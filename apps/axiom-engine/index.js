@@ -2,14 +2,22 @@ const express = require("express");
 const path = require("path");
 const { ChatService } = require("./chat-service");
 const { MemoryStore } = require("./memory-store");
+const { UsageStore } = require("./usage-store");
 const app = express();
 const memoryStore = new MemoryStore(
+  process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data")
+);
+const usageStore = new UsageStore(
   process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data")
 );
 const chatService = new ChatService({
   apiKey: process.env.OPENAI_API_KEY,
   model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
-  memoryStore
+  memoryStore,
+  usageStore,
+  maxMessageCharacters: Number(
+    process.env.AXIOM_CHAT_MAX_MESSAGE_CHARACTERS || 4000
+  )
 });
 
 app.use(express.json());
@@ -21,6 +29,14 @@ app.get("/", (req, res) => {
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok", service: "AXIOM engine" });
+});
+
+app.get("/usage", async (req, res, next) => {
+  try {
+    res.json(await usageStore.summary());
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.get("/memory/identity", async (req, res, next) => {

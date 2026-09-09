@@ -1,8 +1,17 @@
 class ChatService {
-  constructor({ apiKey, model, memoryStore, fetchImplementation = fetch }) {
+  constructor({
+    apiKey,
+    model,
+    memoryStore,
+    usageStore,
+    maxMessageCharacters = 4000,
+    fetchImplementation = fetch
+  }) {
     this.apiKey = apiKey;
     this.model = model;
     this.memoryStore = memoryStore;
+    this.usageStore = usageStore;
+    this.maxMessageCharacters = maxMessageCharacters;
     this.fetchImplementation = fetchImplementation;
   }
 
@@ -17,6 +26,11 @@ class ChatService {
     }
 
     const normalizedMessage = message.trim();
+    if (normalizedMessage.length > this.maxMessageCharacters) {
+      throw new RangeError(
+        `message must not exceed ${this.maxMessageCharacters} characters`
+      );
+    }
     const recentEntries = await this.memoryStore.list("episodic", 10);
     const response = await this.fetchImplementation("https://api.openai.com/v1/responses", {
       method: "POST",
@@ -53,6 +67,14 @@ class ChatService {
       const error = new Error("OpenAI response did not contain output_text");
       error.statusCode = 502;
       throw error;
+    }
+
+    if (payload.usage && this.usageStore) {
+      await this.usageStore.record({
+        model: this.model,
+        usage: payload.usage,
+        responseId: payload.id
+      });
     }
 
     await this.memoryStore.record({

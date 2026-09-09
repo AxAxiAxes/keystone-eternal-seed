@@ -22,6 +22,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-09 | Complete | Unified Axes Contracting portal added | `apps/axiom-freedom` landing page, live AXIOM route, and document library |
 | 2026-09-09 | Complete | AXI durable local memory foundation added | Private identity, episodic, semantic, decision, and procedure memory service |
 | 2026-09-09 | Complete | OpenAI-backed AXI chat implemented and activated | Private provider configuration, contextual chat handling, live provider response, and episodic chat records |
+| 2026-09-09 | Complete | Private OpenAI usage monitoring and chat cost bound added | Persistent provider token totals at private engine endpoint; configurable maximum chat-message size |
 | 2026-09-09 | Complete | Railway production deployment topology prepared | Private engine, persistent memory volume, public portal, and SiteGround DNS plan |
 | 2026-09-09 | Complete | AXIS/XIIOM continuity checkpoint preserved | Founder-provided architecture and operational-history summary in `docs/memory` |
 | 2026-09-09 | Complete | KEYSTONE AXI master-system source preserved | `docs/keystone/KEYSTONE_AXI_MASTER_SYSTEM_DOCUMENT.pdf` with integrity record |
@@ -36,6 +37,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Add automated checks for the engine and deployment configuration.
 - [x] Run and record a complete deployment verification from the consolidated repository.
 - [x] Configure `OPENAI_API_KEY` in the local secret store and verify a live provider response.
+- [x] Persist provider token totals privately and cap each chat-message size before the provider request.
 - [ ] Create the Railway project and deploy the private `axiom-engine` and public `axiom-web` services.
 - [ ] Connect the Railway `axiom-web` service to `axescontracting.com` through SiteGround DNS.
 

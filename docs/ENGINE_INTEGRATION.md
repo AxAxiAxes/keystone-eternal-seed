@@ -9,6 +9,7 @@
 | `AXIOM_ENGINE_URL` | `axiom-freedom` | `http://127.0.0.1:3000` | Base URL for the AXIOM engine. Compose sets it to `http://axiom-engine:3000`. |
 | `PORT` | `axiom-engine` | `3000` | Engine listener port. |
 | `AXIOM_PORT` | `axiom-freedom` | `8080` | Public web-service listener port. |
+| `AXIOM_CHAT_MAX_MESSAGE_CHARACTERS` | `axiom-engine` | `4000` | Maximum characters accepted per OpenAI chat request. |
 
 ## Command contract
 
@@ -48,3 +49,25 @@ OPENAI_MODEL=gpt-4.1-mini
 ```
 
 The browser chat uses `action: "chat"` with `payload.message`. The engine sends the message and up to ten recent episodic records to OpenAI's Responses API, then appends the user message and provider reply to its private episodic memory store. Without `OPENAI_API_KEY`, chat returns `503` and no provider request is made.
+
+## Provider usage monitoring
+
+After each successful OpenAI response, the engine appends the provider-reported
+input, output, and total token counts to its private persistent storage. It does
+not persist API keys or prompt text in this usage record.
+
+Use the private engine endpoint `GET /usage` from the Docker network or trusted
+administrative environment to read cumulative counts:
+
+```json
+{
+  "requests": 12,
+  "inputTokens": 3456,
+  "outputTokens": 789,
+  "totalTokens": 4245
+}
+```
+
+The public portal does not proxy this endpoint. Token counts are not a billing
+statement; review the OpenAI billing dashboard for current prices, invoices,
+credits, or recharge settings.
