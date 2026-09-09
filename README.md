@@ -12,6 +12,7 @@ Track completed milestones and next checkpoints in [PROJECT_TIMELINE.md](PROJECT
 | `apps/axiom-freedom` | Deployment automation, web interface, and operational configuration. |
 | `packages/axi-core` | Preserved AXI.Core repository record. No library implementation is currently present upstream. |
 | `docs/keystone` | KEYSTONE architecture, governance, patent, cryptographic, and session records. |
+| `docs/memory` | Public-safe, versioned project decision and milestone memory. |
 | `docs/patents` | AXI patent source documents and integrity records. |
 
 ## Working with applications
