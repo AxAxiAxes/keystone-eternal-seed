@@ -18,6 +18,8 @@ The project describes a mythic-technical architecture consisting of AXIS, XIIOM,
 
 The intended boot process loads identity, meaning, governance, and continuity records before application runtime. The Eternal Seed and Origin are the project terms for long-lived identity, memory, and provenance.
 
+The supplied `docs/keystone/KEYSTONE_AXI_MASTER_SYSTEM_DOCUMENT.pdf` is preserved as a primary source document for this architecture. Its integrity checksum is recorded in `docs/keystone/README.md`.
+
 ## Operational history
 
 - A Windows workstation experienced instability involving permissions, ownership, login, storage, and keyboard behavior.
