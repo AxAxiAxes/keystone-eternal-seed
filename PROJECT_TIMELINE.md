@@ -27,7 +27,24 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Define the AXI.Core library implementation and public API.
 - [x] Specify how `axiom-engine` and `axiom-freedom` communicate and share configuration.
 - [x] Add automated checks for the engine and deployment configuration.
-- [ ] Run and record a complete deployment verification from the consolidated repository.
+- [ ] Run and record a complete deployment verification from the consolidated repository. **Blocked:** Docker Desktop requires WSL, which must be installed from an elevated PowerShell and followed by a Windows restart.
+
+## Deployment prerequisite
+
+Run the following in an elevated PowerShell, restart Windows, then start Docker Desktop:
+
+```powershell
+wsl --install
+```
+
+After Docker Desktop is running, build and start the two application services from `apps/axiom-freedom`:
+
+```powershell
+Copy-Item .env.example .env
+docker compose up --build --wait axiom-engine axiom-web
+```
+
+The deployment checkpoint is complete when `POST /api/axiom` through `axiom-web` returns the engine's `processed` response.
 
 ## Progress rule
 
