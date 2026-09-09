@@ -15,7 +15,7 @@ class ChatService {
     this.fetchImplementation = fetchImplementation;
   }
 
-  async reply(message) {
+  async reply(message, { agent } = {}) {
     if (!this.apiKey) {
       const error = new Error("OPENAI_API_KEY is not configured");
       error.statusCode = 503;
@@ -43,7 +43,10 @@ class ChatService {
         instructions: [
           "You are AXIOM, the public AXIOM / KEYSTONE assistant for Axes Contracting.",
           "Be helpful, truthful, concise, and do not claim capabilities you do not have.",
-          "Use the supplied recent conversation records only as context."
+          "Use the supplied recent conversation records only as context.",
+          agent
+            ? `You are acting as ${agent.name}. Your allowed capabilities are ${agent.capabilities.join(", ")}. Propose UI improvements for review only; do not claim to edit, deploy, access accounts, or execute changes.`
+            : ""
         ].join(" "),
         input: [
           ...recentEntries.reverse().map((entry) => ({
@@ -80,12 +83,21 @@ class ChatService {
     await this.memoryStore.record({
       kind: "episodic",
       content: normalizedMessage,
-      metadata: { role: "user", source: "chat" }
+      metadata: {
+        role: "user",
+        source: "chat",
+        ...(agent ? { agentId: agent.id } : {})
+      }
     });
     await this.memoryStore.record({
       kind: "episodic",
       content: reply,
-      metadata: { role: "assistant", source: "chat", model: this.model }
+      metadata: {
+        role: "assistant",
+        source: "chat",
+        model: this.model,
+        ...(agent ? { agentId: agent.id } : {})
+      }
     });
 
     return reply;

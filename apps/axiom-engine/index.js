@@ -96,6 +96,16 @@ app.post("/automation/process", async (req, res, next) => {
   }
 });
 
+app.post("/automation/chat", async (req, res, next) => {
+  try {
+    const agent = await automationService.getAgent(req.body.agentId);
+    const reply = await chatService.reply(req.body.message, { agent });
+    res.json({ agent: { id: agent.id, name: agent.name }, reply });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get("/automation/runs", async (req, res, next) => {
   try {
     const limit = req.query.limit === undefined ? 50 : Number(req.query.limit);

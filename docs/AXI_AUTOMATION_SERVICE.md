@@ -99,3 +99,14 @@ Opening `https://xiiom.com/automation` then prompts for HTTP Basic credentials.
 The username may be any non-empty value; use the configured value as the
 password. Do not reuse an email password, store the secret in Git, or add it
 to browser JavaScript.
+
+## Agent chat and UI proposals
+
+The protected console includes Agent Chat. It sends a request to one enabled
+registered agent and stores the conversation in private episodic memory. Agent
+prompts are explicitly limited to analysis and UI-improvement proposals; they
+cannot claim to edit, deploy, access accounts, or execute changes.
+
+Agent Chat requires `OPENAI_API_KEY` in the private `axiom-engine` Railway
+service. Until that encrypted variable is configured, the console returns
+`OPENAI_API_KEY is not configured` and makes no provider request.

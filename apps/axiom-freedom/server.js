@@ -76,7 +76,10 @@ async function invokeEngine(endpoint, method = 'GET', body) {
     });
 
     if (!response.ok) {
-        throw new Error('AXIOM engine returned HTTP ' + response.status);
+        const payload = await response.json().catch(() => ({}));
+        const error = new Error(payload.error || 'AXIOM engine returned HTTP ' + response.status);
+        error.statusCode = response.status;
+        throw error;
     }
 
     return response.json();
@@ -224,6 +227,19 @@ const server = http.createServer(async (req, res) => {
                   console.error('AXIOM automation processing failed:', error.message);
                   res.writeHead(502, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
+          }
+          return;
+    }
+    if (pathname === '/api/automation/chat' && req.method === 'POST') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine('/automation/chat', 'POST', await parseBody(req));
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM agent chat failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
           }
           return;
     }

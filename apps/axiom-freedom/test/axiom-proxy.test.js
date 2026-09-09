@@ -84,6 +84,25 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     );
     assert.equal(automationStatus.status, 200);
     assert.equal((await automationStatus.json()).agents, 3);
+
+    const unavailableAgentChat = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/chat`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: authorization,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          agentId: "memory-curator",
+          message: "Review the automation console."
+        })
+      }
+    );
+    assert.equal(unavailableAgentChat.status, 503);
+    assert.deepEqual(await unavailableAgentChat.json(), {
+      error: "OPENAI_API_KEY is not configured"
+    });
   } finally {
     if (webServer) {
       await stopServer(webServer);

@@ -23,6 +23,22 @@ class AutomationService {
     return this.withState(async (state) => state.agents);
   }
 
+  async getAgent(agentId) {
+    if (!isNonEmptyString(agentId)) {
+      throw new TypeError("agentId must be a non-empty string");
+    }
+    return this.withState(async (state) => {
+      const agent = state.agents.find((entry) => entry.id === agentId);
+      if (!agent) {
+        throw new RangeError(`agent does not exist: ${agentId}`);
+      }
+      if (!agent.enabled) {
+        throw new RangeError(`agent is disabled: ${agentId}`);
+      }
+      return agent;
+    });
+  }
+
   async registerAgent({ id, name, capabilities }) {
     return this.withState(async (state) => {
       if (id !== undefined && !isNonEmptyString(id)) {
