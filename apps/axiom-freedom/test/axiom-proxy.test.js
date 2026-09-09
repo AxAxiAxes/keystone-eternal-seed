@@ -56,6 +56,16 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.deepEqual(await invalid.json(), {
       error: "action must be a non-empty string"
     });
+
+    const portal = await fetch(`http://127.0.0.1:${webPort}/`);
+    assert.equal(portal.status, 200);
+    assert.match(await portal.text(), /AXES CONTRACTING/);
+
+    const library = await fetch(
+      `http://127.0.0.1:${webPort}/library/memory/README.md`
+    );
+    assert.equal(library.status, 200);
+    assert.match(await library.text(), /AXI project memory/);
   } finally {
     if (webServer) {
       await stopServer(webServer);

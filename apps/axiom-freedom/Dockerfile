@@ -2,9 +2,12 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package.json ./
-COPY server.js ./
-COPY axiom_web_interface.html ./
+COPY apps/axiom-freedom/package.json ./
+COPY apps/axiom-freedom/server.js ./
+COPY apps/axiom-freedom/index.html ./
+COPY apps/axiom-freedom/library.html ./
+COPY apps/axiom-freedom/axiom_web_interface.html ./
+COPY docs ./docs
 
 EXPOSE 8080
 

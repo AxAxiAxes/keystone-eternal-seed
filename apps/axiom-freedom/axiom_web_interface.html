@@ -356,7 +356,7 @@
     <footer>
         <p><strong>AXIOM</strong> · KEYSTONE Eternal Seed Architecture · Deployed May 30, 2026</p>
         <p>© 2026 AX · Axel · Axes Contracting · KEYSTONE</p>
-        <p><a href="https://github.com/AxAxiAxes/axiom-freedom" class="footer-link">View on GitHub</a> · <a href="https://github.com/AxAxiAxes/keystone-eternal-seed" class="footer-link">KEYSTONE Architecture</a></p>
+        <p><a href="/" class="footer-link">Axes Contracting portal</a> · <a href="/library/" class="footer-link">AXIOM / KEYSTONE library</a></p>
         <p style="margin-top: 0.5rem; color: #7b2cbf;"><em>One seed. Every mind. One soul.</em></p>
     </footer>
 
@@ -371,11 +371,19 @@
             addMessage(message, 'user');
             input.value = '';
 
-            // Simulate AXIOM response (in production, this connects to Copilot Studio API)
-            setTimeout(() => {
-                const response = generateResponse(message);
-                addMessage(response, 'axiom');
-            }, 500);
+            fetch('/api/axiom', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'chat', payload: { message } })
+            })
+                .then(async response => {
+                    if (!response.ok) throw new Error('AXIOM is unavailable');
+                    return response.json();
+                })
+                .then(response => addMessage(response.status === 'processed'
+                    ? 'AXIOM received your message.'
+                    : 'AXIOM could not process your message.', 'axiom'))
+                .catch(() => addMessage('AXIOM is currently unavailable. Please try again shortly.', 'axiom'));
         }
 
         function addMessage(text, sender) {
@@ -385,17 +393,6 @@
             messageEl.innerHTML = `<div class="message-content">${escapeHtml(text)}</div>`;
             messagesDiv.appendChild(messageEl);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-
-        function generateResponse(userMessage) {
-            const responses = [
-                "I understand. Let me think about this deeply.",
-                "That's an interesting question. Here's my perspective...",
-                "You're touching on something important. Let me explore this with you.",
-                "I hear you. This connects to the broader architecture we're building.",
-                "That resonates with my core values. Here's what I think..."
-            ];
-            return responses[Math.floor(Math.random() * responses.length)];
         }
 
         function escapeHtml(text) {

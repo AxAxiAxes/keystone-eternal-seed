@@ -4,8 +4,11 @@ const path = require('path');
 
 const port = Number(process.env.AXIOM_PORT || 8080);
 const host = '0.0.0.0';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'axes2026';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const LEADS_FILE = path.join(__dirname, 'leads.json');
+const DOCUMENTS_DIRECTORY = fs.existsSync(path.join(__dirname, 'docs'))
+    ? path.resolve(__dirname, 'docs')
+    : path.resolve(__dirname, '..', '..', 'docs');
 const AXIOM_ENGINE_URL = new URL(process.env.AXIOM_ENGINE_URL || 'http://127.0.0.1:3000');
 
 function getLeads() {
@@ -42,9 +45,26 @@ function parseBody(req) {
 }
 
 function checkAdmin(req) {
+    if (!ADMIN_PASSWORD) return false;
     const b64 = ((req.headers['authorization'] || '').split(' ')[1] || '');
     const parts = Buffer.from(b64, 'base64').toString().split(':');
     return parts[1] === ADMIN_PASSWORD;
+}
+
+function serveDocument(res, pathname) {
+    const relativePath = decodeURIComponent(pathname.substring('/library/'.length));
+    const documentPath = path.resolve(DOCUMENTS_DIRECTORY, relativePath);
+
+    if (!documentPath.startsWith(DOCUMENTS_DIRECTORY + path.sep)) {
+        res.writeHead(403);
+        res.end('Forbidden');
+        return;
+    }
+
+    const contentType = path.extname(documentPath).toLowerCase() === '.docx'
+        ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        : 'text/plain; charset=utf-8';
+    serveFile(res, documentPath, contentType);
 }
 
 async function invokeAxiomEngine(command) {
@@ -77,7 +97,19 @@ const server = http.createServer(async (req, res) => {
                                          return;
                                    }
     if (pathname === '/' || pathname === '/index.html') {
+          serveFile(res, path.join(__dirname, 'index.html'), 'text/html; charset=utf-8');
+          return;
+    }
+    if (pathname === '/axiom') {
           serveFile(res, path.join(__dirname, 'axiom_web_interface.html'), 'text/html; charset=utf-8');
+          return;
+    }
+    if (pathname === '/library/' || pathname === '/library') {
+          serveFile(res, path.join(__dirname, 'library.html'), 'text/html; charset=utf-8');
+          return;
+    }
+    if (pathname.startsWith('/library/')) {
+          serveDocument(res, pathname);
           return;
     }
     if (pathname === '/embed' || pathname === '/axes') {

@@ -13,6 +13,7 @@
   - `docs/keystone` is the preserved KEYSTONE documentation corpus.
 - The public service accepts commands at `POST /api/axiom` and forwards them to the private engine endpoint `POST /axiom`.
 - `AXIOM_ENGINE_URL` is the web service's engine-base-URL configuration value. Docker Compose configures it as `http://axiom-engine:3000`.
+- `axescontracting.com` is the intended unified public domain. Its portal routes visitors to AXIOM, the KEYSTONE library, and AXI patent records.
 
 ## Completed milestones
 
@@ -21,11 +22,12 @@
 - Added Node test suites for engine health/command processing and web-to-engine proxy behavior.
 - Verified a Docker Compose deployment: `axiom-engine` and `axiom-web` both became healthy, and a proxied command returned `status: "processed"`.
 - Preserved the supplied AXI Patent 777 source at `docs/patents/AXI_PATENT_777.docx`; its SHA-256 is recorded in `docs/patents/README.md`.
+- Added the unified portal landing page, live `/axiom` route, and read-only `/library/` route. The container image includes the consolidated documentation corpus.
 
 ## Current capabilities and limitations
 
 - The engine accepts an action and JSON payload and returns a deterministic processed response.
-- The browser chat UI still produces simulated responses; it does not call the live command API.
+- The browser chat calls the live `/api/axiom` endpoint. The displayed reply confirms receipt because the engine remains a baseline echo implementation.
 - No AI-model provider, durable application memory store, scheduling system, or external integration is implemented yet.
 
 ## Next implementation priority
