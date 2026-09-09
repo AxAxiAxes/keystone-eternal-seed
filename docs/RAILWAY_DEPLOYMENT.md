@@ -9,6 +9,20 @@ Railway hosts the AXIOM runtime because SiteGround GrowBig shared hosting cannot
 
 Never create a public domain for `axiom-engine`. Its memory endpoints and OpenAI credential must remain private.
 
+## Current deployment state
+
+As of September 9, 2026:
+
+- `axiom-freedom` is public at `https://xiiom.com` and deploys from the
+  `axaxiaxes-axiom-monorepo` branch of this repository.
+- `axiom-engine` is deployed privately in the same Railway project, has a
+  persistent Volume mounted at `/app/data`, and has no public domain.
+- The portal successfully forwards `POST /api/axiom` commands to the private
+  engine over Railway networking.
+- Production OpenAI chat remains disabled until `OPENAI_API_KEY` is added as
+  an encrypted variable to `axiom-engine`. Do not add that secret to this
+  repository or a public portal variable.
+
 ## 1. Create the Railway project
 
 1. In Railway, create a new project and choose **Deploy from GitHub repo**.
