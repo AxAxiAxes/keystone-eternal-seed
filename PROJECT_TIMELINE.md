@@ -16,6 +16,8 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-06 | Complete | AXIOM Express engine foundation created | `apps/axiom-engine` |
 | 2026-09-09 | Complete | Repositories consolidated into this canonical monorepo | Root layout and Git history |
 | 2026-09-09 | Complete | AXI.Core .NET 8 command contract and handler seam established | `packages/axi-core/src/AXI.Core` |
+| 2026-09-09 | Complete | AXIOM application integration contract and Compose topology established | `docs/ENGINE_INTEGRATION.md` |
+| 2026-09-09 | Complete | Repeatable automated checks added for AXI.Core and Node services | `AXIOM.sln`, application test suites |
 
 ## Current checkpoints
 
@@ -23,8 +25,8 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Separate deployable applications, package records, and KEYSTONE documents.
 - [x] Remove generated `node_modules` from version control and prevent future commits.
 - [x] Define the AXI.Core library implementation and public API.
-- [ ] Specify how `axiom-engine` and `axiom-freedom` communicate and share configuration.
-- [ ] Add automated checks for the engine and deployment configuration.
+- [x] Specify how `axiom-engine` and `axiom-freedom` communicate and share configuration.
+- [x] Add automated checks for the engine and deployment configuration.
 - [ ] Run and record a complete deployment verification from the consolidated repository.
 
 ## Progress rule

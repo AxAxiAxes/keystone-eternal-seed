@@ -1,12 +1,12 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const url = require('url');
 
 const port = Number(process.env.AXIOM_PORT || 8080);
 const host = '0.0.0.0';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'axes2026';
 const LEADS_FILE = path.join(__dirname, 'leads.json');
+const AXIOM_ENGINE_URL = new URL(process.env.AXIOM_ENGINE_URL || 'http://127.0.0.1:3000');
 
 function getLeads() {
     try {
@@ -47,8 +47,23 @@ function checkAdmin(req) {
     return parts[1] === ADMIN_PASSWORD;
 }
 
+async function invokeAxiomEngine(command) {
+    const response = await fetch(new URL('/axiom', AXIOM_ENGINE_URL), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(command),
+        signal: AbortSignal.timeout(5000)
+    });
+
+    if (!response.ok) {
+        throw new Error('AXIOM engine returned HTTP ' + response.status);
+    }
+
+    return response.json();
+}
+
 const server = http.createServer(async (req, res) => {
-    const parsed = url.parse(req.url, true);
+    const parsed = new URL(req.url, 'http://' + (req.headers.host || 'localhost'));
     const pathname = parsed.pathname;
 
                                    res.setHeader('Access-Control-Allow-Origin', '*');
@@ -80,6 +95,25 @@ const server = http.createServer(async (req, res) => {
           res.end(JSON.stringify({ success: true, id: lead.id, message: 'Team alerted. We respond within 60 minutes.' }));
           return;
     }
+    if (pathname === '/api/axiom' && req.method === 'POST') {
+          const command = await parseBody(req);
+          if (typeof command.action !== 'string' || command.action.trim().length === 0) {
+                  res.writeHead(400, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: 'action must be a non-empty string' }));
+                  return;
+          }
+
+          try {
+                  const result = await invokeAxiomEngine(command);
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM engine request failed:', error.message);
+                  res.writeHead(502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: 'AXIOM engine is unavailable' }));
+          }
+          return;
+    }
     if (pathname === '/admin') {
           if (!checkAdmin(req)) {
                   res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="AXIOM Admin"' });
@@ -98,9 +132,13 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(404); res.end('Not Found');
 });
 
-server.listen(port, host, () => {
-    console.log('AXIOM v2.0 listening on ' + host + ':' + port);
-    console.log('  Embed:  https://xiiom.com/embed');
-    console.log('  Widget: https://xiiom.com/widget.js');
-    console.log('  Admin:  https://xiiom.com/admin');
-});
+if (require.main === module) {
+    server.listen(port, host, () => {
+        console.log('AXIOM v2.0 listening on ' + host + ':' + port);
+        console.log('  Embed:  https://xiiom.com/embed');
+        console.log('  Widget: https://xiiom.com/widget.js');
+        console.log('  Admin:  https://xiiom.com/admin');
+    });
+}
+
+module.exports = server;
