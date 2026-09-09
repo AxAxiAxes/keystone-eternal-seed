@@ -1,0 +1,4 @@
+services:
+  axiom-web:
+    ports:
+      - "8080:8080"
