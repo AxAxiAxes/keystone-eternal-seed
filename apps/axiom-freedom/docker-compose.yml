@@ -6,6 +6,10 @@ services:
     restart: unless-stopped
     expose:
       - "3000"
+    environment:
+      AXIOM_MEMORY_DIRECTORY: ${AXIOM_MEMORY_DIRECTORY:-/app/data}
+    volumes:
+      - ./axiom_memory:/app/data
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"]
       interval: 20s

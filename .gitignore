@@ -4,3 +4,5 @@ node_modules/
 !.env.example
 bin/
 obj/
+apps/axiom-engine/data/
+apps/axiom-freedom/axiom_memory/
