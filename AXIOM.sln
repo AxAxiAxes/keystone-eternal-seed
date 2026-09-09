@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "packages", "packages", "{B6481C0B-5ACD-49CB-83DA-3D77E0540B5D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "axi-core", "axi-core", "{0A88DD94-14DC-4A8B-9BA5-BE590A584709}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{47201CB4-3F15-466D-80A4-60E9E6665FB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AXI.Core", "packages\axi-core\src\AXI.Core\AXI.Core.csproj", "{B02FB660-A971-4FA4-88DB-8517843BA165}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1C8768D8-D0B7-4F04-AC6A-80E925C36CE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AXI.Core.Tests", "packages\axi-core\tests\AXI.Core.Tests\AXI.Core.Tests.csproj", "{FF0D172F-C98E-4584-95AB-E90282639A63}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B02FB660-A971-4FA4-88DB-8517843BA165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B02FB660-A971-4FA4-88DB-8517843BA165}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B02FB660-A971-4FA4-88DB-8517843BA165}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B02FB660-A971-4FA4-88DB-8517843BA165}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF0D172F-C98E-4584-95AB-E90282639A63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF0D172F-C98E-4584-95AB-E90282639A63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF0D172F-C98E-4584-95AB-E90282639A63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF0D172F-C98E-4584-95AB-E90282639A63}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0A88DD94-14DC-4A8B-9BA5-BE590A584709} = {B6481C0B-5ACD-49CB-83DA-3D77E0540B5D}
+		{47201CB4-3F15-466D-80A4-60E9E6665FB4} = {0A88DD94-14DC-4A8B-9BA5-BE590A584709}
+		{B02FB660-A971-4FA4-88DB-8517843BA165} = {47201CB4-3F15-466D-80A4-60E9E6665FB4}
+		{1C8768D8-D0B7-4F04-AC6A-80E925C36CE8} = {0A88DD94-14DC-4A8B-9BA5-BE590A584709}
+		{FF0D172F-C98E-4584-95AB-E90282639A63} = {1C8768D8-D0B7-4F04-AC6A-80E925C36CE8}
+	EndGlobalSection
+EndGlobal
