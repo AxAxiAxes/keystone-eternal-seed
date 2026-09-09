@@ -36,7 +36,7 @@ Send a `POST` request to `axiom-freedom` at `/api/axiom`.
 }
 ```
 
-The public web service returns `400` for an invalid action and `502` when the engine is unreachable or fails to respond within five seconds.
+The public web service returns `400` for an invalid action and `502` when the engine is unreachable or fails to respond within 60 seconds.
 
 ## OpenAI chat provider
 

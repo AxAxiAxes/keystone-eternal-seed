@@ -48,13 +48,13 @@ class ChatService {
     }
 
     const payload = await response.json();
-    if (typeof payload.output_text !== "string" || payload.output_text.trim().length === 0) {
+    const reply = extractOutputText(payload);
+    if (!reply) {
       const error = new Error("OpenAI response did not contain output_text");
       error.statusCode = 502;
       throw error;
     }
 
-    const reply = payload.output_text.trim();
     await this.memoryStore.record({
       kind: "episodic",
       content: normalizedMessage,
@@ -70,4 +70,21 @@ class ChatService {
   }
 }
 
-module.exports = { ChatService };
+function extractOutputText(payload) {
+  if (typeof payload.output_text === "string" && payload.output_text.trim().length > 0) {
+    return payload.output_text.trim();
+  }
+
+  const text = payload.output
+    ?.filter((item) => item.type === "message")
+    .flatMap((item) => item.content || [])
+    .filter((content) => content.type === "output_text")
+    .map((content) => content.text)
+    .filter((content) => typeof content === "string" && content.trim().length > 0)
+    .join("\n")
+    .trim();
+
+  return text || null;
+}
+
+module.exports = { ChatService, extractOutputText };

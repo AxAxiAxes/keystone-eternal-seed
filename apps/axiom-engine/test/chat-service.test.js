@@ -28,7 +28,12 @@ test("generates a reply and records both chat turns", async () => {
       return {
         ok: true,
         async json() {
-          return { output_text: "Hello from AXIOM." };
+          return {
+            output: [{
+              type: "message",
+              content: [{ type: "output_text", text: "Hello from AXIOM." }]
+            }]
+          };
         }
       };
     }

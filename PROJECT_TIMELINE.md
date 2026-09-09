@@ -21,7 +21,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-09 | Complete | Consolidated Docker Compose deployment verified | Healthy `axiom-engine` and `axiom-web` containers; successful `POST /api/axiom` proxy response |
 | 2026-09-09 | Complete | Unified Axes Contracting portal added | `apps/axiom-freedom` landing page, live AXIOM route, and document library |
 | 2026-09-09 | Complete | AXI durable local memory foundation added | Private identity, episodic, semantic, decision, and procedure memory service |
-| 2026-09-09 | Complete | OpenAI-backed AXI chat integration implemented | Private provider configuration, contextual chat handling, and episodic chat records |
+| 2026-09-09 | Complete | OpenAI-backed AXI chat implemented and activated | Private provider configuration, contextual chat handling, live provider response, and episodic chat records |
 
 ## Current checkpoints
 
@@ -32,7 +32,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Specify how `axiom-engine` and `axiom-freedom` communicate and share configuration.
 - [x] Add automated checks for the engine and deployment configuration.
 - [x] Run and record a complete deployment verification from the consolidated repository.
-- [ ] Configure `OPENAI_API_KEY` in the local or production secret store and verify a live provider response.
+- [x] Configure `OPENAI_API_KEY` in the local secret store and verify a live provider response.
 
 ## Deployment verification
 

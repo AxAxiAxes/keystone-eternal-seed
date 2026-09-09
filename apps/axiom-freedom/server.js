@@ -72,7 +72,7 @@ async function invokeAxiomEngine(command) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(command),
-        signal: AbortSignal.timeout(5000)
+        signal: AbortSignal.timeout(60000)
     });
 
     if (!response.ok) {

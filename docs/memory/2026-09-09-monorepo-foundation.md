@@ -24,12 +24,14 @@
 - Preserved the supplied AXI Patent 777 source at `docs/patents/AXI_PATENT_777.docx`; its SHA-256 is recorded in `docs/patents/README.md`.
 - Added the unified portal landing page, live `/axiom` route, and read-only `/library/` route. The container image includes the consolidated documentation corpus.
 - Implemented private durable memory layers for identity, episodic events, semantic knowledge, decisions, and procedures. The Docker-backed episodic store was verified to survive an `axiom-engine` restart.
+- Activated the local OpenAI provider configuration and verified a live chat response through the public portal. The resulting user and assistant turns were confirmed in durable episodic memory.
 
 ## Current capabilities and limitations
 
 - The engine accepts an action and JSON payload and returns a deterministic processed response.
 - The browser chat calls the live `/api/axiom` endpoint. The displayed reply confirms receipt because the engine remains a baseline echo implementation.
 - Durable memory is available only through the private engine API. The public portal does not expose memory writes or reads.
+- The OpenAI API key is stored only in the local Git-ignored environment file; no provider credential is recorded in this repository.
 - No AI-model provider, durable application memory store, scheduling system, or external integration is implemented yet.
 
 ## Next implementation priority
