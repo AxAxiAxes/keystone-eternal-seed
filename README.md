@@ -2,6 +2,8 @@
 
 The canonical repository for the AXIOM engine, AXIOM deployment materials, AXI.Core record, and KEYSTONE's founding documentation.
 
+Track completed milestones and next checkpoints in [PROJECT_TIMELINE.md](PROJECT_TIMELINE.md).
+
 ## Repository layout
 
 | Path | Purpose |
