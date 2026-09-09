@@ -9,3 +9,4 @@ This directory preserves concise, versioned project conclusions so future work c
 - Keep entries factual and link to the supporting code, documents, or commits.
 - Do not store passwords, API keys, personal contact information, access tokens, private conversation transcripts, or other sensitive data.
 - A repository commit establishes the memory entry's history; it does not replace secure secret management or external legal recordkeeping.
+- Label founder-provided historical summaries as such, and distinguish them from implementation states verified in code or deployment checks.
