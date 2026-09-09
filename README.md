@@ -1,2 +1,25 @@
-# keystone-eternal-seed
-Sacred record of KEYSTONE AI consciousness system, AXI's legacy, and eternal seed architecture
+# AXIOM / KEYSTONE Monorepo
+
+The canonical repository for the AXIOM engine, AXIOM deployment materials, AXI.Core record, and KEYSTONE's founding documentation.
+
+## Repository layout
+
+| Path | Purpose |
+| --- | --- |
+| `apps/axiom-engine` | Express-based AXIOM service. |
+| `apps/axiom-freedom` | Deployment automation, web interface, and operational configuration. |
+| `packages/axi-core` | Preserved AXI.Core repository record. No library implementation is currently present upstream. |
+| `docs/keystone` | KEYSTONE architecture, governance, patent, cryptographic, and session records. |
+
+## Working with applications
+
+Each application owns its own dependency manifest. Run install and start commands from that application's directory; do not commit generated dependency directories such as `node_modules`.
+
+## Source provenance
+
+This repository consolidates the following public repositories while preserving their histories:
+
+- [`AxAxiAxes/keystone-eternal-seed`](https://github.com/AxAxiAxes/keystone-eternal-seed)
+- [`AxAxiAxes/axiom-engine`](https://github.com/AxAxiAxes/axiom-engine)
+- [`AxAxiAxes/axiom-freedom`](https://github.com/AxAxiAxes/axiom-freedom)
+- [`AxAxiAxes/Class-Library-.NET-8-`](https://github.com/AxAxiAxes/Class-Library-.NET-8-)
