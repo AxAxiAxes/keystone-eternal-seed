@@ -82,3 +82,20 @@ AXIOM_AUTOMATION_MAX_TASKS_PER_CYCLE=5
 The poll interval must be from 1,000 through 3,600,000 milliseconds, and each
 cycle may process 1 through 20 tasks. The scheduler logs failures explicitly;
 it does not silently claim completion.
+
+## Protected browser console
+
+The public portal supplies an authenticated operator interface at `/automation`.
+It can read automation status and agents, queue allowlisted tasks, and process
+due tasks. It never exposes a direct engine URL or general engine proxy.
+
+Set a unique secret only in the `axiom-freedom` Railway service variables:
+
+```dotenv
+ADMIN_PASSWORD=<unique-long-password>
+```
+
+Opening `https://xiiom.com/automation` then prompts for HTTP Basic credentials.
+The username may be any non-empty value; use the configured value as the
+password. Do not reuse an email password, store the secret in Git, or add it
+to browser JavaScript.

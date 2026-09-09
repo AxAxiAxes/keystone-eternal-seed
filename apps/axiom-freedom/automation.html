@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AXIOM Automation Console</title>
+  <style>
+    body { background:#10131a; color:#edf2f7; font:16px system-ui,sans-serif; margin:0; }
+    main { max-width:960px; margin:0 auto; padding:32px 20px 64px; }
+    h1 { margin:0; } .note { color:#aab7c7; }
+    section { background:#1a202b; border:1px solid #313b4d; border-radius:10px; margin-top:20px; padding:20px; }
+    .metrics { display:flex; flex-wrap:wrap; gap:12px; } .metric { background:#111722; border-radius:8px; padding:12px; min-width:110px; }
+    form { display:grid; gap:12px; } label { display:grid; gap:5px; color:#cbd5e1; }
+    input, select, textarea, button { border-radius:6px; border:1px solid #46536a; padding:9px; font:inherit; }
+    input, select, textarea { background:#0e1420; color:#fff; } textarea { min-height:80px; }
+    button { background:#d5a94d; color:#18130a; border:0; cursor:pointer; font-weight:700; }
+    button.secondary { background:#334155; color:#fff; } .actions { display:flex; gap:10px; flex-wrap:wrap; }
+    table { border-collapse:collapse; width:100%; } th,td { border-bottom:1px solid #313b4d; padding:9px; text-align:left; vertical-align:top; }
+    #result { white-space:pre-wrap; color:#b8e6c2; } .hidden { display:none; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>AXIOM Automation Console</h1>
+  <p class="note">Private operational controls. Only allowlisted tasks can run; arbitrary commands are not accepted.</p>
+  <section>
+    <div class="actions"><button id="refresh" class="secondary">Refresh</button><button id="process">Process Due Tasks</button></div>
+    <div id="metrics" class="metrics"></div>
+    <p id="result" aria-live="polite"></p>
+  </section>
+  <section>
+    <h2>Queue Task</h2>
+    <form id="task-form">
+      <label>Title <input id="title" required maxlength="200" placeholder="Record a verified milestone"></label>
+      <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="automation.noop">Safe no-op test</option></select></label>
+      <div id="memory-fields">
+        <label>Memory layer <select id="kind"><option value="decision">Decision</option><option value="procedure">Procedure</option><option value="semantic">Semantic</option><option value="episodic">Episodic</option></select></label>
+        <label>Content <textarea id="content" placeholder="What should be recorded?"></textarea></label>
+      </div>
+      <label>Repeat every minutes (optional) <input id="recurrence" type="number" min="1" max="10080"></label>
+      <button type="submit">Queue Task</button>
+    </form>
+  </section>
+  <section><h2>Registered Agents</h2><div id="agents"></div></section>
+  <section><h2>Tasks</h2><div id="tasks"></div></section>
+</main>
+<script>
+const result = document.querySelector("#result");
+async function request(path, options) {
+  const response = await fetch(path, { credentials:"same-origin", headers:{"Content-Type":"application/json"}, ...options });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || `Request failed (${response.status})`);
+  return payload;
+}
+function table(items, fields) {
+  if (!items.length) return "<p class='note'>None yet.</p>";
+  return `<table><thead><tr>${fields.map(([_,label])=>`<th>${label}</th>`).join("")}</tr></thead><tbody>${items.map(item=>`<tr>${fields.map(([key])=>`<td>${String(item[key] ?? "")}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+async function refresh() {
+  try {
+    const [status, agents, tasks] = await Promise.all([
+      request("/api/automation/status"), request("/api/automation/agents"), request("/api/automation/tasks")
+    ]);
+    document.querySelector("#metrics").innerHTML = Object.entries(status).map(([key,value]) => `<div class="metric"><strong>${value}</strong><br>${key}</div>`).join("");
+    document.querySelector("#agents").innerHTML = table(agents, [["name","Name"],["capabilities","Capabilities"],["enabled","Enabled"]]);
+    document.querySelector("#tasks").innerHTML = table(tasks, [["title","Title"],["action","Action"],["status","Status"],["runCount","Runs"],["runAt","Next run"]]);
+    result.textContent = "";
+  } catch (error) { result.textContent = error.message; }
+}
+document.querySelector("#action").addEventListener("change", event => document.querySelector("#memory-fields").classList.toggle("hidden", event.target.value !== "memory.record"));
+document.querySelector("#refresh").addEventListener("click", refresh);
+document.querySelector("#process").addEventListener("click", async () => { try { result.textContent = JSON.stringify(await request("/api/automation/process", {method:"POST",body:"{}"}),null,2); await refresh(); } catch(error) { result.textContent=error.message; } });
+document.querySelector("#task-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  const action = document.querySelector("#action").value;
+  const recurrence = document.querySelector("#recurrence").value;
+  const task = { title:document.querySelector("#title").value, action };
+  if (action === "memory.record") task.payload = { kind:document.querySelector("#kind").value, content:document.querySelector("#content").value };
+  if (recurrence) task.recurrenceMinutes = Number(recurrence);
+  try { result.textContent = `Queued: ${(await request("/api/automation/tasks",{method:"POST",body:JSON.stringify(task)})).id}`; event.target.reset(); await refresh(); } catch(error) { result.textContent=error.message; }
+});
+refresh();
+</script>
+</body>
+</html>

@@ -24,6 +24,7 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
   let webServer;
   try {
     process.env.AXIOM_ENGINE_URL = `http://127.0.0.1:${enginePort}`;
+    process.env.ADMIN_PASSWORD = "test-admin-password";
     delete require.cache[require.resolve("../server")];
     const web = require("../server");
     webServer = await startServer(web);
@@ -66,11 +67,29 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     );
     assert.equal(library.status, 200);
     assert.match(await library.text(), /AXI project memory/);
+
+    const unauthorizedConsole = await fetch(`http://127.0.0.1:${webPort}/automation`);
+    assert.equal(unauthorizedConsole.status, 401);
+
+    const authorization = `Basic ${Buffer.from("admin:test-admin-password").toString("base64")}`;
+    const consolePage = await fetch(`http://127.0.0.1:${webPort}/automation`, {
+      headers: { Authorization: authorization }
+    });
+    assert.equal(consolePage.status, 200);
+    assert.match(await consolePage.text(), /AXIOM Automation Console/);
+
+    const automationStatus = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/status`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(automationStatus.status, 200);
+    assert.equal((await automationStatus.json()).agents, 3);
   } finally {
     if (webServer) {
       await stopServer(webServer);
     }
     await stopServer(engineServer);
     delete process.env.AXIOM_ENGINE_URL;
+    delete process.env.ADMIN_PASSWORD;
   }
 });

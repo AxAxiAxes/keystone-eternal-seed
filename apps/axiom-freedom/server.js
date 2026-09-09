@@ -67,11 +67,11 @@ function serveDocument(res, pathname) {
     serveFile(res, documentPath, contentType);
 }
 
-async function invokeAxiomEngine(command) {
-    const response = await fetch(new URL('/axiom', AXIOM_ENGINE_URL), {
-        method: 'POST',
+async function invokeEngine(endpoint, method = 'GET', body) {
+    const response = await fetch(new URL(endpoint, AXIOM_ENGINE_URL), {
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(command),
+        body: body === undefined ? undefined : JSON.stringify(body),
         signal: AbortSignal.timeout(60000)
     });
 
@@ -80,6 +80,17 @@ async function invokeAxiomEngine(command) {
     }
 
     return response.json();
+}
+
+function invokeAxiomEngine(command) {
+    return invokeEngine('/axiom', 'POST', command);
+}
+
+function requireAdmin(req, res) {
+    if (checkAdmin(req)) return true;
+    res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="AXIOM Admin"' });
+    res.end('Unauthorized');
+    return false;
 }
 
 const server = http.createServer(async (req, res) => {
@@ -102,6 +113,11 @@ const server = http.createServer(async (req, res) => {
     }
     if (pathname === '/axiom') {
           serveFile(res, path.join(__dirname, 'axiom_web_interface.html'), 'text/html; charset=utf-8');
+          return;
+    }
+    if (pathname === '/automation') {
+          if (!requireAdmin(req, res)) return;
+          serveFile(res, path.join(__dirname, 'automation.html'), 'text/html; charset=utf-8');
           return;
     }
     if (pathname === '/library/' || pathname === '/library') {
@@ -146,17 +162,78 @@ const server = http.createServer(async (req, res) => {
           }
           return;
     }
-    if (pathname === '/admin') {
-          if (!checkAdmin(req)) {
-                  res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="AXIOM Admin"' });
-                  res.end('Unauthorized');
-                  return;
+    if (pathname === '/api/automation/status' && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine('/automation/status');
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM automation status request failed:', error.message);
+                  res.writeHead(502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
           }
+          return;
+    }
+    if (pathname === '/api/automation/agents' && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine('/automation/agents');
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM automation agent request failed:', error.message);
+                  res.writeHead(502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
+          }
+          return;
+    }
+    if (pathname === '/api/automation/tasks' && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine('/automation/tasks' + parsed.search);
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM automation task request failed:', error.message);
+                  res.writeHead(502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
+          }
+          return;
+    }
+    if (pathname === '/api/automation/tasks' && req.method === 'POST') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const task = await invokeEngine('/automation/tasks', 'POST', await parseBody(req));
+                  res.writeHead(201, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(task));
+          } catch (error) {
+                  console.error('AXIOM automation task creation failed:', error.message);
+                  res.writeHead(502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
+          }
+          return;
+    }
+    if (pathname === '/api/automation/process' && req.method === 'POST') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine('/automation/process', 'POST', await parseBody(req));
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM automation processing failed:', error.message);
+                  res.writeHead(502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
+          }
+          return;
+    }
+    if (pathname === '/admin') {
+          if (!requireAdmin(req, res)) return;
           serveFile(res, path.join(__dirname, 'admin.html'), 'text/html; charset=utf-8');
           return;
     }
     if (pathname === '/api/leads' && req.method === 'GET') {
-          if (!checkAdmin(req)) { res.writeHead(401); res.end('Unauthorized'); return; }
+          if (!requireAdmin(req, res)) return;
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify(getLeads()));
           return;
