@@ -60,6 +60,24 @@ test("reports engine health", async (t) => {
     service: "AXIOM engine"
   });
 
+  test("reports seeded automation status", async (t) => {
+    t.after(() => fs.rm(memoryDirectory, { recursive: true, force: true }));
+    const server = await startServer();
+    t.after(() => stopServer(server));
+    const { port } = server.address();
+
+    const response = await fetch(`http://127.0.0.1:${port}/automation/status`);
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(await response.json(), {
+      agents: 3,
+      pendingTasks: 0,
+      completedTasks: 0,
+      failedTasks: 0,
+      runs: 0
+    });
+  });
+
   test("reports empty OpenAI usage before any provider requests", async (t) => {
     t.after(() => fs.rm(memoryDirectory, { recursive: true, force: true }));
     const server = await startServer();

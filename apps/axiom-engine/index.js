@@ -3,6 +3,10 @@ const path = require("path");
 const { ChatService } = require("./chat-service");
 const { MemoryStore } = require("./memory-store");
 const { UsageStore } = require("./usage-store");
+const {
+  AutomationService,
+  startAutomationScheduler
+} = require("./automation-service");
 const app = express();
 const memoryStore = new MemoryStore(
   process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data")
@@ -10,6 +14,10 @@ const memoryStore = new MemoryStore(
 const usageStore = new UsageStore(
   process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data")
 );
+const automationService = new AutomationService({
+  directory: process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data"),
+  memoryStore
+});
 const chatService = new ChatService({
   apiKey: process.env.OPENAI_API_KEY,
   model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
@@ -34,6 +42,64 @@ app.get("/health", (req, res) => {
 app.get("/usage", async (req, res, next) => {
   try {
     res.json(await usageStore.summary());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/automation/status", async (req, res, next) => {
+  try {
+    res.json(await automationService.status());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/automation/agents", async (req, res, next) => {
+  try {
+    res.json(await automationService.listAgents());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/automation/agents", async (req, res, next) => {
+  try {
+    res.status(201).json(await automationService.registerAgent(req.body));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/automation/tasks", async (req, res, next) => {
+  try {
+    res.json(await automationService.listTasks(req.query.status));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/automation/tasks", async (req, res, next) => {
+  try {
+    res.status(201).json(await automationService.createTask(req.body));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/automation/process", async (req, res, next) => {
+  try {
+    const maxTasks = req.body.maxTasks === undefined ? 5 : Number(req.body.maxTasks);
+    res.json(await automationService.processDueTasks(maxTasks));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/automation/runs", async (req, res, next) => {
+  try {
+    const limit = req.query.limit === undefined ? 50 : Number(req.query.limit);
+    res.json(await automationService.listRuns(limit));
   } catch (error) {
     next(error);
   }
@@ -121,6 +187,12 @@ app.use((error, req, res, next) => {
 });
 
 if (require.main === module) {
+  if (process.env.AXIOM_AUTOMATION_ENABLED === "true") {
+    startAutomationScheduler(automationService, {
+      pollIntervalMs: Number(process.env.AXIOM_AUTOMATION_POLL_INTERVAL_MS || 60_000),
+      maxTasks: Number(process.env.AXIOM_AUTOMATION_MAX_TASKS_PER_CYCLE || 5)
+    });
+  }
   app.listen(process.env.PORT || 3000, () => {
     console.log("AXIOM engine running");
   });

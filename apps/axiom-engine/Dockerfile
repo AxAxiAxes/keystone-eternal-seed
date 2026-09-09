@@ -9,6 +9,7 @@ COPY index.js ./
 COPY chat-service.js ./
 COPY memory-store.js ./
 COPY usage-store.js ./
+COPY automation-service.js ./
 
 EXPOSE 3000
 

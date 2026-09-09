@@ -14,6 +14,11 @@ The AXIOM engine implements the durable memory foundation described by the KEYST
 
 The JSONL layers are append-only through the service API. Identity is intentionally replaceable because it represents the current declared state.
 
+The private automation service records its durable task, agent, and execution
+state in `automation.json` in the same directory. See
+[`AXI_AUTOMATION_SERVICE.md`](AXI_AUTOMATION_SERVICE.md) for its action
+allowlist, APIs, and opt-in scheduler.
+
 ## Private API
 
 | Method | Path | Purpose |
