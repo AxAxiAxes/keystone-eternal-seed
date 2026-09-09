@@ -6,3 +6,4 @@ bin/
 obj/
 apps/axiom-engine/data/
 apps/axiom-freedom/axiom_memory/
+private-archive/

@@ -10,3 +10,4 @@ This directory preserves concise, versioned project conclusions so future work c
 - Do not store passwords, API keys, personal contact information, access tokens, private conversation transcripts, or other sensitive data.
 - A repository commit establishes the memory entry's history; it does not replace secure secret management or external legal recordkeeping.
 - Label founder-provided historical summaries as such, and distinguish them from implementation states verified in code or deployment checks.
+- Preserve unreviewed Copilot Library exports under the Git-ignored `private-archive/` workflow; publish only reviewed, public-safe conclusions or artifacts.
