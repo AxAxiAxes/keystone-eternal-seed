@@ -1,10 +1,16 @@
 const express = require("express");
 const path = require("path");
-const { ENTRY_KINDS, MemoryStore } = require("./memory-store");
+const { ChatService } = require("./chat-service");
+const { MemoryStore } = require("./memory-store");
 const app = express();
 const memoryStore = new MemoryStore(
   process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data")
 );
+const chatService = new ChatService({
+  apiKey: process.env.OPENAI_API_KEY,
+  model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
+  memoryStore
+});
 
 app.use(express.json());
 
@@ -60,8 +66,20 @@ app.post("/memory/:kind", async (req, res, next) => {
 });
 
 // Core automation route
-app.post("/axiom", (req, res) => {
+app.post("/axiom", async (req, res, next) => {
   const { action, payload } = req.body;
+
+  try {
+    if (action === "chat") {
+      const reply = await chatService.reply(payload?.message);
+      res.json({
+        engine: "AXIOM",
+        actionReceived: action,
+        reply,
+        status: "processed"
+      });
+      return;
+    }
 
   res.json({
     engine: "AXIOM",
@@ -69,11 +87,18 @@ app.post("/axiom", (req, res) => {
     payloadReceived: payload,
     status: "processed"
   });
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.use((error, req, res, next) => {
-  if (error instanceof TypeError || error instanceof RangeError) {
-    res.status(400).json({ error: error.message });
+  if (
+    error instanceof TypeError ||
+    error instanceof RangeError ||
+    Number.isInteger(error.statusCode)
+  ) {
+    res.status(error.statusCode || 400).json({ error: error.message });
     return;
   }
   next(error);

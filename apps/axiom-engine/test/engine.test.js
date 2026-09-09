@@ -61,6 +61,22 @@ test("reports engine health", async (t) => {
   });
 });
 
+test("reports an unavailable chat provider when no key is configured", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const response = await fetch(`http://127.0.0.1:${port}/axiom`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "chat", payload: { message: "Hello AXIOM" } })
+  });
+
+  assert.equal(response.status, 503);
+  assert.deepEqual(await response.json(), {
+    error: "OPENAI_API_KEY is not configured"
+  });
+});
 test("persists and retrieves AXI memory layers", async (t) => {
   t.after(() => fs.rm(memoryDirectory, { recursive: true, force: true }));
   const server = await startServer();

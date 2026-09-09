@@ -37,3 +37,14 @@ Send a `POST` request to `axiom-freedom` at `/api/axiom`.
 ```
 
 The public web service returns `400` for an invalid action and `502` when the engine is unreachable or fails to respond within five seconds.
+
+## OpenAI chat provider
+
+Set these values only in the local `apps/axiom-freedom/.env` file or a deployment secret store:
+
+```dotenv
+OPENAI_API_KEY=your-api-key
+OPENAI_MODEL=gpt-4.1-mini
+```
+
+The browser chat uses `action: "chat"` with `payload.message`. The engine sends the message and up to ten recent episodic records to OpenAI's Responses API, then appends the user message and provider reply to its private episodic memory store. Without `OPENAI_API_KEY`, chat returns `503` and no provider request is made.

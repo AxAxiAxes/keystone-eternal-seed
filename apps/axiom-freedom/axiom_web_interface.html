@@ -380,9 +380,7 @@
                     if (!response.ok) throw new Error('AXIOM is unavailable');
                     return response.json();
                 })
-                .then(response => addMessage(response.status === 'processed'
-                    ? 'AXIOM received your message.'
-                    : 'AXIOM could not process your message.', 'axiom'))
+                .then(response => addMessage(response.reply || 'AXIOM could not process your message.', 'axiom'))
                 .catch(() => addMessage('AXIOM is currently unavailable. Please try again shortly.', 'axiom'));
         }
 
