@@ -18,6 +18,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-09 | Complete | AXI.Core .NET 8 command contract and handler seam established | `packages/axi-core/src/AXI.Core` |
 | 2026-09-09 | Complete | AXIOM application integration contract and Compose topology established | `docs/ENGINE_INTEGRATION.md` |
 | 2026-09-09 | Complete | Repeatable automated checks added for AXI.Core and Node services | `AXIOM.sln`, application test suites |
+| 2026-09-09 | Complete | Consolidated Docker Compose deployment verified | Healthy `axiom-engine` and `axiom-web` containers; successful `POST /api/axiom` proxy response |
 
 ## Current checkpoints
 
@@ -27,24 +28,19 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Define the AXI.Core library implementation and public API.
 - [x] Specify how `axiom-engine` and `axiom-freedom` communicate and share configuration.
 - [x] Add automated checks for the engine and deployment configuration.
-- [ ] Run and record a complete deployment verification from the consolidated repository. **Blocked:** Docker Desktop requires WSL, which must be installed from an elevated PowerShell and followed by a Windows restart.
+- [x] Run and record a complete deployment verification from the consolidated repository.
 
-## Deployment prerequisite
+## Deployment verification
 
-Run the following in an elevated PowerShell, restart Windows, then start Docker Desktop:
+Docker Desktop must use the WSL 2 backend with Ubuntu integration enabled. From Ubuntu, build and start the two application services:
 
-```powershell
-wsl --install
-```
-
-After Docker Desktop is running, build and start the two application services from `apps/axiom-freedom`:
-
-```powershell
-Copy-Item .env.example .env
+```bash
+cd /mnt/c/Users/erick/copilot-worktrees/keystone-eternal-seed/axaxiaxes-congenial-succotash/apps/axiom-freedom
+cp .env.example .env
 docker compose up --build --wait axiom-engine axiom-web
 ```
 
-The deployment checkpoint is complete when `POST /api/axiom` through `axiom-web` returns the engine's `processed` response.
+The 2026-09-09 verification confirmed both services reached healthy state and that `POST /api/axiom` through `axiom-web` returned the engine's `processed` response. Remove the temporary `.env` file and run `docker compose down` when finished.
 
 ## Progress rule
 
