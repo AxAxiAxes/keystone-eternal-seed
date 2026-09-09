@@ -1,0 +1,25 @@
+{
+  "name": "axiom-engine",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "description": "",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AxAxiAxes/axiom-engine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AxAxiAxes/axiom-engine/issues"
+  },
+  "homepage": "https://github.com/AxAxiAxes/axiom-engine#readme"
+}
