@@ -4,6 +4,8 @@ The canonical repository for the AXIOM engine, AXIOM deployment materials, AXI.C
 
 Track completed milestones and next checkpoints in [PROJECT_TIMELINE.md](PROJECT_TIMELINE.md).
 
+For production hosting on Railway with `axescontracting.com`, follow [RAILWAY_DEPLOYMENT.md](docs/RAILWAY_DEPLOYMENT.md).
+
 ## Repository layout
 
 | Path | Purpose |
