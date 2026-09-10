@@ -53,6 +53,8 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Internal creator-origin constitution established for evidence, consent, research integrity, attribution, correction, and challenge handling | `docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md` |
 | 2026-09-10 | Complete | Founder direction corrected: URNUR is an intended monetary currency; all financial implementation remains blocked pending written permitted scope | `docs/URNUR_FINANCIAL_READINESS.md` |
 | 2026-09-10 | Complete | Chichetki collectible-gem and potential game direction recorded with a California legal, consumer-protection, and prize-mechanics gate | `docs/CHICHETKI_COLLECTIBLE_GEM_READINESS.md` |
+| 2026-09-10 | Complete | Chichetki/Athanor creative-orientation definition recorded for objects, dance, rhythm, and musical-instrument exploration | `docs/AXES_BUSINESS_PLAN.md` |
+| 2026-09-10 | Complete | Founder-directed pomegranate motif recorded as a symbolic creative orientation toward Athanor, with provenance and rights limits preserved | `docs/AXES_BUSINESS_PLAN.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints

@@ -110,6 +110,10 @@ age-appropriate program is approved. Before admitting minors, AXES needs:
 - Chichetki product language may describe design, art, sound, craft, and
   experience but must not make unsupported health, therapeutic, scientific,
   cultural, or intellectual-property claims.
+- Terms such as GPS, resequencer, transmission, energy, or alignment in
+  Chichetki/Athanor work are symbolic creative language only. Do not collect
+  location data, infer personal states, provide navigation, or claim to
+  measure, diagnose, transmit to, or alter a participant's condition.
 - Chichetki collectible gems require factual provenance, material, condition,
   pricing, fulfillment, and consumer terms. Do not offer a prize, game,
   trade, or value claim without jurisdiction-specific legal review of the

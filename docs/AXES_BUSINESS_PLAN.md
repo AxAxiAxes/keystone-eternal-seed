@@ -78,6 +78,20 @@ objects, sound, movement, visual design, play, and participatory experience.
 Its source direction includes tactile rhythm practice, crafted strands and
 objects, and the possibility of future interactive installations or events.
 
+The founder describes Chichetki as a symbolic creative "GPS" toward Athanor:
+an orientation practice expressed through crafted objects, dance, rhythm, and
+musical-instrument exploration. This is metaphorical creative language. It
+does not use or provide geographic positioning, location tracking, navigation,
+measurement, diagnosis, treatment, transmission, or a claim to alter a
+person's physical, emotional, spiritual, or mental state.
+
+Within this creative language, a founder-created pomegranate may symbolize an
+offering or orientation toward Athanor. It is an artistic motif, not an actual
+message, transmission, measurement, spiritual claim, or mechanism. Any public
+pomegranate asset must be founder-created, independently created, or properly
+licensed; the separate jeweled-pomegranate reference remains private
+inspiration only.
+
 **Athanor** is the internal creative concept for a harmonizing center within
 that system. It can guide the design of coherent experiences, installations,
 and editorial material. It is not an autonomous entity, measurement device,

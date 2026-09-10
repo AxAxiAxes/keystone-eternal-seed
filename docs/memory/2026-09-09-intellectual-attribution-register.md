@@ -216,3 +216,34 @@ official C2PA specifications at `https://c2pa.org/specifications/`, reviewed
 **Credit note:** This is an internal governance framework, not a legal
 determination or a representation that AXES verifies all real-world origin
 claims.
+
+### IA-2026-09-10-11 — Chichetki as creative orientation toward Athanor
+
+**Insight:** The founder describes Chichetki as a symbolic creative "GPS"
+toward Athanor, expressed through crafted objects, dance, rhythm, and
+musical-instrument exploration. This may guide original artistic and
+experiential direction.
+
+**Attribution:** Founder-provided concept.
+**Source:** Founder instruction recorded 2026-09-10 in this project session.
+**Implementation interpretation:** `docs/AXES_BUSINESS_PLAN.md` and
+`docs/INTERACTIVE_EXPERIENCE_CATALOG.md`.
+**Credit note:** GPS, resequencer, transmission, energy, and alignment are
+creative metaphors in this context. This entry does not assert geographic
+tracking, navigation, measurement, medical, psychological, spiritual,
+technical, or outcome functionality.
+
+### IA-2026-09-10-12 — Pomegranate as an Athanor creative motif
+
+**Insight:** The founder identifies a founder-created pomegranate as a
+symbolic creative offering or orientation toward Athanor within the Chichetki
+system.
+
+**Attribution:** Founder-provided concept.
+**Source:** Founder instruction recorded 2026-09-10 in this project session.
+**Implementation interpretation:** `docs/AXES_BUSINESS_PLAN.md`.
+**Credit note:** This is artistic language, not a representation of an actual
+transmission, measurement, spiritual fact, or technical mechanism. Any public
+asset must be founder-created, independently created, or properly licensed.
+The separate jeweled-pomegranate reference remains private inspiration only
+and may not be copied or published without rights-holder permission.
