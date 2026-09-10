@@ -32,6 +32,7 @@ stage.
 | Chichetki Studio | Founder-led creative line | Founder-designed physical rhythm objects, art editions, sound, movement, and carefully scoped experiences | Separate substantiated product descriptions from health, therapeutic, cultural, patent, or market claims |
 | XIIOM | Private operations core | Memory, monitoring, task controls, and review-only agent proposals | No public engine, arbitrary execution, account control, spending, or autonomous publication |
 | AXES Creative Studio | Future internal production workspace | Creative briefs, original image concepts, sound concepts, storyboards, and video shot lists | Human-approved providers, rights review, and private asset storage before generation or publication |
+| AULAUX directory | Future business-discovery pilot | Small, opt-in, human-reviewed business listings and referrals | No White Pages, public people search, identity registry, scraping, data brokerage, ad platform, or automated outreach |
 | AXOUX | Future creator pilot | Invite-only projects, contribution roles, and attribution history | Moderation, consent, and contributor terms before broad access |
 | School of Love & Ethics | Future learning pilot | Accessible curriculum, project labs, and voluntary reflection | Adult-only or separated cohorts until youth safeguarding is operational |
 | AXEOUS and AUXAOUS | Future community and self-design pilots | Moderated groups and private participant-controlled reflection | No unrestricted messaging, public sensitive profiles, or unmoderated interactions |
@@ -158,6 +159,9 @@ thresholds are in `PROJECT_BUDGET.md`.
 The baseline privacy, moderation, accessibility, youth, commerce, content, and
 pilot-launch operating rules are maintained in
 `AXES_GOVERNANCE_AND_SAFEGUARDING.md`.
+
+The business-only directory and human-reviewed marketing-assistance path is
+defined in `AULAUX_DIRECTORY_READINESS.md`.
 
 ## Success measures
 
