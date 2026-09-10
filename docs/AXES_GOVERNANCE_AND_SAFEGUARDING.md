@@ -110,6 +110,10 @@ age-appropriate program is approved. Before admitting minors, AXES needs:
 - Chichetki product language may describe design, art, sound, craft, and
   experience but must not make unsupported health, therapeutic, scientific,
   cultural, or intellectual-property claims.
+- Chichetki collectible gems require factual provenance, material, condition,
+  pricing, fulfillment, and consumer terms. Do not offer a prize, game,
+  trade, or value claim without jurisdiction-specific legal review of the
+  actual mechanics.
 - URNUR remains outside financial, market, crypto, token, custody, payment,
   exchange, or trading activity until written legal approval defines a
   permitted scope.

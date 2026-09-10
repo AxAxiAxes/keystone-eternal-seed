@@ -29,7 +29,7 @@ stage.
 | AXES Contracting | Central public hub | Company story, service registry, design guidance, contact and scoped intake | No unreviewed claims or account-control actions |
 | Architectural Design Desk | Design-education line | Tips, inspiration, material palettes, and consultation requests | Not licensed architecture, engineering, code, or safety advice without responsible professional review |
 | Building-Materials Discovery | Commercial discovery line | Curated materials, supplier links, sample/quote requests, and project inspiration | No checkout, inventory, fulfillment, warranties, tax, or payment processing until commerce operations are ready |
-| Chichetki Studio | Founder-led creative line | Founder-designed physical rhythm objects, art editions, sound, movement, and carefully scoped experiences | Separate substantiated product descriptions from health, therapeutic, cultural, patent, or market claims |
+| Chichetki Studio | Founder-led creative line | Founder-designed physical rhythm objects, collectible gems, art editions, sound, movement, and carefully scoped experiences | Separate substantiated product descriptions from health, therapeutic, cultural, patent, financial-value, prize, or market claims; California legal review before any gem game, prize, or exchange |
 | XIIOM | Private operations core | Memory, monitoring, task controls, and review-only agent proposals | No public engine, arbitrary execution, account control, spending, or autonomous publication |
 | AXES Creative Studio | Future internal production workspace | Creative briefs, original image concepts, sound concepts, storyboards, and video shot lists | Human-approved providers, rights review, and private asset storage before generation or publication |
 | AXES Directory | Future business-discovery pilot | Small, opt-in, human-reviewed listings for building-material vendors, contractors, and real-estate professionals | No White Pages, public people search, identity registry, scraping, data brokerage, ad platform, or automated outreach |
@@ -219,5 +219,6 @@ Track only metrics that help decide whether a service should continue:
 - `PROJECT_BUDGET.md`
 - `EMAIL_MIGRATION_PLAN.md`
 - `URNUR_FINANCIAL_READINESS.md`
+- `CHICHETKI_COLLECTIBLE_GEM_READINESS.md`
 - `AXES_OS_PORTABILITY.md`
 - `AXES_CREATOR_ORIGIN_CONSTITUTION.md`
