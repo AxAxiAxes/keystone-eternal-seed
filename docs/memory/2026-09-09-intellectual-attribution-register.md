@@ -142,6 +142,27 @@ and the future Architectural Design Desk.
 construction drawing, permit set, engineering specification, cost estimate,
 or representation of licensed professional services.
 
+### IA-2026-09-10-08 — Page 8 historical generator transcript
+
+**Insight:** A founder-provided historical transcript preserves a draft visual
+brief for a red-and-gold, symmetrical, illuminated-manuscript Page 8 featuring
+an Eternal Seed structure, Gothic-arrow geometry, architectural diagrams, and
+a continuous golden spine. The transcript also contains assertions about
+historic Copilot image generators that have not been independently verified.
+
+**Attribution:** Historical conversation source; the Page 8 brief is a draft
+reference pending founder approval.
+**Source:** Private archive
+`private-archive/copilot-library/2026-09-10-page-8-generator-transcript/source.txt`,
+SHA-256
+`2678329A994354ED3810CD1EF4A8485B11D7D80BA4A2BF8A9479606C9E9E8C3E`.
+**Implementation interpretation:** Future original Page 8 design brief only
+after founder approval; no technical or provider decision is derived from the
+generator assertions.
+**Credit note:** Preserve the transcript as historical context. Do not
+represent its model, engine, access-path, capability, or reproducibility
+statements as verified without direct evidence from the relevant product.
+
 ## Future entry standard
 
 For every material future insight, record:

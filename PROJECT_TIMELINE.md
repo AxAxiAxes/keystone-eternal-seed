@@ -42,6 +42,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Architectural design guidance, building-materials discovery, and Chetki studio tracks scoped for a controlled AXES pilot | `docs/INTERACTIVE_EXPERIENCE_CATALOG.md` |
 | 2026-09-10 | Complete | Founder-ready public-safe business plan consolidated across AXES Contracting, Chetki, XIIOM, creative studio, and future ventures | `docs/AXES_BUSINESS_PLAN.md` |
 | 2026-09-10 | Complete | Temple of Love architectural manuscript source privately archived, checksummed, and scoped as a future design-reference method | Private archive and `docs/INTERACTIVE_EXPERIENCE_CATALOG.md` |
+| 2026-09-10 | Complete | Historical Page 8 generator transcript privately archived with unverified engine claims separated from its draft visual brief | Private archive and `docs/memory` attribution register |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
