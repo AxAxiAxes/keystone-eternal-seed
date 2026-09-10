@@ -29,7 +29,7 @@ next begins.
 | 2 | Task execution controls | Add priorities, dependencies, bounded retries, approvals, and readable run history | Operational intelligence |
 | 3 | Production validation and delivery | Verify review-only production chat and connect engine deployment to the canonical source repository | Operational intelligence |
 | 4 | Governance and safeguarding | Establish privacy, consent, retention, moderation, reporting, appeals, and age-appropriate participation rules | Founder direction |
-| 5 | AXES Control Center pilot | Deliver a small public-safe hub and private service registry | Workstreams 2 and 4 |
+| 5 | AXES Control Center and interaction catalog | Deliver a small public-safe hub, private service registry, and staged reusable experiences | Workstreams 2 and 4 |
 | 6 | Creator and learning pilot | Pilot AXOUX projects and the School of Love & Ethics with moderation and scoped participation | Workstreams 4 and 5 |
 | 7 | Community and self-design pilot | Pilot AXEOUS and AUXAOUS only after safety, export, deletion, and abuse-response capabilities are established | Workstream 6 |
 | 8 | Recognition and lineage pilot | Pilot URNUR recognition and opt-in authorship/lineage records without transfers or financial functionality | Workstream 7 |
@@ -133,8 +133,10 @@ next begins.
 1. Contact qualified financial-services and digital-asset counsel before
    resuming crypto registration or designing financial-market functionality for
    URNUR.
-2. Implement Release A: private operational intelligence and task-execution
-   controls in `apps/axiom-engine` and the protected Automation Console.
+2. Deploy the completed private-engine monitoring and task-control updates,
+   then verify production chat and monitoring through the protected console.
+3. Begin Release B with the AXES Control Center visual rebuild and the staged
+   interaction catalog in `docs/INTERACTIVE_EXPERIENCE_CATALOG.md`.
 
 See `docs/URNUR_FINANCIAL_READINESS.md` for the attorney briefing packet and
 pre-launch engineering boundary.

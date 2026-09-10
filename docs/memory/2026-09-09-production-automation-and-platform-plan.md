@@ -60,6 +60,9 @@ product direction.
 - Elevated patent completion and URNUR legal readiness to P0 workstreams and
   created a conservative 12-month budget with legal, patent, backup, and
   operational spending gates.
+- Preserved a founder-supplied AXES source package with 42 checksummed visual,
+  audio, document, and prototype files, then classified candidate interactive
+  experiences for staged, governed implementation.
 
 ## Current operational state
 
