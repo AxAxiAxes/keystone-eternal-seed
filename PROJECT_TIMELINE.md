@@ -46,6 +46,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Founder-approved AXES Eternal Seed Page 8 visual brief established for future original design work | `docs/AXES_PAGE_8_VISUAL_BRIEF.md` |
 | 2026-09-10 | Complete | Chichetki name and Athanor creative-system direction confirmed, privately preserved, and safely integrated into active planning | Private archive and AXES planning documents |
 | 2026-09-10 | Complete | AXES Contracting public hub rebuilt with the approved architectural visual language and staged service presentation | `apps/axiom-freedom/axescontracting.html` |
+| 2026-09-10 | Complete | AXES governance and safeguarding foundation established for public and invite-only pilots | `docs/AXES_GOVERNANCE_AND_SAFEGUARDING.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
@@ -81,7 +82,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Rebuild the AXES Contracting hub from the approved visual direction using accessible, maintainable source.
 - [x] Add task priorities, specific scheduling, recurring schedules, and a protected schedule view.
 - [x] Establish the conservative project budget, spending gates, patent reserve, and patent-completion execution track.
-- [ ] Establish the AXES Control Center pilot with governance, data-handling, moderation, and safeguarding requirements.
+- [x] Establish the AXES Control Center pilot with governance, data-handling, moderation, and safeguarding requirements.
 - [ ] Connect `axescontracting.com` to Railway and verify its dedicated hub page, TLS, and health endpoint.
 - [ ] Complete and validate `info@axescontracting.com` migration from SiteGround to Microsoft 365.
 - [ ] Connect the Railway `axiom-web` service to `axescontracting.com` through SiteGround DNS.

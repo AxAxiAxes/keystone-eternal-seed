@@ -155,6 +155,10 @@ thresholds are in `PROJECT_BUDGET.md`.
 | Youth participation or community features | Age policy, safeguarding, moderation, reporting, appeals, and cohort design |
 | URNUR financial or crypto concepts | Written financial-services/digital-asset legal guidance and separately approved product scope |
 
+The baseline privacy, moderation, accessibility, youth, commerce, content, and
+pilot-launch operating rules are maintained in
+`AXES_GOVERNANCE_AND_SAFEGUARDING.md`.
+
 ## Success measures
 
 Track only metrics that help decide whether a service should continue:

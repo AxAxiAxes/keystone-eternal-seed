@@ -24,6 +24,9 @@ URNUR's financial-services legal-review gate and attorney briefing packet are
 in [URNUR_FINANCIAL_READINESS.md](docs/URNUR_FINANCIAL_READINESS.md).
 The conservative project budget, spending gates, and patent-completion
 workstream are in [PROJECT_BUDGET.md](docs/PROJECT_BUDGET.md).
+The minimum privacy, content, moderation, accessibility, youth, commerce, and
+pilot-launch operating rules are in
+[AXES_GOVERNANCE_AND_SAFEGUARDING.md](docs/AXES_GOVERNANCE_AND_SAFEGUARDING.md).
 
 ## Repository layout
 
