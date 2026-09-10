@@ -3,6 +3,7 @@ const path = require("path");
 const { ChatService } = require("./chat-service");
 const { MemoryStore } = require("./memory-store");
 const { UsageStore } = require("./usage-store");
+const { CheckpointService } = require("./checkpoint-service");
 const {
   AutomationService,
   startAutomationScheduler
@@ -17,6 +18,16 @@ const usageStore = new UsageStore(
 const automationService = new AutomationService({
   directory: process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data"),
   memoryStore
+});
+const checkpointService = new CheckpointService({
+  directory: process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data"),
+  modules: [
+    { id: "memory", version: "1" },
+    { id: "usage", version: "1" },
+    { id: "automation", version: "1" },
+    { id: "chat", version: "1" },
+    { id: "checkpoint", version: "1" }
+  ]
 });
 const chatService = new ChatService({
   apiKey: process.env.OPENAI_API_KEY,
@@ -42,6 +53,23 @@ app.get("/health", (req, res) => {
 app.get("/usage", async (req, res, next) => {
   try {
     res.json(await usageStore.summary());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/checkpoints", async (req, res, next) => {
+  try {
+    const limit = req.query.limit === undefined ? 20 : Number(req.query.limit);
+    res.json(await checkpointService.list(limit));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/system/checkpoints", async (req, res, next) => {
+  try {
+    res.status(201).json(await checkpointService.create());
   } catch (error) {
     next(error);
   }

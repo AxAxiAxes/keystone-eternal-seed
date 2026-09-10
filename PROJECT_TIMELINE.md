@@ -32,6 +32,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-09 | Complete | AXES constellation source reviewed and converted into a staged, safety-bounded product plan | `docs/AXES_PLATFORM_PLAN.md` |
 | 2026-09-09 | Complete | AXES domain portfolio and conservative hosting roadmap established | `docs/DOMAIN_PORTFOLIO.md` |
 | 2026-09-09 | Complete | Microsoft 365 target and rollback-safe migration plan selected for AXES business email | `docs/EMAIL_MIGRATION_PLAN.md` |
+| 2026-09-09 | Complete | AXES OS portability foundation and private checksummed checkpoint manifests added | `docs/AXES_OS_PORTABILITY.md` |
 
 ## Current checkpoints
 
@@ -50,6 +51,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Define the AXES, XIIOM, AXEOUS, URNUR, AXOUX, AUXAOUS, and School of Love & Ethics product direction with implementation boundaries.
 - [x] Define a conservative domain, hosting, data, and AXES-owned hardware transition strategy.
 - [x] Define the AXES business-email migration target and rollback-safe execution plan.
+- [x] Define module boundaries and add private integrity checkpoints for future AXES OS migration.
 - [ ] Set `OPENAI_API_KEY` as a Railway encrypted variable and verify a live production chat response.
 - [ ] Add private operational monitoring and task safeguards: priorities, dependencies, retries, approvals, and run history.
 - [ ] Establish the AXES Control Center pilot with governance, data-handling, moderation, and safeguarding requirements.

@@ -153,4 +153,18 @@ test("persists and retrieves AXI memory layers", async (t) => {
   assert.equal(identityRecord.name, "AXIOM");
   assert.equal(identityRecord.summary, "AXIOM command service identity");
   assert.ok(identityRecord.updatedAt);
+
+  const checkpointResponse = await fetch(
+    `http://127.0.0.1:${port}/system/checkpoints`,
+    { method: "POST" }
+  );
+  assert.equal(checkpointResponse.status, 201);
+  const checkpoint = await checkpointResponse.json();
+  assert.equal(checkpoint.schemaVersion, 1);
+  assert.ok(checkpoint.files.some((file) => file.path === "identity.json"));
+  assert.ok(checkpoint.files.some((file) => file.path === "episodic.jsonl"));
+
+  const checkpoints = await fetch(`http://127.0.0.1:${port}/system/checkpoints`);
+  assert.equal(checkpoints.status, 200);
+  assert.deepEqual(await checkpoints.json(), [checkpoint]);
 });

@@ -277,7 +277,7 @@ class AutomationService {
     await fs.mkdir(this.directory, { recursive: true });
     const temporaryPath = `${this.statePath()}.${randomUUID()}.tmp`;
     await fs.writeFile(temporaryPath, JSON.stringify(state, null, 2), "utf8");
-    await fs.rename(temporaryPath, this.statePath());
+    await replaceFile(temporaryPath, this.statePath());
   }
 
   statePath() {
@@ -346,6 +346,21 @@ function isNonEmptyString(value) {
 
 function isRecord(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+async function replaceFile(source, destination) {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      await fs.rename(source, destination);
+      return;
+    } catch (error) {
+      const isTransientLock = error.code === "EPERM" || error.code === "EBUSY";
+      if (!isTransientLock || attempt === 2) {
+        throw error;
+      }
+      await new Promise((resolve) => setTimeout(resolve, (attempt + 1) * 25));
+    }
+  }
 }
 
 module.exports = {
