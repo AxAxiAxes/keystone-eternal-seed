@@ -61,7 +61,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [ ] Set `OPENAI_API_KEY` as a Railway encrypted variable and verify a live production chat response.
 - [x] Add private operational monitoring, task priorities, specific scheduling, and a protected reevaluation view.
 - [x] Add task dependencies, bounded retries, explicit approvals, and operator-visible task attempts.
-- [ ] Add a dedicated operator-visible detailed run-history view.
+- [x] Add a dedicated protected run-history view for completed, retrying, and failed task outcomes.
 - [x] Add task priorities, specific scheduling, recurring schedules, and a protected schedule view.
 - [x] Establish the conservative project budget, spending gates, patent reserve, and patent-completion execution track.
 - [ ] Establish the AXES Control Center pilot with governance, data-handling, moderation, and safeguarding requirements.

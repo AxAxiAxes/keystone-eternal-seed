@@ -122,7 +122,9 @@ reevaluation history. The private API also provides `GET /monitoring/status`,
 The public portal supplies an authenticated operator interface at `/automation`.
 It can read automation status and agents, queue allowlisted tasks, set task
 priority and scheduled time, view the upcoming schedule, and process due tasks.
-It never exposes a direct engine URL or general engine proxy.
+It also displays the private run history, including completed, retrying, and
+failed task outcomes, attempts, agent assignments, and results. It never
+exposes a direct engine URL or general engine proxy.
 
 Set a unique secret only in the `axiom-freedom` Railway service variables:
 

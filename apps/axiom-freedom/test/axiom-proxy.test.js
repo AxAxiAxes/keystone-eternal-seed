@@ -117,6 +117,13 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
       attention: []
     });
 
+    const runHistory = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/runs`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(runHistory.status, 200);
+    assert.deepEqual(await runHistory.json(), []);
+
     const unavailableAgentChat = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/chat`,
       {

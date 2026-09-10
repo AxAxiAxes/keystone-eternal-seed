@@ -255,6 +255,19 @@ const server = http.createServer(async (req, res) => {
           }
           return;
     }
+    if (pathname === '/api/automation/runs' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const result = await invokeEngine('/automation/runs' + parsed.search);
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(result));
+              } catch (error) {
+                      console.error('AXIOM automation run-history request failed:', error.message);
+                      res.writeHead(502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
+              }
+              return;
+    }
     if (pathname === '/api/automation/chat' && req.method === 'POST') {
           if (!requireAdmin(req, res)) return;
           try {
