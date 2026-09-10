@@ -135,6 +135,16 @@ authorizes purchases, contracts, releases, and material operational changes.
 | 6 to 12 months | Scale selectively | Mature the best-performing offers; evaluate storefront only if ready; add limited learning/creator work | Revenue/cost evidence, support capacity, policies, data controls, and documented approvals |
 | Later | Community, recognition, media, and AXES OS growth | Separate product briefs and reversible pilots | Legal, safety, privacy, staffing, and budget gates are met |
 
+### AULAUX directory discovery sequence
+
+After the founder approves the directory readiness gates, begin with private
+interviews of business owners or authorized representatives. Use the interviews
+to validate categories, public listing fields, correction/removal expectations,
+and whether businesses wish to join a limited pilot. Send invitations only
+after the first catalog, privacy notice, participant terms, and correction
+workflow are ready. The initial catalog remains business-only, opt-in, and
+human-reviewed.
+
 ## Budget and controls
 
 The current conservative first-year planning range is **$17,720-$57,080**.
@@ -189,7 +199,9 @@ Track only metrics that help decide whether a service should continue:
 5. Confirm the first commercial pilot: design consultation, materials
    discovery, Chichetki catalog/interest requests, or a limited creative-studio
    workflow.
-6. Contact patent counsel and financial-services/digital-asset counsel before
+6. Approve the AULAUX directory pilot materials before interviewing or
+   inviting business representatives.
+7. Contact patent counsel and financial-services/digital-asset counsel before
    any related public claims, filings, crypto registration, or financial
    functionality.
 

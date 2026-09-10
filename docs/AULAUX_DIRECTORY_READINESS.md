@@ -57,6 +57,52 @@ Do not begin a public pilot until:
       tested.
 - [ ] The founder approves a fixed initial budget and a small pilot cohort.
 
+## Founder-led discovery and invitation program
+
+The first catalog should be built through a small, documented discovery cycle
+with business owners or authorized business representatives. The purpose is to
+learn whether the directory is useful, accurate, and manageable before any
+public launch.
+
+### Interview protocol
+
+Use a plain-language, voluntary interview that covers:
+
+1. The business's public name, category, service area, website, and preferred
+   public contact method.
+2. Whether the representative is authorized to request, approve, correct, or
+   remove a listing.
+3. What customers need help discovering about the business or service.
+4. Whether the business wants a free, limited pilot listing when available.
+5. The business's preferred communication method for a future invitation.
+
+Do not request personal identity documents, home addresses, payment
+information, private customer data, marketing credentials, or information
+unrelated to a listing. Record interview notes privately, minimize retained
+contact data, and honor a request not to be contacted again.
+
+### Invitation workflow
+
+1. The founder approves the catalog purpose, service area, listing fields,
+   public copy, privacy notice, and a small pilot list.
+2. Send a human-reviewed invitation explaining that the pilot is optional,
+   free unless clearly stated otherwise, and subject to correction/removal.
+3. Collect the business-owner or authorized-representative confirmation before
+   publishing a listing.
+4. Publish only the confirmed public fields and a clear “pilot listing” label.
+5. Provide a visible correction/removal contact and review requests promptly.
+6. Review pilot outcomes, support load, listing accuracy, and privacy issues
+   with the founder before any expansion.
+
+### Pilot success criteria
+
+- Listings are sourced from explicit business confirmation.
+- Every published business has a correction/removal route.
+- No personal directory data, advertisements, paid placement, or lead resale
+  is introduced.
+- A human can accurately maintain the directory within the approved budget and
+  response capacity.
+
 ## Related records
 
 - `AXES_BUSINESS_PLAN.md`
