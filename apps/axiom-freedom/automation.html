@@ -115,11 +115,20 @@ function renderTasks(tasks) {
 }
 async function refresh() {
   try {
-    const [status, agents, tasks, monitoring, monitoringHistory, runs] = await Promise.all([
+    const [status, agents, tasks, runs] = await Promise.all([
       request("/api/automation/status"), request("/api/automation/agents"), request("/api/automation/tasks"),
-      request("/api/automation/monitoring/status"), request("/api/automation/monitoring/history?limit=10"),
       request("/api/automation/runs?limit=25")
     ]);
+    let monitoring = { status: "unavailable", attention: [] };
+    let monitoringHistory = [];
+    try {
+      [monitoring, monitoringHistory] = await Promise.all([
+        request("/api/automation/monitoring/status"),
+        request("/api/automation/monitoring/history?limit=10")
+      ]);
+    } catch (error) {
+      result.textContent = "Monitoring will be available after the private engine deployment is updated.";
+    }
     document.querySelector("#metrics").innerHTML = Object.entries(status).map(([key,value]) => `<div class="metric"><strong>${value}</strong><br>${key}</div>`).join("");
     document.querySelector("#agents").innerHTML = table(agents, [["name","Name"],["capabilities","Capabilities"],["enabled","Enabled"]]);
     document.querySelector("#chat-agent").innerHTML = agents.map(agent => `<option value="${agent.id}">${agent.name}</option>`).join("");
@@ -137,8 +146,8 @@ async function refresh() {
       agentId: run.agentId,
       result: JSON.stringify(run.result)
     })), [["recordedAt","Recorded"],["status","Outcome"],["priority","Priority"],["attempt","Attempt"],["action","Action"],["agentId","Agent"],["result","Result"]]);
-    document.querySelector("#monitoring").innerHTML = monitoring.status === "not-yet-sampled"
-      ? "<p class='note'>No snapshot yet.</p>"
+    document.querySelector("#monitoring").innerHTML = !monitoring.snapshot
+      ? `<p class='note'>${monitoring.status === "not-yet-sampled" ? "No snapshot yet." : "Monitoring endpoint unavailable until the private engine is updated."}</p>`
       : table([{
         recordedAt: monitoring.recordedAt,
         attention: monitoring.attention.join(", ") || "none",
@@ -149,7 +158,7 @@ async function refresh() {
         scheduler: monitoring.snapshot.scheduler.lastRunAt || "not yet run"
       }], [["recordedAt","Last snapshot"],["attention","Attention"],["pendingTasks","Pending"],["failedTasks","Failed"],["agents","Agents"],["totalTokens","Tokens"],["scheduler","Scheduler"]]);
     document.querySelector("#monitoring-history").innerHTML = `<h3>Reevaluation history</h3>${table(monitoringHistory, [["recordedAt","Recorded"],["attention","Attention"]])}`;
-    result.textContent = "";
+    if (monitoring.snapshot) result.textContent = "";
   } catch (error) { result.textContent = error.message; }
 }
 document.querySelector("#action").addEventListener("change", event => document.querySelector("#memory-fields").classList.toggle("hidden", event.target.value !== "memory.record"));
