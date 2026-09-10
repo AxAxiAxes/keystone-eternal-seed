@@ -163,6 +163,11 @@ organization of misconduct without adequate evidence and appropriate review.
 Contested material is not used for promotion, marketing, rankings,
 endorsements, revenue claims, or model training while review is open.
 
+Creator-origin and lineage records may support accurate credit and provenance,
+but they do not establish financial value, investment value, scarcity,
+authenticity, popularity, social status, citizenship, or permission to sell,
+trade, tokenize, award, or otherwise transact in a work.
+
 ## Article X — Registry safeguards
 
 The creator-origin registry is a private, minimum-data record. It must not

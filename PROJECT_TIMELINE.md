@@ -59,6 +59,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Chichetki/Athanor objects defined as fictional game keys to future virtual-reality-home experiences, without physical, identity, ownership, or financial claims | `docs/ATHANOR_GAME_CONSOLE_READINESS.md` |
 | 2026-09-10 | Complete | Athanor virtual-home interactions defined for dance, design, play, and player-controlled harmonic interface resynchronization of game state only | `docs/ATHANOR_GAME_CONSOLE_READINESS.md` |
 | 2026-09-10 | Complete | Chichetki recorded as a founder-designed musical instrument within the Athanor game-console creative system | `docs/AXES_BUSINESS_PLAN.md` |
+| 2026-09-10 | Complete | URNUR creator-economy direction recorded for provenance-aware fashion, music, game, art, and collectible work, pending written financial and marketplace permitted scope | `docs/URNUR_FINANCIAL_READINESS.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints

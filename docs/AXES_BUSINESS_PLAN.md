@@ -36,7 +36,7 @@ stage.
 | AXOUS / AXOUX | AXOUS creator initiative through the AXOUX site | Invite-only projects, contribution roles, and attribution history | Moderation, consent, and contributor terms before broad access |
 | School of Love & Ethics | Future learning pilot | Accessible curriculum, project labs, and voluntary reflection | Adult-only or separated cohorts until youth safeguarding is operational |
 | AXEOUS and AUXAOUS | Future community and self-design pilots | Moderated groups and private participant-controlled reflection | No unrestricted messaging, public sensitive profiles, or unmoderated interactions |
-| URNUR | Future monetary currency and banking direction | Currency and prospective bank/financial-institution concept, subject to written permitted scope | No application, banking claim, issuance, deposit, sale, transfer, payment, custody, market, token, or trading functionality before qualified legal, compliance, security, and operational approval |
+| URNUR | Future monetary currency, banking, and creator-economy direction | Currency concept and potential creator economy for original fashion, music, game, art, and collectible work with documented provenance | No application, banking claim, issuance, deposit, sale, transfer, payment, custody, marketplace, token, or trading functionality before qualified legal, compliance, security, and operational approval |
 
 ## Customer and participant groups
 

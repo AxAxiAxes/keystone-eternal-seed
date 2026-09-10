@@ -23,6 +23,51 @@ protection, tax, and operational requirements define a written permitted
 scope. No public claim may imply that URNUR is issued, available, regulated,
 backed, valuable, transferable, or ready for use before those gates are met.
 
+## Proposed creator-economy direction
+
+The founder proposes that URNUR may eventually support a creator economy for
+original fashion, music, game, art, and related collectible work. Creators may
+make, buy, play with, and potentially exchange approved works under a lawful,
+reviewed product model. Documented creator origin and contribution lineage may
+help provide credit and provenance for a work.
+
+Terms such as higher harmonics, resonance, alignment, intelligence lineage,
+and energy are creative or cultural descriptions only. They are not objective
+quality measures, price models, investment ratings, citizenship status,
+financial-credit scores, guarantees of demand, proof of value, or claims that
+a work has a measurable personal effect. AXES must not state that URNUR is
+"more than" another currency or otherwise make unsupported comparative,
+performance, or value claims.
+
+“Citizen” may be used only as optional fictional game-world or community
+language after a separate participant-policy review. It must not imply
+nationality, legal residency, identity verification, civic rights, membership
+eligibility, social ranking, or a requirement to disclose personal identity.
+
+## Required scope decision for creator trading
+
+Before enabling any purchase, sale, trade, prize, exchange, marketplace,
+creator payout, secondary resale, currency use, account balance, or
+participant-owned digital item, obtain a written permitted scope that covers:
+
+1. California and applicable U.S. federal financial-services, money-
+   transmission, digital-asset, securities, commodities, banking, consumer,
+   tax, advertising, and prize/contest implications.
+2. Creator rights, contributor agreements, license terms, provenance,
+   counterfeit/impersonation response, takedown/correction handling, and
+   rights-holder dispute process.
+3. Payment processing, custody, account/balance treatment, fraud prevention,
+   sanctions/anti-money-laundering requirements where applicable, security,
+   privacy, data retention, and customer support.
+4. Product disclosures that distinguish creative provenance from authenticity,
+   scarcity, resale value, financial value, investment potential, or
+   endorsement.
+
+Until that decision is approved, the permitted work is internal product
+research, creator-origin record design, original asset creation, and
+non-transactional prototypes using no accounts, payments, prizes, balances,
+trades, or publicly collected participant data.
+
 ## Bank-registration prerequisite
 
 Bank or financial-institution registration is jurisdiction-specific and may
