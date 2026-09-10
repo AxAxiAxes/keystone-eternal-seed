@@ -14,6 +14,11 @@ AXES domain portfolio. They are references and prototypes, not automatic
 production deployments. Each experience is rebuilt as a small, maintainable
 module with a defined domain, visibility, data policy, and safety boundary.
 
+The founder-approved **AXES Eternal Seed Page 8** design direction is defined
+in `AXES_PAGE_8_VISUAL_BRIEF.md`. It is the canonical brief for related
+original visual work and does not depend on a particular image-generation
+provider.
+
 ## Source inventory
 
 | Source class | Count | Use |
