@@ -517,6 +517,23 @@ test("reports an unavailable chat provider when no key is configured", async (t)
     error: "OPENAI_API_KEY is not configured"
   });
 });
+
+test("does not expose parser details for malformed engine requests", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const response = await fetch(`http://127.0.0.1:${port}/axiom`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "{"
+  });
+
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), {
+    error: "Invalid JSON request"
+  });
+});
 test("persists and retrieves AXI memory layers", async (t) => {
   t.after(() => fs.rm(memoryDirectory, { recursive: true, force: true }));
   const server = await startServer();

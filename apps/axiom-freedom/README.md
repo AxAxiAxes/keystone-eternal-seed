@@ -28,3 +28,10 @@ Run the activation script from PowerShell. It prompts for the API key without ec
 ```
 
 The key remains local to this computer and is never written to source-controlled files.
+
+## Private-engine diagnostics
+
+Authenticated operators can use `/api/support/status` to distinguish the safe
+categories `unreachable-private-engine` and `engine-non-success-response`.
+The public `/api/axiom` endpoint intentionally continues to return only its
+generic unavailable response and never relays private-engine details.
