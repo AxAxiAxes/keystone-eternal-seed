@@ -1,4 +1,4 @@
-# AULAUX directory and marketing readiness
+# AXES Directory and marketing readiness
 
 **Status:** Future concept; no public directory or marketing agent is active  
 **Recorded:** 2026-09-10  
@@ -6,7 +6,7 @@
 
 ## Purpose
 
-The AULAUX concept can become a useful local business-discovery and
+The AXES Directory can become a useful local business-discovery and
 project-connection service within the AXES ecosystem. Its first release must
 be a small, business-only, opt-in directory—not a combined Yellow Pages and
 White Pages system, a public people-search tool, an identity registry, or an
@@ -17,7 +17,7 @@ automated marketing platform.
 | Phase | Allowed scope | Explicitly excluded |
 | --- | --- | --- |
 | 0 - Research | Product brief, data model, jurisdiction review, provider evaluation, and private sample data | Publishing listings, collecting personal data, account linking, messaging, ads, or identity checks |
-| 1 - Curated business pilot | A small human-reviewed list of businesses that opt in, with name, public business category, public contact method, website, service area, and listing date | Residential addresses, personal contact details, user accounts, reviews, rankings, paid placement, scraping, or “verified” claims |
+| 1 - Curated business pilot | A small human-reviewed list of opt-in building-material vendors, contractors, and real-estate professionals, with name, public category, public contact method, website, service area, and listing date | Residential addresses, personal contact details, user accounts, reviews, rankings, paid placement, scraping, or “verified” claims |
 | 2 - Claim and update flow | Business-owner request process, correction/removal path, clear listing source, and human review | Automated verification, document collection, public identity records, or algorithmic reputation scores |
 | 3 - Search and referrals | Category and locality filters, human-reviewed supplier/referral introductions, and transparent sponsorship disclosures | Payments, lead resale, ads, automated outreach, bulk email/SMS, or personalized marketing |
 | Deferred | Any broader directory or communications feature | White Pages, identity registry, citizenship/passport claims, message routing, anti-fraud guarantees, surveillance, data brokerage, or financial features |
@@ -80,6 +80,18 @@ Do not request personal identity documents, home addresses, payment
 information, private customer data, marketing credentials, or information
 unrelated to a listing. Record interview notes privately, minimize retained
 contact data, and honor a request not to be contacted again.
+
+### Initial catalog categories
+
+Begin with narrow, understandable categories:
+
+- Building-material vendors and showrooms.
+- Contractors and trade professionals.
+- Real-estate professionals and related public services.
+
+Each category must use factual public descriptions. A listing is not a
+recommendation, license verification, background check, property valuation,
+availability guarantee, or endorsement by AXES.
 
 ### Invitation workflow
 

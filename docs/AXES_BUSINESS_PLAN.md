@@ -32,7 +32,7 @@ stage.
 | Chichetki Studio | Founder-led creative line | Founder-designed physical rhythm objects, art editions, sound, movement, and carefully scoped experiences | Separate substantiated product descriptions from health, therapeutic, cultural, patent, or market claims |
 | XIIOM | Private operations core | Memory, monitoring, task controls, and review-only agent proposals | No public engine, arbitrary execution, account control, spending, or autonomous publication |
 | AXES Creative Studio | Future internal production workspace | Creative briefs, original image concepts, sound concepts, storyboards, and video shot lists | Human-approved providers, rights review, and private asset storage before generation or publication |
-| AULAUX directory | Future business-discovery pilot | Small, opt-in, human-reviewed business listings and referrals | No White Pages, public people search, identity registry, scraping, data brokerage, ad platform, or automated outreach |
+| AXES Directory | Future business-discovery pilot | Small, opt-in, human-reviewed listings for building-material vendors, contractors, and real-estate professionals | No White Pages, public people search, identity registry, scraping, data brokerage, ad platform, or automated outreach |
 | AXOUX | Future creator pilot | Invite-only projects, contribution roles, and attribution history | Moderation, consent, and contributor terms before broad access |
 | School of Love & Ethics | Future learning pilot | Accessible curriculum, project labs, and voluntary reflection | Adult-only or separated cohorts until youth safeguarding is operational |
 | AXEOUS and AUXAOUS | Future community and self-design pilots | Moderated groups and private participant-controlled reflection | No unrestricted messaging, public sensitive profiles, or unmoderated interactions |
@@ -135,7 +135,7 @@ authorizes purchases, contracts, releases, and material operational changes.
 | 6 to 12 months | Scale selectively | Mature the best-performing offers; evaluate storefront only if ready; add limited learning/creator work | Revenue/cost evidence, support capacity, policies, data controls, and documented approvals |
 | Later | Community, recognition, media, and AXES OS growth | Separate product briefs and reversible pilots | Legal, safety, privacy, staffing, and budget gates are met |
 
-### AULAUX directory discovery sequence
+### AXES Directory discovery sequence
 
 After the founder approves the directory readiness gates, begin with private
 interviews of business owners or authorized representatives. Use the interviews
@@ -171,7 +171,7 @@ pilot-launch operating rules are maintained in
 `AXES_GOVERNANCE_AND_SAFEGUARDING.md`.
 
 The business-only directory and human-reviewed marketing-assistance path is
-defined in `AULAUX_DIRECTORY_READINESS.md`.
+defined in `AXES_DIRECTORY_READINESS.md`.
 
 ## Success measures
 
@@ -199,7 +199,7 @@ Track only metrics that help decide whether a service should continue:
 5. Confirm the first commercial pilot: design consultation, materials
    discovery, Chichetki catalog/interest requests, or a limited creative-studio
    workflow.
-6. Approve the AULAUX directory pilot materials before interviewing or
+6. Approve the AXES Directory pilot materials before interviewing or
    inviting business representatives.
 7. Contact patent counsel and financial-services/digital-asset counsel before
    any related public claims, filings, crypto registration, or financial
