@@ -1,82 +1,208 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AXES Contracting: design direction, material discovery, Chichetki studio, and responsibly governed technology.">
   <title>AXES Contracting | The AXES Control Center</title>
   <style>
     :root {
       color-scheme: dark;
-      font-family: system-ui, sans-serif;
-      --background: #09101f;
-      --surface: #14213a;
-      --border: #293d61;
-      --text: #e7edf7;
-      --muted: #aebbd0;
-      --accent: #66d9ef;
+      --ink: #100c11;
+      --ink-soft: #1d1219;
+      --wine: #571b2b;
+      --garnet: #8a2538;
+      --gold: #ddb65c;
+      --gold-light: #f7db92;
+      --paper: #f5ead4;
+      --muted: #d1bfa7;
+      --line: rgba(221, 182, 92, .3);
     }
-
-    body { background: var(--background); color: var(--text); margin: 0; }
-    main { margin: auto; max-width: 1080px; padding: 4rem 1.5rem; }
-    h1 { font-size: clamp(2.5rem, 7vw, 5rem); margin: 0; }
-    h2 { color: var(--accent); }
-    .eyebrow { color: var(--accent); font-weight: 700; letter-spacing: .12em; }
-    .tagline { color: var(--muted); font-size: 1.25rem; line-height: 1.6; max-width: 48rem; }
-    .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: 2rem 0; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: .75rem; padding: 1.5rem; }
-    .stage { color: var(--muted); font-size: .9rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
-    a { color: var(--accent); font-weight: 650; }
-    footer { border-top: 1px solid var(--border); color: var(--muted); margin-top: 3rem; padding-top: 1.5rem; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background:
+        linear-gradient(115deg, rgba(221, 182, 92, .06) 1px, transparent 1px) 0 0 / 48px 48px,
+        linear-gradient(25deg, rgba(221, 182, 92, .04) 1px, transparent 1px) 0 0 / 48px 48px,
+        radial-gradient(circle at 50% 8%, #5a1c2b 0, var(--ink) 48rem);
+      color: var(--paper);
+      font: 16px/1.6 Georgia, "Times New Roman", serif;
+      margin: 0;
+    }
+    a { color: var(--gold-light); text-underline-offset: .22em; }
+    a:hover { color: #fff1c7; }
+    .shell { margin: auto; max-width: 1180px; padding: 0 24px 72px; }
+    .topbar {
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      font-family: system-ui, sans-serif;
+      justify-content: space-between;
+      padding: 18px 0;
+    }
+    .wordmark { color: var(--gold-light); font-size: .78rem; font-weight: 800; letter-spacing: .22em; text-decoration: none; }
+    nav { display: flex; flex-wrap: wrap; gap: 16px; }
+    nav a { color: var(--muted); font-size: .85rem; text-decoration: none; }
+    nav a:hover { color: var(--gold-light); }
+    .hero { min-height: 600px; padding: 92px 0 64px; position: relative; text-align: center; }
+    .eyebrow { color: var(--gold); font-family: system-ui, sans-serif; font-size: .78rem; font-weight: 800; letter-spacing: .23em; margin: 0; text-transform: uppercase; }
+    h1 { font-size: clamp(3.1rem, 10vw, 7.6rem); font-weight: 400; letter-spacing: .05em; line-height: .92; margin: 28px 0 18px; text-transform: uppercase; }
+    h1 span { color: var(--gold-light); display: block; font-size: .38em; letter-spacing: .32em; margin: 18px 0 0 .32em; }
+    .lede { color: var(--muted); font-size: clamp(1.1rem, 2.5vw, 1.4rem); margin: 0 auto; max-width: 650px; }
+    .seed {
+      border: 1px solid var(--gold);
+      border-radius: 48% 48% 52% 52% / 35% 35% 66% 66%;
+      box-shadow: 0 0 0 13px rgba(221, 182, 92, .06), 0 0 80px rgba(221, 182, 92, .14), inset 0 0 55px rgba(221, 182, 92, .12);
+      height: 280px;
+      left: 50%;
+      opacity: .82;
+      pointer-events: none;
+      position: absolute;
+      top: 272px;
+      transform: translateX(-50%);
+      width: 168px;
+    }
+    .seed::before, .seed::after {
+      border: 1px solid rgba(247, 219, 146, .62);
+      content: "";
+      height: 128%;
+      left: 50%;
+      position: absolute;
+      top: -14%;
+      transform: translateX(-50%) rotate(36deg);
+      width: 1px;
+    }
+    .seed::after { transform: translateX(-50%) rotate(-36deg); }
+    .hero-copy { position: relative; z-index: 1; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 42px; }
+    .button { border: 1px solid var(--gold); color: var(--ink); display: inline-block; font-family: system-ui, sans-serif; font-size: .86rem; font-weight: 800; letter-spacing: .05em; padding: 12px 18px; text-decoration: none; text-transform: uppercase; }
+    .button.primary { background: var(--gold); }
+    .button.secondary { background: rgba(16, 12, 17, .45); color: var(--gold-light); }
+    .button:hover { background: var(--gold-light); color: var(--ink); }
+    .blueprint { border-bottom: 1px solid var(--line); border-top: 1px solid var(--line); display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); padding: 22px 0; }
+    .blueprint div { color: var(--muted); font-family: system-ui, sans-serif; font-size: .78rem; letter-spacing: .04em; }
+    .blueprint strong { color: var(--gold); display: block; font-size: 1.3rem; font-weight: 500; }
+    section { padding-top: 76px; }
+    .section-label { color: var(--gold); font-family: system-ui, sans-serif; font-size: .78rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+    h2 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 400; line-height: 1.05; margin: 10px 0 22px; }
+    .intro { color: var(--muted); font-size: 1.15rem; max-width: 710px; }
+    .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 32px; }
+    .card { background: linear-gradient(145deg, rgba(102, 29, 45, .72), rgba(29, 18, 25, .84)); border: 1px solid var(--line); min-height: 245px; padding: 26px; position: relative; }
+    .card::before { background: var(--gold); content: ""; height: 1px; left: 26px; position: absolute; top: 0; width: 50px; }
+    .state { color: var(--gold); font-family: system-ui, sans-serif; font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    h3 { font-size: 1.55rem; font-weight: 400; line-height: 1.15; margin: 16px 0 10px; }
+    .card p { color: var(--muted); margin: 0; }
+    .statement { border: 1px solid var(--line); font-size: clamp(1.6rem, 3.6vw, 2.65rem); line-height: 1.2; margin-top: 36px; padding: clamp(28px, 6vw, 64px); text-align: center; }
+    .statement em { color: var(--gold-light); font-style: normal; }
+    .operating { background: rgba(12, 9, 13, .7); border: 1px solid var(--line); display: grid; gap: 24px; grid-template-columns: 1fr auto; margin-top: 36px; padding: 28px; }
+    .operating h2 { margin-bottom: 10px; }
+    .operating p { color: var(--muted); max-width: 630px; }
+    footer { border-top: 1px solid var(--line); color: var(--muted); font-family: system-ui, sans-serif; font-size: .84rem; margin-top: 80px; padding-top: 24px; }
+    @media (max-width: 620px) {
+      .shell { padding-left: 18px; padding-right: 18px; }
+      .topbar { align-items: flex-start; flex-direction: column; gap: 14px; }
+      .hero { min-height: 530px; padding-top: 70px; }
+      .seed { top: 250px; transform: translateX(-50%) scale(.76); }
+      .blueprint { grid-template-columns: 1fr; }
+      .operating { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   </style>
 </head>
 <body>
-  <main>
-    <p class="eyebrow">AXES CONTRACTING</p>
-    <h1>The AXES Control Center</h1>
-    <p class="tagline">
-      A deliberate home for the AXES product constellation: ethical creation,
-      learning, durable records, and responsibly governed technology.
-    </p>
+  <main class="shell">
+    <header class="topbar">
+      <a class="wordmark" href="#top">AXES CONTRACTING</a>
+      <nav aria-label="Primary navigation">
+        <a href="#studio">Studio</a>
+        <a href="#materials">Materials</a>
+        <a href="#operating">Operations</a>
+        <a href="/library/AXES_BUSINESS_PLAN.md">Business plan</a>
+      </nav>
+    </header>
 
-    <section class="grid" aria-label="Active and planned services">
-      <article class="card">
-        <p class="stage">Operating now</p>
-        <h2>XIIOM</h2>
-        <p>Private AXI operations with bounded automation, durable memory, and a protected operator console.</p>
-        <a href="https://xiiom.com">Visit XIIOM</a>
-      </article>
-      <article class="card">
-        <p class="stage">In planning</p>
-        <h2>Creator and learning pilots</h2>
-        <p>AXOUX creator projects and a moderated School of Love &amp; Ethics are the next public-facing pilots.</p>
-        <a href="/library/AXES_BUILD_PROGRAM.md">Read the build program</a>
-      </article>
-      <article class="card">
-        <p class="stage">In planning</p>
-        <h2>Digital library</h2>
-        <p>A privacy-conscious library for reviewed records, project work, and credited contributions.</p>
-        <a href="/library/AXES_PLATFORM_PLAN.md">Read the platform plan</a>
-      </article>
+    <section class="hero" id="top" aria-labelledby="page-title">
+      <div class="seed" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <p class="eyebrow">Design · Material · Technology</p>
+        <h1 id="page-title">AXES<span>The AXES Control Center</span></h1>
+        <p class="lede">A founder-led home for thoughtful design, original creative work, material discovery, and responsibly governed technology.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#studio">Explore the studio</a>
+          <a class="button secondary" href="/library/AXES_BUSINESS_PLAN.md">Read the plan</a>
+        </div>
+      </div>
     </section>
 
-    <section class="card">
-      <h2>All for All</h2>
-      <p>
-        We build in stages: protect privacy, preserve attribution, keep people
-        in control, and make each service useful before expanding to the next.
-      </p>
+    <div class="blueprint" aria-label="AXES operating principles">
+      <div><strong>Original</strong>Founder-led visual and physical design direction.</div>
+      <div><strong>Deliberate</strong>Each offering is released in measured, useful stages.</div>
+      <div><strong>Accountable</strong>People retain approval over operations and expansion.</div>
+    </div>
+
+    <section id="studio" aria-labelledby="studio-title">
+      <p class="section-label">The public studio</p>
+      <h2 id="studio-title">Spaces for design, craft, and creative direction.</h2>
+      <p class="intro">AXES Contracting begins with clear, useful public information. Services and products are labeled plainly as available, in development, or planned.</p>
+      <div class="grid">
+        <article class="card">
+          <p class="state">Planning</p>
+          <h3>Architectural Design Desk</h3>
+          <p>Design tips, interior inspiration, material palettes, and scoped project conversations. Educational guidance only unless qualified professionals define a service scope.</p>
+        </article>
+        <article class="card">
+          <p class="state">Planning</p>
+          <h3>Chichetki Studio</h3>
+          <p>Founder-designed rhythm objects, art editions, sound, movement, and participatory creative experiences shaped through craft and care.</p>
+        </article>
+        <article class="card">
+          <p class="state">Future internal workspace</p>
+          <h3>AXES Creative Studio</h3>
+          <p>Human-approved briefs, storyboards, original image concepts, sound concepts, and video planning with private source and rights records.</p>
+        </article>
+      </div>
+      <div class="statement">The work begins with <em>form, material, light, and intention</em>—then earns its next stage through careful making.</div>
     </section>
 
-    <section class="card">
-      <p class="stage">Operator access</p>
-      <h2>Technical support desk</h2>
-      <p>A protected, read-only workspace for checking the public portal, private AXIOM engine, automation, checkpoints, and planned email migration.</p>
-      <a href="/support">Open the support desk</a>
+    <section id="materials" aria-labelledby="materials-title">
+      <p class="section-label">Materials discovery</p>
+      <h2 id="materials-title">A curated starting point, not a generic marketplace.</h2>
+      <p class="intro">The future materials collection will connect visual direction with practical discovery: finishes, color stories, crafted details, and approved supplier references.</p>
+      <div class="grid">
+        <article class="card">
+          <p class="state">First release</p>
+          <h3>Material palettes</h3>
+          <p>Curated themes for warm woods, garnet tones, gold accents, stone, glass, textiles, and crafted ornament.</p>
+        </article>
+        <article class="card">
+          <p class="state">First release</p>
+          <h3>Project inquiry</h3>
+          <p>Requests for material inspiration, samples, or an introduction to an approved supplier—reviewed by a person before follow-up.</p>
+        </article>
+        <article class="card">
+          <p class="state">Deferred</p>
+          <h3>Commerce and fulfillment</h3>
+          <p>Checkout, payment collection, inventory, shipping, returns, and warranties begin only when suppliers, operations, customer support, taxes, and terms are ready.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="operating" aria-labelledby="operating-title">
+      <p class="section-label">Private operations</p>
+      <div class="operating">
+        <div>
+          <h2 id="operating-title">XIIOM keeps the operational foundation private.</h2>
+          <p>AXI memory, monitoring, bounded automation, and support signals remain behind protected operator access. Automation can propose and record approved work; it does not independently deploy, access accounts, spend funds, or publish.</p>
+        </div>
+        <div>
+          <a class="button secondary" href="https://xiiom.com">Visit XIIOM</a>
+          <p><a href="/support">Operator support desk</a></p>
+        </div>
+      </div>
     </section>
 
     <footer>
-      AXES Contracting is the central hub. Product availability and operating
-      status are stated plainly as services are introduced.
+      AXES Contracting · All for All · Product availability and operating status are stated plainly as services are introduced.
     </footer>
   </main>
 </body>
