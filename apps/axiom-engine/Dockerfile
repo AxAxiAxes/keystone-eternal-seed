@@ -11,6 +11,7 @@ COPY memory-store.js ./
 COPY usage-store.js ./
 COPY automation-service.js ./
 COPY checkpoint-service.js ./
+COPY monitoring-service.js ./
 
 EXPOSE 3000
 

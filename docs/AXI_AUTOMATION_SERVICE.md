@@ -86,6 +86,26 @@ The poll interval must be from 1,000 through 3,600,000 milliseconds, and each
 cycle may process 1 through 20 tasks. The scheduler logs failures explicitly;
 it does not silently claim completion.
 
+## Live intelligence monitoring
+
+The private engine can record operational snapshots with:
+
+```dotenv
+AXIOM_MONITORING_ENABLED=true
+AXIOM_MONITORING_POLL_INTERVAL_MS=60000
+```
+
+Snapshots include memory availability, scheduler heartbeat and error state,
+task queue and failure counts, enabled agents, recorded runs, and private
+provider token totals. A history entry is retained only when a monitored state
+meaningfully changes or enters attention state, preventing repetitive records.
+Attention states include unavailable memory, failed tasks, scheduler errors,
+and a queue backlog above 20 tasks.
+
+The protected console can capture a snapshot and display current signals and
+reevaluation history. The private API also provides `GET /monitoring/status`,
+`GET /monitoring/history`, and `POST /monitoring/snapshots`.
+
 ## Protected browser console
 
 The public portal supplies an authenticated operator interface at `/automation`.

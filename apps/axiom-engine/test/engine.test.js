@@ -167,4 +167,21 @@ test("persists and retrieves AXI memory layers", async (t) => {
   const checkpoints = await fetch(`http://127.0.0.1:${port}/system/checkpoints`);
   assert.equal(checkpoints.status, 200);
   assert.deepEqual(await checkpoints.json(), [checkpoint]);
+
+  const monitoring = await fetch(`http://127.0.0.1:${port}/monitoring/snapshots`, {
+    method: "POST"
+  });
+  assert.equal(monitoring.status, 201);
+  const monitoringSnapshot = await monitoring.json();
+  assert.equal(monitoringSnapshot.snapshot.memoryAvailable, true);
+  assert.equal(monitoringSnapshot.snapshot.automation.agents, 3);
+
+  const monitoringHistory = await fetch(`http://127.0.0.1:${port}/monitoring/history`);
+  assert.equal(monitoringHistory.status, 200);
+  assert.deepEqual(await monitoringHistory.json(), [{
+    id: monitoringSnapshot.id,
+    recordedAt: monitoringSnapshot.recordedAt,
+    snapshot: monitoringSnapshot.snapshot,
+    attention: monitoringSnapshot.attention
+  }]);
 });

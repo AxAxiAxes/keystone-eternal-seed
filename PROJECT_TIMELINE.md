@@ -35,6 +35,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-09 | Complete | AXES OS portability foundation and private checksummed checkpoint manifests added | `docs/AXES_OS_PORTABILITY.md` |
 | 2026-09-09 | In progress | URNUR financial-services legal readiness elevated as a pre-launch blocker | `docs/URNUR_FINANCIAL_READINESS.md` |
 | 2026-09-09 | Complete | Automation Console schedule and durable priority ordering added | `apps/axiom-engine/automation-service.js`, `apps/axiom-freedom/automation.html` |
+| 2026-09-09 | Complete | Private live intelligence monitoring and protected reevaluation view added | `apps/axiom-engine/monitoring-service.js`, `apps/axiom-freedom/automation.html` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
@@ -58,7 +59,8 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Define the AXES business-email migration target and rollback-safe execution plan.
 - [x] Define module boundaries and add private integrity checkpoints for future AXES OS migration.
 - [ ] Set `OPENAI_API_KEY` as a Railway encrypted variable and verify a live production chat response.
-- [ ] Add private operational monitoring and task safeguards: priorities, dependencies, retries, approvals, and run history.
+- [x] Add private operational monitoring, task priorities, specific scheduling, and a protected reevaluation view.
+- [ ] Add task dependencies, bounded retries, approvals, and operator-visible detailed run history.
 - [x] Add task priorities, specific scheduling, recurring schedules, and a protected schedule view.
 - [x] Establish the conservative project budget, spending gates, patent reserve, and patent-completion execution track.
 - [ ] Establish the AXES Control Center pilot with governance, data-handling, moderation, and safeguarding requirements.

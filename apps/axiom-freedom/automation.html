@@ -30,6 +30,13 @@
     <p id="result" aria-live="polite"></p>
   </section>
   <section>
+    <h2>Live Intelligence</h2>
+    <p class="note">Private health, memory, scheduler, queue, failure, agent, run, and provider-usage signals. History records only meaningful changes or attention conditions.</p>
+    <div class="actions"><button id="capture-monitoring" class="secondary">Capture Snapshot</button></div>
+    <div id="monitoring"></div>
+    <div id="monitoring-history"></div>
+  </section>
+  <section>
     <h2>Queue Task</h2>
     <form id="task-form">
       <label>Title <input id="title" required maxlength="200" placeholder="Record a verified milestone"></label>
@@ -88,19 +95,33 @@ function renderSchedule(tasks) {
 }
 async function refresh() {
   try {
-    const [status, agents, tasks] = await Promise.all([
-      request("/api/automation/status"), request("/api/automation/agents"), request("/api/automation/tasks")
+    const [status, agents, tasks, monitoring, monitoringHistory] = await Promise.all([
+      request("/api/automation/status"), request("/api/automation/agents"), request("/api/automation/tasks"),
+      request("/api/automation/monitoring/status"), request("/api/automation/monitoring/history?limit=10")
     ]);
     document.querySelector("#metrics").innerHTML = Object.entries(status).map(([key,value]) => `<div class="metric"><strong>${value}</strong><br>${key}</div>`).join("");
     document.querySelector("#agents").innerHTML = table(agents, [["name","Name"],["capabilities","Capabilities"],["enabled","Enabled"]]);
     document.querySelector("#chat-agent").innerHTML = agents.map(agent => `<option value="${agent.id}">${agent.name}</option>`).join("");
     renderSchedule(tasks);
     document.querySelector("#tasks").innerHTML = table(tasks, [["priority","Priority"],["title","Title"],["action","Action"],["status","Status"],["runCount","Runs"],["runAt","Next run"]]);
+    document.querySelector("#monitoring").innerHTML = monitoring.status === "not-yet-sampled"
+      ? "<p class='note'>No snapshot yet.</p>"
+      : table([{
+        recordedAt: monitoring.recordedAt,
+        attention: monitoring.attention.join(", ") || "none",
+        pendingTasks: monitoring.snapshot.automation.pendingTasks,
+        failedTasks: monitoring.snapshot.automation.failedTasks,
+        agents: monitoring.snapshot.automation.agents,
+        totalTokens: monitoring.snapshot.usage.totalTokens,
+        scheduler: monitoring.snapshot.scheduler.lastRunAt || "not yet run"
+      }], [["recordedAt","Last snapshot"],["attention","Attention"],["pendingTasks","Pending"],["failedTasks","Failed"],["agents","Agents"],["totalTokens","Tokens"],["scheduler","Scheduler"]]);
+    document.querySelector("#monitoring-history").innerHTML = `<h3>Reevaluation history</h3>${table(monitoringHistory, [["recordedAt","Recorded"],["attention","Attention"]])}`;
     result.textContent = "";
   } catch (error) { result.textContent = error.message; }
 }
 document.querySelector("#action").addEventListener("change", event => document.querySelector("#memory-fields").classList.toggle("hidden", event.target.value !== "memory.record"));
 document.querySelector("#refresh").addEventListener("click", refresh);
+document.querySelector("#capture-monitoring").addEventListener("click", async () => { try { result.textContent = `Snapshot: ${(await request("/api/automation/monitoring/snapshots", {method:"POST",body:"{}"})).recorded ? "recorded" : "unchanged"}`; await refresh(); } catch(error) { result.textContent=error.message; } });
 document.querySelector("#process").addEventListener("click", async () => { try { result.textContent = JSON.stringify(await request("/api/automation/process", {method:"POST",body:"{}"}),null,2); await refresh(); } catch(error) { result.textContent=error.message; } });
 document.querySelector("#task-form").addEventListener("submit", async event => {
   event.preventDefault();

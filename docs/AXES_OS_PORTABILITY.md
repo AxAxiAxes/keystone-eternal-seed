@@ -18,6 +18,7 @@ boundaries.
 | `usage` | Private provider token-usage accounting | `openai-usage.jsonl` |
 | `automation` | Allowlisted tasks, agent registry, runs, and schedules | `automation.json` |
 | `chat` | Private provider request orchestration and contextual retrieval | Uses memory and usage modules; does not own a separate data file |
+| `monitoring` | Private operational snapshots and attention history | `monitoring.json` |
 | `checkpoint` | Portable state inventory and integrity hashes | `checkpoints/*.json` |
 | `portal` | Public pages and authenticated operator proxy | No durable data; configuration comes from environment variables |
 

@@ -250,6 +250,43 @@ const server = http.createServer(async (req, res) => {
           }
           return;
     }
+    if (pathname === '/api/automation/monitoring/status' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(await invokeEngine('/monitoring/status')));
+              } catch (error) {
+                      console.error('AXIOM monitoring status request failed:', error.message);
+                      res.writeHead(502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: 'AXIOM monitoring service is unavailable' }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/monitoring/history' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(await invokeEngine('/monitoring/history' + parsed.search)));
+              } catch (error) {
+                      console.error('AXIOM monitoring history request failed:', error.message);
+                      res.writeHead(502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: 'AXIOM monitoring service is unavailable' }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/monitoring/snapshots' && req.method === 'POST') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const snapshot = await invokeEngine('/monitoring/snapshots', 'POST', {});
+                      res.writeHead(201, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(snapshot));
+              } catch (error) {
+                      console.error('AXIOM monitoring snapshot failed:', error.message);
+                      res.writeHead(502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: 'AXIOM monitoring service is unavailable' }));
+              }
+              return;
+    }
     if (pathname === '/admin') {
           if (!requireAdmin(req, res)) return;
           serveFile(res, path.join(__dirname, 'admin.html'), 'text/html; charset=utf-8');

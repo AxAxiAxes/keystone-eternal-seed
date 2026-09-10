@@ -308,16 +308,23 @@ class AutomationService {
 function startAutomationScheduler(service, {
   pollIntervalMs = 60_000,
   maxTasks = 5,
-  logger = console
+  logger = console,
+  onCycle = () => {}
 } = {}) {
   if (!Number.isInteger(pollIntervalMs) || pollIntervalMs < 1_000 ||
     pollIntervalMs > 3_600_000) {
     throw new RangeError("pollIntervalMs must be an integer from 1000 to 3600000");
   }
 
-  const process = () => service.processDueTasks(maxTasks).catch((error) => {
-    logger.error("AXIOM automation scheduler failed:", error);
-  });
+  const process = async () => {
+    try {
+      await service.processDueTasks(maxTasks);
+      onCycle({ error: null });
+    } catch (error) {
+      logger.error("AXIOM automation scheduler failed:", error);
+      onCycle({ error });
+    }
+  };
   process();
   return setInterval(process, pollIntervalMs);
 }

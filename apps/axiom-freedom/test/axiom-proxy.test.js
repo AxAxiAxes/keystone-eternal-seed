@@ -107,6 +107,16 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(automationStatus.status, 200);
     assert.equal((await automationStatus.json()).agents, 3);
 
+    const monitoringStatus = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/monitoring/status`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(monitoringStatus.status, 200);
+    assert.deepEqual(await monitoringStatus.json(), {
+      status: "not-yet-sampled",
+      attention: []
+    });
+
     const unavailableAgentChat = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/chat`,
       {

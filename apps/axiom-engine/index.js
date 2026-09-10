@@ -4,6 +4,7 @@ const { ChatService } = require("./chat-service");
 const { MemoryStore } = require("./memory-store");
 const { UsageStore } = require("./usage-store");
 const { CheckpointService } = require("./checkpoint-service");
+const { MonitoringService } = require("./monitoring-service");
 const {
   AutomationService,
   startAutomationScheduler
@@ -26,8 +27,18 @@ const checkpointService = new CheckpointService({
     { id: "usage", version: "1" },
     { id: "automation", version: "1" },
     { id: "chat", version: "1" },
+    { id: "monitoring", version: "1" },
     { id: "checkpoint", version: "1" }
   ]
+});
+const scheduler = {
+  enabled: process.env.AXIOM_AUTOMATION_ENABLED === "true",
+  lastRunAt: null,
+  lastError: null
+};
+const monitoringService = new MonitoringService({
+  directory: process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data"),
+  memoryStore
 });
 const chatService = new ChatService({
   apiKey: process.env.OPENAI_API_KEY,
@@ -53,6 +64,45 @@ app.get("/health", (req, res) => {
 app.get("/usage", async (req, res, next) => {
   try {
     res.json(await usageStore.summary());
+  } catch (error) {
+    next(error);
+  }
+});
+
+async function captureMonitoringSnapshot() {
+  await memoryStore.list("decision", 1);
+  const [automation, usage] = await Promise.all([
+    automationService.status(),
+    usageStore.summary()
+  ]);
+  return monitoringService.record({
+    memoryAvailable: true,
+    scheduler: { ...scheduler },
+    automation,
+    usage
+  });
+}
+
+app.get("/monitoring/status", async (req, res, next) => {
+  try {
+    res.json(await monitoringService.status());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/monitoring/history", async (req, res, next) => {
+  try {
+    const limit = req.query.limit === undefined ? 20 : Number(req.query.limit);
+    res.json(await monitoringService.history(limit));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/monitoring/snapshots", async (req, res, next) => {
+  try {
+    res.status(201).json(await captureMonitoringSnapshot());
   } catch (error) {
     next(error);
   }
@@ -228,8 +278,22 @@ if (require.main === module) {
   if (process.env.AXIOM_AUTOMATION_ENABLED === "true") {
     startAutomationScheduler(automationService, {
       pollIntervalMs: Number(process.env.AXIOM_AUTOMATION_POLL_INTERVAL_MS || 60_000),
-      maxTasks: Number(process.env.AXIOM_AUTOMATION_MAX_TASKS_PER_CYCLE || 5)
+      maxTasks: Number(process.env.AXIOM_AUTOMATION_MAX_TASKS_PER_CYCLE || 5),
+      onCycle: ({ error }) => {
+        scheduler.lastRunAt = new Date().toISOString();
+        scheduler.lastError = error ? error.message : null;
+      }
     });
+  }
+  if (process.env.AXIOM_MONITORING_ENABLED === "true") {
+    const intervalMs = Number(process.env.AXIOM_MONITORING_POLL_INTERVAL_MS || 60_000);
+    if (!Number.isInteger(intervalMs) || intervalMs < 1_000 || intervalMs > 3_600_000) {
+      throw new RangeError("AXIOM_MONITORING_POLL_INTERVAL_MS must be from 1000 to 3600000");
+    }
+    captureMonitoringSnapshot().catch((error) => console.error("AXIOM monitoring failed:", error));
+    setInterval(() => {
+      captureMonitoringSnapshot().catch((error) => console.error("AXIOM monitoring failed:", error));
+    }, intervalMs);
   }
   app.listen(process.env.PORT || 3000, () => {
     console.log("AXIOM engine running");
