@@ -274,6 +274,10 @@ app.post("/axiom", async (req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
+  if (error instanceof SyntaxError) {
+    res.status(400).json({ error: "Invalid JSON request" });
+    return;
+  }
   if (
     error instanceof TypeError ||
     error instanceof RangeError ||
@@ -282,7 +286,7 @@ app.use((error, req, res, next) => {
     res.status(error.statusCode || 400).json({ error: error.message });
     return;
   }
-  next(error);
+  res.status(500).json({ error: "AXIOM engine request failed" });
 });
 
 if (require.main === module) {

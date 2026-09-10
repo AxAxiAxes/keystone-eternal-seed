@@ -41,6 +41,10 @@ const cards = document.querySelector("#cards");
 const detail = document.querySelector("#detail");
 const updated = document.querySelector("#updated");
 const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character]));
+const engineDiagnosticText = category => ({
+  "unreachable-private-engine": "The portal could not reach the private engine.",
+  "engine-non-success-response": "The private engine responded unsuccessfully."
+}[category] || "Private service reachability.");
 function card(label, item, description) {
   const state = item.status || "unknown";
   return `<article class="card"><div class="label">${escapeHtml(label)}</div><p class="status ${escapeHtml(state)}">${escapeHtml(state)}</p><p class="note">${escapeHtml(description)}</p></article>`;
@@ -52,7 +56,7 @@ async function refresh() {
     if (!response.ok) throw new Error(status.error || `Request failed (${response.status})`);
     cards.innerHTML = [
       card("Public portal", status.portal, "Public site route and support desk are responding."),
-      card("Private AXIOM engine", status.engine, status.engine.detail || "Private service reachability."),
+      card("Private AXIOM engine", status.engine, status.engine.detail || engineDiagnosticText(status.engine.diagnostic?.category)),
       card("Automation", status.automation, status.automation.status === "ok" ? `${status.automation.pendingTasks || 0} pending; ${status.automation.failedTasks || 0} failed.` : "Private automation status is unavailable."),
       card("Email migration", status.email, `${status.email.mailbox}: ${status.email.detail}`)
     ].join("");
@@ -62,6 +66,7 @@ async function refresh() {
       <tr><th>Monitoring</th><td>${escapeHtml(status.monitoring.status)}</td></tr>
       <tr><th>Attention</th><td>${escapeHtml(snapshot ? (status.monitoring.attention || []).join(", ") || "none" : "No private monitoring snapshot available.")}</td></tr>
       <tr><th>Latest checkpoint</th><td>${escapeHtml(latest ? `${latest.createdAt || latest.recordedAt || "recorded"} (${latest.id || "no ID"})` : "None recorded or private engine unavailable.")}</td></tr>
+      <tr><th>Last engine failure</th><td>${escapeHtml(status.lastEngineFailure ? `${status.lastEngineFailure.category} (${new Date(status.lastEngineFailure.recordedAt).toLocaleString()})` : "None recorded since portal start.")}</td></tr>
       <tr><th>Email target</th><td>${escapeHtml(status.email.target)}</td></tr>
     </tbody></table>`;
     updated.textContent = `Updated ${new Date(status.recordedAt).toLocaleString()}`;

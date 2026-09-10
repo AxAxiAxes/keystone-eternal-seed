@@ -10,6 +10,11 @@ const DOCUMENTS_DIRECTORY = fs.existsSync(path.join(__dirname, 'docs'))
     ? path.resolve(__dirname, 'docs')
     : path.resolve(__dirname, '..', '..', 'docs');
 const AXIOM_ENGINE_URL = new URL(process.env.AXIOM_ENGINE_URL || 'http://127.0.0.1:3000');
+const ENGINE_FAILURE_CATEGORY = Object.freeze({
+    UNREACHABLE: 'unreachable-private-engine',
+    NON_SUCCESS: 'engine-non-success-response'
+});
+let lastEngineFailure = null;
 
 function isAxesContractingHost(host) {
     return String(host || '').split(':')[0].toLowerCase() === 'axescontracting.com';
@@ -72,25 +77,58 @@ function serveDocument(res, pathname) {
 }
 
 async function invokeEngine(endpoint, method = 'GET', body) {
-    const response = await fetch(new URL(endpoint, AXIOM_ENGINE_URL), {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: body === undefined ? undefined : JSON.stringify(body),
-        signal: AbortSignal.timeout(60000)
-    });
-
-    if (!response.ok) {
-        const payload = await response.json().catch(() => ({}));
-        const error = new Error(payload.error || 'AXIOM engine returned HTTP ' + response.status);
-        error.statusCode = response.status;
-        throw error;
+    let response;
+    try {
+        response = await fetch(new URL(endpoint, AXIOM_ENGINE_URL), {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: body === undefined ? undefined : JSON.stringify(body),
+            signal: AbortSignal.timeout(60000)
+        });
+    } catch (error) {
+        throw recordEngineFailure(ENGINE_FAILURE_CATEGORY.UNREACHABLE);
     }
 
-    return response.json();
+    if (!response.ok) {
+        throw recordEngineFailure(
+            ENGINE_FAILURE_CATEGORY.NON_SUCCESS,
+            response.status
+        );
+    }
+
+    try {
+        return await response.json();
+    } catch (error) {
+        throw recordEngineFailure(ENGINE_FAILURE_CATEGORY.NON_SUCCESS);
+    }
 }
 
 function invokeAxiomEngine(command) {
     return invokeEngine('/axiom', 'POST', command);
+}
+
+function recordEngineFailure(category, statusCode) {
+    lastEngineFailure = {
+        category,
+        recordedAt: new Date().toISOString()
+    };
+    const error = new Error('AXIOM engine request failed');
+    error.diagnosticCategory = category;
+    if (Number.isInteger(statusCode)) error.statusCode = statusCode;
+    return error;
+}
+
+function getEngineFailureCategory(error) {
+    return Object.values(ENGINE_FAILURE_CATEGORY).includes(error.diagnosticCategory)
+        ? error.diagnosticCategory
+        : ENGINE_FAILURE_CATEGORY.UNREACHABLE;
+}
+
+function unavailableEngineStatus(error) {
+    return {
+        status: 'unavailable',
+        diagnostic: { category: getEngineFailureCategory(error) }
+    };
 }
 
 async function getSupportStatus() {
@@ -107,16 +145,17 @@ async function getSupportStatus() {
         portal: { status: 'ok', service: 'AXES Contracting support desk' },
         engine: engine.status === 'fulfilled'
             ? { status: 'ok', detail: engine.value.status || 'online' }
-            : { status: 'unavailable' },
+            : unavailableEngineStatus(engine.reason),
         automation: automation.status === 'fulfilled'
             ? { status: 'ok', ...automation.value }
-            : { status: 'unavailable' },
+            : unavailableEngineStatus(automation.reason),
         monitoring: monitoring.status === 'fulfilled'
             ? { status: 'ok', ...monitoring.value }
-            : { status: 'unavailable' },
+            : unavailableEngineStatus(monitoring.reason),
         checkpoints: checkpoints.status === 'fulfilled'
             ? { status: 'ok', latest: checkpoints.value[0] || null }
-            : { status: 'unavailable' },
+            : unavailableEngineStatus(checkpoints.reason),
+        lastEngineFailure,
         email: {
             status: 'planned',
             mailbox: 'info@axescontracting.com',
@@ -208,7 +247,7 @@ const server = http.createServer(async (req, res) => {
                   res.writeHead(200, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify(result));
           } catch (error) {
-                  console.error('AXIOM engine request failed:', error.message);
+                  console.error('AXIOM engine request failed:', getEngineFailureCategory(error));
                   res.writeHead(502, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify({ error: 'AXIOM engine is unavailable' }));
           }
