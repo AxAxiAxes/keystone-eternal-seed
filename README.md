@@ -4,6 +4,10 @@ The canonical repository for the AXIOM engine, AXIOM deployment materials, AXI.C
 
 Track completed milestones and next checkpoints in [PROJECT_TIMELINE.md](PROJECT_TIMELINE.md).
 
+The consolidated, public-safe business plan for AXES Contracting, Chetki,
+XIIOM, the creative studio, and future ventures is in
+[AXES_BUSINESS_PLAN.md](docs/AXES_BUSINESS_PLAN.md).
+
 For production hosting on Railway with `axescontracting.com`, follow [RAILWAY_DEPLOYMENT.md](docs/RAILWAY_DEPLOYMENT.md).
 
 The staged AXES product constellation and its privacy, safeguarding, and

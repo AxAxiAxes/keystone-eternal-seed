@@ -1,0 +1,184 @@
+# AXES business plan
+
+**Status:** Founder-ready consolidated plan  
+**Recorded:** 2026-09-10  
+**Founder principle:** All for All  
+**Confidentiality:** This is a public-safe operating plan. Private source
+documents, personal records, legal material, product designs, asset files,
+account information, and detailed financial models remain outside the public
+repository.
+
+## Executive summary
+
+AXES is a founder-led constellation of design, creative work, technology, and
+learning experiences. AXES Contracting is the public hub and commercial home.
+Chetki is the physical-object, art, sound, and experiential studio. XIIOM is
+the private operational core for AXI memory, monitoring, and bounded
+automation.
+
+The first business objective is not to launch every idea at once. It is to
+operate one reliable shared foundation, establish a truthful public presence,
+and release small offerings that have a clear customer, owner, budget, and
+human approval path. New domains remain parked until a product earns its next
+stage.
+
+## Business architecture
+
+| Area | Role | Current or initial offer | Boundary |
+| --- | --- | --- | --- |
+| AXES Contracting | Central public hub | Company story, service registry, design guidance, contact and scoped intake | No unreviewed claims or account-control actions |
+| Architectural Design Desk | Design-education line | Tips, inspiration, material palettes, and consultation requests | Not licensed architecture, engineering, code, or safety advice without responsible professional review |
+| Building-Materials Discovery | Commercial discovery line | Curated materials, supplier links, sample/quote requests, and project inspiration | No checkout, inventory, fulfillment, warranties, tax, or payment processing until commerce operations are ready |
+| Chetki Studio | Founder-led creative line | Founder-designed physical works, art editions, sound, and carefully scoped experiences | Separate substantiated product descriptions from health, therapeutic, cultural, patent, or market claims |
+| XIIOM | Private operations core | Memory, monitoring, task controls, and review-only agent proposals | No public engine, arbitrary execution, account control, spending, or autonomous publication |
+| AXES Creative Studio | Future internal production workspace | Creative briefs, original image concepts, sound concepts, storyboards, and video shot lists | Human-approved providers, rights review, and private asset storage before generation or publication |
+| AXOUX | Future creator pilot | Invite-only projects, contribution roles, and attribution history | Moderation, consent, and contributor terms before broad access |
+| School of Love & Ethics | Future learning pilot | Accessible curriculum, project labs, and voluntary reflection | Adult-only or separated cohorts until youth safeguarding is operational |
+| AXEOUS and AUXAOUS | Future community and self-design pilots | Moderated groups and private participant-controlled reflection | No unrestricted messaging, public sensitive profiles, or unmoderated interactions |
+| URNUR | Future recognition direction | Non-transferable contribution recognition after review | No financial, market, token, custody, payment, or trading functionality before written legal approval |
+
+## Customer and participant groups
+
+1. **Design and contracting clients:** People seeking thoughtful visual,
+material, and project inspiration, eventually with clearly scoped professional
+services where qualified providers are responsible.
+2. **Collectors and creative patrons:** People interested in founder-designed
+physical work, art editions, sound, and limited experiences.
+3. **Creators and collaborators:** Invite-only contributors who need a clear
+project role, consent terms, and credit record.
+4. **Learners and community participants:** People accessing free or low-cost
+education and moderated project activity.
+5. **Internal operators:** The founder and approved operators who maintain
+hosting, deployment, assets, records, support, and approvals.
+
+## Value proposition
+
+AXES combines a consistent founder visual language with a disciplined operating
+model:
+
+- Design direction informed by original physical work, interior composition,
+  Chetki material practice, the hero-and-pomegranate motif, the eternal-seed
+  frame, and blueprint composition.
+- Carefully selected material and creative references rather than a generic
+  marketplace.
+- Private, durable operational tooling that keeps automation limited,
+  observable, and approval-bounded.
+- Clear credit, consent, and human stewardship rather than unsupported claims
+  of ownership, efficacy, identity, or value.
+
+The gemstone-pomegranate reference remains inspiration only. It can inform
+color, material, light, and ornament but is not an AXES asset or logo and must
+not be copied or published without rights-holder permission.
+
+## Revenue model and sequencing
+
+The program uses diversified revenue only after the associated operating
+requirements are satisfied.
+
+| Stage | Revenue or support model | Readiness requirement |
+| --- | --- | --- |
+| Foundation | Founder-funded shared operations, service inquiries, approved design consultation | Public hub, email continuity, clear scope, and human response process |
+| Chetki pilot | Founder-designed objects, art editions, and approved interest requests | Asset catalog, pricing approval, fulfillment plan, rights review, and customer terms |
+| Material discovery | Referral relationships, approved supplier introductions, or qualified leads | Written supplier terms, disclosure rules, accurate product data, and no deceptive endorsements |
+| Events and sound | Tickets, editions, licensing, or commissions where appropriate | Venue/host terms, accessibility, rights clearance, insurance and safety review where required |
+| Creator and learning pilot | Grants, sponsorships, memberships, or paid workshops only after review | Moderation, safeguarding, consent, participant terms, and financial tracking |
+| Mature commerce | Store checkout and fulfillment | Taxes, payments, inventory, shipping, returns, privacy, security, support, and accounting operations |
+
+No financial-market, crypto, token, payment, custody, exchange, autotrading, or
+investment activity is part of the current business model.
+
+## Operating model
+
+### Shared technical foundation
+
+One shared public service can host branded pages for the active domains.
+XIIOM remains a separate private engine with persistent data, monitoring,
+checkpoints, and an allowlisted task system. The protected AXES Support Desk
+provides read-only visibility into the public portal, engine, automation,
+checkpoints, and email-migration status.
+
+### Asset and content governance
+
+Every asset used publicly needs a recorded source, creator credit, intended
+use, accessibility treatment, and rights status. Keep founder source archives
+private. Keep external reference material private unless a specific licensed
+or permission-based use is documented.
+
+### Human decision authority
+
+Automation may record, monitor, and propose. It cannot independently create
+accounts, accept terms, spend money, deploy, contact people, publish media, or
+change domain/email settings. The founder or a designated human approver
+authorizes purchases, contracts, releases, and material operational changes.
+
+## Launch plan
+
+| Horizon | Objective | Deliverables | Exit evidence |
+| --- | --- | --- | --- |
+| Now to 30 days | Stabilize and establish the hub | Redeploy healthy private engine; connect AXES domain; complete support desk; finish email inventory; prepare legal/patent records | Healthy service, verified chat, private backups/checkpoints, domain TLS, and complete access inventory |
+| 30 to 90 days | Validate commercial direction | AXES visual rebuild; Architectural Design Desk; materials-discovery catalog; Chetki catalog brief; original asset selection | Public copy is factual and accessible; each offer has an owner, intake path, and published scope |
+| 3 to 6 months | Run small pilots | Approved Chetki interest/pilot launch; supplier-discovery relationships; private Creative Studio prototype; invite-only creator registry | Measured inquiries, delivery capability, feedback, asset/rights records, and a reviewed operating budget |
+| 6 to 12 months | Scale selectively | Mature the best-performing offers; evaluate storefront only if ready; add limited learning/creator work | Revenue/cost evidence, support capacity, policies, data controls, and documented approvals |
+| Later | Community, recognition, media, and AXES OS growth | Separate product briefs and reversible pilots | Legal, safety, privacy, staffing, and budget gates are met |
+
+## Budget and controls
+
+The current conservative first-year planning range is **$17,720-$57,080**.
+Protect patent completion, legal review, security, backups, email continuity,
+and the shared operating core before discretionary expansion. Maintain a small
+initial operational cap, request written quotes for professional work, and
+retain a contingency reserve. The authoritative planning ranges and approval
+thresholds are in `PROJECT_BUDGET.md`.
+
+## Critical legal and professional gates
+
+| Topic | Required before launch or public claim |
+| --- | --- |
+| Patent, ownership, or invention claims | Confirmed records and qualified patent counsel review |
+| Architecture, engineering, construction, or code advice | Defined jurisdiction, responsible qualified professional, insurance/terms as needed, and reviewed scope |
+| Product store and materials sales | Supplier/fulfillment terms, taxes, consumer terms, privacy/security, product data, customer support, and accounting |
+| Health, wellness, therapeutic, cultural, or outcome claims | Supportable wording and appropriate qualified review |
+| Creative media providers | Commercial-use terms, pricing approval, asset provenance, privacy review, and human publication approval |
+| Youth participation or community features | Age policy, safeguarding, moderation, reporting, appeals, and cohort design |
+| URNUR financial or crypto concepts | Written financial-services/digital-asset legal guidance and separately approved product scope |
+
+## Success measures
+
+Track only metrics that help decide whether a service should continue:
+
+- Portal availability, private-engine availability, backup/checkpoint recency,
+  and unresolved support items.
+- Qualified design, material, Chetki, and creative-studio inquiries.
+- Pilot conversion, fulfillment reliability, support response time, and
+  customer/participant feedback.
+- Actual monthly spending against the approved cap.
+- Asset-rights completeness and content accessibility completion.
+- For collaborative pilots: participant safety, moderation response, consent,
+  attribution, export, and deletion outcomes.
+
+## Immediate founder decisions
+
+1. Redeploy and verify the private XIIOM engine so public AXIOM chat and
+   operational monitoring work reliably.
+2. Connect `axescontracting.com` using Railway's exact DNS record, while
+   preserving current email records.
+3. Complete the `info@axescontracting.com` Microsoft 365 access inventory and
+   backup before any mail cutover.
+4. Select the first founder-created assets and copy for the AXES visual rebuild.
+5. Confirm the first commercial pilot: design consultation, materials
+   discovery, Chetki catalog/interest requests, or a limited creative-studio
+   workflow.
+6. Contact patent counsel and financial-services/digital-asset counsel before
+   any related public claims, filings, crypto registration, or financial
+   functionality.
+
+## Related operating records
+
+- `AXES_BUILD_PROGRAM.md`
+- `AXES_PLATFORM_PLAN.md`
+- `INTERACTIVE_EXPERIENCE_CATALOG.md`
+- `DOMAIN_PORTFOLIO.md`
+- `PROJECT_BUDGET.md`
+- `EMAIL_MIGRATION_PLAN.md`
+- `URNUR_FINANCIAL_READINESS.md`
+- `AXES_OS_PORTABILITY.md`

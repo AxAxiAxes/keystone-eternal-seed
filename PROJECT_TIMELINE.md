@@ -40,6 +40,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Protected AXES Contracting support desk added for portal, engine, automation, checkpoint, and email-migration visibility | `apps/axiom-freedom/support.html` |
 | 2026-09-10 | Complete | Production dependency baseline reviewed and hardened for the AXIOM engine and public portal | `apps/axiom-engine/package.json`, `apps/axiom-engine/package-lock.json` |
 | 2026-09-10 | Complete | Architectural design guidance, building-materials discovery, and Chetki studio tracks scoped for a controlled AXES pilot | `docs/INTERACTIVE_EXPERIENCE_CATALOG.md` |
+| 2026-09-10 | Complete | Founder-ready public-safe business plan consolidated across AXES Contracting, Chetki, XIIOM, creative studio, and future ventures | `docs/AXES_BUSINESS_PLAN.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
@@ -70,6 +71,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Add a protected, read-only AXES Contracting support desk for core operational visibility.
 - [x] Review production dependencies for both active sites and apply compatible engine dependency hardening.
 - [x] Define safe initial boundaries for architecture tips, building-material discovery, and the Chetki studio.
+- [x] Consolidate the full AXES business plan into one founder-ready operating document.
 - [ ] Rebuild the AXES Contracting hub from the approved visual direction using accessible, maintainable source.
 - [x] Add task priorities, specific scheduling, recurring schedules, and a protected schedule view.
 - [x] Establish the conservative project budget, spending gates, patent reserve, and patent-completion execution track.
