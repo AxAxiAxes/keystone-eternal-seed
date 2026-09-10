@@ -219,10 +219,10 @@ claims.
 
 ### IA-2026-09-10-11 — Chichetki as creative orientation toward Athanor
 
-**Insight:** The founder describes Chichetki as a symbolic creative "GPS"
-toward Athanor, expressed through crafted objects, dance, rhythm, and
-musical-instrument exploration. This may guide original artistic and
-experiential direction.
+**Insight:** The founder describes Chichetki as a founder-designed musical
+instrument and symbolic creative "GPS" toward Athanor, expressed through
+crafted objects, dance, rhythm, and musical play. This may guide original
+artistic and experiential direction.
 
 **Attribution:** Founder-provided concept.
 **Source:** Founder instruction recorded 2026-09-10 in this project session.

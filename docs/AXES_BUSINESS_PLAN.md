@@ -73,10 +73,11 @@ not be copied or published without rights-holder permission.
 
 ### Chichetki and Athanor creative system
 
-Chichetki is the founder-directed creative rhythm system connecting physical
-objects, sound, movement, visual design, play, and participatory experience.
-Its source direction includes tactile rhythm practice, crafted strands and
-objects, and the possibility of future interactive installations or events.
+Chichetki is a founder-directed musical instrument and creative rhythm system
+connecting physical objects, sound, movement, visual design, play, and
+participatory experience. Its source direction includes tactile rhythm
+practice, crafted strands and objects, dance, and the possibility of future
+interactive installations or events.
 
 The founder describes Chichetki as a symbolic creative "GPS" toward Athanor:
 an orientation practice expressed through crafted objects, dance, rhythm, and

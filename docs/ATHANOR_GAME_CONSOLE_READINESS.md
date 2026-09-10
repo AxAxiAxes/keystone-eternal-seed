@@ -8,11 +8,11 @@ participant-initiated motion and sound input.
 ## Creative premise
 
 Athanor is the internal creative center for a future game-console-style
-experience. Chichetki provides the rhythm-object, dance, musical-instrument,
-motion, sound, and visual-design language through which players choose to
-interact. Within the game world, approved Chichetki/Athanor interaction
-objects may serve as fictional keys to a future virtual-reality home: creative
-spaces, scenes, activities, or player-selected experiences.
+experience. Chichetki is a founder-designed musical instrument that provides
+the rhythm, dance, motion, sound, and visual-design language through which
+players choose to interact. Within the game world, approved Chichetki/Athanor
+interaction objects may serve as fictional keys to a future virtual-reality
+home: creative spaces, scenes, activities, or player-selected experiences.
 
 The virtual-reality home may support dance, design, interaction, play, rhythm,
 sound, musical-instrument exploration, and harmonic interface
