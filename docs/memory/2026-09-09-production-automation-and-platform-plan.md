@@ -54,6 +54,9 @@ product direction.
 - Recorded the material's provenance as original founder-and-Copilot work and
   created `docs/AXES_BUILD_PROGRAM.md`, a dependency-ordered plan from reliable
   XIIOM operations through controlled product pilots.
+- Selected Microsoft 365 as the future host for `info@axescontracting.com` and
+  documented a rollback-safe migration procedure that keeps website and email
+  DNS changes independent.
 
 ## Current operational state
 

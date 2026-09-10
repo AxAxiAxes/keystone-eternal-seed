@@ -12,6 +12,8 @@ The long-range, dependency-ordered delivery program is in
 [AXES_BUILD_PROGRAM.md](docs/AXES_BUILD_PROGRAM.md).
 The domain registry, conservative operating budget, and AXES-owned hardware
 readiness plan are in [DOMAIN_PORTFOLIO.md](docs/DOMAIN_PORTFOLIO.md).
+The rollback-safe Microsoft 365 migration plan for the AXES business mailbox is
+in [EMAIL_MIGRATION_PLAN.md](docs/EMAIL_MIGRATION_PLAN.md).
 
 ## Repository layout
 

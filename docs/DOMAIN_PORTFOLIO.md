@@ -79,13 +79,16 @@ regardless of where the primary hardware runs.
 ## Immediate domain tasks
 
 1. Enable registrar privacy for every eligible registered domain.
-2. Record registrar, renewal date, registrant account, DNS provider, nameserver,
+2. Migrate `info@axescontracting.com` from SiteGround mail to Microsoft 365
+   using the rollback-safe procedure in `EMAIL_MIGRATION_PLAN.md`. Keep website
+   and email DNS changes separate.
+3. Record registrar, renewal date, registrant account, DNS provider, nameserver,
    intended product, and owner in a private operational inventory. Do not store
    registrar credentials in this repository.
-3. Add only Railway's specified DNS record for `axescontracting.com`; do not
+4. Add only Railway's specified DNS record for `axescontracting.com`; do not
    alter Microsoft 365 or unrelated mail records.
-4. Confirm TLS and `/health` after DNS propagation.
-5. Park, redirect, or place a minimal holding page on all unassigned domains.
+5. Confirm TLS and `/health` after DNS propagation.
+6. Park, redirect, or place a minimal holding page on all unassigned domains.
 
 ## AXES-owned hardware readiness
 
