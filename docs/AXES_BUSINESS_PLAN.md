@@ -166,6 +166,13 @@ correction/revocation history. It does not claim automatic legal ownership,
 global authority, or control over third-party applications. The architecture is
 defined in `KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md`.
 
+AXES may later add a private project-fulfillment workspace for versioned
+scope, price-list assumptions, milestones, delivery evidence, and
+project-specific satisfaction feedback. It is not a public rating system,
+automated negotiator, fraud adjudicator, escrow, payment service, or
+professional certification. The detailed readiness model is
+`AXES_PROJECT_FULFILLMENT_READINESS.md`.
+
 ### Asset and content governance
 
 Every asset used publicly needs a recorded source, creator credit, intended
@@ -287,6 +294,7 @@ Track only metrics that help decide whether a service should continue:
 - `FOUNDER_REVENUE_PRIORITY_OVERLAY.md`
 - `KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md`
 - `KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md`
+- `AXES_PROJECT_FULFILLMENT_READINESS.md`
 - `EMAIL_MIGRATION_PLAN.md`
 - `URNUR_FINANCIAL_READINESS.md`
 - `CHICHETKI_COLLECTIBLE_GEM_READINESS.md`

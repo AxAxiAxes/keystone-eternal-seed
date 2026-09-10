@@ -131,6 +131,10 @@ age-appropriate program is approved. Before admitting minors, AXES needs:
   diagnostic claims, or promises to alter a person's state. It must not be
   used to issue, transfer, price, redeem, or promote URNUR before the
   permitted financial scope is approved.
+- Project delivery/satisfaction feedback must be private, project-specific,
+  factual, correctable, human-reviewed, and separate from public ratings,
+  reputation scores, fraud findings, payment handling, or automated
+  consequential decisions.
 
 ## Review cadence
 
