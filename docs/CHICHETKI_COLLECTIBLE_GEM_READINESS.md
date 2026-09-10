@@ -13,6 +13,13 @@ founder also proposes a future game in which participants may play for,
 receive, or exchange gems. This document records product direction, not a
 legal conclusion or authorization to operate.
 
+The founder proposes that each gem may eventually have an individual **NUR**
+record. In founder terminology, NUR is the record-holder for a **UR** (Unit of
+Eternal Origin). A NUR record may preserve documented origin, creation,
+rights, condition, and authorized-use history. It is not a current registry
+or automatic proof of ownership, authenticity, rarity, value, transferability,
+or permission to sell or award a gem.
+
 AXES must not represent a collectible gem as an investment, currency, security,
 financial product, guaranteed store of value, appreciating asset, payment
 instrument, or prize of a stated monetary value unless supportable, reviewed,
@@ -76,6 +83,9 @@ Until counsel approves a specific design, AXES will not:
 ## Required evidence before a launch decision
 
 - Named product owner, legal reviewer, support owner, and incident owner.
+- If a NUR record is proposed: a privacy/security review, creator-origin
+  record, correction/dispute process, access controls, retention/deletion
+  policy, and an explicit statement of what the record does not prove.
 - Written California scope determination and required terms/notices.
 - Provenance and rights record for every product image, design, and gem.
 - Material/sourcing description that is factual and does not overstate
@@ -92,4 +102,3 @@ Until counsel approves a specific design, AXES will not:
 - `AXES_GOVERNANCE_AND_SAFEGUARDING.md`
 - `URNUR_FINANCIAL_READINESS.md`
 - `AXES_CREATOR_ORIGIN_CONSTITUTION.md`
-

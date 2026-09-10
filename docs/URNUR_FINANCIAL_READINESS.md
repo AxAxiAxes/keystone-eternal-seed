@@ -17,6 +17,14 @@ application, issuance, promotion, sale, transfer, exchange, redemption,
 deposit-taking, payment use, custody, lending, market data, trading, wallet
 functionality, account creation, or any other financial activity.
 
+In the founder's terminology, **UR** means **Unit of Eternal Origin** and
+**NUR** is the proposed record-holder for an individual unit or gem. A future
+NUR record may link a gem to its documented creator-origin and provenance
+record. No NUR registry is currently active, and a registry entry is not
+automatic proof of legal ownership, authenticity, grade, scarcity, value,
+financial status, transferability, regulatory approval, or permission to
+trade.
+
 Every possible currency implementation remains blocked until qualified counsel
 for the primary launch jurisdiction, compliance, security, privacy, consumer
 protection, tax, and operational requirements define a written permitted

@@ -173,6 +173,12 @@ assign Harmonics, determine a Harmonics balance, calculate a personal level, or
 automatically authorize a transaction, reward, access right, or financial
 claim.
 
+A future NUR record may preserve provenance for a UR (Unit of Eternal Origin)
+or individual gem only under the same evidence, consent, correction, privacy,
+and human-review requirements. The record does not itself establish ownership,
+authenticity, financial value, transfer rights, or a right to issue, sell,
+award, or trade the item.
+
 ## Article X — Registry safeguards
 
 The creator-origin registry is a private, minimum-data record. It must not

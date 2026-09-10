@@ -143,6 +143,12 @@ states and player-controlled interface interactions. The two meanings are not
 interchangeable: game Harmonics confer no financial value, balance, prize,
 ownership right, or transferability.
 
+In founder terminology, **UR** means Unit of Eternal Origin and **NUR** is the
+proposed record-holder for each individual gem or unit. NUR may preserve
+creator-origin and provenance records after the applicable privacy, security,
+rights, legal, and operational reviews. A NUR record is not by itself proof of
+ownership, authenticity, value, transferability, or permission to transact.
+
 ## Operating model
 
 ### Shared technical foundation
