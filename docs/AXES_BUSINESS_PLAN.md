@@ -171,7 +171,10 @@ pilot-launch operating rules are maintained in
 `AXES_GOVERNANCE_AND_SAFEGUARDING.md`.
 
 The business-only directory and human-reviewed marketing-assistance path is
-defined in `AXES_DIRECTORY_READINESS.md`.
+defined in `AXES_DIRECTORY_READINESS.md`. Its proposed pilot listing fields,
+lifecycle, renewal record, correction/removal workflow, and track-specific
+limits are defined in `AXES_DIRECTORY_DATA_MODEL.md`; neither record enables a
+live directory or outreach activity.
 
 ## Success measures
 
@@ -214,4 +217,6 @@ Track only metrics that help decide whether a service should continue:
 - `PROJECT_BUDGET.md`
 - `EMAIL_MIGRATION_PLAN.md`
 - `URNUR_FINANCIAL_READINESS.md`
+- `AXES_DIRECTORY_READINESS.md`
+- `AXES_DIRECTORY_DATA_MODEL.md`
 - `AXES_OS_PORTABILITY.md`

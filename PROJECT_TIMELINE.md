@@ -50,6 +50,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Read-only AXES materials-discovery page added with staged commerce boundary | `apps/axiom-freedom/materials.html` |
 | 2026-09-10 | Complete | AXES Directory and marketing-assistance concepts privately archived and converted into a safety-gated readiness plan | `docs/AXES_DIRECTORY_READINESS.md` |
 | 2026-09-10 | Complete | Business-official interview and invitation workflow added for the future opt-in AXES Directory pilot | `docs/AXES_DIRECTORY_READINESS.md` |
+| 2026-09-10 | Complete | Proposed AXES Directory pilot data model, lifecycle, correction/removal route, renewal evidence, and track limitations established without public listings | `docs/AXES_DIRECTORY_DATA_MODEL.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
@@ -86,6 +87,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Add task priorities, specific scheduling, recurring schedules, and a protected schedule view.
 - [x] Establish the conservative project budget, spending gates, patent reserve, and patent-completion execution track.
 - [x] Establish the AXES Control Center pilot with governance, data-handling, moderation, and safeguarding requirements.
+- [x] Define the AXES Directory's private-safe pilot fields, human approval and renewal lifecycle, correction/removal workflow, and track-specific limitations without enabling live listings.
 - [ ] Connect `axescontracting.com` to Railway and verify its dedicated hub page, TLS, and health endpoint.
 - [ ] Complete and validate `info@axescontracting.com` migration from SiteGround to Microsoft 365.
 - [ ] Connect the Railway `axiom-web` service to `axescontracting.com` through SiteGround DNS.
