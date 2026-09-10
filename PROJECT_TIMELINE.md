@@ -29,6 +29,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-09 | Complete | Railway production portal and private-engine routing deployed | `xiiom.com` health check and public-to-private `POST /api/axiom` command response |
 | 2026-09-09 | Complete | AXIS/XIIOM continuity checkpoint preserved | Founder-provided architecture and operational-history summary in `docs/memory` |
 | 2026-09-09 | Complete | KEYSTONE AXI master-system source preserved | `docs/keystone/KEYSTONE_AXI_MASTER_SYSTEM_DOCUMENT.pdf` with integrity record |
+| 2026-09-09 | Complete | AXES constellation source reviewed and converted into a staged, safety-bounded product plan | `docs/AXES_PLATFORM_PLAN.md` |
 
 ## Current checkpoints
 
@@ -44,7 +45,10 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Add durable task scheduling, multi-agent assignment, execution audits, and an opt-in bounded automation scheduler.
 - [x] Add a protected browser console for testing and operating allowlisted automation tasks.
 - [x] Deploy the private `axiom-engine` and public `axiom-freedom` services to Railway, with a persistent engine volume and private service routing.
+- [x] Define the AXES, XIIOM, AXEOUS, URNUR, AXOUX, AUXAOUS, and School of Love & Ethics product direction with implementation boundaries.
 - [ ] Set `OPENAI_API_KEY` as a Railway encrypted variable and verify a live production chat response.
+- [ ] Add private operational monitoring and task safeguards: priorities, dependencies, retries, approvals, and run history.
+- [ ] Establish the AXES Control Center pilot with governance, data-handling, moderation, and safeguarding requirements.
 - [ ] Connect the Railway `axiom-web` service to `axescontracting.com` through SiteGround DNS.
 
 ## Deployment verification

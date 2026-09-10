@@ -6,6 +6,9 @@ Track completed milestones and next checkpoints in [PROJECT_TIMELINE.md](PROJECT
 
 For production hosting on Railway with `axescontracting.com`, follow [RAILWAY_DEPLOYMENT.md](docs/RAILWAY_DEPLOYMENT.md).
 
+The staged AXES product constellation and its privacy, safeguarding, and
+automation boundaries are defined in [AXES_PLATFORM_PLAN.md](docs/AXES_PLATFORM_PLAN.md).
+
 ## Repository layout
 
 | Path | Purpose |
