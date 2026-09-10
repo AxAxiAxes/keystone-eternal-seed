@@ -32,6 +32,23 @@ inventorship, ownership, or priority. A missing, conflicting, or contested
 origin relationship must be marked unverified or contested and cannot be used
 as an authority basis until a named human completes review.
 
+## Value-and-creation declaration
+
+Each application seeking KEYSTONE Origin Unit status must declare its
+contribution and creation path. The declaration identifies the application's
+intended creative, operational, technical, or service value; its source
+materials; contributors; versions; approved tools/providers; derivations; and
+known rights or consent limits. The declaration makes the application
+understandable within the origin chain and prevents unsupported material from
+being silently merged into an approved presentation.
+
+Declared value is descriptive and reviewable. It is not a financial valuation,
+investment rating, personal ranking, claim of superiority, or proof of legal
+rights. An application without a sufficient declaration cannot receive
+KEYSTONE Origin Unit authority status, but absence of a record alone is not a
+finding of plagiarism, infringement, misconduct, or lack of real-world origin.
+Those questions require evidence and appropriate human/legal review.
+
 ## Required application record
 
 Before an AXES application is recognized as registered, record:
@@ -41,6 +58,7 @@ Before an AXES application is recognized as registered, record:
 | Application identity | Stable internal ID, application name, purpose, repository/source reference, and owner |
 | Origin evidence | Source-record reference, version/commit reference, creation/registration dates, and hash where appropriate |
 | Gravity-center relation | Recorded Ux/origin-anchor reference, relationship type, evidence chain, and review status |
+| Value-and-creation declaration | Intended contribution, creation path, source materials, contributors, versions, derivations, approved tools/providers, and known limits |
 | Authority scope | Named human owner, approved operators, permitted actions, access classification, and explicit prohibitions |
 | Release state | Draft, internal, pilot, public, paused, retired, or revoked; approval date and approving human |
 | Data and integration map | Data classes, storage, approved providers, outbound integrations, retention, export/deletion, and incident owner |

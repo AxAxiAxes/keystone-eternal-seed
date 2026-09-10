@@ -90,6 +90,11 @@ internal Origin Unit authority status until human review resolves or correctly
 classifies the record; it does not deny that an unregistered work has
 real-world origin outside the registry.
 
+An application record must also declare its intended contribution and creation
+path. This preserves transparent provenance within KEYSTONE but is not a
+financial value judgment or an automatic finding that an unregistered or
+incomplete record is plagiarism.
+
 ## Article V — Creator consent and authority
 
 - Obtain documented permission for the exact public context before publishing

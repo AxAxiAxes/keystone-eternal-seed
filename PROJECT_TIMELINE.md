@@ -67,6 +67,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | KEYSTONE Tier 1 zero-spend automation and income-evaluation plan added with measured productivity and cryptocurrency-readiness boundaries | `docs/KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md` |
 | 2026-09-10 | Complete | KEYSTONE application origin and authority registry architecture defined with bounded, human-approved, revocable operating records | `docs/KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md` |
 | 2026-09-10 | Complete | KEYSTONE Origin Unit gravity-center rule defined: registered units must resolve to a recorded Ux anchor or remain unverified/contested | `docs/KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md` |
+| 2026-09-10 | Complete | KEYSTONE application value-and-creation declaration added to preserve contribution, source, contributor, version, and derivation context | `docs/KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
