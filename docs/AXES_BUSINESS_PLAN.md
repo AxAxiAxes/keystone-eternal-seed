@@ -106,6 +106,12 @@ virtual-reality home: player-selected creative spaces and game experiences.
 They are not physical-property keys, identity credentials, financial
 instruments, or proof of ownership or status.
 
+The creative home may support dance, design, interaction, play, rhythm, sound,
+and player-controlled harmonic interface resynchronization: resetting or
+realigning the game's audiovisual timing, controls, layout, or fictional game
+state. It does not claim to resynchronize, measure, diagnose, or alter a
+person.
+
 **Athanor** is the internal creative concept for a harmonizing center within
 that system. It can guide the design of coherent experiences, installations,
 and editorial material. It is not an autonomous entity, measurement device,

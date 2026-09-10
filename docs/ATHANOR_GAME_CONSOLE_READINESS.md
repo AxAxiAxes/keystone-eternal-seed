@@ -14,6 +14,13 @@ interact. Within the game world, approved Chichetki/Athanor interaction
 objects may serve as fictional keys to a future virtual-reality home: creative
 spaces, scenes, activities, or player-selected experiences.
 
+The virtual-reality home may support dance, design, interaction, play, rhythm,
+sound, musical-instrument exploration, and harmonic interface
+resynchronization. Interface resynchronization means that a player can reset,
+recalibrate, or realign the game's audiovisual timing, controls, scene layout,
+or fictional game state. It does not resynchronize, measure, diagnose, or
+alter a person's body, mind, emotions, health, spirituality, or condition.
+
 Within the game, terms such as harmonic, resonance, resequencer,
 transmission, alignment, and challenge describe fictional or artistic game
 states, audiovisual rules, levels, and feedback. They do not describe a
