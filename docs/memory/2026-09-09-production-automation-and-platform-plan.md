@@ -57,6 +57,9 @@ product direction.
 - Selected Microsoft 365 as the future host for `info@axescontracting.com` and
   documented a rollback-safe migration procedure that keeps website and email
   DNS changes independent.
+- Elevated patent completion and URNUR legal readiness to P0 workstreams and
+  created a conservative 12-month budget with legal, patent, backup, and
+  operational spending gates.
 
 ## Current operational state
 

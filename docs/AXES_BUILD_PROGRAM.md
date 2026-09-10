@@ -115,14 +115,17 @@ next begins.
 
 1. Keep raw creative and continuity material private. Publish only reviewed,
    accurate, public-safe documentation and code.
-2. Use short pilot cycles with measured outcomes and human review, not
+2. Fund patent completion, legal readiness, security, backups, and operational
+   reliability before discretionary product expansion. See
+   `docs/PROJECT_BUDGET.md`.
+3. Use short pilot cycles with measured outcomes and human review, not
    unrestricted autonomous growth.
-3. Treat children, identity, relationships, money-like value, health, legal
+4. Treat children, identity, relationships, money-like value, health, legal
    claims, and third-party actions as high-risk domains requiring a documented
    design review before implementation.
-4. Preserve the founder principle, **All for All**, through accessible design,
+5. Preserve the founder principle, **All for All**, through accessible design,
    consent, truthful product claims, and accountable human governance.
-5. Build the operational foundation first. It is the prerequisite for a stable
+6. Build the operational foundation first. It is the prerequisite for a stable
    public hub and every later world.
 
 ## Current next action

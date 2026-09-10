@@ -35,10 +35,12 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-09 | Complete | AXES OS portability foundation and private checksummed checkpoint manifests added | `docs/AXES_OS_PORTABILITY.md` |
 | 2026-09-09 | In progress | URNUR financial-services legal readiness elevated as a pre-launch blocker | `docs/URNUR_FINANCIAL_READINESS.md` |
 | 2026-09-09 | Complete | Automation Console schedule and durable priority ordering added | `apps/axiom-engine/automation-service.js`, `apps/axiom-freedom/automation.html` |
+| 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
 
 - [ ] **Priority 0 - URNUR legal readiness:** Identify the primary launch jurisdiction and contact qualified financial-services and digital-asset counsel before resuming crypto registration or designing public financial functionality.
+- [ ] **Priority 0 - Patent completion:** Identify any filing status and deadlines, retain qualified patent counsel, separate the technical disclosure from supporting materials, and approve a filing strategy before public patent claims or submission.
 - [x] Preserve the upstream histories for all four repositories.
 - [x] Separate deployable applications, package records, and KEYSTONE documents.
 - [x] Remove generated `node_modules` from version control and prevent future commits.
@@ -58,6 +60,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [ ] Set `OPENAI_API_KEY` as a Railway encrypted variable and verify a live production chat response.
 - [ ] Add private operational monitoring and task safeguards: priorities, dependencies, retries, approvals, and run history.
 - [x] Add task priorities, specific scheduling, recurring schedules, and a protected schedule view.
+- [x] Establish the conservative project budget, spending gates, patent reserve, and patent-completion execution track.
 - [ ] Establish the AXES Control Center pilot with governance, data-handling, moderation, and safeguarding requirements.
 - [ ] Connect `axescontracting.com` to Railway and verify its dedicated hub page, TLS, and health endpoint.
 - [ ] Complete and validate `info@axescontracting.com` migration from SiteGround to Microsoft 365.

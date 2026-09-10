@@ -18,6 +18,8 @@ The module boundaries and portable AXES OS checkpoint process are in
 [AXES_OS_PORTABILITY.md](docs/AXES_OS_PORTABILITY.md).
 URNUR's financial-services legal-review gate and attorney briefing packet are
 in [URNUR_FINANCIAL_READINESS.md](docs/URNUR_FINANCIAL_READINESS.md).
+The conservative project budget, spending gates, and patent-completion
+workstream are in [PROJECT_BUDGET.md](docs/PROJECT_BUDGET.md).
 
 ## Repository layout
 
