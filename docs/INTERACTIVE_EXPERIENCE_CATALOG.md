@@ -29,13 +29,17 @@ audience have been reviewed.
 
 ## Rights and exclusion record
 
-The founder identifies the supplied original designs, photographs, and physical
-works as founder-provided source material. The jeweled or gemstone-pomegranate
-reference is specifically excluded: it is not founder-created material and
-must not be copied, published, used as an AXES mark, or treated as an AXES
-asset unless its rights holder provides written permission for the intended
-use. The pomegranate may remain a general concept only when expressed through
-independently created or properly licensed work.
+The founder identifies the supplied original designs, photographs, physical
+works, interior-design elements, Chetki material, hero figure, eternal-seed
+frame, and blueprint composition as founder-provided AXES source material.
+
+The jeweled or gemstone-pomegranate reference remains in the private visual
+canon as inspiration for material, color, light, and ornamental qualities. It
+is not founder-created and must not be copied, published, used as an AXES
+mark, or treated as an AXES asset unless its rights holder provides written
+permission for the intended use. AXES may use the pomegranate concept through
+the founder's original physical designs and independently created or properly
+licensed visual work.
 
 ## Experience catalog
 

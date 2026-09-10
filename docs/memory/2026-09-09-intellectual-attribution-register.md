@@ -105,21 +105,23 @@ recommendations.
 
 ### IA-2026-09-10-06 — Founder visual and physical-design source boundary
 
-**Insight:** The founder identifies the original designs, photographs, and
-physical works supplied in the AXES source materials as founder-provided
-project source material. A jeweled or gemstone-pomegranate reference supplied
-alongside them is explicitly not founder-created and is excluded from AXES
-reuse.
+**Insight:** The founder identifies the original designs, photographs, physical
+works, interior-design elements, Chetki material, hero figure, eternal-seed
+frame, and blueprint composition supplied in the AXES source materials as
+founder-provided project source material. A jeweled or gemstone-pomegranate
+reference supplied alongside them is not founder-created, but remains a
+private inspiration reference.
 
 **Attribution:** Founder-provided correction.
 **Source:** Founder instruction recorded 2026-09-10 in this project session;
 private source package and accompanying image references.
 **Implementation interpretation:** `docs/INTERACTIVE_EXPERIENCE_CATALOG.md`.
 **Credit note:** This entry is a project-provenance record, not a legal
-ownership determination. The excluded pomegranate reference must not be
-published, copied, used as a logo, or treated as an AXES asset without
-rights-holder permission. A pomegranate concept may be expressed only through
-independent or properly licensed work.
+ownership determination. The gemstone-pomegranate reference may inform
+material, color, lighting, or ornamental direction, but must not be copied,
+published, used as a logo, or treated as an AXES asset without rights-holder
+permission. A pomegranate concept may be expressed through the founder's
+original work and independent or properly licensed work.
 
 ## Future entry standard
 
