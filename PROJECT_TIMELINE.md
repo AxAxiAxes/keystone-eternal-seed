@@ -59,6 +59,21 @@ Update this document when a milestone changes state. A checked item is complete;
 - [ ] Complete and validate `info@axescontracting.com` migration from SiteGround to Microsoft 365.
 - [ ] Connect the Railway `axiom-web` service to `axescontracting.com` through SiteGround DNS.
 
+## AXES OS migration track
+
+This migration is phased. Do not move production workloads to AXES-owned
+hardware until the current phase's evidence and recovery criteria are complete.
+
+| Phase | Status | Objective | Entry and completion criteria |
+| --- | --- | --- | --- |
+| 0 - Portability foundation | Complete | Make the present system movable and verifiable | Containerized services, documented module boundaries, private checkpoint manifests, and a written restore procedure are present. |
+| 1 - Observability and backups | Planned | Prove the current hosted system can be monitored and restored | Implement monitoring; define encrypted backup destinations and retention; create a restore drill using a checkpoint manifest. |
+| 2 - AXES OS staging | Planned | Run a private, non-production AXES OS environment | Provision isolated staging hardware or infrastructure; restore a sanitized data copy; verify module startup, checksums, and operator access. |
+| 3 - Parallel validation | Planned | Compare hosted and AXES OS behavior without redirecting users | Run controlled workloads in staging; validate performance, backup recovery, updates, logs, security controls, and failback procedure. |
+| 4 - Limited service migration | Planned | Move a low-risk, reversible workload first | Migrate a non-public or read-only service with monitoring and a tested rollback. Keep Railway as the fallback. |
+| 5 - Production cutover | Planned | Move eligible production services only after operational proof | Approve a documented cutover plan, maintenance window, DNS changes, monitoring, backups, and rollback owner. Retain the hosted environment through the observation period. |
+| 6 - Ongoing hybrid operations | Planned | Operate AXES OS and managed services according to measured needs | Review cost, reliability, privacy, capacity, and staffing regularly; retain off-site encrypted backups and recovery drills. |
+
 ## Deployment verification
 
 Docker Desktop must use the WSL 2 backend with Ubuntu integration enabled. From Ubuntu, build and start the two application services:

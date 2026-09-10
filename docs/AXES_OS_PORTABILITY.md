@@ -41,6 +41,11 @@ make a backup by itself, or expose an endpoint through the public portal.
 
 ## Migration procedure
 
+This procedure corresponds to the phased migration track in
+[`PROJECT_TIMELINE.md`](../PROJECT_TIMELINE.md). A checkpoint is an integrity
+record; successful migration also requires backups, restoration testing,
+observability, security review, and an approved rollback path.
+
 1. Pause nonessential task processing and record the current operational state.
 2. Create a checkpoint manifest and copy the listed data files through an
    encrypted, access-controlled transfer path.
