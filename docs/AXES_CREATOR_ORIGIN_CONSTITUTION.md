@@ -184,6 +184,11 @@ assign Harmonics, determine a Harmonics balance, calculate a personal level, or
 automatically authorize a transaction, reward, access right, or financial
 claim.
 
+URNUR may retain separate, participant-approved non-monetary contribution and
+stewardship acknowledgements. They must remain voluntary, contribution-specific,
+human-reviewed, private by default, correctable, and separate from currency,
+balances, pricing, prizes, personal levels, social ranking, or financial rights.
+
 A future NUR record may preserve provenance for a UR (Unit of Eternal Origin)
 or individual gem only under the same evidence, consent, correction, privacy,
 and human-review requirements. The record does not itself establish ownership,

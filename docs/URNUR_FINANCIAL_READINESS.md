@@ -65,6 +65,27 @@ Chichetki/Athanor game meaning recorded in
 states and interactions; they do not create currency, financial value,
 ownership, balances, prizes, or tradable rights.
 
+## Non-monetary contributor layer
+
+Alongside the future monetary-currency direction, the founder intends URNUR to
+include a non-monetary contributor layer for voluntary creative, origin, and
+stewardship acknowledgement within the long-term AXES community vision. This
+layer may preserve participant-approved contribution records, creator credit,
+provenance links, and project stewardship history.
+
+The non-monetary contributor layer is separate from currency issuance and
+trading. It cannot create or assign Harmonics units, balances, prices, prizes,
+financial rights, personal levels, social rank, citizenship status,
+eligibility, or access to essential services. It must remain opt-in,
+contribution-specific, human-reviewed, private by default, correctable, and
+subject to the creator-origin, privacy, accessibility, moderation, and
+participant-policy safeguards.
+
+This is a long-term community aspiration, not a claim that the system creates
+an eternal civilization, permanent identity, or irreversible responsibility.
+Participants retain their rights to privacy, correction, withdrawal where
+appropriate, and fair review.
+
 ## Required scope decision for creator trading
 
 Before enabling any purchase, sale, trade, prize, exchange, marketplace,
