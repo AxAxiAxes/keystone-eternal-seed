@@ -88,6 +88,10 @@ claims.
 - Launch AXOUX as an invite-only project proposal and collaboration pilot.
 - Launch the School of Love & Ethics as content and moderated project-invention
   labs, beginning with adult-only or clearly separated age cohorts.
+- Include voluntary ikigai reflection activities that help participants explore
+  what they value, enjoy, do well, can contribute, and may wish to sustain.
+  These activities are educational prompts, not assessments, diagnoses, or
+  prescriptions.
 - Implement opt-in authorship attribution and version history for submitted
   projects.
 - Add trained human moderation, community rules, reporting, and appeals before

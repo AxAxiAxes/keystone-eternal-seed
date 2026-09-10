@@ -86,6 +86,23 @@ interpretation.
 founder-provided. The staged pilot and safeguarding requirements are a
 technical and safety recommendation.
 
+### IA-2026-09-09-05 — Ikigai as voluntary reflective practice
+
+**Insight:** Ikigai can provide a useful reflective framework for the School
+of Love & Ethics by helping participants connect what they value, enjoy, do
+well, can contribute, and may wish to sustain. It should be offered as a
+voluntary educational exercise rather than a diagnostic, ranking system, or
+prescription for someone's life.
+
+**Attribution:** Founder-provided direction with collaborative implementation
+interpretation.
+**Source:** Founder instruction recorded 2026-09-09 in this project session.
+**Implementation interpretation:** Phase 2 in `docs/AXES_PLATFORM_PLAN.md` and
+Release C in `docs/AXES_BUILD_PROGRAM.md`.
+**Credit note:** The decision to include ikigai was founder-directed. The
+privacy, consent, and non-diagnostic boundaries are technical and safety
+recommendations.
+
 ## Future entry standard
 
 For every material future insight, record:

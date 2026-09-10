@@ -87,6 +87,9 @@ next begins.
   history.
 - A free School of Love & Ethics pilot with curriculum, project-invention
   labs, code of conduct, trained moderation, reporting, and appeal paths.
+- Voluntary ikigai reflection activities connecting personal values, interests,
+  strengths, contribution, and sustainable work. Participants retain control
+  over whether reflections are stored, shared, or deleted.
 - Separate age cohorts or an adult-only first cohort until youth safeguarding
   procedures are fully implemented.
 
