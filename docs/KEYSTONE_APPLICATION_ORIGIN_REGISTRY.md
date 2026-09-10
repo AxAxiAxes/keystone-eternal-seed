@@ -17,6 +17,21 @@ authority. A registration record does not by itself prove legal ownership,
 patent validity, trademark rights, exclusivity, security, regulatory approval,
 or authority over another person's or organization's application.
 
+## Origin gravity-center rule
+
+Each KEYSTONE Origin Unit must resolve through its evidence and version history
+to a recorded **origin gravity center**: the designated Ux anchor and its
+associated source record. A later application, derivative, asset, release, or
+authority record cannot receive valid Origin Unit status *within KEYSTONE*
+unless that relationship is recorded, reviewable, and consistent with the
+approved origin chain.
+
+This is a registry-validity rule. It does not claim that work outside KEYSTONE
+has no real-world origin, and it does not automatically decide legal
+inventorship, ownership, or priority. A missing, conflicting, or contested
+origin relationship must be marked unverified or contested and cannot be used
+as an authority basis until a named human completes review.
+
 ## Required application record
 
 Before an AXES application is recognized as registered, record:
@@ -25,6 +40,7 @@ Before an AXES application is recognized as registered, record:
 | --- | --- |
 | Application identity | Stable internal ID, application name, purpose, repository/source reference, and owner |
 | Origin evidence | Source-record reference, version/commit reference, creation/registration dates, and hash where appropriate |
+| Gravity-center relation | Recorded Ux/origin-anchor reference, relationship type, evidence chain, and review status |
 | Authority scope | Named human owner, approved operators, permitted actions, access classification, and explicit prohibitions |
 | Release state | Draft, internal, pilot, public, paused, retired, or revoked; approval date and approving human |
 | Data and integration map | Data classes, storage, approved providers, outbound integrations, retention, export/deletion, and incident owner |
@@ -71,4 +87,3 @@ security, correction process, and human operating capacity are validated.
 - `AXES_GOVERNANCE_AND_SAFEGUARDING.md`
 - `KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md`
 - `AXES_OS_PORTABILITY.md`
-

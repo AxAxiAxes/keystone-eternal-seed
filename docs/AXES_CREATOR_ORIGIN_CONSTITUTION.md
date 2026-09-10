@@ -84,6 +84,12 @@ The record must contain:
 Private source records and identifying evidence remain outside the public
 repository unless publication is specifically approved and lawful.
 
+For KEYSTONE registration, an Origin Unit must have a recorded relation to its
+origin gravity center/Ux anchor. A missing or contested relation prevents
+internal Origin Unit authority status until human review resolves or correctly
+classifies the record; it does not deny that an unregistered work has
+real-world origin outside the registry.
+
 ## Article V — Creator consent and authority
 
 - Obtain documented permission for the exact public context before publishing
