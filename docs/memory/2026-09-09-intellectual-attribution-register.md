@@ -247,3 +247,30 @@ transmission, measurement, spiritual fact, or technical mechanism. Any public
 asset must be founder-created, independently created, or properly licensed.
 The separate jeweled-pomegranate reference remains private inspiration only
 and may not be copied or published without rights-holder permission.
+
+### IA-2026-09-10-13 — UR Node, sphere, and AU home source designs
+
+**Insight:** The founder identifies three uploaded designs as founder-created
+AXES source designs: the UR Node / Eternal Origin Point composition, the
+sphere eversion and inversion technical-diagram composition, and the AU home
+matrix composition. Together they establish an internal visual direction for
+origin-centered architecture, radial and sphere geometry, black-stone/gold
+materials, and the future AU home interface.
+
+**Attribution:** Founder-provided creative source designs.
+**Source:** Private archive
+`private-archive/copilot-library/2026-09-10-ur-au-source-designs/`:
+
+- `ur-node.png` — SHA-256
+  `953A4B4BCCADBA66CC965675CAAC5B4D8EC56571EC8DA70FFCBC0DEC9363D62C`
+- `sphere-everison-diagram.jpg` — SHA-256
+  `C2A60440066EC7BADB3B69B9B54769C8E70264553E9F529F87953D16DCC40CC3`
+- `au-home-matrix.jpg` — SHA-256
+  `FEA6497884155CC3303C37D9BAD01EE9B4AB0A39BC5406CC58B8490DD344C70E`
+
+**Implementation interpretation:** Future Page 8, Athanor game-console, AU
+home, and creator-origin visual work.
+**Credit note:** The files remain private founder source designs. Do not
+publish, reproduce, train on, or present them as public AXES assets without
+specific founder approval for the proposed use. This entry records project
+provenance and is not a legal ownership determination.
