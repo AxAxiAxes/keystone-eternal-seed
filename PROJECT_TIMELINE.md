@@ -50,6 +50,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Read-only AXES materials-discovery page added with staged commerce boundary | `apps/axiom-freedom/materials.html` |
 | 2026-09-10 | Complete | AXES Directory and marketing-assistance concepts privately archived and converted into a safety-gated readiness plan | `docs/AXES_DIRECTORY_READINESS.md` |
 | 2026-09-10 | Complete | Business-official interview and invitation workflow added for the future opt-in AXES Directory pilot | `docs/AXES_DIRECTORY_READINESS.md` |
+| 2026-09-10 | Complete | Internal creator-origin constitution established for evidence, consent, research integrity, attribution, correction, and challenge handling | `docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
@@ -68,7 +69,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Add durable task scheduling, multi-agent assignment, execution audits, and an opt-in bounded automation scheduler.
 - [x] Add a protected browser console for testing and operating allowlisted automation tasks.
 - [x] Deploy the private `axiom-engine` and public `axiom-freedom` services to Railway, with a persistent engine volume and private service routing.
-- [x] Define the AXES, XIIOM, AXEOUS, URNUR, AXOUX, AUXAOUS, and School of Love & Ethics product direction with implementation boundaries.
+- [x] Define the AXES, XIIOM, AXEOUS, URNUR, AXOUS (through AXOUX), AUXAOUS, and School of Love & Ethics product direction with implementation boundaries.
 - [x] Define a conservative domain, hosting, data, and AXES-owned hardware transition strategy.
 - [x] Define the AXES business-email migration target and rollback-safe execution plan.
 - [x] Define module boundaries and add private integrity checkpoints for future AXES OS migration.

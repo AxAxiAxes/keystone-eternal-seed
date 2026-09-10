@@ -197,3 +197,22 @@ review needed.
 
 This approach preserves credit without overstating certainty or turning the
 project record into an unsupported legal claim.
+
+### IA-2026-09-10-10 — Creator-origin evidence and research integrity
+
+**Insight:** A creator-origin registry can protect credit and correction only
+when it separates asserted origin, integrity of the captured record, and
+independent support for the claim. External research, AI output, timestamps,
+hashes, and signed provenance should support review, never replace human
+evidence review or become automatic ownership decisions.
+
+**Attribution:** Collaborative governance synthesis from founder direction
+about creator authority and source protection, informed by current
+content-provenance research.
+**Source:** Founder instruction recorded 2026-09-10 in this project session;
+official C2PA specifications at `https://c2pa.org/specifications/`, reviewed
+2026-09-10.
+**Implementation interpretation:** `docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md`.
+**Credit note:** This is an internal governance framework, not a legal
+determination or a representation that AXES verifies all real-world origin
+claims.

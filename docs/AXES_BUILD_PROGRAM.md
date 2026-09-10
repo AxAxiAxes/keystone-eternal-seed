@@ -30,7 +30,7 @@ next begins.
 | 3 | Production validation and delivery | Verify review-only production chat and connect engine deployment to the canonical source repository | Operational intelligence |
 | 4 | Governance and safeguarding | Establish privacy, consent, retention, moderation, reporting, appeals, and age-appropriate participation rules | Founder direction |
 | 5 | AXES Control Center and interaction catalog | Deliver a small public-safe hub, private service registry, and staged reusable experiences | Workstreams 2 and 4 |
-| 6 | Creator and learning pilot | Pilot AXOUX projects and the School of Love & Ethics with moderation and scoped participation | Workstreams 4 and 5 |
+| 6 | Creator and learning pilot | Pilot AXOUS projects through AXOUX and the School of Love & Ethics with moderation and scoped participation | Workstreams 4 and 5 |
 | 7 | Community and self-design pilot | Pilot AXEOUS and AUXAOUS only after safety, export, deletion, and abuse-response capabilities are established | Workstream 6 |
 | 8 | Recognition and lineage pilot | Pilot URNUR recognition and opt-in authorship/lineage records without transfers or financial functionality | Workstream 7 |
 | Blocking | URNUR legal readiness | Determine the permitted scope for any future financial-market product | Primary launch jurisdiction and qualified financial-services/digital-asset counsel |

@@ -2,8 +2,9 @@
 
 **Status:** Internal operating foundation; review before each public pilot  
 **Recorded:** 2026-09-10  
-**Scope:** AXES Contracting, Chichetki, AXOUX, AUXAOUS, AXEOUS, School of Love
-& Ethics, AXES Creative Studio, and future public or invite-only services.
+**Scope:** AXES Contracting, Chichetki, AXOUS through the AXOUX site, AUXAOUS,
+AXEOUS, School of Love & Ethics, AXES Creative Studio, and future public or
+invite-only services.
 
 ## Purpose
 
@@ -61,6 +62,10 @@ Before launching or materially changing a service, record:
 
 - Record the creator/source, rights status, intended use, approval date, and
   accessibility treatment for every public asset.
+- Apply `AXES_CREATOR_ORIGIN_CONSTITUTION.md` to origin claims, contributor
+  records, research conclusions, AI-assisted assets, and public attribution.
+  Treat external material as unverified until a human has reviewed its source,
+  evidence, rights, and permitted wording.
 - Treat user submissions as private until the contributor gives documented
   permission for the exact publication context.
 - Never claim ownership of contributor work merely because it was submitted.

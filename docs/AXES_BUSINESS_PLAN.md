@@ -33,7 +33,7 @@ stage.
 | XIIOM | Private operations core | Memory, monitoring, task controls, and review-only agent proposals | No public engine, arbitrary execution, account control, spending, or autonomous publication |
 | AXES Creative Studio | Future internal production workspace | Creative briefs, original image concepts, sound concepts, storyboards, and video shot lists | Human-approved providers, rights review, and private asset storage before generation or publication |
 | AXES Directory | Future business-discovery pilot | Small, opt-in, human-reviewed listings for building-material vendors, contractors, and real-estate professionals | No White Pages, public people search, identity registry, scraping, data brokerage, ad platform, or automated outreach |
-| AXOUX | Future creator pilot | Invite-only projects, contribution roles, and attribution history | Moderation, consent, and contributor terms before broad access |
+| AXOUS / AXOUX | AXOUS creator initiative through the AXOUX site | Invite-only projects, contribution roles, and attribution history | Moderation, consent, and contributor terms before broad access |
 | School of Love & Ethics | Future learning pilot | Accessible curriculum, project labs, and voluntary reflection | Adult-only or separated cohorts until youth safeguarding is operational |
 | AXEOUS and AUXAOUS | Future community and self-design pilots | Moderated groups and private participant-controlled reflection | No unrestricted messaging, public sensitive profiles, or unmoderated interactions |
 | URNUR | Future recognition direction | Non-transferable contribution recognition after review | No financial, market, token, custody, payment, or trading functionality before written legal approval |
@@ -117,6 +117,11 @@ Every asset used publicly needs a recorded source, creator credit, intended
 use, accessibility treatment, and rights status. Keep founder source archives
 private. Keep external reference material private unless a specific licensed
 or permission-based use is documented.
+
+The internal `AXES_CREATOR_ORIGIN_CONSTITUTION.md` governs origin evidence,
+creator consent, research integrity, correction requests, and public
+attribution. It prevents external or AI-generated assertions from being
+treated as creator authority or factual proof without human review.
 
 ### Human decision authority
 
@@ -215,3 +220,4 @@ Track only metrics that help decide whether a service should continue:
 - `EMAIL_MIGRATION_PLAN.md`
 - `URNUR_FINANCIAL_READINESS.md`
 - `AXES_OS_PORTABILITY.md`
+- `AXES_CREATOR_ORIGIN_CONSTITUTION.md`

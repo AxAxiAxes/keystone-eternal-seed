@@ -28,6 +28,7 @@ it is planned or used.
 | `axaxaxu.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
 | `axianaxiunaixia.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
 | `axaxiaxes.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
+| `axaxes.com` | Newly reported AXES site | Park pending confirmed registration, purpose, owner, privacy classification, budget, and operating model |
 | `uxaxu.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
 | `owawawao.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
 | `aulaux.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
@@ -40,8 +41,8 @@ it is planned or used.
    its current home page.
 2. **XIIOM:** Finish monitoring, task controls, production chat verification,
    and source-connected deployment. Do not expose the private engine.
-3. **AXOUX and the School of Love & Ethics:** Use an invite-only creator and
-   learning pilot before activating a separate public domain.
+3. **AXOUS through AXOUX and the School of Love & Ethics:** Use an invite-only
+   creator and learning pilot before activating a separate public domain.
 4. **AUXAOUS and AXEOUS:** Activate only after privacy, moderation,
    safeguarding, export, and deletion capabilities exist.
 5. **URNUR and remaining domains:** Keep parked until they have documented
