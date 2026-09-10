@@ -65,6 +65,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Three founder-created UR Node, sphere, and AU home designs privately archived with SHA-256 provenance records | `docs/memory/2026-09-09-intellectual-attribution-register.md` |
 | 2026-09-10 | Complete | Founder constrained-budget revenue-priority overlay added for parallel V1 trading-app, V2 AXES appraisal/inspection pathways, and V3 KEYSTONE development | `docs/FOUNDER_REVENUE_PRIORITY_OVERLAY.md` |
 | 2026-09-10 | Complete | KEYSTONE Tier 1 zero-spend automation and income-evaluation plan added with measured productivity and cryptocurrency-readiness boundaries | `docs/KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md` |
+| 2026-09-10 | Complete | KEYSTONE application origin and authority registry architecture defined with bounded, human-approved, revocable operating records | `docs/KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints

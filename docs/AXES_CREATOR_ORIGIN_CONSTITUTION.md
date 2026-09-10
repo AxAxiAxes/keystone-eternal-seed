@@ -192,6 +192,11 @@ record, retention period, export/correction/removal route, backup plan, and
 incident owner before storing records. Public pages may display only
 specifically approved credits and notices.
 
+The KEYSTONE application registry applies these principles to application
+source and operational authority. Authority must be explicit, bounded,
+human-approved, and revocable; an internal registration cannot create legal or
+global authority. See `KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md`.
+
 ## Article XI — Oversight and amendments
 
 The founder is the initial constitutional steward. Each active service must
