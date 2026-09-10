@@ -8,6 +8,8 @@ For production hosting on Railway with `axescontracting.com`, follow [RAILWAY_DE
 
 The staged AXES product constellation and its privacy, safeguarding, and
 automation boundaries are defined in [AXES_PLATFORM_PLAN.md](docs/AXES_PLATFORM_PLAN.md).
+The long-range, dependency-ordered delivery program is in
+[AXES_BUILD_PROGRAM.md](docs/AXES_BUILD_PROGRAM.md).
 
 ## Repository layout
 

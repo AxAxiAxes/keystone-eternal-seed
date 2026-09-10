@@ -3,6 +3,9 @@
 **Status:** Directional product plan  
 **Last updated:** 2026-09-09  
 **Founder principle:** All for All
+**Source and provenance:** Founder-authored material developed collaboratively
+with GitHub Copilot. The raw source remains private; this is its reviewed,
+public-safe implementation interpretation.
 
 ## Purpose
 
@@ -125,6 +128,9 @@ non-financial, consented, and auditable.
 4. Build the AXES service registry and authenticated control-center shell.
 5. Pilot creator projects and a safely scoped learning program before broader
    community features.
+
+The detailed execution sequence is maintained in
+[AXES_BUILD_PROGRAM.md](AXES_BUILD_PROGRAM.md).
 
 ## Decisions requiring explicit review
 
