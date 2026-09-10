@@ -73,12 +73,19 @@ next begins.
   classification, and operational status.
 - Plain-language product descriptions that distinguish current capabilities
   from future direction.
+- An Architectural Design Desk with general, non-professional design tips,
+  material education, and a scoped consultation-request path.
+- A Building-Materials Discovery catalog that begins with curated references
+  and inquiries, not checkout, payment processing, inventory claims, or
+  fulfillment.
 
 **Exit criteria**
 
 - Visitors and operators can tell which services are active, experimental, or
   planned.
 - The pilot avoids real-world identity collection and sensitive profile data.
+- Architecture content is clearly educational unless a responsible licensed
+  professional, jurisdiction, and reviewed scope are presented.
 
 ### Release C - Creator and learning pilot
 

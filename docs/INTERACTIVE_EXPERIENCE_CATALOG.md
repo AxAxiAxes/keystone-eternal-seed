@@ -46,6 +46,9 @@ licensed visual work.
 | Experience | Candidate domain | Interaction level | Initial audience | First release |
 | --- | --- | --- | --- | --- |
 | AXES Control Center | `axescontracting.com` | Public navigation, service status, contact/intake | Public | Branded hub and service registry |
+| Architectural design desk | `axescontracting.com` | Readable design tips, project inspiration, material palettes, and scoped consultation requests | Public | Educational articles and inspiration boards; no professional-plan or engineering claims |
+| Building-materials discovery | `axescontracting.com` | Curated materials catalog, filters, samples or quote requests, and approved supplier links | Public | Read-only catalog and inquiry workflow; no checkout or payment collection |
+| Chetki studio | Future Chetki route or dedicated domain | Product stories, founder-designed work catalog, sound previews, and controlled interest requests | Public and private operator tiers | Reviewed catalog; no health, therapeutic, or patent-status claims |
 | XIIOM operations | `xiiom.com` | Authenticated scheduling, monitoring, task approvals, agent proposals | Operators only | Existing protected console |
 | AUXAOUS self-design studio | `auxaous.com` | Private guided reflection, visual path mapping, save/export/delete controls | Invite-only adults | Local/private draft only; no public profiles |
 | XAXALU sound and visual exploration | Future dedicated route or `auxaous.com` pilot | User-initiated audio playback, visual exploration, accessibility controls | Invite-only adults | Static exhibit with optional sound |
@@ -70,10 +73,36 @@ Every interactive module must declare:
    or audio asset becomes public.
 7. A reversible deployment, test plan, and rollback approach.
 
+### Architecture and materials boundary
+
+The Architectural Design Desk may provide general design inspiration, material
+education, and clearly scoped project-intake information. It must not represent
+itself as licensed architecture, engineering, construction, code-compliance, or
+safety advice unless the responsible licensed professional and jurisdiction are
+identified and the content is reviewed accordingly.
+
+The Building-Materials Discovery catalog starts as a curated directory and
+inquiry workflow. Checkout, payment collection, inventory promises, supplier
+fulfillment, product warranties, shipping, sales-tax handling, returns, and
+product-safety representations remain deferred until supplier agreements,
+commerce operations, applicable registrations, and counsel/accountant review
+are complete.
+
+### Chetki source boundary
+
+The confidential Chetki plan informs future product and experience strategy:
+founder-designed physical works, art editions, sound, education, and carefully
+scoped experiential commerce. Before public implementation, separate
+founder-directed product descriptions from claims about health, wellness
+outcomes, spirituality, cultural representation, intellectual-property status,
+or market position. Each public claim needs independently supportable wording
+and any required professional review.
+
 ## First implementation order
 
 1. Rebuild the AXES Contracting hub using the approved visual direction and
-   usable, factual service content.
+   usable, factual service content, then add the read-only Architectural Design
+   Desk and Building-Materials Discovery catalog.
 2. Keep the XIIOM console as the private operational environment.
 3. Build a read-only digital-library catalog and an invite-only AXOUX project
    registry before any public social interaction.
