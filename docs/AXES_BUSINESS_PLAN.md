@@ -101,6 +101,11 @@ biometric or behavioral profiles, infer personal states, or claim to
 understand or alter a player. The detailed gate is
 `ATHANOR_GAME_CONSOLE_READINESS.md`.
 
+Approved interaction objects may act as fictional keys to a future
+virtual-reality home: player-selected creative spaces and game experiences.
+They are not physical-property keys, identity credentials, financial
+instruments, or proof of ownership or status.
+
 **Athanor** is the internal creative concept for a harmonizing center within
 that system. It can guide the design of coherent experiences, installations,
 and editorial material. It is not an autonomous entity, measurement device,

@@ -10,7 +10,9 @@ participant-initiated motion and sound input.
 Athanor is the internal creative center for a future game-console-style
 experience. Chichetki provides the rhythm-object, dance, musical-instrument,
 motion, sound, and visual-design language through which players choose to
-interact.
+interact. Within the game world, approved Chichetki/Athanor interaction
+objects may serve as fictional keys to a future virtual-reality home: creative
+spaces, scenes, activities, or player-selected experiences.
 
 Within the game, terms such as harmonic, resonance, resequencer,
 transmission, alignment, and challenge describe fictional or artistic game
@@ -18,6 +20,14 @@ states, audiovisual rules, levels, and feedback. They do not describe a
 system that understands, evaluates, tracks, diagnoses, predicts, influences,
 or changes a player or any other person's physical, emotional, mental,
 spiritual, or social condition.
+
+Virtual-reality-home keys are game access symbols only. They are not keys to
+physical property, identity credentials, financial accounts, currency,
+investment products, proof of ownership, or a measure of a person's standing.
+They must not be sold, transferred, redeemed, traded, randomized for payment,
+or connected to URNUR or collectible-gem awards unless a separate product,
+legal, consumer-protection, security, and financial review approves the
+specific mechanics.
 
 ## Input and privacy boundary
 
@@ -75,4 +85,3 @@ Before a player-facing prototype, provide:
 - `AXES_GOVERNANCE_AND_SAFEGUARDING.md`
 - `CHICHETKI_COLLECTIBLE_GEM_READINESS.md`
 - `AXES_CREATOR_ORIGIN_CONSTITUTION.md`
-
