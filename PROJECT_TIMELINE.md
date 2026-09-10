@@ -33,9 +33,11 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-09 | Complete | AXES domain portfolio and conservative hosting roadmap established | `docs/DOMAIN_PORTFOLIO.md` |
 | 2026-09-09 | Complete | Microsoft 365 target and rollback-safe migration plan selected for AXES business email | `docs/EMAIL_MIGRATION_PLAN.md` |
 | 2026-09-09 | Complete | AXES OS portability foundation and private checksummed checkpoint manifests added | `docs/AXES_OS_PORTABILITY.md` |
+| 2026-09-09 | In progress | URNUR financial-services legal readiness elevated as a pre-launch blocker | `docs/URNUR_FINANCIAL_READINESS.md` |
 
 ## Current checkpoints
 
+- [ ] **Priority 0 - URNUR legal readiness:** Identify the primary launch jurisdiction and contact qualified financial-services and digital-asset counsel before resuming crypto registration or designing public financial functionality.
 - [x] Preserve the upstream histories for all four repositories.
 - [x] Separate deployable applications, package records, and KEYSTONE documents.
 - [x] Remove generated `node_modules` from version control and prevent future commits.
@@ -58,6 +60,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [ ] Connect `axescontracting.com` to Railway and verify its dedicated hub page, TLS, and health endpoint.
 - [ ] Complete and validate `info@axescontracting.com` migration from SiteGround to Microsoft 365.
 - [ ] Connect the Railway `axiom-web` service to `axescontracting.com` through SiteGround DNS.
+- [ ] Obtain written legal guidance that defines URNUR's permitted first-release scope before any market data, financial simulation, exchange connectivity, token, custody, payment, or automated-trading implementation.
 
 ## AXES OS migration track
 

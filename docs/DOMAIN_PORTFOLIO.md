@@ -24,7 +24,7 @@ it is planned or used.
 | `xiiom.com` | Home of AXI and private operations entry | Active public portal; private engine remains inaccessible from the internet |
 | `axoux.com` | Creator projects and collaboration | Park or redirect until the creator pilot is ready |
 | `auxaous.com` | Private self-design and reflection tools | Park or redirect until the self-design pilot is ready |
-| `urnur.com` | Contribution recognition and lineage direction | Park or redirect; no payments, token, or trading functionality |
+| `urnur.com` | Contribution recognition and lineage direction | Park or redirect pending the blocking legal-readiness review; no payments, token, market, or trading functionality |
 | `axaxaxu.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
 | `axianaxiunaixia.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
 | `axaxiaxes.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |

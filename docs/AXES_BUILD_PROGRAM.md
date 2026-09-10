@@ -33,6 +33,7 @@ next begins.
 | 6 | Creator and learning pilot | Pilot AXOUX projects and the School of Love & Ethics with moderation and scoped participation | Workstreams 4 and 5 |
 | 7 | Community and self-design pilot | Pilot AXEOUS and AUXAOUS only after safety, export, deletion, and abuse-response capabilities are established | Workstream 6 |
 | 8 | Recognition and lineage pilot | Pilot URNUR recognition and opt-in authorship/lineage records without transfers or financial functionality | Workstream 7 |
+| Blocking | URNUR legal readiness | Determine the permitted scope for any future financial-market product | Primary launch jurisdiction and qualified financial-services/digital-asset counsel |
 
 ## First release plan
 
@@ -126,5 +127,11 @@ next begins.
 
 ## Current next action
 
-Implement Release A: private operational intelligence and task-execution
-controls in `apps/axiom-engine` and the protected Automation Console.
+1. Contact qualified financial-services and digital-asset counsel before
+   resuming crypto registration or designing financial-market functionality for
+   URNUR.
+2. Implement Release A: private operational intelligence and task-execution
+   controls in `apps/axiom-engine` and the protected Automation Console.
+
+See `docs/URNUR_FINANCIAL_READINESS.md` for the attorney briefing packet and
+pre-launch engineering boundary.
