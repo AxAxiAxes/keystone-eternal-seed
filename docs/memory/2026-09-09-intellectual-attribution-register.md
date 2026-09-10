@@ -103,6 +103,24 @@ Release C in `docs/AXES_BUILD_PROGRAM.md`.
 privacy, consent, and non-diagnostic boundaries are technical and safety
 recommendations.
 
+### IA-2026-09-10-06 — Founder visual and physical-design source boundary
+
+**Insight:** The founder identifies the original designs, photographs, and
+physical works supplied in the AXES source materials as founder-provided
+project source material. A jeweled or gemstone-pomegranate reference supplied
+alongside them is explicitly not founder-created and is excluded from AXES
+reuse.
+
+**Attribution:** Founder-provided correction.
+**Source:** Founder instruction recorded 2026-09-10 in this project session;
+private source package and accompanying image references.
+**Implementation interpretation:** `docs/INTERACTIVE_EXPERIENCE_CATALOG.md`.
+**Credit note:** This entry is a project-provenance record, not a legal
+ownership determination. The excluded pomegranate reference must not be
+published, copied, used as a logo, or treated as an AXES asset without
+rights-holder permission. A pomegranate concept may be expressed only through
+independent or properly licensed work.
+
 ## Future entry standard
 
 For every material future insight, record:

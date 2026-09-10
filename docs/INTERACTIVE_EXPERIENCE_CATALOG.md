@@ -3,7 +3,8 @@
 **Status:** Source inventory and pilot classification  
 **Recorded:** 2026-09-10  
 **Source:** Founder-supplied original visual, audio, HTML, business-plan, and
-KEYSTONE source package. The complete originals are private in
+KEYSTONE source package, except for specifically excluded third-party or
+unknown-rights reference material. The complete originals are private in
 `private-archive/copilot-library/2026-09-10-axes-source-package/`.
 
 ## Purpose
@@ -25,6 +26,16 @@ module with a defined domain, visibility, data policy, and safety boundary.
 The sources were archived with SHA-256 integrity records. They are not public
 site assets until ownership, consent, accessibility, file size, and intended
 audience have been reviewed.
+
+## Rights and exclusion record
+
+The founder identifies the supplied original designs, photographs, and physical
+works as founder-provided source material. The jeweled or gemstone-pomegranate
+reference is specifically excluded: it is not founder-created material and
+must not be copied, published, used as an AXES mark, or treated as an AXES
+asset unless its rights holder provides written permission for the intended
+use. The pomegranate may remain a general concept only when expressed through
+independently created or properly licensed work.
 
 ## Experience catalog
 
