@@ -1,4 +1,5 @@
 const assert = require("node:assert/strict");
+const http = require("node:http");
 const test = require("node:test");
 const engine = require("../../axiom-engine");
 
@@ -15,6 +16,23 @@ async function stopServer(server) {
   server.closeAllConnections();
   await new Promise((resolve, reject) =>
     server.close((error) => (error ? reject(error) : resolve())));
+}
+
+function request(port, headers) {
+  return new Promise((resolve, reject) => {
+    const request = http.get(
+      { hostname: "127.0.0.1", port, path: "/", headers },
+      (response) => {
+        let body = "";
+        response.setEncoding("utf8");
+        response.on("data", (chunk) => {
+          body += chunk;
+        });
+        response.on("end", () => resolve({ body, statusCode: response.statusCode }));
+      }
+    );
+    request.once("error", reject);
+  });
 }
 
 test("forwards valid commands to the AXIOM engine", async (t) => {
@@ -61,6 +79,10 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     const portal = await fetch(`http://127.0.0.1:${webPort}/`);
     assert.equal(portal.status, 200);
     assert.match(await portal.text(), /AXES CONTRACTING/);
+
+    const axesPortal = await request(webPort, { Host: "axescontracting.com" });
+    assert.equal(axesPortal.statusCode, 200);
+    assert.match(axesPortal.body, /The AXES Control Center/);
 
     const library = await fetch(
       `http://127.0.0.1:${webPort}/library/memory/README.md`

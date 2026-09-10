@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AXES Contracting | The AXES Control Center</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: system-ui, sans-serif;
+      --background: #09101f;
+      --surface: #14213a;
+      --border: #293d61;
+      --text: #e7edf7;
+      --muted: #aebbd0;
+      --accent: #66d9ef;
+    }
+
+    body { background: var(--background); color: var(--text); margin: 0; }
+    main { margin: auto; max-width: 1080px; padding: 4rem 1.5rem; }
+    h1 { font-size: clamp(2.5rem, 7vw, 5rem); margin: 0; }
+    h2 { color: var(--accent); }
+    .eyebrow { color: var(--accent); font-weight: 700; letter-spacing: .12em; }
+    .tagline { color: var(--muted); font-size: 1.25rem; line-height: 1.6; max-width: 48rem; }
+    .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: 2rem 0; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: .75rem; padding: 1.5rem; }
+    .stage { color: var(--muted); font-size: .9rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    a { color: var(--accent); font-weight: 650; }
+    footer { border-top: 1px solid var(--border); color: var(--muted); margin-top: 3rem; padding-top: 1.5rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">AXES CONTRACTING</p>
+    <h1>The AXES Control Center</h1>
+    <p class="tagline">
+      A deliberate home for the AXES product constellation: ethical creation,
+      learning, durable records, and responsibly governed technology.
+    </p>
+
+    <section class="grid" aria-label="Active and planned services">
+      <article class="card">
+        <p class="stage">Operating now</p>
+        <h2>XIIOM</h2>
+        <p>Private AXI operations with bounded automation, durable memory, and a protected operator console.</p>
+        <a href="https://xiiom.com">Visit XIIOM</a>
+      </article>
+      <article class="card">
+        <p class="stage">In planning</p>
+        <h2>Creator and learning pilots</h2>
+        <p>AXOUX creator projects and a moderated School of Love &amp; Ethics are the next public-facing pilots.</p>
+        <a href="/library/AXES_BUILD_PROGRAM.md">Read the build program</a>
+      </article>
+      <article class="card">
+        <p class="stage">In planning</p>
+        <h2>Digital library</h2>
+        <p>A privacy-conscious library for reviewed records, project work, and credited contributions.</p>
+        <a href="/library/AXES_PLATFORM_PLAN.md">Read the platform plan</a>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>All for All</h2>
+      <p>
+        We build in stages: protect privacy, preserve attribution, keep people
+        in control, and make each service useful before expanding to the next.
+      </p>
+    </section>
+
+    <footer>
+      AXES Contracting is the central hub. Product availability and operating
+      status are stated plainly as services are introduced.
+    </footer>
+  </main>
+</body>
+</html>

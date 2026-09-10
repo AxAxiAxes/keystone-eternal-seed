@@ -11,6 +11,10 @@ const DOCUMENTS_DIRECTORY = fs.existsSync(path.join(__dirname, 'docs'))
     : path.resolve(__dirname, '..', '..', 'docs');
 const AXIOM_ENGINE_URL = new URL(process.env.AXIOM_ENGINE_URL || 'http://127.0.0.1:3000');
 
+function isAxesContractingHost(host) {
+    return String(host || '').split(':')[0].toLowerCase() === 'axescontracting.com';
+}
+
 function getLeads() {
     try {
           if (fs.existsSync(LEADS_FILE)) return JSON.parse(fs.readFileSync(LEADS_FILE, 'utf8'));
@@ -111,7 +115,10 @@ const server = http.createServer(async (req, res) => {
                                          return;
                                    }
     if (pathname === '/' || pathname === '/index.html') {
-          serveFile(res, path.join(__dirname, 'index.html'), 'text/html; charset=utf-8');
+          const page = isAxesContractingHost(req.headers.host)
+              ? 'axescontracting.html'
+              : 'index.html';
+          serveFile(res, path.join(__dirname, page), 'text/html; charset=utf-8');
           return;
     }
     if (pathname === '/axiom') {

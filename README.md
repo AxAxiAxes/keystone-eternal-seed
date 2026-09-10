@@ -10,6 +10,8 @@ The staged AXES product constellation and its privacy, safeguarding, and
 automation boundaries are defined in [AXES_PLATFORM_PLAN.md](docs/AXES_PLATFORM_PLAN.md).
 The long-range, dependency-ordered delivery program is in
 [AXES_BUILD_PROGRAM.md](docs/AXES_BUILD_PROGRAM.md).
+The domain registry, conservative operating budget, and AXES-owned hardware
+readiness plan are in [DOMAIN_PORTFOLIO.md](docs/DOMAIN_PORTFOLIO.md).
 
 ## Repository layout
 
