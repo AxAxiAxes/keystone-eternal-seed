@@ -162,6 +162,10 @@ const server = http.createServer(async (req, res) => {
           serveFile(res, path.join(__dirname, 'materials.html'), 'text/html; charset=utf-8');
           return;
     }
+    if (pathname === '/directory') {
+          serveFile(res, path.join(__dirname, 'directory.html'), 'text/html; charset=utf-8');
+          return;
+    }
     if (pathname === '/automation') {
           if (!requireAdmin(req, res)) return;
           serveFile(res, path.join(__dirname, 'automation.html'), 'text/html; charset=utf-8');

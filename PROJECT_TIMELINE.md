@@ -50,6 +50,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Read-only AXES materials-discovery page added with staged commerce boundary | `apps/axiom-freedom/materials.html` |
 | 2026-09-10 | Complete | AXES Directory and marketing-assistance concepts privately archived and converted into a safety-gated readiness plan | `docs/AXES_DIRECTORY_READINESS.md` |
 | 2026-09-10 | Complete | Business-official interview and invitation workflow added for the future opt-in AXES Directory pilot | `docs/AXES_DIRECTORY_READINESS.md` |
+| 2026-09-10 | Complete | Public-information page added for the future opt-in AXES Directory pilot without publishing a directory | `apps/axiom-freedom/directory.html` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints

@@ -94,6 +94,18 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(materials.status, 200);
     assert.match(await materials.text(), /Materials Discovery/);
 
+    const directory = await fetch(`http://127.0.0.1:${webPort}/directory`);
+    assert.equal(directory.status, 200);
+    const directoryPage = await directory.text();
+    assert.match(directoryPage, /Future AXES Directory Pilot/);
+    assert.match(directoryPage, /No listings are available/);
+    assert.match(
+      directoryPage,
+      /mailto:info@axescontracting\.com\?subject=AXES%20Directory%20correction%20or%20removal/
+    );
+    assert.doesNotMatch(directoryPage, /<form\b/i);
+    assert.doesNotMatch(directoryPage, /<input\b/i);
+
     const unauthorizedConsole = await fetch(`http://127.0.0.1:${webPort}/automation`);
     assert.equal(unauthorizedConsole.status, 401);
 

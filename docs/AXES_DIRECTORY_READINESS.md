@@ -1,6 +1,6 @@
 # AXES Directory and marketing readiness
 
-**Status:** Future concept; no public directory or marketing agent is active  
+**Status:** Future concept; a public information page is available at `/directory`, but no public directory or marketing agent is active
 **Recorded:** 2026-09-10  
 **Source:** Founder-provided historical concept source retained privately.
 
@@ -121,3 +121,4 @@ availability guarantee, or endorsement by AXES.
 - `AXES_GOVERNANCE_AND_SAFEGUARDING.md`
 - `AXES_PLATFORM_PLAN.md`
 - `URNUR_FINANCIAL_READINESS.md`
+- `apps/axiom-freedom/directory.html`
