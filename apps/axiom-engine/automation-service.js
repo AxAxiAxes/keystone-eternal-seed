@@ -68,7 +68,15 @@ class AutomationService {
     });
   }
 
-  async createTask({ title, action, payload = {}, agentId, runAt, recurrenceMinutes }) {
+  async createTask({
+    title,
+    action,
+    payload = {},
+    agentId,
+    runAt,
+    recurrenceMinutes,
+    priority = 3
+  }) {
     return this.withState(async (state) => {
       if (!isNonEmptyString(title)) {
         throw new TypeError("task title must be a non-empty string");
@@ -95,6 +103,9 @@ class AutomationService {
           recurrenceMinutes > 10080)) {
         throw new RangeError("task recurrenceMinutes must be an integer from 1 to 10080");
       }
+      if (!Number.isInteger(priority) || priority < 1 || priority > 5) {
+        throw new RangeError("task priority must be an integer from 1 to 5");
+      }
 
       const task = {
         id: randomUUID(),
@@ -105,6 +116,7 @@ class AutomationService {
         status: "pending",
         runAt: scheduledAt.toISOString(),
         recurrenceMinutes: recurrenceMinutes || null,
+        priority,
         runCount: 0,
         createdAt: this.now().toISOString(),
         updatedAt: this.now().toISOString()
@@ -119,7 +131,8 @@ class AutomationService {
       if (status !== undefined && !TASK_STATUSES.has(status)) {
         throw new RangeError(`unsupported task status: ${status}`);
       }
-      return status ? state.tasks.filter((task) => task.status === status) : state.tasks;
+      const tasks = status ? state.tasks.filter((task) => task.status === status) : state.tasks;
+      return [...tasks].sort(compareTasks);
     });
   }
 
@@ -139,6 +152,7 @@ class AutomationService {
       const now = this.now();
       const dueTasks = state.tasks
         .filter((task) => task.status === "pending" && new Date(task.runAt) <= now)
+        .sort(compareTasks)
         .slice(0, maxTasks);
       const outcomes = [];
 
@@ -222,6 +236,7 @@ class AutomationService {
       taskId: task.id,
       agentId: agent.id,
       action: task.action,
+      priority: task.priority,
       status,
       result,
       recordedAt: this.now().toISOString()
@@ -259,6 +274,11 @@ class AutomationService {
       if (!Array.isArray(state.agents) || !Array.isArray(state.tasks) ||
         !Array.isArray(state.runs)) {
         throw new TypeError("automation state has an invalid shape");
+      }
+      for (const task of state.tasks) {
+        if (task.priority === undefined) {
+          task.priority = 3;
+        }
       }
       return state;
     } catch (error) {
@@ -346,6 +366,14 @@ function isNonEmptyString(value) {
 
 function isRecord(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function compareTasks(left, right) {
+  const priorityDifference = right.priority - left.priority;
+  if (priorityDifference !== 0) {
+    return priorityDifference;
+  }
+  return new Date(left.runAt).valueOf() - new Date(right.runAt).valueOf();
 }
 
 async function replaceFile(source, destination) {

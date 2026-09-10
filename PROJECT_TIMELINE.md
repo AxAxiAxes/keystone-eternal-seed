@@ -34,6 +34,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-09 | Complete | Microsoft 365 target and rollback-safe migration plan selected for AXES business email | `docs/EMAIL_MIGRATION_PLAN.md` |
 | 2026-09-09 | Complete | AXES OS portability foundation and private checksummed checkpoint manifests added | `docs/AXES_OS_PORTABILITY.md` |
 | 2026-09-09 | In progress | URNUR financial-services legal readiness elevated as a pre-launch blocker | `docs/URNUR_FINANCIAL_READINESS.md` |
+| 2026-09-09 | Complete | Automation Console schedule and durable priority ordering added | `apps/axiom-engine/automation-service.js`, `apps/axiom-freedom/automation.html` |
 
 ## Current checkpoints
 
@@ -56,6 +57,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Define module boundaries and add private integrity checkpoints for future AXES OS migration.
 - [ ] Set `OPENAI_API_KEY` as a Railway encrypted variable and verify a live production chat response.
 - [ ] Add private operational monitoring and task safeguards: priorities, dependencies, retries, approvals, and run history.
+- [x] Add task priorities, specific scheduling, recurring schedules, and a protected schedule view.
 - [ ] Establish the AXES Control Center pilot with governance, data-handling, moderation, and safeguarding requirements.
 - [ ] Connect `axescontracting.com` to Railway and verify its dedicated hub page, TLS, and health endpoint.
 - [ ] Complete and validate `info@axescontracting.com` migration from SiteGround to Microsoft 365.

@@ -29,8 +29,10 @@ New installations seed three enabled agent records:
 | Automation Auditor | Both capabilities | Provides a general audited fallback. |
 
 Tasks can specify an eligible `agentId`; otherwise the first enabled agent with
-the matching capability is assigned. Every completed or failed execution
-creates a durable run record and a private `decision` memory audit entry.
+the matching capability is assigned. Tasks have a priority from 1 (backlog) to
+5 (critical), defaulting to 3. Due tasks execute by highest priority first,
+then earliest scheduled time. Every completed or failed execution creates a
+durable run record and a private `decision` memory audit entry.
 
 ## Private API
 
@@ -66,7 +68,8 @@ POST /automation/tasks
 
 Add `recurrenceMinutes` from 1 through 10,080 to run a task again after each
 successful execution. Without recurrence, a successful task becomes
-`completed`.
+`completed`. Use `runAt` with an ISO-8601 timestamp to schedule a task for a
+specific time; omit it to make the task due immediately.
 
 ## Opt-in scheduler
 
@@ -86,8 +89,9 @@ it does not silently claim completion.
 ## Protected browser console
 
 The public portal supplies an authenticated operator interface at `/automation`.
-It can read automation status and agents, queue allowlisted tasks, and process
-due tasks. It never exposes a direct engine URL or general engine proxy.
+It can read automation status and agents, queue allowlisted tasks, set task
+priority and scheduled time, view the upcoming schedule, and process due tasks.
+It never exposes a direct engine URL or general engine proxy.
 
 Set a unique secret only in the `axiom-freedom` Railway service variables:
 

@@ -17,6 +17,7 @@
     button.secondary { background:#334155; color:#fff; } .actions { display:flex; gap:10px; flex-wrap:wrap; }
     table { border-collapse:collapse; width:100%; } th,td { border-bottom:1px solid #313b4d; padding:9px; text-align:left; vertical-align:top; }
     #result { white-space:pre-wrap; color:#b8e6c2; } .hidden { display:none; }
+    .priority-5 { color:#fca5a5; } .priority-4 { color:#fdba74; } .priority-3 { color:#fde68a; } .priority-2 { color:#bfdbfe; } .priority-1 { color:#cbd5e1; }
   </style>
 </head>
 <body>
@@ -33,6 +34,8 @@
     <form id="task-form">
       <label>Title <input id="title" required maxlength="200" placeholder="Record a verified milestone"></label>
       <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="automation.noop">Safe no-op test</option></select></label>
+      <label>Priority <select id="priority"><option value="5">P5 - Critical</option><option value="4">P4 - High</option><option value="3" selected>P3 - Normal</option><option value="2">P2 - Low</option><option value="1">P1 - Backlog</option></select></label>
+      <label>Run at (optional) <input id="run-at" type="datetime-local"><span class="note">Leave empty to make the task due now.</span></label>
       <div id="memory-fields">
         <label>Memory layer <select id="kind"><option value="decision">Decision</option><option value="procedure">Procedure</option><option value="semantic">Semantic</option><option value="episodic">Episodic</option></select></label>
         <label>Content <textarea id="content" placeholder="What should be recorded?"></textarea></label>
@@ -42,6 +45,7 @@
     </form>
   </section>
   <section><h2>Registered Agents</h2><div id="agents"></div></section>
+  <section><h2>Schedule</h2><p class="note">Due tasks run by priority first, then scheduled time. All execution remains limited to allowlisted actions.</p><div id="schedule"></div></section>
   <section>
     <h2>Agent Chat</h2>
     <p class="note">Agents propose improvements for review. They cannot edit or deploy the public site.</p>
@@ -64,7 +68,23 @@ async function request(path, options) {
 }
 function table(items, fields) {
   if (!items.length) return "<p class='note'>None yet.</p>";
-  return `<table><thead><tr>${fields.map(([_,label])=>`<th>${label}</th>`).join("")}</tr></thead><tbody>${items.map(item=>`<tr>${fields.map(([key])=>`<td>${String(item[key] ?? "")}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+  return `<table><thead><tr>${fields.map(([_,label])=>`<th>${label}</th>`).join("")}</tr></thead><tbody>${items.map(item=>`<tr>${fields.map(([key])=>`<td>${escapeHtml(item[key])}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[character]);
+}
+function priorityLabel(priority) {
+  return `P${priority}`;
+}
+function renderSchedule(tasks) {
+  const scheduled = tasks.filter(task => task.status === "pending");
+  if (!scheduled.length) {
+    document.querySelector("#schedule").innerHTML = "<p class='note'>No pending tasks are scheduled.</p>";
+    return;
+  }
+  document.querySelector("#schedule").innerHTML = `<table><thead><tr><th>Scheduled time</th><th>Priority</th><th>Task</th><th>Action</th><th>Repeat (minutes)</th></tr></thead><tbody>${scheduled.map(task => `<tr><td>${escapeHtml(task.runAt)}</td><td class="priority-${task.priority}">${priorityLabel(task.priority)}</td><td>${escapeHtml(task.title)}</td><td>${escapeHtml(task.action)}</td><td>${escapeHtml(task.recurrenceMinutes)}</td></tr>`).join("")}</tbody></table>`;
 }
 async function refresh() {
   try {
@@ -74,7 +94,8 @@ async function refresh() {
     document.querySelector("#metrics").innerHTML = Object.entries(status).map(([key,value]) => `<div class="metric"><strong>${value}</strong><br>${key}</div>`).join("");
     document.querySelector("#agents").innerHTML = table(agents, [["name","Name"],["capabilities","Capabilities"],["enabled","Enabled"]]);
     document.querySelector("#chat-agent").innerHTML = agents.map(agent => `<option value="${agent.id}">${agent.name}</option>`).join("");
-    document.querySelector("#tasks").innerHTML = table(tasks, [["title","Title"],["action","Action"],["status","Status"],["runCount","Runs"],["runAt","Next run"]]);
+    renderSchedule(tasks);
+    document.querySelector("#tasks").innerHTML = table(tasks, [["priority","Priority"],["title","Title"],["action","Action"],["status","Status"],["runCount","Runs"],["runAt","Next run"]]);
     result.textContent = "";
   } catch (error) { result.textContent = error.message; }
 }
@@ -85,9 +106,11 @@ document.querySelector("#task-form").addEventListener("submit", async event => {
   event.preventDefault();
   const action = document.querySelector("#action").value;
   const recurrence = document.querySelector("#recurrence").value;
-  const task = { title:document.querySelector("#title").value, action };
+  const task = { title:document.querySelector("#title").value, action, priority:Number(document.querySelector("#priority").value) };
   if (action === "memory.record") task.payload = { kind:document.querySelector("#kind").value, content:document.querySelector("#content").value };
   if (recurrence) task.recurrenceMinutes = Number(recurrence);
+  const runAt = document.querySelector("#run-at").value;
+  if (runAt) task.runAt = new Date(runAt).toISOString();
   try { result.textContent = `Queued: ${(await request("/api/automation/tasks",{method:"POST",body:JSON.stringify(task)})).id}`; event.target.reset(); await refresh(); } catch(error) { result.textContent=error.message; }
 });
 document.querySelector("#chat-form").addEventListener("submit", async event => {

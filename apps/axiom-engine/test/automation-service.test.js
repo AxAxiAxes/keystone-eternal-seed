@@ -92,6 +92,33 @@ test("keeps recurring tasks pending for their next execution", async (t) => {
   assert.equal((await service.listRuns()).length, 1);
 });
 
+test("processes due tasks by priority and then scheduled time", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const currentTime = new Date("2026-09-09T18:00:00.000Z");
+  const service = new AutomationService({
+    directory,
+    memoryStore: createMemoryStore(),
+    now: () => currentTime
+  });
+
+  const lowPriority = await service.createTask({
+    title: "Low priority task",
+    action: "automation.noop",
+    priority: 1
+  });
+  const highPriority = await service.createTask({
+    title: "High priority task",
+    action: "automation.noop",
+    priority: 5
+  });
+
+  const [outcome] = await service.processDueTasks(1);
+  assert.equal(outcome.taskId, highPriority.id);
+  assert.equal((await service.listTasks("completed"))[0].id, highPriority.id);
+  assert.equal((await service.listTasks("pending"))[0].id, lowPriority.id);
+});
+
 test("rejects task actions outside the allowlist", async (t) => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));
