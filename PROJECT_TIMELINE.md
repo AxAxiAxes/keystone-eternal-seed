@@ -63,6 +63,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Harmonics recorded as separate proposed names for future URNUR creator-economy units and Chichetki/Athanor fictional game interactions | `docs/URNUR_FINANCIAL_READINESS.md` |
 | 2026-09-10 | Complete | UR defined as Unit of Eternal Origin and NUR as the proposed provenance record-holder for individual gems or units, without ownership or trading assertions | `docs/URNUR_FINANCIAL_READINESS.md` |
 | 2026-09-10 | Complete | Three founder-created UR Node, sphere, and AU home designs privately archived with SHA-256 provenance records | `docs/memory/2026-09-09-intellectual-attribution-register.md` |
+| 2026-09-10 | Complete | Founder constrained-budget revenue-priority overlay added for parallel V1 trading-app, V2 AXES appraisal/inspection pathways, and V3 KEYSTONE development | `docs/FOUNDER_REVENUE_PRIORITY_OVERLAY.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints

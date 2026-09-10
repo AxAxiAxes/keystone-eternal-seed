@@ -207,6 +207,12 @@ initial operational cap, request written quotes for professional work, and
 retain a contingency reserve. The authoritative planning ranges and approval
 thresholds are in `PROJECT_BUDGET.md`.
 
+The founder's current constrained-budget execution emphasis is maintained in
+`FOUNDER_REVENUE_PRIORITY_OVERLAY.md`. It prioritizes AXES client pathways and
+KEYSTONE provenance services while keeping the trading application under its
+existing financial-readiness gate; it does not replace the patent-source V1-V8
+architecture.
+
 ## Critical legal and professional gates
 
 | Topic | Required before launch or public claim |
@@ -265,6 +271,7 @@ Track only metrics that help decide whether a service should continue:
 - `INTERACTIVE_EXPERIENCE_CATALOG.md`
 - `DOMAIN_PORTFOLIO.md`
 - `PROJECT_BUDGET.md`
+- `FOUNDER_REVENUE_PRIORITY_OVERLAY.md`
 - `EMAIL_MIGRATION_PLAN.md`
 - `URNUR_FINANCIAL_READINESS.md`
 - `CHICHETKI_COLLECTIBLE_GEM_READINESS.md`
