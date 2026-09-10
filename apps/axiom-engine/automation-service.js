@@ -6,6 +6,8 @@ const TASK_ACTIONS = new Set(["memory.record", "automation.noop"]);
 const TASK_STATUSES = new Set([
   "pending",
   "running",
+  "blocked",
+  "awaiting_approval",
   "completed",
   "failed",
   "cancelled"
@@ -75,7 +77,11 @@ class AutomationService {
     agentId,
     runAt,
     recurrenceMinutes,
-    priority = 3
+    priority = 3,
+    dependsOn = [],
+    approvalRequired = false,
+    maxAttempts = 1,
+    retryDelayMinutes = 5
   }) {
     return this.withState(async (state) => {
       if (!isNonEmptyString(title)) {
@@ -106,6 +112,24 @@ class AutomationService {
       if (!Number.isInteger(priority) || priority < 1 || priority > 5) {
         throw new RangeError("task priority must be an integer from 1 to 5");
       }
+      if (!Array.isArray(dependsOn) || !dependsOn.every(isNonEmptyString)) {
+        throw new TypeError("task dependsOn must be a string array");
+      }
+      const dependencyIds = [...new Set(dependsOn.map((dependency) => dependency.trim()))];
+      if (!dependencyIds.every((dependencyId) =>
+        state.tasks.some((task) => task.id === dependencyId))) {
+        throw new RangeError("task dependencies must reference existing tasks");
+      }
+      if (typeof approvalRequired !== "boolean") {
+        throw new TypeError("task approvalRequired must be a boolean");
+      }
+      if (!Number.isInteger(maxAttempts) || maxAttempts < 1 || maxAttempts > 5) {
+        throw new RangeError("task maxAttempts must be an integer from 1 to 5");
+      }
+      if (!Number.isInteger(retryDelayMinutes) || retryDelayMinutes < 1 ||
+        retryDelayMinutes > 1440) {
+        throw new RangeError("task retryDelayMinutes must be an integer from 1 to 1440");
+      }
 
       const task = {
         id: randomUUID(),
@@ -113,10 +137,17 @@ class AutomationService {
         action,
         payload,
         agentId: agentId || null,
-        status: "pending",
+        status: approvalRequired ? "awaiting_approval" :
+          dependenciesComplete(state.tasks, dependencyIds) ? "pending" : "blocked",
         runAt: scheduledAt.toISOString(),
         recurrenceMinutes: recurrenceMinutes || null,
         priority,
+        dependsOn: dependencyIds,
+        approvalRequired,
+        approvalStatus: approvalRequired ? "pending" : "not-required",
+        maxAttempts,
+        retryDelayMinutes,
+        attemptCount: 0,
         runCount: 0,
         createdAt: this.now().toISOString(),
         updatedAt: this.now().toISOString()
@@ -143,6 +174,28 @@ class AutomationService {
     return this.withState(async (state) => state.runs.slice(-limit).reverse());
   }
 
+  async reviewTaskApproval(taskId, approved) {
+    if (!isNonEmptyString(taskId)) {
+      throw new TypeError("taskId must be a non-empty string");
+    }
+    if (typeof approved !== "boolean") {
+      throw new TypeError("approved must be a boolean");
+    }
+    return this.withState(async (state) => {
+      const task = findTask(state.tasks, taskId);
+      if (task.status !== "awaiting_approval") {
+        throw new RangeError("task is not awaiting approval");
+      }
+      task.approvalStatus = approved ? "approved" : "rejected";
+      task.approvedAt = this.now().toISOString();
+      task.status = approved && dependenciesComplete(state.tasks, task.dependsOn)
+        ? "pending"
+        : approved ? "blocked" : "cancelled";
+      task.updatedAt = this.now().toISOString();
+      return task;
+    });
+  }
+
   async processDueTasks(maxTasks = 5) {
     if (!Number.isInteger(maxTasks) || maxTasks < 1 || maxTasks > 20) {
       throw new RangeError("maxTasks must be an integer between 1 and 20");
@@ -150,6 +203,7 @@ class AutomationService {
 
     return this.withState(async (state) => {
       const now = this.now();
+      unblockReadyTasks(state.tasks, this.now);
       const dueTasks = state.tasks
         .filter((task) => task.status === "pending" && new Date(task.runAt) <= now)
         .sort(compareTasks)
@@ -164,12 +218,14 @@ class AutomationService {
         }
 
         task.status = "running";
+        task.attemptCount += 1;
         task.updatedAt = this.now().toISOString();
         try {
           const result = await this.executeTask(task, agent);
           task.runCount += 1;
           task.lastRunAt = this.now().toISOString();
           task.lastResult = result;
+          task.attemptCount = 0;
           if (task.recurrenceMinutes) {
             task.status = "pending";
             task.runAt = new Date(
@@ -182,17 +238,23 @@ class AutomationService {
           const run = await this.recordRun(state, task, agent, "completed", result);
           outcomes.push({ taskId: task.id, status: task.status, runId: run.id });
         } catch (error) {
-          task.status = "failed";
           task.updatedAt = this.now().toISOString();
           task.lastError = error.message;
+          const retrying = task.attemptCount < task.maxAttempts;
+          task.status = retrying ? "pending" : "failed";
+          if (retrying) {
+            task.runAt = new Date(
+              this.now().valueOf() + task.retryDelayMinutes * 60_000
+            ).toISOString();
+          }
           const run = await this.recordRun(
             state,
             task,
             agent,
-            "failed",
+            retrying ? "retrying" : "failed",
             { error: error.message }
           );
-          outcomes.push({ taskId: task.id, status: "failed", runId: run.id });
+          outcomes.push({ taskId: task.id, status: task.status, runId: run.id });
         }
       }
 
@@ -204,6 +266,10 @@ class AutomationService {
     return this.withState(async (state) => ({
       agents: state.agents.length,
       pendingTasks: state.tasks.filter((task) => task.status === "pending").length,
+      blockedTasks: state.tasks.filter((task) => task.status === "blocked").length,
+      awaitingApprovalTasks: state.tasks.filter(
+        (task) => task.status === "awaiting_approval"
+      ).length,
       completedTasks: state.tasks.filter((task) => task.status === "completed").length,
       failedTasks: state.tasks.filter((task) => task.status === "failed").length,
       runs: state.runs.length
@@ -237,6 +303,8 @@ class AutomationService {
       agentId: agent.id,
       action: task.action,
       priority: task.priority,
+      attempt: task.attemptCount,
+      maxAttempts: task.maxAttempts,
       status,
       result,
       recordedAt: this.now().toISOString()
@@ -279,6 +347,12 @@ class AutomationService {
         if (task.priority === undefined) {
           task.priority = 3;
         }
+        if (task.dependsOn === undefined) task.dependsOn = [];
+        if (task.approvalRequired === undefined) task.approvalRequired = false;
+        if (task.approvalStatus === undefined) task.approvalStatus = "not-required";
+        if (task.maxAttempts === undefined) task.maxAttempts = 1;
+        if (task.retryDelayMinutes === undefined) task.retryDelayMinutes = 5;
+        if (task.attemptCount === undefined) task.attemptCount = 0;
       }
       return state;
     } catch (error) {
@@ -381,6 +455,27 @@ function compareTasks(left, right) {
     return priorityDifference;
   }
   return new Date(left.runAt).valueOf() - new Date(right.runAt).valueOf();
+}
+
+function dependenciesComplete(tasks, dependencyIds) {
+  return dependencyIds.every((dependencyId) =>
+    tasks.find((task) => task.id === dependencyId)?.status === "completed");
+}
+
+function unblockReadyTasks(tasks, now) {
+  for (const task of tasks) {
+    if (task.status === "blocked" && task.approvalStatus !== "rejected" &&
+      dependenciesComplete(tasks, task.dependsOn)) {
+      task.status = "pending";
+      task.updatedAt = now().toISOString();
+    }
+  }
+}
+
+function findTask(tasks, taskId) {
+  const task = tasks.find((entry) => entry.id === taskId);
+  if (!task) throw new RangeError(`task does not exist: ${taskId}`);
+  return task;
 }
 
 async function replaceFile(source, destination) {

@@ -4,6 +4,7 @@ const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
 const { AutomationService } = require("../automation-service");
+const { MemoryStore } = require("../memory-store");
 
 function createMemoryStore() {
   const entries = [];
@@ -117,6 +118,62 @@ test("processes due tasks by priority and then scheduled time", async (t) => {
   assert.equal(outcome.taskId, highPriority.id);
   assert.equal((await service.listTasks("completed"))[0].id, highPriority.id);
   assert.equal((await service.listTasks("pending"))[0].id, lowPriority.id);
+});
+
+test("unblocks approved tasks after their dependencies complete", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AutomationService({
+    directory,
+    memoryStore: createMemoryStore(),
+    now: () => new Date("2026-09-09T18:00:00.000Z")
+  });
+  const prerequisite = await service.createTask({
+    title: "Complete prerequisite",
+    action: "automation.noop"
+  });
+  const dependent = await service.createTask({
+    title: "Complete approved dependent task",
+    action: "automation.noop",
+    dependsOn: [prerequisite.id],
+    approvalRequired: true
+  });
+
+  assert.equal(dependent.status, "awaiting_approval");
+  const approved = await service.reviewTaskApproval(dependent.id, true);
+  assert.equal(approved.status, "blocked");
+  await service.processDueTasks();
+  assert.equal((await service.listTasks("blocked"))[0].id, dependent.id);
+  await service.processDueTasks();
+  assert.equal((await service.listTasks("completed"))[0].id, prerequisite.id);
+  assert.equal((await service.listTasks("completed"))[1].id, dependent.id);
+});
+
+test("retries a failed task only up to its configured attempt limit", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  let currentTime = new Date("2026-09-09T18:00:00.000Z");
+  const service = new AutomationService({
+    directory,
+    memoryStore: new MemoryStore(directory),
+    now: () => currentTime
+  });
+  const task = await service.createTask({
+    title: "Invalid memory record",
+    action: "memory.record",
+    payload: { kind: "invalid", content: "Will fail" },
+    maxAttempts: 2,
+    retryDelayMinutes: 1
+  });
+
+  const [firstOutcome] = await service.processDueTasks();
+  assert.equal(firstOutcome.status, "pending");
+  assert.equal((await service.listTasks("pending"))[0].attemptCount, 1);
+  currentTime = new Date("2026-09-09T18:01:00.000Z");
+  const [secondOutcome] = await service.processDueTasks();
+  assert.equal(secondOutcome.status, "failed");
+  assert.equal((await service.listTasks("failed"))[0].id, task.id);
+  assert.deepEqual((await service.listRuns()).map((run) => run.status), ["failed", "retrying"]);
 });
 
 test("rejects task actions outside the allowlist", async (t) => {

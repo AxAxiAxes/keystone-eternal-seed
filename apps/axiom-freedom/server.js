@@ -224,6 +224,24 @@ const server = http.createServer(async (req, res) => {
           }
           return;
     }
+    const approvalRoute = pathname.match(/^\/api\/automation\/tasks\/([^/]+)\/approval$/);
+    if (approvalRoute && req.method === 'POST') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const task = await invokeEngine(
+                        '/automation/tasks/' + encodeURIComponent(approvalRoute[1]) + '/approval',
+                        'POST',
+                        await parseBody(req)
+                      );
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(task));
+              } catch (error) {
+                      console.error('AXIOM automation task approval failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
     if (pathname === '/api/automation/process' && req.method === 'POST') {
           if (!requireAdmin(req, res)) return;
           try {

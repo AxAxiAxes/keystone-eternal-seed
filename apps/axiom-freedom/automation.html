@@ -43,6 +43,10 @@
       <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="automation.noop">Safe no-op test</option></select></label>
       <label>Priority <select id="priority"><option value="5">P5 - Critical</option><option value="4">P4 - High</option><option value="3" selected>P3 - Normal</option><option value="2">P2 - Low</option><option value="1">P1 - Backlog</option></select></label>
       <label>Run at (optional) <input id="run-at" type="datetime-local"><span class="note">Leave empty to make the task due now.</span></label>
+      <label>Depends on (optional) <select id="depends-on" multiple></select><span class="note">Select completed prerequisites or tasks that must finish first.</span></label>
+      <label>Retry attempts <input id="max-attempts" type="number" min="1" max="5" value="1"></label>
+      <label>Retry delay minutes <input id="retry-delay" type="number" min="1" max="1440" value="5"></label>
+      <label><input id="approval-required" type="checkbox"> Require operator approval before execution</label>
       <div id="memory-fields">
         <label>Memory layer <select id="kind"><option value="decision">Decision</option><option value="procedure">Procedure</option><option value="semantic">Semantic</option><option value="episodic">Episodic</option></select></label>
         <label>Content <textarea id="content" placeholder="What should be recorded?"></textarea></label>
@@ -93,6 +97,21 @@ function renderSchedule(tasks) {
   }
   document.querySelector("#schedule").innerHTML = `<table><thead><tr><th>Scheduled time</th><th>Priority</th><th>Task</th><th>Action</th><th>Repeat (minutes)</th></tr></thead><tbody>${scheduled.map(task => `<tr><td>${escapeHtml(task.runAt)}</td><td class="priority-${task.priority}">${priorityLabel(task.priority)}</td><td>${escapeHtml(task.title)}</td><td>${escapeHtml(task.action)}</td><td>${escapeHtml(task.recurrenceMinutes)}</td></tr>`).join("")}</tbody></table>`;
 }
+function renderTasks(tasks) {
+  document.querySelector("#tasks").innerHTML = `<table><thead><tr><th>Priority</th><th>Title</th><th>Status</th><th>Dependencies</th><th>Approval</th><th>Attempts</th><th>Next run</th><th>Action</th></tr></thead><tbody>${tasks.map(task => `<tr><td class="priority-${task.priority}">${priorityLabel(task.priority)}</td><td>${escapeHtml(task.title)}</td><td>${escapeHtml(task.status)}</td><td>${escapeHtml(task.dependsOn.join(", "))}</td><td>${escapeHtml(task.approvalStatus)}</td><td>${escapeHtml(`${task.attemptCount}/${task.maxAttempts}`)}</td><td>${escapeHtml(task.runAt)}</td><td>${task.status === "awaiting_approval" ? `<button class="approve-task" data-task-id="${escapeHtml(task.id)}">Approve</button> <button class="reject-task secondary" data-task-id="${escapeHtml(task.id)}">Reject</button>` : ""}</td></tr>`).join("")}</tbody></table>`;
+  document.querySelectorAll(".approve-task, .reject-task").forEach(button => {
+    button.addEventListener("click", async () => {
+      try {
+        const approved = button.classList.contains("approve-task");
+        await request(`/api/automation/tasks/${encodeURIComponent(button.dataset.taskId)}/approval`, {
+          method: "POST",
+          body: JSON.stringify({ approved })
+        });
+        await refresh();
+      } catch (error) { result.textContent = error.message; }
+    });
+  });
+}
 async function refresh() {
   try {
     const [status, agents, tasks, monitoring, monitoringHistory] = await Promise.all([
@@ -102,8 +121,11 @@ async function refresh() {
     document.querySelector("#metrics").innerHTML = Object.entries(status).map(([key,value]) => `<div class="metric"><strong>${value}</strong><br>${key}</div>`).join("");
     document.querySelector("#agents").innerHTML = table(agents, [["name","Name"],["capabilities","Capabilities"],["enabled","Enabled"]]);
     document.querySelector("#chat-agent").innerHTML = agents.map(agent => `<option value="${agent.id}">${agent.name}</option>`).join("");
+    document.querySelector("#depends-on").innerHTML = tasks.map(task =>
+      `<option value="${escapeHtml(task.id)}">${escapeHtml(task.title)} (${escapeHtml(task.status)})</option>`
+    ).join("");
     renderSchedule(tasks);
-    document.querySelector("#tasks").innerHTML = table(tasks, [["priority","Priority"],["title","Title"],["action","Action"],["status","Status"],["runCount","Runs"],["runAt","Next run"]]);
+    renderTasks(tasks);
     document.querySelector("#monitoring").innerHTML = monitoring.status === "not-yet-sampled"
       ? "<p class='note'>No snapshot yet.</p>"
       : table([{
@@ -127,7 +149,7 @@ document.querySelector("#task-form").addEventListener("submit", async event => {
   event.preventDefault();
   const action = document.querySelector("#action").value;
   const recurrence = document.querySelector("#recurrence").value;
-  const task = { title:document.querySelector("#title").value, action, priority:Number(document.querySelector("#priority").value) };
+  const task = { title:document.querySelector("#title").value, action, priority:Number(document.querySelector("#priority").value), maxAttempts:Number(document.querySelector("#max-attempts").value), retryDelayMinutes:Number(document.querySelector("#retry-delay").value), approvalRequired:document.querySelector("#approval-required").checked, dependsOn:Array.from(document.querySelector("#depends-on").selectedOptions, option => option.value) };
   if (action === "memory.record") task.payload = { kind:document.querySelector("#kind").value, content:document.querySelector("#content").value };
   if (recurrence) task.recurrenceMinutes = Number(recurrence);
   const runAt = document.querySelector("#run-at").value;

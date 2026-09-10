@@ -72,6 +72,8 @@ test("reports engine health", async (t) => {
     assert.deepEqual(await response.json(), {
       agents: 3,
       pendingTasks: 0,
+      blockedTasks: 0,
+      awaitingApprovalTasks: 0,
       completedTasks: 0,
       failedTasks: 0,
       runs: 0

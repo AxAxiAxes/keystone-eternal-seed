@@ -165,6 +165,17 @@ app.post("/automation/tasks", async (req, res, next) => {
   }
 });
 
+app.post("/automation/tasks/:taskId/approval", async (req, res, next) => {
+  try {
+    res.json(await automationService.reviewTaskApproval(
+      req.params.taskId,
+      req.body.approved
+    ));
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/automation/process", async (req, res, next) => {
   try {
     const maxTasks = req.body.maxTasks === undefined ? 5 : Number(req.body.maxTasks);

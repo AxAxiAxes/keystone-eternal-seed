@@ -34,6 +34,16 @@ the matching capability is assigned. Tasks have a priority from 1 (backlog) to
 then earliest scheduled time. Every completed or failed execution creates a
 durable run record and a private `decision` memory audit entry.
 
+Tasks may declare `dependsOn`, an array of existing task identifiers. A
+dependent task is blocked until every prerequisite is completed. Set
+`approvalRequired: true` to hold a task in `awaiting_approval`; an authenticated
+operator must approve or reject it through the console or private API.
+
+Each task has `maxAttempts` from 1 through 5 (default 1) and
+`retryDelayMinutes` from 1 through 1,440 (default 5). Failed tasks retry only
+within that bound; afterward, they enter the terminal `failed` state with a
+recorded run history.
+
 ## Private API
 
 These endpoints remain private to the AXIOM engine network and are not proxied
@@ -46,6 +56,7 @@ by the public portal.
 | `POST` | `/automation/agents` | Registers an agent with a name and capability list. |
 | `GET` | `/automation/tasks` | Lists tasks; optionally filter with `?status=pending`. |
 | `POST` | `/automation/tasks` | Creates a pending, scheduled task. |
+| `POST` | `/automation/tasks/:taskId/approval` | Approves or rejects a task awaiting approval. |
 | `POST` | `/automation/process` | Processes due tasks, up to `maxTasks` (default 5; maximum 20). |
 | `GET` | `/automation/runs` | Lists recent execution records; use `?limit=50`. |
 
