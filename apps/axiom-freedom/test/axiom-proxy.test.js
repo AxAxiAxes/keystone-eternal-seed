@@ -90,6 +90,10 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(library.status, 200);
     assert.match(await library.text(), /AXI project memory/);
 
+    const materials = await fetch(`http://127.0.0.1:${webPort}/materials`);
+    assert.equal(materials.status, 200);
+    assert.match(await materials.text(), /Materials Discovery/);
+
     const unauthorizedConsole = await fetch(`http://127.0.0.1:${webPort}/automation`);
     assert.equal(unauthorizedConsole.status, 401);
 

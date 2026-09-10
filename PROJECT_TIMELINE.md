@@ -47,6 +47,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Chichetki name and Athanor creative-system direction confirmed, privately preserved, and safely integrated into active planning | Private archive and AXES planning documents |
 | 2026-09-10 | Complete | AXES Contracting public hub rebuilt with the approved architectural visual language and staged service presentation | `apps/axiom-freedom/axescontracting.html` |
 | 2026-09-10 | Complete | AXES governance and safeguarding foundation established for public and invite-only pilots | `docs/AXES_GOVERNANCE_AND_SAFEGUARDING.md` |
+| 2026-09-10 | Complete | Read-only AXES materials-discovery page added with staged commerce boundary | `apps/axiom-freedom/materials.html` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
