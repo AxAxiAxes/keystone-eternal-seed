@@ -93,6 +93,39 @@ function invokeAxiomEngine(command) {
     return invokeEngine('/axiom', 'POST', command);
 }
 
+async function getSupportStatus() {
+    const checks = await Promise.allSettled([
+        invokeEngine('/health'),
+        invokeEngine('/automation/status'),
+        invokeEngine('/monitoring/status'),
+        invokeEngine('/system/checkpoints?limit=1')
+    ]);
+    const [engine, automation, monitoring, checkpoints] = checks;
+
+    return {
+        recordedAt: new Date().toISOString(),
+        portal: { status: 'ok', service: 'AXES Contracting support desk' },
+        engine: engine.status === 'fulfilled'
+            ? { status: 'ok', detail: engine.value.status || 'online' }
+            : { status: 'unavailable' },
+        automation: automation.status === 'fulfilled'
+            ? { status: 'ok', ...automation.value }
+            : { status: 'unavailable' },
+        monitoring: monitoring.status === 'fulfilled'
+            ? { status: 'ok', ...monitoring.value }
+            : { status: 'unavailable' },
+        checkpoints: checkpoints.status === 'fulfilled'
+            ? { status: 'ok', latest: checkpoints.value[0] || null }
+            : { status: 'unavailable' },
+        email: {
+            status: 'planned',
+            mailbox: 'info@axescontracting.com',
+            target: 'Microsoft 365',
+            detail: 'No DNS or mailbox cutover has been recorded.'
+        }
+    };
+}
+
 function requireAdmin(req, res) {
     if (checkAdmin(req)) return true;
     res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="AXIOM Admin"' });
@@ -128,6 +161,11 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/automation') {
           if (!requireAdmin(req, res)) return;
           serveFile(res, path.join(__dirname, 'automation.html'), 'text/html; charset=utf-8');
+          return;
+    }
+    if (pathname === '/support') {
+          if (!requireAdmin(req, res)) return;
+          serveFile(res, path.join(__dirname, 'support.html'), 'text/html; charset=utf-8');
           return;
     }
     if (pathname === '/library/' || pathname === '/library') {
@@ -315,6 +353,18 @@ const server = http.createServer(async (req, res) => {
                       console.error('AXIOM monitoring snapshot failed:', error.message);
                       res.writeHead(502, { 'Content-Type': 'application/json' });
                       res.end(JSON.stringify({ error: 'AXIOM monitoring service is unavailable' }));
+              }
+              return;
+    }
+    if (pathname === '/api/support/status' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(await getSupportStatus()));
+              } catch (error) {
+                      console.error('AXES support status request failed:', error.message);
+                      res.writeHead(500, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: 'AXES support status is unavailable' }));
               }
               return;
     }

@@ -18,10 +18,10 @@ async function stopServer(server) {
     server.close((error) => (error ? reject(error) : resolve())));
 }
 
-function request(port, headers) {
+function request(port, headers, path = "/") {
   return new Promise((resolve, reject) => {
     const request = http.get(
-      { hostname: "127.0.0.1", port, path: "/", headers },
+      { hostname: "127.0.0.1", port, path, headers },
       (response) => {
         let body = "";
         response.setEncoding("utf8");
@@ -99,6 +99,26 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     });
     assert.equal(consolePage.status, 200);
     assert.match(await consolePage.text(), /AXIOM Automation Console/);
+
+    const unauthorizedSupport = await fetch(`http://127.0.0.1:${webPort}/support`);
+    assert.equal(unauthorizedSupport.status, 401);
+
+    const supportPage = await fetch(`http://127.0.0.1:${webPort}/support`, {
+      headers: { Authorization: authorization }
+    });
+    assert.equal(supportPage.status, 200);
+    assert.match(await supportPage.text(), /AXES Contracting Support Desk/);
+
+    const supportStatus = await request(
+      webPort,
+      { Authorization: authorization },
+      "/api/support/status"
+    );
+    assert.equal(supportStatus.statusCode, 200);
+    const support = JSON.parse(supportStatus.body);
+    assert.equal(support.portal.status, "ok");
+    assert.equal(support.engine.status, "ok");
+    assert.equal(support.email.status, "planned");
 
     const automationStatus = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/status`,

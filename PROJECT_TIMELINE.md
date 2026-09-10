@@ -37,6 +37,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-09 | Complete | Automation Console schedule and durable priority ordering added | `apps/axiom-engine/automation-service.js`, `apps/axiom-freedom/automation.html` |
 | 2026-09-09 | Complete | Private live intelligence monitoring and protected reevaluation view added | `apps/axiom-engine/monitoring-service.js`, `apps/axiom-freedom/automation.html` |
 | 2026-09-10 | Complete | AXES visual, audio, and prototype package privately archived and classified for staged interactive experiences | `docs/INTERACTIVE_EXPERIENCE_CATALOG.md` |
+| 2026-09-10 | Complete | Protected AXES Contracting support desk added for portal, engine, automation, checkpoint, and email-migration visibility | `apps/axiom-freedom/support.html` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
@@ -64,6 +65,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Add task dependencies, bounded retries, explicit approvals, and operator-visible task attempts.
 - [x] Add a dedicated protected run-history view for completed, retrying, and failed task outcomes.
 - [x] Archive and classify original AXES visual, audio, and interaction-prototype sources for staged reuse.
+- [x] Add a protected, read-only AXES Contracting support desk for core operational visibility.
 - [ ] Rebuild the AXES Contracting hub from the approved visual direction using accessible, maintainable source.
 - [x] Add task priorities, specific scheduling, recurring schedules, and a protected schedule view.
 - [x] Establish the conservative project budget, spending gates, patent reserve, and patent-completion execution track.

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AXES Contracting Support Desk</title>
+  <style>
+    :root { color-scheme: dark; --bg:#080f1d; --surface:#121f35; --border:#344b70; --text:#e8eef9; --muted:#a9bad4; --gold:#d9af55; --good:#86e0b0; --warn:#f2c879; --bad:#f29191; }
+    * { box-sizing:border-box; } body { background:var(--bg); color:var(--text); font:16px system-ui,sans-serif; margin:0; }
+    main { margin:auto; max-width:1080px; padding:32px 20px 64px; } h1 { margin:0; } h2 { color:var(--gold); margin-top:0; }
+    .note { color:var(--muted); line-height:1.5; } .toolbar, .cards { display:flex; flex-wrap:wrap; gap:12px; } .toolbar { margin:20px 0; }
+    button { background:var(--gold); border:0; border-radius:7px; color:#171006; cursor:pointer; font:inherit; font-weight:700; padding:10px 14px; }
+    .card, section { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:18px; } .card { flex:1 1 220px; min-height:132px; }
+    .label { color:var(--muted); font-size:.82rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; } .status { font-weight:750; margin:8px 0; }
+    .ok { color:var(--good); } .planned { color:var(--warn); } .unavailable { color:var(--bad); } section { margin-top:20px; }
+    table { border-collapse:collapse; width:100%; } th,td { border-bottom:1px solid var(--border); padding:10px; text-align:left; vertical-align:top; }
+    code { color:var(--gold); } #updated { color:var(--muted); } ul { line-height:1.6; padding-left:20px; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="label">Private operator workspace</p>
+  <h1>AXES Contracting Support Desk</h1>
+  <p class="note">Read-only operational overview for the portal, private engine, automation, checkpoints, and email migration. This desk cannot access accounts, change DNS, deploy services, or send mail.</p>
+  <div class="toolbar"><button id="refresh">Refresh status</button><span id="updated" aria-live="polite"></span></div>
+  <div class="cards" id="cards"></div>
+  <section>
+    <h2>Operational checklist</h2>
+    <ul>
+      <li>Keep the private AXIOM engine private and confirm it is healthy on Railway port <code>3000</code>.</li>
+      <li>Review a current private checkpoint before platform or hardware migration work.</li>
+      <li>Resolve failed or blocked automation tasks in the AXIOM Automation Console.</li>
+      <li>Do not change email DNS until the Microsoft 365 migration readiness and backup steps are complete.</li>
+      <li>Do not make domain, deployment, billing, account, or legal changes without human approval.</li>
+    </ul>
+  </section>
+  <section><h2>System detail</h2><div id="detail"><p class="note">Loading support status...</p></div></section>
+</main>
+<script>
+const cards = document.querySelector("#cards");
+const detail = document.querySelector("#detail");
+const updated = document.querySelector("#updated");
+const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character]));
+function card(label, item, description) {
+  const state = item.status || "unknown";
+  return `<article class="card"><div class="label">${escapeHtml(label)}</div><p class="status ${escapeHtml(state)}">${escapeHtml(state)}</p><p class="note">${escapeHtml(description)}</p></article>`;
+}
+async function refresh() {
+  try {
+    const response = await fetch("/api/support/status", { credentials:"same-origin" });
+    const status = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(status.error || `Request failed (${response.status})`);
+    cards.innerHTML = [
+      card("Public portal", status.portal, "Public site route and support desk are responding."),
+      card("Private AXIOM engine", status.engine, status.engine.detail || "Private service reachability."),
+      card("Automation", status.automation, status.automation.status === "ok" ? `${status.automation.pendingTasks || 0} pending; ${status.automation.failedTasks || 0} failed.` : "Private automation status is unavailable."),
+      card("Email migration", status.email, `${status.email.mailbox}: ${status.email.detail}`)
+    ].join("");
+    const snapshot = status.monitoring.snapshot;
+    const latest = status.checkpoints.latest;
+    detail.innerHTML = `<table><tbody>
+      <tr><th>Monitoring</th><td>${escapeHtml(status.monitoring.status)}</td></tr>
+      <tr><th>Attention</th><td>${escapeHtml(snapshot ? (status.monitoring.attention || []).join(", ") || "none" : "No private monitoring snapshot available.")}</td></tr>
+      <tr><th>Latest checkpoint</th><td>${escapeHtml(latest ? `${latest.createdAt || latest.recordedAt || "recorded"} (${latest.id || "no ID"})` : "None recorded or private engine unavailable.")}</td></tr>
+      <tr><th>Email target</th><td>${escapeHtml(status.email.target)}</td></tr>
+    </tbody></table>`;
+    updated.textContent = `Updated ${new Date(status.recordedAt).toLocaleString()}`;
+  } catch (error) {
+    cards.innerHTML = "";
+    detail.innerHTML = `<p class="unavailable">Status unavailable: ${escapeHtml(error.message)}</p>`;
+  }
+}
+document.querySelector("#refresh").addEventListener("click", refresh);
+refresh();
+</script>
+</body>
+</html>
