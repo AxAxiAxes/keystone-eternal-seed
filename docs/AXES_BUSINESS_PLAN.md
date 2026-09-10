@@ -213,6 +213,12 @@ KEYSTONE provenance services while keeping the trading application under its
 existing financial-readiness gate; it does not replace the patent-source V1-V8
 architecture.
 
+`KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md` defines the zero-spend,
+internally controlled automation and revenue-evaluation process. It requires
+measured productivity results rather than assumed savings and keeps
+cryptocurrency, currency, banking, marketplace, and trading activity within
+the existing legal-readiness boundary.
+
 ## Critical legal and professional gates
 
 | Topic | Required before launch or public claim |
@@ -272,6 +278,7 @@ Track only metrics that help decide whether a service should continue:
 - `DOMAIN_PORTFOLIO.md`
 - `PROJECT_BUDGET.md`
 - `FOUNDER_REVENUE_PRIORITY_OVERLAY.md`
+- `KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md`
 - `EMAIL_MIGRATION_PLAN.md`
 - `URNUR_FINANCIAL_READINESS.md`
 - `CHICHETKI_COLLECTIBLE_GEM_READINESS.md`
