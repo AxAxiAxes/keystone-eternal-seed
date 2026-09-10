@@ -22,6 +22,42 @@ and release small offerings that have a clear customer, owner, budget, and
 human approval path. New domains remain parked until a product earns its next
 stage.
 
+## Full business-plan objective
+
+Build a durable, founder-led AXES ecosystem that turns original design,
+creative work, origin intelligence, and accountable technology into
+supportable client services, products, and later platform offerings. The plan
+must protect the creative center of the work while creating a practical path
+to revenue, continuity, and staged growth.
+
+The objective has five connected outcomes:
+
+1. **Earn early, lawful revenue:** Establish AXES Contracting design/materials
+   services and KEYSTONE creator-origin record setup as clear, supportable
+   offers with defined scope, price, delivery, and human support.
+2. **Preserve origin and authority:** Use KEYSTONE, Ux, NUR, and the Creator
+   Origin Constitution to retain source, purpose, contributor, version,
+   permission, and correction records for founder-directed work and approved
+   collaborators.
+3. **Build the distinctive creative ecosystem:** Develop Chichetki as a
+   founder-designed musical instrument and creative practice, with Athanor and
+   AU as the future virtual-home and game-console environment for design,
+   dance, sound, play, and creative interaction.
+4. **Create trusted marketplace infrastructure:** Stage the AXES Directory and
+   service marketplace from confirmed business discovery and price-list
+   matching through private project fulfillment, while protecting clients and
+   providers through accurate records, consent, and human review.
+5. **Prepare long-range economic systems responsibly:** Advance URNUR,
+   Harmonics, creator economy, collectible gems, and future banking/currency
+   direction through protected research, technical design, evidence, and
+   qualified review before any regulated or public financial implementation.
+
+Success is not measured by launching every concept at once. It is measured by
+preserving the origin of the work, delivering real value to early clients,
+operating reliably within the current budget, and advancing each later layer
+only when its evidence, people, technical controls, and operating capacity are
+ready.
+
 ## Business architecture
 
 | Area | Role | Current or initial offer | Boundary |
