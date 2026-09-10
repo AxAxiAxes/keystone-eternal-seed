@@ -81,6 +81,12 @@ itself as licensed architecture, engineering, construction, code-compliance, or
 safety advice unless the responsible licensed professional and jurisdiction are
 identified and the content is reviewed accordingly.
 
+The private Temple of Love / Page 8 manuscript source is an architectural
+reference for the seven-layer presentation method: clean drafting base,
+traced geometry, massing, interior grid, ecology, title treatment, and meaning
+layer. It is not construction-ready documentation, a permit set, engineering
+work, cost estimate, or safety specification.
+
 The Building-Materials Discovery catalog starts as a curated directory and
 inquiry workflow. Checkout, payment collection, inventory promises, supplier
 fulfillment, product warranties, shipping, sales-tax handling, returns, and

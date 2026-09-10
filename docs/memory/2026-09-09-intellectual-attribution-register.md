@@ -123,6 +123,25 @@ published, used as a logo, or treated as an AXES asset without rights-holder
 permission. A pomegranate concept may be expressed through the founder's
 original work and independent or properly licensed work.
 
+### IA-2026-09-10-07 — Temple of Love architectural manuscript method
+
+**Insight:** The founder-provided Temple of Love / Page 8 source describes a
+seven-layer architectural presentation method: a clean drafting base, traced
+blueprint geometry, three-dimensional massing, interior grid, ecology system,
+Keystone title treatment, and a meaning layer. It may guide original AXES
+design communication and future interactive architectural experiences.
+
+**Attribution:** Founder-provided concept and source material.
+**Source:** Private archive
+`private-archive/copilot-library/2026-09-10-temple-of-love-source/source.txt`,
+SHA-256
+`BF5750C7EFD223AC2E86A28A15406AE67EADE7585CD3BF21BEADB395D9C3CF5A`.
+**Implementation interpretation:** `docs/INTERACTIVE_EXPERIENCE_CATALOG.md`
+and the future Architectural Design Desk.
+**Credit note:** This is a creative and presentation-method source, not a
+construction drawing, permit set, engineering specification, cost estimate,
+or representation of licensed professional services.
+
 ## Future entry standard
 
 For every material future insight, record:
