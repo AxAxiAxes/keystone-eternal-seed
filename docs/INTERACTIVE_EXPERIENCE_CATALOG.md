@@ -35,7 +35,7 @@ audience have been reviewed.
 ## Rights and exclusion record
 
 The founder identifies the supplied original designs, photographs, physical
-works, interior-design elements, Chetki material, hero figure, eternal-seed
+works, interior-design elements, Chichetki material, hero figure, eternal-seed
 frame, and blueprint composition as founder-provided AXES source material.
 
 The jeweled or gemstone-pomegranate reference remains in the private visual
@@ -53,7 +53,7 @@ licensed visual work.
 | AXES Control Center | `axescontracting.com` | Public navigation, service status, contact/intake | Public | Branded hub and service registry |
 | Architectural design desk | `axescontracting.com` | Readable design tips, project inspiration, material palettes, and scoped consultation requests | Public | Educational articles and inspiration boards; no professional-plan or engineering claims |
 | Building-materials discovery | `axescontracting.com` | Curated materials catalog, filters, samples or quote requests, and approved supplier links | Public | Read-only catalog and inquiry workflow; no checkout or payment collection |
-| Chetki studio | Future Chetki route or dedicated domain | Product stories, founder-designed work catalog, sound previews, and controlled interest requests | Public and private operator tiers | Reviewed catalog; no health, therapeutic, or patent-status claims |
+| Chichetki studio | Future Chichetki route or dedicated domain | Product stories, founder-designed rhythm objects, sound previews, movement/art direction, and controlled interest requests | Public and private operator tiers | Reviewed catalog; no health, therapeutic, or patent-status claims |
 | XIIOM operations | `xiiom.com` | Authenticated scheduling, monitoring, task approvals, agent proposals | Operators only | Existing protected console |
 | AUXAOUS self-design studio | `auxaous.com` | Private guided reflection, visual path mapping, save/export/delete controls | Invite-only adults | Local/private draft only; no public profiles |
 | XAXALU sound and visual exploration | Future dedicated route or `auxaous.com` pilot | User-initiated audio playback, visual exploration, accessibility controls | Invite-only adults | Static exhibit with optional sound |
@@ -99,11 +99,13 @@ product-safety representations remain deferred until supplier agreements,
 commerce operations, applicable registrations, and counsel/accountant review
 are complete.
 
-### Chetki source boundary
+### Chichetki source boundary
 
-The confidential Chetki plan informs future product and experience strategy:
-founder-designed physical works, art editions, sound, education, and carefully
-scoped experiential commerce. Before public implementation, separate
+The confidential Chichetki plan informs future product and experience strategy:
+founder-designed physical rhythm objects, art editions, sound, movement,
+education, and carefully scoped experiential commerce. Athanor may guide the
+creative direction as a harmonizing-center concept, but it is not a technical
+or scientific claim. Before public implementation, separate
 founder-directed product descriptions from claims about health, wellness
 outcomes, spirituality, cultural representation, intellectual-property status,
 or market position. Each public claim needs independently supportable wording

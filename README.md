@@ -4,7 +4,7 @@ The canonical repository for the AXIOM engine, AXIOM deployment materials, AXI.C
 
 Track completed milestones and next checkpoints in [PROJECT_TIMELINE.md](PROJECT_TIMELINE.md).
 
-The consolidated, public-safe business plan for AXES Contracting, Chetki,
+The consolidated, public-safe business plan for AXES Contracting, Chichetki,
 XIIOM, the creative studio, and future ventures is in
 [AXES_BUSINESS_PLAN.md](docs/AXES_BUSINESS_PLAN.md).
 

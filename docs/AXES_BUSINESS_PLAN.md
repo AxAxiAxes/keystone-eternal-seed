@@ -12,7 +12,7 @@ repository.
 
 AXES is a founder-led constellation of design, creative work, technology, and
 learning experiences. AXES Contracting is the public hub and commercial home.
-Chetki is the physical-object, art, sound, and experiential studio. XIIOM is
+Chichetki is the physical-object, art, sound, and experiential studio. XIIOM is
 the private operational core for AXI memory, monitoring, and bounded
 automation.
 
@@ -29,7 +29,7 @@ stage.
 | AXES Contracting | Central public hub | Company story, service registry, design guidance, contact and scoped intake | No unreviewed claims or account-control actions |
 | Architectural Design Desk | Design-education line | Tips, inspiration, material palettes, and consultation requests | Not licensed architecture, engineering, code, or safety advice without responsible professional review |
 | Building-Materials Discovery | Commercial discovery line | Curated materials, supplier links, sample/quote requests, and project inspiration | No checkout, inventory, fulfillment, warranties, tax, or payment processing until commerce operations are ready |
-| Chetki Studio | Founder-led creative line | Founder-designed physical works, art editions, sound, and carefully scoped experiences | Separate substantiated product descriptions from health, therapeutic, cultural, patent, or market claims |
+| Chichetki Studio | Founder-led creative line | Founder-designed physical rhythm objects, art editions, sound, movement, and carefully scoped experiences | Separate substantiated product descriptions from health, therapeutic, cultural, patent, or market claims |
 | XIIOM | Private operations core | Memory, monitoring, task controls, and review-only agent proposals | No public engine, arbitrary execution, account control, spending, or autonomous publication |
 | AXES Creative Studio | Future internal production workspace | Creative briefs, original image concepts, sound concepts, storyboards, and video shot lists | Human-approved providers, rights review, and private asset storage before generation or publication |
 | AXOUX | Future creator pilot | Invite-only projects, contribution roles, and attribution history | Moderation, consent, and contributor terms before broad access |
@@ -57,7 +57,7 @@ AXES combines a consistent founder visual language with a disciplined operating
 model:
 
 - Design direction informed by original physical work, interior composition,
-  Chetki material practice, the hero-and-pomegranate motif, the eternal-seed
+  Chichetki material practice, the hero-and-pomegranate motif, the eternal-seed
   frame, and blueprint composition.
 - Carefully selected material and creative references rather than a generic
   marketplace.
@@ -70,6 +70,19 @@ The gemstone-pomegranate reference remains inspiration only. It can inform
 color, material, light, and ornament but is not an AXES asset or logo and must
 not be copied or published without rights-holder permission.
 
+### Chichetki and Athanor creative system
+
+Chichetki is the founder-directed creative rhythm system connecting physical
+objects, sound, movement, visual design, play, and participatory experience.
+Its source direction includes tactile rhythm practice, crafted strands and
+objects, and the possibility of future interactive installations or events.
+
+**Athanor** is the internal creative concept for a harmonizing center within
+that system. It can guide the design of coherent experiences, installations,
+and editorial material. It is not an autonomous entity, measurement device,
+medical tool, or claim that an object can diagnose, judge, alter, or guarantee
+a person's emotional or physical state.
+
 ## Revenue model and sequencing
 
 The program uses diversified revenue only after the associated operating
@@ -78,7 +91,7 @@ requirements are satisfied.
 | Stage | Revenue or support model | Readiness requirement |
 | --- | --- | --- |
 | Foundation | Founder-funded shared operations, service inquiries, approved design consultation | Public hub, email continuity, clear scope, and human response process |
-| Chetki pilot | Founder-designed objects, art editions, and approved interest requests | Asset catalog, pricing approval, fulfillment plan, rights review, and customer terms |
+| Chichetki pilot | Founder-designed objects, art editions, and approved interest requests | Asset catalog, pricing approval, fulfillment plan, rights review, and customer terms |
 | Material discovery | Referral relationships, approved supplier introductions, or qualified leads | Written supplier terms, disclosure rules, accurate product data, and no deceptive endorsements |
 | Events and sound | Tickets, editions, licensing, or commissions where appropriate | Venue/host terms, accessibility, rights clearance, insurance and safety review where required |
 | Creator and learning pilot | Grants, sponsorships, memberships, or paid workshops only after review | Moderation, safeguarding, consent, participant terms, and financial tracking |
@@ -116,8 +129,8 @@ authorizes purchases, contracts, releases, and material operational changes.
 | Horizon | Objective | Deliverables | Exit evidence |
 | --- | --- | --- | --- |
 | Now to 30 days | Stabilize and establish the hub | Redeploy healthy private engine; connect AXES domain; complete support desk; finish email inventory; prepare legal/patent records | Healthy service, verified chat, private backups/checkpoints, domain TLS, and complete access inventory |
-| 30 to 90 days | Validate commercial direction | AXES visual rebuild; Architectural Design Desk; materials-discovery catalog; Chetki catalog brief; original asset selection | Public copy is factual and accessible; each offer has an owner, intake path, and published scope |
-| 3 to 6 months | Run small pilots | Approved Chetki interest/pilot launch; supplier-discovery relationships; private Creative Studio prototype; invite-only creator registry | Measured inquiries, delivery capability, feedback, asset/rights records, and a reviewed operating budget |
+| 30 to 90 days | Validate commercial direction | AXES visual rebuild; Architectural Design Desk; materials-discovery catalog; Chichetki catalog brief; original asset selection | Public copy is factual and accessible; each offer has an owner, intake path, and published scope |
+| 3 to 6 months | Run small pilots | Approved Chichetki interest/pilot launch; supplier-discovery relationships; private Creative Studio prototype; invite-only creator registry | Measured inquiries, delivery capability, feedback, asset/rights records, and a reviewed operating budget |
 | 6 to 12 months | Scale selectively | Mature the best-performing offers; evaluate storefront only if ready; add limited learning/creator work | Revenue/cost evidence, support capacity, policies, data controls, and documented approvals |
 | Later | Community, recognition, media, and AXES OS growth | Separate product briefs and reversible pilots | Legal, safety, privacy, staffing, and budget gates are met |
 
@@ -148,7 +161,7 @@ Track only metrics that help decide whether a service should continue:
 
 - Portal availability, private-engine availability, backup/checkpoint recency,
   and unresolved support items.
-- Qualified design, material, Chetki, and creative-studio inquiries.
+- Qualified design, material, Chichetki, and creative-studio inquiries.
 - Pilot conversion, fulfillment reliability, support response time, and
   customer/participant feedback.
 - Actual monthly spending against the approved cap.
@@ -166,7 +179,7 @@ Track only metrics that help decide whether a service should continue:
    backup before any mail cutover.
 4. Select the first founder-created assets and copy for the AXES visual rebuild.
 5. Confirm the first commercial pilot: design consultation, materials
-   discovery, Chetki catalog/interest requests, or a limited creative-studio
+   discovery, Chichetki catalog/interest requests, or a limited creative-studio
    workflow.
 6. Contact patent counsel and financial-services/digital-asset counsel before
    any related public claims, filings, crypto registration, or financial

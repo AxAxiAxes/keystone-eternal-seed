@@ -39,11 +39,12 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | AXES visual, audio, and prototype package privately archived and classified for staged interactive experiences | `docs/INTERACTIVE_EXPERIENCE_CATALOG.md` |
 | 2026-09-10 | Complete | Protected AXES Contracting support desk added for portal, engine, automation, checkpoint, and email-migration visibility | `apps/axiom-freedom/support.html` |
 | 2026-09-10 | Complete | Production dependency baseline reviewed and hardened for the AXIOM engine and public portal | `apps/axiom-engine/package.json`, `apps/axiom-engine/package-lock.json` |
-| 2026-09-10 | Complete | Architectural design guidance, building-materials discovery, and Chetki studio tracks scoped for a controlled AXES pilot | `docs/INTERACTIVE_EXPERIENCE_CATALOG.md` |
-| 2026-09-10 | Complete | Founder-ready public-safe business plan consolidated across AXES Contracting, Chetki, XIIOM, creative studio, and future ventures | `docs/AXES_BUSINESS_PLAN.md` |
+| 2026-09-10 | Complete | Architectural design guidance, building-materials discovery, and Chichetki studio tracks scoped for a controlled AXES pilot | `docs/INTERACTIVE_EXPERIENCE_CATALOG.md` |
+| 2026-09-10 | Complete | Founder-ready public-safe business plan consolidated across AXES Contracting, Chichetki, XIIOM, creative studio, and future ventures | `docs/AXES_BUSINESS_PLAN.md` |
 | 2026-09-10 | Complete | Temple of Love architectural manuscript source privately archived, checksummed, and scoped as a future design-reference method | Private archive and `docs/INTERACTIVE_EXPERIENCE_CATALOG.md` |
 | 2026-09-10 | Complete | Historical Page 8 generator transcript privately archived with unverified engine claims separated from its draft visual brief | Private archive and `docs/memory` attribution register |
 | 2026-09-10 | Complete | Founder-approved AXES Eternal Seed Page 8 visual brief established for future original design work | `docs/AXES_PAGE_8_VISUAL_BRIEF.md` |
+| 2026-09-10 | Complete | Chichetki name and Athanor creative-system direction confirmed, privately preserved, and safely integrated into active planning | Private archive and AXES planning documents |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
@@ -73,7 +74,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Archive and classify original AXES visual, audio, and interaction-prototype sources for staged reuse.
 - [x] Add a protected, read-only AXES Contracting support desk for core operational visibility.
 - [x] Review production dependencies for both active sites and apply compatible engine dependency hardening.
-- [x] Define safe initial boundaries for architecture tips, building-material discovery, and the Chetki studio.
+- [x] Define safe initial boundaries for architecture tips, building-material discovery, and the Chichetki studio.
 - [x] Consolidate the full AXES business plan into one founder-ready operating document.
 - [x] Establish the founder-approved canonical Page 8 Eternal Seed visual brief.
 - [ ] Rebuild the AXES Contracting hub from the approved visual direction using accessible, maintainable source.

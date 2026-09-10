@@ -106,7 +106,7 @@ recommendations.
 ### IA-2026-09-10-06 — Founder visual and physical-design source boundary
 
 **Insight:** The founder identifies the original designs, photographs, physical
-works, interior-design elements, Chetki material, hero figure, eternal-seed
+works, interior-design elements, Chichetki material, hero figure, eternal-seed
 frame, and blueprint composition supplied in the AXES source materials as
 founder-provided project source material. A jeweled or gemstone-pomegranate
 reference supplied alongside them is not founder-created, but remains a
@@ -161,6 +161,26 @@ technical or provider decision is derived from the generator assertions.
 **Credit note:** Preserve the transcript as historical context. Do not
 represent its model, engine, access-path, capability, or reproducibility
 statements as verified without direct evidence from the relevant product.
+
+### IA-2026-09-10-09 — Chichetki and Athanor creative-system direction
+
+**Insight:** Chichetki is founder-provided direction for a creative rhythm
+system spanning physical objects, sound, movement, visual design, play, and
+participatory experience. Athanor is a connected founder-provided concept for
+a harmonizing center within this creative system.
+
+**Attribution:** Founder-provided concept and historical source material.
+**Source:** Private archive
+`private-archive/copilot-library/2026-09-10-chichetki-athanor-transcript/source.txt`,
+SHA-256
+`C29C2B3E606537E9D993208A299699199DBDB4237EDE19006D1FBAACAB6BB281`.
+**Implementation interpretation:** Chichetki Studio entries in
+`docs/AXES_BUSINESS_PLAN.md` and
+`docs/INTERACTIVE_EXPERIENCE_CATALOG.md`.
+**Credit note:** The system description records founder creative direction.
+Terms such as harmony, frequency, reading, or influence are not evidence of
+medical, scientific, autonomous, diagnostic, or outcome claims and must not
+be presented publicly that way without appropriate evidence and review.
 
 ## Future entry standard
 
