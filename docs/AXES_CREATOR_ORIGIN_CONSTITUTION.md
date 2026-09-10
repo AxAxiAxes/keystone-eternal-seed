@@ -168,6 +168,11 @@ but they do not establish financial value, investment value, scarcity,
 authenticity, popularity, social status, citizenship, or permission to sell,
 trade, tokenize, award, or otherwise transact in a work.
 
+The Harmonics name does not change this rule. Creator-origin records cannot
+assign Harmonics, determine a Harmonics balance, calculate a personal level, or
+automatically authorize a transaction, reward, access right, or financial
+claim.
+
 ## Article X — Registry safeguards
 
 The creator-origin registry is a private, minimum-data record. It must not

@@ -28,6 +28,13 @@ system that understands, evaluates, tracks, diagnoses, predicts, influences,
 or changes a player or any other person's physical, emotional, mental,
 spiritual, or social condition.
 
+**Harmonics** is the game-world name for fictional audiovisual states,
+interactions, and player-controlled interface resynchronization. Game
+Harmonics are not currency, account balances, prizes, transferable items,
+financial value, ownership rights, or a score about a player. This meaning is
+separate from the proposed future URNUR currency/creator-economy name in
+`URNUR_FINANCIAL_READINESS.md`.
+
 Virtual-reality-home keys are game access symbols only. They are not keys to
 physical property, identity credentials, financial accounts, currency,
 investment products, proof of ownership, or a measure of a person's standing.

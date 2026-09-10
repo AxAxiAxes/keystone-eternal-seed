@@ -136,6 +136,13 @@ requirements are satisfied.
 No financial-market, crypto, token, payment, custody, exchange, autotrading, or
 investment activity is part of the current business model.
 
+**Harmonics** is the proposed public name for future URNUR
+currency/creator-economy units, subject to all URNUR approval gates. In the
+separate Chichetki/Athanor game world, Harmonics names fictional audiovisual
+states and player-controlled interface interactions. The two meanings are not
+interchangeable: game Harmonics confer no financial value, balance, prize,
+ownership right, or transferability.
+
 ## Operating model
 
 ### Shared technical foundation

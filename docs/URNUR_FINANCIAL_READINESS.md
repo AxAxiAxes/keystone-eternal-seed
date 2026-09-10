@@ -31,6 +31,13 @@ make, buy, play with, and potentially exchange approved works under a lawful,
 reviewed product model. Documented creator origin and contribution lineage may
 help provide credit and provenance for a work.
 
+**Harmonics** is the proposed public name for future URNUR currency or
+creator-economy units. This is a naming and product-direction decision only:
+no Harmonics unit has been issued, priced, offered, transferred, traded,
+redeemed, backed, or made available. The name must not imply a financial
+return, exchange rate, value stability, regulatory approval, or readiness for
+use.
+
 Terms such as higher harmonics, resonance, alignment, intelligence lineage,
 and energy are creative or cultural descriptions only. They are not objective
 quality measures, price models, investment ratings, citizenship status,
@@ -43,6 +50,12 @@ performance, or value claims.
 language after a separate participant-policy review. It must not imply
 nationality, legal residency, identity verification, civic rights, membership
 eligibility, social ranking, or a requirement to disclose personal identity.
+
+The currency/creator-economy meaning of Harmonics is separate from the
+Chichetki/Athanor game meaning recorded in
+`ATHANOR_GAME_CONSOLE_READINESS.md`. Game Harmonics are fictional audiovisual
+states and interactions; they do not create currency, financial value,
+ownership, balances, prizes, or tradable rights.
 
 ## Required scope decision for creator trading
 
