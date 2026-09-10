@@ -33,7 +33,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-09 | Complete | AXES domain portfolio and conservative hosting roadmap established | `docs/DOMAIN_PORTFOLIO.md` |
 | 2026-09-09 | Complete | Microsoft 365 target and rollback-safe migration plan selected for AXES business email | `docs/EMAIL_MIGRATION_PLAN.md` |
 | 2026-09-09 | Complete | AXES OS portability foundation and private checksummed checkpoint manifests added | `docs/AXES_OS_PORTABILITY.md` |
-| 2026-09-09 | In progress | URNUR financial-services legal readiness elevated as a pre-launch blocker | `docs/URNUR_FINANCIAL_READINESS.md` |
+| 2026-09-09 | In progress | URNUR banking, financial-services, and digital-asset legal readiness elevated as a pre-launch blocker | `docs/URNUR_FINANCIAL_READINESS.md` |
 | 2026-09-09 | Complete | Automation Console schedule and durable priority ordering added | `apps/axiom-engine/automation-service.js`, `apps/axiom-freedom/automation.html` |
 | 2026-09-09 | Complete | Private live intelligence monitoring and protected reevaluation view added | `apps/axiom-engine/monitoring-service.js`, `apps/axiom-freedom/automation.html` |
 | 2026-09-10 | Complete | AXES visual, audio, and prototype package privately archived and classified for staged interactive experiences | `docs/INTERACTIVE_EXPERIENCE_CATALOG.md` |
@@ -51,7 +51,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | AXES Directory and marketing-assistance concepts privately archived and converted into a safety-gated readiness plan | `docs/AXES_DIRECTORY_READINESS.md` |
 | 2026-09-10 | Complete | Business-official interview and invitation workflow added for the future opt-in AXES Directory pilot | `docs/AXES_DIRECTORY_READINESS.md` |
 | 2026-09-10 | Complete | Internal creator-origin constitution established for evidence, consent, research integrity, attribution, correction, and challenge handling | `docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md` |
-| 2026-09-10 | Complete | URNUR non-monetary recognition framework established for voluntary contribution credit and provenance acknowledgement | `docs/URNUR_NON_MONETARY_RECOGNITION.md` |
+| 2026-09-10 | Complete | Founder direction corrected: URNUR is an intended monetary currency; all financial implementation remains blocked pending written permitted scope | `docs/URNUR_FINANCIAL_READINESS.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints

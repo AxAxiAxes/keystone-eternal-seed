@@ -113,9 +113,11 @@ age-appropriate program is approved. Before admitting minors, AXES needs:
 - URNUR remains outside financial, market, crypto, token, custody, payment,
   exchange, or trading activity until written legal approval defines a
   permitted scope.
-- Non-monetary recognition must remain voluntary, contribution-specific,
+- Any future recognition feature must remain voluntary, contribution-specific,
   human-reviewed, private by default, and free of scores, levels, rankings,
-  diagnostic claims, or promises to alter a person's state.
+  diagnostic claims, or promises to alter a person's state. It must not be
+  used to issue, transfer, price, redeem, or promote URNUR before the
+  permitted financial scope is approved.
 
 ## Review cadence
 

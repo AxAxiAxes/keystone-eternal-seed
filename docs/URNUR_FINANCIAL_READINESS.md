@@ -1,31 +1,67 @@
-# URNUR financial readiness and legal-review gate
+# URNUR currency readiness and legal-review gate
 
 **Status:** Blocking pre-launch workstream  
 **Recorded:** 2026-09-09  
-**Scope:** Future market data, charts, paper trading, exchange connectivity,
-automated trading, crypto assets, custody, payments, and digital-asset plans.
+**Scope:** Future bank or financial-institution registration, monetary
+currency, deposits, payments, transfers, custody, market data, charts, paper
+trading, exchange connectivity, automated trading, crypto assets, and
+digital-asset plans.
+
+## Founder direction
+
+The founder identifies URNUR as an intended monetary currency and future bank
+or financial institution. This statement records product direction only; it
+does not represent that URNUR is registered, licensed, chartered, approved,
+insured, operational, backed, or available. It does not authorize an
+application, issuance, promotion, sale, transfer, exchange, redemption,
+deposit-taking, payment use, custody, lending, market data, trading, wallet
+functionality, account creation, or any other financial activity.
+
+Every possible currency implementation remains blocked until qualified counsel
+for the primary launch jurisdiction, compliance, security, privacy, consumer
+protection, tax, and operational requirements define a written permitted
+scope. No public claim may imply that URNUR is issued, available, regulated,
+backed, valuable, transferable, or ready for use before those gates are met.
+
+## Bank-registration prerequisite
+
+Bank or financial-institution registration is jurisdiction-specific and may
+require a charter, regulatory approvals, capital, governance, risk management,
+compliance staffing, anti-money-laundering and sanctions controls, consumer
+protection, prudential supervision, examinations, technology/security
+requirements, and possibly deposit-insurance eligibility. The required path
+cannot be selected or started in this repository.
+
+Before any application, the founder must identify the primary launch country
+and state/province, engage qualified banking and financial-services counsel,
+and receive a written classification and permitted next-step plan. No one may
+represent an intention, concept, domain registration, or project record as a
+banking license, regulatory approval, registration, or customer protection.
 
 ## Immediate decision
 
-Contact qualified financial-services and digital-asset counsel **now**, before
-resuming any crypto registration or beginning public-facing financial product
-work. Counsel should be licensed or able to advise in the primary launch
-jurisdiction, which is still to be identified.
+Contact qualified banking, financial-services, and digital-asset counsel
+**now**, before beginning bank-registration preparation, resuming any crypto
+registration, or beginning public-facing financial product work. Counsel
+should be licensed or able to advise in the primary launch jurisdiction, which
+is still to be identified.
 
 This is planning guidance, not legal, tax, investment, or regulatory advice.
 
 ## Why counsel is needed now
 
-URNUR's proposed scope may include market data, charts, automated trading,
-crypto assets, and financial-market functionality. The regulatory classification
-can change based on jurisdiction and exact product behavior. Building the wrong
-architecture first can create rework, cost, and unacceptable compliance risk.
+URNUR's proposed scope may include bank or financial-institution operation,
+currency, deposits, payments, transfers, market data, charts, automated
+trading, crypto assets, and financial-market functionality. The regulatory
+classification can change based on jurisdiction and exact product behavior.
+Building the wrong architecture first can create rework, cost, and
+unacceptable compliance risk.
 
 ## Legal-review gates
 
 | Gate | Attorney required | Permitted work before the gate |
 | --- | --- | --- |
-| Product discovery | Yes, contact and briefing | Internal concept mapping; no customer accounts, live financial data, recommendations, or transactions |
+| Bank-registration discovery | Yes, banking and financial-services counsel | Internal concept mapping and private counsel briefing only; no application, public banking claim, customer accounts, deposits, live financial data, recommendations, or transactions |
 | Read-only educational prototype | Review before public launch | Non-personalized educational content and mock/synthetic charts; do not imply investment advice |
 | Market-data integration | Review before contracting or publishing | Evaluate providers and document requirements; do not purchase, redistribute, or display data without a license review |
 | Paper trading or portfolio simulation | Review before public pilot | Internal prototypes using synthetic assets and synthetic data only |
@@ -42,7 +78,9 @@ Prepare these items before the first consultation:
 3. A feature matrix distinguishing educational charts, simulated portfolios,
    market-data display, alerts, recommendations, exchange connectivity,
    automated orders, custody, transfers, payments, and token issuance.
-4. Proposed business model, fee model, partners, and revenue sources.
+4. Proposed bank or financial-institution model, chartering/registration
+   objective, fee model, capital plan, governance, partners, and revenue
+   sources.
 5. Proposed user data, identity verification, age restrictions, records,
    security, fraud controls, complaints, and customer-support process.
 6. Current architecture: private XIIOM automation, planned AXES database, data
@@ -65,7 +103,7 @@ The repository must not add:
   on user holdings, custody, wallet generation, transfers, deposits, payments,
   or token issuance.
 - Claims that URNUR is a currency, investment, financial advisor, exchange,
-  broker, or regulated service.
+  bank, financial institution, broker, or regulated service.
 - Personal financial profiles, identity-verification documents, or financial
   account information.
 
@@ -78,7 +116,8 @@ synthetic data and no personalized financial output.
 This workstream is complete only when the project has:
 
 - Identified a primary launch jurisdiction.
-- Retained appropriate counsel or received documented qualified advice.
+- Retained appropriate banking, financial-services, and digital-asset counsel
+  or received documented qualified advice.
 - Approved a written product classification and permitted first-release scope.
 - Documented data licensing, privacy, security, user terms, and operational
   requirements.
