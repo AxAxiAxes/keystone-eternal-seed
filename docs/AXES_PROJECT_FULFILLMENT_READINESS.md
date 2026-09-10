@@ -14,6 +14,14 @@ may organize project documents, scope versions, price-list configurations,
 milestones, change requests, delivery evidence, and private satisfaction
 feedback.
 
+The longer-term product is a curated service marketplace with understandable
+price-list information and a client-to-provider matching path. It may help a
+client find an approved category of service and request an introduction to a
+participating provider. Marketplace matching is informational and
+human-reviewed; it is not an automated recommendation, professional referral,
+ranking, endorsement, guarantee of availability, license verification, safety
+assessment, quality certification, or promise of a particular outcome.
+
 Terms such as **transaction-progress resequencer** and **price-list
 configuration resequencer** mean versioned organization of a project's
 approved scope, pricing assumptions, milestones, and changes. They do not
@@ -22,6 +30,11 @@ or bind either party.
 
 ## First-pilot boundaries
 
+- Provider profiles, service categories, and price-list information must be
+  owner-submitted or explicitly confirmed, dated, and correctable.
+- A match request may be routed only with the participant's permission and a
+  stated purpose. No scraping, unsolicited outreach, personal-data brokerage,
+  or lead resale.
 - Feedback is private, project-specific, voluntary, and visible only to the
   participating client, provider, and named AXES review owner.
 - No public provider ratings, rankings, reputation scores, review marketplace,
@@ -73,10 +86,15 @@ security review; accessibility review; incident/escalation route; and
 appropriate California professional, consumer-protection, privacy, and
 contract review.
 
+Before a public marketplace or matching pilot, also define provider
+participation terms, listing data fields, price-list update/expiration rules,
+match-request consent, correction/removal process, disclosure language,
+provider-category boundaries, unfair/deceptive-practice controls, accessibility,
+and a human owner for listing and match review.
+
 ## Related records
 
 - `AXES_BUSINESS_PLAN.md`
 - `AXES_GOVERNANCE_AND_SAFEGUARDING.md`
 - `URNUR_FINANCIAL_READINESS.md`
 - `AXES_DIRECTORY_READINESS.md`
-

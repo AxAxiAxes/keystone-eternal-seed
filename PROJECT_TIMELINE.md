@@ -70,6 +70,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | KEYSTONE application value-and-creation declaration added to preserve contribution, source, contributor, version, and derivation context | `docs/KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md` |
 | 2026-09-10 | Complete | URNUR two-layer direction recorded: future currency path plus a separate voluntary non-monetary contributor and stewardship recognition layer | `docs/URNUR_FINANCIAL_READINESS.md` |
 | 2026-09-10 | Complete | AXES private project-fulfillment workspace defined for scope, price-list versions, milestones, delivery evidence, and private satisfaction feedback | `docs/AXES_PROJECT_FULFILLMENT_READINESS.md` |
+| 2026-09-10 | Complete | AXES future curated service-marketplace and permissioned matching direction defined with provider-confirmed price-list and consumer-protection boundaries | `docs/AXES_PROJECT_FULFILLMENT_READINESS.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints

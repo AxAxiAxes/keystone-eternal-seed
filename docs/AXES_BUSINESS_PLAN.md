@@ -173,6 +173,12 @@ automated negotiator, fraud adjudicator, escrow, payment service, or
 professional certification. The detailed readiness model is
 `AXES_PROJECT_FULFILLMENT_READINESS.md`.
 
+The future extension is a curated service marketplace with factual,
+provider-confirmed price-list information and a permissioned client-to-provider
+match request. It begins as discovery and human-reviewed introductions, not
+automated recommendations, public ratings, payments, or a guarantee of
+provider availability, qualification, price, or outcome.
+
 ### Asset and content governance
 
 Every asset used publicly needs a recorded source, creator credit, intended
