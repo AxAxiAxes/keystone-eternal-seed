@@ -114,7 +114,7 @@ next begins.
 | --- | --- | --- |
 | AXEOUS | Moderated community groups and discovery | Dating, unrestricted direct messages, and unmoderated interactions |
 | AUXAOUS | Private self-reflection and creative-path tools | Sensitive profiling, diagnosis, or public personal maps |
-| URNUR | Non-transferable recognition points | Currency, payments, redemption, markets, investments, and trading |
+| URNUR | Voluntary contribution credit and provenance acknowledgement | Currency, payments, redemption, markets, investments, trading, scores, levels, and personal-status claims |
 | Lineage Archive | Opt-in, versioned attribution records | Legal proof of ownership or immutable records without correction processes |
 | Virtual spaces | Moderated, limited-purpose collaboration | Broad virtual worlds without age controls, reporting, and safety operations |
 

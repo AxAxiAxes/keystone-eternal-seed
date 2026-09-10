@@ -25,7 +25,7 @@ or any other legal right.
 | AXES Contracting | Central hub and operator control center | Navigation, authenticated operator dashboard, service status, and approved product links |
 | XIIOM | Home of AXI and automation operations | Private memory, bounded automation, audited agent proposals, and service monitoring |
 | AXEOUS | Community and participation space | Safe community profiles, moderated groups, and collaboration discovery |
-| URNUR | Recognition of constructive contribution | Non-transferable recognition points and contribution history; not money, a payment system, or a tradable asset |
+| URNUR | Recognition of constructive contribution | Voluntary contribution credit and provenance acknowledgement; not money, a score, a payment system, or a tradable asset |
 | AXOUS / AXOUX | AXOUS creator initiative through the AXOUX site | Project proposals, collaboration workspaces, authorship attribution, and an opt-in lineage archive |
 | AUXAOUS | Self-design and reflection tools | Private, user-controlled self-mapping and creative-path tools |
 | School of Love & Ethics | Free learning and project-invention program | Age-appropriate curriculum, moderated project labs, consent-aware participation, and accessible learning resources |
@@ -115,7 +115,8 @@ consented participation in a limited pilot.
 
 ### Phase 4 - Recognition and archival systems
 
-- Pilot URNUR as non-transferable recognition for contributions.
+- Pilot URNUR as voluntary, non-monetary recognition for documented
+  contributions without levels, scores, or status claims.
 - Build the Lineage Archive as an opt-in, versioned attribution record.
 - Evaluate any future exchange, payment, auction, or token concept separately
   with financial, consumer-protection, tax, and jurisdictional review before

@@ -36,7 +36,7 @@ stage.
 | AXOUS / AXOUX | AXOUS creator initiative through the AXOUX site | Invite-only projects, contribution roles, and attribution history | Moderation, consent, and contributor terms before broad access |
 | School of Love & Ethics | Future learning pilot | Accessible curriculum, project labs, and voluntary reflection | Adult-only or separated cohorts until youth safeguarding is operational |
 | AXEOUS and AUXAOUS | Future community and self-design pilots | Moderated groups and private participant-controlled reflection | No unrestricted messaging, public sensitive profiles, or unmoderated interactions |
-| URNUR | Future recognition direction | Non-transferable contribution recognition after review | No financial, market, token, custody, payment, or trading functionality before written legal approval |
+| URNUR | Future non-monetary recognition direction | Voluntary, human-reviewed contribution credit and provenance acknowledgement | No scores, energy-level claims, financial, market, token, custody, payment, or trading functionality |
 
 ## Customer and participant groups
 
@@ -219,5 +219,6 @@ Track only metrics that help decide whether a service should continue:
 - `PROJECT_BUDGET.md`
 - `EMAIL_MIGRATION_PLAN.md`
 - `URNUR_FINANCIAL_READINESS.md`
+- `URNUR_NON_MONETARY_RECOGNITION.md`
 - `AXES_OS_PORTABILITY.md`
 - `AXES_CREATOR_ORIGIN_CONSTITUTION.md`
