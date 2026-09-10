@@ -114,6 +114,11 @@ age-appropriate program is approved. Before admitting minors, AXES needs:
   Chichetki/Athanor work are symbolic creative language only. Do not collect
   location data, infer personal states, provide navigation, or claim to
   measure, diagnose, transmit to, or alter a participant's condition.
+- A future Athanor game console may use player-initiated motion or sound input
+  only with a clear interaction purpose and permission. It must not monitor
+  people in the background, retain recordings by default, create biometric or
+  behavioral profiles, or use input for personal ranking, eligibility, prizes,
+  or consequential decisions.
 - Chichetki collectible gems require factual provenance, material, condition,
   pricing, fulfillment, and consumer terms. Do not offer a prize, game,
   trade, or value claim without jurisdiction-specific legal review of the

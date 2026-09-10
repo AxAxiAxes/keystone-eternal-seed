@@ -92,6 +92,15 @@ pomegranate asset must be founder-created, independently created, or properly
 licensed; the separate jeweled-pomegranate reference remains private
 inspiration only.
 
+Athanor and Chichetki may later become a game-console-style creative
+experience in which players deliberately initiate motion or sound inputs for
+fictional audiovisual challenges. Game terms such as harmonic, resonance,
+resequencer, transmission, alignment, and challenge describe artistic game
+states only. The experience must not monitor people in the background, build
+biometric or behavioral profiles, infer personal states, or claim to
+understand or alter a player. The detailed gate is
+`ATHANOR_GAME_CONSOLE_READINESS.md`.
+
 **Athanor** is the internal creative concept for a harmonizing center within
 that system. It can guide the design of coherent experiences, installations,
 and editorial material. It is not an autonomous entity, measurement device,
