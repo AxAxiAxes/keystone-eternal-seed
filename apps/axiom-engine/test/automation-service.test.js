@@ -471,6 +471,34 @@ test("creates and verifies a recovery backup through the Operations Observer", a
   assert.equal(task.agentId, "operations-observer");
 });
 
+test("records a coordinate transition through the Operations Observer", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AutomationService({
+    directory,
+    memoryStore: createMemoryStore(),
+    createCoordinate: async (coordinate) => ({
+      id: "coordinate-1",
+      ...coordinate
+    })
+  });
+  await service.createTask({
+    title: "Record Genesis continuity",
+    action: "coordinate.record",
+    agentId: "operations-observer",
+    originCheckpoint: "axi-coordinate-foundation"
+  });
+
+  await service.processDueTasks();
+  assert.deepEqual((await service.listRuns())[0].result, {
+    coordinate: {
+      id: "coordinate-1",
+      label: "Record Genesis continuity",
+      originCheckpoint: "axi-coordinate-foundation"
+    }
+  });
+});
+
 test("records a monitoring snapshot through the dedicated observer", async (t) => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));

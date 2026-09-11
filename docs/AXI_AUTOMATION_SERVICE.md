@@ -16,6 +16,7 @@ controller. It accepts only the versioned action allowlist:
 | `monitoring.snapshot` | `monitoring.snapshot` | Captures a private operational snapshot without contacting an external system. |
 | `governance.readiness` | `governance.readiness` | Assesses Genesis registration, active accountability, approved capabilities, and task attention states without making legal or external determinations. |
 | `recovery.backup` | `recovery.backup` | Creates and verifies a private runtime recovery bundle only at an explicitly configured, distinct backup location. |
+| `coordinate.record` | `coordinate.record` | Records a source-linked, hash-chained private coordinate transition. |
 
 The service rejects any unrecognized action. New external integrations must be
 implemented, reviewed, tested, and added to the allowlist before they can be
@@ -32,7 +33,7 @@ preserving existing agent records.
 | Memory Curator | `memory.record` | Maintains validated memory entries. |
 | Automation Executor | `automation.noop` | Runs bounded workflow checks. |
 | Automation Auditor | Both capabilities | Provides a general audited fallback. |
-| Operations Observer | `monitoring.snapshot`, `governance.readiness`, `recovery.backup` | Captures private health, queue, scheduler, usage, Genesis/governance-readiness, and recovery signals. |
+| Operations Observer | `monitoring.snapshot`, `governance.readiness`, `recovery.backup`, `coordinate.record` | Captures private health, queue, scheduler, usage, Genesis/governance-readiness, recovery, and coordinate-chain signals. |
 
 Tasks can specify an eligible `agentId`; otherwise the first enabled agent with
 the matching capability is assigned. Tasks have a priority from 1 (backlog) to
@@ -134,6 +135,11 @@ one private recovery bundle, verifies its hashes before completing the task,
 and retains the bundle for a separately authorized restore. It does not
 overwrite live memory, contact an external service, or prove that a configured
 storage location is independently durable.
+
+Queue a `coordinate.record` task to record an approved, source-linked
+continuity transition. The Operations Observer uses the task title and origin
+checkpoint to create the next coordinate in the private hash chain. See
+`AXI_ORIGIN_COORDINATE_SYSTEM.md`.
 
 ## Opt-in scheduler
 

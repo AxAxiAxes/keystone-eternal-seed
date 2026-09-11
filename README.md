@@ -32,6 +32,8 @@ requirements, and counsel-readiness path are in
 The active AXI founder-claimed invention record, technical scope, and
 preservation anchors are in
 [AXI_INVENTION_RECORD.md](docs/AXI_INVENTION_RECORD.md).
+The private, hash-chained AXI origin-coordinate system is defined in
+[AXI_ORIGIN_COORDINATE_SYSTEM.md](docs/AXI_ORIGIN_COORDINATE_SYSTEM.md).
 The Eternal Origin ownership-invention value objective and past/current crisis
 register are in
 [AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md](docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md).

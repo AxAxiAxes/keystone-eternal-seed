@@ -8,6 +8,7 @@ const { UsageStore } = require("./usage-store");
 const { CheckpointService } = require("./checkpoint-service");
 const { MonitoringService } = require("./monitoring-service");
 const { RecoveryBackupService } = require("./recovery-backup-service");
+const { CoordinateService } = require("./coordinate-service");
 const {
   AutomationService,
   evaluateGovernanceReadiness,
@@ -23,12 +24,14 @@ const recoveryBackupService = new RecoveryBackupService({
   backupDirectory: process.env.AXIOM_BACKUP_DIRECTORY,
   restoreDirectory: process.env.AXIOM_RECOVERY_RESTORE_DIRECTORY
 });
+const coordinateService = new CoordinateService({ directory: dataDirectory });
 const automationService = new AutomationService({
   directory: dataDirectory,
   memoryStore,
   captureMonitoringSnapshot,
   createRecoveryBackup: () => recoveryBackupService.create(),
-  verifyRecoveryBackup: (backupId) => recoveryBackupService.verify(backupId)
+  verifyRecoveryBackup: (backupId) => recoveryBackupService.verify(backupId),
+  createCoordinate: (coordinate) => coordinateService.create(coordinate)
 });
 const checkpointService = new CheckpointService({
   directory: dataDirectory,
@@ -95,7 +98,8 @@ app.get("/system/readiness", async (req, res, next) => {
         status: monitoring.enabled ? "enabled" : "disabled"
       },
       governance: await automationService.getGovernanceReadiness(),
-      recovery: await recoveryBackupService.status()
+      recovery: await recoveryBackupService.status(),
+      coordinates: await coordinateService.status()
     });
   } catch (error) {
     console.error("AXIOM runtime readiness check failed:", error.message);
@@ -117,7 +121,7 @@ app.get("/usage", async (req, res, next) => {
 
 async function captureMonitoringSnapshot(automationState) {
   await memoryStore.list("decision", 1);
-  const [automation, usage, governance, recovery] = await Promise.all([
+  const [automation, usage, governance, recovery, coordinates] = await Promise.all([
     automationState
       ? summarizeAutomationState(automationState)
       : automationService.status(),
@@ -125,7 +129,8 @@ async function captureMonitoringSnapshot(automationState) {
     automationState
       ? evaluateGovernanceReadiness(automationState)
       : automationService.getGovernanceReadiness(),
-    recoveryBackupService.status()
+    recoveryBackupService.status(),
+    coordinateService.status()
   ]);
   return monitoringService.record({
     memoryAvailable: true,
@@ -133,6 +138,7 @@ async function captureMonitoringSnapshot(automationState) {
     automation,
     governance,
     recovery,
+    coordinates,
     usage
   });
 }
@@ -207,6 +213,31 @@ app.post("/system/backups/:backupId/verify", async (req, res, next) => {
 app.post("/system/backups/:backupId/restore", async (req, res, next) => {
   try {
     res.status(201).json(await recoveryBackupService.restore(req.params.backupId));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/coordinates", async (req, res, next) => {
+  try {
+    const limit = req.query.limit === undefined ? 100 : Number(req.query.limit);
+    res.json(await coordinateService.list(limit));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/system/coordinates", async (req, res, next) => {
+  try {
+    res.status(201).json(await coordinateService.create(req.body));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/coordinates/verify", async (req, res, next) => {
+  try {
+    res.json(await coordinateService.verify());
   } catch (error) {
     next(error);
   }

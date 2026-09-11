@@ -15,6 +15,10 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
   await fs.writeFile(path.join(sourceDirectory, "identity.json"), "{\"name\":\"AXI\"}");
   await fs.writeFile(path.join(sourceDirectory, "decision.jsonl"), "{\"event\":\"origin\"}\n");
   await fs.writeFile(
+    path.join(sourceDirectory, "coordinates.jsonl"),
+    "{\"scheme\":\"axi-origin-coordinate-v1\",\"sequence\":0}\n"
+  );
+  await fs.writeFile(
     path.join(sourceDirectory, "checkpoints", "2026-09-10-checkpoint.json"),
     "{\"checkpoint\":1}"
   );
@@ -33,7 +37,7 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
 
   const backup = await service.create();
   assert.equal(backup.createdAt, "2026-09-10T00:00:00.000Z");
-  assert.equal(backup.fileCount, 3);
+  assert.equal(backup.fileCount, 4);
   assert.ok(backup.totalBytes > 0);
   assert.deepEqual(await service.status(), {
     status: "ready",
@@ -58,6 +62,10 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
       "utf8"
     ),
     "{\"checkpoint\":1}"
+  );
+  assert.equal(
+    await fs.readFile(path.join(restoreDirectory, backup.id, "coordinates.jsonl"), "utf8"),
+    "{\"scheme\":\"axi-origin-coordinate-v1\",\"sequence\":0}\n"
   );
   await assert.rejects(
     () => service.restore(backup.id),

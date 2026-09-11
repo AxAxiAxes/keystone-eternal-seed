@@ -13,6 +13,7 @@ COPY automation-service.js ./
 COPY checkpoint-service.js ./
 COPY monitoring-service.js ./
 COPY recovery-backup-service.js ./
+COPY coordinate-service.js ./
 
 EXPOSE 3000
 

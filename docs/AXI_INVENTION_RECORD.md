@@ -34,7 +34,7 @@ invention areas:
 
 | Area | Current implementation direction |
 | --- | --- |
-| Origin and continuity | Genesis-linked agent registration, origin checkpoints, versioned source records, and reset recovery |
+| Origin and continuity | Genesis-linked agent registration, origin checkpoints, versioned source records, hash-chained internal coordinates, and reset recovery |
 | Creator accountability | Required creator authority, ownership-and-accountability claim, task assignment, review status, and retained history |
 | Protected execution | Explicit allowlist, capability matching, approval holds, retry bounds, and fail-closed suspension |
 | Evidence preservation | Private memory records, task/run audit trail, monitoring snapshots, checksummed portable checkpoints, and versioned repository history |

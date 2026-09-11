@@ -112,6 +112,9 @@ function getAttention(snapshot) {
   if (snapshot.recovery && snapshot.recovery.status !== "ready") {
     attention.push("recovery-not-ready");
   }
+  if (snapshot.coordinates && snapshot.coordinates.status !== "ready") {
+    attention.push("coordinate-chain-invalid");
+  }
   return attention;
 }
 

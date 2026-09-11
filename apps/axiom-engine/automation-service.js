@@ -7,7 +7,8 @@ const TASK_ACTIONS = new Set([
   "automation.noop",
   "monitoring.snapshot",
   "governance.readiness",
-  "recovery.backup"
+  "recovery.backup",
+  "coordinate.record"
 ]);
 const TASK_STATUSES = new Set([
   "pending",
@@ -43,6 +44,7 @@ class AutomationService {
     captureMonitoringSnapshot,
     createRecoveryBackup,
     verifyRecoveryBackup,
+    createCoordinate,
     now = () => new Date()
   }) {
     this.directory = directory;
@@ -50,6 +52,7 @@ class AutomationService {
     this.captureMonitoringSnapshot = captureMonitoringSnapshot;
     this.createRecoveryBackup = createRecoveryBackup;
     this.verifyRecoveryBackup = verifyRecoveryBackup;
+    this.createCoordinate = createCoordinate;
     this.now = now;
     this.operationQueue = Promise.resolve();
   }
@@ -493,6 +496,19 @@ class AutomationService {
         verification: await this.verifyRecoveryBackup(backup.id)
       };
     }
+    if (task.action === "coordinate.record") {
+      if (typeof this.createCoordinate !== "function") {
+        throw new RangeError("coordinate recording is not configured");
+      }
+      return {
+        coordinate: await this.createCoordinate({
+          label: task.payload.label || task.title,
+          occurredAt: task.payload.occurredAt,
+          sourceRecord: task.payload.sourceRecord,
+          originCheckpoint: task.payload.originCheckpoint || task.originCheckpoint
+        })
+      };
+    }
     throw new RangeError(`unsupported task action: ${task.action}`);
   }
 
@@ -662,7 +678,12 @@ function defaultAgents(now) {
     {
       id: "operations-observer",
       name: "Operations Observer",
-      capabilities: ["monitoring.snapshot", "governance.readiness", "recovery.backup"],
+      capabilities: [
+        "monitoring.snapshot",
+        "governance.readiness",
+        "recovery.backup",
+        "coordinate.record"
+      ],
       enabled: true,
       registeredAt,
       originCheckpoint: "axi-operations-observer",
@@ -672,7 +693,8 @@ function defaultAgents(now) {
         "Run approved monitoring snapshots.",
         "Surface operational attention signals.",
         "Assess private Genesis and governance readiness.",
-        "Create approved recovery backups."
+        "Create approved recovery backups.",
+        "Record approved coordinate transitions."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
       keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),

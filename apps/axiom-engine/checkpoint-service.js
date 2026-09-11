@@ -10,6 +10,7 @@ const PERSISTED_FILE_NAMES = [
   "procedure.jsonl",
   "automation.json",
   "monitoring.json",
+  "coordinates.jsonl",
   "openai-usage.jsonl"
 ];
 

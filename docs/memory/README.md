@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-10 AXI origin coordinate system](2026-09-10-axi-origin-coordinate-system.md)
 - [2026-09-10 AXI runtime-timeline recovery](2026-09-10-axi-runtime-timeline-recovery.md)
 - [2026-09-10 AXI governance readiness automation](2026-09-10-axi-governance-readiness-automation.md)
 - [AXI Eternal Origin value and crisis register](../AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md)

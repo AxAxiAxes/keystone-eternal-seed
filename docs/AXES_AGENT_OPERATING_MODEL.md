@@ -33,7 +33,7 @@ That is not an operational capacity commitment. The current engine:
 - Persists the registry in one private JSON state file.
 - Supports only `memory.record`, `automation.noop`, and
   `monitoring.snapshot`, `governance.readiness`, and `recovery.backup` task
-  actions.
+  actions, plus `coordinate.record`.
 - Processes due tasks sequentially in one service process, from 1 to 20 per
   cycle, with a default of 5.
 - Requires an authenticated operator to approve a task when the task is marked
@@ -51,7 +51,7 @@ provider's project limits view before increasing usage. See the official
 
 | Stage | Role profiles | Enabled agents | Purpose and release condition |
 | --- | ---: | ---: | --- |
-| Current foundation | 4 | 4 | Existing private memory, safe no-op, audit, monitoring-observer, Genesis/governance-readiness, and recovery-backup roles only. |
+| Current foundation | 4 | 4 | Existing private memory, safe no-op, audit, monitoring-observer, Genesis/governance-readiness, recovery-backup, and coordinate-chain roles only. |
 | Command Center pilot | 5 | At most 5 | Add observation and change-readiness analysis after protected-console monitoring is working. |
 | Directory preparation | 10 | At most 8 | Define directory-support roles only after every directory readiness gate is met; no data collection or listings. |
 | Governed AXES ecosystem | 15 | At most 12 | Activate further roles one at a time after an owner, data map, review procedure, tests, and rollback path are approved. |
@@ -74,7 +74,7 @@ enforcement work is tracked separately in
 
 | # | Area | Role profile | Bounded responsibility | Human authority and prohibited outcome |
 | ---: | --- | --- | --- | --- |
-| 1 | Command Center | Operations Observer | Summarize private health, queue, memory, scheduler, usage, Genesis/governance-readiness, and recovery-backup signals. | A human investigates and acts on alerts; no autonomous restore, deployment, account action, or rights determination. |
+| 1 | Command Center | Operations Observer | Summarize private health, queue, memory, scheduler, usage, Genesis/governance-readiness, recovery-backup, and coordinate-chain signals. | A human investigates and acts on alerts; no autonomous restore, deployment, account action, or rights determination. |
 | 2 | Command Center | Incident Runbook Coordinator | Draft incident status, evidence checklist, rollback options, and next safe diagnostic. | A human declares incidents, changes production, and closes recovery. |
 | 3 | Command Center | Automation Planner | Propose allowlisted task order, dependencies, priority, and approval requirements. | A human creates, approves, or rejects tasks; no new action type or schedule without review. |
 | 4 | Command Center | Memory and Continuity Curator | Draft and, when explicitly scheduled, record validated non-sensitive memory entries. | A human confirms accuracy and retention; no secrets, personal data, or unreviewed claims. |

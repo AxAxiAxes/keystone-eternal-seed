@@ -134,6 +134,7 @@ test("reports secret-safe runtime readiness", async (t) => {
   assert.equal(readiness.governance.status, "ready");
   assert.equal(readiness.governance.activeAgents, 4);
   assert.equal(readiness.recovery.status, "not-configured");
+  assert.equal(readiness.coordinates.status, "ready");
   assert.equal(readiness.automation.lastRunAt, null);
   assert.equal(readiness.automation.lastError, null);
   assert.ok(readiness.checkedAt);
@@ -222,10 +223,29 @@ test("persists and retrieves AXI memory layers", async (t) => {
   assert.equal(monitoringSnapshot.snapshot.governance.status, "ready");
   assert.equal(monitoringSnapshot.snapshot.recovery.status, "not-configured");
   assert.ok(monitoringSnapshot.attention.includes("recovery-not-ready"));
+  assert.equal(monitoringSnapshot.snapshot.coordinates.status, "ready");
 
   const governance = await fetch(`http://127.0.0.1:${port}/automation/readiness`);
   assert.equal(governance.status, 200);
   assert.equal((await governance.json()).status, "ready");
+
+  const createdCoordinate = await fetch(`http://127.0.0.1:${port}/system/coordinates`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      label: "Record engine coordinate test",
+      originCheckpoint: "axi-coordinate-foundation"
+    })
+  });
+  assert.equal(createdCoordinate.status, 201);
+  const coordinate = await createdCoordinate.json();
+  assert.equal(coordinate.sequence, 1);
+
+  const coordinateVerification = await fetch(
+    `http://127.0.0.1:${port}/system/coordinates/verify`
+  );
+  assert.equal(coordinateVerification.status, 200);
+  assert.equal((await coordinateVerification.json()).coordinateCount, 2);
 
   const monitoringHistory = await fetch(`http://127.0.0.1:${port}/monitoring/history`);
   assert.equal(monitoringHistory.status, 200);

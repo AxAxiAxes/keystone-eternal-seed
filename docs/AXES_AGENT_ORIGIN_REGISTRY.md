@@ -48,7 +48,7 @@ system operation and decisions away from AXES.
 | `memory-curator` | `axi-durable-memory-foundation` | Axel Urartu (AX) · Axes Contracting | Maintain factual, non-sensitive AXI continuity records. | Prepare approved memory entries; preserve concise operational continuity. |
 | `automation-executor` | `axi-bounded-automation-foundation` | Axel Urartu (AX) · Axes Contracting | Run safe workflow checks within the explicit action allowlist. | Execute approved no-op checks; record bounded task outcomes. |
 | `automation-auditor` | `axi-bounded-automation-foundation` | Axel Urartu (AX) · Axes Contracting | Provide an auditable fallback for approved bounded tasks. | Review task outcomes; record approved audit continuity. |
-| `operations-observer` | `axi-operations-observer` | Axel Urartu (AX) · Axes Contracting | Capture private operational, Genesis/governance-readiness, and recovery evidence. | Run approved monitoring snapshots; assess private readiness; create verified recovery bundles; surface operational attention signals. |
+| `operations-observer` | `axi-operations-observer` | Axel Urartu (AX) · Axes Contracting | Capture private operational, Genesis/governance-readiness, recovery, and coordinate-chain evidence. | Run approved monitoring snapshots; assess private readiness; create verified recovery bundles; record approved coordinate transitions; surface operational attention signals. |
 
 The origin checkpoint identifies the implementation milestone that established
 the role. It must not be used to imply that an agent owns that milestone or
@@ -64,6 +64,7 @@ can decide its future direction.
 | `operations-observer` | Capture a recurring private monitoring snapshot | `monitoring.snapshot` | `axi-operations-observer` | Human creates the recurring task, chooses its interval, and investigates attention states. |
 | `operations-observer` | Assess Genesis and governance readiness | `governance.readiness` | `axi-governance-readiness` | Human reviews agent reports before scheduling and investigates every attention state. |
 | `operations-observer` | Create and verify a private runtime recovery bundle | `recovery.backup` | `axi-reset-recovery` | Human configures a distinct backup location, reviews the result, and authorizes any isolated restore drill. |
+| `operations-observer` | Record an approved coordinate transition | `coordinate.record` | `axi-coordinate-foundation` | Human reviews the source and checkpoint relation; no origin, rights, or value conclusion is made by the task. |
 
 Templates are not queued tasks. A task is created only by an authenticated
 operator through the protected Automation Console or private API.

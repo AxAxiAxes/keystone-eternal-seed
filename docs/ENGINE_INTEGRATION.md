@@ -103,6 +103,12 @@ its read-only status response.
     "enabledAgents": 4,
     "activeAgents": 4,
     "issues": []
+  },
+  "recovery": { "status": "ready" },
+  "coordinates": {
+    "status": "ready",
+    "scheme": "axi-origin-coordinate-v1",
+    "coordinateCount": 2
   }
 }
 ```
@@ -131,3 +137,12 @@ The engine exposes recovery endpoints only on the private service network:
 The restore endpoint is not public and refuses to write to the live memory or
 backup locations. Review the restored copy before changing an engine's memory
 directory or enabling automation.
+
+## Private coordinate endpoints
+
+`GET /system/coordinates`, `POST /system/coordinates`, and
+`GET /system/coordinates/verify` manage AXI's private
+`axi-origin-coordinate-v1` ledger. It records temporal, source, governance,
+and hash-chain coordinates for approved internal state transitions. It does
+not collect precise location or personal data, and it does not make external
+ownership, rights, valuation, or patent determinations.

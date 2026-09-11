@@ -8,8 +8,8 @@
 
 AXI must preserve and recover its complete private runtime timeline through a
 reset: identity and memory records, agent origin/accountability records, task
-and run history, monitoring history, usage records, and previous checkpoint
-manifests. The source project timeline is separately retained through
+and run history, monitoring history, usage records, coordinate-chain records,
+and previous checkpoint manifests. The source project timeline is separately retained through
 `PROJECT_TIMELINE.md`, `docs/memory/`, and committed Git history.
 
 ## Implemented mechanism
