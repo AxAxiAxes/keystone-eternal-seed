@@ -18,6 +18,7 @@ boundaries.
 | `startup context` | Versioned non-sensitive AXES memory-bank basis available to AXI at startup | `startup-context.json` |
 | `usage` | Private provider token-usage accounting | `openai-usage.jsonl` |
 | `automation` | Allowlisted tasks, agent registry, runs, and schedules | `automation.json` |
+| `business metrics` | Private hash-linked submitted revenue/expense metric journal | `business-metrics.jsonl` |
 | `chat` | Private provider request orchestration and contextual retrieval | Uses memory and usage modules; does not own a separate data file |
 | `monitoring` | Private operational snapshots and attention history | `monitoring.json` |
 | `checkpoint` | Portable state inventory and integrity hashes | `checkpoints/*.json` |
@@ -52,6 +53,9 @@ make the approved memory-bank basis available at process startup. It writes a
 hashed bundle only when
 `AXIOM_BACKUP_DIRECTORY` names a location distinct from both live memory and
 the isolated restore directory.
+It also preserves the private `business-metrics.jsonl` submitted-metrics
+journal; the journal remains a record of submitted metrics, not a financial
+statement or advice.
 
 | Method | Path | Purpose |
 | --- | --- | --- |

@@ -9,6 +9,11 @@ alongside AXI memory in `automation.json`.
 Automation is not an unrestricted shell, browser, account, or deployment
 controller. It accepts only the versioned action allowlist:
 
+AXI roles execute founder-assigned work only. They cannot assign or remove
+their own work, approve tasks, or suspend or reactivate themselves or other
+roles. Those controls remain founder-controlled through the protected
+operational process; protected access is not agent authority.
+
 | Action | Capability | Effect |
 | --- | --- | --- |
 | `memory.record` | `memory.record` | Writes a validated entry to a supported private memory layer. |
@@ -20,6 +25,7 @@ controller. It accepts only the versioned action allowlist:
 | `continuity.checkpoint` | `continuity.checkpoint` | Creates a checksummed private checkpoint manifest for current runtime files. |
 | `continuity.record` | `continuity.record` | Appends an operator-confirmed, bounded event to the private continuous memory record. |
 | `source.catalog` | `source.catalog` | Appends approved repository-source metadata and SHA-256 evidence to the private source catalog. |
+| `business.metric` | `business.metric` | Appends one approved non-sensitive revenue or expense metric to the private hash-linked journal. |
 
 The service rejects any unrecognized action. New external integrations must be
 implemented, reviewed, tested, and added to the allowlist before they can be
@@ -58,7 +64,7 @@ automation-state access while preserving existing agent records.
 | Agent | Capabilities | Purpose |
 | --- | --- | --- |
 | Memory Curator | `memory.record` | Maintains validated memory entries. |
-| Project Memory Manager | `memory.record`, `continuity.record`, `source.catalog` | Maintains approved, non-sensitive project memory, continuous continuity entries, and source-catalog metadata. |
+| Project Memory Manager | `memory.record`, `continuity.record`, `source.catalog`, `business.metric` | Maintains approved, non-sensitive project memory, continuous continuity entries, source-catalog metadata, and submitted business metrics. |
 | Automation Executor | `automation.noop` | Runs bounded workflow checks. |
 | Automation Auditor | Both capabilities | Provides a general audited fallback. |
 | Operations Observer | `monitoring.snapshot`, `governance.readiness`, `recovery.backup`, `coordinate.record`, `continuity.checkpoint` | Captures private health, queue, scheduler, usage, Genesis/governance-readiness, recovery, coordinate-chain signals, and approved continuity checkpoints. |
@@ -191,6 +197,19 @@ upload, classify, or interpret raw source content. Duplicate source IDs,
 unsafe paths, unsupported fields, malformed hashes, and invalid retained
 history fail explicitly. See `AXI_SOURCE_CATALOG.md`.
 
+Queue a `business.metric` task only for the Project Memory Manager with
+`approvalRequired: true` and only the restrictive fields in
+`AXI_BUSINESS_METRICS.md`: period, kind, category, positive `amountCents`, and
+non-sensitive source record. It cannot accept account, invoice,
+customer/vendor, payment, tax, financial-account, credential, personal data,
+or narrative. Invalid retained metrics history blocks both manual processing
+and scheduler cycles. This action records submitted metrics only; it does not
+make an accounting, tax, valuation, cash, profitability, legal, or financial
+determination.
+The Project Memory Manager performs the recorded task only after founder
+assignment and founder approval through the protected process; it cannot
+assign, approve, remove, suspend, or reactivate itself.
+
 ## Opt-in scheduler
 
 Manual processing through `POST /automation/process` is always available from
@@ -230,6 +249,8 @@ memory, failed tasks, scheduler errors, a queue backlog above 20 tasks, and a
 Genesis/governance readiness issue.
 A missing, empty, unavailable, or invalid recovery backup produces the
 `recovery-not-ready` attention state.
+An invalid business-metrics journal produces `business-metrics-unavailable`;
+the journal's own attention state blocks automation.
 
 The protected console can capture a snapshot and display current signals and
 reevaluation history. The private API also provides `GET /monitoring/status`,
@@ -265,6 +286,15 @@ enforces the same manager-assignment and approval requirements independently.
 The Console exposes the private source-catalog status and recent approved
 entries. It can queue a catalog entry only through an explicitly assigned,
 approval-required `source.catalog` task for the Project Memory Manager.
+
+The Console exposes submitted business-metrics status, deterministic summary,
+and recent approved entries. It queues a metric only as an explicitly assigned,
+approval-required `business.metric` task for the Project Memory Manager and
+warns that account, invoice, customer/vendor, payment, tax, financial-account,
+credential, and personal data are prohibited. The view is a record of
+submitted metrics, not a financial statement or advice. The founder controls
+task assignment, approval, and accountability actions through this protected
+process; AXI roles have no control over those actions.
 
 The protected `/command-center` view extends this into build-management
 observation. It combines the continuity tree with agent/task/run-flow metrics,

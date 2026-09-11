@@ -141,6 +141,8 @@ test("reports secret-safe runtime readiness", async (t) => {
   assert.equal(readiness.continuityRecord.status, "ready");
   assert.equal(readiness.sourceCatalog.status, "ready");
   assert.equal(readiness.sourceCatalog.sourceCount, 0);
+  assert.equal(readiness.businessMetrics.status, "ready");
+  assert.equal(readiness.businessMetrics.recordCount, 0);
   assert.ok(readiness.continuityRecord.recordCount >= 2);
   assert.equal(readiness.startupContext.id, "axes-memory-bank-startup-v1");
   assert.equal(readiness.automation.lastRunAt, null);
@@ -260,6 +262,7 @@ test("catalogs approved source metadata through the private engine", async (t) =
       }
     })
   });
+
   assert.equal(taskResponse.status, 201);
   const task = await taskResponse.json();
   assert.equal(task.status, "awaiting_approval");
@@ -289,6 +292,68 @@ test("catalogs approved source metadata through the private engine", async (t) =
   const entries = await entriesResponse.json();
   assert.equal(entries[0].sourceId, "axi-memory-service");
   assert.equal(entries[0].reviewStatus, "operator-approved");
+});
+
+test("records approved business metrics through the private engine task flow", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+  const taskResponse = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: "Record approved revenue metric",
+      action: "business.metric",
+      agentId: "project-memory-manager",
+      approvalRequired: true,
+      originCheckpoint: "axi-business-metrics-foundation",
+      payload: {
+        period: "2026-09",
+        kind: "revenue",
+        category: "contracting-services",
+        amountCents: 12500,
+        sourceRecord: "engine-approved-metric-2026-09-001"
+      }
+    })
+  });
+  assert.equal(taskResponse.status, 201);
+  const task = await taskResponse.json();
+  assert.equal(task.status, "awaiting_approval");
+  const approvalResponse = await fetch(
+    `http://127.0.0.1:${port}/automation/tasks/${task.id}/approval`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ approved: true })
+    }
+  );
+  assert.equal(approvalResponse.status, 200);
+  const processResponse = await fetch(`http://127.0.0.1:${port}/automation/process`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "{}"
+  });
+  assert.equal(processResponse.status, 200);
+  assert.equal((await processResponse.json())[0].status, "completed");
+
+  const entriesResponse = await fetch(
+    `http://127.0.0.1:${port}/system/business-metrics/entries?limit=5`
+  );
+  assert.equal(entriesResponse.status, 200);
+  const entries = await entriesResponse.json();
+  assert.equal(entries.entries[0].reviewStatus, "operator-approved");
+  assert.equal(entries.entries[0].sourceRecord, "engine-approved-metric-2026-09-001");
+  assert.match(entries.label, /Record of submitted metrics only/);
+  const summaryResponse = await fetch(`http://127.0.0.1:${port}/system/business-metrics/summary`);
+  assert.equal(summaryResponse.status, 200);
+  const summary = await summaryResponse.json();
+  assert.equal(summary.totalRecordedRevenueCents, 12500);
+  assert.equal(summary.netRecordedOperatingResultCents, 12500);
+  const monitoringResponse = await fetch(`http://127.0.0.1:${port}/monitoring/snapshots`, {
+    method: "POST"
+  });
+  assert.equal(monitoringResponse.status, 201);
+  assert.equal((await monitoringResponse.json()).snapshot.businessMetrics.status, "ready");
 });
 
 test("blocks automation when retained startup context is invalid", async (t) => {
@@ -396,6 +461,7 @@ test("persists and retrieves AXI memory layers", async (t) => {
   assert.ok(monitoringSnapshot.attention.includes("recovery-not-ready"));
   assert.equal(monitoringSnapshot.snapshot.coordinates.status, "ready");
   assert.equal(monitoringSnapshot.snapshot.beadPassports.status, "ready");
+  assert.equal(monitoringSnapshot.snapshot.businessMetrics.status, "ready");
 
   const governance = await fetch(`http://127.0.0.1:${port}/automation/readiness`);
   assert.equal(governance.status, 200);
@@ -409,6 +475,7 @@ test("persists and retrieves AXI memory layers", async (t) => {
       originCheckpoint: "axi-coordinate-foundation"
     })
   });
+
   assert.equal(createdCoordinate.status, 201);
   const coordinate = await createdCoordinate.json();
   assert.equal(coordinate.sequence, 1);
@@ -474,4 +541,25 @@ test("persists and retrieves AXI memory layers", async (t) => {
     snapshot: monitoringSnapshot.snapshot,
     attention: monitoringSnapshot.attention
   }]);
+});
+
+test("fails closed when retained business metrics are tampered", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+  const metricPath = path.join(memoryDirectory, "business-metrics.jsonl");
+  await fs.mkdir(memoryDirectory, { recursive: true });
+  await fs.writeFile(metricPath, "{\"tampered\":true}\n");
+
+  const statusResponse = await fetch(`http://127.0.0.1:${port}/system/business-metrics`);
+  assert.equal(statusResponse.status, 200);
+  assert.equal((await statusResponse.json()).status, "attention");
+
+  const response = await fetch(`http://127.0.0.1:${port}/automation/process`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "{}"
+  });
+  assert.equal(response.status, 409);
+  assert.match((await response.json()).error, /business metrics are ready \(business-metrics-invalid\)/);
 });

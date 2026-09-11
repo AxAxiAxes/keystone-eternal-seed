@@ -25,6 +25,10 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
     path.join(sourceDirectory, "source-catalog.jsonl"),
     "{\"sequence\":1,\"sourceId\":\"axi-memory-service\"}\n"
   );
+  await fs.writeFile(
+    path.join(sourceDirectory, "business-metrics.jsonl"),
+    "{\"sequence\":1,\"kind\":\"revenue\",\"amountCents\":12500}\n"
+  );
   await fs.writeFile(path.join(sourceDirectory, "decision.jsonl"), "{\"event\":\"origin\"}\n");
   await fs.writeFile(
     path.join(sourceDirectory, "coordinates.jsonl"),
@@ -53,7 +57,7 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
 
   const backup = await service.create();
   assert.equal(backup.createdAt, "2026-09-10T00:00:00.000Z");
-  assert.equal(backup.fileCount, 8);
+  assert.equal(backup.fileCount, 9);
   assert.ok(backup.totalBytes > 0);
   assert.deepEqual(await service.status(), {
     status: "ready",
@@ -83,6 +87,10 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
   assert.equal(
     await fs.readFile(path.join(restoreDirectory, backup.id, "source-catalog.jsonl"), "utf8"),
     "{\"sequence\":1,\"sourceId\":\"axi-memory-service\"}\n"
+  );
+  assert.equal(
+    await fs.readFile(path.join(restoreDirectory, backup.id, "business-metrics.jsonl"), "utf8"),
+    "{\"sequence\":1,\"kind\":\"revenue\",\"amountCents\":12500}\n"
   );
   assert.equal(
     await fs.readFile(

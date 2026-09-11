@@ -138,9 +138,10 @@ async function getSupportStatus() {
         invokeEngine('/monitoring/status'),
         invokeEngine('/system/checkpoints?limit=1'),
         invokeEngine('/system/continuity-record'),
-        invokeEngine('/system/source-catalog')
+        invokeEngine('/system/source-catalog'),
+        invokeEngine('/system/business-metrics')
     ]);
-    const [engine, readiness, automation, monitoring, checkpoints, continuityRecord, sourceCatalog] = checks;
+    const [engine, readiness, automation, monitoring, checkpoints, continuityRecord, sourceCatalog, businessMetrics] = checks;
 
     return {
         recordedAt: new Date().toISOString(),
@@ -165,6 +166,9 @@ async function getSupportStatus() {
             : { status: 'unavailable' },
         sourceCatalog: sourceCatalog.status === 'fulfilled'
             ? sourceCatalog.value
+            : { status: 'unavailable' },
+        businessMetrics: businessMetrics.status === 'fulfilled'
+            ? businessMetrics.value
             : { status: 'unavailable' },
         email: {
             status: 'planned',
@@ -539,6 +543,44 @@ const server = http.createServer(async (req, res) => {
                       )));
               } catch (error) {
                       console.error('AXIOM source catalog entry request failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/business-metrics' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(await invokeEngine('/system/business-metrics')));
+              } catch (error) {
+                      console.error('AXIOM business metrics status request failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/business-metrics/entries' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(await invokeEngine(
+                        '/system/business-metrics/entries' + parsed.search
+                      )));
+              } catch (error) {
+                      console.error('AXIOM business metrics entry request failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/business-metrics/summary' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(await invokeEngine('/system/business-metrics/summary')));
+              } catch (error) {
+                      console.error('AXIOM business metrics summary request failed:', error.message);
                       res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
                       res.end(JSON.stringify({ error: error.message }));
               }

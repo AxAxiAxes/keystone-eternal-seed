@@ -44,6 +44,74 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
     }
   });
 
+  test("restricts approved business metric tasks to the Project Memory Manager", async (t) => {
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+    t.after(() => fs.rm(directory, { recursive: true, force: true }));
+    const recordedMetrics = [];
+    const service = new AutomationService({
+      directory,
+      memoryStore: createMemoryStore(),
+      recordBusinessMetric: async (entry) => {
+        const recorded = { id: "metric-entry-1", sequence: 1, ...entry };
+        recordedMetrics.push(recorded);
+        return recorded;
+      }
+    });
+    const payload = {
+      period: "2026-09",
+      kind: "revenue",
+      category: "contracting-services",
+      amountCents: 12500,
+      sourceRecord: "approved-metric-2026-09-001"
+    };
+
+    const agents = await service.listAgents();
+    assert.ok(agents.find((agent) => agent.id === "project-memory-manager")
+      .capabilities.includes("business.metric"));
+    await assert.rejects(
+      () => service.createTask({
+        title: "Metric without approval",
+        action: "business.metric",
+        agentId: "project-memory-manager",
+        originCheckpoint: "axi-business-metrics-foundation",
+        payload
+      }),
+      /business\.metric tasks require operator approval/
+    );
+    const nonManager = await service.registerAgent({
+      name: "Business Metrics Test Agent",
+      capabilities: ["business.metric"]
+    });
+    await assert.rejects(
+      () => service.createTask({
+        title: "Metric with wrong agent",
+        action: "business.metric",
+        agentId: nonManager.id,
+        approvalRequired: true,
+        originCheckpoint: "axi-business-metrics-foundation",
+        payload
+      }),
+      /business\.metric tasks must be assigned to the Project Memory Manager/
+    );
+
+    const task = await service.createTask({
+      title: "Approved business metric",
+      action: "business.metric",
+      agentId: "project-memory-manager",
+      approvalRequired: true,
+      originCheckpoint: "axi-business-metrics-foundation",
+      payload
+    });
+    assert.equal(task.status, "awaiting_approval");
+    await service.reviewTaskApproval(task.id, true);
+    assert.equal((await service.processDueTasks())[0].status, "completed");
+    assert.deepEqual(recordedMetrics, [{
+      id: "metric-entry-1",
+      sequence: 1,
+      ...payload
+    }]);
+  });
+
   await t.test("records an approved continuity event through the Project Memory Manager", async (t) => {
     const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
     t.after(() => fs.rm(directory, { recursive: true, force: true }));

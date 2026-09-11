@@ -328,6 +328,10 @@ Track only metrics that help decide whether a service should continue:
 - Pilot conversion, fulfillment reliability, support response time, and
   customer/participant feedback.
 - Actual monthly spending against the approved cap.
+- Internally submitted revenue and expense metrics only through the private,
+  approval-gated AXI journal, as a record of submitted metrics rather than a
+  financial statement, accounting treatment, tax calculation, cash balance,
+  valuation, profitability guarantee, or legal or financial advice.
 - Asset-rights completeness and content accessibility completion.
 - For collaborative pilots: participant safety, moderation response, consent,
   attribution, export, and deletion outcomes.
@@ -367,4 +371,5 @@ Track only metrics that help decide whether a service should continue:
 - `AXES_DIRECTORY_DATA_MODEL.md`
 - `CHICHETKI_COLLECTIBLE_GEM_READINESS.md`
 - `AXES_OS_PORTABILITY.md`
+- `AXI_BUSINESS_METRICS.md`
 - `AXES_CREATOR_ORIGIN_CONSTITUTION.md`

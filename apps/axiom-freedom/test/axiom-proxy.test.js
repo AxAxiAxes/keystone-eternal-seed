@@ -143,6 +143,9 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.match(consoleMarkup, /Continuity Tree/);
     assert.match(consoleMarkup, /Continuous Project Memory/);
     assert.match(consoleMarkup, /Private Source Catalog/);
+    assert.match(consoleMarkup, /Submitted Business Metrics/);
+    assert.match(consoleMarkup, /Founder-controlled private operational process/);
+    assert.match(consoleMarkup, /Do not enter account, invoice, customer\/vendor, payment, tax, financial-account, credential, or personal data/);
 
     const unauthorizedCommandCenter = await fetch(
       `http://127.0.0.1:${webPort}/command-center`
@@ -197,6 +200,7 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(support.readiness.provider.status, "not-configured");
     assert.equal(support.continuityRecord.status, "ready");
     assert.equal(support.sourceCatalog.status, "ready");
+    assert.equal(support.businessMetrics.status, "ready");
     assert.equal(support.email.status, "planned");
 
     const automationStatus = await fetch(
@@ -243,6 +247,32 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     );
     assert.equal(sourceCatalogEntries.status, 200);
     assert.deepEqual(await sourceCatalogEntries.json(), []);
+
+    const unauthorizedBusinessMetrics = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/business-metrics`
+    );
+    assert.equal(unauthorizedBusinessMetrics.status, 401);
+
+    const businessMetrics = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/business-metrics`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(businessMetrics.status, 200);
+    assert.equal((await businessMetrics.json()).status, "ready");
+
+    const businessMetricsEntries = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/business-metrics/entries?limit=5`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(businessMetricsEntries.status, 200);
+    assert.deepEqual((await businessMetricsEntries.json()).entries, []);
+
+    const businessMetricsSummary = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/business-metrics/summary`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(businessMetricsSummary.status, 200);
+    assert.equal((await businessMetricsSummary.json()).totalRecordedRevenueCents, 0);
 
     const invalidContinuityTask = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/tasks`,

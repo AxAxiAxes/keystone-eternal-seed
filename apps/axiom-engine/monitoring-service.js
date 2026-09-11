@@ -127,6 +127,9 @@ function getAttention(snapshot) {
   if (snapshot.sourceCatalog && snapshot.sourceCatalog.status !== "ready") {
     attention.push("source-catalog-unavailable");
   }
+  if (snapshot.businessMetrics && snapshot.businessMetrics.status !== "ready") {
+    attention.push("business-metrics-unavailable");
+  }
   return attention;
 }
 

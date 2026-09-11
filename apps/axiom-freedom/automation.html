@@ -27,7 +27,7 @@
 <body>
 <main>
   <h1>AXIOM Automation Console</h1>
-  <p class="note">Private operational controls. Only allowlisted tasks can run; arbitrary commands are not accepted.</p>
+  <p class="note">Founder-controlled private operational process. Only allowlisted tasks can run; AXI roles cannot assign, remove, approve, suspend, or reactivate themselves, and arbitrary commands are not accepted.</p>
   <section>
     <div class="actions"><button id="refresh" class="secondary">Refresh</button><button id="process">Process Due Tasks</button></div>
     <div id="metrics" class="metrics"></div>
@@ -57,6 +57,22 @@
     <p class="note">Approved repository-source metadata and content hashes only. Raw source content is not copied into AXI memory, and restricted sources must use non-sensitive titles and references.</p>
     <div id="source-catalog"></div>
     <div id="source-catalog-entries"></div>
+  </section>
+  <section>
+    <h2>Submitted Business Metrics</h2>
+    <p class="note">Private record of submitted metrics only, not a financial statement, accounting treatment, tax calculation, cash balance, valuation, profitability guarantee, or legal or financial advice. Do not enter account, invoice, customer/vendor, payment, tax, financial-account, credential, or personal data.</p>
+    <div id="business-metrics"></div>
+    <div id="business-metrics-summary"></div>
+    <div id="business-metrics-entries"></div>
+    <h3>Queue a founder-controlled approval task</h3>
+    <form id="business-metric-form">
+      <label>Kind <select id="business-metric-kind"><option value="revenue">Revenue</option><option value="expense">Expense</option></select></label>
+      <label>Category <select id="business-metric-category" required></select></label>
+      <label>Period <input id="business-metric-period" type="month" min="2000-01" max="2100-12" required></label>
+      <label>Amount in dollars <input id="business-metric-dollars" inputmode="decimal" pattern="[0-9]+([.][0-9]{1,2})?" required placeholder="0.00"></label>
+      <label>Non-sensitive source record <input id="business-metric-source-record" maxlength="120" pattern="[a-z0-9]+(-[a-z0-9]+)*" required placeholder="approved-metric-2026-09"></label>
+      <button type="submit">Queue for Founder Approval</button>
+    </form>
   </section>
   <section>
     <h2>Private Coordinate Center</h2>
@@ -181,15 +197,15 @@ function renderAgents(agents) {
       issuedAt: passport.issuedAt
     })), [["passportId","Node"],["agentId","AXI agent"],["harmonicBand","Band"],["vector","Vector"],["coordinateId","Coordinate"],["issuedAt","Issued"]])}`;
   }
-  document.querySelector("#agents").innerHTML = `<table><thead><tr><th>Name</th><th>Capabilities</th><th>Enabled</th><th>Accountability</th><th>Review</th></tr></thead><tbody>${agents.map(agent => {
+  document.querySelector("#agents").innerHTML = `<table><thead><tr><th>Name</th><th>Capabilities</th><th>Enabled</th><th>Accountability</th><th>Founder control</th></tr></thead><tbody>${agents.map(agent => {
     const status = agent.accountability?.status || "unreconciled";
     const nextStatus = status === "suspended" ? "active" : "suspended";
-    const label = nextStatus === "active" ? "Reactivate" : "Suspend";
+    const label = nextStatus === "active" ? "Submit founder reactivation" : "Submit founder suspension";
     return `<tr><td>${escapeHtml(agent.name)}</td><td>${escapeHtml(agent.capabilities.join(", "))}</td><td>${escapeHtml(agent.enabled)}</td><td>${escapeHtml(status)}</td><td><button class="review-agent secondary" data-agent-id="${escapeHtml(agent.id)}" data-status="${nextStatus}">${label}</button></td></tr>`;
   }).join("")}</tbody></table>`;
   document.querySelectorAll(".review-agent").forEach(button => {
     button.addEventListener("click", async () => {
-      const reason = window.prompt("Required accountability review reason:");
+      const reason = window.prompt("Required founder-controlled accountability review reason:");
       if (!reason || !reason.trim()) {
         result.textContent = "An accountability review reason is required.";
         return;
@@ -296,6 +312,9 @@ async function refresh() {
     let continuityEvents = [];
     let sourceCatalog = { status: "unavailable" };
     let sourceCatalogEntries = [];
+    let businessMetrics = { status: "unavailable" };
+    let businessMetricsEntries = { entries: [] };
+    let businessMetricsSummary = { totalsByPeriod: {} };
     try {
       [monitoring, monitoringHistory] = await Promise.all([
         request("/api/automation/monitoring/status"),
@@ -319,6 +338,15 @@ async function refresh() {
       ]);
     } catch (error) {
       result.textContent = "Source catalog will be available after the private engine deployment is updated.";
+    }
+    try {
+      [businessMetrics, businessMetricsEntries, businessMetricsSummary] = await Promise.all([
+        request("/api/automation/business-metrics"),
+        request("/api/automation/business-metrics/entries?limit=10"),
+        request("/api/automation/business-metrics/summary")
+      ]);
+    } catch (error) {
+      result.textContent = "Business metrics will be available after the private engine deployment is updated.";
     }
     document.querySelector("#metrics").innerHTML = Object.entries(status).map(([key,value]) => `<div class="metric"><strong>${value}</strong><br>${key}</div>`).join("");
     document.querySelector("#governance").innerHTML = `<h3>Eternal Origin Ownership from Genesis readiness</h3>${table([{
@@ -381,6 +409,34 @@ async function refresh() {
         sourceReference: entry.sourceReference,
         recordedAt: entry.recordedAt
       })), [["sequence","Sequence"],["sourceId","Source ID"],["title","Title"],["sourceType","Type"],["classification","Classification"],["sourceReference","Reference"],["recordedAt","Recorded"]])}`;
+    document.querySelector("#business-metrics").innerHTML = table([{
+      status: businessMetrics.status,
+      recordCount: businessMetrics.recordCount ?? "unavailable",
+      latestRecord: businessMetrics.latestRecord
+        ? `${businessMetrics.latestRecord.kind} ${businessMetrics.latestRecord.amountCents} cents for ${businessMetrics.latestRecord.period}`
+        : "none"
+    }], [["status","Status"],["recordCount","Submitted records"],["latestRecord","Latest submitted metric"]]);
+    document.querySelector("#business-metrics-summary").innerHTML =
+      `<h3>Deterministic submitted-metrics summary</h3><p class="note">${escapeHtml(businessMetricsSummary.label || businessMetrics.label || "")}</p>${table([{
+        revenue: businessMetricsSummary.totalRecordedRevenueCents ?? "unavailable",
+        expense: businessMetricsSummary.totalRecordedExpenseCents ?? "unavailable",
+        net: businessMetricsSummary.netRecordedOperatingResultCents ?? "unavailable"
+      }], [["revenue","Recorded revenue (cents)"],["expense","Recorded expense (cents)"],["net","Recorded operating result (cents)"]])}${table(Object.entries(businessMetricsSummary.totalsByPeriod || {}).map(([period, totals]) => ({
+        period,
+        revenue: totals.revenueCents,
+        expense: totals.expenseCents,
+        net: totals.netOperatingResultCents
+      })), [["period","Period"],["revenue","Revenue (cents)"],["expense","Expense (cents)"],["net","Operating result (cents)"]])}`;
+    document.querySelector("#business-metrics-entries").innerHTML =
+      `<h3>Recent approved submissions</h3>${table((businessMetricsEntries.entries || []).map(entry => ({
+        sequence: entry.sequence,
+        period: entry.period,
+        kind: entry.kind,
+        category: entry.category,
+        amountCents: entry.amountCents,
+        sourceRecord: entry.sourceRecord,
+        recordedAt: entry.recordedAt
+      })), [["sequence","Sequence"],["period","Period"],["kind","Kind"],["category","Category"],["amountCents","Amount (cents)"],["sourceRecord","Source record"],["recordedAt","Recorded"]])}`;
     document.querySelector("#runs").innerHTML = table(runs.map(run => ({
       recordedAt: run.recordedAt,
       status: run.status,
@@ -490,6 +546,56 @@ document.querySelector("#chat-form").addEventListener("submit", async event => {
     output.textContent = `${response.agent.name}: ${response.reply}`;
   } catch (error) { output.textContent = error.message; }
 });
+const businessMetricCategories = {
+  revenue: ["contracting-services", "product-sales", "subscriptions", "other-approved-revenue"],
+  expense: ["materials", "labor", "software", "operations", "marketing", "professional-services", "other-approved-expense"]
+};
+function updateBusinessMetricCategories() {
+  const kind = document.querySelector("#business-metric-kind").value;
+  document.querySelector("#business-metric-category").innerHTML = businessMetricCategories[kind]
+    .map(category => `<option value="${category}">${category}</option>`).join("");
+}
+function dollarsToCents(value) {
+  const match = /^([0-9]+)(?:\.([0-9]{1,2}))?$/.exec(value.trim());
+  if (!match) throw new Error("Amount must be a positive dollar value with no more than two decimal places.");
+  const cents = BigInt(match[1]) * 100n + BigInt((match[2] || "").padEnd(2, "0"));
+  if (cents <= 0n || cents > BigInt(Number.MAX_SAFE_INTEGER)) {
+    throw new Error("Amount must convert to a strictly positive safe cent value.");
+  }
+  return Number(cents);
+}
+document.querySelector("#business-metric-kind").addEventListener("change", updateBusinessMetricCategories);
+document.querySelector("#business-metric-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  try {
+    const kind = document.querySelector("#business-metric-kind").value;
+    const task = {
+      title: `Record approved ${kind} metric`,
+      action: "business.metric",
+      agentId: "project-memory-manager",
+      approvalRequired: true,
+      originCheckpoint: "axi-business-metrics-foundation",
+      payload: {
+        kind,
+        category: document.querySelector("#business-metric-category").value,
+        period: document.querySelector("#business-metric-period").value,
+        amountCents: dollarsToCents(document.querySelector("#business-metric-dollars").value),
+        sourceRecord: document.querySelector("#business-metric-source-record").value
+      }
+    };
+    const queued = await request("/api/automation/tasks", {
+      method: "POST",
+      body: JSON.stringify(task)
+    });
+    result.textContent = `Queued for founder approval: ${queued.id}`;
+    event.target.reset();
+    updateBusinessMetricCategories();
+    await refresh();
+  } catch (error) {
+    result.textContent = error.message;
+  }
+});
+updateBusinessMetricCategories();
 refresh();
 setInterval(refresh, 30000);
 </script>

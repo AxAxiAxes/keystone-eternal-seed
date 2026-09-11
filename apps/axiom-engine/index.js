@@ -13,6 +13,7 @@ const { BeadPassportService } = require("./bead-passport-service");
 const { StartupContextService } = require("./startup-context-service");
 const { ContinuityRecordService } = require("./continuity-record-service");
 const { SourceCatalogService } = require("./source-catalog-service");
+const { BusinessMetricsService } = require("./business-metrics-service");
 const {
   AutomationService,
   evaluateGovernanceReadiness,
@@ -29,10 +30,13 @@ const continuityRecordService = new ContinuityRecordService({ directory: dataDir
 const continuityRecordReady = continuityRecordService.initialize();
 const sourceCatalogService = new SourceCatalogService({ directory: dataDirectory });
 const sourceCatalogReady = sourceCatalogService.initialize();
+const businessMetricsService = new BusinessMetricsService({ directory: dataDirectory });
+const businessMetricsReady = businessMetricsService.initialize();
 const runtimeContextReady = Promise.all([
   startupContextReady,
   continuityRecordReady,
-  sourceCatalogReady
+  sourceCatalogReady,
+  businessMetricsReady
 ]);
 const recoveryBackupService = new RecoveryBackupService({
   sourceDirectory: dataDirectory,
@@ -56,6 +60,30 @@ app.get("/system/source-catalog/entries", async (req, res, next) => {
     next(error);
   }
 });
+app.get("/system/business-metrics", async (req, res, next) => {
+  try {
+    res.json(await businessMetricsService.status());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/business-metrics/entries", async (req, res, next) => {
+  try {
+    const limit = req.query.limit === undefined ? 20 : Number(req.query.limit);
+    res.json(await businessMetricsService.list(limit));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/business-metrics/summary", async (req, res, next) => {
+  try {
+    res.json(await businessMetricsService.summary());
+  } catch (error) {
+    next(error);
+  }
+});
 const coordinateService = new CoordinateService({ directory: dataDirectory });
 const checkpointService = new CheckpointService({
   directory: dataDirectory,
@@ -66,7 +94,8 @@ const checkpointService = new CheckpointService({
     { id: "chat", version: "1" },
     { id: "monitoring", version: "1" },
     { id: "checkpoint", version: "1" },
-    { id: "source-catalog", version: "1" }
+    { id: "source-catalog", version: "1" },
+    { id: "business-metrics", version: "1" }
   ]
 });
 const automationService = new AutomationService({
@@ -78,7 +107,8 @@ const automationService = new AutomationService({
   createCoordinate: (coordinate) => coordinateService.create(coordinate),
   createCheckpoint: () => checkpointService.create(),
   recordContinuity: (entry) => continuityRecordService.recordOperatorConfirmation(entry),
-  catalogSource: (entry) => sourceCatalogService.record(entry)
+  catalogSource: (entry) => sourceCatalogService.record(entry),
+  recordBusinessMetric: (entry) => businessMetricsService.record(entry)
 });
 const beadPassportService = new BeadPassportService({
   directory: dataDirectory,
@@ -152,7 +182,8 @@ app.get("/system/readiness", async (req, res, next) => {
       beadPassports: await beadPassportService.status(),
       startupContext: await startupContextService.status(),
       continuityRecord: await continuityRecordService.status(),
-      sourceCatalog: await sourceCatalogService.status()
+      sourceCatalog: await sourceCatalogService.status(),
+      businessMetrics: await businessMetricsService.status()
     });
   } catch (error) {
     console.error("AXIOM runtime readiness check failed:", error.message);
@@ -174,7 +205,7 @@ app.get("/usage", async (req, res, next) => {
 
 async function captureMonitoringSnapshot(automationState) {
   await memoryStore.list("decision", 1);
-  const [automation, usage, governance, recovery, coordinates, beadPassports, startupContext, continuityRecord, sourceCatalog] = await Promise.all([
+  const [automation, usage, governance, recovery, coordinates, beadPassports, startupContext, continuityRecord, sourceCatalog, businessMetrics] = await Promise.all([
     automationState
       ? summarizeAutomationState(automationState)
       : automationService.status(),
@@ -187,7 +218,8 @@ async function captureMonitoringSnapshot(automationState) {
     beadPassportService.status(),
     startupContextService.status(),
     continuityRecordService.status(),
-    sourceCatalogService.status()
+    sourceCatalogService.status(),
+    businessMetricsService.status()
   ]);
   const monitoringRecord = await monitoringService.record({
     memoryAvailable: true,
@@ -200,6 +232,7 @@ async function captureMonitoringSnapshot(automationState) {
     startupContext,
     continuityRecord,
     sourceCatalog,
+    businessMetrics,
     usage
   });
   if (monitoringRecord.recorded) {
@@ -234,6 +267,14 @@ async function requireReadyStartupContext() {
     );
     catalogError.statusCode = 409;
     throw catalogError;
+  }
+  const businessMetrics = await businessMetricsService.status();
+  if (businessMetrics.status !== "ready") {
+    const metricsError = new Error(
+      `Automation is blocked until business metrics are ready (${businessMetrics.code}).`
+    );
+    metricsError.statusCode = 409;
+    throw metricsError;
   }
 }
 

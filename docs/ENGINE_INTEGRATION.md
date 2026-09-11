@@ -123,6 +123,11 @@ its read-only status response.
     "status": "ready",
     "id": "axi-private-source-catalog-v1",
     "sourceCount": 0
+  },
+  "businessMetrics": {
+    "status": "ready",
+    "id": "axi-private-business-metrics-v1",
+    "recordCount": 0
   }
 }
 ```
@@ -159,6 +164,14 @@ approved source identifiers, non-sensitive titles, classifications,
 repository-relative references, and SHA-256 hashes; it does not ingest raw
 project content. A malformed retained catalog is an attention state that also
 blocks manual and scheduled automation until reviewed.
+
+`businessMetrics` reports the state of the private
+`axi-private-business-metrics-v1` hash-linked journal. It stores only approved
+non-sensitive category, period, kind, positive-cent amount, and source-record
+values. An invalid retained journal is an attention state and blocks manual
+and scheduled automation. Its output is a record of submitted metrics only,
+not a financial statement, accounting or tax treatment, cash balance,
+valuation, profitability guarantee, or legal or financial advice.
 
 ## Private recovery endpoints
 
@@ -202,6 +215,20 @@ an explicitly assigned, operator-approved `source.catalog` task for the
 Project Memory Manager. The authenticated portal proxies the read-only routes
 at `/api/automation/source-catalog` and
 `/api/automation/source-catalog/entries`.
+
+## Private business-metrics endpoints
+
+`GET /system/business-metrics` reports journal readiness,
+`GET /system/business-metrics/entries?limit=20` returns recent approved
+records, and `GET /system/business-metrics/summary` returns deterministic
+period totals. There is no direct metrics write endpoint. Entries can be
+created only through an explicitly founder-assigned and founder-approved
+`business.metric` task executed by the Project Memory Manager. AXI roles do
+not assign, remove, approve, suspend, or reactivate themselves. The
+authenticated portal proxies the
+read-only routes at `/api/automation/business-metrics`,
+`/api/automation/business-metrics/entries`, and
+`/api/automation/business-metrics/summary`. See `AXI_BUSINESS_METRICS.md`.
 
 ## Private coordinate endpoints
 

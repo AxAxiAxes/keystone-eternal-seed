@@ -11,7 +11,8 @@ const TASK_ACTIONS = new Set([
   "coordinate.record",
   "continuity.checkpoint",
   "continuity.record",
-  "source.catalog"
+  "source.catalog",
+  "business.metric"
 ]);
 const TASK_STATUSES = new Set([
   "pending",
@@ -51,6 +52,7 @@ class AutomationService {
     createCheckpoint,
     recordContinuity,
     catalogSource,
+    recordBusinessMetric,
     now = () => new Date()
   }) {
     this.directory = directory;
@@ -62,6 +64,7 @@ class AutomationService {
     this.createCheckpoint = createCheckpoint;
     this.recordContinuity = recordContinuity;
     this.catalogSource = catalogSource;
+    this.recordBusinessMetric = recordBusinessMetric;
     this.now = now;
     this.operationQueue = Promise.resolve();
   }
@@ -304,11 +307,13 @@ class AutomationService {
       if (typeof approvalRequired !== "boolean") {
         throw new TypeError("task approvalRequired must be a boolean");
       }
-      if ((action === "continuity.record" || action === "source.catalog") &&
+      if ((action === "continuity.record" || action === "source.catalog" ||
+        action === "business.metric") &&
         agentId !== "project-memory-manager") {
         throw new RangeError(`${action} tasks must be assigned to the Project Memory Manager`);
       }
-      if ((action === "continuity.record" || action === "source.catalog") && !approvalRequired) {
+      if ((action === "continuity.record" || action === "source.catalog" ||
+        action === "business.metric") && !approvalRequired) {
         throw new RangeError(`${action} tasks require operator approval`);
       }
       if (!Number.isInteger(maxAttempts) || maxAttempts < 1 || maxAttempts > 5) {
@@ -508,6 +513,19 @@ class AutomationService {
         sourceCatalogSequence: entry.sequence
       };
     }
+    if (task.action === "business.metric") {
+      if (typeof this.recordBusinessMetric !== "function") {
+        throw new RangeError("business metrics are not configured");
+      }
+      const entry = await this.recordBusinessMetric(task.payload);
+      return {
+        businessMetricEntryId: entry.id,
+        businessMetricSequence: entry.sequence,
+        period: entry.period,
+        kind: entry.kind,
+        amountCents: entry.amountCents
+      };
+    }
     if (task.action === "monitoring.snapshot") {
       if (typeof this.captureMonitoringSnapshot !== "function") {
         throw new RangeError("monitoring snapshots are not configured");
@@ -691,17 +709,23 @@ function defaultAgents(now) {
     {
       id: "project-memory-manager",
       name: "Project Memory Manager",
-      capabilities: ["memory.record", "continuity.record", "source.catalog"],
+      capabilities: [
+        "memory.record",
+        "continuity.record",
+        "source.catalog",
+        "business.metric"
+      ],
       enabled: true,
       registeredAt,
       originCheckpoint: "axi-project-memory-management",
       creator: KEYSTONE_REGISTRATION.creatorAuthority,
-      purpose: "Maintain approved, non-sensitive AXI project memory and continuous continuity records.",
+      purpose: "Maintain approved, non-sensitive AXI project memory, continuous continuity records, source metadata, and submitted business metrics.",
       duties: [
         "Prepare operator-confirmed continuity entries with source references.",
         "Maintain approved records across supported private memory layers.",
         "Catalog approved source metadata without copying raw source content.",
-        "Surface continuity-record and source-catalog attention states for human review."
+        "Record approved non-sensitive business metric entries without financial integrations.",
+        "Surface continuity-record, source-catalog, and business-metrics attention states for human review."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
       keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),

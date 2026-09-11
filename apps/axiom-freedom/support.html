@@ -21,7 +21,7 @@
 <main>
   <p class="label">Private operator workspace</p>
   <h1>AXES Contracting Support Desk</h1>
-  <p class="note">Read-only operational overview for the portal, private engine, automation, checkpoints, and email migration. This desk cannot access accounts, change DNS, deploy services, or send mail.</p>
+  <p class="note">Read-only operational overview for the portal, private engine, automation, checkpoints, submitted business-metrics record, and email migration. This desk cannot access accounts, change DNS, deploy services, send mail, spend, or process payments.</p>
   <div class="toolbar"><button id="refresh">Refresh status</button><span id="updated" aria-live="polite"></span></div>
   <div class="cards" id="cards"></div>
   <section>
@@ -55,6 +55,7 @@ async function refresh() {
       card("Private AXIOM engine", status.engine, status.engine.detail || "Private service reachability."),
       card("Runtime readiness", status.readiness, status.readiness.status === "ready" ? `Storage ${status.readiness.storage.status}; provider ${status.readiness.provider.status}.` : "Private readiness signal is unavailable."),
       card("Automation", status.automation, status.automation.status === "ok" ? `${status.automation.pendingTasks || 0} pending; ${status.automation.failedTasks || 0} failed.` : "Private automation status is unavailable."),
+      card("Business metrics", status.businessMetrics, status.businessMetrics.status === "ready" ? `${status.businessMetrics.recordCount || 0} submitted metric records. Not a financial statement or advice.` : "Private submitted-metrics status is unavailable."),
       card("Email migration", status.email, `${status.email.mailbox}: ${status.email.detail}`)
     ].join("");
     const snapshot = status.monitoring.snapshot;
@@ -64,6 +65,7 @@ async function refresh() {
       <tr><th>Provider</th><td>${escapeHtml(status.readiness.provider ? `${status.readiness.provider.status} (${status.readiness.provider.model})` : "Unavailable")}</td></tr>
       <tr><th>Scheduler</th><td>${escapeHtml(status.readiness.automation ? `${status.readiness.automation.status}; ${status.readiness.automation.lastError || "no error"}` : "Unavailable")}</td></tr>
       <tr><th>Attention</th><td>${escapeHtml(snapshot ? (status.monitoring.attention || []).join(", ") || "none" : "No private monitoring snapshot available.")}</td></tr>
+      <tr><th>Business metrics</th><td>${escapeHtml(status.businessMetrics ? `${status.businessMetrics.status}; ${status.businessMetrics.recordCount || 0} submitted records.` : "Unavailable")}</td></tr>
       <tr><th>Latest checkpoint</th><td>${escapeHtml(latest ? `${latest.createdAt || latest.recordedAt || "recorded"} (${latest.id || "no ID"})` : "None recorded or private engine unavailable.")}</td></tr>
       <tr><th>Email target</th><td>${escapeHtml(status.email.target)}</td></tr>
     </tbody></table>`;

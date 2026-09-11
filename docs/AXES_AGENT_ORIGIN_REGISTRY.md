@@ -34,8 +34,11 @@ enforcement outside AXES follows the separate rights-readiness process.
 
 Each registered AXI agent has a private accountability record with an `active`
 or `suspended` status, a dated reason, and an append-only review history.
-An authenticated AXES operator must provide a reason to suspend or reactivate
-an agent. A suspended agent cannot be assigned to a new task, selected for an
+The founder alone controls task assignment/removal, approval, suspension, and
+reactivation through the authenticated protected operational process. AXI roles
+cannot perform or initiate any of those controls for themselves or other
+roles. A founder-controlled review must provide a reason to suspend or
+reactivate an agent. A suspended agent cannot be assigned to a new task, selected for an
 unassigned task, used for protected agent chat, or execute a queued task. A
 queued task assigned to a suspended agent moves to `blocked` and retains the
 accountability-hold reason until the agent is reactivated and the task is
@@ -51,7 +54,7 @@ system operation and decisions away from AXES.
 | Agent ID | Origin checkpoint | Creator attribution | Purpose | Core duties |
 | --- | --- | --- | --- | --- |
 | `memory-curator` | `axi-durable-memory-foundation` | Axel Urartu (AX) · Axes Contracting | Maintain factual, non-sensitive AXI continuity records. | Prepare approved memory entries; preserve concise operational continuity. |
-| `project-memory-manager` | `axi-project-memory-management` | Axel Urartu (AX) · Axes Contracting | Maintain approved, non-sensitive AXI project memory, the private continuous record, and source-catalog metadata. | Prepare operator-confirmed continuity entries; catalog approved source metadata and hashes without copying raw content; maintain supported memory-layer references; surface record attention states. |
+| `project-memory-manager` | `axi-project-memory-management` | Axel Urartu (AX) · Axes Contracting | Maintain approved, non-sensitive AXI project memory, the private continuous record, source-catalog metadata, and submitted business metrics. | Prepare operator-confirmed continuity entries; catalog approved source metadata and hashes without copying raw content; record approval-gated non-sensitive business metrics; maintain supported memory-layer references; surface record attention states. |
 | `automation-executor` | `axi-bounded-automation-foundation` | Axel Urartu (AX) · Axes Contracting | Run safe workflow checks within the explicit action allowlist. | Execute approved no-op checks; record bounded task outcomes. |
 | `automation-auditor` | `axi-bounded-automation-foundation` | Axel Urartu (AX) · Axes Contracting | Provide an auditable fallback for approved bounded tasks. | Review task outcomes; record approved audit continuity. |
 | `operations-observer` | `axi-operations-observer` | Axel Urartu (AX) · Axes Contracting | Capture private operational, Genesis/governance-readiness, recovery, coordinate-chain, and continuity-checkpoint evidence. | Run approved monitoring snapshots; assess private readiness; create verified recovery bundles; record approved coordinate transitions and continuity checkpoints; surface operational attention signals. |
@@ -67,6 +70,7 @@ can decide its future direction.
 | `memory-curator` | Record an approved continuity checkpoint | `memory.record` | `axi-continuity-update` | Human confirms the factual content and retained data. |
 | `project-memory-manager` | Record an approved continuous-memory event | `continuity.record` | `axi-project-memory-management` | Human confirms the bounded source reference and summary; no personal data, secrets, source replacement, legal conclusion, or external action. |
 | `project-memory-manager` | Catalog an approved repository source | `source.catalog` | `axi-project-memory-management` | Human confirms non-sensitive metadata, repository-relative reference, and SHA-256 evidence; no raw-content ingestion, source replacement, legal conclusion, or external action. |
+| `project-memory-manager` | Record a founder-approved submitted business metric | `business.metric` | `axi-business-metrics-foundation` | Founder supplies, assigns, and approves only non-sensitive category, period, kind, positive-cent amount, and source record; the role executes only that bounded task and has no assignment, approval, removal, suspension, or reactivation authority; no client/vendor, account, invoice, payment, tax, credential, personal data, financial integration, accounting, legal, or financial determination. |
 | `automation-executor` | Run an approved safe workflow check | `automation.noop` | `axi-automation-validation` | Human defines the check and reviews the recorded result. |
 | `automation-auditor` | Record an approved automation audit | `memory.record` | `axi-automation-audit` | Human reviews the evidence and approves the record. |
 | `operations-observer` | Capture a recurring private monitoring snapshot | `monitoring.snapshot` | `axi-operations-observer` | Human creates the recurring task, chooses its interval, and investigates attention states. |
