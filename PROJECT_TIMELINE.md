@@ -78,6 +78,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-11 | Complete | Internal KEYSTONE creator-origin recordkeeping candidate defined with evidence-organization deliverables, explicit legal/financial exclusions, and private evidence practice | `docs/KEYSTONE_CREATOR_ORIGIN_SETUP_READINESS.md` |
 | 2026-09-11 | Complete | First private KEYSTONE draft application records captured for AXIOM Engine and AXIOM Freedom with source-tree identifiers and unverified Ux/authority state | `docs/keystone/AXIOM_APPLICATION_DRAFT_RECORDS.md` |
 | 2026-09-11 | Complete | Asset-use readiness register established with current private/excluded source groups and a required source, rights, accessibility, and human-approval decision record | `docs/AXES_ASSET_USE_READINESS.md` |
+| 2026-09-11 | Complete | Tier 1 decision register established to track unresolved founder-controlled offer, continuity, evidence, rights, legal-readiness, and external-action gates | `docs/AXES_TIER_1_DECISION_REGISTER.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
