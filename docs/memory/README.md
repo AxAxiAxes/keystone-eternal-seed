@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-11 Command Center site monitoring](2026-09-11-command-center-site-monitoring.md)
 - [2026-09-10 AXI continuous validation](2026-09-10-axi-continuous-validation.md)
 - [2026-09-10 AXI Continuity Tree](2026-09-10-axi-continuity-tree.md)
 - [2026-09-10 Timeline origin correction](2026-09-10-timeline-origin-correction.md)

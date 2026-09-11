@@ -142,6 +142,17 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.match(consoleMarkup, /AXIOM Automation Console/);
     assert.match(consoleMarkup, /Continuity Tree/);
 
+    const unauthorizedCommandCenter = await fetch(
+      `http://127.0.0.1:${webPort}/command-center`
+    );
+    assert.equal(unauthorizedCommandCenter.status, 401);
+
+    const commandCenter = await fetch(`http://127.0.0.1:${webPort}/command-center`, {
+      headers: { Authorization: authorization }
+    });
+    assert.equal(commandCenter.status, 200);
+    assert.match(await commandCenter.text(), /AXES Command Center/);
+
     const unauthorizedSupport = await fetch(`http://127.0.0.1:${webPort}/support`);
     assert.equal(unauthorizedSupport.status, 401);
 

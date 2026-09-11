@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AXES Command Center</title>
+  <style>
+    body { background:#10131a; color:#edf2f7; font:16px system-ui,sans-serif; margin:0; }
+    main { max-width:1200px; margin:0 auto; padding:32px 20px 64px; }
+    h1,h2 { margin:0; } .note { color:#aab7c7; } section { background:#1a202b; border:1px solid #313b4d; border-radius:10px; margin-top:20px; padding:20px; }
+    .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; } .metric { background:#111722; border-radius:8px; padding:12px; }
+    button { background:#d5a94d; color:#18130a; border:0; border-radius:6px; cursor:pointer; font:inherit; font-weight:700; padding:9px; }
+    table { border-collapse:collapse; width:100%; } th,td { border-bottom:1px solid #313b4d; padding:9px; text-align:left; vertical-align:top; }
+    .tree, .tree ul { list-style:none; margin:0; padding-left:22px; } .tree { padding-left:0; } .tree ul { border-left:1px solid #46536a; margin-left:8px; }
+    .tree li { margin:9px 0; } .node { display:inline-block; background:#111722; border-radius:6px; padding:7px 10px; }
+    .ready { color:#b8e6c2; } .attention { color:#fca5a5; } .muted { color:#aab7c7; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>AXES Command Center</h1>
+  <p class="note">Private build-management view. It observes protected AXI data and public endpoint reachability; it does not create work, enable automation, deploy, publish, or change accounts.</p>
+  <p><button id="refresh">Refresh now</button> <span id="updated" class="note"></span></p>
+  <section>
+    <h2>Build and efficiency signals</h2>
+    <p class="note">Efficiency describes recorded task/run flow only. It is not a measure of people, identity, value, or project worth.</p>
+    <div id="metrics" class="metrics"></div>
+  </section>
+  <section>
+    <h2>Continuity tree</h2>
+    <p class="note">AXI root → governance → registered agents → assigned tasks → latest runs. Unassigned work remains visible.</p>
+    <div id="tree" aria-live="polite"></div>
+  </section>
+  <section>
+    <h2>Site development monitor</h2>
+    <p class="note">A 401 response for protected operator pages means the route is reachable and access-controlled. A 404 health route is an attention state, not proof that a site is unavailable.</p>
+    <div id="sites"></div>
+  </section>
+</main>
+<script>
+const siteTargets = [
+  { name: "XIIOM health", url: "https://xiiom.com/health", expected: [200] },
+  { name: "XIIOM Support Desk", url: "https://xiiom.com/support", expected: [401] },
+  { name: "XIIOM Automation Console", url: "https://xiiom.com/automation", expected: [401] },
+  { name: "AXES Contracting", url: "https://axescontracting.com/", expected: [200] },
+  { name: "AXES Contracting health", url: "https://axescontracting.com/health", expected: [200] },
+  { name: "AXES Contracting www health", url: "https://www.axescontracting.com/health", expected: [200] }
+];
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[character]);
+}
+
+async function request(path) {
+  const response = await fetch(path, { credentials:"same-origin", cache:"no-store" });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || `Request failed (${response.status})`);
+  return payload;
+}
+
+function metric(label, value, attention = false) {
+  return `<div class="metric ${attention ? "attention" : "ready"}"><strong>${escapeHtml(value)}</strong><br>${escapeHtml(label)}</div>`;
+}
+
+function renderTree(reports, tasks, runs, governance) {
+  const assigned = new Set();
+  const agents = reports.map(report => {
+    const agent = report.agent;
+    const agentTasks = tasks.filter(task => task.agentId === agent.id);
+    agentTasks.forEach(task => assigned.add(task.id));
+    const latestEvent = report.timeline.at(-1);
+    const latestRun = runs.find(run => run.agentId === agent.id);
+    const agentStatus = agent.accountability?.status || "unreconciled";
+    const agentClass = agentStatus === "active" ? "ready" : "attention";
+    const taskNodes = agentTasks.length
+      ? agentTasks.map(task => {
+        const run = runs.find(entry => entry.taskId === task.id);
+        const latest = run ? `latest run: ${run.status}` : "no recorded run";
+        return `<li><span class="node">${escapeHtml(task.title)} — ${escapeHtml(task.status)}; ${escapeHtml(latest)}</span></li>`;
+      }).join("")
+      : "<li><span class='node muted'>No assigned tasks</span></li>";
+    const event = latestEvent ? `latest event: ${latestEvent.event}` : "no events";
+    const run = latestRun ? `latest agent run: ${latestRun.status}` : "no agent runs";
+    return `<li><span class="node ${agentClass}">${escapeHtml(agent.name)} — ${escapeHtml(agentStatus)}; ${escapeHtml(event)}; ${escapeHtml(run)}</span><ul>${taskNodes}</ul></li>`;
+  }).join("");
+  const unassigned = tasks.filter(task => !assigned.has(task.id));
+  const unassignedNode = unassigned.length
+    ? `<li><span class="node attention">Unassigned tasks</span><ul>${unassigned.map(task => `<li><span class="node">${escapeHtml(task.title)} — ${escapeHtml(task.status)}</span></li>`).join("")}</ul></li>`
+    : "";
+  const governanceClass = governance.status === "ready" ? "ready" : "attention";
+  document.querySelector("#tree").innerHTML = `<ul class="tree"><li><span class="node ${governanceClass}">AXI continuity root — governance ${escapeHtml(governance.status)}; ${reports.length} registered agents; ${tasks.length} tracked tasks</span><ul>${agents}${unassignedNode}</ul></li></ul>`;
+}
+
+async function probeSite(target) {
+  try {
+    const response = await fetch(target.url, { credentials:"omit", cache:"no-store" });
+    return {
+      ...target,
+      status: response.status,
+      state: target.expected.includes(response.status) ? "ready" : "attention"
+    };
+  } catch (error) {
+    return { ...target, status: "unavailable", state: "attention" };
+  }
+}
+
+async function refresh() {
+  const [governance, agents, tasks, runs] = await Promise.all([
+    request("/api/automation/readiness"),
+    request("/api/automation/agents"),
+    request("/api/automation/tasks"),
+    request("/api/automation/runs?limit=100")
+  ]);
+  const reports = await Promise.all(
+    agents.map(agent => request(`/api/automation/agents/${encodeURIComponent(agent.id)}/report`))
+  );
+  const siteResults = await Promise.all(siteTargets.map(probeSite));
+  const activeAgents = agents.filter(agent => agent.enabled && agent.accountability?.status === "active").length;
+  const unassignedTasks = tasks.filter(task => !task.agentId).length;
+  const terminalTasks = tasks.filter(task => ["completed", "failed"].includes(task.status));
+  const completedTasks = terminalTasks.filter(task => task.status === "completed").length;
+  const successfulRuns = runs.filter(run => run.status === "completed").length;
+  document.querySelector("#metrics").innerHTML = [
+    metric("Registered agents", `${activeAgents}/${agents.length}`, activeAgents !== agents.length),
+    metric("Tracked tasks", tasks.length),
+    metric("Unassigned tasks", unassignedTasks, unassignedTasks > 0),
+    metric("Completed task rate", terminalTasks.length ? `${Math.round(completedTasks / terminalTasks.length * 100)}%` : "No terminal tasks"),
+    metric("Successful recorded runs", `${successfulRuns}/${runs.length}`, runs.some(run => run.status === "failed")),
+    metric("Governance", governance.status, governance.status !== "ready")
+  ].join("");
+  renderTree(reports, tasks, runs, governance);
+  document.querySelector("#sites").innerHTML = `<table><thead><tr><th>Target</th><th>Status</th><th>Expected</th><th>State</th></tr></thead><tbody>${siteResults.map(site => `<tr><td>${escapeHtml(site.name)}</td><td>${escapeHtml(site.status)}</td><td>${escapeHtml(site.expected.join(", "))}</td><td class="${site.state}">${escapeHtml(site.state)}</td></tr>`).join("")}</tbody></table>`;
+  document.querySelector("#updated").textContent = `Last refreshed: ${new Date().toLocaleString()}`;
+}
+
+document.querySelector("#refresh").addEventListener("click", () => refresh().catch(error => {
+  document.querySelector("#updated").textContent = error.message;
+}));
+refresh().catch(error => {
+  document.querySelector("#updated").textContent = error.message;
+});
+setInterval(() => refresh().catch(() => {}), 30000);
+</script>
+</body>
+</html>

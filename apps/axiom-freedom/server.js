@@ -176,6 +176,11 @@ const server = http.createServer(async (req, res) => {
           serveFile(res, path.join(__dirname, 'automation.html'), 'text/html; charset=utf-8');
           return;
     }
+    if (pathname === '/command-center') {
+          if (!requireAdmin(req, res)) return;
+          serveFile(res, path.join(__dirname, 'command-center.html'), 'text/html; charset=utf-8');
+          return;
+    }
     if (pathname === '/support') {
           if (!requireAdmin(req, res)) return;
           serveFile(res, path.join(__dirname, 'support.html'), 'text/html; charset=utf-8');

@@ -38,6 +38,8 @@ jobs:
           cache: npm
           cache-dependency-path: ${{ matrix.application }}/package-lock.json
       - run: npm ci
+      - if: matrix.application == 'apps/axiom-freedom'
+        run: npm ci --prefix ../axiom-engine
       - run: npm test
 
   axi-core-tests:

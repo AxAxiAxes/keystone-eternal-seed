@@ -239,6 +239,13 @@ each agent's accountability and latest timeline event, assigned tasks, and
 latest recorded runs. It is an operator view only; it does not create, assign,
 approve, run, or modify a task.
 
+The protected `/command-center` view extends this into build-management
+observation. It combines the continuity tree with agent/task/run-flow metrics
+and a browser-side reachability display for the public XIIOM and AXES
+Contracting endpoints. Site status is observation only; it does not call the
+private engine directly, change a site, create an external monitor, or enable
+the scheduler.
+
 Set a unique secret only in the `axiom-freedom` Railway service variables:
 
 ```dotenv
