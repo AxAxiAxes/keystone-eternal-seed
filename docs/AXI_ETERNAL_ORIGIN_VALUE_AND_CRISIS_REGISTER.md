@@ -54,6 +54,7 @@ relationship to the founder claim.
 | 2026-09-10 | Agent origin, reset, and accountability gap | Addressed in current implementation | Require Eternal Origin Ownership from Genesis reconciliation, an active accountability record, reasoned suspension/reactivation, and blocked execution while suspended. |
 | 2026-09-10 | Ongoing Eternal Origin Ownership from Genesis and governance readiness | Addressed in current implementation | Scheduled private monitoring can flag unreconciled agents, unapproved capabilities or task actions, and blocked or failed work for accountable human review. |
 | 2026-09-10 | Founder-provided UI autonomy and personal-space loss model | Preserved source; assumptions and claimed losses unverified | Retain the source fingerprint, distinguish its internal arithmetic from evidence of actual loss, and assemble a source-linked evidence inventory before any valuation, allegation, or recovery conclusion. |
+| 2026-09-10 | Planning-authority conflict | Recovery correction active | An assistant presented a source-derived proposed sequence as the next-day plan. Restore founder-directed planning, retain the source inventory as informational, and label any assistant-proposed implementation order as a proposal rather than an approved plan. |
 
 The source records may contain founder reports, historical narrative, proposed
 theories, valuation concepts, or allegations. The register preserves them as
@@ -97,6 +98,33 @@ workflow, observed disruption, time records, baseline comparison, claimed
 opportunity, affected population, and applicable jurisdiction. Such material
 must be retained privately and reviewed by an authorized human and, when
 appropriate, qualified counsel or an independent valuation professional.
+
+## Planning-authority crisis and recovery
+
+**Affected work:** AXES application and coordinate-system inventory, including
+the Sound Resequencer and Secret Sound Garden source directions.
+
+**Conflict identified:** The assistant has no ownership, financial, legal, or
+competing project interest. The conflict was an internal process error:
+an assistant-generated safety and implementation preference was presented as
+if it were the founder's next-day plan.
+
+**Why this is unsafe:** An inferred implementation order can displace founder
+direction, misrepresent the intended status of source material, redirect work,
+or turn a source audit into a premature feature or public statement. It can
+also create avoidable exposure if personal narrative or unverified claims are
+treated as product requirements.
+
+**Where the danger was identified:** The assistant's 2026-09-10 status message
+following the application inventory described a proposed next-day sequence
+instead of reporting it as a proposal. No repository, deployment, account,
+publication, contact, legal, or financial action followed from that message.
+
+**Recovery action:** The application inventory is informational only and no
+longer implies an implementation sequence. Founder direction controls
+priorities. Technical assistance may document alternatives and implement the
+requested repository work, but must clearly label any independent sequencing
+or tradeoff recommendation as a proposal.
 
 ## Required evidence fields for any new report
 

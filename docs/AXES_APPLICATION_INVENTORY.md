@@ -37,12 +37,13 @@ The current software implements only repository-controlled continuity,
 accountability, correction, and recovery mechanisms; it does not validate
 historical, linguistic, medical, identity, legal, ownership, or value claims.
 
-## Next evidence gate
+## Implementation reference
 
-Before a resequencer or Secret Sound Garden experience is implemented, an
-authorized human must identify a reproducible source, define the intended
-audience and interaction, approve a public-safe content set, establish
-accessibility controls including optional and user-initiated sound, and record
-privacy, retention, moderation, and correction requirements. No deployment,
-collection, audio capture, biometric inference, personal profiling, or
-third-party action is authorized by this inventory.
+This inventory is informational; it does not establish the next development
+sequence or replace founder direction. When the founder selects a
+resequencer or Secret Sound Garden implementation, the resulting work should
+identify a reproducible source, intended audience and interaction,
+public-safe content set, and relevant accessibility, privacy, retention,
+moderation, and correction requirements. No deployment, collection, audio
+capture, biometric inference, personal profiling, or third-party action is
+authorized by this inventory alone.
