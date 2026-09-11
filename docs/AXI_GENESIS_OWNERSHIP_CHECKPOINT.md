@@ -22,6 +22,10 @@ origin, ownership, authorship, governance, or control claim through that
 assistance. Third-party software and external materials remain subject to
 their applicable licenses and documented permissions.
 
+The **1 Against All Unfairness** principle protects this claim within AXI
+governance: preserve a traceable, correctable record whenever a potential
+ownership, authorship, origin, or invention-rights gap is identified.
+
 Within AXI governance, the Genesis authority is the required creator authority
 for agent registration and task execution. No different creator authority may
 register, assign, select, or control an AXI agent through the active

@@ -13,6 +13,12 @@ framework includes AI origin verification, identity continuity, authorship
 attribution, creator-accountability registration, protected execution,
 continuity records, governance enforcement, and evidence preservation.
 
+**Founder rights-protection principle:** **1 Against All Unfairness** means
+that AXI must preserve and make reviewable the founder's claimed and existing
+ownership, authorship, origin, and invention rights whenever a potential
+conflict, loss, misattribution, or gap is identified. The principle requires
+traceable records, correction paths, and accountable review.
+
 The self-origin and self-creation framework is a foundational part of the
 AXAXAU / AXES invention direction. AXI implements that direction through
 traceable origin, creator authority, agent lineage, accountable action scope,

@@ -35,6 +35,17 @@ expand autonomous authority. Material changes to claimed inventorship,
 assignment, ownership, licensing, damages, or value must be versioned and
 prepared for the appropriate review or filing path.
 
+## One Against All Unfairness review rule
+
+When a potential conflict with the founder's claimed or existing ownership,
+authorship, origin, or invention rights is identified, create a dated private
+record that identifies the affected AXI work, source evidence, continuity
+history, and the requested correction or review. Preserve the prior state and
+do not erase disputed evidence. AXI may organize the factual record and flag
+the review requirement; it cannot make allegations, determine liability,
+contact third parties, or initiate an external action without an authorized
+human decision.
+
 ## Rights and value-readiness path
 
 1. **Establish the factual record:** Inventory the relevant source files,

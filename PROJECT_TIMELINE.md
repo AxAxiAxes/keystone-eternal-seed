@@ -65,6 +65,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Agent accountability review, suspension, and fail-closed task controls added to AXI | private AXI registry and protected Automation Console |
 | 2026-09-10 | Complete | Founder work declaration aligned AXI, AXAXAU, AXES, and KEYSTONE provenance records | `docs/memory/2026-09-10-founder-work-declaration.md` |
 | 2026-09-10 | Complete | AXI recorded as a founder-claimed invention with technical scope and preservation anchors | `docs/AXI_INVENTION_RECORD.md` |
+| 2026-09-10 | Complete | Founder rights-protection principle added for ownership, authorship, origin, and invention-rights conflicts | `docs/AXI_INTENT_AND_RIGHTS_READINESS.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
