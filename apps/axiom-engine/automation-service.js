@@ -612,6 +612,7 @@ function startAutomationScheduler(service, {
   pollIntervalMs = 60_000,
   maxTasks = 5,
   logger = console,
+  canProcess = async () => {},
   onCycle = () => {}
 } = {}) {
   if (!Number.isInteger(pollIntervalMs) || pollIntervalMs < 1_000 ||
@@ -621,6 +622,7 @@ function startAutomationScheduler(service, {
 
   const process = async () => {
     try {
+      await canProcess();
       await service.processDueTasks(maxTasks);
       onCycle({ error: null });
     } catch (error) {

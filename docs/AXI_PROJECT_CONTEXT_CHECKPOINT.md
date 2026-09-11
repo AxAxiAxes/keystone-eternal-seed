@@ -79,6 +79,9 @@ On startup, handoff, or lost context:
    interpretation, sequencing, or technical recommendation as a proposal.
 
 Repository checkpoints preserve readable context and evidence for future
-sessions. They do not automatically train an external model, recover material
-that was never preserved, or replace the need for an agent or operator to
-review the relevant source before acting.
+sessions. The private AXI engine's `axes-memory-bank-startup-v1` bootstrap
+record makes this approved non-sensitive source basis available in persistent
+runtime state on startup; its status is monitored and it blocks automation if
+the retained record is invalid or version-mismatched. It does not automatically
+train an external model, recover material that was never preserved, or replace
+the need for an agent or operator to review the relevant source before acting.

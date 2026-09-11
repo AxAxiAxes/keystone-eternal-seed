@@ -127,6 +127,15 @@ rights, value, or recovery.
 `ready` means the latest private bundle was locally hash-verified; it does not
 represent an external durability, legal, or rights determination.
 
+`startupContext` reports the state of the local `axes-memory-bank-startup-v1`
+bootstrap record. The engine writes or resumes that non-sensitive context
+record on startup from its deployed code, preserving the startup timestamps
+and count in the persistent memory directory. It references the approved
+memory-bank and governance source set without copying private archives,
+credentials, or prompt content into runtime status. An absent record is
+reseeded from the deployed bootstrap definition; invalid and
+version-mismatched records are attention states and are not silently replaced.
+
 ## Private recovery endpoints
 
 The engine exposes recovery endpoints only on the private service network:

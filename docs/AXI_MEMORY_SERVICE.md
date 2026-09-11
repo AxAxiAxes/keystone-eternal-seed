@@ -7,6 +7,7 @@ The AXIOM engine implements the durable memory foundation described by the KEYST
 | Layer | Storage | Purpose |
 | --- | --- | --- |
 | Identity | `identity.json` | Current AXIOM name and concise identity summary. |
+| Startup context | `startup-context.json` | Versioned, non-sensitive AXES memory-bank source basis, startup timestamps, and startup count. |
 | Episodic | `episodic.jsonl` | Timestamped event records. |
 | Semantic | `semantic.jsonl` | Timestamped knowledge records. |
 | Decision | `decision.jsonl` | Timestamped decision records. |
@@ -18,6 +19,10 @@ The private automation service records its durable task, agent, and execution
 state in `automation.json` in the same directory. See
 [`AXI_AUTOMATION_SERVICE.md`](AXI_AUTOMATION_SERVICE.md) for its action
 allowlist, APIs, and opt-in scheduler.
+
+The startup context is reseeded only when it is absent. A retained malformed or
+version-mismatched startup context is preserved for review and blocks
+automation until its private readiness status is restored.
 
 ## Private API
 

@@ -23,6 +23,30 @@ The service rejects any unrecognized action. New external integrations must be
 implemented, reviewed, tested, and added to the allowlist before they can be
 scheduled.
 
+## Startup continuity context
+
+At private-engine startup, AXI writes or resumes `startup-context.json` in the
+same persistent directory as its memory. It is a compact, versioned,
+non-sensitive bootstrap record that identifies the approved memory-bank and
+governance sources required to resume work. It preserves its creation time,
+last startup time, and startup count across ordinary process restarts.
+
+`GET /system/readiness` includes a secret-safe `startupContext` result, and
+the private `GET /system/startup-context` endpoint provides its detailed
+status. If the context file is absent, the engine safely reseeds it from the
+versioned, deployed bootstrap definition; recovery readiness separately
+reports whether previous runtime data can be restored. A malformed or
+version-mismatched record becomes an operational attention state, and the
+engine does not overwrite it. Manual task processing and scheduler cycles fail
+closed until the record is ready. The record is included in checkpoints and
+recovery bundles.
+
+The bootstrap record makes the approved continuity basis available to the
+runtime on startup. It does not replace task-specific reading, cause an
+external model to learn project material, establish authority or rights, or
+enable automation, deployment, publication, communication, payment, or other
+external action.
+
 ## Agents and assignments
 
 New installations seed four enabled agent records. Existing installations add

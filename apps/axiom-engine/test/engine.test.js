@@ -135,10 +135,48 @@ test("reports secret-safe runtime readiness", async (t) => {
   assert.equal(readiness.governance.activeAgents, 4);
   assert.equal(readiness.recovery.status, "not-configured");
   assert.equal(readiness.coordinates.status, "ready");
+  assert.equal(readiness.startupContext.status, "ready");
+  assert.equal(readiness.startupContext.id, "axes-memory-bank-startup-v1");
   assert.equal(readiness.automation.lastRunAt, null);
   assert.equal(readiness.automation.lastError, null);
   assert.ok(readiness.checkedAt);
   assert.equal(JSON.stringify(readiness).includes("OPENAI_API_KEY"), false);
+});
+
+test("reports the private startup context without exposing private source material", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const response = await fetch(`http://127.0.0.1:${port}/system/startup-context`);
+
+  assert.equal(response.status, 200);
+  const startupContext = await response.json();
+  assert.equal(startupContext.status, "ready");
+  assert.equal(startupContext.id, "axes-memory-bank-startup-v1");
+  assert.ok(startupContext.sourceRecords.includes("docs/memory/README.md"));
+  assert.equal(JSON.stringify(startupContext).includes("OPENAI_API_KEY"), false);
+});
+
+test("blocks automation when retained startup context is invalid", async (t) => {
+  t.after(() => fs.rm(memoryDirectory, { recursive: true, force: true }));
+  await fs.mkdir(memoryDirectory, { recursive: true });
+  await fs.writeFile(path.join(memoryDirectory, "startup-context.json"), "{invalid");
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const response = await fetch(`http://127.0.0.1:${port}/automation/process`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "{}"
+  });
+
+  assert.equal(response.status, 409);
+  assert.match(
+    (await response.json()).error,
+    /startup context is ready \(startup-context-invalid\)/
+  );
 });
 
 test("reports an unavailable chat provider when no key is configured", async (t) => {

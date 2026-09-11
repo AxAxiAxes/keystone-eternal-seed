@@ -55,4 +55,12 @@ test("records changed monitoring state and attention transitions", async (t) => 
   assert.deepEqual(coordinateAttention.attention, ["coordinate-chain-invalid"]);
   assert.equal(decisions.length, 4);
   assert.equal((await service.history()).length, 5);
+
+  const startupContextAttention = await service.record({
+    ...healthy,
+    startupContext: { status: "attention" }
+  });
+  assert.deepEqual(startupContextAttention.attention, ["startup-context-unavailable"]);
+  assert.equal(decisions.length, 5);
+  assert.equal((await service.history()).length, 6);
 });

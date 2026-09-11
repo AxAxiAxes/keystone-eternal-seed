@@ -15,6 +15,7 @@ COPY monitoring-service.js ./
 COPY recovery-backup-service.js ./
 COPY coordinate-service.js ./
 COPY bead-passport-service.js ./
+COPY startup-context-service.js ./
 
 EXPOSE 3000
 

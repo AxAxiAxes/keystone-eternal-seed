@@ -13,6 +13,10 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
   const restoreDirectory = path.join(root, "restored");
   await fs.mkdir(path.join(sourceDirectory, "checkpoints"), { recursive: true });
   await fs.writeFile(path.join(sourceDirectory, "identity.json"), "{\"name\":\"AXI\"}");
+  await fs.writeFile(
+    path.join(sourceDirectory, "startup-context.json"),
+    "{\"id\":\"axes-memory-bank-startup-v1\"}"
+  );
   await fs.writeFile(path.join(sourceDirectory, "decision.jsonl"), "{\"event\":\"origin\"}\n");
   await fs.writeFile(
     path.join(sourceDirectory, "coordinates.jsonl"),
@@ -41,7 +45,7 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
 
   const backup = await service.create();
   assert.equal(backup.createdAt, "2026-09-10T00:00:00.000Z");
-  assert.equal(backup.fileCount, 5);
+  assert.equal(backup.fileCount, 6);
   assert.ok(backup.totalBytes > 0);
   assert.deepEqual(await service.status(), {
     status: "ready",
@@ -59,6 +63,10 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
   assert.equal(
     await fs.readFile(path.join(restoreDirectory, backup.id, "identity.json"), "utf8"),
     "{\"name\":\"AXI\"}"
+  );
+  assert.equal(
+    await fs.readFile(path.join(restoreDirectory, backup.id, "startup-context.json"), "utf8"),
+    "{\"id\":\"axes-memory-bank-startup-v1\"}"
   );
   assert.equal(
     await fs.readFile(

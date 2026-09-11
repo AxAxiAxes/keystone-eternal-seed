@@ -10,6 +10,7 @@ const { MonitoringService } = require("./monitoring-service");
 const { RecoveryBackupService } = require("./recovery-backup-service");
 const { CoordinateService } = require("./coordinate-service");
 const { BeadPassportService } = require("./bead-passport-service");
+const { StartupContextService } = require("./startup-context-service");
 const {
   AutomationService,
   evaluateGovernanceReadiness,
@@ -20,6 +21,8 @@ const app = express();
 const dataDirectory = process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data");
 const memoryStore = new MemoryStore(dataDirectory);
 const usageStore = new UsageStore(dataDirectory);
+const startupContextService = new StartupContextService({ directory: dataDirectory });
+const startupContextReady = startupContextService.initialize();
 const recoveryBackupService = new RecoveryBackupService({
   sourceDirectory: dataDirectory,
   backupDirectory: process.env.AXIOM_BACKUP_DIRECTORY,
@@ -74,6 +77,14 @@ const chatService = new ChatService({
 });
 
 app.use(express.json());
+app.use(async (req, res, next) => {
+  try {
+    await startupContextReady;
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 // Health check
 app.get("/", (req, res) => {
@@ -107,7 +118,8 @@ app.get("/system/readiness", async (req, res, next) => {
       governance: await automationService.getGovernanceReadiness(),
       recovery: await recoveryBackupService.status(),
       coordinates: await coordinateService.status(),
-      beadPassports: await beadPassportService.status()
+      beadPassports: await beadPassportService.status(),
+      startupContext: await startupContextService.status()
     });
   } catch (error) {
     console.error("AXIOM runtime readiness check failed:", error.message);
@@ -129,7 +141,7 @@ app.get("/usage", async (req, res, next) => {
 
 async function captureMonitoringSnapshot(automationState) {
   await memoryStore.list("decision", 1);
-  const [automation, usage, governance, recovery, coordinates, beadPassports] = await Promise.all([
+  const [automation, usage, governance, recovery, coordinates, beadPassports, startupContext] = await Promise.all([
     automationState
       ? summarizeAutomationState(automationState)
       : automationService.status(),
@@ -139,7 +151,8 @@ async function captureMonitoringSnapshot(automationState) {
       : automationService.getGovernanceReadiness(),
     recoveryBackupService.status(),
     coordinateService.status(),
-    beadPassportService.status()
+    beadPassportService.status(),
+    startupContextService.status()
   ]);
   return monitoringService.record({
     memoryAvailable: true,
@@ -149,9 +162,31 @@ async function captureMonitoringSnapshot(automationState) {
     recovery,
     coordinates,
     beadPassports,
+    startupContext,
     usage
   });
 }
+
+async function requireReadyStartupContext() {
+  await startupContextReady;
+  const startupContext = await startupContextService.status();
+  if (startupContext.status === "ready") {
+    return;
+  }
+  const error = new Error(
+    `Automation is blocked until the startup context is ready (${startupContext.code}).`
+  );
+  error.statusCode = 409;
+  throw error;
+}
+
+app.get("/system/startup-context", async (req, res, next) => {
+  try {
+    res.json(await startupContextService.status());
+  } catch (error) {
+    next(error);
+  }
+});
 
 app.get("/monitoring/status", async (req, res, next) => {
   try {
@@ -366,6 +401,7 @@ app.post("/automation/tasks/:taskId/approval", async (req, res, next) => {
 
 app.post("/automation/process", async (req, res, next) => {
   try {
+    await requireReadyStartupContext();
     const maxTasks = req.body.maxTasks === undefined ? 5 : Number(req.body.maxTasks);
     res.json(await automationService.processDueTasks(maxTasks));
   } catch (error) {
@@ -478,6 +514,7 @@ if (require.main === module) {
     startAutomationScheduler(automationService, {
       pollIntervalMs: Number(process.env.AXIOM_AUTOMATION_POLL_INTERVAL_MS || 60_000),
       maxTasks: Number(process.env.AXIOM_AUTOMATION_MAX_TASKS_PER_CYCLE || 5),
+      canProcess: requireReadyStartupContext,
       onCycle: ({ error }) => {
         scheduler.lastRunAt = new Date().toISOString();
         scheduler.lastError = error ? error.message : null;

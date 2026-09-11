@@ -118,6 +118,9 @@ function getAttention(snapshot) {
   if (snapshot.beadPassports && snapshot.beadPassports.status !== "ready") {
     attention.push("bead-passport-invalid");
   }
+  if (snapshot.startupContext && snapshot.startupContext.status !== "ready") {
+    attention.push("startup-context-unavailable");
+  }
   return attention;
 }
 
