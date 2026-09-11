@@ -18,6 +18,10 @@
     table { border-collapse:collapse; width:100%; } th,td { border-bottom:1px solid #313b4d; padding:9px; text-align:left; vertical-align:top; }
     #result { white-space:pre-wrap; color:#b8e6c2; } .hidden { display:none; }
     .priority-5 { color:#fca5a5; } .priority-4 { color:#fdba74; } .priority-3 { color:#fde68a; } .priority-2 { color:#bfdbfe; } .priority-1 { color:#cbd5e1; }
+    .continuity-tree, .continuity-tree ul { list-style:none; margin:0; padding-left:22px; }
+    .continuity-tree { padding-left:0; } .continuity-tree ul { border-left:1px solid #46536a; margin-left:8px; }
+    .continuity-tree li { margin:9px 0; } .tree-node { display:inline-block; background:#111722; border-radius:6px; padding:7px 10px; }
+    .tree-ready { color:#b8e6c2; } .tree-attention { color:#fca5a5; } .tree-muted { color:#aab7c7; }
   </style>
 </head>
 <body>
@@ -36,6 +40,11 @@
     <div id="governance"></div>
     <div id="monitoring"></div>
     <div id="monitoring-history"></div>
+  </section>
+  <section>
+    <h2>Continuity Tree</h2>
+    <p class="note">Private live view of AXI, governance readiness, registered agents, assigned tasks, and each agent's latest recorded run. Refreshes every 30 seconds.</p>
+    <div id="continuity-tree" aria-live="polite"></div>
   </section>
   <section>
     <h2>Private Coordinate Center</h2>
@@ -193,6 +202,38 @@ function renderAgentTimelines(reports) {
     return `<h3>${escapeHtml(agent.name)}</h3><p class="note">${escapeHtml(attribution)}</p>${table(events, [["occurredAt","Time"],["event","Event"],["genesisCheckpoint","Eternal Origin"],["originCheckpoint","Origin"],["status","Status"],["detail","Detail"]])}`;
   }).join("");
 }
+function renderContinuityTree(reports, tasks, runs, governance) {
+  const assignedTaskIds = new Set();
+  const agents = reports.map(report => {
+    const agent = report.agent;
+    const agentTasks = tasks.filter(task => task.agentId === agent.id);
+    agentTasks.forEach(task => assignedTaskIds.add(task.id));
+    const latestEvent = report.timeline[report.timeline.length - 1];
+    const latestRun = runs.find(run => run.agentId === agent.id);
+    const status = agent.accountability?.status || "unreconciled";
+    const statusClass = status === "active" ? "tree-ready" : "tree-attention";
+    const taskNodes = agentTasks.length
+      ? `<ul>${agentTasks.map(task => {
+        const taskRun = runs.find(run => run.taskId === task.id);
+        const detail = taskRun
+          ? ` latest run: ${taskRun.status} at ${taskRun.recordedAt}`
+          : " no recorded run";
+        return `<li><span class="tree-node">${escapeHtml(task.title)} — ${escapeHtml(task.status)} (${escapeHtml(task.action)};${escapeHtml(detail)})</span></li>`;
+      }).join("")}</ul>`
+      : "<ul><li><span class='tree-node tree-muted'>No assigned tasks</span></li></ul>";
+    const eventDetail = latestEvent
+      ? ` latest continuity event: ${latestEvent.event} at ${latestEvent.occurredAt}`
+      : " no continuity events recorded";
+    const runDetail = latestRun ? ` latest agent run: ${latestRun.status}` : " no agent runs recorded";
+    return `<li><span class="tree-node ${statusClass}">${escapeHtml(agent.name)} — ${escapeHtml(status)};${escapeHtml(eventDetail)};${escapeHtml(runDetail)}</span>${taskNodes}</li>`;
+  });
+  const unassignedTasks = tasks.filter(task => !assignedTaskIds.has(task.id));
+  const unassignedNode = unassignedTasks.length
+    ? `<li><span class="tree-node tree-attention">Unassigned tasks</span><ul>${unassignedTasks.map(task => `<li><span class="tree-node">${escapeHtml(task.title)} — ${escapeHtml(task.status)} (${escapeHtml(task.action)})</span></li>`).join("")}</ul></li>`
+    : "";
+  const governanceClass = governance.status === "ready" ? "tree-ready" : "tree-attention";
+  document.querySelector("#continuity-tree").innerHTML = `<ul class="continuity-tree"><li><span class="tree-node ${governanceClass}">AXI continuity root — governance ${escapeHtml(governance.status)}; ${escapeHtml(String(reports.length))} registered agents; ${escapeHtml(String(tasks.length))} tracked tasks</span><ul>${agents.join("")}${unassignedNode}</ul></li></ul>`;
+}
 function renderSchedule(tasks) {
   const scheduled = tasks.filter(task => task.status === "pending");
   if (!scheduled.length) {
@@ -259,9 +300,11 @@ async function refresh() {
     ).join("");
     renderSchedule(tasks);
     renderTasks(tasks);
-    renderAgentTimelines(await Promise.all(
+    const agentReports = await Promise.all(
       agents.map(agent => request(`/api/automation/agents/${encodeURIComponent(agent.id)}/report`))
-    ));
+    );
+    renderAgentTimelines(agentReports);
+    renderContinuityTree(agentReports, tasks, runs, governance);
     document.querySelector("#runs").innerHTML = table(runs.map(run => ({
       recordedAt: run.recordedAt,
       status: run.status,
@@ -342,6 +385,7 @@ document.querySelector("#chat-form").addEventListener("submit", async event => {
   } catch (error) { output.textContent = error.message; }
 });
 refresh();
+setInterval(refresh, 30000);
 </script>
 </body>
 </html>

@@ -233,6 +233,12 @@ It also displays the private run history, including completed, retrying, and
 failed task outcomes, attempts, agent assignments, and results. It never
 exposes a direct engine URL or general engine proxy.
 
+The Console also provides a private Continuity Tree that refreshes every 30
+seconds. It connects the AXI root to governance readiness, registered agents,
+each agent's accountability and latest timeline event, assigned tasks, and
+latest recorded runs. It is an operator view only; it does not create, assign,
+approve, run, or modify a task.
+
 Set a unique secret only in the `axiom-freedom` Railway service variables:
 
 ```dotenv

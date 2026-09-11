@@ -138,7 +138,9 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
       headers: { Authorization: authorization }
     });
     assert.equal(consolePage.status, 200);
-    assert.match(await consolePage.text(), /AXIOM Automation Console/);
+    const consoleMarkup = await consolePage.text();
+    assert.match(consoleMarkup, /AXIOM Automation Console/);
+    assert.match(consoleMarkup, /Continuity Tree/);
 
     const unauthorizedSupport = await fetch(`http://127.0.0.1:${webPort}/support`);
     assert.equal(unauthorizedSupport.status, 401);
