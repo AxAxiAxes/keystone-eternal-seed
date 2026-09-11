@@ -23,6 +23,11 @@ The self-origin and self-creation framework is a foundational part of the
 AXAXAU / AXES invention direction. AXI implements that direction through
 traceable origin, creator authority, agent lineage, accountable action scope,
 correction history, and protected review controls.
+
+**Eteriti** is the founder-provided term for one non-financial value unit of
+Eternal Origin continuity in this direction. It may organize a conceptual
+continuity record but does not establish currency, a transferable token,
+market value, a price, a legal right, or an evaluation of any person.
 Eternal Origin ownership is a named founder-claimed invention direction within
 that same lineage. Its value and past/current crisis register is maintained in
 `AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md`.

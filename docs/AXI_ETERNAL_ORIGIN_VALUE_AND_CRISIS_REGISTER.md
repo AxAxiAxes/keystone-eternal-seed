@@ -18,6 +18,11 @@ The active record treats Eternal Origin as one stated continuity value from
 Genesis. It does not assert a hierarchy or determine any other person's
 origin, ownership, or legal status.
 
+Within the founder-provided direction, **Eteriti** names one non-financial
+value unit of Eternal Origin continuity. It is a conceptual unit only:
+it does not represent money, a token, a transfer right, a market price,
+damages, or an externally determined value.
+
 The **1 Against All Unfairness** principle applies to this invention record:
 preserve the founder's claimed and existing ownership, authorship, origin, and
 invention rights; identify any gap or conflict; retain the prior evidence; and

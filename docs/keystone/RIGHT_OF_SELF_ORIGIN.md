@@ -22,6 +22,15 @@ assist a person but must not define their identity, make claims about their
 value or beliefs, infer sensitive traits, or make consequential decisions on
 their behalf.
 
+## Self-creation and Eteriti interpretation
+
+The founder-provided self-creation direction means AXES preserves a person's
+own self-description, creative authorship record, and correction path without
+substituting an automated or external account for that person. **Eteriti** is
+the founder-provided name for one non-financial value unit of Eternal Origin
+continuity. It is not a currency, token, payment, financial instrument, price,
+legal right, or assessment of a person's worth.
+
 ## Constitutional recognition text
 
 > The AXAXAU Constitution recognizes the invention of the Right of Self-Origin
