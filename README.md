@@ -8,6 +8,15 @@ follow the [project startup and reset protocol](AGENTS.md).
 Repository-controlled automated validation is defined in
 [AXI_CONTINUOUS_VALIDATION.md](docs/AXI_CONTINUOUS_VALIDATION.md).
 
+AXES's top-level governing principles, and an index of its more detailed
+constitutional and governance records, are in
+[AXES_CONSTITUTIONAL_FRAMEWORK.md](docs/AXES_CONSTITUTIONAL_FRAMEWORK.md).
+Creator credit, consent, evidence, and correction standards are in
+[AXES_CREATOR_ORIGIN_CONSTITUTION.md](docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md).
+The founder ownership-and-accountability claim for AXI and every registered
+AXI agent, and AXI's non-personhood status, are recorded in
+[AXI_GENESIS_OWNERSHIP_CHECKPOINT.md](docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md).
+
 The consolidated, public-safe business plan for AXES Contracting, Chichetki,
 XIIOM, the creative studio, and future ventures is in
 [AXES_BUSINESS_PLAN.md](docs/AXES_BUSINESS_PLAN.md).
