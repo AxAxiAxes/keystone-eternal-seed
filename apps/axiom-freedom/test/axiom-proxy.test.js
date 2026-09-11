@@ -76,6 +76,22 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
       error: "action must be a non-empty string"
     });
 
+    const unavailablePublicChat = await fetch(
+      `http://127.0.0.1:${webPort}/api/axiom`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "chat",
+          payload: { message: "Hello AXIOM" }
+        })
+      }
+    );
+    assert.equal(unavailablePublicChat.status, 503);
+    assert.deepEqual(await unavailablePublicChat.json(), {
+      error: "AXIOM chat is not configured"
+    });
+
     const portal = await fetch(`http://127.0.0.1:${webPort}/`);
     assert.equal(portal.status, 200);
     assert.match(await portal.text(), /AXES CONTRACTING/);

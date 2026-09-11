@@ -214,8 +214,17 @@ const server = http.createServer(async (req, res) => {
                   res.end(JSON.stringify(result));
           } catch (error) {
                   console.error('AXIOM engine request failed:', error.message);
+                  if (command.action === 'chat' && error.statusCode === 503) {
+                          res.writeHead(503, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify({ error: 'AXIOM chat is not configured' }));
+                          return;
+                  }
                   res.writeHead(502, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify({ error: 'AXIOM engine is unavailable' }));
+                  res.end(JSON.stringify({
+                    error: command.action === 'chat'
+                      ? 'AXIOM chat is temporarily unavailable'
+                      : 'AXIOM engine is unavailable'
+                  }));
           }
           return;
     }

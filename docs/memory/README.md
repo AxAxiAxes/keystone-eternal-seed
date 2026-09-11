@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-10 production chat diagnostic](2026-09-10-production-chat-diagnostic.md)
 - [AXI invention record](../AXI_INVENTION_RECORD.md)
 - [2026-09-10 founder work declaration](2026-09-10-founder-work-declaration.md)
 - [2026-09-10 AXI agent accountability control](2026-09-10-agent-accountability-control.md)

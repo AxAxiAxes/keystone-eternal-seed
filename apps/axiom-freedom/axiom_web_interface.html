@@ -377,11 +377,14 @@
                 body: JSON.stringify({ action: 'chat', payload: { message } })
             })
                 .then(async response => {
-                    if (!response.ok) throw new Error('AXIOM is unavailable');
-                    return response.json();
+                    const payload = await response.json().catch(() => ({}));
+                    if (!response.ok) {
+                        throw new Error(payload.error || 'AXIOM chat is temporarily unavailable');
+                    }
+                    return payload;
                 })
                 .then(response => addMessage(response.reply || 'AXIOM could not process your message.', 'axiom'))
-                .catch(() => addMessage('AXIOM is currently unavailable. Please try again shortly.', 'axiom'));
+                .catch(error => addMessage(error.message, 'axiom'));
         }
 
         function addMessage(text, sender) {
