@@ -12,8 +12,10 @@ COPY apps/axiom-freedom/axescontracting.html ./
 COPY apps/axiom-freedom/library.html ./
 COPY apps/axiom-freedom/axiom_web_interface.html ./
 COPY apps/axiom-freedom/automation.html ./
+COPY apps/axiom-freedom/command-center.html ./
 COPY apps/axiom-freedom/support.html ./
 COPY apps/axiom-freedom/materials.html ./
+COPY PROJECT_TIMELINE.md ./
 COPY docs ./docs
 
 EXPOSE 8080

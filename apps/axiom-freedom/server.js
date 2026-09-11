@@ -9,6 +9,9 @@ const LEADS_FILE = path.join(__dirname, 'leads.json');
 const DOCUMENTS_DIRECTORY = fs.existsSync(path.join(__dirname, 'docs'))
     ? path.resolve(__dirname, 'docs')
     : path.resolve(__dirname, '..', '..', 'docs');
+const PROJECT_TIMELINE_FILE = fs.existsSync(path.join(__dirname, 'PROJECT_TIMELINE.md'))
+    ? path.resolve(__dirname, 'PROJECT_TIMELINE.md')
+    : path.resolve(__dirname, '..', '..', 'PROJECT_TIMELINE.md');
 const AXIOM_ENGINE_URL = new URL(process.env.AXIOM_ENGINE_URL || 'http://127.0.0.1:3000');
 
 function isAxesContractingHost(host) {
@@ -70,6 +73,39 @@ function serveDocument(res, pathname) {
         ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         : 'text/plain; charset=utf-8';
     serveFile(res, documentPath, contentType);
+}
+
+function getCommandCenterCheckpoints() {
+    const timeline = fs.readFileSync(PROJECT_TIMELINE_FILE, 'utf8');
+    const phase = timeline.match(/^\*\*Current phase:\*\*\s*(.+)$/m);
+    const sectionStart = timeline.indexOf('## Current checkpoints');
+    const nextSection = timeline.indexOf('\n## ', sectionStart + 1);
+
+    if (!phase || sectionStart === -1 || nextSection === -1) {
+        throw new Error('Project timeline checkpoints are unavailable.');
+    }
+
+    const checkpoints = [];
+    let currentCheckpoint;
+    const lines = timeline.slice(sectionStart, nextSection).split(/\r?\n/);
+    for (const line of lines) {
+        const entry = line.match(/^- \[([ xX])\]\s+(.+)$/);
+        if (entry) {
+            currentCheckpoint = {
+                status: entry[1].toLowerCase() === 'x' ? 'complete' : 'planned',
+                title: entry[2].trim()
+            };
+            checkpoints.push(currentCheckpoint);
+        } else if (currentCheckpoint && /^\s{2,}\S/.test(line)) {
+            currentCheckpoint.title += ' ' + line.trim();
+        }
+    }
+
+    return {
+        recordedAt: new Date().toISOString(),
+        currentPhase: phase[1].trim(),
+        checkpoints
+    };
 }
 
 async function invokeEngine(endpoint, method = 'GET', body) {
@@ -389,6 +425,18 @@ const server = http.createServer(async (req, res) => {
                       res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
               }
               return;
+    }
+    if (pathname === '/api/command-center/checkpoints' && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(getCommandCenterCheckpoints()));
+          } catch (error) {
+                  console.error('AXES Command Center checkpoint request failed:', error.message);
+                  res.writeHead(500, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: 'AXES Command Center checkpoints are unavailable' }));
+          }
+          return;
     }
     if (pathname === '/api/automation/chat' && req.method === 'POST') {
           if (!requireAdmin(req, res)) return;

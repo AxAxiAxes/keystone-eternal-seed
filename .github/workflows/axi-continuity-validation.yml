@@ -53,3 +53,11 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - run: dotnet test AXIOM.sln --configuration Release
+
+  portal-image:
+    name: AXIOM portal image
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker build --file apps/axiom-freedom/Dockerfile --tag axiom-freedom-validation .

@@ -254,11 +254,15 @@ automatically requires operator approval for that action, and the engine
 enforces the same manager-assignment and approval requirements independently.
 
 The protected `/command-center` view extends this into build-management
-observation. It combines the continuity tree with agent/task/run-flow metrics
-and a browser-side reachability display for the public XIIOM and AXES
-Contracting endpoints. Site status is observation only; it does not call the
-private engine directly, change a site, create an external monitor, or enable
-the scheduler.
+observation. It combines the continuity tree with agent/task/run-flow metrics,
+a browser-local clock, current versioned project checkpoints, and a
+browser-side reachability display for the public XIIOM and AXES Contracting
+endpoints. The protected `GET /api/command-center/checkpoints` endpoint reads
+the current-checkpoint section from `PROJECT_TIMELINE.md`; it does not expose
+private runtime data or modify the timeline. The clock is not service uptime
+or a deployment assertion. Site status is observation only; it does not call
+the private engine directly, change a site, create an external monitor, or
+enable the scheduler.
 
 Set a unique secret only in the `axiom-freedom` Railway service variables:
 

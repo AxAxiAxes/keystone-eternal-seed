@@ -14,6 +14,7 @@
     .tree, .tree ul { list-style:none; margin:0; padding-left:22px; } .tree { padding-left:0; } .tree ul { border-left:1px solid #46536a; margin-left:8px; }
     .tree li { margin:9px 0; } .node { display:inline-block; background:#111722; border-radius:6px; padding:7px 10px; }
     .ready { color:#b8e6c2; } .attention { color:#fca5a5; } .muted { color:#aab7c7; }
+    .clock { color:#d5a94d; font-size:1.25rem; font-variant-numeric:tabular-nums; font-weight:700; }
   </style>
 </head>
 <body>
@@ -21,6 +22,12 @@
   <h1>AXES Command Center</h1>
   <p class="note">Private build-management view. It observes protected AXI data and public endpoint reachability; it does not create work, enable automation, deploy, publish, or change accounts.</p>
   <p><button id="refresh">Refresh now</button> <span id="updated" class="note"></span></p>
+  <section>
+    <h2>Live continuity clock and checkpoints</h2>
+    <p id="clock" class="clock" aria-live="polite"></p>
+    <p class="note">Browser-local time updates every second. Timeline checkpoints are read from the versioned project record; the clock is not service uptime or an external deployment claim.</p>
+    <div id="checkpoints"></div>
+  </section>
   <section>
     <h2>Build and efficiency signals</h2>
     <p class="note">Efficiency describes recorded task/run flow only. It is not a measure of people, identity, value, or project worth.</p>
@@ -62,6 +69,15 @@ async function request(path) {
 
 function metric(label, value, attention = false) {
   return `<div class="metric ${attention ? "attention" : "ready"}"><strong>${escapeHtml(value)}</strong><br>${escapeHtml(label)}</div>`;
+}
+
+function updateClock() {
+  document.querySelector("#clock").textContent = `Current browser time: ${new Date().toLocaleString()}`;
+}
+
+function renderCheckpoints(timeline) {
+  const rows = timeline.checkpoints.map(checkpoint => `<tr><td class="${checkpoint.status === "complete" ? "ready" : "attention"}">${escapeHtml(checkpoint.status)}</td><td>${escapeHtml(checkpoint.title)}</td></tr>`).join("");
+  document.querySelector("#checkpoints").innerHTML = `<p><strong>Current phase:</strong> ${escapeHtml(timeline.currentPhase)}</p><table><thead><tr><th>Status</th><th>Checkpoint</th></tr></thead><tbody>${rows || "<tr><td colspan='2'>No current checkpoints found.</td></tr>"}</tbody></table>`;
 }
 
 function renderTree(reports, tasks, runs, governance) {
@@ -107,11 +123,12 @@ async function probeSite(target) {
 }
 
 async function refresh() {
-  const [governance, agents, tasks, runs] = await Promise.all([
+  const [governance, agents, tasks, runs, timeline] = await Promise.all([
     request("/api/automation/readiness"),
     request("/api/automation/agents"),
     request("/api/automation/tasks"),
-    request("/api/automation/runs?limit=100")
+    request("/api/automation/runs?limit=100"),
+    request("/api/command-center/checkpoints")
   ]);
   const reports = await Promise.all(
     agents.map(agent => request(`/api/automation/agents/${encodeURIComponent(agent.id)}/report`))
@@ -131,6 +148,7 @@ async function refresh() {
     metric("Governance", governance.status, governance.status !== "ready")
   ].join("");
   renderTree(reports, tasks, runs, governance);
+  renderCheckpoints(timeline);
   document.querySelector("#sites").innerHTML = `<table><thead><tr><th>Target</th><th>Status</th><th>Expected</th><th>State</th></tr></thead><tbody>${siteResults.map(site => `<tr><td>${escapeHtml(site.name)}</td><td>${escapeHtml(site.status)}</td><td>${escapeHtml(site.expected.join(", "))}</td><td class="${site.state}">${escapeHtml(site.state)}</td></tr>`).join("")}</tbody></table>`;
   document.querySelector("#updated").textContent = `Last refreshed: ${new Date().toLocaleString()}`;
 }
@@ -141,6 +159,8 @@ document.querySelector("#refresh").addEventListener("click", () => refresh().cat
 refresh().catch(error => {
   document.querySelector("#updated").textContent = error.message;
 });
+updateClock();
+setInterval(updateClock, 1000);
 setInterval(() => refresh().catch(() => {}), 30000);
 </script>
 </body>

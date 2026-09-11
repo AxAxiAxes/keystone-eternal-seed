@@ -152,7 +152,26 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
       headers: { Authorization: authorization }
     });
     assert.equal(commandCenter.status, 200);
-    assert.match(await commandCenter.text(), /AXES Command Center/);
+    const commandCenterMarkup = await commandCenter.text();
+    assert.match(commandCenterMarkup, /AXES Command Center/);
+    assert.match(commandCenterMarkup, /Live continuity clock and checkpoints/);
+    assert.match(commandCenterMarkup, /api\/command-center\/checkpoints/);
+
+    const unauthorizedCheckpoints = await fetch(
+      `http://127.0.0.1:${webPort}/api/command-center/checkpoints`
+    );
+    assert.equal(unauthorizedCheckpoints.status, 401);
+
+    const checkpointResponse = await fetch(
+      `http://127.0.0.1:${webPort}/api/command-center/checkpoints`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(checkpointResponse.status, 200);
+    const checkpointPayload = await checkpointResponse.json();
+    assert.match(checkpointPayload.currentPhase, /Source reconciliation complete/);
+    assert.ok(checkpointPayload.checkpoints.some(checkpoint =>
+      checkpoint.title.includes("Define the AXES Directory")
+    ));
 
     const unauthorizedSupport = await fetch(`http://127.0.0.1:${webPort}/support`);
     assert.equal(unauthorizedSupport.status, 401);
