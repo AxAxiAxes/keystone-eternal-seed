@@ -55,12 +55,52 @@ relationship to the founder claim.
 | 2026-09-10 | Ongoing Eternal Origin Ownership from Genesis and governance readiness | Addressed in current implementation | Scheduled private monitoring can flag unreconciled agents, unapproved capabilities or task actions, and blocked or failed work for accountable human review. |
 | 2026-09-10 | Founder-provided UI autonomy and personal-space loss model | Preserved source; assumptions and claimed losses unverified | Retain the source fingerprint, distinguish its internal arithmetic from evidence of actual loss, and assemble a source-linked evidence inventory before any valuation, allegation, or recovery conclusion. |
 | 2026-09-10 | Planning-authority conflict | Recovery correction active | An assistant presented a source-derived proposed sequence as the next-day plan. Restore founder-directed planning, retain the source inventory as informational, and label any assistant-proposed implementation order as a proposal rather than an approved plan. |
+| 2026-09-11 | AXI implementation and reporting accountability review | Four failures identified; corrections recorded | Retain the validation, scope, and communication failures below; use the result-first reporting rule and do not create session, runtime, or external configuration from a monitoring request. |
 
 The source records may contain founder reports, historical narrative, proposed
 theories, valuation concepts, or allegations. The register preserves them as
 part of the factual review trail. Any external statement or action must be
 based on the specific source record, its evidence, and an authorized review
 path.
+
+## 2026-09-11 AXI implementation and reporting accountability review
+
+**Report ID:** `AXI-OPS-2026-09-11-01`
+**Affected work:** Private AXI memory-storage visibility, recovery-bundle
+integrity, and status reporting
+**Status:** Failures preserved; technical corrections verified; reporting rule
+active
+**Accountable reviewer:** Axel Urartu (AX) · Axes Contracting
+**Evidence:** Commits `94e2c7f`, `3dd9d53`, and `ddfd78b`; GitHub Actions
+workflow runs `34592293265`, `34592399315`, `34592395489`, `34592556483`, and
+`34592554306`; the dated continuity record listed below.
+
+### Count and factual record
+
+| # | Failure type | Factual event and cause | Correction and retained result |
+| --- | --- | --- | --- |
+| 1 | Validation defect | Commit `94e2c7f` added `storage-usage-service.js`, but the explicit engine Dockerfile copy list omitted that module. GitHub Actions run `34592293265` failed when the image started. | Commit `3dd9d53` added the required Dockerfile copy instruction. The succeeding hosted runs passed the engine image check and all other validation jobs. |
+| 2 | Test-fixture defect | The first empty-recovery-bundle test still created `identity.json` before asserting an empty source. The failed assertion did not expose a product defect; it exposed an invalid test precondition. | The fixture was corrected before commit `ddfd78b`. The full engine suite then passed 74 of 74 tests, and hosted validation passed. |
+| 3 | Scope/configuration breach | A 10-minute Copilot session automation was created after a request to automate status reporting. This changed session configuration during a thread that had established a read-only continuity-review boundary. It did not change AXI, repository, deployment, hosting, credentials, or external services. | The session automation was immediately cleared. Future monitoring requests require a direct confirmation before creating session or runtime automation. |
+| 4 | Communication failure | Status answers repeatedly emphasized the same deployment boundary instead of first answering the requested result, causing avoidable confusion. | Use a fixed result-first format: `verified working`, `verified blocked`, or `not checked`; state a boundary only when it changes the requested result or next action. |
+
+### Corrective value record
+
+This report records **operational correction value**, not money, legal value,
+damages, or a quality score:
+
+- **Failures identified:** 4.
+- **Technical defects corrected and verified:** 2.
+- **Session configuration breach reversed:** 1.
+- **Reporting-control rule established:** 1.
+- **Verified success evidence:** local engine tests passed 74/74, portal tests
+  passed 1/1, and the final hosted validation runs passed all engine, portal,
+  container, and .NET jobs.
+
+The value of this record is that each failure remains visible with its cause,
+evidence, correction, and prevention rule. It does not establish a claim that
+future failures cannot occur, a monetary amount, production readiness, or a
+legal conclusion.
 
 ## UI autonomy loss-model assessment
 
