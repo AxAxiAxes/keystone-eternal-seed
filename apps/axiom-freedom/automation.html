@@ -40,7 +40,7 @@
     <h2>Queue Task</h2>
     <form id="task-form">
       <label>Title <input id="title" required maxlength="200" placeholder="Record a verified milestone"></label>
-      <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="automation.noop">Safe no-op test</option></select></label>
+      <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="monitoring.snapshot">Capture private monitoring snapshot</option><option value="automation.noop">Safe no-op test</option></select></label>
       <label>Priority <select id="priority"><option value="5">P5 - Critical</option><option value="4">P4 - High</option><option value="3" selected>P3 - Normal</option><option value="2">P2 - Low</option><option value="1">P1 - Backlog</option></select></label>
       <label>Run at (optional) <input id="run-at" type="datetime-local"><span class="note">Leave empty to make the task due now.</span></label>
       <label>Depends on (optional) <select id="depends-on" multiple></select><span class="note">Select completed prerequisites or tasks that must finish first.</span></label>

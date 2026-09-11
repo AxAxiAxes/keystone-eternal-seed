@@ -7,11 +7,11 @@ operations.
 
 ## Current verified capacity
 
-The private `axiom-engine` currently seeds three agent records and does not
+The private `axiom-engine` currently seeds four agent records and does not
 impose a numeric registry limit in `registerAgent`. This is not a claim of
 unlimited operational capacity: it persists records in one private JSON file,
 executes due tasks sequentially in one process, and supports only
-`memory.record` and `automation.noop` actions.
+`memory.record`, `automation.noop`, and `monitoring.snapshot` actions.
 
 The scheduler handles from 1 through 20 due tasks per cycle, with a default of
 5. Any OpenAI-backed chat use is constrained by the actual account and model

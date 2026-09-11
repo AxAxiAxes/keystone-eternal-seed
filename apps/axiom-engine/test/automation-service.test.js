@@ -25,8 +25,9 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
   const service = new AutomationService({ directory, memoryStore });
 
   const agents = await service.listAgents();
-  assert.equal(agents.length, 3);
+  assert.equal(agents.length, 4);
   assert.equal(agents[0].id, "memory-curator");
+  assert.equal(agents[3].id, "operations-observer");
 
   const task = await service.createTask({
     title: "Record deployment decision",
@@ -192,4 +193,41 @@ test("rejects task actions outside the allowlist", async (t) => {
     (error) => error instanceof RangeError &&
       error.message === "unsupported task action: shell.execute"
   );
+});
+
+test("records a monitoring snapshot through the dedicated observer", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const memoryStore = createMemoryStore();
+  let receivedState;
+  const service = new AutomationService({
+    directory,
+    memoryStore,
+    captureMonitoringSnapshot: async (state) => {
+      receivedState = structuredClone(state);
+      return {
+        id: "monitoring-snapshot-1",
+        recorded: true,
+        attention: []
+      };
+    }
+  });
+
+  const task = await service.createTask({
+    title: "Capture a private monitoring snapshot",
+    action: "monitoring.snapshot",
+    recurrenceMinutes: 15
+  });
+  const [outcome] = await service.processDueTasks();
+
+  assert.equal(outcome.taskId, task.id);
+  assert.equal(outcome.status, "pending");
+  assert.equal(receivedState.tasks[0].status, "running");
+  const [run] = await service.listRuns();
+  assert.deepEqual(run.result, {
+    monitoringSnapshotId: "monitoring-snapshot-1",
+    recorded: true,
+    attention: []
+  });
+  assert.equal(run.agentId, "operations-observer");
 });

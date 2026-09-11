@@ -23,15 +23,16 @@ The model is governed by `AGENTS.md`,
 
 ## Current implementation capacity
 
-The current private `axiom-engine` seeds three agent records: Memory Curator,
-Automation Executor, and Automation Auditor. Its `registerAgent` operation has
-no numeric registry cap, so the repository does not impose a maximum number of
-stored agent records.
+The current private `axiom-engine` seeds four agent records: Memory Curator,
+Automation Executor, Automation Auditor, and Operations Observer. Its
+`registerAgent` operation has no numeric registry cap, so the repository does
+not impose a maximum number of stored agent records.
 
 That is not an operational capacity commitment. The current engine:
 
 - Persists the registry in one private JSON state file.
-- Supports only `memory.record` and `automation.noop` task actions.
+- Supports only `memory.record`, `automation.noop`, and
+  `monitoring.snapshot` task actions.
 - Processes due tasks sequentially in one service process, from 1 to 20 per
   cycle, with a default of 5.
 - Requires an authenticated operator to approve a task when the task is marked
@@ -49,7 +50,7 @@ provider's project limits view before increasing usage. See the official
 
 | Stage | Role profiles | Enabled agents | Purpose and release condition |
 | --- | ---: | ---: | --- |
-| Current foundation | 3 | 3 | Existing private memory, safe no-op, and audit roles only. |
+| Current foundation | 4 | 4 | Existing private memory, safe no-op, audit, and monitoring-observer roles only. |
 | Command Center pilot | 5 | At most 5 | Add observation and change-readiness analysis after protected-console monitoring is working. |
 | Directory preparation | 10 | At most 8 | Define directory-support roles only after every directory readiness gate is met; no data collection or listings. |
 | Governed AXES ecosystem | 15 | At most 12 | Activate further roles one at a time after an owner, data map, review procedure, tests, and rollback path are approved. |
@@ -82,7 +83,7 @@ security, privacy, and operational review.
 
 ## Activation requirements
 
-Before enabling any role profile beyond the current three, record:
+Before enabling any role profile beyond the current four, record:
 
 1. A named human owner and the role's exact purpose.
 2. The inputs, outputs, data classification, storage location, retention, and
@@ -100,7 +101,7 @@ request without the accountable human reviewer.
 
 ## Next safe implementation sequence
 
-1. Keep the existing three private roles active only after the Railway
+1. Keep the existing four private roles active only after the Railway
    monitoring-first activation path is completed.
 2. Add Operations Observer and Change Readiness Auditor as proposal-only roles
    after the protected console has current monitoring data.

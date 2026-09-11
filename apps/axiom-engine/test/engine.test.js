@@ -70,7 +70,7 @@ test("reports engine health", async (t) => {
 
     assert.equal(response.status, 200);
     assert.deepEqual(await response.json(), {
-      agents: 3,
+      agents: 4,
       pendingTasks: 0,
       blockedTasks: 0,
       awaitingApprovalTasks: 0,
@@ -197,7 +197,7 @@ test("persists and retrieves AXI memory layers", async (t) => {
   assert.equal(monitoring.status, 201);
   const monitoringSnapshot = await monitoring.json();
   assert.equal(monitoringSnapshot.snapshot.memoryAvailable, true);
-  assert.equal(monitoringSnapshot.snapshot.automation.agents, 3);
+  assert.equal(monitoringSnapshot.snapshot.automation.agents, 4);
 
   const monitoringHistory = await fetch(`http://127.0.0.1:${port}/monitoring/history`);
   assert.equal(monitoringHistory.status, 200);

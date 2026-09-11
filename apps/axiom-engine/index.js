@@ -9,6 +9,7 @@ const { CheckpointService } = require("./checkpoint-service");
 const { MonitoringService } = require("./monitoring-service");
 const {
   AutomationService,
+  summarizeAutomationState,
   startAutomationScheduler
 } = require("./automation-service");
 const app = express();
@@ -20,7 +21,8 @@ const usageStore = new UsageStore(
 );
 const automationService = new AutomationService({
   directory: process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data"),
-  memoryStore
+  memoryStore,
+  captureMonitoringSnapshot
 });
 const checkpointService = new CheckpointService({
   directory: process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data"),
@@ -105,10 +107,12 @@ app.get("/usage", async (req, res, next) => {
   }
 });
 
-async function captureMonitoringSnapshot() {
+async function captureMonitoringSnapshot(automationState) {
   await memoryStore.list("decision", 1);
   const [automation, usage] = await Promise.all([
-    automationService.status(),
+    automationState
+      ? summarizeAutomationState(automationState)
+      : automationService.status(),
     usageStore.summary()
   ]);
   return monitoringService.record({

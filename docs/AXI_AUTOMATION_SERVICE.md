@@ -13,6 +13,7 @@ controller. It accepts only the versioned action allowlist:
 | --- | --- | --- |
 | `memory.record` | `memory.record` | Writes a validated entry to a supported private memory layer. |
 | `automation.noop` | `automation.noop` | Runs a testable workflow placeholder without external side effects. |
+| `monitoring.snapshot` | `monitoring.snapshot` | Captures a private operational snapshot without contacting an external system. |
 
 The service rejects any unrecognized action. New external integrations must be
 implemented, reviewed, tested, and added to the allowlist before they can be
@@ -20,13 +21,16 @@ scheduled.
 
 ## Agents and assignments
 
-New installations seed three enabled agent records:
+New installations seed four enabled agent records. Existing installations add
+the Operations Observer on their next private automation-state access while
+preserving existing agent records.
 
 | Agent | Capabilities | Purpose |
 | --- | --- | --- |
 | Memory Curator | `memory.record` | Maintains validated memory entries. |
 | Automation Executor | `automation.noop` | Runs bounded workflow checks. |
 | Automation Auditor | Both capabilities | Provides a general audited fallback. |
+| Operations Observer | `monitoring.snapshot` | Captures private health, queue, scheduler, and usage signals. |
 
 Tasks can specify an eligible `agentId`; otherwise the first enabled agent with
 the matching capability is assigned. Tasks have a priority from 1 (backlog) to
@@ -121,6 +125,12 @@ and a queue backlog above 20 tasks.
 The protected console can capture a snapshot and display current signals and
 reevaluation history. The private API also provides `GET /monitoring/status`,
 `GET /monitoring/history`, and `POST /monitoring/snapshots`.
+
+Queue a `monitoring.snapshot` task with `recurrenceMinutes` to capture
+snapshots through the bounded scheduler. The Operations Observer handles this
+action. An authenticated operator still creates the task and chooses its
+interval; the scheduler never enables monitoring, creates tasks, or contacts
+an external service by itself.
 
 ## Protected browser console
 

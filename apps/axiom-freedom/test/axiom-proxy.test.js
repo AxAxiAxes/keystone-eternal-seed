@@ -136,7 +136,7 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
       { headers: { Authorization: authorization } }
     );
     assert.equal(automationStatus.status, 200);
-    assert.equal((await automationStatus.json()).agents, 3);
+    assert.equal((await automationStatus.json()).agents, 4);
 
     const monitoringStatus = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/monitoring/status`,

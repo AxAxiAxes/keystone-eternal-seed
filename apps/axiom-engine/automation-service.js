@@ -2,7 +2,11 @@ const { randomUUID } = require("crypto");
 const fs = require("fs/promises");
 const path = require("path");
 
-const TASK_ACTIONS = new Set(["memory.record", "automation.noop"]);
+const TASK_ACTIONS = new Set([
+  "memory.record",
+  "automation.noop",
+  "monitoring.snapshot"
+]);
 const TASK_STATUSES = new Set([
   "pending",
   "running",
@@ -14,9 +18,15 @@ const TASK_STATUSES = new Set([
 ]);
 
 class AutomationService {
-  constructor({ directory, memoryStore, now = () => new Date() }) {
+  constructor({
+    directory,
+    memoryStore,
+    captureMonitoringSnapshot,
+    now = () => new Date()
+  }) {
     this.directory = directory;
     this.memoryStore = memoryStore;
+    this.captureMonitoringSnapshot = captureMonitoringSnapshot;
     this.now = now;
     this.operationQueue = Promise.resolve();
   }
@@ -221,7 +231,7 @@ class AutomationService {
         task.attemptCount += 1;
         task.updatedAt = this.now().toISOString();
         try {
-          const result = await this.executeTask(task, agent);
+          const result = await this.executeTask(task, agent, state);
           task.runCount += 1;
           task.lastRunAt = this.now().toISOString();
           task.lastResult = result;
@@ -263,20 +273,10 @@ class AutomationService {
   }
 
   async status() {
-    return this.withState(async (state) => ({
-      agents: state.agents.length,
-      pendingTasks: state.tasks.filter((task) => task.status === "pending").length,
-      blockedTasks: state.tasks.filter((task) => task.status === "blocked").length,
-      awaitingApprovalTasks: state.tasks.filter(
-        (task) => task.status === "awaiting_approval"
-      ).length,
-      completedTasks: state.tasks.filter((task) => task.status === "completed").length,
-      failedTasks: state.tasks.filter((task) => task.status === "failed").length,
-      runs: state.runs.length
-    }));
+    return this.withState(async (state) => summarizeAutomationState(state));
   }
 
-  async executeTask(task, agent) {
+  async executeTask(task, agent, state) {
     if (task.action === "automation.noop") {
       return { message: "No-op automation completed" };
     }
@@ -292,6 +292,17 @@ class AutomationService {
         }
       });
       return { memoryEntryId: entry.id, memoryKind: entry.kind };
+    }
+    if (task.action === "monitoring.snapshot") {
+      if (typeof this.captureMonitoringSnapshot !== "function") {
+        throw new RangeError("monitoring snapshots are not configured");
+      }
+      const snapshot = await this.captureMonitoringSnapshot(state);
+      return {
+        monitoringSnapshotId: snapshot.id,
+        recorded: snapshot.recorded,
+        attention: snapshot.attention
+      };
     }
     throw new RangeError(`unsupported task action: ${task.action}`);
   }
@@ -354,6 +365,7 @@ class AutomationService {
         if (task.retryDelayMinutes === undefined) task.retryDelayMinutes = 5;
         if (task.attemptCount === undefined) task.attemptCount = 0;
       }
+      seedMissingDefaultAgents(state, this.now);
       return state;
     } catch (error) {
       if (error.code !== "ENOENT") {
@@ -426,8 +438,38 @@ function defaultAgents(now) {
       capabilities: ["memory.record", "automation.noop"],
       enabled: true,
       registeredAt
+    },
+    {
+      id: "operations-observer",
+      name: "Operations Observer",
+      capabilities: ["monitoring.snapshot"],
+      enabled: true,
+      registeredAt
     }
   ];
+}
+
+function seedMissingDefaultAgents(state, now) {
+  const existingAgentIds = new Set(state.agents.map((agent) => agent.id));
+  for (const agent of defaultAgents(now)) {
+    if (!existingAgentIds.has(agent.id)) {
+      state.agents.push(agent);
+    }
+  }
+}
+
+function summarizeAutomationState(state) {
+  return {
+    agents: state.agents.length,
+    pendingTasks: state.tasks.filter((task) => task.status === "pending").length,
+    blockedTasks: state.tasks.filter((task) => task.status === "blocked").length,
+    awaitingApprovalTasks: state.tasks.filter(
+      (task) => task.status === "awaiting_approval"
+    ).length,
+    completedTasks: state.tasks.filter((task) => task.status === "completed").length,
+    failedTasks: state.tasks.filter((task) => task.status === "failed").length,
+    runs: state.runs.length
+  };
 }
 
 function selectAgent(agents, task) {
@@ -497,5 +539,6 @@ module.exports = {
   AutomationService,
   TASK_ACTIONS,
   TASK_STATUSES,
+  summarizeAutomationState,
   startAutomationScheduler
 };
