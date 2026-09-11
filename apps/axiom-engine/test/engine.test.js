@@ -62,7 +62,7 @@ test("reports engine health", async (t) => {
     service: "AXIOM engine"
   });
 
-  test("reports seeded automation status", async (t) => {
+  await t.test("reports seeded automation status", async (t) => {
     t.after(() => fs.rm(memoryDirectory, { recursive: true, force: true }));
     const server = await startServer();
     t.after(() => stopServer(server));
@@ -100,7 +100,7 @@ test("reports engine health", async (t) => {
     ]);
   });
 
-  test("reports empty OpenAI usage before any provider requests", async (t) => {
+  await t.test("reports empty OpenAI usage before any provider requests", async (t) => {
     t.after(() => fs.rm(memoryDirectory, { recursive: true, force: true }));
     const server = await startServer();
     t.after(() => stopServer(server));

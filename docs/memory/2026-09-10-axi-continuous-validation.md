@@ -30,6 +30,8 @@ portal test.
 The next run, `34572611157`, passed the AXI.Core and portal jobs but retained
 an engine test process longer than expected on the Node 20 runner. Engine test
 server teardown now stops the listener before closing idle and active
-connections, and each workflow job has a five-minute maximum duration. Local
-engine and portal tests pass after this correction. The subsequent GitHub
-Actions run is the required confirmation of the Node 20 behavior.
+connections. The two test cases previously declared globally inside the
+asynchronous health test are now awaited subtests, so Node 20 owns their
+lifecycle and cleanup. Each workflow job has a five-minute maximum duration.
+Local engine and portal tests pass after this correction. The subsequent
+GitHub Actions run is the required confirmation of the Node 20 behavior.
