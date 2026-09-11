@@ -1,8 +1,9 @@
 # AXIOM / KEYSTONE project timeline
 
 **Last updated:** 2026-09-11
-**Current phase:** Business-operations foundation complete; production
-promotion and external readiness remain blocked
+**Current phase:** Tier 1 internal readiness controls and business-operations
+foundation complete; founder-controlled activation and external/production
+readiness remain pending
 
 Update this document when a milestone changes state. A checked item is complete;
 an unchecked item is planned or in progress. The timeline begins with AXIOM's
@@ -146,6 +147,10 @@ from later repository implementation and deployment evidence.
 | 2026-09-10 | Complete | Tier 1 minimum-data evidence ledger established for offer readiness, conservative low/base/high assumptions, actual-versus-forecast review, and founder-reviewed productivity measurements | `docs/AXES_TIER_1_EVIDENCE_LEDGER.md` |
 | 2026-09-10 | Complete | Internal AXES design/materials consultation candidate defined with permitted deliverables, exclusions, activation decisions, and private evidence practice | `docs/AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md` |
 | 2026-09-11 | Complete | Internal KEYSTONE creator-origin recordkeeping candidate defined with evidence-organization deliverables, explicit legal/financial exclusions, and private evidence practice | `docs/KEYSTONE_CREATOR_ORIGIN_SETUP_READINESS.md` |
+| 2026-09-11 | Complete | First private KEYSTONE draft application records captured for AXIOM Engine and AXIOM Freedom with source-tree identifiers and unverified Ux/authority state | `docs/keystone/AXIOM_APPLICATION_DRAFT_RECORDS.md` |
+| 2026-09-11 | Complete | Asset-use readiness register established with current private/excluded source groups and a required source, rights, accessibility, and human-approval decision record | `docs/AXES_ASSET_USE_READINESS.md` |
+| 2026-09-11 | Complete | Tier 1 decision register established to track unresolved founder-controlled offer, continuity, evidence, rights, legal-readiness, and external-action gates | `docs/AXES_TIER_1_DECISION_REGISTER.md` |
+| 2026-09-11 | Complete | Public portal regression coverage added for direct private-archive denial and document-library traversal denial | `apps/axiom-freedom/test/axiom-proxy.test.js` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints

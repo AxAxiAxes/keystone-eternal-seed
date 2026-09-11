@@ -99,6 +99,11 @@ user accounts, authority tokens, global application claims, or third-party
 app registration flow until the record model, access controls, privacy,
 security, correction process, and human operating capacity are validated.
 
+The first captured draft records are in
+`keystone/AXIOM_APPLICATION_DRAFT_RECORDS.md`. They document source state and
+known technical boundaries only; neither entry has a recorded Ux relationship
+or internal Origin Unit authority.
+
 ## Related records
 
 - `AXES_CREATOR_ORIGIN_CONSTITUTION.md`

@@ -69,6 +69,10 @@ revenue, valuation, or a guarantee.
 Use `AXES_TIER_1_EVIDENCE_LEDGER.md` for the approved minimum-data template
 covering offer readiness, conservative scenario assumptions,
 actual-versus-forecast variance, and founder-reviewed productivity tests.
+Use `AXES_ASSET_USE_READINESS.md` for the individual asset-use decision fields
+that must be complete before any private source asset is reused.
+Use `AXES_TIER_1_DECISION_REGISTER.md` to track the human-controlled
+activation, continuity, and legal-readiness decisions that remain pending.
 
 ## Cryptocurrency and financial boundary
 

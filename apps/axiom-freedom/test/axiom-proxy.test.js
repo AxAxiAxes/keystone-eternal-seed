@@ -145,6 +145,16 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(library.status, 200);
     assert.match(await library.text(), /AXI project memory/);
 
+    const privateArchive = await fetch(
+      `http://127.0.0.1:${webPort}/private-archive/copilot-library/source.png`
+    );
+    assert.equal(privateArchive.status, 404);
+
+    const libraryTraversal = await fetch(
+      `http://127.0.0.1:${webPort}/library/%2e%2e%2fprivate-archive/source.png`
+    );
+    assert.equal(libraryTraversal.status, 403);
+
     const materials = await fetch(`http://127.0.0.1:${webPort}/materials`);
     assert.equal(materials.status, 200);
     assert.match(await materials.text(), /Materials Discovery/);
