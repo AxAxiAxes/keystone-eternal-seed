@@ -104,6 +104,7 @@ function getAttention(snapshot) {
   const attention = [];
   if (!snapshot.memoryAvailable) attention.push("memory-unavailable");
   if (snapshot.automation.failedTasks > 0) attention.push("failed-tasks");
+  if (snapshot.automation.auditAttentionTasks > 0) attention.push("task-run-audit-error");
   if (snapshot.scheduler.enabled && snapshot.scheduler.lastError) attention.push("scheduler-error");
   if (snapshot.automation.pendingTasks > 20) attention.push("queue-backlog");
   if (snapshot.governance && snapshot.governance.status !== "ready") {

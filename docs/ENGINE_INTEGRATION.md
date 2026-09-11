@@ -18,6 +18,14 @@
 | `AXIOM_BACKUP_DIRECTORY` | `axiom-engine` | Unset | Required distinct location for private runtime recovery bundles. |
 | `AXIOM_RECOVERY_RESTORE_DIRECTORY` | `axiom-engine` | Unset | Required isolated location for verified recovery drills; never the live memory directory. |
 
+When using the local Compose topology, configure
+`AXIOM_BACKUP_HOST_DIRECTORY` and `AXIOM_RECOVERY_RESTORE_HOST_DIRECTORY`
+instead. Compose mounts them at the fixed, separate engine paths
+`/app/backups` and `/app/recovery-staging`; it does not accept arbitrary
+unmounted container locations. The backup host directory must be selected on
+durable storage distinct from the live memory location. A separate path alone
+does not prove independent recovery.
+
 ## Command contract
 
 Send a `POST` request to `axiom-freedom` at `/api/axiom`.

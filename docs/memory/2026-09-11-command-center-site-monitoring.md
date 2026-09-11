@@ -4,8 +4,9 @@
 
 ## Agent count
 
-Repository evidence confirms four current AXI agent records: Memory Curator,
-Automation Executor, Automation Auditor, and Operations Observer.
+Repository evidence confirms five current AXI agent records: Memory Curator,
+Project Memory Manager, Automation Executor, Automation Auditor, and
+Operations Observer.
 `AXES_AGENT_OPERATING_MODEL.md` defines 15 future role profiles with a current
 practical ceiling of 12 enabled roles. No repository evidence confirms 18
 active or automated agents.
@@ -30,10 +31,11 @@ production configuration, security, availability, or deployment state.
 
 The protected `/command-center` view combines existing AXI governance, agent,
 task, and run responses into an interactive continuity tree and task-flow
-metrics. It refreshes itself and the listed public endpoints every 30 seconds.
-It is an observation surface only: it does not create or process work, enable
-the scheduler, modify sites, deploy, access accounts, or contact third-party
-systems.
+metrics. It refreshes protected internal data only when an operator opens the
+view or selects **Refresh now**. Public endpoint checks remain a separate,
+explicitly authorized continuity-review procedure and are not performed by
+the page. The view does not create or process work, enable the scheduler,
+modify sites, deploy, access accounts, or contact third-party systems.
 
 ## Supporting records
 

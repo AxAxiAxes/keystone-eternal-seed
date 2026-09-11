@@ -8,8 +8,8 @@ services:
       - "3000"
     environment:
       AXIOM_MEMORY_DIRECTORY: ${AXIOM_MEMORY_DIRECTORY:-/app/data}
-      AXIOM_BACKUP_DIRECTORY: ${AXIOM_BACKUP_DIRECTORY:-}
-      AXIOM_RECOVERY_RESTORE_DIRECTORY: ${AXIOM_RECOVERY_RESTORE_DIRECTORY:-}
+      AXIOM_BACKUP_DIRECTORY: /app/backups
+      AXIOM_RECOVERY_RESTORE_DIRECTORY: /app/recovery-staging
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4.1-mini}
       AXIOM_AUTOMATION_ENABLED: ${AXIOM_AUTOMATION_ENABLED:-false}
@@ -19,6 +19,8 @@ services:
       AXIOM_MONITORING_POLL_INTERVAL_MS: ${AXIOM_MONITORING_POLL_INTERVAL_MS:-60000}
     volumes:
       - ./axiom_memory:/app/data
+      - ${AXIOM_BACKUP_HOST_DIRECTORY:-./axiom_backups}:/app/backups
+      - ${AXIOM_RECOVERY_RESTORE_HOST_DIRECTORY:-./axiom_recovery_staging}:/app/recovery-staging
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"]
       interval: 20s

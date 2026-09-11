@@ -832,3 +832,51 @@ test("records a monitoring snapshot through the dedicated observer", async (t) =
   });
   assert.equal(run.agentId, "operations-observer");
 });
+
+test("does not retry a completed protected operation when its memory audit fails", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  let catalogWrites = 0;
+  const service = new AutomationService({
+    directory,
+    memoryStore: {
+      async record() {
+        throw new Error("private memory audit is unavailable");
+      }
+    },
+    catalogSource: async (entry) => {
+      catalogWrites += 1;
+      return {
+        id: "source-entry-1",
+        sequence: catalogWrites,
+        sourceId: entry.sourceId
+      };
+    }
+  });
+  const task = await service.createTask({
+    title: "Catalog a reviewed source",
+    action: "source.catalog",
+    agentId: "project-memory-manager",
+    approvalRequired: true,
+    originCheckpoint: "axi-source-catalog",
+    payload: {
+      sourceId: "reviewed-source",
+      title: "Reviewed source",
+      sourceType: "document",
+      classification: "internal",
+      sourceReference: "docs/AXI_SOURCE_CATALOG.md",
+      sha256: "a".repeat(64)
+    }
+  });
+  await service.reviewTaskApproval(task.id, true);
+
+  const [outcome] = await service.processDueTasks();
+
+  assert.equal(outcome.status, "completed");
+  assert.match(outcome.auditError, /private memory audit is unavailable/);
+  assert.equal(catalogWrites, 1);
+  assert.equal((await service.listTasks())[0].status, "completed");
+  assert.match((await service.listRuns())[0].auditError, /private memory audit is unavailable/);
+  assert.equal((await service.processDueTasks()).length, 0);
+  assert.equal(catalogWrites, 1);
+});

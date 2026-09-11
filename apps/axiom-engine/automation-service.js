@@ -474,6 +474,8 @@ class AutomationService {
           task.lastRunAt = this.now().toISOString();
           task.lastResult = result;
           task.attemptCount = 0;
+          task.lastError = null;
+          task.lastAuditError = null;
           if (task.recurrenceMinutes) {
             task.status = "pending";
             task.runAt = new Date(
@@ -484,7 +486,12 @@ class AutomationService {
           }
           task.updatedAt = this.now().toISOString();
           const run = await this.recordRun(state, task, agent, "completed", result);
-          outcomes.push({ taskId: task.id, status: task.status, runId: run.id });
+          outcomes.push({
+            taskId: task.id,
+            status: task.status,
+            runId: run.id,
+            ...(run.auditError ? { auditError: run.auditError } : {})
+          });
         } catch (error) {
           task.updatedAt = this.now().toISOString();
           task.lastError = error.message;
@@ -502,7 +509,12 @@ class AutomationService {
             retrying ? "retrying" : "failed",
             { error: error.message }
           );
-          outcomes.push({ taskId: task.id, status: task.status, runId: run.id });
+          outcomes.push({
+            taskId: task.id,
+            status: task.status,
+            runId: run.id,
+            ...(run.auditError ? { auditError: run.auditError } : {})
+          });
         }
       }
 
@@ -644,18 +656,24 @@ class AutomationService {
       recordedAt: this.now().toISOString()
     };
     state.runs.push(run);
-    await this.memoryStore.record({
-      kind: "decision",
-      content: `Automation task "${task.title}" ${status} by ${agent.name}.`,
-      metadata: {
-        source: "automation",
-        taskId: task.id,
-        runId: run.id,
-        agentId: agent.id,
-        action: task.action,
-        status
-      }
-    });
+    try {
+      await this.memoryStore.record({
+        kind: "decision",
+        content: `Automation task "${task.title}" ${status} by ${agent.name}.`,
+        metadata: {
+          source: "automation",
+          taskId: task.id,
+          runId: run.id,
+          agentId: agent.id,
+          action: task.action,
+          status
+        }
+      });
+    } catch (error) {
+      // The durable automation run prevents an audit-write failure from retrying a completed action.
+      run.auditError = error.message;
+      task.lastAuditError = error.message;
+    }
     return run;
   }
 
@@ -687,6 +705,7 @@ class AutomationService {
         if (task.maxAttempts === undefined) task.maxAttempts = 1;
         if (task.retryDelayMinutes === undefined) task.retryDelayMinutes = 5;
         if (task.attemptCount === undefined) task.attemptCount = 0;
+        if (task.lastAuditError === undefined) task.lastAuditError = null;
         if (task.originCheckpoint === undefined) task.originCheckpoint = null;
         if (task.automationProfileId === undefined) task.automationProfileId = null;
         if (task.automationProfileKey === undefined) task.automationProfileKey = null;
@@ -918,6 +937,7 @@ function summarizeAutomationState(state) {
     ).length,
     completedTasks: state.tasks.filter((task) => task.status === "completed").length,
     failedTasks: state.tasks.filter((task) => task.status === "failed").length,
+    auditAttentionTasks: state.tasks.filter((task) => isNonEmptyString(task.lastAuditError)).length,
     runs: state.runs.length,
     agentObservations: state.agents.map((agent) => observeAgent(state, agent))
   };
@@ -944,6 +964,9 @@ function evaluateGovernanceReadiness(state) {
   const blockedTaskIds = state.tasks
     .filter((task) => task.status === "blocked")
     .map((task) => task.id);
+  const auditAttentionTaskIds = state.tasks
+    .filter((task) => isNonEmptyString(task.lastAuditError))
+    .map((task) => task.id);
   const issues = [
     ...unregisteredAgentIds.map((agentId) => ({
       code: "unregistered-agent",
@@ -967,6 +990,10 @@ function evaluateGovernanceReadiness(state) {
     })),
     ...blockedTaskIds.map((taskId) => ({
       code: "blocked-task",
+      taskId
+    })),
+    ...auditAttentionTaskIds.map((taskId) => ({
+      code: "task-run-audit-error",
       taskId
     }))
   ];
@@ -1017,6 +1044,9 @@ function observeAgent(state, agent) {
   }
   if (taskCountsByState.blocked > 0) attention.push("assigned-task-blocked");
   if (taskCountsByState.failed > 0) attention.push("assigned-task-failed");
+  if (tasks.some((task) => isNonEmptyString(task.lastAuditError))) {
+    attention.push("assigned-task-run-audit-error");
+  }
   return {
     scope: "Observed internal system facts only; not cognition, memory completeness, legal personality, ownership, or external state.",
     agentId: agent.id,
@@ -1032,7 +1062,8 @@ function observeAgent(state, agent) {
     assignedTaskCountsByState: taskCountsByState,
     recentRun: recentRun ? {
       status: recentRun.status,
-      recordedAt: recentRun.recordedAt
+      recordedAt: recentRun.recordedAt,
+      auditError: recentRun.auditError || null
     } : null,
     attention
   };

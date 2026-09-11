@@ -74,7 +74,11 @@ Tasks can specify an eligible `agentId`; otherwise the first enabled agent with
 the matching capability is assigned. Tasks have a priority from 1 (backlog) to
 5 (critical), defaulting to 3. Due tasks execute by highest priority first,
 then earliest scheduled time. Every completed or failed execution creates a
-durable run record and a private `decision` memory audit entry.
+durable run record and attempts a private `decision` memory audit entry. If
+that secondary memory audit cannot be written, the completed task remains
+non-retryable to prevent a duplicate protected operation; the retained
+task/run audit error becomes an explicit readiness and monitoring attention
+state.
 
 Tasks may declare `dependsOn`, an array of existing task identifiers. A
 dependent task is blocked until every prerequisite is completed. Set

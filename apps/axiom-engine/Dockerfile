@@ -16,6 +16,11 @@ COPY recovery-backup-service.js ./
 COPY coordinate-service.js ./
 COPY bead-passport-service.js ./
 COPY startup-context-service.js ./
+COPY continuity-record-service.js ./
+COPY source-catalog-service.js ./
+COPY business-metrics-service.js ./
+COPY service-registry-service.js ./
+COPY automation-profile-service.js ./
 
 EXPOSE 3000
 

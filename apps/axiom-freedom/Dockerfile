@@ -13,6 +13,7 @@ COPY apps/axiom-freedom/library.html ./
 COPY apps/axiom-freedom/axiom_web_interface.html ./
 COPY apps/axiom-freedom/automation.html ./
 COPY apps/axiom-freedom/command-center.html ./
+COPY apps/axiom-freedom/origin-continuity.html ./
 COPY apps/axiom-freedom/support.html ./
 COPY apps/axiom-freedom/materials.html ./
 COPY PROJECT_TIMELINE.md ./

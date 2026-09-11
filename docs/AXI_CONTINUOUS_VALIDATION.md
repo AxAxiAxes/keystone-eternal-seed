@@ -16,7 +16,8 @@ It runs automatically for pushes to `axaxiaxes-axes-directory-data-model` and
 | --- | --- | --- |
 | Node tests | `npm ci` and `npm test` | `apps/axiom-engine` and `apps/axiom-freedom` |
 | AXI.Core tests | `dotnet test AXIOM.sln --configuration Release` | AXI.Core library and tests |
-| Portal image | `docker build --file apps/axiom-freedom/Dockerfile` | Production portal image, including protected Command Center assets |
+| Engine image | Build and start `apps/axiom-engine/Dockerfile`; query private `/health` | Production engine image and imported runtime modules |
+| Portal image | Build and start `apps/axiom-freedom/Dockerfile`; query `/health` and `/origin-continuity` | Production portal image, including required public and protected-view assets |
 
 The workflow has `contents: read` permission only. It does not receive
 deployment credentials, access production data, contact third parties, enable

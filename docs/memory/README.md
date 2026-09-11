@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-11 comprehensive-review remediation](2026-09-11-comprehensive-review-remediation.md)
 - [2026-09-11 AXI agent provenance and observation](2026-09-11-agent-provenance-observation.md)
 - [2026-09-11 Automation activation profiles](2026-09-11-automation-activation-profiles.md)
 
