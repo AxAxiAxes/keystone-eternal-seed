@@ -14,7 +14,8 @@
 
 - Local combined-state validation passed: AXI engine `45/45`, protected portal `1/1`, and AXI.Core `5/5`.
 - GitHub Actions runs `34576734969` and `34576850646` exposed a test-lifecycle race in `apps/axiom-engine/test/automation-service.test.js`: a nested continuity subtest was registered through the global test function and could be cancelled after its parent completed.
-- The test now uses `await t.test(...)`, following the existing engine-test convention. The corrected engine suite passed locally at `45/45`; hosted validation must confirm the pushed correction.
+- The test now uses `await t.test(...)`, following the existing engine-test convention. The corrected engine suite passed locally at `45/45`.
+- GitHub Actions run `34577014677` passed AXI engine, protected portal, and AXI.Core validation after the correction.
 
 ## Retained boundaries
 
