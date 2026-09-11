@@ -58,6 +58,13 @@ Before launching or materially changing a service, record:
 | Private | Source archives, creator drafts, support records, account configuration, unpublished media | Store in access-controlled systems; do not put in public repositories or prompts |
 | Sensitive/restricted | Credentials, payment details, legal records, identity documents, health, financial, intimate, or child-related information | Do not collect for early pilots; use dedicated approved systems and professional review if ever required |
 
+Portal intake records are private operational records. If a local
+`apps/axiom-freedom/leads.json` record is created by the existing intake
+workflow, it must remain excluded from version control and must never be used
+as a substitute for an approved retention, access, export, deletion, and
+incident-response process. Do not add client contact details or intake content
+to source code, documentation, test fixtures, prompts, or public artifacts.
+
 ## Content, attribution, and media
 
 - Record the creator/source, rights status, intended use, approval date, and
