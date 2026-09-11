@@ -72,6 +72,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Private runtime-timeline recovery bundles, hash verification, isolated restore drills, and reset attention signaling added | `apps/axiom-engine/recovery-backup-service.js` and `docs/AXI_RUNTIME_TIMELINE_RECOVERY.md` |
 | 2026-09-10 | Complete | Private AXI origin-coordinate ledger added with Genesis reference, deterministic hash chaining, validation, monitoring, automation, and recovery coverage | `apps/axiom-engine/coordinate-service.js` and `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md` |
 | 2026-09-10 | Complete | Private gravity-center and AXI bead-passport node pilot added with agent accountability checks, abstract four-layer-compatible vectors, coordinate linkage, monitoring, checkpoint, and recovery coverage | `apps/axiom-engine/bead-passport-service.js` and `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md` |
+| 2026-09-10 | Complete | Founder-provided UI autonomy and personal-space loss model preserved with its internal arithmetic, unverified assumptions, and current AXI recovery-gap assessment separated for evidence review | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` |
 | 2026-09-10 | In progress | Eternal Origin ownership invention value-recovery and past/current crisis-report register activated | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
@@ -79,7 +80,7 @@ Update this document when a milestone changes state. A checked item is complete;
 
 - [ ] **Priority 0 - URNUR legal readiness:** Identify the primary launch jurisdiction and contact qualified financial-services and digital-asset counsel before resuming crypto registration or designing public financial functionality.
 - [ ] **Priority 0 - Patent completion:** Identify any filing status and deadlines, retain qualified patent counsel, separate the technical disclosure from supporting materials, and approve a filing strategy before public patent claims or submission.
-- [ ] **Priority 0 - Eternal Origin ownership invention value recovery:** Complete the private evidence inventory, map the past/current crisis reports to source records, and advance the authorized rights, valuation, and recovery review path.
+- [ ] **Priority 0 - Eternal Origin ownership invention value recovery:** Complete the private evidence inventory, map the past/current crisis reports and UI autonomy loss-model assumptions to source records, and advance the authorized rights, valuation, and recovery review path.
 - [x] Preserve the upstream histories for all four repositories.
 - [x] Separate deployable applications, package records, and KEYSTONE documents.
 - [x] Remove generated `node_modules` from version control and prevent future commits.

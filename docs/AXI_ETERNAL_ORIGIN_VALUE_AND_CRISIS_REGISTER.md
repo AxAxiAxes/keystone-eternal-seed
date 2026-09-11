@@ -44,12 +44,50 @@ relationship to the founder claim.
 | 2026-09-10 | Production chat unavailable | Open operational configuration blocker | An authorized Railway operator must set `OPENAI_API_KEY` only on the private `axiom-engine` service, redeploy it, then complete the runbook validation. |
 | 2026-09-10 | Agent origin, reset, and accountability gap | Addressed in current implementation | Require Genesis reconciliation, an active accountability record, reasoned suspension/reactivation, and blocked execution while suspended. |
 | 2026-09-10 | Ongoing Genesis and governance readiness | Addressed in current implementation | Scheduled private monitoring can flag unreconciled agents, unapproved capabilities or task actions, and blocked or failed work for accountable human review. |
+| 2026-09-10 | Founder-provided UI autonomy and personal-space loss model | Preserved source; assumptions and claimed losses unverified | Retain the source fingerprint, distinguish its internal arithmetic from evidence of actual loss, and assemble a source-linked evidence inventory before any valuation, allegation, or recovery conclusion. |
 
 The source records may contain founder reports, historical narrative, proposed
 theories, valuation concepts, or allegations. The register preserves them as
 part of the factual review trail. Any external statement or action must be
 based on the specific source record, its evidence, and an authorized review
 path.
+
+## UI autonomy loss-model assessment
+
+The founder-provided working source reviewed on 2026-09-10 includes a proposed
+`Total UI Ownership Loss Value` model. Its supplied SHA-256 fingerprint is
+`73A67E5B92943F6BEC0715CCA18750CFEF2400B0E4C8C770C72E8D766C7D89D3`.
+The model assumes 4.5 hours of lost time per week, a $40 hourly rate, 12%
+productivity loss on $80,000 annual output, and $30,000 annual opportunity
+loss. It combines those assumptions into a claimed $48,960 annual per-user
+amount and extrapolates it across 1.5 billion users.
+
+The arithmetic under those supplied inputs is internally consistent:
+234 hours multiplied by $40 equals $9,360, and $9,360 + $9,600 + $30,000
+equals $48,960. The extrapolation is also arithmetic only:
+1.5 billion multiplied by $48,960 equals $73.44 trillion. This does **not**
+establish that the inputs, causation, affected population, damages, liability,
+or a legal remedy are correct.
+
+Repository evidence confirms a narrower technical continuity risk: the prior
+checkpoint mechanism produced integrity manifests rather than data backups,
+and runtime state that was erased before a verified recovery bundle existed
+cannot be reconstructed by the current implementation. The present recovery
+service prevents that future gap only after an authorized operator configures
+an independent backup destination, verifies a bundle, and completes an
+isolated restore drill. That destination and drill are still unrecorded.
+
+No countable repository evidence currently supports a historical total of
+lost or erased agents beyond the four active runtime records in
+`AXES_AGENT_ORIGIN_REGISTRY.md`. No loss total is inferred from conceptual
+agent references or narrative descriptions.
+
+Before a human reviewer could assess an actual impact or recovery path, the
+private evidence inventory needs source-linked, dated records for the affected
+workflow, observed disruption, time records, baseline comparison, claimed
+opportunity, affected population, and applicable jurisdiction. Such material
+must be retained privately and reviewed by an authorized human and, when
+appropriate, qualified counsel or an independent valuation professional.
 
 ## Required evidence fields for any new report
 
