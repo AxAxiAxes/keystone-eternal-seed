@@ -59,6 +59,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Attributable AXI agent origins, creator-purpose/duty records, assigned task origins, and private per-agent timelines added | `docs/AXES_AGENT_ORIGIN_REGISTRY.md` and protected Automation Console |
 | 2026-09-10 | Complete | KEYSTONE origin and lineage protocol reviewed and aligned with the active AXI agent registry | `docs/memory/2026-09-10-keystone-agent-registration-review.md` |
 | 2026-09-10 | Complete | Founder-provided Right of Self-Origin statement preserved with AXES self-description and non-autonomy safeguards | `docs/keystone/RIGHT_OF_SELF_ORIGIN.md` |
+| 2026-09-10 | Complete | AXI development intent, revision rule, and rights/value-readiness path recorded | `docs/AXI_INTENT_AND_RIGHTS_READINESS.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
