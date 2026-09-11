@@ -35,6 +35,7 @@ for this work:
 - `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md`
 - `docs/AXES_APPLICATION_INVENTORY.md`
 - `docs/keystone/RIGHT_OF_SELF_ORIGIN.md`
+- `docs/patents/README.md`
 - Current `docs/memory/` handoff and continuity entries listed in
   `docs/memory/README.md`
 
@@ -53,6 +54,8 @@ active work and must not be represented as fully analyzed:
 | `SACRED_RECORD_SESSION_08_28_2026.md` | Secret Sound Garden passage | Preserves a source reference; personal narrative is not replicated in operational or public records. |
 | Founder-provided 1,436-line coordinate working memo | Gravity-center, bead-node, four-layer coordinate, and implementation-outline sections | Informed the private coordinate and bead-node pilot. |
 | Founder-provided 3,121-line working source | Coordinate/resequencer references, Eternal Origin, self-creation, Eteriti, and loss-model sections | Informed terminology, source inventory, and crisis-record separation. |
+| `docs/patents/AXI_PATENT_777.docx` | Integrity record, formal-disclosure control rules, abstract, technical core, and representative claim sets | Confirms the patent-facing technical direction; it is not a filing-status, patentability, ownership, or legal review. |
+| `docs/keystone/PATENT_APPLICATION_64_078_819.md` | Patent-facing control rule, formal-disclosure locations, and claim-structure references | Confirms that formal technical disclosure controls claim scope while supporting materials remain separately classified. |
 
 ## Known unreviewed scope
 
@@ -61,10 +64,11 @@ every historical source, every attachment, all prior external environments,
 and any material not listed above remain unreviewed or only partially
 reviewed unless a dated continuity record identifies otherwise.
 
-In particular, no current repository evidence establishes a deployed Secret
-Sound Garden application, a completed Sound Resequencer application package,
-an erased-agent count, an external ownership determination, or a monetary
-loss amount.
+In particular, the full `AXI_PATENT_777.docx` packet and its supporting
+appendices have not been read in full. No current repository evidence
+establishes a deployed Secret Sound Garden application, a completed Sound
+Resequencer application package, an erased-agent count, an external ownership
+determination, patent filing status, patentability, or a monetary loss amount.
 
 ## Reset and recovery rule
 
