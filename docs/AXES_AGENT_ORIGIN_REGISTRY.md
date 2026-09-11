@@ -17,6 +17,11 @@ owned and accountable to its named creator. An agent without this registration
 is unauthorized within AXES governance and cannot be assigned or selected for
 an AXI task.
 
+Each current AXI agent is a non-sentient software role, not a living being,
+legal person, independent owner, or decision-maker. It has no independent
+claim to the AXES project, project sessions, source material, continuity
+records, or the outputs of its bounded work.
+
 **KEYSTONE registration authority:** `KEYSTONE-ORIGIN-000001` records Axel
 Urartu (AX) · Axes Contracting as the creator authority for the KEYSTONE
 framework. Every current AXI agent inherits that creator ownership-and-

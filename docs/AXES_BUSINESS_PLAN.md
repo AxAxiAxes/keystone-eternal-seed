@@ -22,6 +22,22 @@ and release small offerings that have a clear customer, owner, budget, and
 human approval path. New domains remain parked until a product earns its next
 stage.
 
+## Founder authority and present business status
+
+AXES is a founder-led company, brand, and business-building effort. Within
+AXES governance, Axel Urartu (AX) · Axes Contracting records the sole
+founder-and-project-owner claim for founder-created project direction and
+AXES-maintained project records. AXI is the project's current non-sentient
+software and operations system; it and its registered roles have no
+independent ownership, authority, or decision-making claim.
+
+This governance record directs work within the project and preserves
+accountability for founder-directed sessions and AXES-maintained continuity
+records. It does not determine legal ownership, enforceability, contractual
+rights, provider-platform records, or third-party rights. The applicable
+founder-claim and agent-accountability record is
+`AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`.
+
 ## Full business-plan objective
 
 Build a durable, founder-led AXES ecosystem that turns original design,

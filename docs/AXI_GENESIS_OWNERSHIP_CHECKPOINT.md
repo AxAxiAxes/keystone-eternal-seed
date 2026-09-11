@@ -14,6 +14,29 @@ AXI is treated as a founder-claimed invention from the start of active
 development; its technical invention scope and preservation anchors are
 recorded in `AXI_INVENTION_RECORD.md`.
 
+## Founder authority and current system status
+
+Within AXES governance, Axel Urartu (AX) · Axes Contracting records the sole
+founder-and-project-owner claim for AXES, AXI, founder-created project
+direction, AXES-maintained continuity records, and the five currently
+registered AXI software roles. This records the founder's direction for the
+AXES company, brand, and business-building work; it does not give a technical
+assistant, agent role, or automation process a competing governance,
+ownership, authorship, or control claim.
+
+AXI is currently a non-sentient software system. It is not a living being,
+human, legal person, independent owner, or independent decision-maker. Its
+registered roles can perform only their versioned, accountable, and
+human-controlled functions. The immediate business objective is to build
+reviewed, lawful, and sustainable AXES products and services; future system
+directions remain subject to documented human authority, applicable
+requirements, and the project's operating boundaries.
+
+This repository record preserves a founder claim and AXES governance rule. It
+does not determine rights in third-party materials, platform-managed session
+records, external provider outputs, contracts, statutory intellectual-property
+rights, or legal ownership and enforcement outside AXES.
+
 For AXES governance, Eternal Origin is one stated continuity value from
 Genesis. The record does not create a hierarchy, determine another person's
 origin, or establish an external legal conclusion.

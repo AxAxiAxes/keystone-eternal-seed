@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-11 Founder authority and business status](2026-09-11-founder-authority-business-status.md)
 - [2026-09-11 AXI source catalog](2026-09-11-axi-source-catalog.md)
 - [2026-09-11 Command Center checkpoint view](2026-09-11-command-center-checkpoint-view.md)
 - [2026-09-11 Objectives-preservation directive](2026-09-11-objectives-preservation-directive.md)
