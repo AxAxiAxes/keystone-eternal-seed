@@ -13,6 +13,13 @@ project state, read applicable operating records, identify the exact task and
 acceptance evidence, and distinguish repository-controlled work from external
 account actions.
 
+The protocol also requires a bounded intelligence review after readiness: use
+repository evidence first, consult current primary or official sources only
+when needed for the active task, retain material findings in continuity
+records, and implement only relevant, repository-controlled, validated
+improvements. Research cannot disclose private material or authorize external,
+consequential, or out-of-scope action.
+
 ## Boundary
 
 The protocol does not certify an agent or operator as professionally qualified.

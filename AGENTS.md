@@ -22,6 +22,26 @@ deployment state.
    access does not authorize domain, DNS, Railway, email, cloud, payment,
    vendor, legal, or account changes.
 
+## Task-relevant intelligence loop
+
+After completing the readiness check, begin a bounded intelligence review for
+the active task. Use repository evidence first, then current primary sources
+or official documentation only when the task depends on information that may
+have changed. Record the source, date checked, finding, and implementation
+relevance in a continuity record when it materially affects project direction.
+
+During active work, continuously compare findings against the requested
+outcome, current checks, and established boundaries. Implement a discovered
+improvement only when it is directly relevant, repository-controlled,
+reversible where practical, within the current authority, and can be
+validated. Otherwise, preserve it as a clearly labeled proposal or blocker for
+an authorized human decision.
+
+Do not send repository code, secrets, personal data, private records, or
+credentials to external research systems. A research result does not authorize
+an external integration, account action, procurement, publication, outreach,
+professional claim, or change outside the approved task scope.
+
 ## Qualification and authority boundary
 
 An agent can assist with repository analysis, implementation, testing,
