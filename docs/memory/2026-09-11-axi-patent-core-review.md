@@ -2,12 +2,15 @@
 
 **Status:** Partial technical source review completed
 
-## Integrity
+## Preserved file hash
 
-The SHA-256 value calculated for `docs/patents/AXI_PATENT_777.docx` matches
-the preserved record in `docs/patents/README.md`:
+The SHA-256 file hash calculated for `docs/patents/AXI_PATENT_777.docx`
+matches the repository preservation record in `docs/patents/README.md`:
 
 `D8BBAA974D3FAE3FE05C09845A9B3231F3868BD1AB5AE6D2627F4BD906F46EC6`
+
+This is only a file-integrity comparison. It does not interpret source text,
+define the term "chechetki," or connect that term to the file hash.
 
 ## Reviewed technical core
 
