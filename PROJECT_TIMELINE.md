@@ -11,6 +11,7 @@ from later repository implementation and deployment evidence.
 
 | Date | Status | Milestone | Evidence |
 | --- | --- | --- | --- |
+| 2026-09-11 | Complete | Automation Profile dependencies now require existing completed-task evidence during preflight, draft creation, and activation | `apps/axiom-engine/automation-profile-service.js` and `docs/memory/2026-09-11-automation-profile-dependencies.md` |
 | 2026-09-11 | Complete | Protected Automation Profile preflight added to validate a payload-free task plan and activation gates before any draft, task, or schedule is created | `apps/axiom-engine/automation-profile-service.js` and `docs/memory/2026-09-11-automation-profile-preflight.md` |
 | 2026-09-11 | Complete | Protected Automation Profile transition history added with payload-free hash-linked lifecycle evidence for draft, activation, pause, and resume events | `apps/axiom-engine/automation-profile-service.js` and `docs/memory/2026-09-11-automation-profile-history.md` |
 | 2026-09-11 | Complete | Private Automation Profiles gained an explicit, readiness-gated resume lifecycle that reuses the exact retained task associations without creating work or enabling the scheduler | `apps/axiom-engine/automation-profile-service.js` and `docs/memory/2026-09-11-automation-profile-resume.md` |

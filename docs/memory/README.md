@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-11 automation profile dependency evidence](2026-09-11-automation-profile-dependencies.md)
 - [2026-09-11 automation profile preflight](2026-09-11-automation-profile-preflight.md)
 - [2026-09-11 automation profile history](2026-09-11-automation-profile-history.md)
 - [2026-09-11 automation profile resume](2026-09-11-automation-profile-resume.md)

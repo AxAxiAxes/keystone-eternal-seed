@@ -26,6 +26,11 @@ and action-specific structured payload. Unsupported fields, sensitive
 free-form content, incompatible roles/actions, and arbitrary execution
 capabilities are rejected.
 
+Every profile dependency must reference a currently existing task whose status
+is `completed`. Preflight, draft creation, and activation all verify that
+condition before a profile reports an executable plan or creates a
+profile-managed task association.
+
 ## Lifecycle and control
 
 An authenticated founder-controlled operational process creates a `draft`.

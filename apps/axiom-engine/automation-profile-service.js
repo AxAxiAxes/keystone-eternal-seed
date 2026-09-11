@@ -45,6 +45,7 @@ class AutomationProfileService {
     assertDraftInput(input, agents);
     const taskTemplates = input.template === OPERATIONS_OBSERVATION_TEMPLATE
       ? starterTemplates(input) : normalizeTaskTemplates(input.taskTemplates);
+    assertCompletedDependencies(taskTemplates, await this.listTasks());
     const readiness = await this.readiness();
     const activationBlockers = activationReadinessIssues(readiness);
     return {
@@ -62,12 +63,13 @@ class AutomationProfileService {
   async createDraft(input) {
     const agents = await this.listAgents();
     assertDraftInput(input, agents);
+    const taskTemplates = input.template === OPERATIONS_OBSERVATION_TEMPLATE
+      ? starterTemplates(input) : normalizeTaskTemplates(input.taskTemplates);
+    assertCompletedDependencies(taskTemplates, await this.listTasks());
     return this.withExclusiveAccess(async () => {
       const records = await this.validRecords();
       if (projectProfiles(records)[input.profileId.trim()]) throw new RangeError(`profileId already exists: ${input.profileId.trim()}`);
       const template = input.template;
-      const taskTemplates = template === OPERATIONS_OBSERVATION_TEMPLATE
-        ? starterTemplates(input) : normalizeTaskTemplates(input.taskTemplates);
       return this.append(records, {
         event: "draft-created", profileId: input.profileId.trim(), template, taskTemplates,
         taskIds: {}, recoveryReadiness: "not-checked"
@@ -87,6 +89,7 @@ class AutomationProfileService {
       const agents = await this.listAgents();
       assertCompatibleTemplates(profile.taskTemplates, agents);
       const existingTasks = await this.listTasks();
+      assertCompletedDependencies(profile.taskTemplates, existingTasks);
       const taskIds = {};
       for (const definition of profile.taskTemplates) {
         const associated = existingTasks.filter((task) => task.automationProfileId === profileId && task.automationProfileKey === definition.key);
@@ -270,6 +273,18 @@ function safeText(value, limit) { return typeof value === "string" && value.trim
 function safePath(value) { return typeof value === "string" && value.length > 0 && value.length <= 500 && !value.includes("\\") && !value.startsWith("/") && !value.split("/").some((part) => !part || part === "." || part === ".."); }
 function activationReadinessIssues(readiness) { return ["startupContext", "sourceCatalog", "businessMetrics", "serviceRegistry", "governance"].filter((key) => readiness?.[key]?.status !== "ready"); }
 function assertActivationReadiness(readiness) { const blockers = activationReadinessIssues(readiness); if (blockers.length) throw new RangeError(`profile activation is blocked until ${blockers[0]} is ready`); }
+function assertCompletedDependencies(templates, tasks) {
+  const tasksById = new Map(tasks.map((task) => [task.id, task]));
+  for (const template of templates) {
+    const incompleteDependency = template.dependsOnTaskIds.find((taskId) =>
+      tasksById.get(taskId)?.status !== "completed");
+    if (incompleteDependency) {
+      throw new RangeError(
+        `profile task dependency must reference an existing completed task: ${incompleteDependency}`
+      );
+    }
+  }
+}
 function matchesDefinition(task, definition) { return task.action === definition.action && task.agentId === definition.agentId && task.recurrenceMinutes === definition.recurrenceMinutes && JSON.stringify(task.dependsOn) === JSON.stringify(definition.dependsOnTaskIds) && task.approvalRequired === definition.approvalRequired && JSON.stringify(task.payload) === JSON.stringify(definition.payload); }
 function summarizeTaskPlan(template) { return { key: template.key, action: template.action, agentId: template.agentId, recurrenceMinutes: template.recurrenceMinutes, dependsOnTaskIds: [...template.dependsOnTaskIds], approvalRequired: template.approvalRequired }; }
 function validateRecords(records) {

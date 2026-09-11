@@ -131,6 +131,32 @@ test("exposes every active role capability and activates a founder-configured te
     assert.equal(tasks.length, 0);
     assert.equal((await service.status()).profileCount, 0);
   });
+
+  test("requires profile dependencies to be existing completed tasks", async (t) => {
+    const directory = path.join(process.cwd(), `automation-profile-test-${process.pid}-${Date.now()}`);
+    t.after(() => fs.rm(directory, { recursive: true, force: true }));
+    const { service, tasks } = fixture(directory);
+    const incompleteDependency = randomUUID();
+    const input = {
+      profileId: "dependency-profile", template: "founder-configured",
+      taskTemplates: [{ key: "dependent-noop", action: "automation.noop",
+        agentId: "automation-executor", recurrenceMinutes: 60,
+        dependsOnTaskIds: [incompleteDependency], approvalRequired: false, payload: {} }]
+    };
+
+    await assert.rejects(
+      () => service.preview(input),
+      /existing completed task/
+    );
+    await assert.rejects(
+      () => service.createDraft(input),
+      /existing completed task/
+    );
+    tasks.push({ id: incompleteDependency, status: "completed" });
+    const preview = await service.preview(input);
+    assert.equal(preview.activation.status, "ready");
+    assert.equal((await service.createDraft(input)).status, "draft");
+  });
   const active = await service.activate("curator-memory-profile", { confirmed: true });
   assert.equal(active.status, "active");
   assert.equal(tasks[0].agentId, "memory-curator");
