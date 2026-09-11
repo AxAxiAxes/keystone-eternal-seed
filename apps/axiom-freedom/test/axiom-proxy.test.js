@@ -220,7 +220,7 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     );
     assert.equal(checkpointResponse.status, 200);
     const checkpointPayload = await checkpointResponse.json();
-    assert.match(checkpointPayload.currentPhase, /Business-operations foundation complete/);
+    assert.match(checkpointPayload.currentPhase, /Tier 1 internal readiness controls and business-operations foundation complete/);
     assert.ok(checkpointPayload.checkpoints.some(checkpoint =>
       checkpoint.title.includes("Define the AXES Directory")
     ));

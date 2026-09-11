@@ -1,9 +1,7 @@
 # AXIOM / KEYSTONE project timeline
 
 **Last updated:** 2026-09-11
-**Current phase:** Tier 1 internal readiness controls and business-operations
-foundation complete; founder-controlled activation and external/production
-readiness remain pending
+**Current phase:** Tier 1 internal readiness controls and business-operations foundation complete; founder-controlled activation and external/production readiness remain pending
 
 Update this document when a milestone changes state. A checked item is complete;
 an unchecked item is planned or in progress. The timeline begins with AXIOM's
