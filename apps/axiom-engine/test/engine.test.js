@@ -74,6 +74,8 @@ test("reports engine health", async (t) => {
     const status = await response.json();
     assert.equal(status.agents, 5);
     assert.equal(status.pendingTasks, 0);
+    assert.equal(status.overdueTasks, 0);
+    assert.equal(status.nextScheduledAt, null);
     assert.equal(status.runs, 0);
     assert.equal(status.agentObservations.length, 5);
     assert.equal(status.agentObservations[0].attention.length, 0);

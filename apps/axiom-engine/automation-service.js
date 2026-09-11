@@ -523,7 +523,7 @@ class AutomationService {
   }
 
   async status() {
-    return this.withState(async (state) => summarizeAutomationState(state));
+    return this.withState(async (state) => summarizeAutomationState(state, this.now()));
   }
 
   async getGovernanceReadiness() {
@@ -927,10 +927,16 @@ function seedMissingDefaultAgents(state, now) {
   }
 }
 
-function summarizeAutomationState(state) {
+function summarizeAutomationState(state, now = new Date()) {
+  const pendingTasks = state.tasks.filter((task) => task.status === "pending");
+  const nextScheduledTask = pendingTasks
+    .slice()
+    .sort((left, right) => new Date(left.runAt) - new Date(right.runAt))[0];
   return {
     agents: state.agents.length,
-    pendingTasks: state.tasks.filter((task) => task.status === "pending").length,
+    pendingTasks: pendingTasks.length,
+    overdueTasks: pendingTasks.filter((task) => new Date(task.runAt) < now).length,
+    nextScheduledAt: nextScheduledTask ? nextScheduledTask.runAt : null,
     blockedTasks: state.tasks.filter((task) => task.status === "blocked").length,
     awaitingApprovalTasks: state.tasks.filter(
       (task) => task.status === "awaiting_approval"

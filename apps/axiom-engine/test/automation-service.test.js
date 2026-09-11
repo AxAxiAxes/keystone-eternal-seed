@@ -20,6 +20,37 @@ function createMemoryStore() {
   };
 }
 
+test("reports overdue work and the next scheduled task", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const now = new Date("2026-09-11T12:00:00.000Z");
+  const service = new AutomationService({
+    directory,
+    memoryStore: createMemoryStore(),
+    now: () => now
+  });
+  const agentId = (await service.listAgents())[2].id;
+  await service.createTask({
+    title: "Past-due automation check",
+    action: "automation.noop",
+    agentId,
+    originCheckpoint: "axi-execution-visibility",
+    runAt: "2026-09-11T11:59:00.000Z"
+  });
+  await service.createTask({
+    title: "Upcoming automation check",
+    action: "automation.noop",
+    agentId,
+    originCheckpoint: "axi-execution-visibility",
+    runAt: "2026-09-11T12:01:00.000Z"
+  });
+
+  const status = await service.status();
+  assert.equal(status.pendingTasks, 2);
+  assert.equal(status.overdueTasks, 1);
+  assert.equal(status.nextScheduledAt, "2026-09-11T11:59:00.000Z");
+});
+
 test("assigns an eligible agent, records memory, and writes an audit run", async (t) => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));

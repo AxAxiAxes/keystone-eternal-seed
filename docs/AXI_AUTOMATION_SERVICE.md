@@ -97,6 +97,11 @@ Each task has `maxAttempts` from 1 through 5 (default 1) and
 within that bound; afterward, they enter the terminal `failed` state with a
 recorded run history.
 
+`GET /automation/status` also reports `overdueTasks` and `nextScheduledAt`.
+These are private queue-observation fields: overdue work is pending work whose
+scheduled time has passed, and `nextScheduledAt` is the earliest pending task.
+They do not process, alter, or discard work.
+
 ### Agent accountability
 
 Every AXI agent is registered to the AXI Genesis ownership checkpoint with a
