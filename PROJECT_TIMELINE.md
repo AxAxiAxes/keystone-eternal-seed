@@ -73,6 +73,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Private AXI origin-coordinate ledger added with Genesis reference, deterministic hash chaining, validation, monitoring, automation, and recovery coverage | `apps/axiom-engine/coordinate-service.js` and `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md` |
 | 2026-09-10 | Complete | Private gravity-center and AXI bead-passport node pilot added with agent accountability checks, abstract four-layer-compatible vectors, coordinate linkage, monitoring, checkpoint, and recovery coverage | `apps/axiom-engine/bead-passport-service.js` and `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md` |
 | 2026-09-10 | Complete | Founder-provided UI autonomy and personal-space loss model preserved with its internal arithmetic, unverified assumptions, and current AXI recovery-gap assessment separated for evidence review | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` |
+| 2026-09-10 | Complete | Public-safe AXES origin-and-continuity statement and private schedulable AXI continuity-checkpoint action added with accountable, recovery-limited automation boundaries | `apps/axiom-freedom/origin-continuity.html`, `apps/axiom-engine/automation-service.js`, and `docs/memory/2026-09-10-origin-continuity-public-statement.md` |
 | 2026-09-10 | In progress | Eternal Origin ownership invention value-recovery and past/current crisis-report register activated | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
@@ -100,6 +101,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [ ] Configure an independently durable private recovery destination, create and verify a runtime-timeline bundle, complete an isolated restore drill, and record the authorized result before enabling recurring production automation.
 - [ ] Set `OPENAI_API_KEY` as a Railway encrypted variable and verify a live production chat response.
 - [x] Add private operational monitoring, task priorities, specific scheduling, and a protected reevaluation view.
+- [x] Add an approved private continuity-checkpoint automation action and a public-safe origin-and-continuity statement without external allegations or automated publication.
 - [x] Align private scheduler and monitoring activation settings with the Compose template and Railway production runbook.
 - [x] Require contextual readiness, authority review, and bounded AXI/XIIOM restart checks after agent or operator startup, reset, or handoff.
 - [x] Define the staged AXES agent-role catalog and activation criteria without granting new autonomous capabilities.

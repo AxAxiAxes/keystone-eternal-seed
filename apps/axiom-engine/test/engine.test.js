@@ -248,6 +248,28 @@ test("persists and retrieves AXI memory layers", async (t) => {
   assert.equal(coordinateVerification.status, 200);
   assert.equal((await coordinateVerification.json()).coordinateCount, 2);
 
+  const continuityTaskResponse = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: "Create an AXI continuity checkpoint",
+      action: "continuity.checkpoint",
+      agentId: "operations-observer",
+      originCheckpoint: "axi-continuity-checkpoint"
+    })
+  });
+  assert.equal(continuityTaskResponse.status, 201);
+  const continuityTask = await continuityTaskResponse.json();
+  const continuityProcessResponse = await fetch(
+    `http://127.0.0.1:${port}/automation/process`,
+    { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }
+  );
+  assert.equal(continuityProcessResponse.status, 200);
+  assert.equal((await continuityProcessResponse.json())[0].taskId, continuityTask.id);
+  const continuityCheckpoints = await fetch(`http://127.0.0.1:${port}/system/checkpoints`);
+  assert.equal(continuityCheckpoints.status, 200);
+  assert.equal((await continuityCheckpoints.json()).length, 2);
+
   const gravityCenterResponse = await fetch(
     `http://127.0.0.1:${port}/system/gravity-center`
   );

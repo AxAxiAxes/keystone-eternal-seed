@@ -58,8 +58,9 @@ AXIOM_AUTOMATION_MAX_TASKS_PER_CYCLE=5
 Enable monitoring first and confirm its snapshots appear through the protected
 console. Then enable the scheduler. The scheduler can process only the
 versioned `memory.record`, `automation.noop`, `monitoring.snapshot`,
-`governance.readiness`, and `recovery.backup` allowlist; it cannot deploy,
-access third-party accounts, send messages, or take external action.
+`governance.readiness`, `recovery.backup`, `coordinate.record`, and
+`continuity.checkpoint` allowlist; it cannot deploy, access third-party
+accounts, send messages, publish, or take other external action.
 
 ## 3. Configure `axiom-web`
 

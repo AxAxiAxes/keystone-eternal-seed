@@ -8,7 +8,8 @@ const TASK_ACTIONS = new Set([
   "monitoring.snapshot",
   "governance.readiness",
   "recovery.backup",
-  "coordinate.record"
+  "coordinate.record",
+  "continuity.checkpoint"
 ]);
 const TASK_STATUSES = new Set([
   "pending",
@@ -45,6 +46,7 @@ class AutomationService {
     createRecoveryBackup,
     verifyRecoveryBackup,
     createCoordinate,
+    createCheckpoint,
     now = () => new Date()
   }) {
     this.directory = directory;
@@ -53,6 +55,7 @@ class AutomationService {
     this.createRecoveryBackup = createRecoveryBackup;
     this.verifyRecoveryBackup = verifyRecoveryBackup;
     this.createCoordinate = createCoordinate;
+    this.createCheckpoint = createCheckpoint;
     this.now = now;
     this.operationQueue = Promise.resolve();
   }
@@ -509,6 +512,14 @@ class AutomationService {
         })
       };
     }
+    if (task.action === "continuity.checkpoint") {
+      if (typeof this.createCheckpoint !== "function") {
+        throw new RangeError("continuity checkpoints are not configured");
+      }
+      return {
+        checkpoint: await this.createCheckpoint()
+      };
+    }
     throw new RangeError(`unsupported task action: ${task.action}`);
   }
 
@@ -682,7 +693,8 @@ function defaultAgents(now) {
         "monitoring.snapshot",
         "governance.readiness",
         "recovery.backup",
-        "coordinate.record"
+        "coordinate.record",
+        "continuity.checkpoint"
       ],
       enabled: true,
       registeredAt,
@@ -694,7 +706,8 @@ function defaultAgents(now) {
         "Surface operational attention signals.",
         "Assess private Genesis and governance readiness.",
         "Create approved recovery backups.",
-        "Record approved coordinate transitions."
+        "Record approved coordinate transitions.",
+        "Create approved private continuity checkpoints."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
       keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),

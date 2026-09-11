@@ -106,6 +106,10 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(portal.status, 200);
     assert.match(await portal.text(), /AXES CONTRACTING/);
 
+    const originContinuity = await fetch(`http://127.0.0.1:${webPort}/origin-continuity`);
+    assert.equal(originContinuity.status, 200);
+    assert.match(await originContinuity.text(), /Origin and Continuity/);
+
     const axesPortal = await request(webPort, { Host: "axescontracting.com" });
     assert.equal(axesPortal.statusCode, 200);
     assert.match(axesPortal.body, /The AXES Control Center/);

@@ -26,19 +26,6 @@ const recoveryBackupService = new RecoveryBackupService({
   restoreDirectory: process.env.AXIOM_RECOVERY_RESTORE_DIRECTORY
 });
 const coordinateService = new CoordinateService({ directory: dataDirectory });
-const automationService = new AutomationService({
-  directory: dataDirectory,
-  memoryStore,
-  captureMonitoringSnapshot,
-  createRecoveryBackup: () => recoveryBackupService.create(),
-  verifyRecoveryBackup: (backupId) => recoveryBackupService.verify(backupId),
-  createCoordinate: (coordinate) => coordinateService.create(coordinate)
-});
-const beadPassportService = new BeadPassportService({
-  directory: dataDirectory,
-  coordinateService,
-  getAgent: (agentId) => automationService.getAgent(agentId)
-});
 const checkpointService = new CheckpointService({
   directory: dataDirectory,
   modules: [
@@ -49,6 +36,20 @@ const checkpointService = new CheckpointService({
     { id: "monitoring", version: "1" },
     { id: "checkpoint", version: "1" }
   ]
+});
+const automationService = new AutomationService({
+  directory: dataDirectory,
+  memoryStore,
+  captureMonitoringSnapshot,
+  createRecoveryBackup: () => recoveryBackupService.create(),
+  verifyRecoveryBackup: (backupId) => recoveryBackupService.verify(backupId),
+  createCoordinate: (coordinate) => coordinateService.create(coordinate),
+  createCheckpoint: () => checkpointService.create()
+});
+const beadPassportService = new BeadPassportService({
+  directory: dataDirectory,
+  coordinateService,
+  getAgent: (agentId) => automationService.getAgent(agentId)
 });
 const scheduler = {
   enabled: process.env.AXIOM_AUTOMATION_ENABLED === "true",

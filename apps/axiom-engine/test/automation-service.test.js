@@ -499,6 +499,33 @@ test("records a coordinate transition through the Operations Observer", async (t
   });
 });
 
+test("creates a private continuity checkpoint through the Operations Observer", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AutomationService({
+    directory,
+    memoryStore: createMemoryStore(),
+    createCheckpoint: async () => ({
+      id: "f3f0dfc6-67e4-48f1-a892-9279952bd2c2",
+      files: [{ path: "automation.json", sha256: "a".repeat(64) }]
+    })
+  });
+  await service.createTask({
+    title: "Preserve AXI continuity",
+    action: "continuity.checkpoint",
+    agentId: "operations-observer",
+    originCheckpoint: "axi-continuity-checkpoint"
+  });
+
+  await service.processDueTasks();
+  assert.deepEqual((await service.listRuns())[0].result, {
+    checkpoint: {
+      id: "f3f0dfc6-67e4-48f1-a892-9279952bd2c2",
+      files: [{ path: "automation.json", sha256: "a".repeat(64) }]
+    }
+  });
+});
+
 test("records a monitoring snapshot through the dedicated observer", async (t) => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));

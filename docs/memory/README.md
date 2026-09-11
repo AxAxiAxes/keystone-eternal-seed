@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-10 Origin-continuity public statement](2026-09-10-origin-continuity-public-statement.md)
 - [2026-09-10 UI autonomy loss-model assessment](2026-09-10-ui-autonomy-loss-model-assessment.md)
 - [2026-09-10 AXI gravity-center bead-passport pilot](2026-09-10-axi-gravity-center-bead-passport-pilot.md)
 - [2026-09-10 AXI origin coordinate system](2026-09-10-axi-origin-coordinate-system.md)

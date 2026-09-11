@@ -17,6 +17,7 @@ controller. It accepts only the versioned action allowlist:
 | `governance.readiness` | `governance.readiness` | Assesses Genesis registration, active accountability, approved capabilities, and task attention states without making legal or external determinations. |
 | `recovery.backup` | `recovery.backup` | Creates and verifies a private runtime recovery bundle only at an explicitly configured, distinct backup location. |
 | `coordinate.record` | `coordinate.record` | Records a source-linked, hash-chained private coordinate transition. |
+| `continuity.checkpoint` | `continuity.checkpoint` | Creates a checksummed private checkpoint manifest for current runtime files. |
 
 The service rejects any unrecognized action. New external integrations must be
 implemented, reviewed, tested, and added to the allowlist before they can be
@@ -33,7 +34,7 @@ preserving existing agent records.
 | Memory Curator | `memory.record` | Maintains validated memory entries. |
 | Automation Executor | `automation.noop` | Runs bounded workflow checks. |
 | Automation Auditor | Both capabilities | Provides a general audited fallback. |
-| Operations Observer | `monitoring.snapshot`, `governance.readiness`, `recovery.backup`, `coordinate.record` | Captures private health, queue, scheduler, usage, Genesis/governance-readiness, recovery, and coordinate-chain signals. |
+| Operations Observer | `monitoring.snapshot`, `governance.readiness`, `recovery.backup`, `coordinate.record`, `continuity.checkpoint` | Captures private health, queue, scheduler, usage, Genesis/governance-readiness, recovery, coordinate-chain signals, and approved continuity checkpoints. |
 
 Tasks can specify an eligible `agentId`; otherwise the first enabled agent with
 the matching capability is assigned. Tasks have a priority from 1 (backlog) to
@@ -140,6 +141,14 @@ Queue a `coordinate.record` task to record an approved, source-linked
 continuity transition. The Operations Observer uses the task title and origin
 checkpoint to create the next coordinate in the private hash chain. See
 `AXI_ORIGIN_COORDINATE_SYSTEM.md`.
+
+Queue a `continuity.checkpoint` task to create a checksum manifest of the
+current persisted runtime files. It can be scheduled only by an authenticated
+operator and runs through the same assignment, approval, retry, audit, and
+Genesis-accountability controls as every other task. A checkpoint manifest is
+evidence of the files present at that time; it is not a backup and cannot
+restore erased data. Use `recovery.backup` with independently configured
+storage for recoverability.
 
 ## Opt-in scheduler
 

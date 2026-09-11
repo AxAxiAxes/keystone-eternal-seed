@@ -163,6 +163,10 @@ const server = http.createServer(async (req, res) => {
           serveFile(res, path.join(__dirname, 'axiom_web_interface.html'), 'text/html; charset=utf-8');
           return;
     }
+    if (pathname === '/origin-continuity') {
+          serveFile(res, path.join(__dirname, 'origin-continuity.html'), 'text/html; charset=utf-8');
+          return;
+    }
     if (pathname === '/materials') {
           serveFile(res, path.join(__dirname, 'materials.html'), 'text/html; charset=utf-8');
           return;

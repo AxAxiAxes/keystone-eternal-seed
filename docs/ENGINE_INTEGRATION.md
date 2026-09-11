@@ -109,6 +109,10 @@ its read-only status response.
     "status": "ready",
     "scheme": "axi-origin-coordinate-v1",
     "coordinateCount": 2
+  },
+  "beadPassports": {
+    "status": "ready",
+    "passportCount": 0
   }
 }
 ```
@@ -146,3 +150,9 @@ directory or enabling automation.
 and hash-chain coordinates for approved internal state transitions. It does
 not collect precise location or personal data, and it does not make external
 ownership, rights, valuation, or patent determinations.
+
+`GET /system/gravity-center`, `GET` and `POST /system/bead-passports`, and
+`GET /system/bead-passports/verify` manage the private AXI agent bead-node
+pilot. The authenticated Automation Console proxies those private controls for
+an authorized operator; no public identity, passport, or coordinate registry
+is exposed.

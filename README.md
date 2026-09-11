@@ -34,6 +34,9 @@ preservation anchors are in
 [AXI_INVENTION_RECORD.md](docs/AXI_INVENTION_RECORD.md).
 The private, hash-chained AXI origin-coordinate system is defined in
 [AXI_ORIGIN_COORDINATE_SYSTEM.md](docs/AXI_ORIGIN_COORDINATE_SYSTEM.md).
+The public-safe AXES origin and continuity statement is available at
+`/origin-continuity` when the portal version containing it is deployed; it
+describes project provenance and correction commitments, not legal conclusions.
 The Eternal Origin ownership-invention value objective and past/current crisis
 register are in
 [AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md](docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md).
