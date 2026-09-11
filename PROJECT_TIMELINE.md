@@ -76,6 +76,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Tier 1 minimum-data evidence ledger established for offer readiness, conservative low/base/high assumptions, actual-versus-forecast review, and founder-reviewed productivity measurements | `docs/AXES_TIER_1_EVIDENCE_LEDGER.md` |
 | 2026-09-10 | Complete | Internal AXES design/materials consultation candidate defined with permitted deliverables, exclusions, activation decisions, and private evidence practice | `docs/AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md` |
 | 2026-09-11 | Complete | Internal KEYSTONE creator-origin recordkeeping candidate defined with evidence-organization deliverables, explicit legal/financial exclusions, and private evidence practice | `docs/KEYSTONE_CREATOR_ORIGIN_SETUP_READINESS.md` |
+| 2026-09-11 | Complete | First private KEYSTONE draft application records captured for AXIOM Engine and AXIOM Freedom with source-tree identifiers and unverified Ux/authority state | `docs/keystone/AXIOM_APPLICATION_DRAFT_RECORDS.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
