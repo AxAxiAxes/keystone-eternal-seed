@@ -19,9 +19,11 @@ async function startServer() {
 }
 
 async function stopServer(server) {
-  server.closeAllConnections();
-  await new Promise((resolve, reject) =>
+  const closed = new Promise((resolve, reject) =>
     server.close((error) => (error ? reject(error) : resolve())));
+  server.closeIdleConnections();
+  server.closeAllConnections();
+  await closed;
 }
 
 test("processes an AXIOM command", async (t) => {

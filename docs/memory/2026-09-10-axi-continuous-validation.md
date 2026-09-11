@@ -19,3 +19,17 @@ spend, or control a third-party account.
 - `.github/workflows/axi-continuity-validation.yml`
 - `docs/AXI_CONTINUOUS_VALIDATION.md`
 - `PROJECT_TIMELINE.md`
+
+## Validation correction
+
+The first workflow run, `34571811175`, found that the isolated portal job
+imports the AXI engine but had not installed the engine's dependencies. The
+workflow now installs `apps/axiom-engine` dependencies before running the
+portal test.
+
+The next run, `34572611157`, passed the AXI.Core and portal jobs but retained
+an engine test process longer than expected on the Node 20 runner. Engine test
+server teardown now stops the listener before closing idle and active
+connections, and each workflow job has a five-minute maximum duration. Local
+engine and portal tests pass after this correction. The subsequent GitHub
+Actions run is the required confirmation of the Node 20 behavior.
