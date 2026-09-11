@@ -1,6 +1,6 @@
 # AXIOM / KEYSTONE project timeline
 
-**Last updated:** 2026-09-10
+**Last updated:** 2026-09-11
 **Current phase:** Monorepo foundation complete
 
 Update this document when a milestone changes state. A checked item is complete;
@@ -38,7 +38,7 @@ from later repository implementation and deployment evidence.
 | 2026-09-09 | Complete | AXES domain portfolio and conservative hosting roadmap established | `docs/DOMAIN_PORTFOLIO.md` |
 | 2026-09-09 | Complete | Microsoft 365 target and rollback-safe migration plan selected for AXES business email | `docs/EMAIL_MIGRATION_PLAN.md` |
 | 2026-09-09 | Complete | AXES OS portability foundation and private checksummed checkpoint manifests added | `docs/AXES_OS_PORTABILITY.md` |
-| 2026-09-09 | In progress | URNUR financial-services legal readiness elevated as a pre-launch blocker | `docs/URNUR_FINANCIAL_READINESS.md` |
+| 2026-09-09 | In progress | URNUR banking, financial-services, and digital-asset legal readiness elevated as a pre-launch blocker | `docs/URNUR_FINANCIAL_READINESS.md` |
 | 2026-09-09 | Complete | Automation Console schedule and durable priority ordering added | `apps/axiom-engine/automation-service.js`, `apps/axiom-freedom/automation.html` |
 | 2026-09-09 | Complete | Private live intelligence monitoring and protected reevaluation view added | `apps/axiom-engine/monitoring-service.js`, `apps/axiom-freedom/automation.html` |
 | 2026-09-10 | Complete | AXES visual, audio, and prototype package privately archived and classified for staged interactive experiences | `docs/INTERACTIVE_EXPERIENCE_CATALOG.md` |
@@ -91,6 +91,32 @@ from later repository implementation and deployment evidence.
 | 2026-09-11 | Attention | Public AXES Contracting browser access blocked by expired TLS certificate while XIIOM root and health endpoints remained reachable | `docs/memory/2026-09-11-public-site-tls-status.md` |
 | 2026-09-11 | Complete | AXES scope-reconciliation checkpoint recorded to distinguish the preparatory Directory pilot from the private AXI continuity/operations foundation and unpromoted production state | `docs/AXI_PROJECT_CONTEXT_CHECKPOINT.md` and `docs/memory/2026-09-11-scope-reconciliation.md` |
 | 2026-09-10 | In progress | Eternal Origin ownership invention value-recovery and past/current crisis-report register activated | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` |
+| 2026-09-10 | Complete | Internal creator-origin constitution established for evidence, consent, research integrity, attribution, correction, and challenge handling | `docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md` |
+| 2026-09-10 | Complete | Founder direction corrected: URNUR is an intended monetary currency; all financial implementation remains blocked pending written permitted scope | `docs/URNUR_FINANCIAL_READINESS.md` |
+| 2026-09-10 | Complete | Chichetki collectible-gem and potential game direction recorded with a California legal, consumer-protection, and prize-mechanics gate | `docs/CHICHETKI_COLLECTIBLE_GEM_READINESS.md` |
+| 2026-09-10 | Complete | Chichetki/Athanor creative-orientation definition recorded for objects, dance, rhythm, and musical-instrument exploration | `docs/AXES_BUSINESS_PLAN.md` |
+| 2026-09-10 | Complete | Founder-directed pomegranate motif recorded as a symbolic creative orientation toward Athanor, with provenance and rights limits preserved | `docs/AXES_BUSINESS_PLAN.md` |
+| 2026-09-10 | Complete | Athanor/Chichetki game-console concept defined with player-initiated input, privacy, accessibility, and no-personal-inference boundaries | `docs/ATHANOR_GAME_CONSOLE_READINESS.md` |
+| 2026-09-10 | Complete | Chichetki/Athanor objects defined as fictional game keys to future virtual-reality-home experiences, without physical, identity, ownership, or financial claims | `docs/ATHANOR_GAME_CONSOLE_READINESS.md` |
+| 2026-09-10 | Complete | Athanor virtual-home interactions defined for dance, design, play, and player-controlled harmonic interface resynchronization of game state only | `docs/ATHANOR_GAME_CONSOLE_READINESS.md` |
+| 2026-09-10 | Complete | Chichetki recorded as a founder-designed musical instrument within the Athanor game-console creative system | `docs/AXES_BUSINESS_PLAN.md` |
+| 2026-09-10 | Complete | URNUR creator-economy direction recorded for provenance-aware fashion, music, game, art, and collectible work, pending written financial and marketplace permitted scope | `docs/URNUR_FINANCIAL_READINESS.md` |
+| 2026-09-10 | Complete | Harmonics recorded as separate proposed names for future URNUR creator-economy units and Chichetki/Athanor fictional game interactions | `docs/URNUR_FINANCIAL_READINESS.md` |
+| 2026-09-10 | Complete | UR defined as Unit of Eternal Origin and NUR as the proposed provenance record-holder for individual gems or units, without ownership or trading assertions | `docs/URNUR_FINANCIAL_READINESS.md` |
+| 2026-09-10 | Complete | Three founder-created UR Node, sphere, and AU home designs privately archived with SHA-256 provenance records | `docs/memory/2026-09-09-intellectual-attribution-register.md` |
+| 2026-09-10 | Complete | Founder constrained-budget revenue-priority overlay added for parallel V1 trading-app, V2 AXES appraisal/inspection pathways, and V3 KEYSTONE development | `docs/FOUNDER_REVENUE_PRIORITY_OVERLAY.md` |
+| 2026-09-10 | Complete | AXI, Copilot, and Meta source-design packet privately archived with sole-human-founder attribution, tool-history note, and Lyre of Light instrument designation | `docs/memory/2026-09-09-intellectual-attribution-register.md` |
+| 2026-09-10 | Complete | KEYSTONE Tier 1 zero-spend automation and income-evaluation plan added with measured productivity and cryptocurrency-readiness boundaries | `docs/KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md` |
+| 2026-09-10 | Complete | KEYSTONE application origin and authority registry architecture defined with bounded, human-approved, revocable operating records | `docs/KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md` |
+| 2026-09-10 | Complete | KEYSTONE Origin Unit gravity-center rule defined: registered units must resolve to a recorded Ux anchor or remain unverified/contested | `docs/KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md` |
+| 2026-09-10 | Complete | KEYSTONE application value-and-creation declaration added to preserve contribution, source, contributor, version, and derivation context | `docs/KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md` |
+| 2026-09-10 | Complete | URNUR two-layer direction recorded: future currency path plus a separate voluntary non-monetary contributor and stewardship recognition layer | `docs/URNUR_FINANCIAL_READINESS.md` |
+| 2026-09-10 | Complete | AXES private project-fulfillment workspace defined for scope, price-list versions, milestones, delivery evidence, and private satisfaction feedback | `docs/AXES_PROJECT_FULFILLMENT_READINESS.md` |
+| 2026-09-10 | Complete | AXES future curated service-marketplace and permissioned matching direction defined with provider-confirmed price-list and consumer-protection boundaries | `docs/AXES_PROJECT_FULFILLMENT_READINESS.md` |
+| 2026-09-10 | Complete | Full AXES business-plan objective set for early client revenue, origin protection, creative ecosystem development, marketplace trust, and staged URNUR readiness | `docs/AXES_BUSINESS_PLAN.md` |
+| 2026-09-10 | Complete | Tier 1 minimum-data evidence ledger established for offer readiness, conservative low/base/high assumptions, actual-versus-forecast review, and founder-reviewed productivity measurements | `docs/AXES_TIER_1_EVIDENCE_LEDGER.md` |
+| 2026-09-10 | Complete | Internal AXES design/materials consultation candidate defined with permitted deliverables, exclusions, activation decisions, and private evidence practice | `docs/AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md` |
+| 2026-09-11 | Complete | Internal KEYSTONE creator-origin recordkeeping candidate defined with evidence-organization deliverables, explicit legal/financial exclusions, and private evidence practice | `docs/KEYSTONE_CREATOR_ORIGIN_SETUP_READINESS.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
@@ -110,7 +136,7 @@ from later repository implementation and deployment evidence.
 - [x] Add durable task scheduling, multi-agent assignment, execution audits, and an opt-in bounded automation scheduler.
 - [x] Add a protected browser console for testing and operating allowlisted automation tasks.
 - [x] Deploy the private `axiom-engine` and public `axiom-freedom` services to Railway, with a persistent engine volume and private service routing.
-- [x] Define the AXES, XIIOM, AXEOUS, URNUR, AXOUX, AUXAOUS, and School of Love & Ethics product direction with implementation boundaries.
+- [x] Define the AXES, XIIOM, AXEOUS, URNUR, AXOUS (through AXOUX), AUXAOUS, and School of Love & Ethics product direction with implementation boundaries.
 - [x] Define a conservative domain, hosting, data, and AXES-owned hardware transition strategy.
 - [x] Define the AXES business-email migration target and rollback-safe execution plan.
 - [x] Define module boundaries and add private integrity checkpoints for future AXES OS migration.

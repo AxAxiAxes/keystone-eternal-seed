@@ -26,8 +26,8 @@ or any other legal right.
 | AXES Contracting | Central hub and operator control center | Navigation, authenticated operator dashboard, service status, and approved product links |
 | XIIOM | Home of AXI and automation operations | Private memory, bounded automation, audited agent proposals, and service monitoring |
 | AXEOUS | Community and participation space | Safe community profiles, moderated groups, and collaboration discovery |
-| URNUR | Recognition of constructive contribution | Non-transferable recognition points and contribution history; not money, a payment system, or a tradable asset |
-| AXOUX | Creator and project space | Project proposals, collaboration workspaces, authorship attribution, and an opt-in lineage archive |
+| URNUR | Future monetary currency and contribution-recognition direction | Product concept only; no issued currency, payment system, transfer, market, or tradable asset until the written permitted scope is approved |
+| AXOUS / AXOUX | AXOUS creator initiative through the AXOUX site | Project proposals, collaboration workspaces, authorship attribution, and an opt-in lineage archive |
 | AUXAOUS | Self-design and reflection tools | Private, user-controlled self-mapping and creative-path tools |
 | School of Love & Ethics | Free learning and project-invention program | Age-appropriate curriculum, moderated project labs, consent-aware participation, and accessible learning resources |
 
@@ -86,7 +86,8 @@ claims.
 
 ### Phase 2 - Creator projects and learning
 
-- Launch AXOUX as an invite-only project proposal and collaboration pilot.
+- Launch AXOUS through AXOUX as an invite-only project proposal and
+  collaboration pilot.
 - Launch the School of Love & Ethics as content and moderated project-invention
   labs, beginning with adult-only or clearly separated age cohorts.
 - Include voluntary ikigai reflection activities that help participants explore
@@ -115,7 +116,9 @@ consented participation in a limited pilot.
 
 ### Phase 4 - Recognition and archival systems
 
-- Pilot URNUR as non-transferable recognition for contributions.
+- Do not pilot URNUR currency or contribution-recognition functionality until
+  the written financial, legal, compliance, security, and operational
+  permitted scope is approved.
 - Build the Lineage Archive as an opt-in, versioned attribution record.
 - Evaluate any future exchange, payment, auction, or token concept separately
   with financial, consumer-protection, tax, and jurisdictional review before

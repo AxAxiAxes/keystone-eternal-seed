@@ -53,11 +53,11 @@ licensed visual work.
 | AXES Control Center | `axescontracting.com` | Public navigation, service status, contact/intake | Public | Branded hub and service registry |
 | Architectural design desk | `axescontracting.com` | Readable design tips, project inspiration, material palettes, and scoped consultation requests | Public | Educational articles and inspiration boards; no professional-plan or engineering claims |
 | Building-materials discovery | `axescontracting.com` | Curated materials catalog, filters, samples or quote requests, and approved supplier links | Public | Read-only catalog and inquiry workflow; no checkout or payment collection |
-| Chichetki studio | Future Chichetki route or dedicated domain | Product stories, founder-designed rhythm objects, sound previews, movement/art direction, and controlled interest requests | Public and private operator tiers | Reviewed catalog; no health, therapeutic, or patent-status claims |
+| Chichetki studio | Future Chichetki route or dedicated domain | Product stories, founder-designed Chichetki musical instruments and rhythm objects, dance exploration, sound previews, movement/art direction, controlled interest requests, and a future virtual-reality-home game-console prototype for dance, design, interaction, play, and interface resynchronization | Public and private operator tiers | Reviewed catalog; fictional game keys only; player-initiated inputs only; interface resynchronization affects game state only; no geographic tracking, background monitoring, biometric profiling, health, therapeutic, or patent-status claims |
 | XIIOM operations | `xiiom.com` | Authenticated scheduling, monitoring, task approvals, agent proposals | Operators only | Existing protected console |
 | AUXAOUS self-design studio | `auxaous.com` | Private guided reflection, visual path mapping, save/export/delete controls | Invite-only adults | Local/private draft only; no public profiles |
 | XAXALU sound and visual exploration | Future dedicated route or `auxaous.com` pilot | User-initiated audio playback, visual exploration, accessibility controls | Invite-only adults | Static exhibit with optional sound |
-| AXOUX creator studio | `axoux.com` | Project proposals, contributor roles, attribution history, moderated comments | Invite-only creators | Creator project registry |
+| AXOUS creator studio | `axoux.com` (AXOUX site) | Project proposals, contributor roles, attribution history, moderated comments | Invite-only creators | Creator project registry |
 | School of Love & Ethics | AXES hub route, later dedicated domain if needed | Lessons, project labs, moderated submissions, ikigai reflection | Separate age cohorts | Adult-only or age-separated pilot |
 | Digital library | AXES hub route | Browse, search, cite, request access, contributor credit | Public and authenticated tiers | Reviewed document and media catalog |
 | Future cultural/world experiences | Unassigned portfolio domains | To be determined | Not public | Keep private until purpose, safety, and governance are defined |
@@ -117,7 +117,7 @@ and any required professional review.
    usable, factual service content, then add the read-only Architectural Design
    Desk and Building-Materials Discovery catalog.
 2. Keep the XIIOM console as the private operational environment.
-3. Build a read-only digital-library catalog and an invite-only AXOUX project
+3. Build a read-only digital-library catalog and an invite-only AXOUS project
    registry before any public social interaction.
 4. Select one AUXAOUS or XAXALU prototype for a private, static interaction
    pilot, then add persistence only after data and consent design is approved.

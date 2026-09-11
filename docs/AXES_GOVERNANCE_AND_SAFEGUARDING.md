@@ -2,8 +2,9 @@
 
 **Status:** Internal operating foundation; review before each public pilot  
 **Recorded:** 2026-09-10  
-**Scope:** AXES Contracting, Chichetki, AXOUX, AUXAOUS, AXEOUS, School of Love
-& Ethics, AXES Creative Studio, and future public or invite-only services.
+**Scope:** AXES Contracting, Chichetki, AXOUS through the AXOUX site, AUXAOUS,
+AXEOUS, School of Love & Ethics, AXES Creative Studio, and future public or
+invite-only services.
 
 ## Purpose
 
@@ -64,6 +65,10 @@ Before launching or materially changing a service, record:
 
 - Record the creator/source, rights status, intended use, approval date, and
   accessibility treatment for every public asset.
+- Apply `AXES_CREATOR_ORIGIN_CONSTITUTION.md` to origin claims, contributor
+  records, research conclusions, AI-assisted assets, and public attribution.
+  Treat external material as unverified until a human has reviewed its source,
+  evidence, rights, and permitted wording.
 - Treat user submissions as private until the contributor gives documented
   permission for the exact publication context.
 - Never claim ownership of contributor work merely because it was submitted.
@@ -115,9 +120,31 @@ age-appropriate program is approved. Before admitting minors, AXES needs:
 - Chichetki product language may describe design, art, sound, craft, and
   experience but must not make unsupported health, therapeutic, scientific,
   cultural, or intellectual-property claims.
+- Terms such as GPS, resequencer, transmission, energy, or alignment in
+  Chichetki/Athanor work are symbolic creative language only. Do not collect
+  location data, infer personal states, provide navigation, or claim to
+  measure, diagnose, transmit to, or alter a participant's condition.
+- A future Athanor game console may use player-initiated motion or sound input
+  only with a clear interaction purpose and permission. It must not monitor
+  people in the background, retain recordings by default, create biometric or
+  behavioral profiles, or use input for personal ranking, eligibility, prizes,
+  or consequential decisions.
+- Chichetki collectible gems require factual provenance, material, condition,
+  pricing, fulfillment, and consumer terms. Do not offer a prize, game,
+  trade, or value claim without jurisdiction-specific legal review of the
+  actual mechanics.
 - URNUR remains outside financial, market, crypto, token, custody, payment,
   exchange, or trading activity until written legal approval defines a
   permitted scope.
+- Any future recognition feature must remain voluntary, contribution-specific,
+  human-reviewed, private by default, and free of scores, levels, rankings,
+  diagnostic claims, or promises to alter a person's state. It must not be
+  used to issue, transfer, price, redeem, or promote URNUR before the
+  permitted financial scope is approved.
+- Project delivery/satisfaction feedback must be private, project-specific,
+  factual, correctable, human-reviewed, and separate from public ratings,
+  reputation scores, fraud findings, payment handling, or automated
+  consequential decisions.
 
 ## Review cadence
 

@@ -1,0 +1,107 @@
+# KEYSTONE application origin and authority registry
+
+**Status:** Internal architecture and readiness plan; no registry service is active  
+**Recorded:** 2026-09-10  
+**Purpose:** Establish a governed internal record of origin and authorized
+operation for AXES applications.
+
+## Service definition
+
+KEYSTONE is the proposed origin and authority registration service for AXES
+applications. Each registered application has a versioned internal record that
+connects its source, accountable human owner, approved operating scope,
+deployment approval, and correction/revocation history.
+
+This registry is not a public identity registry or a declaration of global
+authority. A registration record does not by itself prove legal ownership,
+patent validity, trademark rights, exclusivity, security, regulatory approval,
+or authority over another person's or organization's application.
+
+## Origin gravity-center rule
+
+Each KEYSTONE Origin Unit must resolve through its evidence and version history
+to a recorded **origin gravity center**: the designated Ux anchor and its
+associated source record. A later application, derivative, asset, release, or
+authority record cannot receive valid Origin Unit status *within KEYSTONE*
+unless that relationship is recorded, reviewable, and consistent with the
+approved origin chain.
+
+This is a registry-validity rule. It does not claim that work outside KEYSTONE
+has no real-world origin, and it does not automatically decide legal
+inventorship, ownership, or priority. A missing, conflicting, or contested
+origin relationship must be marked unverified or contested and cannot be used
+as an authority basis until a named human completes review.
+
+## Value-and-creation declaration
+
+Each application seeking KEYSTONE Origin Unit status must declare its
+contribution and creation path. The declaration identifies the application's
+intended creative, operational, technical, or service value; its source
+materials; contributors; versions; approved tools/providers; derivations; and
+known rights or consent limits. The declaration makes the application
+understandable within the origin chain and prevents unsupported material from
+being silently merged into an approved presentation.
+
+Declared value is descriptive and reviewable. It is not a financial valuation,
+investment rating, personal ranking, claim of superiority, or proof of legal
+rights. An application without a sufficient declaration cannot receive
+KEYSTONE Origin Unit authority status, but absence of a record alone is not a
+finding of plagiarism, infringement, misconduct, or lack of real-world origin.
+Those questions require evidence and appropriate human/legal review.
+
+## Required application record
+
+Before an AXES application is recognized as registered, record:
+
+| Record | Minimum content |
+| --- | --- |
+| Application identity | Stable internal ID, application name, purpose, repository/source reference, and owner |
+| Origin evidence | Source-record reference, version/commit reference, creation/registration dates, and hash where appropriate |
+| Gravity-center relation | Recorded Ux/origin-anchor reference, relationship type, evidence chain, and review status |
+| Value-and-creation declaration | Intended contribution, creation path, source materials, contributors, versions, derivations, approved tools/providers, and known limits |
+| Authority scope | Named human owner, approved operators, permitted actions, access classification, and explicit prohibitions |
+| Release state | Draft, internal, pilot, public, paused, retired, or revoked; approval date and approving human |
+| Data and integration map | Data classes, storage, approved providers, outbound integrations, retention, export/deletion, and incident owner |
+| Rights and credit | Creator/contributor records, rights status, licenses, attribution wording, and restrictions |
+| Security and continuity | Authentication/authorization model, secrets location outside the repository, monitoring, backup, recovery, and change log |
+| Challenge and correction | Reporting route, evidence record, interim action, decision owner, versioned correction, and revocation path |
+
+## Authority model
+
+Application authority is specific, bounded, and revocable. An authority record
+must answer: who can approve release, deploy, change settings, access data,
+operate integrations, publish content, spend funds, or make consequential
+decisions. If an action is not explicitly assigned, it is not authorized.
+
+Automation may observe, organize records, validate declared schema, and
+propose changes. It cannot grant authority, change an application's scope,
+activate an integration, deploy, spend, publish, contact third parties, or
+resolve an origin/rights dispute without a named human approval.
+
+## Registration lifecycle
+
+1. **Draft:** Source and purpose are recorded; no production authority.
+2. **Internal:** A human owner approves private development under defined
+   data, access, and action limits.
+3. **Pilot:** Required privacy, security, rights, support, accessibility, and
+   applicable legal reviews are complete for a limited audience.
+4. **Public:** A human approves the exact public scope, statements, support,
+   rollback, and ongoing review ownership.
+5. **Paused or revoked:** Access, integrations, or public availability are
+   stopped when evidence, safety, rights, security, or operating requirements
+   are no longer met. History is preserved privately for review.
+
+## First implementation boundary
+
+Begin with the applications already in this repository: the private
+`axiom-engine` and public `axiom-freedom` portal. Create no public registry,
+user accounts, authority tokens, global application claims, or third-party
+app registration flow until the record model, access controls, privacy,
+security, correction process, and human operating capacity are validated.
+
+## Related records
+
+- `AXES_CREATOR_ORIGIN_CONSTITUTION.md`
+- `AXES_GOVERNANCE_AND_SAFEGUARDING.md`
+- `KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md`
+- `AXES_OS_PORTABILITY.md`

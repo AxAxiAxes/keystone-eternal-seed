@@ -31,7 +31,7 @@ next begins.
 | 3 | Production validation and delivery | Verify review-only production chat and connect engine deployment to the canonical source repository | Operational intelligence |
 | 4 | Governance and safeguarding | Establish privacy, consent, retention, moderation, reporting, appeals, and age-appropriate participation rules | Founder direction |
 | 5 | AXES Control Center and interaction catalog | Deliver a small public-safe hub, private service registry, and staged reusable experiences | Workstreams 2 and 4 |
-| 6 | Creator and learning pilot | Pilot AXOUX projects and the School of Love & Ethics with moderation and scoped participation | Workstreams 4 and 5 |
+| 6 | Creator and learning pilot | Pilot AXOUS projects through AXOUX and the School of Love & Ethics with moderation and scoped participation | Workstreams 4 and 5 |
 | 7 | Community and self-design pilot | Pilot AXEOUS and AUXAOUS only after safety, export, deletion, and abuse-response capabilities are established | Workstream 6 |
 | 8 | Recognition and lineage pilot | Pilot URNUR recognition and opt-in authorship/lineage records without transfers or financial functionality | Workstream 7 |
 | Blocking | URNUR legal readiness | Determine the permitted scope for any future financial-market product | Primary launch jurisdiction and qualified financial-services/digital-asset counsel |
@@ -115,7 +115,7 @@ next begins.
 | --- | --- | --- |
 | AXEOUS | Moderated community groups and discovery | Dating, unrestricted direct messages, and unmoderated interactions |
 | AUXAOUS | Private self-reflection and creative-path tools | Sensitive profiling, diagnosis, or public personal maps |
-| URNUR | Non-transferable recognition points | Currency, payments, redemption, markets, investments, and trading |
+| URNUR | Currency concept and possible contribution-recognition direction, pending written permitted scope | Issuance, payments, redemption, transfer, markets, investments, trading, scores, levels, and personal-status claims before approval |
 | Lineage Archive | Opt-in, versioned attribution records | Legal proof of ownership or immutable records without correction processes |
 | Virtual spaces | Moderated, limited-purpose collaboration | Broad virtual worlds without age controls, reporting, and safety operations |
 

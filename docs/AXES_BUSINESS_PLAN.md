@@ -22,6 +22,42 @@ and release small offerings that have a clear customer, owner, budget, and
 human approval path. New domains remain parked until a product earns its next
 stage.
 
+## Full business-plan objective
+
+Build a durable, founder-led AXES ecosystem that turns original design,
+creative work, origin intelligence, and accountable technology into
+supportable client services, products, and later platform offerings. The plan
+must protect the creative center of the work while creating a practical path
+to revenue, continuity, and staged growth.
+
+The objective has five connected outcomes:
+
+1. **Earn early, lawful revenue:** Establish AXES Contracting design/materials
+   services and KEYSTONE creator-origin record setup as clear, supportable
+   offers with defined scope, price, delivery, and human support.
+2. **Preserve origin and authority:** Use KEYSTONE, Ux, NUR, and the Creator
+   Origin Constitution to retain source, purpose, contributor, version,
+   permission, and correction records for founder-directed work and approved
+   collaborators.
+3. **Build the distinctive creative ecosystem:** Develop Chichetki as a
+   founder-designed musical instrument and creative practice, with Athanor and
+   AU as the future virtual-home and game-console environment for design,
+   dance, sound, play, and creative interaction.
+4. **Create trusted marketplace infrastructure:** Stage the AXES Directory and
+   service marketplace from confirmed business discovery and price-list
+   matching through private project fulfillment, while protecting clients and
+   providers through accurate records, consent, and human review.
+5. **Prepare long-range economic systems responsibly:** Advance URNUR,
+   Harmonics, creator economy, collectible gems, and future banking/currency
+   direction through protected research, technical design, evidence, and
+   qualified review before any regulated or public financial implementation.
+
+Success is not measured by launching every concept at once. It is measured by
+preserving the origin of the work, delivering real value to early clients,
+operating reliably within the current budget, and advancing each later layer
+only when its evidence, people, technical controls, and operating capacity are
+ready.
+
 ## Business architecture
 
 | Area | Role | Current or initial offer | Boundary |
@@ -29,14 +65,14 @@ stage.
 | AXES Contracting | Central public hub | Company story, service registry, design guidance, contact and scoped intake | No unreviewed claims or account-control actions |
 | Architectural Design Desk | Design-education line | Tips, inspiration, material palettes, and consultation requests | Not licensed architecture, engineering, code, or safety advice without responsible professional review |
 | Building-Materials Discovery | Commercial discovery line | Curated materials, supplier links, sample/quote requests, and project inspiration | No checkout, inventory, fulfillment, warranties, tax, or payment processing until commerce operations are ready |
-| Chichetki Studio | Founder-led creative line | Founder-designed physical rhythm objects, art editions, sound, movement, and carefully scoped experiences | Separate substantiated product descriptions from health, therapeutic, cultural, patent, or market claims |
+| Chichetki Studio | Founder-led creative line | Founder-designed physical rhythm objects, collectible gems, art editions, sound, movement, and carefully scoped experiences | Separate substantiated product descriptions from health, therapeutic, cultural, patent, financial-value, prize, or market claims; California legal review before any gem game, prize, or exchange |
 | XIIOM | Private operations core | Memory, monitoring, task controls, and review-only agent proposals | No public engine, arbitrary execution, account control, spending, or autonomous publication |
 | AXES Creative Studio | Future internal production workspace | Creative briefs, original image concepts, sound concepts, storyboards, and video shot lists | Human-approved providers, rights review, and private asset storage before generation or publication |
 | AXES Directory | Future business-discovery pilot | Small, opt-in, human-reviewed listings for building-material vendors, contractors, and real-estate professionals | No White Pages, public people search, identity registry, scraping, data brokerage, ad platform, or automated outreach |
-| AXOUX | Future creator pilot | Invite-only projects, contribution roles, and attribution history | Moderation, consent, and contributor terms before broad access |
+| AXOUS / AXOUX | AXOUS creator initiative through the AXOUX site | Invite-only projects, contribution roles, and attribution history | Moderation, consent, and contributor terms before broad access |
 | School of Love & Ethics | Future learning pilot | Accessible curriculum, project labs, and voluntary reflection | Adult-only or separated cohorts until youth safeguarding is operational |
 | AXEOUS and AUXAOUS | Future community and self-design pilots | Moderated groups and private participant-controlled reflection | No unrestricted messaging, public sensitive profiles, or unmoderated interactions |
-| URNUR | Future recognition direction | Non-transferable contribution recognition after review | No financial, market, token, custody, payment, or trading functionality before written legal approval |
+| URNUR | Future monetary currency, banking, creator-economy, and non-monetary contributor-recognition direction | Currency concept plus voluntary creator-origin and stewardship acknowledgement for original fashion, music, game, art, and collectible work | No application, banking claim, issuance, deposit, sale, transfer, payment, custody, marketplace, token, trading, personal-level, or social-ranking functionality before qualified legal, compliance, security, and operational approval |
 
 ## Customer and participant groups
 
@@ -73,10 +109,45 @@ not be copied or published without rights-holder permission.
 
 ### Chichetki and Athanor creative system
 
-Chichetki is the founder-directed creative rhythm system connecting physical
-objects, sound, movement, visual design, play, and participatory experience.
-Its source direction includes tactile rhythm practice, crafted strands and
-objects, and the possibility of future interactive installations or events.
+Chichetki is a founder-directed musical instrument and creative rhythm system
+connecting physical objects, sound, movement, visual design, play, and
+participatory experience. Its source direction includes tactile rhythm
+practice, crafted strands and objects, dance, and the possibility of future
+interactive installations or events.
+
+The founder describes Chichetki as a symbolic creative "GPS" toward Athanor:
+an orientation practice expressed through crafted objects, dance, rhythm, and
+musical-instrument exploration. This is metaphorical creative language. It
+does not use or provide geographic positioning, location tracking, navigation,
+measurement, diagnosis, treatment, transmission, or a claim to alter a
+person's physical, emotional, spiritual, or mental state.
+
+Within this creative language, a founder-created pomegranate may symbolize an
+offering or orientation toward Athanor. It is an artistic motif, not an actual
+message, transmission, measurement, spiritual claim, or mechanism. Any public
+pomegranate asset must be founder-created, independently created, or properly
+licensed; the separate jeweled-pomegranate reference remains private
+inspiration only.
+
+Athanor and Chichetki may later become a game-console-style creative
+experience in which players deliberately initiate motion or sound inputs for
+fictional audiovisual challenges. Game terms such as harmonic, resonance,
+resequencer, transmission, alignment, and challenge describe artistic game
+states only. The experience must not monitor people in the background, build
+biometric or behavioral profiles, infer personal states, or claim to
+understand or alter a player. The detailed gate is
+`ATHANOR_GAME_CONSOLE_READINESS.md`.
+
+Approved interaction objects may act as fictional keys to a future
+virtual-reality home: player-selected creative spaces and game experiences.
+They are not physical-property keys, identity credentials, financial
+instruments, or proof of ownership or status.
+
+The creative home may support dance, design, interaction, play, rhythm, sound,
+and player-controlled harmonic interface resynchronization: resetting or
+realigning the game's audiovisual timing, controls, layout, or fictional game
+state. It does not claim to resynchronize, measure, diagnose, or alter a
+person.
 
 **Athanor** is the internal creative concept for a harmonizing center within
 that system. It can guide the design of coherent experiences, installations,
@@ -101,6 +172,19 @@ requirements are satisfied.
 No financial-market, crypto, token, payment, custody, exchange, autotrading, or
 investment activity is part of the current business model.
 
+**Harmonics** is the proposed public name for future URNUR
+currency/creator-economy units, subject to all URNUR approval gates. In the
+separate Chichetki/Athanor game world, Harmonics names fictional audiovisual
+states and player-controlled interface interactions. The two meanings are not
+interchangeable: game Harmonics confer no financial value, balance, prize,
+ownership right, or transferability.
+
+In founder terminology, **UR** means Unit of Eternal Origin and **NUR** is the
+proposed record-holder for each individual gem or unit. NUR may preserve
+creator-origin and provenance records after the applicable privacy, security,
+rights, legal, and operational reviews. A NUR record is not by itself proof of
+ownership, authenticity, value, transferability, or permission to transact.
+
 ## Operating model
 
 ### Shared technical foundation
@@ -111,12 +195,37 @@ checkpoints, and an allowlisted task system. The protected AXES Support Desk
 provides read-only visibility into the public portal, engine, automation,
 checkpoints, and email-migration status.
 
+KEYSTONE is the proposed origin and authority registration service for AXES
+applications. It will maintain private, versioned records of an application's
+source, accountable human owner, approved scope, release state, and
+correction/revocation history. It does not claim automatic legal ownership,
+global authority, or control over third-party applications. The architecture is
+defined in `KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md`.
+
+AXES may later add a private project-fulfillment workspace for versioned
+scope, price-list assumptions, milestones, delivery evidence, and
+project-specific satisfaction feedback. It is not a public rating system,
+automated negotiator, fraud adjudicator, escrow, payment service, or
+professional certification. The detailed readiness model is
+`AXES_PROJECT_FULFILLMENT_READINESS.md`.
+
+The future extension is a curated service marketplace with factual,
+provider-confirmed price-list information and a permissioned client-to-provider
+match request. It begins as discovery and human-reviewed introductions, not
+automated recommendations, public ratings, payments, or a guarantee of
+provider availability, qualification, price, or outcome.
+
 ### Asset and content governance
 
 Every asset used publicly needs a recorded source, creator credit, intended
 use, accessibility treatment, and rights status. Keep founder source archives
 private. Keep external reference material private unless a specific licensed
 or permission-based use is documented.
+
+The internal `AXES_CREATOR_ORIGIN_CONSTITUTION.md` governs origin evidence,
+creator consent, research integrity, correction requests, and public
+attribution. It prevents external or AI-generated assertions from being
+treated as creator authority or factual proof without human review.
 
 ### Human decision authority
 
@@ -158,6 +267,18 @@ and the shared operating core before discretionary expansion. Maintain a small
 initial operational cap, request written quotes for professional work, and
 retain a contingency reserve. The authoritative planning ranges and approval
 thresholds are in `PROJECT_BUDGET.md`.
+
+The founder's current constrained-budget execution emphasis is maintained in
+`FOUNDER_REVENUE_PRIORITY_OVERLAY.md`. It prioritizes AXES client pathways and
+KEYSTONE provenance services while keeping the trading application under its
+existing financial-readiness gate; it does not replace the patent-source V1-V8
+architecture.
+
+`KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md` defines the zero-spend,
+internally controlled automation and revenue-evaluation process. It requires
+measured productivity results rather than assumed savings and keeps
+cryptocurrency, currency, banking, marketplace, and trading activity within
+the existing legal-readiness boundary.
 
 ## Critical legal and professional gates
 
@@ -220,8 +341,14 @@ Track only metrics that help decide whether a service should continue:
 - `INTERACTIVE_EXPERIENCE_CATALOG.md`
 - `DOMAIN_PORTFOLIO.md`
 - `PROJECT_BUDGET.md`
+- `FOUNDER_REVENUE_PRIORITY_OVERLAY.md`
+- `KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md`
+- `KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md`
+- `AXES_PROJECT_FULFILLMENT_READINESS.md`
 - `EMAIL_MIGRATION_PLAN.md`
 - `URNUR_FINANCIAL_READINESS.md`
 - `AXES_DIRECTORY_READINESS.md`
 - `AXES_DIRECTORY_DATA_MODEL.md`
+- `CHICHETKI_COLLECTIBLE_GEM_READINESS.md`
 - `AXES_OS_PORTABILITY.md`
+- `AXES_CREATOR_ORIGIN_CONSTITUTION.md`
