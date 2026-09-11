@@ -2,6 +2,7 @@
 
 **Status:** Active reset-safe context record
 **Recorded:** 2026-09-10
+**Last confirmed:** 2026-09-11
 
 ## Purpose
 
@@ -44,11 +45,15 @@ Downloaded tools or services become part of the system only after their
 purpose, access, data handling, authority, failure handling, rollback path,
 and test evidence are documented and implemented.
 
-The current feature branch contains continuity and Directory work that is not
-yet reconciled with the documented production-source branch. A passing local
-or CI test proves implementation behavior only; it does not prove production
-deployment, site health, TLS validity, secret configuration, durable recovery,
-or external-service readiness.
+On 2026-09-11, merge commit
+`8393905c7d3691f428eb7ea1ece5d6808d689af1` incorporated the documented
+production-source branch `axaxiaxes-axiom-monorepo` into the current feature
+branch while retaining the Directory and continuity history. This does not
+establish that the current branch is deployed, selected as the production
+source, or production-ready. A passing local or CI test proves implementation
+behavior only; it does not prove production deployment, site health, TLS
+validity, secret configuration, durable recovery, or external-service
+readiness.
 
 ## Current reviewed basis
 

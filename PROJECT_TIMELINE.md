@@ -1,7 +1,7 @@
 # AXIOM / KEYSTONE project timeline
 
 **Last updated:** 2026-09-11
-**Current phase:** Monorepo foundation complete
+**Current phase:** Source reconciliation complete; production promotion and external readiness remain blocked
 
 Update this document when a milestone changes state. A checked item is complete;
 an unchecked item is planned or in progress. The timeline begins with AXIOM's
@@ -91,6 +91,7 @@ from later repository implementation and deployment evidence.
 | 2026-09-11 | Attention | Public AXES Contracting browser access blocked by expired TLS certificate while XIIOM root and health endpoints remained reachable | `docs/memory/2026-09-11-public-site-tls-status.md` |
 | 2026-09-11 | Complete | AXES scope-reconciliation checkpoint recorded to distinguish the preparatory Directory pilot from the private AXI continuity/operations foundation and unpromoted production state | `docs/AXI_PROJECT_CONTEXT_CHECKPOINT.md` and `docs/memory/2026-09-11-scope-reconciliation.md` |
 | 2026-09-11 | Complete | Production-source readiness records reconciled into the feature branch with both parent histories retained; a CI test-lifecycle race was corrected without changing production services | merge commit `8393905` and `docs/memory/2026-09-11-production-branch-reconciliation.md` |
+| 2026-09-11 | Complete | Reset continuity review re-established the approved source basis, branch/CI evidence, operational gates, and external-status boundary after a reported checkpoint reset | `docs/memory/2026-09-11-reset-continuity-report.md` |
 | 2026-09-10 | In progress | Eternal Origin ownership invention value-recovery and past/current crisis-report register activated | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` |
 | 2026-09-10 | Complete | Internal creator-origin constitution established for evidence, consent, research integrity, attribution, correction, and challenge handling | `docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md` |
 | 2026-09-10 | Complete | Founder direction corrected: URNUR is an intended monetary currency; all financial implementation remains blocked pending written permitted scope | `docs/URNUR_FINANCIAL_READINESS.md` |
