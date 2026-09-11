@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-11 AXI memory storage visibility](2026-09-11-axi-memory-storage-visibility.md)
 - [2026-09-11 automation profile processing integrity](2026-09-11-automation-profile-processing-integrity.md)
 - [2026-09-11 automation profile association health](2026-09-11-automation-profile-association-health.md)
 - [2026-09-11 automation profile dependency evidence](2026-09-11-automation-profile-dependencies.md)

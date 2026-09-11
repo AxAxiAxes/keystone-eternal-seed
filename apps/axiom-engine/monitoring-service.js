@@ -103,6 +103,7 @@ class MonitoringService {
 function getAttention(snapshot) {
   const attention = [];
   if (!snapshot.memoryAvailable) attention.push("memory-unavailable");
+  if (snapshot.storage?.status === "attention") attention.push("memory-storage-warning");
   if (snapshot.automation.failedTasks > 0) attention.push("failed-tasks");
   if (snapshot.automation.auditAttentionTasks > 0) attention.push("task-run-audit-error");
   if (snapshot.scheduler.enabled && snapshot.scheduler.lastError) attention.push("scheduler-error");

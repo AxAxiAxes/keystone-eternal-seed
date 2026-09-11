@@ -38,6 +38,7 @@
     <p class="note">Private health, memory, scheduler, queue, failure, agent, run, and provider-usage signals. History records only meaningful changes or attention conditions.</p>
     <div class="actions"><button id="capture-monitoring" class="secondary">Capture Snapshot</button></div>
     <div id="governance"></div>
+    <div id="memory-storage"></div>
     <div id="monitoring"></div>
     <div id="monitoring-history"></div>
   </section>
@@ -207,6 +208,9 @@ function escapeHtml(value) {
 }
 function priorityLabel(priority) {
   return `P${priority}`;
+}
+function formatBytes(value) {
+  return Number.isSafeInteger(value) ? `${value.toLocaleString()} bytes` : "unavailable";
 }
 function renderTaskAgentOptions() {
   const select = document.querySelector("#task-agent");
@@ -379,6 +383,12 @@ async function refresh() {
     let automationProfiles = { profiles: [], templates: [] };
     let automationProfileHistory = [];
     let automationProfileHealth = { profiles: [] };
+    let memoryStorage = { status: "unavailable", filesystem: { status: "unavailable" } };
+    try {
+      memoryStorage = await request("/api/automation/storage");
+    } catch (error) {
+      result.textContent = "Memory-storage visibility will be available after the private engine deployment is updated.";
+    }
     try {
       [monitoring, monitoringHistory] = await Promise.all([
         request("/api/automation/monitoring/status"),
@@ -439,6 +449,15 @@ async function refresh() {
       activeAgents: `${governance.activeAgents}/${governance.enabledAgents}`,
       issues: governance.issues.map(issue => issue.code).join(", ") || "none"
     }], [["status","Status"],["checkpoint","Eternal Origin checkpoint"],["activeAgents","Active agents"],["issues","Attention"]])}`;
+    document.querySelector("#memory-storage").innerHTML =
+      `<h3>Private memory storage</h3><p class="note">Storage use is visible only to help AXI grow safely. It does not delete or limit memory. Filesystem capacity is host-reported, not a recovery guarantee.</p>${table([{
+        status: memoryStorage.status,
+        usedBytes: formatBytes(memoryStorage.usedBytes),
+        fileCount: memoryStorage.fileCount ?? "unavailable",
+        warningBytes: memoryStorage.warningBytes === null ? "not configured" : formatBytes(memoryStorage.warningBytes),
+        totalBytes: formatBytes(memoryStorage.filesystem?.totalBytes),
+        availableBytes: formatBytes(memoryStorage.filesystem?.availableBytes)
+      }], [["status","Status"],["usedBytes","AXI storage used"],["fileCount","Tracked files"],["warningBytes","Warning point"],["totalBytes","Host filesystem capacity"],["availableBytes","Host filesystem available"]])}`;
     renderAgents(agents);
     registeredAgents = agents;
     renderTaskAgentOptions();

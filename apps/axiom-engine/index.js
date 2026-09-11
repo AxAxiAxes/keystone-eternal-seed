@@ -4,6 +4,7 @@ const { constants: fsConstants } = require("fs");
 const path = require("path");
 const { ChatService } = require("./chat-service");
 const { MemoryStore } = require("./memory-store");
+const { StorageUsageService } = require("./storage-usage-service");
 const { UsageStore } = require("./usage-store");
 const { CheckpointService } = require("./checkpoint-service");
 const { MonitoringService } = require("./monitoring-service");
@@ -25,6 +26,7 @@ const {
 const app = express();
 const dataDirectory = process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data");
 const memoryStore = new MemoryStore(dataDirectory);
+const storageUsageService = new StorageUsageService({ directory: dataDirectory });
 const usageStore = new UsageStore(dataDirectory);
 const startupContextService = new StartupContextService({ directory: dataDirectory });
 const startupContextReady = startupContextService.initialize();
@@ -212,10 +214,11 @@ app.get("/system/readiness", async (req, res, next) => {
   try {
     await fs.mkdir(memoryStore.directory, { recursive: true });
     await fs.access(memoryStore.directory, fsConstants.R_OK | fsConstants.W_OK);
+    const storage = await storageUsageService.status();
     res.json({
       status: "ready",
       checkedAt: new Date().toISOString(),
-      storage: { status: "ok" },
+      storage,
       provider: {
         status: chatService.apiKey ? "configured" : "not-configured",
         model: chatService.model
@@ -249,6 +252,14 @@ app.get("/system/readiness", async (req, res, next) => {
   }
 });
 
+app.get("/system/storage", async (req, res, next) => {
+  try {
+    res.json(await storageUsageService.status());
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get("/usage", async (req, res, next) => {
   try {
     res.json(await usageStore.summary());
@@ -259,7 +270,8 @@ app.get("/usage", async (req, res, next) => {
 
 async function captureMonitoringSnapshot(automationState) {
   await memoryStore.list("decision", 1);
-  const [automation, usage, governance, recovery, coordinates, beadPassports, startupContext, continuityRecord, sourceCatalog, businessMetrics, serviceRegistry, automationProfiles] = await Promise.all([
+  const [storage, automation, usage, governance, recovery, coordinates, beadPassports, startupContext, continuityRecord, sourceCatalog, businessMetrics, serviceRegistry, automationProfiles] = await Promise.all([
+    storageUsageService.status(),
     automationState
       ? summarizeAutomationState(automationState)
       : automationService.status(),
@@ -278,7 +290,8 @@ async function captureMonitoringSnapshot(automationState) {
     automationProfileService.status()
   ]);
   const monitoringRecord = await monitoringService.record({
-    memoryAvailable: true,
+    memoryAvailable: storage.status !== "unavailable",
+    storage,
     scheduler: { ...scheduler },
     automation,
     governance,

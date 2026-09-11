@@ -131,7 +131,9 @@ test("reports secret-safe runtime readiness", async (t) => {
   assert.equal(response.status, 200);
   const readiness = await response.json();
   assert.equal(readiness.status, "ready");
-  assert.equal(readiness.storage.status, "ok");
+  assert.equal(readiness.storage.status, "ready");
+  assert.ok(Number.isSafeInteger(readiness.storage.usedBytes));
+  assert.ok(Number.isSafeInteger(readiness.storage.fileCount));
   assert.equal(readiness.provider.status, "not-configured");
   assert.equal(readiness.provider.model, "gpt-4.1-mini");
   assert.equal(readiness.automation.status, "disabled");

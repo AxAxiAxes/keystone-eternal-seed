@@ -198,7 +198,7 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(support.portal.status, "ok");
     assert.equal(support.engine.status, "ok");
     assert.equal(support.readiness.status, "ready");
-    assert.equal(support.readiness.storage.status, "ok");
+    assert.equal(support.readiness.storage.status, "ready");
     assert.equal(support.readiness.provider.status, "not-configured");
     assert.equal(support.continuityRecord.status, "ready");
     assert.equal(support.sourceCatalog.status, "ready");
@@ -318,6 +318,13 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(profileHealthProjection.profiles[0].profileId, "portal-observation");
     assert.equal(profileHealthProjection.profiles[0].tasks.length, 2);
     assert.equal("payload" in profileHealthProjection.profiles[0].tasks[0], false);
+
+    const storage = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/storage`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(storage.status, 200);
+    assert.ok(Number.isSafeInteger((await storage.json()).usedBytes));
 
     const unauthorizedContinuityRecord = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/continuity-record`

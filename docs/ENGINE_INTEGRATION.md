@@ -15,6 +15,7 @@
 | `AXIOM_AUTOMATION_MAX_TASKS_PER_CYCLE` | `axiom-engine` | `5` | Maximum due tasks processed each scheduler cycle, from 1 to 20. |
 | `AXIOM_MONITORING_ENABLED` | `axiom-engine` | `false` | Enables private operational monitoring snapshots. |
 | `AXIOM_MONITORING_POLL_INTERVAL_MS` | `axiom-engine` | `60000` | Monitoring interval, from 1,000 to 3,600,000 milliseconds. |
+| `AXIOM_MEMORY_WARNING_BYTES` | `axiom-engine` | Unset | Optional positive-integer early-warning point for AXI data-directory growth; it does not cap or delete memory. |
 | `AXIOM_BACKUP_DIRECTORY` | `axiom-engine` | Unset | Required distinct location for private runtime recovery bundles. |
 | `AXIOM_RECOVERY_RESTORE_DIRECTORY` | `axiom-engine` | Unset | Required isolated location for verified recovery drills; never the live memory directory. |
 

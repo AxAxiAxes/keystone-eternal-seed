@@ -17,6 +17,19 @@ The AXIOM engine implements the durable memory foundation described by the KEYST
 
 The JSONL layers are append-only through the service API. Identity is intentionally replaceable because it represents the current declared state.
 
+## Storage visibility and growth
+
+`GET /system/storage` returns the private AXI data directory's current used
+bytes and file count. Where the host permits it, it also returns filesystem
+total and available bytes. The host filesystem figures are operational signals,
+not a guarantee of a configured volume quota, durable storage, or recovery.
+
+Set the optional positive-integer `AXIOM_MEMORY_WARNING_BYTES` only to surface
+an early `memory-storage-warning` in private monitoring. It is a warning, not
+a memory cap: AXI does not delete, compact, or forget records when the warning
+is reached. A malformed value prevents startup rather than silently disabling
+the warning.
+
 The private automation service records its durable task, agent, and execution
 state in `automation.json` in the same directory. See
 [`AXI_AUTOMATION_SERVICE.md`](AXI_AUTOMATION_SERVICE.md) for its action
