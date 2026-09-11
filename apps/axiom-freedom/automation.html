@@ -39,7 +39,7 @@
   </section>
   <section>
     <h2>Private Coordinate Center</h2>
-    <p class="note">The gravity center is a technical Genesis reference. Bead-passport nodes apply only to registered AXI agents; they are not human passports, legal identities, credentials, or external listings.</p>
+    <p class="note">The gravity center is a technical Eternal Origin Ownership from Genesis reference. Bead-passport nodes apply only to registered AXI agents; they are not human passports, legal identities, credentials, or external listings.</p>
     <div id="gravity-center"></div>
     <h3>Register a bead-passport node</h3>
     <form id="bead-passport-form">
@@ -57,7 +57,7 @@
     <h2>Queue Task</h2>
     <form id="task-form">
       <label>Title <input id="title" required maxlength="200" placeholder="Record a verified milestone"></label>
-      <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="monitoring.snapshot">Capture private monitoring snapshot</option><option value="governance.readiness">Assess Genesis and governance readiness</option><option value="recovery.backup">Create verified runtime recovery bundle</option><option value="coordinate.record">Record a coordinate transition</option><option value="continuity.checkpoint">Create private continuity checkpoint</option><option value="automation.noop">Safe no-op test</option></select></label>
+      <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="monitoring.snapshot">Capture private monitoring snapshot</option><option value="governance.readiness">Assess Eternal Origin Ownership from Genesis readiness</option><option value="recovery.backup">Create verified runtime recovery bundle</option><option value="coordinate.record">Record a coordinate transition</option><option value="continuity.checkpoint">Create private continuity checkpoint</option><option value="automation.noop">Safe no-op test</option></select></label>
       <label>Assigned agent <select id="task-agent" required></select></label>
       <label>Origin checkpoint <input id="origin-checkpoint" required maxlength="120" placeholder="axi-operations-observer"></label>
       <label>Priority <select id="priority"><option value="5">P5 - Critical</option><option value="4">P4 - High</option><option value="3" selected>P3 - Normal</option><option value="2">P2 - Low</option><option value="1">P1 - Backlog</option></select></label>
@@ -75,7 +75,7 @@
     </form>
   </section>
   <section><h2>Registered Agents</h2><div id="agents"></div></section>
-  <section><h2>Agent Timelines</h2><p class="note">Each AXI agent is shown with its recorded AXI Genesis checkpoint, creator ownership-and-accountability claim, origin, assigned tasks, and run events.</p><div id="agent-timelines"></div></section>
+  <section><h2>Agent Timelines</h2><p class="note">Each AXI agent is shown with its recorded AXI Eternal Origin Ownership from Genesis checkpoint, creator ownership-and-accountability claim, origin, assigned tasks, and run events.</p><div id="agent-timelines"></div></section>
   <section><h2>Schedule</h2><p class="note">Due tasks run by priority first, then scheduled time. All execution remains limited to allowlisted actions.</p><div id="schedule"></div></section>
   <section><h2>Run History</h2><p class="note">Each completed, retrying, or failed execution is recorded privately.</p><div id="runs"></div></section>
   <section>
@@ -138,7 +138,7 @@ function renderAgents(agents) {
       source: gravityCenter.sourceRecord,
       vector: JSON.stringify(gravityCenter.spatialVector),
       status: gravityCenter.status
-    }], [["id","Reference"],["genesisCoordinate","Genesis coordinate"],["source","Source"],["vector","Vector"],["status","Status"]])}`;
+    }], [["id","Reference"],["genesisCoordinate","Eternal Origin coordinate"],["source","Source"],["vector","Vector"],["status","Status"]])}`;
     document.querySelector("#bead-passports").innerHTML = `<h3>Bead-passport nodes</h3>${table(passports.map(passport => ({
       passportId: passport.passportId,
       agentId: passport.agentId,
@@ -190,7 +190,7 @@ function renderAgentTimelines(reports) {
       status: event.status || "",
       detail: event.detail || event.title || event.action || ""
     }));
-    return `<h3>${escapeHtml(agent.name)}</h3><p class="note">${escapeHtml(attribution)}</p>${table(events, [["occurredAt","Time"],["event","Event"],["genesisCheckpoint","Genesis"],["originCheckpoint","Origin"],["status","Status"],["detail","Detail"]])}`;
+    return `<h3>${escapeHtml(agent.name)}</h3><p class="note">${escapeHtml(attribution)}</p>${table(events, [["occurredAt","Time"],["event","Event"],["genesisCheckpoint","Eternal Origin"],["originCheckpoint","Origin"],["status","Status"],["detail","Detail"]])}`;
   }).join("");
 }
 function renderSchedule(tasks) {
@@ -236,12 +236,12 @@ async function refresh() {
       result.textContent = "Monitoring will be available after the private engine deployment is updated.";
     }
     document.querySelector("#metrics").innerHTML = Object.entries(status).map(([key,value]) => `<div class="metric"><strong>${value}</strong><br>${key}</div>`).join("");
-    document.querySelector("#governance").innerHTML = `<h3>Genesis and governance readiness</h3>${table([{
+    document.querySelector("#governance").innerHTML = `<h3>Eternal Origin Ownership from Genesis readiness</h3>${table([{
       status: governance.status,
       checkpoint: governance.genesisCheckpoint.id,
       activeAgents: `${governance.activeAgents}/${governance.enabledAgents}`,
       issues: governance.issues.map(issue => issue.code).join(", ") || "none"
-    }], [["status","Status"],["checkpoint","Genesis checkpoint"],["activeAgents","Active agents"],["issues","Attention"]])}`;
+    }], [["status","Status"],["checkpoint","Eternal Origin checkpoint"],["activeAgents","Active agents"],["issues","Attention"]])}`;
     renderAgents(agents);
     registeredAgents = agents;
     renderTaskAgentOptions();

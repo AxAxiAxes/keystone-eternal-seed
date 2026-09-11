@@ -15,9 +15,9 @@ verified.
 ## Implemented control
 
 `apps/axiom-freedom/origin-continuity.html` provides a public-safe
-`/origin-continuity` statement. It communicates that AXES maintains founder
-direction, versioned technical records, correction history, consent, privacy,
-and human accountability. It deliberately does not name, accuse, or assign
+`/origin-continuity` statement. It communicates one founder-provided value of
+Eternal Origin from Genesis, versioned technical records, correction history,
+consent, privacy, and human accountability. It deliberately does not name, accuse, or assign
 wrongdoing to any person or organization, claim ownership or damages as a
 legal conclusion, or collect visitor data.
 

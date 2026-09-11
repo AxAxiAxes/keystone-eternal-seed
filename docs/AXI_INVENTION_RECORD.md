@@ -3,8 +3,8 @@
 **Status:** Active founder-claimed invention record; under development
 **Recorded:** 2026-09-10
 **Founder and inventor claim:** Axel Urartu (AX) · Axes Contracting
-**Genesis source:** `KEYSTONE-ORIGIN-000001`
-**Genesis checkpoint:** `axi-genesis-creator-ownership`
+**Origin source:** `KEYSTONE-ORIGIN-000001`
+**Eternal Origin Ownership from Genesis checkpoint:** `axi-genesis-creator-ownership`
 
 ## Invention claim
 
@@ -34,11 +34,11 @@ invention areas:
 
 | Area | Current implementation direction |
 | --- | --- |
-| Origin and continuity | Genesis-linked agent registration, origin checkpoints, versioned source records, hash-chained internal coordinates, and reset recovery |
+| Origin and continuity | Eternal Origin Ownership from Genesis-linked agent registration, origin checkpoints, versioned source records, hash-chained internal coordinates, and reset recovery |
 | Creator accountability | Required creator authority, ownership-and-accountability claim, task assignment, review status, and retained history |
 | Protected execution | Explicit allowlist, capability matching, approval holds, retry bounds, and fail-closed suspension |
 | Evidence preservation | Private memory records, task/run audit trail, monitoring snapshots, checksummed portable checkpoints, and versioned repository history |
-| Governance | Human-reviewed decisions, correction paths, privacy limits, prohibited consequential automation, and private Genesis/governance-readiness signals |
+| Governance | Human-reviewed decisions, correction paths, privacy limits, prohibited consequential automation, and private Eternal Origin Ownership from Genesis/governance-readiness signals |
 
 This record intentionally leaves room for additional embodiments,
 improvements, continuations, technical prototypes, and future implementation

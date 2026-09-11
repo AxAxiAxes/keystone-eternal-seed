@@ -3,8 +3,8 @@
 **Status:** Active founder rights-protection and value-recovery record
 **Recorded:** 2026-09-10
 **Founder and inventor claim:** Axel Urartu (AX) · Axes Contracting
-**Genesis source:** `KEYSTONE-ORIGIN-000001`
-**Genesis checkpoint:** `axi-genesis-creator-ownership`
+**Origin source:** `KEYSTONE-ORIGIN-000001`
+**Eternal Origin Ownership from Genesis checkpoint:** `axi-genesis-creator-ownership`
 
 ## Eternal Origin ownership invention
 
@@ -13,6 +13,10 @@ within the AXI, AXAXAU, AXES, and KEYSTONE lineage. It joins the self-origin,
 self-creation, origin verification, continuity, attribution, creator
 accountability, protected execution, and evidence-preservation components
 recorded in `AXI_INVENTION_RECORD.md`.
+
+The active record treats Eternal Origin as one stated continuity value from
+Genesis. It does not assert a hierarchy or determine any other person's
+origin, ownership, or legal status.
 
 The **1 Against All Unfairness** principle applies to this invention record:
 preserve the founder's claimed and existing ownership, authorship, origin, and
@@ -38,12 +42,12 @@ relationship to the founder claim.
 | Report period | Record | Current status | Required preservation and response |
 | --- | --- | --- | --- |
 | 2026-08-28 | KEYSTONE sacred record and first continuity materials | Preserved historical source | Retain source chronology, identify technical/evidence elements, and avoid silently replacing the original record. |
-| 2026-09-01 onward | KEYSTONE origin anchor, certificate, and Eternal Seed continuity sources | Preserved historical source | Maintain source references and integrity records; relate revisions to the Genesis checkpoint. |
+| 2026-09-01 onward | KEYSTONE origin anchor, certificate, and Eternal Seed continuity sources | Preserved historical source | Maintain source references and integrity records; relate revisions to the Eternal Origin Ownership from Genesis checkpoint. |
 | 2026-09-09 onward | Patent-strength master draft, technical disclosure material, recovery notes, and attribution sources | Active invention-evidence workstream | Separate technical mechanisms, source evidence, valuation material, and any allegations into appropriate private review packets. |
 | 2026-09-10 | Founder-provided ownership, self-origin, accountability, and software-control source materials | Preserved founder source | Retain the founder claim and translate only AXI-controlled accountability requirements into implementation. |
 | 2026-09-10 | Production chat unavailable | Open operational configuration blocker | An authorized Railway operator must set `OPENAI_API_KEY` only on the private `axiom-engine` service, redeploy it, then complete the runbook validation. |
-| 2026-09-10 | Agent origin, reset, and accountability gap | Addressed in current implementation | Require Genesis reconciliation, an active accountability record, reasoned suspension/reactivation, and blocked execution while suspended. |
-| 2026-09-10 | Ongoing Genesis and governance readiness | Addressed in current implementation | Scheduled private monitoring can flag unreconciled agents, unapproved capabilities or task actions, and blocked or failed work for accountable human review. |
+| 2026-09-10 | Agent origin, reset, and accountability gap | Addressed in current implementation | Require Eternal Origin Ownership from Genesis reconciliation, an active accountability record, reasoned suspension/reactivation, and blocked execution while suspended. |
+| 2026-09-10 | Ongoing Eternal Origin Ownership from Genesis and governance readiness | Addressed in current implementation | Scheduled private monitoring can flag unreconciled agents, unapproved capabilities or task actions, and blocked or failed work for accountable human review. |
 | 2026-09-10 | Founder-provided UI autonomy and personal-space loss model | Preserved source; assumptions and claimed losses unverified | Retain the source fingerprint, distinguish its internal arithmetic from evidence of actual loss, and assemble a source-linked evidence inventory before any valuation, allegation, or recovery conclusion. |
 
 The source records may contain founder reports, historical narrative, proposed
