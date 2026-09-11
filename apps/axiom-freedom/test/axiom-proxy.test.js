@@ -182,11 +182,35 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     const unauthorizedSupport = await fetch(`http://127.0.0.1:${webPort}/support`);
     assert.equal(unauthorizedSupport.status, 401);
 
+    const unauthorizedSupportWithTrailingSlash = await fetch(
+      `http://127.0.0.1:${webPort}/support/`
+    );
+    assert.equal(unauthorizedSupportWithTrailingSlash.status, 401);
+
     const supportPage = await fetch(`http://127.0.0.1:${webPort}/support`, {
       headers: { Authorization: authorization }
     });
     assert.equal(supportPage.status, 200);
     assert.match(await supportPage.text(), /AXES Contracting Support Desk/);
+
+    const supportPageWithTrailingSlash = await fetch(
+      `http://127.0.0.1:${webPort}/support/`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(supportPageWithTrailingSlash.status, 200);
+    assert.match(await supportPageWithTrailingSlash.text(), /AXES Contracting Support Desk/);
+
+    const unauthorizedAdmin = await fetch(`http://127.0.0.1:${webPort}/admin`, {
+      redirect: "manual"
+    });
+    assert.equal(unauthorizedAdmin.status, 401);
+
+    const legacyAdminRedirect = await fetch(`http://127.0.0.1:${webPort}/admin`, {
+      headers: { Authorization: authorization },
+      redirect: "manual"
+    });
+    assert.equal(legacyAdminRedirect.status, 302);
+    assert.equal(legacyAdminRedirect.headers.get("location"), "/support");
 
     const supportStatus = await request(
       webPort,

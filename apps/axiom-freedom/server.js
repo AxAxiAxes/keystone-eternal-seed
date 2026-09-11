@@ -237,7 +237,7 @@ const server = http.createServer(async (req, res) => {
           serveFile(res, path.join(__dirname, 'command-center.html'), 'text/html; charset=utf-8');
           return;
     }
-    if (pathname === '/support') {
+    if (pathname === '/support' || pathname === '/support/') {
           if (!requireAdmin(req, res)) return;
           serveFile(res, path.join(__dirname, 'support.html'), 'text/html; charset=utf-8');
           return;
@@ -779,7 +779,8 @@ const server = http.createServer(async (req, res) => {
     }
     if (pathname === '/admin') {
           if (!requireAdmin(req, res)) return;
-          serveFile(res, path.join(__dirname, 'admin.html'), 'text/html; charset=utf-8');
+          res.writeHead(302, { Location: '/support' });
+          res.end();
           return;
     }
     if (pathname === '/api/leads' && req.method === 'GET') {

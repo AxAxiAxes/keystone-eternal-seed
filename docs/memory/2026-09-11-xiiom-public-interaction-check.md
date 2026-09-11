@@ -33,10 +33,22 @@ exposing private operational state. The existing
 provider configuration; this check does not claim that private configuration
 has since changed.
 
+## Route correction
+
+The deployment returned HTTP 404 for `https://xiiom.com/support/` because the
+portal accepted only the no-trailing-slash form. The repository now accepts
+both forms with the same administrator authentication requirement. The
+correction remains pending deployment through the configured production-source
+branch.
+
+The legacy authenticated `https://xiiom.com/admin` route also attempted to
+serve a nonexistent `admin.html` file. It now redirects authenticated requests
+to the active `/support` desk instead of returning Not Found. This correction
+also remains pending deployment.
+
 ## Boundary
 
 No Railway configuration, credentials, deployment, DNS, scheduler, task, or
 external provider action was changed during this check. Activating a provider
 or changing the protected-access credential requires an authorized operator in
 the relevant private deployment account.
-
