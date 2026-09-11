@@ -164,10 +164,25 @@ class AutomationProfileService {
       });
     });
   }
-  async isTaskProcessingAllowed(taskId) {
+  async isTaskProcessingAllowed(taskId, availableTasks) {
     try {
-      return !Object.values(projectProfiles(await this.validRecords())).some((profile) =>
-        Object.values(profile.taskIds).includes(taskId) && profile.status !== "active");
+      const profiles = Object.values(projectProfiles(await this.validRecords()));
+      const tasks = availableTasks || await this.listTasks();
+      const task = tasks.find((candidate) => candidate.id === taskId);
+      const profile = profiles.find((candidate) =>
+        Object.values(candidate.taskIds).includes(taskId) ||
+        task?.automationProfileId === candidate.profileId);
+      if (!profile) return true;
+      if (profile.status !== "active") return false;
+      const definition = profile.taskTemplates.find((candidate) =>
+        candidate.key === task?.automationProfileKey);
+      if (!definition || !task) return false;
+      const retainedTaskId = profile.taskIds[definition.key] || profile.taskIds[definition.action];
+      const associated = tasks.filter((candidate) =>
+        candidate.automationProfileId === profile.profileId &&
+        candidate.automationProfileKey === definition.key);
+      return retainedTaskId === taskId && associated.length === 1 &&
+        matchesDefinition(task, definition);
     } catch { return false; }
   }
   async append(records, event) {

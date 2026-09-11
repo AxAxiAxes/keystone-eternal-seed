@@ -44,6 +44,14 @@ profile-managed tasks remain retained but are not processed; their history and
 unrelated tasks are unchanged. A profile never enables the scheduler and
 cannot reactivate itself.
 
+Task processing also requires an active profile's retained task ID, profile
+key, and approved task definition to match exactly and uniquely. A missing,
+renamed, altered, or duplicate profile association is refused rather than
+processed, even while the profile remains active.
+The processing check uses the task state already held by the active processing
+cycle; it does not reopen the task store while that cycle holds its exclusive
+write lock.
+
 Activation requires ready startup context, source catalog, submitted business
 metrics, service registry when initialized, and governance state. Recovery
 readiness is surfaced in the active profile audit but is not required to

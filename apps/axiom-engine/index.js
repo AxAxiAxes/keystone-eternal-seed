@@ -142,8 +142,8 @@ const automationService = new AutomationService({
   catalogSource: (entry) => sourceCatalogService.record(entry),
   recordBusinessMetric: (entry) => businessMetricsService.record(entry),
   recordServiceRegistry: (entry) => serviceRegistryService.record(entry),
-  canProcessTask: (task) => automationProfileService
-    ? automationProfileService.isTaskProcessingAllowed(task.id)
+  canProcessTask: (task, tasks) => automationProfileService
+    ? automationProfileService.isTaskProcessingAllowed(task.id, tasks)
     : true
 });
 automationProfileService = new AutomationProfileService({

@@ -444,7 +444,7 @@ class AutomationService {
 
       for (const task of dueTasks) {
         if (typeof this.canProcessTask === "function" &&
-          !await this.canProcessTask(task)) {
+          !await this.canProcessTask(task, state.tasks)) {
           outcomes.push({ taskId: task.id, status: "profile-paused" });
           continue;
         }

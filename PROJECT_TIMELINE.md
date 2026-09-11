@@ -11,6 +11,7 @@ from later repository implementation and deployment evidence.
 
 | Date | Status | Milestone | Evidence |
 | --- | --- | --- | --- |
+| 2026-09-11 | Complete | Active Automation Profile tasks now fail closed unless their retained ID, profile key, and approved task definition match exactly and uniquely during processing | `apps/axiom-engine/automation-service.js` and `docs/memory/2026-09-11-automation-profile-processing-integrity.md` |
 | 2026-09-11 | Complete | Protected read-only Automation Profile task-association health added for active and paused profiles with payload-free task state and fixed attention codes | `apps/axiom-engine/automation-profile-service.js` and `docs/memory/2026-09-11-automation-profile-association-health.md` |
 | 2026-09-11 | Complete | Automation Profile dependencies now require existing completed-task evidence during preflight, draft creation, and activation | `apps/axiom-engine/automation-profile-service.js` and `docs/memory/2026-09-11-automation-profile-dependencies.md` |
 | 2026-09-11 | Complete | Protected Automation Profile preflight added to validate a payload-free task plan and activation gates before any draft, task, or schedule is created | `apps/axiom-engine/automation-profile-service.js` and `docs/memory/2026-09-11-automation-profile-preflight.md` |

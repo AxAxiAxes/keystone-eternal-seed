@@ -76,6 +76,15 @@ test("creates, activates once, and pauses the exact operations-observation sched
   );
   assert.equal(tasks.length, 2);
   assert.equal(await service.isTaskProcessingAllowed(tasks[0].id), true);
+  service.listTasks = async () => { throw new Error("task list must not be re-read during processing"); };
+  assert.equal(await service.isTaskProcessingAllowed(tasks[0].id, tasks), true);
+  service.listTasks = async () => tasks;
+  tasks[0].automationProfileKey = "unexpected-key";
+  assert.equal(await service.isTaskProcessingAllowed(tasks[0].id), false);
+  tasks[0].automationProfileKey = "monitoring-snapshot";
+  tasks.push({ ...tasks[0], id: randomUUID() });
+  assert.equal(await service.isTaskProcessingAllowed(tasks[0].id), false);
+  tasks.pop();
 
   const paused = await service.pause("private-observation", { confirmed: true });
   assert.equal(paused.status, "paused");
