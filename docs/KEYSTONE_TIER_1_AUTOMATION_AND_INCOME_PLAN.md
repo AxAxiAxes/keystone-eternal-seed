@@ -66,6 +66,10 @@ delivery capacity, direct costs, founder time, and cash-collection assumption.
 Use low, base, and high scenarios. Treat a forecast as a decision aid, not
 revenue, valuation, or a guarantee.
 
+Use `AXES_TIER_1_EVIDENCE_LEDGER.md` for the approved minimum-data template
+covering offer readiness, conservative scenario assumptions,
+actual-versus-forecast variance, and founder-reviewed productivity tests.
+
 ## Cryptocurrency and financial boundary
 
 URNUR, Harmonics, and any cryptocurrency, currency, bank, marketplace,
@@ -103,4 +107,3 @@ The founder reviews, at minimum:
 - `PROJECT_BUDGET.md`
 - `URNUR_FINANCIAL_READINESS.md`
 - `AXES_CREATOR_ORIGIN_CONSTITUTION.md`
-

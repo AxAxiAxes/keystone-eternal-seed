@@ -73,6 +73,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | AXES private project-fulfillment workspace defined for scope, price-list versions, milestones, delivery evidence, and private satisfaction feedback | `docs/AXES_PROJECT_FULFILLMENT_READINESS.md` |
 | 2026-09-10 | Complete | AXES future curated service-marketplace and permissioned matching direction defined with provider-confirmed price-list and consumer-protection boundaries | `docs/AXES_PROJECT_FULFILLMENT_READINESS.md` |
 | 2026-09-10 | Complete | Full AXES business-plan objective set for early client revenue, origin protection, creative ecosystem development, marketplace trust, and staged URNUR readiness | `docs/AXES_BUSINESS_PLAN.md` |
+| 2026-09-10 | Complete | Tier 1 minimum-data evidence ledger established for offer readiness, conservative low/base/high assumptions, actual-versus-forecast review, and founder-reviewed productivity measurements | `docs/AXES_TIER_1_EVIDENCE_LEDGER.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
