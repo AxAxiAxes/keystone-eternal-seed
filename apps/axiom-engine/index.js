@@ -369,6 +369,15 @@ app.post("/automation/profiles", async (req, res, next) => {
   }
 });
 
+app.get("/automation/profiles/history", async (req, res, next) => {
+  try {
+    const limit = req.query.limit === undefined ? 20 : Number(req.query.limit);
+    res.json(await automationProfileService.history(limit));
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/automation/profiles/:profileId/activate", async (req, res, next) => {
   try {
     res.json(await automationProfileService.activate(req.params.profileId, req.body));

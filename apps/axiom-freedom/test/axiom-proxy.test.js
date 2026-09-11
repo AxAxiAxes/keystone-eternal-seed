@@ -280,6 +280,16 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(profileResume.status, 200);
     assert.deepEqual((await profileResume.json()).taskIds, activeProfile.taskIds);
 
+    const profileHistory = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/profiles/history?limit=5`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(profileHistory.status, 200);
+    const profileHistoryEntries = await profileHistory.json();
+    assert.equal(profileHistoryEntries[0].event, "resumed");
+    assert.equal(profileHistoryEntries[0].taskCount, 2);
+    assert.equal("taskTemplates" in profileHistoryEntries[0], false);
+
     const unauthorizedContinuityRecord = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/continuity-record`
     );

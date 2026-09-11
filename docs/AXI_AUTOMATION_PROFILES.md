@@ -57,7 +57,10 @@ checkpoints and private recovery bundles.
 The private engine exposes `GET` and `POST /automation/profiles`, plus
 `POST /automation/profiles/:profileId/activate`, `/pause`, and `/resume`. The protected
 portal proxies these routes only under `/api/automation/profiles`; there is no
-public route or generic engine proxy.
+public route or generic engine proxy. `GET /automation/profiles/history`
+returns payload-free lifecycle evidence: sequence, timestamp, profile,
+transition, retained-task count, and recovery state. It does not expose task
+templates or payloads.
 
 Profiles cannot deploy, access accounts, send messages, publish, spend, accept
 payments, collect data, or make financial or legal decisions.

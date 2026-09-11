@@ -34,6 +34,12 @@ class AutomationProfileService {
     const records = await this.validRecords();
     return { label: PROFILE_NOTICE, templates: sourceMatrix(await this.listAgents()), profiles: Object.values(projectProfiles(records)).map(summarizeProfile) };
   }
+  async history(limit = 20) {
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100) {
+      throw new RangeError("limit must be an integer between 1 and 100");
+    }
+    return (await this.validRecords()).slice(-limit).reverse().map(summarizeProfileEvent);
+  }
   async createDraft(input) {
     const agents = await this.listAgents();
     assertDraftInput(input, agents);
@@ -188,6 +194,17 @@ function starterFromLegacy(record) {
   return starterTemplates({ monitoringRecurrenceMinutes: record.monitoringRecurrenceMinutes, governanceRecurrenceMinutes: record.governanceRecurrenceMinutes });
 }
 function summarizeProfile(profile) { return { ...profile, taskIds: { ...profile.taskIds }, taskTemplates: profile.taskTemplates.map((task) => ({ ...task, payload: { ...task.payload } })), notice: PROFILE_NOTICE }; }
+function summarizeProfileEvent(record) {
+  return {
+    sequence: record.sequence,
+    recordedAt: record.recordedAt,
+    event: record.event,
+    profileId: record.profileId,
+    template: record.template,
+    taskCount: Object.keys(record.taskIds).length,
+    recoveryReadiness: record.recoveryReadiness
+  };
+}
 
 function assertDraftInput(input, agents) {
   if (!isRecord(input) || (input.template !== OPERATIONS_OBSERVATION_TEMPLATE && input.template !== FOUNDER_CONFIGURED_TEMPLATE)) throw new RangeError("profile must select operations-observation or founder-configured");

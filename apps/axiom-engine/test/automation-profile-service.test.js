@@ -90,6 +90,12 @@ test("creates, activates once, and pauses the exact operations-observation sched
   assert.deepEqual(resumed.taskIds, active.taskIds);
   assert.equal(tasks.length, 2);
   assert.equal(await service.isTaskProcessingAllowed(tasks[0].id), true);
+  assert.deepEqual(await service.history(), [
+    { sequence: 4, recordedAt: resumed.updatedAt, event: "resumed", profileId: "private-observation", template: "operations-observation", taskCount: 2, recoveryReadiness: "not-configured" },
+    { sequence: 3, recordedAt: paused.updatedAt, event: "paused", profileId: "private-observation", template: "operations-observation", taskCount: 2, recoveryReadiness: "not-configured" },
+    { sequence: 2, recordedAt: active.updatedAt, event: "activated", profileId: "private-observation", template: "operations-observation", taskCount: 2, recoveryReadiness: "not-configured" },
+    { sequence: 1, recordedAt: draft.updatedAt, event: "draft-created", profileId: "private-observation", template: "operations-observation", taskCount: 0, recoveryReadiness: "not-checked" }
+  ]);
 });
 
 test("exposes every active role capability and activates a founder-configured template", async (t) => {
