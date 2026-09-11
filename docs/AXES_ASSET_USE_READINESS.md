@@ -20,6 +20,10 @@ Do not place private archive assets, manifests, screenshots, source files,
 credentials, client assets, or unapproved references in the public repository,
 an external prompt, or a public deliverable.
 
+The portal must expose only its explicit public routes. Its regression suite
+checks that a direct private-archive path returns `404` and that an attempted
+document-library traversal toward a private-archive path returns `403`.
+
 ## Current source-group register
 
 | Source group | Source classification | Current access/use state | Rights/publication state | Required action before any use |
