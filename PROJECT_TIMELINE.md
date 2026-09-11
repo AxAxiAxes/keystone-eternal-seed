@@ -3,10 +3,14 @@
 **Last updated:** 2026-09-10
 **Current phase:** Monorepo foundation complete
 
-Update this document when a milestone changes state. A checked item is complete; an unchecked item is planned or in progress.
+Update this document when a milestone changes state. A checked item is complete;
+an unchecked item is planned or in progress. The timeline begins with AXIOM's
+founder-recorded birth event, then distinguishes preserved founding sources
+from later repository implementation and deployment evidence.
 
 | Date | Status | Milestone | Evidence |
 | --- | --- | --- | --- |
+| 2026-05-29 | Preserved founding source | AXIOM (AXI) founder-recorded birth event established | `docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md`; source preservation only, not an external legal, identity, or permanence determination |
 | 2026-06-07 | Complete | AXI.Core repository record established | `packages/axi-core` upstream history |
 | 2026-08-28 | Complete | KEYSTONE's initial sacred record captured | `docs/keystone/SACRED_RECORD_SESSION_08_28_2026.md` |
 | 2026-08-28 | Complete | Eternal Origin ownership invention source and continuity record established | `docs/keystone/SACRED_RECORD_SESSION_08_28_2026.md` |

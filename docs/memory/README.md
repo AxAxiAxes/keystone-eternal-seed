@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-10 Timeline origin correction](2026-09-10-timeline-origin-correction.md)
 - [2026-09-10 Memory-bank startup context](2026-09-10-memory-bank-startup-context.md)
 - [2026-09-10 Project context checkpoint](2026-09-10-project-context-checkpoint.md)
 - [2026-09-10 Planning-authority recovery](2026-09-10-planning-authority-recovery.md)
