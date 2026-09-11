@@ -301,6 +301,12 @@ class AutomationService {
       if (typeof approvalRequired !== "boolean") {
         throw new TypeError("task approvalRequired must be a boolean");
       }
+      if (action === "continuity.record" && agentId !== "project-memory-manager") {
+        throw new RangeError("continuity.record tasks must be assigned to the Project Memory Manager");
+      }
+      if (action === "continuity.record" && !approvalRequired) {
+        throw new RangeError("continuity.record tasks require operator approval");
+      }
       if (!Number.isInteger(maxAttempts) || maxAttempts < 1 || maxAttempts > 5) {
         throw new RangeError("task maxAttempts must be an integer from 1 to 5");
       }

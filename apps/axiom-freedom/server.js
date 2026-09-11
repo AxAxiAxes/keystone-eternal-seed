@@ -100,9 +100,10 @@ async function getSupportStatus() {
         invokeEngine('/system/readiness'),
         invokeEngine('/automation/status'),
         invokeEngine('/monitoring/status'),
-        invokeEngine('/system/checkpoints?limit=1')
+        invokeEngine('/system/checkpoints?limit=1'),
+        invokeEngine('/system/continuity-record')
     ]);
-    const [engine, readiness, automation, monitoring, checkpoints] = checks;
+    const [engine, readiness, automation, monitoring, checkpoints, continuityRecord] = checks;
 
     return {
         recordedAt: new Date().toISOString(),
@@ -121,6 +122,9 @@ async function getSupportStatus() {
             : { status: 'unavailable' },
         checkpoints: checkpoints.status === 'fulfilled'
             ? { status: 'ok', latest: checkpoints.value[0] || null }
+            : { status: 'unavailable' },
+        continuityRecord: continuityRecord.status === 'fulfilled'
+            ? continuityRecord.value
             : { status: 'unavailable' },
         email: {
             status: 'planned',
@@ -335,8 +339,10 @@ const server = http.createServer(async (req, res) => {
                   res.end(JSON.stringify(task));
           } catch (error) {
                   console.error('AXIOM automation task creation failed:', error.message);
-                  res.writeHead(502, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({
+                    error: error.statusCode ? error.message : 'AXIOM automation service is unavailable'
+                  }));
           }
           return;
     }
@@ -431,6 +437,32 @@ const server = http.createServer(async (req, res) => {
                       console.error('AXIOM monitoring snapshot failed:', error.message);
                       res.writeHead(502, { 'Content-Type': 'application/json' });
                       res.end(JSON.stringify({ error: 'AXIOM monitoring service is unavailable' }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/continuity-record' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(await invokeEngine('/system/continuity-record')));
+              } catch (error) {
+                      console.error('AXIOM continuity record status request failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/continuity-record/events' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(await invokeEngine(
+                        '/system/continuity-record/events' + parsed.search
+                      )));
+              } catch (error) {
+                      console.error('AXIOM continuity record history request failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
               }
               return;
     }

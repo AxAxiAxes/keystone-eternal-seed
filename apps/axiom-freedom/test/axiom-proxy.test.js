@@ -141,6 +141,7 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     const consoleMarkup = await consolePage.text();
     assert.match(consoleMarkup, /AXIOM Automation Console/);
     assert.match(consoleMarkup, /Continuity Tree/);
+    assert.match(consoleMarkup, /Continuous Project Memory/);
 
     const unauthorizedCommandCenter = await fetch(
       `http://127.0.0.1:${webPort}/command-center`
@@ -174,6 +175,7 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(support.readiness.status, "ready");
     assert.equal(support.readiness.storage.status, "ok");
     assert.equal(support.readiness.provider.status, "not-configured");
+    assert.equal(support.continuityRecord.status, "ready");
     assert.equal(support.email.status, "planned");
 
     const automationStatus = await fetch(
@@ -182,6 +184,49 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     );
     assert.equal(automationStatus.status, 200);
     assert.equal((await automationStatus.json()).agents, 5);
+
+    const unauthorizedContinuityRecord = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/continuity-record`
+    );
+    assert.equal(unauthorizedContinuityRecord.status, 401);
+
+    const continuityRecord = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/continuity-record`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(continuityRecord.status, 200);
+    assert.equal((await continuityRecord.json()).status, "ready");
+
+    const continuityEvents = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/continuity-record/events?limit=5`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(continuityEvents.status, 200);
+    assert.ok((await continuityEvents.json()).length >= 2);
+
+    const invalidContinuityTask = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/tasks`,
+      {
+        method: "POST",
+        headers: { Authorization: authorization, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: "Invalid continuity task",
+          action: "continuity.record",
+          agentId: "project-memory-manager",
+          approvalRequired: false,
+          originCheckpoint: "axi-project-memory-management",
+          payload: {
+            sourceRecord: "portal-test",
+            summary: "This task intentionally omits required approval."
+          }
+        })
+      }
+    );
+    assert.equal(invalidContinuityTask.status, 400);
+    assert.match(
+      (await invalidContinuityTask.json()).error,
+      /continuity\.record tasks require operator approval/
+    );
 
     const governanceReadiness = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/readiness`,

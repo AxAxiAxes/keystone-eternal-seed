@@ -58,6 +58,38 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
       }
     });
 
+    await assert.rejects(
+      () => service.createTask({
+        title: "Record manager continuity without approval",
+        action: "continuity.record",
+        agentId: "project-memory-manager",
+        originCheckpoint: "axi-project-memory-management",
+        payload: {
+          sourceRecord: "docs/memory/README.md",
+          summary: "This task lacks required approval."
+        }
+      }),
+      /continuity\.record tasks require operator approval/
+    );
+    const nonManager = await service.registerAgent({
+      name: "Continuity Test Agent",
+      capabilities: ["continuity.record"]
+    });
+    await assert.rejects(
+      () => service.createTask({
+        title: "Record continuity with the wrong agent",
+        action: "continuity.record",
+        agentId: nonManager.id,
+        approvalRequired: true,
+        originCheckpoint: "axi-project-memory-management",
+        payload: {
+          sourceRecord: "docs/memory/README.md",
+          summary: "This task has the wrong manager."
+        }
+      }),
+      /continuity\.record tasks must be assigned to the Project Memory Manager/
+    );
+
     const task = await service.createTask({
       title: "Record approved project continuity",
       action: "continuity.record",

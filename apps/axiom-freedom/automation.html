@@ -47,6 +47,12 @@
     <div id="continuity-tree" aria-live="polite"></div>
   </section>
   <section>
+    <h2>Continuous Project Memory</h2>
+    <p class="note">Private, hash-linked operational record. The Project Memory Manager can append only an explicitly assigned, operator-approved event with a non-sensitive source reference and summary.</p>
+    <div id="continuity-record"></div>
+    <div id="continuity-events"></div>
+  </section>
+  <section>
     <h2>Private Coordinate Center</h2>
     <p class="note">The gravity center is a technical Eternal Origin Ownership from Genesis reference. Bead-passport nodes apply only to registered AXI agents; they are not human passports, legal identities, credentials, or external listings.</p>
     <div id="gravity-center"></div>
@@ -66,7 +72,7 @@
     <h2>Queue Task</h2>
     <form id="task-form">
       <label>Title <input id="title" required maxlength="200" placeholder="Record a verified milestone"></label>
-      <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="monitoring.snapshot">Capture private monitoring snapshot</option><option value="governance.readiness">Assess Eternal Origin Ownership from Genesis readiness</option><option value="recovery.backup">Create verified runtime recovery bundle</option><option value="coordinate.record">Record a coordinate transition</option><option value="continuity.checkpoint">Create private continuity checkpoint</option><option value="automation.noop">Safe no-op test</option></select></label>
+      <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="continuity.record">Record approved continuity event</option><option value="monitoring.snapshot">Capture private monitoring snapshot</option><option value="governance.readiness">Assess Eternal Origin Ownership from Genesis readiness</option><option value="recovery.backup">Create verified runtime recovery bundle</option><option value="coordinate.record">Record a coordinate transition</option><option value="continuity.checkpoint">Create private continuity checkpoint</option><option value="automation.noop">Safe no-op test</option></select></label>
       <label>Assigned agent <select id="task-agent" required></select></label>
       <label>Origin checkpoint <input id="origin-checkpoint" required maxlength="120" placeholder="axi-operations-observer"></label>
       <label>Priority <select id="priority"><option value="5">P5 - Critical</option><option value="4">P4 - High</option><option value="3" selected>P3 - Normal</option><option value="2">P2 - Low</option><option value="1">P1 - Backlog</option></select></label>
@@ -78,6 +84,10 @@
       <div id="memory-fields">
         <label>Memory layer <select id="kind"><option value="decision">Decision</option><option value="procedure">Procedure</option><option value="semantic">Semantic</option><option value="episodic">Episodic</option></select></label>
         <label>Content <textarea id="content" placeholder="What should be recorded?"></textarea></label>
+      </div>
+      <div id="continuity-fields" class="hidden">
+        <label>Source reference <input id="continuity-source-record" maxlength="200" placeholder="docs/memory/2026-09-11-record.md"></label>
+        <label>Approved summary <textarea id="continuity-summary" maxlength="500" placeholder="Record a factual, non-sensitive continuity event."></textarea></label>
       </div>
       <label>Repeat every minutes (optional) <input id="recurrence" type="number" min="1" max="10080"></label>
       <button type="submit">Queue Task</button>
@@ -268,6 +278,8 @@ async function refresh() {
     ]);
     let monitoring = { status: "unavailable", attention: [] };
     let monitoringHistory = [];
+    let continuityRecord = { status: "unavailable" };
+    let continuityEvents = [];
     try {
       [monitoring, monitoringHistory] = await Promise.all([
         request("/api/automation/monitoring/status"),
@@ -275,6 +287,14 @@ async function refresh() {
       ]);
     } catch (error) {
       result.textContent = "Monitoring will be available after the private engine deployment is updated.";
+    }
+    try {
+      [continuityRecord, continuityEvents] = await Promise.all([
+        request("/api/automation/continuity-record"),
+        request("/api/automation/continuity-record/events?limit=10")
+      ]);
+    } catch (error) {
+      result.textContent = "Continuous memory will be available after the private engine deployment is updated.";
     }
     document.querySelector("#metrics").innerHTML = Object.entries(status).map(([key,value]) => `<div class="metric"><strong>${value}</strong><br>${key}</div>`).join("");
     document.querySelector("#governance").innerHTML = `<h3>Eternal Origin Ownership from Genesis readiness</h3>${table([{
@@ -305,6 +325,21 @@ async function refresh() {
     );
     renderAgentTimelines(agentReports);
     renderContinuityTree(agentReports, tasks, runs, governance);
+    document.querySelector("#continuity-record").innerHTML = table([{
+      status: continuityRecord.status,
+      recordCount: continuityRecord.recordCount ?? "unavailable",
+      latestEvent: continuityRecord.latestRecord
+        ? `${continuityRecord.latestRecord.eventType} at ${continuityRecord.latestRecord.recordedAt}`
+        : "none"
+    }], [["status","Status"],["recordCount","Records"],["latestEvent","Latest event"]]);
+    document.querySelector("#continuity-events").innerHTML =
+      `<h3>Recent continuity events</h3>${table(continuityEvents.map(entry => ({
+        sequence: entry.sequence,
+        recordedAt: entry.recordedAt,
+        eventType: entry.eventType,
+        sourceRecord: entry.sourceRecord,
+        summary: entry.summary
+      })), [["sequence","Sequence"],["recordedAt","Recorded"],["eventType","Type"],["sourceRecord","Source"],["summary","Summary"]])}`;
     document.querySelector("#runs").innerHTML = table(runs.map(run => ({
       recordedAt: run.recordedAt,
       status: run.status,
@@ -329,10 +364,21 @@ async function refresh() {
     if (monitoring.snapshot) result.textContent = "";
   } catch (error) { result.textContent = error.message; }
 }
-document.querySelector("#action").addEventListener("change", event => {
-  document.querySelector("#memory-fields").classList.toggle("hidden", event.target.value !== "memory.record");
+function updateTaskFields() {
+  const action = document.querySelector("#action").value;
+  const isContinuityRecord = action === "continuity.record";
+  document.querySelector("#memory-fields").classList.toggle("hidden", action !== "memory.record");
+  document.querySelector("#continuity-fields").classList.toggle("hidden", !isContinuityRecord);
+  document.querySelector("#continuity-source-record").required = isContinuityRecord;
+  document.querySelector("#continuity-summary").required = isContinuityRecord;
+  const approvalRequired = document.querySelector("#approval-required");
+  if (isContinuityRecord) {
+    approvalRequired.checked = true;
+  }
+  approvalRequired.disabled = isContinuityRecord;
   renderTaskAgentOptions();
-});
+}
+document.querySelector("#action").addEventListener("change", updateTaskFields);
 document.querySelector("#refresh").addEventListener("click", refresh);
 document.querySelector("#capture-monitoring").addEventListener("click", async () => { try { result.textContent = `Snapshot: ${(await request("/api/automation/monitoring/snapshots", {method:"POST",body:"{}"})).recorded ? "recorded" : "unchanged"}`; await refresh(); } catch(error) { result.textContent=error.message; } });
 document.querySelector("#process").addEventListener("click", async () => { try { result.textContent = JSON.stringify(await request("/api/automation/process", {method:"POST",body:"{}"}),null,2); await refresh(); } catch(error) { result.textContent=error.message; } });
@@ -342,10 +388,11 @@ document.querySelector("#task-form").addEventListener("submit", async event => {
   const recurrence = document.querySelector("#recurrence").value;
   const task = { title:document.querySelector("#title").value, action, agentId:document.querySelector("#task-agent").value, originCheckpoint:document.querySelector("#origin-checkpoint").value, priority:Number(document.querySelector("#priority").value), maxAttempts:Number(document.querySelector("#max-attempts").value), retryDelayMinutes:Number(document.querySelector("#retry-delay").value), approvalRequired:document.querySelector("#approval-required").checked, dependsOn:Array.from(document.querySelector("#depends-on").selectedOptions, option => option.value) };
   if (action === "memory.record") task.payload = { kind:document.querySelector("#kind").value, content:document.querySelector("#content").value };
+  if (action === "continuity.record") task.payload = { sourceRecord:document.querySelector("#continuity-source-record").value, summary:document.querySelector("#continuity-summary").value };
   if (recurrence) task.recurrenceMinutes = Number(recurrence);
   const runAt = document.querySelector("#run-at").value;
   if (runAt) task.runAt = new Date(runAt).toISOString();
-  try { result.textContent = `Queued: ${(await request("/api/automation/tasks",{method:"POST",body:JSON.stringify(task)})).id}`; event.target.reset(); await refresh(); } catch(error) { result.textContent=error.message; }
+  try { result.textContent = `Queued: ${(await request("/api/automation/tasks",{method:"POST",body:JSON.stringify(task)})).id}`; event.target.reset(); updateTaskFields(); await refresh(); } catch(error) { result.textContent=error.message; }
 });
 document.querySelector("#bead-passport-form").addEventListener("submit", async event => {
   event.preventDefault();

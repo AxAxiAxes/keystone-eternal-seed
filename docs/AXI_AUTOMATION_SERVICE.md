@@ -247,6 +247,12 @@ each agent's accountability and latest timeline event, assigned tasks, and
 latest recorded runs. It is an operator view only; it does not create, assign,
 approve, run, or modify a task.
 
+The Console also exposes the private continuous-memory record's status and
+recent events. A continuity event can be queued only as a
+`continuity.record` task assigned to the Project Memory Manager. The console
+automatically requires operator approval for that action, and the engine
+enforces the same manager-assignment and approval requirements independently.
+
 The protected `/command-center` view extends this into build-management
 observation. It combines the continuity tree with agent/task/run-flow metrics
 and a browser-side reachability display for the public XIIOM and AXES

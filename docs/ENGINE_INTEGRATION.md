@@ -175,6 +175,12 @@ assigned and approved `continuity.record` task. This does not permit arbitrary
 file writes, source-history replacement, recovery, publication, external
 communication, personal-data collection, or legal/ownership conclusions.
 
+The authenticated portal proxies the read-only status and event-history routes
+at `/api/automation/continuity-record` and
+`/api/automation/continuity-record/events`. It does not proxy the direct
+recording endpoint; the protected console queues the approval-required manager
+task instead.
+
 ## Private coordinate endpoints
 
 `GET /system/coordinates`, `POST /system/coordinates`, and

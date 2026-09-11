@@ -15,6 +15,41 @@ The founder-directed AXES record treats Eternal Origin as one continuous value
 from Genesis. This checkpoint preserves that direction as context; it does not
 interpret, narrow, supersede, or sequence it.
 
+## Current coherence checkpoint
+
+The current repository-controlled build has two related but distinct slices:
+
+1. The **AXES Directory pilot** remains preparatory only: a private-safe
+   business-only data model, lifecycle, and governance documentation for a
+   later human-reviewed opt-in directory. It has no live listings, scraping,
+   invitations, public intake, payments, verification claims, or
+   professional-quality/credential/property-value assertions.
+2. The **private AXI continuity and operations foundation** persists
+   non-sensitive runtime context, memory, task/agent accountability, monitoring,
+   recovery/checkpoint evidence, coordinates, and a continuous operational
+   record. Its protected console supports observation and explicitly approved
+   allowlisted tasks; it is not a public Directory, a general autonomous
+   controller, or a replacement for founder or human operational authority.
+
+The Project Memory Manager is an accountable AXI work role within the second
+slice. It can maintain approved non-sensitive continuity metadata through
+defined private controls. It does not have complete project knowledge and
+cannot treat its records as substitutes for original sources, unreviewed
+history, human direction, or external evidence.
+
+Repository evidence currently supports five seeded AXI roles and eight
+allowlisted task actions. It does not support a claim of eighteen active
+agents, a fully automated AXES ecosystem, or integrated app-store services.
+Downloaded tools or services become part of the system only after their
+purpose, access, data handling, authority, failure handling, rollback path,
+and test evidence are documented and implemented.
+
+The current feature branch contains continuity and Directory work that is not
+yet reconciled with the documented production-source branch. A passing local
+or CI test proves implementation behavior only; it does not prove production
+deployment, site health, TLS validity, secret configuration, durable recovery,
+or external-service readiness.
+
 ## Current reviewed basis
 
 The following current operational and governance records have been reviewed

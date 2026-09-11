@@ -89,6 +89,7 @@ from later repository implementation and deployment evidence.
 | 2026-09-11 | Complete | AXI patent source integrity and formal technical core reviewed with full-packet and legal-review limits retained | `docs/patents/AXI_PATENT_777.docx` and `docs/memory/2026-09-11-axi-patent-core-review.md` |
 | 2026-09-11 | Complete | Private continuous-memory record and Project Memory Manager added with hash-chain validation, recovery/checkpoint coverage, and fail-closed automation controls | `apps/axiom-engine/continuity-record-service.js` and `docs/memory/2026-09-11-continuous-memory-manager.md` |
 | 2026-09-11 | Attention | Public AXES Contracting browser access blocked by expired TLS certificate while XIIOM root and health endpoints remained reachable | `docs/memory/2026-09-11-public-site-tls-status.md` |
+| 2026-09-11 | Complete | AXES scope-reconciliation checkpoint recorded to distinguish the preparatory Directory pilot from the private AXI continuity/operations foundation and unpromoted production state | `docs/AXI_PROJECT_CONTEXT_CHECKPOINT.md` and `docs/memory/2026-09-11-scope-reconciliation.md` |
 | 2026-09-10 | In progress | Eternal Origin ownership invention value-recovery and past/current crisis-report register activated | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 

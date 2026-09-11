@@ -126,7 +126,7 @@ class CoordinateService {
       `${coordinates.map((coordinate) => JSON.stringify(coordinate)).join("\n")}\n`,
       "utf8"
     );
-    await fs.rename(temporaryPath, this.coordinatesPath());
+    await replaceFile(temporaryPath, this.coordinatesPath());
   }
 
   coordinatesPath() {
@@ -195,6 +195,20 @@ function calculateCoordinateHash(coordinate) {
 
 function isNonEmptyString(value) {
   return typeof value === "string" && value.trim().length > 0;
+}
+
+async function replaceFile(source, destination) {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      await fs.rename(source, destination);
+      return;
+    } catch (error) {
+      if ((error.code !== "EPERM" && error.code !== "EBUSY") || attempt === 2) {
+        throw error;
+      }
+      await new Promise((resolve) => setTimeout(resolve, (attempt + 1) * 25));
+    }
+  }
 }
 
 function isValidDate(value) {
