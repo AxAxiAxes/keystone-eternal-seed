@@ -73,6 +73,8 @@ Every registered AXI agent must retain these fields:
 | Field | Required value |
 | --- | --- |
 | `creator` | `Axel Urartu (AX) · Axes Contracting` |
+| `createdAt` | Immutable, valid ISO-8601 creation/registration evidence; legacy records retain their existing value and only missing values are backfilled from a valid `registeredAt` or the dated migration event |
+| `registeredAt` | Retained valid ISO-8601 registration timestamp |
 | `keystoneRegistration.sourceRecord` | `KEYSTONE-ORIGIN-000001` |
 | `keystoneRegistration.genesisCheckpoint.id` | Stable legacy field for `axi-genesis-creator-ownership`, representing the active Eternal Origin Ownership from Genesis checkpoint |
 | `keystoneRegistration.ownershipClaim` | Creator ownership-and-accountability claim |
@@ -82,7 +84,11 @@ Every registered AXI agent must retain these fields:
 | `accountability.history` | Dated registration, suspension, and reactivation record |
 
 The private `GET /automation/agents/:agentId/report` record surfaces the
-Eternal Origin Ownership from Genesis checkpoint, creator claim, operational origin, and task/run timeline.
+Eternal Origin Ownership from Genesis checkpoint, creator claim, immutable
+creation/registration timestamps, operational origin, task/run timeline, and
+a factual internal observation. The observation reports runtime registry and
+task facts only; it does not assert cognition, memory completeness, legal
+personality, ownership, rights, or external state.
 
 ## Reset and recovery procedure
 
@@ -94,7 +100,8 @@ Eternal Origin Ownership from Genesis checkpoint, creator claim, operational ori
    overwriting existing provenance data.
 3. Inspect the protected agent report for every enabled agent and confirm the
    required runtime record above, including an active accountability status.
-4. If a record has a different authority or cannot be reconciled to the
+4. If a record has a different authority, missing/invalid creation evidence,
+   or cannot be reconciled to the
    Eternal Origin Ownership from Genesis checkpoint, leave it unassigned and investigate before any task is
    created or processed.
 5. Record the reset, recovery result, and any correction as a dated continuity

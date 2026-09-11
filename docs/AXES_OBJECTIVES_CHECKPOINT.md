@@ -15,7 +15,7 @@ This checkpoint was rebuilt from the repository onset and current records:
 `ENGINE_INTEGRATION.md`, `RAILWAY_DEPLOYMENT.md`, `AXES_OS_PORTABILITY.md`,
 `AXES_DIRECTORY_READINESS.md`, `AXES_DIRECTORY_DATA_MODEL.md`,
 `PROJECT_BUDGET.md`, `AXI_BUSINESS_METRICS.md`, and the current continuity
-records.
+records, including `AXI_AUTOMATION_PROFILES.md`.
 
 It records the reviewed basis for work; it is not a claim that every
 repository source or founder-provided archive has been fully analyzed.
@@ -49,8 +49,9 @@ claim.
   commit `9a19086`.
 - The hosted continuity-validation runs for both commits passed engine, portal,
   AXI.Core, and portal-image checks.
-- The repository has five seeded AXI software roles and ten allowlisted
-  actions. This is not evidence of ten autonomous capabilities or active
+- The repository has five seeded AXI software roles and eleven allowlisted
+  actions. Their private factual observations preserve provenance and
+  readiness visibility; they are not evidence of autonomous capabilities or active
   production tasks.
 - The AXES Directory remains a private planning/data-model slice. No listings,
   collection, invitations, scraping, accounts, payments, or public
@@ -89,3 +90,11 @@ readiness-review decision, not further silent automation:
 - This checkpoint does not establish legal ownership, corporate formation,
   licensing, financial status, patent rights, professional qualification, or
   rights in third-party materials or provider-managed records.
+
+## Automation activation profile foundation
+
+The private Automation Profile foundation retains
+`operations-observation` as a starter and gives the founder a protected,
+strictly validated path to configure schedules from every active AXI role's
+existing allowlisted capabilities. It does not create external business action,
+autonomous roles, production readiness, or scheduler enablement.

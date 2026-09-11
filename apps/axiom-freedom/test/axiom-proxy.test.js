@@ -144,6 +144,8 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.match(consoleMarkup, /Continuous Project Memory/);
     assert.match(consoleMarkup, /Private Source Catalog/);
     assert.match(consoleMarkup, /Submitted Business Metrics/);
+    assert.match(consoleMarkup, /Private AXES Service Registry/);
+    assert.match(consoleMarkup, /founder-approved internal planning and operating metadata only/i);
     assert.match(consoleMarkup, /Founder-controlled private operational process/);
     assert.match(consoleMarkup, /Do not enter account, invoice, customer\/vendor, payment, tax, financial-account, credential, or personal data/);
 
@@ -172,7 +174,7 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     );
     assert.equal(checkpointResponse.status, 200);
     const checkpointPayload = await checkpointResponse.json();
-    assert.match(checkpointPayload.currentPhase, /Source reconciliation complete/);
+    assert.match(checkpointPayload.currentPhase, /Business-operations foundation complete/);
     assert.ok(checkpointPayload.checkpoints.some(checkpoint =>
       checkpoint.title.includes("Define the AXES Directory")
     ));
@@ -201,6 +203,9 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(support.continuityRecord.status, "ready");
     assert.equal(support.sourceCatalog.status, "ready");
     assert.equal(support.businessMetrics.status, "ready");
+    assert.equal(support.serviceRegistry.status, "ready");
+    assert.equal(support.automationProfiles.status, "ok");
+    assert.equal(support.automationProfiles.templates[0].id, "operations-observation");
     assert.equal(support.email.status, "planned");
 
     const automationStatus = await fetch(
@@ -209,6 +214,49 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     );
     assert.equal(automationStatus.status, 200);
     assert.equal((await automationStatus.json()).agents, 5);
+
+    const unauthorizedProfiles = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/profiles`
+    );
+    assert.equal(unauthorizedProfiles.status, 401);
+
+    const profiles = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/profiles`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(profiles.status, 200);
+    const profileStatus = await profiles.json();
+    assert.equal(profileStatus.templates.length, 2);
+    assert.equal(profileStatus.templates[0].id, "operations-observation");
+
+    const profileDraft = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/profiles`,
+      {
+        method: "POST",
+        headers: { Authorization: authorization, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          profileId: "portal-observation",
+          template: "operations-observation",
+          monitoringRecurrenceMinutes: 5,
+          governanceRecurrenceMinutes: 60
+        })
+      }
+    );
+    assert.equal(profileDraft.status, 201);
+    assert.equal((await profileDraft.json()).status, "draft");
+
+    const profileActivation = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/profiles/portal-observation/activate`,
+      {
+        method: "POST",
+        headers: { Authorization: authorization, "Content-Type": "application/json" },
+        body: JSON.stringify({ confirmed: true })
+      }
+    );
+    assert.equal(profileActivation.status, 200);
+    const activeProfile = await profileActivation.json();
+    assert.equal(activeProfile.status, "active");
+    assert.equal(Object.keys(activeProfile.taskIds).length, 2);
 
     const unauthorizedContinuityRecord = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/continuity-record`
@@ -274,6 +322,34 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(businessMetricsSummary.status, 200);
     assert.equal((await businessMetricsSummary.json()).totalRecordedRevenueCents, 0);
 
+    const unauthorizedServiceRegistry = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/service-registry`
+    );
+    assert.equal(unauthorizedServiceRegistry.status, 401);
+
+    const serviceRegistry = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/service-registry`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(serviceRegistry.status, 200);
+    const serviceRegistryStatus = await serviceRegistry.json();
+    assert.equal(serviceRegistryStatus.status, "ready");
+    assert.match(serviceRegistryStatus.label, /not public availability/);
+
+    const serviceRegistryProjection = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/service-registry/projection`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(serviceRegistryProjection.status, 200);
+    assert.deepEqual((await serviceRegistryProjection.json()).services, {});
+
+    const serviceRegistryEntries = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/service-registry/entries?limit=5`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(serviceRegistryEntries.status, 200);
+    assert.deepEqual((await serviceRegistryEntries.json()).entries, []);
+
     const invalidContinuityTask = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/tasks`,
       {
@@ -333,7 +409,15 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
       { headers: { Authorization: authorization } }
     );
     assert.equal(observerReport.status, 200);
-    assert.equal((await observerReport.json()).agent.name, "Operations Observer");
+    const observerReportPayload = await observerReport.json();
+    assert.equal(observerReportPayload.agent.name, "Operations Observer");
+    assert.equal(observerReportPayload.observation.agentId, "operations-observer");
+    assert.equal(observerReportPayload.observation.attention.length, 0);
+
+    const unprotectedObserverReport = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/agents/operations-observer/report`
+    );
+    assert.equal(unprotectedObserverReport.status, 401);
 
     const suspendedObserver = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/agents/operations-observer/accountability`,

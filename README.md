@@ -24,6 +24,10 @@ The rollback-safe Microsoft 365 migration plan for the AXES business mailbox is
 in [EMAIL_MIGRATION_PLAN.md](docs/EMAIL_MIGRATION_PLAN.md).
 The module boundaries and portable AXES OS checkpoint process are in
 [AXES_OS_PORTABILITY.md](docs/AXES_OS_PORTABILITY.md).
+The private founder-controlled operations-observation schedule contract is in
+[AXI_AUTOMATION_PROFILES.md](docs/AXI_AUTOMATION_PROFILES.md).
+The private founder-approved service-planning journal is in
+[AXES_SERVICE_REGISTRY.md](docs/AXES_SERVICE_REGISTRY.md).
 URNUR's financial-services legal-review gate and attorney briefing packet are
 in [URNUR_FINANCIAL_READINESS.md](docs/URNUR_FINANCIAL_READINESS.md).
 The conservative project budget, spending gates, and patent-completion

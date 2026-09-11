@@ -18,7 +18,9 @@ boundaries.
 | `startup context` | Versioned non-sensitive AXES memory-bank basis available to AXI at startup | `startup-context.json` |
 | `usage` | Private provider token-usage accounting | `openai-usage.jsonl` |
 | `automation` | Allowlisted tasks, agent registry, runs, and schedules | `automation.json` |
+| `automation profiles` | Founder-controlled internal operations-observation schedules and audit | `automation-profiles.jsonl` |
 | `business metrics` | Private hash-linked submitted revenue/expense metric journal | `business-metrics.jsonl` |
+| `service registry` | Founder-approved internal service planning/operating metadata journal | `service-registry.jsonl` |
 | `chat` | Private provider request orchestration and contextual retrieval | Uses memory and usage modules; does not own a separate data file |
 | `monitoring` | Private operational snapshots and attention history | `monitoring.json` |
 | `checkpoint` | Portable state inventory and integrity hashes | `checkpoints/*.json` |
@@ -56,6 +58,8 @@ the isolated restore directory.
 It also preserves the private `business-metrics.jsonl` submitted-metrics
 journal; the journal remains a record of submitted metrics, not a financial
 statement or advice.
+It also preserves `service-registry.jsonl`; this retained internal metadata is
+not public availability, legal status, or deployment proof.
 
 | Method | Path | Purpose |
 | --- | --- | --- |
@@ -108,3 +112,16 @@ observability, security review, and an approved rollback path.
 
 Each addition must define its state files or database schema, checkpoint
 coverage, backup method, restore test, owner, and public exposure boundary.
+
+The `automation.json` agent registry retains immutable creation/registration
+evidence and canonical creator-accountability metadata. Checkpoints and
+recovery bundles preserve those records; their presence is internal
+governance attribution, not a legal ownership/right conclusion.
+
+## Automation-profile portability
+
+The private AXI runtime checkpoint and recovery file set includes
+`automation-profiles.jsonl`. Restore it only to the isolated staging path
+defined by the recovery procedure, validate its hash chain, and inspect
+founder-controlled profile status before processing tasks. Its presence does
+not enable the scheduler or establish production readiness.

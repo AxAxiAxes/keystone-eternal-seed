@@ -130,6 +130,12 @@ function getAttention(snapshot) {
   if (snapshot.businessMetrics && snapshot.businessMetrics.status !== "ready") {
     attention.push("business-metrics-unavailable");
   }
+  if (snapshot.serviceRegistry && snapshot.serviceRegistry.status !== "ready") {
+    attention.push("service-registry-unavailable");
+  }
+  if (snapshot.automationProfiles && snapshot.automationProfiles.status !== "ready") {
+    attention.push("automation-profile-unavailable");
+  }
   return attention;
 }
 

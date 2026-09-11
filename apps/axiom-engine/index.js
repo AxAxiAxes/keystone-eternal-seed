@@ -14,6 +14,8 @@ const { StartupContextService } = require("./startup-context-service");
 const { ContinuityRecordService } = require("./continuity-record-service");
 const { SourceCatalogService } = require("./source-catalog-service");
 const { BusinessMetricsService } = require("./business-metrics-service");
+const { ServiceRegistryService } = require("./service-registry-service");
+const { AutomationProfileService } = require("./automation-profile-service");
 const {
   AutomationService,
   evaluateGovernanceReadiness,
@@ -32,11 +34,14 @@ const sourceCatalogService = new SourceCatalogService({ directory: dataDirectory
 const sourceCatalogReady = sourceCatalogService.initialize();
 const businessMetricsService = new BusinessMetricsService({ directory: dataDirectory });
 const businessMetricsReady = businessMetricsService.initialize();
+const serviceRegistryService = new ServiceRegistryService({ directory: dataDirectory });
+const serviceRegistryReady = serviceRegistryService.initialize();
 const runtimeContextReady = Promise.all([
   startupContextReady,
   continuityRecordReady,
   sourceCatalogReady,
-  businessMetricsReady
+  businessMetricsReady,
+  serviceRegistryReady
 ]);
 const recoveryBackupService = new RecoveryBackupService({
   sourceDirectory: dataDirectory,
@@ -84,6 +89,30 @@ app.get("/system/business-metrics/summary", async (req, res, next) => {
     next(error);
   }
 });
+app.get("/system/service-registry", async (req, res, next) => {
+  try {
+    res.json(await serviceRegistryService.status());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/service-registry/entries", async (req, res, next) => {
+  try {
+    const limit = req.query.limit === undefined ? 20 : Number(req.query.limit);
+    res.json(await serviceRegistryService.list(limit));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/service-registry/projection", async (req, res, next) => {
+  try {
+    res.json(await serviceRegistryService.projection());
+  } catch (error) {
+    next(error);
+  }
+});
 const coordinateService = new CoordinateService({ directory: dataDirectory });
 const checkpointService = new CheckpointService({
   directory: dataDirectory,
@@ -95,9 +124,12 @@ const checkpointService = new CheckpointService({
     { id: "monitoring", version: "1" },
     { id: "checkpoint", version: "1" },
     { id: "source-catalog", version: "1" },
-    { id: "business-metrics", version: "1" }
+    { id: "business-metrics", version: "1" },
+    { id: "service-registry", version: "1" },
+    { id: "automation-profiles", version: "1" }
   ]
 });
+let automationProfileService;
 const automationService = new AutomationService({
   directory: dataDirectory,
   memoryStore,
@@ -108,8 +140,27 @@ const automationService = new AutomationService({
   createCheckpoint: () => checkpointService.create(),
   recordContinuity: (entry) => continuityRecordService.recordOperatorConfirmation(entry),
   catalogSource: (entry) => sourceCatalogService.record(entry),
-  recordBusinessMetric: (entry) => businessMetricsService.record(entry)
+  recordBusinessMetric: (entry) => businessMetricsService.record(entry),
+  recordServiceRegistry: (entry) => serviceRegistryService.record(entry),
+  canProcessTask: (task) => automationProfileService
+    ? automationProfileService.isTaskProcessingAllowed(task.id)
+    : true
 });
+automationProfileService = new AutomationProfileService({
+  directory: dataDirectory,
+  createTask: (task) => automationService.createProfileTask(task),
+  listTasks: () => automationService.listTasks(),
+  listAgents: () => automationService.listAgents(),
+  readiness: async () => ({
+    startupContext: await startupContextService.status(),
+    sourceCatalog: await sourceCatalogService.status(),
+    businessMetrics: await businessMetricsService.status(),
+    serviceRegistry: await serviceRegistryService.status(),
+    governance: await automationService.getGovernanceReadiness(),
+    recovery: await recoveryBackupService.status()
+  })
+});
+const automationProfileReady = automationProfileService.initialize();
 const beadPassportService = new BeadPassportService({
   directory: dataDirectory,
   coordinateService,
@@ -141,6 +192,7 @@ app.use(express.json());
 app.use(async (req, res, next) => {
   try {
     await runtimeContextReady;
+    await automationProfileReady;
     next();
   } catch (error) {
     next(error);
@@ -183,7 +235,9 @@ app.get("/system/readiness", async (req, res, next) => {
       startupContext: await startupContextService.status(),
       continuityRecord: await continuityRecordService.status(),
       sourceCatalog: await sourceCatalogService.status(),
-      businessMetrics: await businessMetricsService.status()
+      businessMetrics: await businessMetricsService.status(),
+      serviceRegistry: await serviceRegistryService.status(),
+      automationProfiles: await automationProfileService.status()
     });
   } catch (error) {
     console.error("AXIOM runtime readiness check failed:", error.message);
@@ -205,7 +259,7 @@ app.get("/usage", async (req, res, next) => {
 
 async function captureMonitoringSnapshot(automationState) {
   await memoryStore.list("decision", 1);
-  const [automation, usage, governance, recovery, coordinates, beadPassports, startupContext, continuityRecord, sourceCatalog, businessMetrics] = await Promise.all([
+  const [automation, usage, governance, recovery, coordinates, beadPassports, startupContext, continuityRecord, sourceCatalog, businessMetrics, serviceRegistry, automationProfiles] = await Promise.all([
     automationState
       ? summarizeAutomationState(automationState)
       : automationService.status(),
@@ -219,7 +273,9 @@ async function captureMonitoringSnapshot(automationState) {
     startupContextService.status(),
     continuityRecordService.status(),
     sourceCatalogService.status(),
-    businessMetricsService.status()
+    businessMetricsService.status(),
+    serviceRegistryService.status(),
+    automationProfileService.status()
   ]);
   const monitoringRecord = await monitoringService.record({
     memoryAvailable: true,
@@ -233,6 +289,8 @@ async function captureMonitoringSnapshot(automationState) {
     continuityRecord,
     sourceCatalog,
     businessMetrics,
+    serviceRegistry,
+    automationProfiles,
     usage
   });
   if (monitoringRecord.recorded) {
@@ -243,6 +301,7 @@ async function captureMonitoringSnapshot(automationState) {
 
 async function requireReadyStartupContext() {
   await runtimeContextReady;
+  await automationProfileReady;
   const startupContext = await startupContextService.status();
   if (startupContext.status !== "ready") {
     const error = new Error(
@@ -276,7 +335,55 @@ async function requireReadyStartupContext() {
     metricsError.statusCode = 409;
     throw metricsError;
   }
+  const serviceRegistry = await serviceRegistryService.status();
+  if (serviceRegistry.status !== "ready") {
+    const registryError = new Error(
+      `Automation is blocked until the service registry is ready (${serviceRegistry.code}).`
+    );
+    registryError.statusCode = 409;
+    throw registryError;
+  }
+  const profiles = await automationProfileService.status();
+  if (profiles.status !== "ready") {
+    const profileError = new Error(
+      `Automation is blocked until automation profiles are ready (${profiles.code}).`
+    );
+    profileError.statusCode = 409;
+    throw profileError;
+  }
 }
+
+app.get("/automation/profiles", async (req, res, next) => {
+  try {
+    res.json(await automationProfileService.list());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/automation/profiles", async (req, res, next) => {
+  try {
+    res.status(201).json(await automationProfileService.createDraft(req.body));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/automation/profiles/:profileId/activate", async (req, res, next) => {
+  try {
+    res.json(await automationProfileService.activate(req.params.profileId, req.body));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/automation/profiles/:profileId/pause", async (req, res, next) => {
+  try {
+    res.json(await automationProfileService.pause(req.params.profileId, req.body));
+  } catch (error) {
+    next(error);
+  }
+});
 
 app.get("/system/startup-context", async (req, res, next) => {
   try {

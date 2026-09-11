@@ -1,6 +1,8 @@
 const { randomUUID } = require("crypto");
 const fs = require("fs/promises");
 const path = require("path");
+const { validateServiceRegistryInput } = require("./service-registry-service");
+const PROFILE_TASK = Symbol("automation-profile-task");
 
 const TASK_ACTIONS = new Set([
   "memory.record",
@@ -12,7 +14,8 @@ const TASK_ACTIONS = new Set([
   "continuity.checkpoint",
   "continuity.record",
   "source.catalog",
-  "business.metric"
+  "business.metric",
+  "service.registry"
 ]);
 const TASK_STATUSES = new Set([
   "pending",
@@ -53,6 +56,8 @@ class AutomationService {
     recordContinuity,
     catalogSource,
     recordBusinessMetric,
+    recordServiceRegistry,
+    canProcessTask,
     now = () => new Date()
   }) {
     this.directory = directory;
@@ -65,12 +70,17 @@ class AutomationService {
     this.recordContinuity = recordContinuity;
     this.catalogSource = catalogSource;
     this.recordBusinessMetric = recordBusinessMetric;
+    this.recordServiceRegistry = recordServiceRegistry;
+    this.canProcessTask = canProcessTask;
     this.now = now;
     this.operationQueue = Promise.resolve();
   }
 
   async listAgents() {
-    return this.withState(async (state) => state.agents);
+    return this.withState(async (state) => state.agents.map((agent) => ({
+      ...agent,
+      observation: observeAgent(state, agent)
+    })));
   }
 
   async getAgent(agentId) {
@@ -124,12 +134,14 @@ class AutomationService {
       if (creatorAuthority !== AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority) {
         throw new RangeError("agent creator must match the AXI Genesis ownership authority");
       }
+      const createdAt = this.now().toISOString();
       const agent = {
         id: id || randomUUID(),
         name: name.trim(),
         capabilities: [...new Set(capabilities.map((capability) => capability.trim()))],
         enabled: true,
-        registeredAt: this.now().toISOString(),
+        createdAt,
+        registeredAt: createdAt,
         originCheckpoint: normalizeOptionalString(originCheckpoint) ||
           REGISTERED_AGENT_DEFAULT_ORIGIN,
         creator: creatorAuthority,
@@ -138,7 +150,7 @@ class AutomationService {
         attributionScope: AGENT_ATTRIBUTION_SCOPE,
         keystoneRegistration: createKeystoneRegistration(creatorAuthority),
         accountability: createAccountabilityRecord(
-          this.now().toISOString(),
+          createdAt,
           "Genesis registration accepted."
         )
       };
@@ -186,16 +198,15 @@ class AutomationService {
     }
     return this.withState(async (state) => {
       const agent = findAgent(state.agents, agentId);
-      assertRegisteredAgent(agent);
       const timeline = [
         {
           event: "origin",
           occurredAt: agent.registeredAt,
           originCheckpoint: agent.originCheckpoint,
-          genesisCheckpoint: agent.keystoneRegistration.genesisCheckpoint.id,
+          genesisCheckpoint: agent.keystoneRegistration?.genesisCheckpoint?.id || null,
           detail: agent.purpose || "No purpose has been recorded."
         },
-        ...agent.accountability.history.map((review) => ({
+        ...(Array.isArray(agent.accountability?.history) ? agent.accountability.history : []).map((review) => ({
           event: "accountability-review",
           occurredAt: review.occurredAt,
           status: review.status,
@@ -231,6 +242,8 @@ class AutomationService {
           id: agent.id,
           name: agent.name,
           capabilities: agent.capabilities,
+          createdAt: agent.createdAt || null,
+          registeredAt: agent.registeredAt || null,
           enabled: agent.enabled,
           originCheckpoint: agent.originCheckpoint || null,
           creator: agent.creator || null,
@@ -240,6 +253,7 @@ class AutomationService {
           keystoneRegistration: agent.keystoneRegistration || KEYSTONE_REGISTRATION,
           accountability: agent.accountability
         },
+        observation: observeAgent(state, agent),
         timeline
       };
     });
@@ -257,7 +271,10 @@ class AutomationService {
     approvalRequired = false,
     maxAttempts = 1,
     retryDelayMinutes = 5,
-    originCheckpoint
+    originCheckpoint,
+    automationProfileId,
+    automationProfileKey,
+    [PROFILE_TASK]: profileTask
   }) {
     return this.withState(async (state) => {
       if (!isNonEmptyString(title)) {
@@ -268,6 +285,12 @@ class AutomationService {
       }
       if (!isRecord(payload)) {
         throw new TypeError("task payload must be an object");
+      }
+      if (action === "service.registry") {
+        validateServiceRegistryInput(payload);
+      }
+      if (action === "service.registry" && agentId !== "project-memory-manager") {
+        throw new RangeError("service.registry tasks must be assigned to the Project Memory Manager");
       }
       if (agentId !== undefined && !isNonEmptyString(agentId)) {
         throw new TypeError("task agentId must be a non-empty string");
@@ -283,11 +306,20 @@ class AutomationService {
         }
       }
       assertOriginCheckpoint(originCheckpoint, "task originCheckpoint");
+      assertOriginCheckpoint(automationProfileId, "task automationProfileId");
+      assertOriginCheckpoint(automationProfileKey, "task automationProfileKey");
+      if (automationProfileId !== undefined && profileTask !== true) {
+        throw new RangeError("automationProfileId is reserved for Automation Profiles");
+      }
+      if (automationProfileKey !== undefined && profileTask !== true) {
+        throw new RangeError("automationProfileKey is reserved for Automation Profiles");
+      }
 
       const scheduledAt = runAt === undefined ? this.now() : new Date(runAt);
       if (Number.isNaN(scheduledAt.valueOf())) {
         throw new TypeError("task runAt must be an ISO-8601 date");
       }
+
       if (recurrenceMinutes !== undefined &&
         (!Number.isInteger(recurrenceMinutes) || recurrenceMinutes < 1 ||
           recurrenceMinutes > 10080)) {
@@ -313,7 +345,7 @@ class AutomationService {
         throw new RangeError(`${action} tasks must be assigned to the Project Memory Manager`);
       }
       if ((action === "continuity.record" || action === "source.catalog" ||
-        action === "business.metric") && !approvalRequired) {
+        action === "business.metric" || action === "service.registry") && !approvalRequired) {
         throw new RangeError(`${action} tasks require operator approval`);
       }
       if (!Number.isInteger(maxAttempts) || maxAttempts < 1 || maxAttempts > 5) {
@@ -341,6 +373,8 @@ class AutomationService {
         maxAttempts,
         retryDelayMinutes,
         originCheckpoint: normalizeOptionalString(originCheckpoint),
+        automationProfileId: normalizeOptionalString(automationProfileId),
+        automationProfileKey: normalizeOptionalString(automationProfileKey),
         attemptCount: 0,
         runCount: 0,
         createdAt: this.now().toISOString(),
@@ -349,6 +383,10 @@ class AutomationService {
       state.tasks.push(task);
       return task;
     });
+  }
+
+  async createProfileTask(task) {
+    return this.createTask({ ...task, [PROFILE_TASK]: true });
   }
 
   async listTasks(status) {
@@ -405,6 +443,11 @@ class AutomationService {
       const outcomes = [];
 
       for (const task of dueTasks) {
+        if (typeof this.canProcessTask === "function" &&
+          !await this.canProcessTask(task)) {
+          outcomes.push({ taskId: task.id, status: "profile-paused" });
+          continue;
+        }
         const agent = selectAgent(state.agents, task);
         if (!agent) {
           const assignedAgent = task.agentId
@@ -526,6 +569,18 @@ class AutomationService {
         amountCents: entry.amountCents
       };
     }
+    if (task.action === "service.registry") {
+      if (typeof this.recordServiceRegistry !== "function") {
+        throw new RangeError("service registry is not configured");
+      }
+      const entry = await this.recordServiceRegistry(task.payload);
+      return {
+        serviceRegistrySequence: entry.sequence,
+        serviceId: entry.serviceId,
+        revision: entry.revision,
+        stage: entry.stage
+      };
+    }
     if (task.action === "monitoring.snapshot") {
       if (typeof this.captureMonitoringSnapshot !== "function") {
         throw new RangeError("monitoring snapshots are not configured");
@@ -633,6 +688,8 @@ class AutomationService {
         if (task.retryDelayMinutes === undefined) task.retryDelayMinutes = 5;
         if (task.attemptCount === undefined) task.attemptCount = 0;
         if (task.originCheckpoint === undefined) task.originCheckpoint = null;
+        if (task.automationProfileId === undefined) task.automationProfileId = null;
+        if (task.automationProfileKey === undefined) task.automationProfileKey = null;
       }
       seedMissingDefaultAgents(state, this.now);
       return state;
@@ -694,6 +751,7 @@ function defaultAgents(now) {
       name: "Memory Curator",
       capabilities: ["memory.record"],
       enabled: true,
+      createdAt: registeredAt,
       registeredAt,
       originCheckpoint: "axi-durable-memory-foundation",
       creator: KEYSTONE_REGISTRATION.creatorAuthority,
@@ -713,19 +771,22 @@ function defaultAgents(now) {
         "memory.record",
         "continuity.record",
         "source.catalog",
-        "business.metric"
+        "business.metric",
+        "service.registry"
       ],
       enabled: true,
+      createdAt: registeredAt,
       registeredAt,
       originCheckpoint: "axi-project-memory-management",
       creator: KEYSTONE_REGISTRATION.creatorAuthority,
-      purpose: "Maintain approved, non-sensitive AXI project memory, continuous continuity records, source metadata, and submitted business metrics.",
+      purpose: "Maintain approved, non-sensitive AXI project memory, continuous continuity records, source metadata, submitted business metrics, and service registry metadata.",
       duties: [
         "Prepare operator-confirmed continuity entries with source references.",
         "Maintain approved records across supported private memory layers.",
         "Catalog approved source metadata without copying raw source content.",
         "Record approved non-sensitive business metric entries without financial integrations.",
-        "Surface continuity-record, source-catalog, and business-metrics attention states for human review."
+        "Record founder-approved internal service registry metadata without public or external claims.",
+        "Surface continuity-record, source-catalog, business-metrics, and service-registry attention states for human review."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
       keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),
@@ -736,6 +797,7 @@ function defaultAgents(now) {
       name: "Automation Executor",
       capabilities: ["automation.noop"],
       enabled: true,
+      createdAt: registeredAt,
       registeredAt,
       originCheckpoint: "axi-bounded-automation-foundation",
       creator: KEYSTONE_REGISTRATION.creatorAuthority,
@@ -753,6 +815,7 @@ function defaultAgents(now) {
       name: "Automation Auditor",
       capabilities: ["memory.record", "automation.noop"],
       enabled: true,
+      createdAt: registeredAt,
       registeredAt,
       originCheckpoint: "axi-bounded-automation-foundation",
       creator: KEYSTONE_REGISTRATION.creatorAuthority,
@@ -776,6 +839,7 @@ function defaultAgents(now) {
         "continuity.checkpoint"
       ],
       enabled: true,
+      createdAt: registeredAt,
       registeredAt,
       originCheckpoint: "axi-operations-observer",
       creator: KEYSTONE_REGISTRATION.creatorAuthority,
@@ -815,11 +879,10 @@ function seedMissingDefaultAgents(state, now) {
     }
   }
   for (const agent of state.agents) {
-    if (!isNonEmptyString(agent.originCheckpoint)) {
-      agent.originCheckpoint = REGISTERED_AGENT_DEFAULT_ORIGIN;
-    }
-    if (!isNonEmptyString(agent.creator)) {
-      agent.creator = KEYSTONE_REGISTRATION.creatorAuthority;
+    if (agent.createdAt === undefined) {
+      agent.createdAt = isIsoTimestamp(agent.registeredAt)
+        ? agent.registeredAt
+        : now().toISOString();
     }
     if (!isNonEmptyString(agent.attributionScope)) {
       agent.attributionScope = AGENT_ATTRIBUTION_SCOPE;
@@ -855,7 +918,8 @@ function summarizeAutomationState(state) {
     ).length,
     completedTasks: state.tasks.filter((task) => task.status === "completed").length,
     failedTasks: state.tasks.filter((task) => task.status === "failed").length,
-    runs: state.runs.length
+    runs: state.runs.length,
+    agentObservations: state.agents.map((agent) => observeAgent(state, agent))
   };
 }
 
@@ -916,7 +980,61 @@ function evaluateGovernanceReadiness(state) {
     },
     enabledAgents: enabledAgents.length,
     activeAgents: enabledAgents.filter(isAccountableAgent).length,
-    issues
+    issues,
+    agentObservations: state.agents.map((agent) => observeAgent(state, agent))
+  };
+}
+
+function observeAgent(state, agent) {
+  const tasks = state.tasks.filter((task) => task.agentId === agent.id);
+  const taskCountsByState = Object.fromEntries(
+    [...TASK_STATUSES].map((status) => [status, tasks.filter((task) => task.status === status).length])
+  );
+  const compatibleCapabilities = Array.isArray(agent.capabilities)
+    ? agent.capabilities.filter((capability) => TASK_ACTIONS.has(capability))
+    : [];
+  const recentRun = state.runs
+    .filter((run) => run.agentId === agent.id)
+    .sort((left, right) => new Date(right.recordedAt).valueOf() - new Date(left.recordedAt).valueOf())[0];
+  const expectedRegistration = createKeystoneRegistration(
+    AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority
+  );
+  const attention = [];
+  if (!isIsoTimestamp(agent.createdAt)) attention.push("creation-timestamp-invalid");
+  if (!isIsoTimestamp(agent.registeredAt)) attention.push("registration-timestamp-invalid");
+  if (!isNonEmptyString(agent.originCheckpoint)) attention.push("origin-checkpoint-missing");
+  if (agent.creator !== AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority ||
+    agent.keystoneRegistration?.creatorAuthority !== AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority) {
+    attention.push("creator-authority-invalid");
+  }
+  if (agent.keystoneRegistration?.ownershipClaim !== expectedRegistration.ownershipClaim) {
+    attention.push("ownership-claim-invalid");
+  }
+  if (!agent.enabled) attention.push("agent-disabled");
+  if (agent.accountability?.status !== "active") attention.push("accountability-not-active");
+  if (!Array.isArray(agent.capabilities) || compatibleCapabilities.length !== agent.capabilities.length) {
+    attention.push("unsupported-capability");
+  }
+  if (taskCountsByState.blocked > 0) attention.push("assigned-task-blocked");
+  if (taskCountsByState.failed > 0) attention.push("assigned-task-failed");
+  return {
+    scope: "Observed internal system facts only; not cognition, memory completeness, legal personality, ownership, or external state.",
+    agentId: agent.id,
+    name: agent.name,
+    createdAt: isIsoTimestamp(agent.createdAt) ? agent.createdAt : null,
+    registeredAt: isIsoTimestamp(agent.registeredAt) ? agent.registeredAt : null,
+    creatorAuthority: agent.keystoneRegistration?.creatorAuthority || null,
+    ownershipClaim: agent.keystoneRegistration?.ownershipClaim || null,
+    originCheckpoint: agent.originCheckpoint || null,
+    enabled: agent.enabled === true,
+    accountabilityStatus: agent.accountability?.status || null,
+    compatibleCapabilities,
+    assignedTaskCountsByState: taskCountsByState,
+    recentRun: recentRun ? {
+      status: recentRun.status,
+      recordedAt: recentRun.recordedAt
+    } : null,
+    attention
   };
 }
 
@@ -974,6 +1092,8 @@ function normalizeAccountability(accountability, fallbackOccurredAt) {
 
 function isRegisteredAgent(agent) {
   return isRecord(agent) &&
+    isIsoTimestamp(agent.createdAt) &&
+    isIsoTimestamp(agent.registeredAt) &&
     isNonEmptyString(agent.originCheckpoint) &&
     isNonEmptyString(agent.creator) &&
     isRecord(agent.keystoneRegistration) &&
@@ -982,7 +1102,9 @@ function isRegisteredAgent(agent) {
     agent.creator === AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority &&
     agent.keystoneRegistration.creatorAuthority ===
       AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority &&
-    isNonEmptyString(agent.keystoneRegistration.ownershipClaim) &&
+    agent.keystoneRegistration.ownershipClaim === createKeystoneRegistration(
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority
+    ).ownershipClaim &&
     isRecord(agent.keystoneRegistration.genesisCheckpoint) &&
     agent.keystoneRegistration.genesisCheckpoint.id ===
       AXI_GENESIS_OWNERSHIP_CHECKPOINT.id &&
@@ -1013,6 +1135,10 @@ function assertActiveAccountability(agent) {
 
 function isNonEmptyString(value) {
   return typeof value === "string" && value.trim().length > 0;
+}
+
+function isIsoTimestamp(value) {
+  return typeof value === "string" && !Number.isNaN(Date.parse(value));
 }
 
 function isRecord(value) {
@@ -1092,6 +1218,7 @@ module.exports = {
   KEYSTONE_REGISTRATION,
   TASK_ACTIONS,
   TASK_STATUSES,
+  observeAgent,
   evaluateGovernanceReadiness,
   summarizeAutomationState,
   startAutomationScheduler

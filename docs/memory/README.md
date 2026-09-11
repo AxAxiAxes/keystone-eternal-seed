@@ -14,6 +14,10 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-11 AXI agent provenance and observation](2026-09-11-agent-provenance-observation.md)
+- [2026-09-11 Automation activation profiles](2026-09-11-automation-activation-profiles.md)
+
+- [2026-09-11 AXES service registry foundation](2026-09-11-axes-service-registry-foundation.md)
 - [2026-09-11 AXES objectives checkpoint](2026-09-11-axes-objectives-checkpoint.md)
 - [2026-09-11 Founder task authority clarification](2026-09-11-founder-task-authority-clarification.md)
 - [2026-09-11 AXI business metrics foundation](2026-09-11-axi-business-metrics-foundation.md)

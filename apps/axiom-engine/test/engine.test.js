@@ -71,15 +71,12 @@ test("reports engine health", async (t) => {
     const response = await fetch(`http://127.0.0.1:${port}/automation/status`);
 
     assert.equal(response.status, 200);
-    assert.deepEqual(await response.json(), {
-      agents: 5,
-      pendingTasks: 0,
-      blockedTasks: 0,
-      awaitingApprovalTasks: 0,
-      completedTasks: 0,
-      failedTasks: 0,
-      runs: 0
-    });
+    const status = await response.json();
+    assert.equal(status.agents, 5);
+    assert.equal(status.pendingTasks, 0);
+    assert.equal(status.runs, 0);
+    assert.equal(status.agentObservations.length, 5);
+    assert.equal(status.agentObservations[0].attention.length, 0);
 
     const agentReport = await fetch(
       `http://127.0.0.1:${port}/automation/agents/operations-observer/report`
@@ -94,6 +91,12 @@ test("reports engine health", async (t) => {
       "axi-genesis-creator-ownership"
     );
     assert.equal(report.agent.originCheckpoint, "axi-operations-observer");
+    assert.equal(report.agent.createdAt, report.agent.registeredAt);
+    assert.equal(report.observation.creatorAuthority, "Axel Urartu (AX) · Axes Contracting");
+    assert.deepEqual(report.observation.assignedTaskCountsByState, {
+      pending: 0, running: 0, blocked: 0, awaiting_approval: 0,
+      completed: 0, failed: 0, cancelled: 0
+    });
     assert.deepEqual(report.timeline.map((event) => event.event), [
       "origin",
       "accountability-review"
@@ -143,6 +146,11 @@ test("reports secret-safe runtime readiness", async (t) => {
   assert.equal(readiness.sourceCatalog.sourceCount, 0);
   assert.equal(readiness.businessMetrics.status, "ready");
   assert.equal(readiness.businessMetrics.recordCount, 0);
+  assert.equal(readiness.serviceRegistry.status, "ready");
+  assert.equal(readiness.serviceRegistry.serviceCount, 0);
+  assert.equal(readiness.automationProfiles.status, "ready");
+  assert.equal(readiness.automationProfiles.templates.length, 2);
+  assert.equal(readiness.automationProfiles.templates[0].id, "operations-observation");
   assert.ok(readiness.continuityRecord.recordCount >= 2);
   assert.equal(readiness.startupContext.id, "axes-memory-bank-startup-v1");
   assert.equal(readiness.automation.lastRunAt, null);
@@ -316,6 +324,89 @@ test("records approved business metrics through the private engine task flow", a
       }
     })
   });
+
+  await t.test("records founder-approved private service registry metadata through task flow", async (t) => {
+    const server = await startServer();
+    t.after(() => stopServer(server));
+    const { port } = server.address();
+    const payload = {
+      operation: "register",
+      serviceId: "axes-control-center",
+      serviceName: "AXES Control Center",
+      purpose: "Private operational planning metadata",
+      stage: "planned",
+      classification: "internal",
+      ownerRole: "founder",
+      dependencySummary: "Private engine readiness and founder review"
+    };
+    const invalidAssignment = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: "Invalid service registry task",
+        action: "service.registry",
+        agentId: "memory-curator",
+        approvalRequired: true,
+        originCheckpoint: "axi-project-memory-management",
+        payload
+      })
+    });
+    assert.equal(invalidAssignment.status, 400);
+    assert.match((await invalidAssignment.json()).error, /Project Memory Manager/);
+
+    const missingApproval = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: "Unapproved service registry task",
+        action: "service.registry",
+        agentId: "project-memory-manager",
+        approvalRequired: false,
+        originCheckpoint: "axi-project-memory-management",
+        payload
+      })
+    });
+    assert.equal(missingApproval.status, 400);
+    assert.match((await missingApproval.json()).error, /require operator approval/);
+
+    const createdResponse = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: "Register AXES Control Center internally",
+        action: "service.registry",
+        agentId: "project-memory-manager",
+        approvalRequired: true,
+        originCheckpoint: "axi-project-memory-management",
+        payload
+      })
+    });
+    assert.equal(createdResponse.status, 201);
+    const task = await createdResponse.json();
+    assert.equal(task.status, "awaiting_approval");
+    const approval = await fetch(`http://127.0.0.1:${port}/automation/tasks/${task.id}/approval`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ approved: true })
+    });
+    assert.equal(approval.status, 200);
+    const processed = await fetch(`http://127.0.0.1:${port}/automation/process`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: "{}"
+    });
+    assert.equal(processed.status, 200);
+    assert.equal((await processed.json())[0].status, "completed");
+
+    const status = await fetch(`http://127.0.0.1:${port}/system/service-registry`);
+    assert.equal(status.status, 200);
+    assert.equal((await status.json()).serviceCount, 1);
+    const projection = await fetch(`http://127.0.0.1:${port}/system/service-registry/projection`);
+    assert.equal(projection.status, 200);
+    assert.equal((await projection.json()).services["axes-control-center"].stage, "planned");
+    const directWrite = await fetch(`http://127.0.0.1:${port}/system/service-registry`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
+    });
+    assert.equal(directWrite.status, 404);
+  });
   assert.equal(taskResponse.status, 201);
   const task = await taskResponse.json();
   assert.equal(task.status, "awaiting_approval");
@@ -353,7 +444,35 @@ test("records approved business metrics through the private engine task flow", a
     method: "POST"
   });
   assert.equal(monitoringResponse.status, 201);
-  assert.equal((await monitoringResponse.json()).snapshot.businessMetrics.status, "ready");
+  const monitoringSnapshot = await monitoringResponse.json();
+  assert.equal(monitoringSnapshot.snapshot.businessMetrics.status, "ready");
+  assert.equal(monitoringSnapshot.snapshot.automation.agentObservations.length, 5);
+  assert.equal(
+    monitoringSnapshot.snapshot.automation.agentObservations
+      .find((observation) => observation.agentId === "project-memory-manager").attention.length,
+    0
+  );
+});
+
+test("fails closed when retained service registry history is invalid", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+  const registryPath = path.join(memoryDirectory, "service-registry.jsonl");
+  const original = await fs.readFile(registryPath, "utf8");
+  await fs.writeFile(registryPath, original.replace("planned", "active"));
+
+  const readiness = await fetch(`http://127.0.0.1:${port}/system/readiness`);
+  assert.equal(readiness.status, 200);
+  assert.equal((await readiness.json()).serviceRegistry.status, "attention");
+  const monitoring = await fetch(`http://127.0.0.1:${port}/monitoring/snapshots`, { method: "POST" });
+  assert.equal(monitoring.status, 201);
+  assert.ok((await monitoring.json()).attention.includes("service-registry-unavailable"));
+  const process = await fetch(`http://127.0.0.1:${port}/automation/process`, {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: "{}"
+  });
+  assert.equal(process.status, 409);
+  assert.match((await process.json()).error, /service registry is ready \(service-registry-invalid\)/);
 });
 
 test("blocks automation when retained startup context is invalid", async (t) => {

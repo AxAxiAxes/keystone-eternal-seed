@@ -60,7 +60,7 @@ console. Then enable the scheduler. The scheduler can process only the
 versioned `memory.record`, `automation.noop`, `monitoring.snapshot`,
 `governance.readiness`, `recovery.backup`, `coordinate.record`, and
 `continuity.checkpoint`, `continuity.record`, `source.catalog`, and
-`business.metric` allowlist;
+`business.metric`, and `service.registry` allowlist;
 it cannot deploy, access third-party
 accounts, send messages, publish, or take other external action.
 

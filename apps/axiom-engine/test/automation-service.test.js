@@ -4,8 +4,7 @@ const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
 const {
-  AutomationService,
-  evaluateGovernanceReadiness
+  AutomationService
 } = require("../automation-service");
 const { MemoryStore } = require("../memory-store");
 
@@ -32,6 +31,9 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
   assert.equal(agents[0].id, "memory-curator");
   assert.equal(agents[1].id, "project-memory-manager");
   assert.equal(agents[4].id, "operations-observer");
+  assert.match(agents[0].createdAt, /^\d{4}-\d{2}-\d{2}T/);
+  assert.equal(agents[0].createdAt, agents[0].registeredAt);
+  assert.equal(agents[0].observation.attention.length, 0);
 
   const task = await service.createTask({
     title: "Record deployment decision",
@@ -274,6 +276,7 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
 
   const report = await service.getAgentReport("memory-curator");
   assert.equal(report.agent.originCheckpoint, "axi-durable-memory-foundation");
+  assert.equal(report.agent.createdAt, report.agent.registeredAt);
   assert.equal(report.agent.creator, "Axel Urartu (AX) · Axes Contracting");
   assert.equal(report.agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
   assert.match(report.agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
@@ -290,6 +293,10 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
     report.timeline.find((event) => event.event === "task-created").originCheckpoint,
     "axi-production-deployment"
   );
+  assert.deepEqual(report.observation.compatibleCapabilities, ["memory.record"]);
+  assert.equal(report.observation.assignedTaskCountsByState.completed, 1);
+  assert.equal(report.observation.recentRun.status, "completed");
+  assert.deepEqual(report.observation.attention, []);
 });
 
 test("registers each AXI agent with creator accountability and an origin", async (t) => {
@@ -347,6 +354,66 @@ test("upgrades legacy agent registrations with the ownership claim", async (t) =
   assert.match(report.agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
   assert.equal(report.agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
   assert.equal(report.agent.keystoneRegistration.genesisCheckpoint.id, "axi-genesis-creator-ownership");
+  assert.equal(report.agent.createdAt, "2026-09-10T00:00:00.000Z");
+});
+
+test("retains legacy provenance evidence and observes invalid agent records without repairing them", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  await fs.writeFile(path.join(directory, "automation.json"), JSON.stringify({
+    agents: [{
+      id: "invalid-legacy-agent",
+      name: "Invalid Legacy Agent",
+      capabilities: ["automation.noop", "unsupported.action"],
+      enabled: true,
+      createdAt: "not-an-iso-timestamp",
+      registeredAt: "2026-09-10T00:00:00.000Z",
+      creator: "Unreconciled creator",
+      keystoneRegistration: {
+        sourceRecord: "KEYSTONE-ORIGIN-000001",
+        creatorAuthority: "Unreconciled creator",
+        ownershipClaim: "Unreconciled claim"
+      }
+    }, {
+      id: "missing-legacy-agent",
+      name: "Missing Legacy Agent",
+      capabilities: ["automation.noop"],
+      enabled: true,
+      registeredAt: "not-an-iso-timestamp",
+      keystoneRegistration: {}
+    }],
+    tasks: [],
+    runs: []
+  }), "utf8");
+  const service = new AutomationService({ directory, memoryStore: createMemoryStore() });
+
+  const report = await service.getAgentReport("invalid-legacy-agent");
+  assert.equal(report.agent.createdAt, "not-an-iso-timestamp");
+  assert.equal(report.observation.createdAt, null);
+  assert.equal(report.observation.registeredAt, "2026-09-10T00:00:00.000Z");
+  assert.deepEqual(report.observation.compatibleCapabilities, ["automation.noop"]);
+  assert.deepEqual(report.observation.attention.sort(), [
+    "creation-timestamp-invalid",
+    "creator-authority-invalid",
+    "origin-checkpoint-missing",
+    "ownership-claim-invalid",
+    "unsupported-capability"
+  ]);
+  await assert.rejects(() => service.getAgent("invalid-legacy-agent"), /not registered/);
+  const missingReport = await service.getAgentReport("missing-legacy-agent");
+  assert.match(missingReport.agent.createdAt, /^\d{4}-\d{2}-\d{2}T/);
+  assert.equal(missingReport.agent.registeredAt, "not-an-iso-timestamp");
+  assert.deepEqual(missingReport.observation.attention.sort(), [
+    "creator-authority-invalid",
+    "origin-checkpoint-missing",
+    "ownership-claim-invalid",
+    "registration-timestamp-invalid"
+  ]);
+  const readiness = await service.getGovernanceReadiness();
+  assert.equal(readiness.status, "attention");
+  assert.equal(readiness.agentObservations.length, 7);
+  assert.ok(readiness.agentObservations.some((observation) =>
+    observation.agentId === "missing-legacy-agent"));
 });
 
 test("fails closed when a custom agent loses its canonical Genesis source", async (t) => {
@@ -600,17 +667,18 @@ test("reports Genesis and governance readiness without making an ownership deter
     memoryStore: createMemoryStore()
   });
 
-  assert.deepEqual(await service.getGovernanceReadiness(), {
-    status: "ready",
-    genesisCheckpoint: {
-      id: "axi-genesis-creator-ownership",
-      sourceRecord: "KEYSTONE-ORIGIN-000001",
-      creatorAuthority: "Axel Urartu (AX) · Axes Contracting"
-    },
-    enabledAgents: 5,
-    activeAgents: 5,
-    issues: []
+  const initialReadiness = await service.getGovernanceReadiness();
+  assert.equal(initialReadiness.status, "ready");
+  assert.deepEqual(initialReadiness.genesisCheckpoint, {
+    id: "axi-genesis-creator-ownership",
+    sourceRecord: "KEYSTONE-ORIGIN-000001",
+    creatorAuthority: "Axel Urartu (AX) · Axes Contracting"
   });
+  assert.equal(initialReadiness.enabledAgents, 5);
+  assert.equal(initialReadiness.activeAgents, 5);
+  assert.deepEqual(initialReadiness.issues, []);
+  assert.equal(initialReadiness.agentObservations.length, 5);
+  assert.deepEqual(initialReadiness.agentObservations[0].attention, []);
 
   const task = await service.createTask({
     title: "Assess private Genesis readiness",
@@ -621,11 +689,14 @@ test("reports Genesis and governance readiness without making an ownership deter
   const [outcome] = await service.processDueTasks();
   assert.equal(outcome.taskId, task.id);
   assert.equal(outcome.status, "completed");
-  assert.deepEqual((await service.listRuns())[0].result, evaluateGovernanceReadiness({
-    agents: await service.listAgents(),
-    tasks: await service.listTasks(),
-    runs: await service.listRuns()
-  }));
+  const readinessRun = (await service.listRuns())[0].result;
+  assert.equal(readinessRun.status, "ready");
+  assert.equal(readinessRun.agentObservations.length, 5);
+  assert.equal(
+    readinessRun.agentObservations.find((observation) =>
+      observation.agentId === "operations-observer").assignedTaskCountsByState.running,
+    1
+  );
 
   await service.reviewAgentAccountability("operations-observer", {
     status: "suspended",

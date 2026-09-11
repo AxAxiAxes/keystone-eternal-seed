@@ -25,6 +25,14 @@ test("creates a checksummed portable checkpoint without secrets", async (t) => {
     path.join(directory, "business-metrics.jsonl"),
     "{\"sequence\":1,\"kind\":\"revenue\",\"amountCents\":12500}\n"
   );
+  await fs.writeFile(
+    path.join(directory, "service-registry.jsonl"),
+    "{\"sequence\":1,\"serviceId\":\"axes-control-center\",\"stage\":\"planned\"}\n"
+  );
+  await fs.writeFile(
+    path.join(directory, "automation-profiles.jsonl"),
+    "{\"sequence\":1,\"event\":\"draft-created\",\"profileId\":\"private-observation\"}\n"
+  );
   await fs.writeFile(path.join(directory, "automation.json"), "{\"tasks\":[]}");
 
   const service = new CheckpointService({
@@ -44,6 +52,8 @@ test("creates a checksummed portable checkpoint without secrets", async (t) => {
       "continuity-record.jsonl",
       "source-catalog.jsonl",
       "business-metrics.jsonl",
+      "service-registry.jsonl",
+      "automation-profiles.jsonl",
       "automation.json"
     ]
   );

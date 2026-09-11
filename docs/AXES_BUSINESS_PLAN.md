@@ -78,7 +78,7 @@ ready.
 
 | Area | Role | Current or initial offer | Boundary |
 | --- | --- | --- | --- |
-| AXES Contracting | Central public hub | Company story, service registry, design guidance, contact and scoped intake | No unreviewed claims or account-control actions |
+| AXES Contracting | Central public hub | Company story, design guidance, contact and scoped intake; authenticated operators may view a separate private service registry | No unreviewed claims, public registry availability claims, or account-control actions |
 | Architectural Design Desk | Design-education line | Tips, inspiration, material palettes, and consultation requests | Not licensed architecture, engineering, code, or safety advice without responsible professional review |
 | Building-Materials Discovery | Commercial discovery line | Curated materials, supplier links, sample/quote requests, and project inspiration | No checkout, inventory, fulfillment, warranties, tax, or payment processing until commerce operations are ready |
 | Chichetki Studio | Founder-led creative line | Founder-designed physical rhythm objects, collectible gems, art editions, sound, movement, and carefully scoped experiences | Separate substantiated product descriptions from health, therapeutic, cultural, patent, financial-value, prize, or market claims; California legal review before any gem game, prize, or exchange |

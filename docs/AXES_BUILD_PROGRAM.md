@@ -70,8 +70,9 @@ next begins.
 
 - A minimal AXES landing page and clearly separated authenticated operator
   dashboard.
-- A service registry: product name, purpose, stage, owner, privacy
-  classification, and operational status.
+- A private, founder-approved service registry: product name, purpose, internal
+  stage, founder owner role, privacy classification, and dependency summary,
+  without public availability or launch claims.
 - Plain-language product descriptions that distinguish current capabilities
   from future direction.
 - An Architectural Design Desk with general, non-professional design tips,

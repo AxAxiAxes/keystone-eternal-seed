@@ -12,7 +12,7 @@ and current continuity records were reviewed.
 The resulting primary objective is to build AXES as a founder-led company,
 brand, and sustainable business supported by a portable private XIIOM/AXI
 operations foundation. The current AXI implementation is non-sentient
-software; the repository supports five registered roles and ten allowlisted
+software; the repository supports five registered roles and eleven allowlisted
 actions, not autonomous business operation.
 
 ## Implementation relevance

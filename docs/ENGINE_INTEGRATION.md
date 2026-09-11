@@ -128,6 +128,11 @@ its read-only status response.
     "status": "ready",
     "id": "axi-private-business-metrics-v1",
     "recordCount": 0
+  },
+  "serviceRegistry": {
+    "status": "ready",
+    "id": "axes-private-service-registry-v1",
+    "serviceCount": 0
   }
 }
 ```
@@ -138,9 +143,24 @@ accountability, whether their capabilities remain allowlisted, and whether any
 tasks are blocked or failed. It does not determine external ownership, legal
 rights, value, or recovery.
 
+`governance.agentObservations` provides compact factual observations for every
+registered agent: immutable creation/registration timestamps, creator
+authority and claim, origin checkpoint, enabled/accountability status,
+compatible capabilities, assigned-task state counts, recent run, and attention
+conditions. A protected agent report exposes the same observation per role.
+These records preserve internal project-governance attribution only; they do
+not establish cognition, legal personality, ownership, rights, or external
+state.
+
 `recovery` reports `not-configured`, `empty`, `ready`, or `unavailable`.
 `ready` means the latest private bundle was locally hash-verified; it does not
 represent an external durability, legal, or rights determination.
+
+`serviceRegistry` reports the private, founder-approved internal service
+planning/operating metadata journal. It is not evidence of public
+availability, legal status, professional qualification, business registration,
+customer service, financial offering, or deployment. Invalid retained registry
+history is an attention state that blocks manual and scheduled automation.
 
 `startupContext` reports the state of the local `axes-memory-bank-startup-v1`
 bootstrap record. The engine writes or resumes that non-sensitive context
@@ -229,6 +249,28 @@ authenticated portal proxies the
 read-only routes at `/api/automation/business-metrics`,
 `/api/automation/business-metrics/entries`, and
 `/api/automation/business-metrics/summary`. See `AXI_BUSINESS_METRICS.md`.
+
+## Private service-registry endpoints
+
+`GET /system/service-registry` reports secret-safe journal readiness.
+`GET /system/service-registry/entries?limit=20` returns recent immutable
+records, and `GET /system/service-registry/projection` returns the current
+service-ID-sorted projection. The authenticated portal proxies only those
+read-only paths at `/api/automation/service-registry`, `/entries`, and
+`/projection`. Entries are created only through an explicitly assigned,
+founder-approved `service.registry` task for the Project Memory Manager; there
+is no direct service-registry write endpoint.
+
+## Private automation-profile endpoints
+
+`GET /automation/profiles` lists the sole supported internal template and
+private profile state. `POST /automation/profiles` creates a strict
+`operations-observation` draft. `POST /automation/profiles/:profileId/activate`
+and `/pause` require explicit confirmation through the protected operational
+process. The authenticated portal proxies these paths beneath
+`/api/automation/profiles`; none is public. Profile status appears in system
+readiness, monitoring, checkpoints, recovery bundles, and Support Desk
+status. See `AXI_AUTOMATION_PROFILES.md`.
 
 ## Private coordinate endpoints
 

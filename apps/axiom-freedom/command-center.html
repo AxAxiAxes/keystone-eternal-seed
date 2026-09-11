@@ -88,6 +88,7 @@ function renderTree(reports, tasks, runs, governance) {
     agentTasks.forEach(task => assigned.add(task.id));
     const latestEvent = report.timeline.at(-1);
     const latestRun = runs.find(run => run.agentId === agent.id);
+    const observation = report.observation || {};
     const agentStatus = agent.accountability?.status || "unreconciled";
     const agentClass = agentStatus === "active" ? "ready" : "attention";
     const taskNodes = agentTasks.length
@@ -99,7 +100,8 @@ function renderTree(reports, tasks, runs, governance) {
       : "<li><span class='node muted'>No assigned tasks</span></li>";
     const event = latestEvent ? `latest event: ${latestEvent.event}` : "no events";
     const run = latestRun ? `latest agent run: ${latestRun.status}` : "no agent runs";
-    return `<li><span class="node ${agentClass}">${escapeHtml(agent.name)} — ${escapeHtml(agentStatus)}; ${escapeHtml(event)}; ${escapeHtml(run)}</span><ul>${taskNodes}</ul></li>`;
+    const attention = (observation.attention || []).join(", ") || "none";
+    return `<li><span class="node ${agentClass}">${escapeHtml(agent.name)} — ${escapeHtml(agentStatus)}; created ${escapeHtml(observation.createdAt || "invalid")}; ${escapeHtml(event)}; ${escapeHtml(run)}; attention: ${escapeHtml(attention)}</span><ul>${taskNodes}</ul></li>`;
   }).join("");
   const unassigned = tasks.filter(task => !assigned.has(task.id));
   const unassignedNode = unassigned.length

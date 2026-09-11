@@ -139,9 +139,11 @@ async function getSupportStatus() {
         invokeEngine('/system/checkpoints?limit=1'),
         invokeEngine('/system/continuity-record'),
         invokeEngine('/system/source-catalog'),
-        invokeEngine('/system/business-metrics')
+        invokeEngine('/system/business-metrics'),
+        invokeEngine('/system/service-registry'),
+        invokeEngine('/automation/profiles')
     ]);
-    const [engine, readiness, automation, monitoring, checkpoints, continuityRecord, sourceCatalog, businessMetrics] = checks;
+    const [engine, readiness, automation, monitoring, checkpoints, continuityRecord, sourceCatalog, businessMetrics, serviceRegistry, automationProfiles] = checks;
 
     return {
         recordedAt: new Date().toISOString(),
@@ -169,6 +171,12 @@ async function getSupportStatus() {
             : { status: 'unavailable' },
         businessMetrics: businessMetrics.status === 'fulfilled'
             ? businessMetrics.value
+            : { status: 'unavailable' },
+        serviceRegistry: serviceRegistry.status === 'fulfilled'
+            ? serviceRegistry.value
+            : { status: 'unavailable' },
+        automationProfiles: automationProfiles.status === 'fulfilled'
+            ? { status: 'ok', ...automationProfiles.value }
             : { status: 'unavailable' },
         email: {
             status: 'planned',
@@ -585,6 +593,86 @@ const server = http.createServer(async (req, res) => {
                       res.end(JSON.stringify({ error: error.message }));
               }
               return;
+    }
+    if (pathname === '/api/automation/service-registry' && req.method === 'GET') {
+                  if (!requireAdmin(req, res)) return;
+                  try {
+                          res.writeHead(200, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify(await invokeEngine('/system/service-registry')));
+                  } catch (error) {
+                          console.error('AXIOM service registry status request failed:', error.message);
+                          res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify({ error: error.message }));
+                  }
+                  return;
+    }
+    if (pathname === '/api/automation/service-registry/entries' && req.method === 'GET') {
+                  if (!requireAdmin(req, res)) return;
+                  try {
+                          res.writeHead(200, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify(await invokeEngine(
+                            '/system/service-registry/entries' + parsed.search
+                          )));
+                  } catch (error) {
+                          console.error('AXIOM service registry history request failed:', error.message);
+                          res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify({ error: error.message }));
+                  }
+                  return;
+    }
+    if (pathname === '/api/automation/service-registry/projection' && req.method === 'GET') {
+                  if (!requireAdmin(req, res)) return;
+                  try {
+                          res.writeHead(200, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify(await invokeEngine('/system/service-registry/projection')));
+                  } catch (error) {
+                          console.error('AXIOM service registry projection request failed:', error.message);
+                          res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify({ error: error.message }));
+                  }
+                  return;
+    }
+    if (pathname === '/api/automation/profiles' && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(await invokeEngine('/automation/profiles')));
+          } catch (error) {
+                  console.error('AXIOM automation profile status request failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
+    }
+    if (pathname === '/api/automation/profiles' && req.method === 'POST') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const profile = await invokeEngine('/automation/profiles', 'POST', await parseBody(req));
+                  res.writeHead(201, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(profile));
+          } catch (error) {
+                  console.error('AXIOM automation profile creation failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
+    }
+    const profileLifecycleRoute = pathname.match(/^\/api\/automation\/profiles\/([^/]+)\/(activate|pause)$/);
+    if (profileLifecycleRoute && req.method === 'POST') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const profile = await invokeEngine(
+                    '/automation/profiles/' + encodeURIComponent(profileLifecycleRoute[1]) + '/' + profileLifecycleRoute[2],
+                    'POST', await parseBody(req)
+                  );
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(profile));
+          } catch (error) {
+                  console.error('AXIOM automation profile lifecycle request failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
     }
     if (pathname === '/api/automation/gravity-center' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;

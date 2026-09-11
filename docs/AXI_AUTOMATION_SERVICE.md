@@ -26,6 +26,7 @@ operational process; protected access is not agent authority.
 | `continuity.record` | `continuity.record` | Appends an operator-confirmed, bounded event to the private continuous memory record. |
 | `source.catalog` | `source.catalog` | Appends approved repository-source metadata and SHA-256 evidence to the private source catalog. |
 | `business.metric` | `business.metric` | Appends one approved non-sensitive revenue or expense metric to the private hash-linked journal. |
+| `service.registry` | `service.registry` | Appends one founder-approved internal service-registry registration or revision without public or external claims. |
 
 The service rejects any unrecognized action. New external integrations must be
 implemented, reviewed, tested, and added to the allowlist before they can be
@@ -64,7 +65,7 @@ automation-state access while preserving existing agent records.
 | Agent | Capabilities | Purpose |
 | --- | --- | --- |
 | Memory Curator | `memory.record` | Maintains validated memory entries. |
-| Project Memory Manager | `memory.record`, `continuity.record`, `source.catalog`, `business.metric` | Maintains approved, non-sensitive project memory, continuous continuity entries, source-catalog metadata, and submitted business metrics. |
+| Project Memory Manager | `memory.record`, `continuity.record`, `source.catalog`, `business.metric`, `service.registry` | Maintains approved, non-sensitive project memory, continuous continuity entries, source-catalog metadata, submitted business metrics, and internal service-registry metadata. |
 | Automation Executor | `automation.noop` | Runs bounded workflow checks. |
 | Automation Auditor | Both capabilities | Provides a general audited fallback. |
 | Operations Observer | `monitoring.snapshot`, `governance.readiness`, `recovery.backup`, `coordinate.record`, `continuity.checkpoint` | Captures private health, queue, scheduler, usage, Genesis/governance-readiness, recovery, coordinate-chain signals, and approved continuity checkpoints. |
@@ -113,6 +114,14 @@ be automatically selected, provide protected chat, or execute work. A queued
 task assigned to it moves to `blocked` with the hold reason. Reactivation
 requires another dated, reasoned review. The active AXI governance and reset
 procedure are in `AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`.
+
+Each agent also retains immutable `createdAt` creation/registration evidence
+and its legacy `registeredAt` timestamp. The protected report, agent list,
+readiness result, and Operations Observer monitoring snapshot provide a
+factual internal observation of those timestamps, creator registration,
+compatible capabilities, task/run state, and attention conditions. This is
+visibility only: it does not grant self-approval or mutation authority, claim
+cognition or memory completeness, or create legal ownership/right conclusions.
 
 ## Private API
 
@@ -210,6 +219,15 @@ The Project Memory Manager performs the recorded task only after founder
 assignment and founder approval through the protected process; it cannot
 assign, approve, remove, suspend, or reactivate itself.
 
+Queue a `service.registry` task only for the Project Memory Manager with
+`approvalRequired: true`, an exact operation payload defined in
+`AXES_SERVICE_REGISTRY.md`, and a founder-controlled assignment. The service
+accepts only internal, private, or restricted planning metadata and validates
+the retained hash chain and stage transitions. It cannot ingest external
+sources, expose a direct write route, or record customer, vendor, person,
+account, payment, credential, legal, licensing, verification, launch, URL,
+or public-availability claims.
+
 ## Opt-in scheduler
 
 Manual processing through `POST /automation/process` is always available from
@@ -224,6 +242,21 @@ AXIOM_AUTOMATION_MAX_TASKS_PER_CYCLE=5
 The poll interval must be from 1,000 through 3,600,000 milliseconds, and each
 cycle may process 1 through 20 tasks. The scheduler logs failures explicitly;
 it does not silently claim completion.
+
+## Automation Profiles
+
+`axi-automation-profile-v1` provides founder-controlled private schedules for
+already allowlisted internal operations. The only supported template is
+`operations-observation`, assigning `monitoring.snapshot` and
+`governance.readiness` to `operations-observer` within its documented safe
+recurrence bounds. The `founder-configured` path exposes every active
+registered role's existing allowlisted capabilities, compatible assignment,
+recurrence, dependencies, approval requirement, and action-specific structured
+input. Profiles are hash-linked records with a
+`draft` → `active` → `paused` lifecycle, explicit founder confirmation, task
+ID linkage, and fail-closed validation. A profile never enables the scheduler,
+adds or changes agents, or permits external action. See
+`AXI_AUTOMATION_PROFILES.md`.
 
 For a staged production activation, enable monitoring and validate its
 protected-console snapshot first. Then enable the scheduler. Setting either

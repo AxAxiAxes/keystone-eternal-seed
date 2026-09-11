@@ -54,7 +54,7 @@ system operation and decisions away from AXES.
 | Agent ID | Origin checkpoint | Creator attribution | Purpose | Core duties |
 | --- | --- | --- | --- | --- |
 | `memory-curator` | `axi-durable-memory-foundation` | Axel Urartu (AX) · Axes Contracting | Maintain factual, non-sensitive AXI continuity records. | Prepare approved memory entries; preserve concise operational continuity. |
-| `project-memory-manager` | `axi-project-memory-management` | Axel Urartu (AX) · Axes Contracting | Maintain approved, non-sensitive AXI project memory, the private continuous record, source-catalog metadata, and submitted business metrics. | Prepare operator-confirmed continuity entries; catalog approved source metadata and hashes without copying raw content; record approval-gated non-sensitive business metrics; maintain supported memory-layer references; surface record attention states. |
+| `project-memory-manager` | `axi-project-memory-management` | Axel Urartu (AX) · Axes Contracting | Maintain approved, non-sensitive AXI project memory, the private continuous record, source-catalog metadata, submitted business metrics, and internal service-registry metadata. | Prepare operator-confirmed continuity entries; catalog approved source metadata and hashes without copying raw content; record approval-gated non-sensitive business metrics and service-registry revisions; maintain supported memory-layer references; surface record attention states. |
 | `automation-executor` | `axi-bounded-automation-foundation` | Axel Urartu (AX) · Axes Contracting | Run safe workflow checks within the explicit action allowlist. | Execute approved no-op checks; record bounded task outcomes. |
 | `automation-auditor` | `axi-bounded-automation-foundation` | Axel Urartu (AX) · Axes Contracting | Provide an auditable fallback for approved bounded tasks. | Review task outcomes; record approved audit continuity. |
 | `operations-observer` | `axi-operations-observer` | Axel Urartu (AX) · Axes Contracting | Capture private operational, Genesis/governance-readiness, recovery, coordinate-chain, and continuity-checkpoint evidence. | Run approved monitoring snapshots; assess private readiness; create verified recovery bundles; record approved coordinate transitions and continuity checkpoints; surface operational attention signals. |
@@ -62,6 +62,25 @@ system operation and decisions away from AXES.
 The origin checkpoint identifies the implementation milestone that established
 the role. It must not be used to imply that an agent owns that milestone or
 can decide its future direction.
+
+## Creation evidence and internal observation
+
+Every current agent record retains an immutable `createdAt` value alongside
+its legacy `registeredAt` timestamp. Existing retained creation evidence is
+never replaced. A legacy record missing `createdAt` is backfilled from its
+valid registration timestamp; when that is unavailable, the current dated
+migration record is used rather than asserting an earlier creation date.
+Invalid retained values remain visible as attention conditions rather than
+being silently rewritten.
+
+Protected agent reports, agent lists, readiness, and monitoring snapshots
+include factual per-agent observations: provenance timestamps, canonical
+creator authority and claim, origin checkpoint, enabled/accountability state,
+compatible capabilities, assigned-task state counts, recent run outcome, and
+attention reasons. Observations do not describe cognition, feelings, memory
+completeness, legal personality, ownership, rights, or external state.
+They preserve AXES project-governance attribution only and do not create legal
+ownership or rights conclusions.
 
 ## Attributable task templates
 
@@ -71,6 +90,7 @@ can decide its future direction.
 | `project-memory-manager` | Record an approved continuous-memory event | `continuity.record` | `axi-project-memory-management` | Human confirms the bounded source reference and summary; no personal data, secrets, source replacement, legal conclusion, or external action. |
 | `project-memory-manager` | Catalog an approved repository source | `source.catalog` | `axi-project-memory-management` | Human confirms non-sensitive metadata, repository-relative reference, and SHA-256 evidence; no raw-content ingestion, source replacement, legal conclusion, or external action. |
 | `project-memory-manager` | Record a founder-approved submitted business metric | `business.metric` | `axi-business-metrics-foundation` | Founder supplies, assigns, and approves only non-sensitive category, period, kind, positive-cent amount, and source record; the role executes only that bounded task and has no assignment, approval, removal, suspension, or reactivation authority; no client/vendor, account, invoice, payment, tax, credential, personal data, financial integration, accounting, legal, or financial determination. |
+| `project-memory-manager` | Record a founder-approved private service-registry entry or revision | `service.registry` | `axi-project-memory-management` | Founder supplies, assigns, and approves tightly constrained internal planning/operating metadata; no public availability, launch, customer/vendor/person/account/payment/credential/legal data, external ingestion, or authority to assign, approve, remove, suspend, or reactivate roles. |
 | `automation-executor` | Run an approved safe workflow check | `automation.noop` | `axi-automation-validation` | Human defines the check and reviews the recorded result. |
 | `automation-auditor` | Record an approved automation audit | `memory.record` | `axi-automation-audit` | Human reviews the evidence and approves the record. |
 | `operations-observer` | Capture a recurring private monitoring snapshot | `monitoring.snapshot` | `axi-operations-observer` | Human creates the recurring task, chooses its interval, and investigates attention states. |
