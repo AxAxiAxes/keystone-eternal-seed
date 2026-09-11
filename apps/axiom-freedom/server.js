@@ -657,7 +657,7 @@ const server = http.createServer(async (req, res) => {
           }
           return;
     }
-    const profileLifecycleRoute = pathname.match(/^\/api\/automation\/profiles\/([^/]+)\/(activate|pause)$/);
+    const profileLifecycleRoute = pathname.match(/^\/api\/automation\/profiles\/([^/]+)\/(activate|pause|resume)$/);
     if (profileLifecycleRoute && req.method === 'POST') {
           if (!requireAdmin(req, res)) return;
           try {

@@ -94,6 +94,37 @@ class AutomationProfileService {
         taskTemplates: profile.taskTemplates, taskIds: profile.taskIds, recoveryReadiness: profile.recoveryReadiness });
     });
   }
+  async resume(profileId, { confirmed } = {}) {
+    if (!isId(profileId)) throw new TypeError("profileId must be a safe lowercase kebab-case identifier");
+    if (confirmed !== true) throw new RangeError("founder confirmation is required to resume a profile");
+    return this.withExclusiveAccess(async () => {
+      const records = await this.validRecords();
+      const profile = projectProfiles(records)[profileId];
+      if (!profile) throw new RangeError(`profile does not exist: ${profileId}`);
+      if (profile.status !== "paused") throw new RangeError("only paused profiles can be resumed");
+      const readiness = await this.readiness();
+      assertActivationReadiness(readiness);
+      const agents = await this.listAgents();
+      assertCompatibleTemplates(profile.taskTemplates, agents);
+      const existingTasks = await this.listTasks();
+      const taskIds = {};
+      for (const definition of profile.taskTemplates) {
+        const taskId = profile.taskIds[definition.key] || profile.taskIds[definition.action];
+        const associated = existingTasks.filter((task) =>
+          task.automationProfileId === profileId && task.automationProfileKey === definition.key);
+        if (associated.length !== 1 || associated[0].id !== taskId ||
+          !matchesDefinition(associated[0], definition)) {
+          throw new RangeError("paused profile task association conflicts with the approved template");
+        }
+        taskIds[definition.key] = taskId;
+      }
+      return this.append(records, {
+        event: "resumed", profileId, template: profile.template,
+        taskTemplates: profile.taskTemplates, taskIds,
+        recoveryReadiness: readiness.recovery?.status || "unavailable"
+      });
+    });
+  }
   async isTaskProcessingAllowed(taskId) {
     try {
       return !Object.values(projectProfiles(await this.validRecords())).some((profile) =>
@@ -148,7 +179,7 @@ function projectProfiles(records) {
   for (const record of records) {
     const templates = record.taskTemplates || starterFromLegacy(record);
     profiles[record.profileId] = { profileId: record.profileId, template: record.template, controller: record.controller,
-      taskTemplates: templates, taskIds: record.taskIds, status: record.event === "draft-created" ? "draft" : record.event === "activated" ? "active" : "paused",
+      taskTemplates: templates, taskIds: record.taskIds, status: record.event === "draft-created" ? "draft" : ["activated", "resumed"].includes(record.event) ? "active" : "paused",
       recoveryReadiness: record.recoveryReadiness, updatedAt: record.recordedAt, auditSequence: record.sequence };
   }
   return profiles;
@@ -209,8 +240,8 @@ function validateRecords(records) {
   for (let index = 0; index < records.length; index += 1) {
     const record = records[index]; const prior = profiles[record?.profileId]; const templates = record?.taskTemplates || starterFromLegacy(record || {});
     const legacy = record?.taskTemplates === undefined;
-    if (!record || record.schemaVersion !== AUTOMATION_PROFILE_SCHEMA_VERSION || !isUuid(record.id) || record.sequence !== index + 1 || !isTimestamp(record.recordedAt) || record.controller !== "founder" || !["draft-created", "activated", "paused"].includes(record.event) || !isId(record.profileId) || ![OPERATIONS_OBSERVATION_TEMPLATE, FOUNDER_CONFIGURED_TEMPLATE].includes(record.template) || (legacy && record.template !== OPERATIONS_OBSERVATION_TEMPLATE) || !validTemplates(templates) || !isRecord(record.taskIds) || !["not-checked", "not-configured", "empty", "ready", "unavailable"].includes(record.recoveryReadiness) || record.previousHash !== previousHash || !isHash(record.hash) || record.hash !== hashRecord(record) || (record.event === "draft-created" && (prior || Object.keys(record.taskIds).length)) || (record.event === "activated" && (!prior || prior.status !== "draft" || !validTaskIds(record.taskIds, templates, legacy))) || (record.event === "paused" && (!prior || prior.status !== "active" || !same(record.taskIds, prior.taskIds)))) throw new TypeError("automation profile has an invalid record");
-    profiles[record.profileId] = { ...record, taskTemplates: templates, status: record.event === "draft-created" ? "draft" : record.event === "activated" ? "active" : "paused" }; previousHash = record.hash;
+    if (!record || record.schemaVersion !== AUTOMATION_PROFILE_SCHEMA_VERSION || !isUuid(record.id) || record.sequence !== index + 1 || !isTimestamp(record.recordedAt) || record.controller !== "founder" || !["draft-created", "activated", "paused", "resumed"].includes(record.event) || !isId(record.profileId) || ![OPERATIONS_OBSERVATION_TEMPLATE, FOUNDER_CONFIGURED_TEMPLATE].includes(record.template) || (legacy && record.template !== OPERATIONS_OBSERVATION_TEMPLATE) || !validTemplates(templates) || !isRecord(record.taskIds) || !["not-checked", "not-configured", "empty", "ready", "unavailable"].includes(record.recoveryReadiness) || record.previousHash !== previousHash || !isHash(record.hash) || record.hash !== hashRecord(record) || (record.event === "draft-created" && (prior || Object.keys(record.taskIds).length)) || (record.event === "activated" && (!prior || prior.status !== "draft" || !validTaskIds(record.taskIds, templates, legacy))) || (record.event === "paused" && (!prior || prior.status !== "active" || !same(record.taskIds, prior.taskIds))) || (record.event === "resumed" && (!prior || prior.status !== "paused" || !validTaskIds(record.taskIds, templates, legacy) || !same(record.taskIds, prior.taskIds)))) throw new TypeError("automation profile has an invalid record");
+    profiles[record.profileId] = { ...record, taskTemplates: templates, status: record.event === "draft-created" ? "draft" : ["activated", "resumed"].includes(record.event) ? "active" : "paused" }; previousHash = record.hash;
   }
 }
 function validTemplates(templates) {

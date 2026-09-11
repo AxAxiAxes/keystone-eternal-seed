@@ -81,6 +81,15 @@ test("creates, activates once, and pauses the exact operations-observation sched
   assert.equal(paused.status, "paused");
   assert.equal(await service.isTaskProcessingAllowed(tasks[0].id), false);
   assert.equal(await service.isTaskProcessingAllowed(randomUUID()), true);
+  await assert.rejects(
+    () => service.resume("private-observation", { confirmed: false }),
+    /founder confirmation/
+  );
+  const resumed = await service.resume("private-observation", { confirmed: true });
+  assert.equal(resumed.status, "active");
+  assert.deepEqual(resumed.taskIds, active.taskIds);
+  assert.equal(tasks.length, 2);
+  assert.equal(await service.isTaskProcessingAllowed(tasks[0].id), true);
 });
 
 test("exposes every active role capability and activates a founder-configured template", async (t) => {

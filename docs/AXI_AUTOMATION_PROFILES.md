@@ -32,9 +32,12 @@ An authenticated founder-controlled operational process creates a `draft`.
 An explicit `confirmed: true` activation moves it to `active`, creates the
 two recurring tasks once, and records their durable IDs in the hash-linked
 profile audit. An explicit confirmation can move an active profile to
-`paused`. Paused profile-managed tasks remain retained but are not processed;
-their history and unrelated tasks are unchanged. A profile never enables the
-scheduler and cannot reactivate itself.
+`paused`. A later, separately confirmed resume requires the same readiness,
+role-capability, and immutable task-association checks before it moves the
+profile back to `active`; it never creates replacement tasks. Paused
+profile-managed tasks remain retained but are not processed; their history and
+unrelated tasks are unchanged. A profile never enables the scheduler and
+cannot reactivate itself.
 
 Activation requires ready startup context, source catalog, submitted business
 metrics, service registry when initialized, and governance state. Recovery
@@ -52,7 +55,7 @@ checkpoints and private recovery bundles.
 ## Private routes
 
 The private engine exposes `GET` and `POST /automation/profiles`, plus
-`POST /automation/profiles/:profileId/activate` and `/pause`. The protected
+`POST /automation/profiles/:profileId/activate`, `/pause`, and `/resume`. The protected
 portal proxies these routes only under `/api/automation/profiles`; there is no
 public route or generic engine proxy.
 

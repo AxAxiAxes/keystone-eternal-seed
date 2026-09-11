@@ -258,6 +258,28 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(activeProfile.status, "active");
     assert.equal(Object.keys(activeProfile.taskIds).length, 2);
 
+    const profilePause = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/profiles/portal-observation/pause`,
+      {
+        method: "POST",
+        headers: { Authorization: authorization, "Content-Type": "application/json" },
+        body: JSON.stringify({ confirmed: true })
+      }
+    );
+    assert.equal(profilePause.status, 200);
+    assert.equal((await profilePause.json()).status, "paused");
+
+    const profileResume = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/profiles/portal-observation/resume`,
+      {
+        method: "POST",
+        headers: { Authorization: authorization, "Content-Type": "application/json" },
+        body: JSON.stringify({ confirmed: true })
+      }
+    );
+    assert.equal(profileResume.status, 200);
+    assert.deepEqual((await profileResume.json()).taskIds, activeProfile.taskIds);
+
     const unauthorizedContinuityRecord = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/continuity-record`
     );

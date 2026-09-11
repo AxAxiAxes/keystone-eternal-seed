@@ -11,6 +11,7 @@ from later repository implementation and deployment evidence.
 
 | Date | Status | Milestone | Evidence |
 | --- | --- | --- | --- |
+| 2026-09-11 | Complete | Private Automation Profiles gained an explicit, readiness-gated resume lifecycle that reuses the exact retained task associations without creating work or enabling the scheduler | `apps/axiom-engine/automation-profile-service.js` and `docs/memory/2026-09-11-automation-profile-resume.md` |
 | 2026-09-11 | Complete | Comprehensive branch review remediated container packaging, local recovery mounts, protected-operation audit failure handling, and Command Center public-probe behavior; container startup smoke checks added to hosted validation | `docs/memory/2026-09-11-comprehensive-review-remediation.md` |
 | 2026-09-11 | Complete | Existing AXI role creation/registration evidence and factual self-observation projection added to protected reports, readiness, monitoring, and private operator views without changing capabilities or assignments | `apps/axiom-engine/automation-service.js` and `docs/memory/2026-09-11-agent-provenance-observation.md` |
 | 2026-09-11 | Complete | Private founder-controlled Automation Activation Profile foundation added with starter operations observation and validated founder-configured active-role capability schedules, tamper-evident audit, fail-closed readiness, protected visibility, checkpoint, and recovery coverage | `apps/axiom-engine/automation-profile-service.js` and `docs/AXI_AUTOMATION_PROFILES.md` |

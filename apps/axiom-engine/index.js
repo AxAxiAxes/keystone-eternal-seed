@@ -385,6 +385,14 @@ app.post("/automation/profiles/:profileId/pause", async (req, res, next) => {
   }
 });
 
+app.post("/automation/profiles/:profileId/resume", async (req, res, next) => {
+  try {
+    res.json(await automationProfileService.resume(req.params.profileId, req.body));
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get("/system/startup-context", async (req, res, next) => {
   try {
     res.json(await startupContextService.status());

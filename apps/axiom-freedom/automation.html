@@ -524,12 +524,14 @@ async function refresh() {
       ? `<button class="activate-profile" data-profile-id="${escapeHtml(profile.profileId)}">Confirm activation</button>`
       : profile.status === "active"
         ? `<button class="pause-profile secondary" data-profile-id="${escapeHtml(profile.profileId)}">Confirm pause</button>`
-        : "Paused; retained audit history"}</td></tr>`).join("");
+        : `<button class="resume-profile" data-profile-id="${escapeHtml(profile.profileId)}">Confirm resume</button>`}</td></tr>`).join("");
     document.querySelector("#automation-profiles").innerHTML =
       `<p class="note">${escapeHtml(automationProfiles.label || "")}</p>${profileRows ? `<table><thead><tr><th>Profile</th><th>Status</th><th>Monitoring minutes</th><th>Governance minutes</th><th>Recovery readiness</th><th>Founder control</th></tr></thead><tbody>${profileRows}</tbody></table>` : "<p class='note'>No profile drafts yet.</p>"}`;
-    document.querySelectorAll(".activate-profile, .pause-profile").forEach(button => {
+    document.querySelectorAll(".activate-profile, .pause-profile, .resume-profile").forEach(button => {
       button.addEventListener("click", async () => {
-        const action = button.classList.contains("activate-profile") ? "activate" : "pause";
+        const action = button.classList.contains("activate-profile")
+          ? "activate"
+          : button.classList.contains("pause-profile") ? "pause" : "resume";
         if (!window.confirm(`I intentionally confirm founder-controlled profile ${action}. This does not enable the scheduler.`)) return;
         try {
           await request(`/api/automation/profiles/${encodeURIComponent(button.dataset.profileId)}/${action}`,
