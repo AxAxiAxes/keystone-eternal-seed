@@ -14,5 +14,6 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-10 startup readiness protocol](2026-09-10-startup-readiness-protocol.md)
 - [2026-09-09 production automation and platform plan](2026-09-09-production-automation-and-platform-plan.md)
 - [2026-09-09 intellectual attribution register](2026-09-09-intellectual-attribution-register.md)

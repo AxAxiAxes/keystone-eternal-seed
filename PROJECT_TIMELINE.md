@@ -51,6 +51,8 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | AXES Directory and marketing-assistance concepts privately archived and converted into a safety-gated readiness plan | `docs/AXES_DIRECTORY_READINESS.md` |
 | 2026-09-10 | Complete | Business-official interview and invitation workflow added for the future opt-in AXES Directory pilot | `docs/AXES_DIRECTORY_READINESS.md` |
 | 2026-09-10 | Complete | Proposed AXES Directory pilot data model, lifecycle, correction/removal route, renewal evidence, and track limitations established without public listings | `docs/AXES_DIRECTORY_DATA_MODEL.md` |
+| 2026-09-10 | Complete | AXI private scheduler and monitoring activation settings aligned across Compose and the Railway production runbook | `apps/axiom-freedom/.env.example`, `apps/axiom-freedom/docker-compose.yml`, and `docs/RAILWAY_DEPLOYMENT.md` |
+| 2026-09-10 | Complete | Mandatory repository startup/reset readiness protocol established for contextual review, authority limits, and safe AXI/XIIOM activation | `AGENTS.md` and `docs/memory/2026-09-10-startup-readiness-protocol.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
@@ -75,6 +77,8 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Define module boundaries and add private integrity checkpoints for future AXES OS migration.
 - [ ] Set `OPENAI_API_KEY` as a Railway encrypted variable and verify a live production chat response.
 - [x] Add private operational monitoring, task priorities, specific scheduling, and a protected reevaluation view.
+- [x] Align private scheduler and monitoring activation settings with the Compose template and Railway production runbook.
+- [x] Require contextual readiness, authority review, and bounded AXI/XIIOM restart checks after agent or operator startup, reset, or handoff.
 - [x] Add task dependencies, bounded retries, explicit approvals, and operator-visible task attempts.
 - [x] Add a dedicated protected run-history view for completed, retrying, and failed task outcomes.
 - [x] Archive and classify original AXES visual, audio, and interaction-prototype sources for staged reuse.

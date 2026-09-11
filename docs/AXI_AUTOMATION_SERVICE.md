@@ -97,6 +97,11 @@ The poll interval must be from 1,000 through 3,600,000 milliseconds, and each
 cycle may process 1 through 20 tasks. The scheduler logs failures explicitly;
 it does not silently claim completion.
 
+For a staged production activation, enable monitoring and validate its
+protected-console snapshot first. Then enable the scheduler. Setting either
+variable requires a private `axiom-engine` service variable; do not expose
+these controls through the public portal.
+
 ## Live intelligence monitoring
 
 The private engine can record operational snapshots with:
