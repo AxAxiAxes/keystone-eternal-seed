@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-11 AXES objectives checkpoint](2026-09-11-axes-objectives-checkpoint.md)
 - [2026-09-11 Founder task authority clarification](2026-09-11-founder-task-authority-clarification.md)
 - [2026-09-11 AXI business metrics foundation](2026-09-11-axi-business-metrics-foundation.md)
 - [2026-09-11 Founder authority and business status](2026-09-11-founder-authority-business-status.md)

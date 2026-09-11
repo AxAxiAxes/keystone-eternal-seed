@@ -1,7 +1,8 @@
 # AXIOM / KEYSTONE project timeline
 
 **Last updated:** 2026-09-11
-**Current phase:** Source reconciliation complete; production promotion and external readiness remain blocked
+**Current phase:** Business-operations foundation complete; production
+promotion and external readiness remain blocked
 
 Update this document when a milestone changes state. A checked item is complete;
 an unchecked item is planned or in progress. The timeline begins with AXIOM's
@@ -98,6 +99,7 @@ from later repository implementation and deployment evidence.
 | 2026-09-11 | Complete | Private AXI submitted business-metrics foundation added with approval-gated hash-linked records, deterministic operating-metric summaries, readiness/monitoring/checkpoint/recovery coverage, and protected operator visibility | `apps/axiom-engine/business-metrics-service.js` and `docs/AXI_BUSINESS_METRICS.md` |
 | 2026-09-11 | Complete | Founder control framing clarified: AXI roles execute founder-assigned work but cannot assign/remove work, approve tasks, or suspend/reactivate themselves or other roles | `docs/AXES_AGENT_ORIGIN_REGISTRY.md` and `docs/memory/2026-09-11-founder-task-authority-clarification.md` |
 | 2026-09-11 | Complete | Founder authority and current system-status statement recorded: AXES is a founder-led company, brand, and business effort; AXI and its roles are current non-sentient software without independent ownership or control claims | `docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md` and `docs/memory/2026-09-11-founder-authority-business-status.md` |
+| 2026-09-11 | Complete | AXES objectives checkpoint rebuilt from the repository onset: founder-led business objective, portable operations foundation, staged pilots, production gate, and external blockers distinguished | `docs/AXES_OBJECTIVES_CHECKPOINT.md` and `docs/memory/2026-09-11-axes-objectives-checkpoint.md` |
 | 2026-09-10 | In progress | Eternal Origin ownership invention value-recovery and past/current crisis-report register activated | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` |
 | 2026-09-10 | Complete | Internal creator-origin constitution established for evidence, consent, research integrity, attribution, correction, and challenge handling | `docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md` |
 | 2026-09-10 | Complete | Founder direction corrected: URNUR is an intended monetary currency; all financial implementation remains blocked pending written permitted scope | `docs/URNUR_FINANCIAL_READINESS.md` |
