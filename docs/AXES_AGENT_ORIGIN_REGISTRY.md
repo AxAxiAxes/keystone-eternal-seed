@@ -25,6 +25,22 @@ below. The required AXI Genesis checkpoint and reset-recovery procedure are
 defined in `AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`. Filing, recognition, or
 enforcement outside AXES follows the separate rights-readiness process.
 
+## Accountability control
+
+Each registered AXI agent has a private accountability record with an `active`
+or `suspended` status, a dated reason, and an append-only review history.
+An authenticated AXES operator must provide a reason to suspend or reactivate
+an agent. A suspended agent cannot be assigned to a new task, selected for an
+unassigned task, used for protected agent chat, or execute a queued task. A
+queued task assigned to a suspended agent moves to `blocked` and retains the
+accountability-hold reason until the agent is reactivated and the task is
+eligible again.
+
+Accountability reviews are project operating records. They identify AXI's
+registered agent, registered authority, task scope, and operator decision;
+they do not make the agent a legal person or shift human accountability for
+system operation and decisions away from AXES.
+
 ## Implemented agent origins
 
 | Agent ID | Origin checkpoint | Creator attribution | Purpose | Core duties |
@@ -60,12 +76,14 @@ Console.
 Each report contains:
 
 1. The agent's origin checkpoint, creator attribution, ownership-and-
-   accountability claim, purpose, duties, capabilities, and registration
-   notice.
+   accountability claim, purpose, duties, capabilities, registration notice,
+   and current accountability status.
 2. An `origin` event at registration.
-3. A `task-created` event for every explicitly assigned task, including its
+3. An `accountability-review` event for each registration, suspension, or
+   reactivation.
+4. A `task-created` event for every explicitly assigned task, including its
    origin checkpoint and current status.
-4. A `task-run` event for each completed, retrying, or failed execution.
+5. A `task-run` event for each completed, retrying, or failed execution.
 
 Task origin checkpoints should use a stable lowercase kebab-case identifier
 that describes the milestone or workstream. No report includes task payloads,

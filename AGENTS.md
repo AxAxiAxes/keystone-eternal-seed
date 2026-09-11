@@ -9,8 +9,9 @@ deployment state.
 1. For AXI work, read `docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md` and
    `docs/AXES_AGENT_ORIGIN_REGISTRY.md`. Before registering, assigning, or
    scheduling an agent, confirm its protected report has the required Genesis
-   checkpoint, creator ownership-and-accountability claim, and operational
-   origin. Do not use an unreconciled agent record.
+   checkpoint, creator ownership-and-accountability claim, operational origin,
+   and active accountability status. Do not use an unreconciled or suspended
+   agent record.
 2. Read `README.md`, `PROJECT_TIMELINE.md`, and `docs/memory/README.md`, then
    read the latest relevant continuity record in `docs/memory/`.
 3. Read the plan, governance, and deployment records that apply to the

@@ -55,6 +55,28 @@ Each task has `maxAttempts` from 1 through 5 (default 1) and
 within that bound; afterward, they enter the terminal `failed` state with a
 recorded run history.
 
+### Agent accountability
+
+Every AXI agent is registered to the AXI Genesis ownership checkpoint with a
+creator ownership-and-accountability claim. The private accountability record
+includes `active` or `suspended` state, a dated review reason, and a complete
+registration/suspension/reactivation history. The authenticated operator may
+review an agent through the protected console or the private engine endpoint:
+
+```json
+POST /automation/agents/:agentId/accountability
+{
+  "status": "suspended",
+  "reason": "Hold pending operator review."
+}
+```
+
+The reason is required. A suspended agent cannot receive a new assignment,
+be automatically selected, provide protected chat, or execute work. A queued
+task assigned to it moves to `blocked` with the hold reason. Reactivation
+requires another dated, reasoned review. The active AXI governance and reset
+procedure are in `AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`.
+
 ## Private API
 
 These endpoints remain private to the AXIOM engine network and are not proxied
@@ -66,6 +88,7 @@ by the public portal.
 | `GET` | `/automation/agents` | Lists registered agents. |
 | `POST` | `/automation/agents` | Registers an agent with a name and capability list. |
 | `GET` | `/automation/agents/:agentId/report` | Returns the agent's project-attribution record and private running timeline. |
+| `POST` | `/automation/agents/:agentId/accountability` | Records a reasoned active/suspended accountability review. |
 | `GET` | `/automation/tasks` | Lists tasks; optionally filter with `?status=pending`. |
 | `POST` | `/automation/tasks` | Creates a pending, scheduled task. |
 | `POST` | `/automation/tasks/:taskId/approval` | Approves or rejects a task awaiting approval. |

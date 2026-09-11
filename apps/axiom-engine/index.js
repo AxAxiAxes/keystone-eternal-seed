@@ -189,6 +189,17 @@ app.get("/automation/agents/:agentId/report", async (req, res, next) => {
   }
 });
 
+app.post("/automation/agents/:agentId/accountability", async (req, res, next) => {
+  try {
+    res.json(await automationService.reviewAgentAccountability(
+      req.params.agentId,
+      req.body
+    ));
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/automation/agents", async (req, res, next) => {
   try {
     res.status(201).json(await automationService.registerAgent(req.body));

@@ -145,6 +145,34 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(observerReport.status, 200);
     assert.equal((await observerReport.json()).agent.name, "Operations Observer");
 
+    const suspendedObserver = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/agents/operations-observer/accountability`,
+      {
+        method: "POST",
+        headers: { Authorization: authorization, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: "suspended",
+          reason: "Hold pending operator review."
+        })
+      }
+    );
+    assert.equal(suspendedObserver.status, 200);
+    assert.equal((await suspendedObserver.json()).accountability.status, "suspended");
+
+    const restoredObserver = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/agents/operations-observer/accountability`,
+      {
+        method: "POST",
+        headers: { Authorization: authorization, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: "active",
+          reason: "Operator review completed."
+        })
+      }
+    );
+    assert.equal(restoredObserver.status, 200);
+    assert.equal((await restoredObserver.json()).accountability.status, "active");
+
     const monitoringStatus = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/monitoring/status`,
       { headers: { Authorization: authorization } }

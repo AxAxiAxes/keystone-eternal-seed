@@ -99,7 +99,8 @@ function renderTaskAgentOptions() {
   const currentValue = select.value;
   const action = document.querySelector("#action").value;
   const eligibleAgents = registeredAgents.filter(agent =>
-    agent.enabled && agent.capabilities.includes(action)
+    agent.enabled && agent.accountability?.status === "active" &&
+    agent.capabilities.includes(action)
   );
   select.innerHTML = eligibleAgents.map(agent =>
     `<option value="${escapeHtml(agent.id)}">${escapeHtml(agent.name)}</option>`
@@ -107,6 +108,36 @@ function renderTaskAgentOptions() {
   if (eligibleAgents.some(agent => agent.id === currentValue)) {
     select.value = currentValue;
   }
+}
+function renderAgents(agents) {
+  if (!agents.length) {
+    document.querySelector("#agents").innerHTML = "<p class='note'>None yet.</p>";
+    return;
+  }
+  document.querySelector("#agents").innerHTML = `<table><thead><tr><th>Name</th><th>Capabilities</th><th>Enabled</th><th>Accountability</th><th>Review</th></tr></thead><tbody>${agents.map(agent => {
+    const status = agent.accountability?.status || "unreconciled";
+    const nextStatus = status === "suspended" ? "active" : "suspended";
+    const label = nextStatus === "active" ? "Reactivate" : "Suspend";
+    return `<tr><td>${escapeHtml(agent.name)}</td><td>${escapeHtml(agent.capabilities.join(", "))}</td><td>${escapeHtml(agent.enabled)}</td><td>${escapeHtml(status)}</td><td><button class="review-agent secondary" data-agent-id="${escapeHtml(agent.id)}" data-status="${nextStatus}">${label}</button></td></tr>`;
+  }).join("")}</tbody></table>`;
+  document.querySelectorAll(".review-agent").forEach(button => {
+    button.addEventListener("click", async () => {
+      const reason = window.prompt("Required accountability review reason:");
+      if (!reason || !reason.trim()) {
+        result.textContent = "An accountability review reason is required.";
+        return;
+      }
+      try {
+        await request(
+          `/api/automation/agents/${encodeURIComponent(button.dataset.agentId)}/accountability`,
+          { method:"POST", body:JSON.stringify({ status:button.dataset.status, reason }) }
+        );
+        await refresh();
+      } catch (error) {
+        result.textContent = error.message;
+      }
+    });
+  });
 }
 function renderAgentTimelines(reports) {
   document.querySelector("#agent-timelines").innerHTML = reports.map(report => {
@@ -168,10 +199,13 @@ async function refresh() {
       result.textContent = "Monitoring will be available after the private engine deployment is updated.";
     }
     document.querySelector("#metrics").innerHTML = Object.entries(status).map(([key,value]) => `<div class="metric"><strong>${value}</strong><br>${key}</div>`).join("");
-    document.querySelector("#agents").innerHTML = table(agents, [["name","Name"],["capabilities","Capabilities"],["enabled","Enabled"]]);
+    renderAgents(agents);
     registeredAgents = agents;
     renderTaskAgentOptions();
-    document.querySelector("#chat-agent").innerHTML = agents.map(agent => `<option value="${agent.id}">${agent.name}</option>`).join("");
+    document.querySelector("#chat-agent").innerHTML = agents
+      .filter(agent => agent.enabled && agent.accountability?.status === "active")
+      .map(agent => `<option value="${escapeHtml(agent.id)}">${escapeHtml(agent.name)}</option>`)
+      .join("");
     document.querySelector("#depends-on").innerHTML = tasks.map(task =>
       `<option value="${escapeHtml(task.id)}">${escapeHtml(task.title)} (${escapeHtml(task.status)})</option>`
     ).join("");

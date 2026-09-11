@@ -35,6 +35,8 @@ Every registered AXI agent must retain these fields:
 | `keystoneRegistration.ownershipClaim` | Creator ownership-and-accountability claim |
 | `originCheckpoint` | Agent-specific operational origin |
 | `purpose` and `duties` | Agent-specific bounded purpose and duties |
+| `accountability.status` | `active` before assignment or execution |
+| `accountability.history` | Dated registration, suspension, and reactivation record |
 
 The private `GET /automation/agents/:agentId/report` record surfaces the
 Genesis checkpoint, creator claim, operational origin, and task/run timeline.
@@ -48,7 +50,7 @@ Genesis checkpoint, creator claim, operational origin, and task/run timeline.
    state migration fills missing Genesis registration fields without
    overwriting existing provenance data.
 3. Inspect the protected agent report for every enabled agent and confirm the
-   required runtime record above.
+   required runtime record above, including an active accountability status.
 4. If a record has a different authority or cannot be reconciled to the
    Genesis checkpoint, leave it unassigned and investigate before any task is
    created or processed.

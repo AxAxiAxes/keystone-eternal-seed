@@ -261,6 +261,28 @@ const server = http.createServer(async (req, res) => {
           }
           return;
     }
+    const agentAccountabilityRoute = pathname.match(
+      /^\/api\/automation\/agents\/([^/]+)\/accountability$/
+    );
+    if (agentAccountabilityRoute && req.method === 'POST') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine(
+                    '/automation/agents/' +
+                      encodeURIComponent(agentAccountabilityRoute[1]) +
+                      '/accountability',
+                    'POST',
+                    await parseBody(req)
+                  );
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM agent accountability review failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
+    }
     if (pathname === '/api/automation/tasks' && req.method === 'GET') {
           if (!requireAdmin(req, res)) return;
           try {

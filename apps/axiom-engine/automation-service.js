@@ -16,6 +16,7 @@ const TASK_STATUSES = new Set([
   "failed",
   "cancelled"
 ]);
+const AGENT_ACCOUNTABILITY_STATUSES = new Set(["active", "suspended"]);
 const AGENT_ATTRIBUTION_SCOPE =
   "KEYSTONE protocol registration of origin, lineage, creator ownership claim, accountable stewardship, and bounded duties.";
 const KEYSTONE_REGISTRATION = Object.freeze({
@@ -60,6 +61,7 @@ class AutomationService {
       if (!agent) {
         throw new RangeError(`agent does not exist: ${agentId}`);
       }
+      assertActiveAccountability(agent);
       if (!agent.enabled) {
         throw new RangeError(`agent is disabled: ${agentId}`);
       }
@@ -113,13 +115,46 @@ class AutomationService {
         purpose: normalizeOptionalString(purpose),
         duties: duties ? [...new Set(duties.map((duty) => duty.trim()))] : [],
         attributionScope: AGENT_ATTRIBUTION_SCOPE,
-        keystoneRegistration: createKeystoneRegistration(creatorAuthority)
+        keystoneRegistration: createKeystoneRegistration(creatorAuthority),
+        accountability: createAccountabilityRecord(
+          this.now().toISOString(),
+          "Genesis registration accepted."
+        )
       };
       if (state.agents.some((existingAgent) => existingAgent.id === agent.id)) {
         throw new RangeError(`agent already exists: ${agent.id}`);
       }
 
       state.agents.push(agent);
+      return agent;
+    });
+  }
+
+  async reviewAgentAccountability(agentId, { status, reason }) {
+    if (!isNonEmptyString(agentId)) {
+      throw new TypeError("agentId must be a non-empty string");
+    }
+    if (!AGENT_ACCOUNTABILITY_STATUSES.has(status)) {
+      throw new RangeError("agent accountability status must be active or suspended");
+    }
+    if (!isNonEmptyString(reason)) {
+      throw new TypeError("agent accountability reason must be a non-empty string");
+    }
+    return this.withState(async (state) => {
+      const agent = findAgent(state.agents, agentId);
+      assertRegisteredAgent(agent);
+      const occurredAt = this.now().toISOString();
+      const event = {
+        status,
+        occurredAt,
+        reason: reason.trim()
+      };
+      agent.accountability = {
+        status,
+        reviewedAt: occurredAt,
+        reason: event.reason,
+        history: [...agent.accountability.history, event]
+      };
       return agent;
     });
   }
@@ -139,6 +174,12 @@ class AutomationService {
           genesisCheckpoint: agent.keystoneRegistration.genesisCheckpoint.id,
           detail: agent.purpose || "No purpose has been recorded."
         },
+        ...agent.accountability.history.map((review) => ({
+          event: "accountability-review",
+          occurredAt: review.occurredAt,
+          status: review.status,
+          detail: review.reason
+        })),
         ...state.tasks
           .filter((task) => task.agentId === agent.id)
           .map((task) => ({
@@ -175,7 +216,8 @@ class AutomationService {
           purpose: agent.purpose || null,
           duties: agent.duties || [],
           attributionScope: agent.attributionScope || AGENT_ATTRIBUTION_SCOPE,
-          keystoneRegistration: agent.keystoneRegistration || KEYSTONE_REGISTRATION
+          keystoneRegistration: agent.keystoneRegistration || KEYSTONE_REGISTRATION,
+          accountability: agent.accountability
         },
         timeline
       };
@@ -211,7 +253,7 @@ class AutomationService {
       }
       if (agentId) {
         const assignedAgent = findAgent(state.agents, agentId);
-        assertRegisteredAgent(assignedAgent);
+        assertActiveAccountability(assignedAgent);
         if (!assignedAgent.enabled) {
           throw new RangeError(`agent is disabled: ${agentId}`);
         }
@@ -335,6 +377,17 @@ class AutomationService {
       for (const task of dueTasks) {
         const agent = selectAgent(state.agents, task);
         if (!agent) {
+          const assignedAgent = task.agentId
+            ? state.agents.find((entry) => entry.id === task.agentId)
+            : null;
+          if (assignedAgent && isRegisteredAgent(assignedAgent) &&
+            !isAccountableAgent(assignedAgent)) {
+            task.status = "blocked";
+            task.lastError = "Assigned agent accountability is suspended.";
+            task.updatedAt = this.now().toISOString();
+            outcomes.push({ taskId: task.id, status: "blocked" });
+            continue;
+          }
           outcomes.push({ taskId: task.id, status: "unassigned" });
           continue;
         }
@@ -545,7 +598,8 @@ function defaultAgents(now) {
         "Preserve concise operational continuity."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
-      keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority)
+      keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),
+      accountability: createAccountabilityRecord(registeredAt, "Genesis registration accepted.")
     },
     {
       id: "automation-executor",
@@ -561,7 +615,8 @@ function defaultAgents(now) {
         "Record bounded task outcomes."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
-      keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority)
+      keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),
+      accountability: createAccountabilityRecord(registeredAt, "Genesis registration accepted.")
     },
     {
       id: "automation-auditor",
@@ -577,7 +632,8 @@ function defaultAgents(now) {
         "Record approved audit continuity."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
-      keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority)
+      keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),
+      accountability: createAccountabilityRecord(registeredAt, "Genesis registration accepted.")
     },
     {
       id: "operations-observer",
@@ -593,7 +649,8 @@ function defaultAgents(now) {
         "Surface operational attention signals."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
-      keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority)
+      keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),
+      accountability: createAccountabilityRecord(registeredAt, "Genesis registration accepted.")
     }
   ];
 }
@@ -626,6 +683,14 @@ function seedMissingDefaultAgents(state, now) {
     if (!isNonEmptyString(agent.attributionScope)) {
       agent.attributionScope = AGENT_ATTRIBUTION_SCOPE;
     }
+    if (!isRecord(agent.accountability)) {
+      agent.accountability = createAccountabilityRecord(
+        agent.registeredAt || now().toISOString(),
+        "Legacy registration reconciled to the AXI accountability record."
+      );
+    } else {
+      normalizeAccountability(agent.accountability, agent.registeredAt || now().toISOString());
+    }
     const registration = createKeystoneRegistration(agent.creator);
     if (!isRecord(agent.keystoneRegistration)) {
       agent.keystoneRegistration = registration;
@@ -656,11 +721,11 @@ function summarizeAutomationState(state) {
 function selectAgent(agents, task) {
   if (task.agentId) {
     const assignedAgent = agents.find((agent) => agent.id === task.agentId);
-    return isRegisteredAgent(assignedAgent) && assignedAgent.enabled &&
+    return isAccountableAgent(assignedAgent) && assignedAgent.enabled &&
       assignedAgent.capabilities.includes(task.action) ? assignedAgent : null;
   }
   return agents.find((agent) =>
-    isRegisteredAgent(agent) && agent.enabled && agent.capabilities.includes(task.action)
+    isAccountableAgent(agent) && agent.enabled && agent.capabilities.includes(task.action)
   ) || null;
 }
 
@@ -671,6 +736,38 @@ function createKeystoneRegistration(creatorAuthority) {
     ownershipClaim: `${creatorAuthority} claims ownership and accountability for AXI agents created and registered within the AXES system.`,
     genesisCheckpoint: { ...AXI_GENESIS_OWNERSHIP_CHECKPOINT }
   };
+}
+
+function createAccountabilityRecord(occurredAt, reason) {
+  return {
+    status: "active",
+    reviewedAt: occurredAt,
+    reason,
+    history: [{
+      status: "active",
+      occurredAt,
+      reason
+    }]
+  };
+}
+
+function normalizeAccountability(accountability, fallbackOccurredAt) {
+  if (!AGENT_ACCOUNTABILITY_STATUSES.has(accountability.status)) {
+    accountability.status = "suspended";
+  }
+  if (!isNonEmptyString(accountability.reviewedAt)) {
+    accountability.reviewedAt = fallbackOccurredAt;
+  }
+  if (!isNonEmptyString(accountability.reason)) {
+    accountability.reason = "Accountability status reconciled after reset.";
+  }
+  if (!Array.isArray(accountability.history)) {
+    accountability.history = [{
+      status: accountability.status,
+      occurredAt: accountability.reviewedAt,
+      reason: accountability.reason
+    }];
+  }
 }
 
 function isRegisteredAgent(agent) {
@@ -688,9 +785,22 @@ function isRegisteredAgent(agent) {
       AXI_GENESIS_OWNERSHIP_CHECKPOINT.id;
 }
 
+function isAccountableAgent(agent) {
+  return isRegisteredAgent(agent) &&
+    isRecord(agent.accountability) &&
+    agent.accountability.status === "active";
+}
+
 function assertRegisteredAgent(agent) {
   if (!isRegisteredAgent(agent)) {
     throw new RangeError("agent is not registered with creator ownership and accountability");
+  }
+}
+
+function assertActiveAccountability(agent) {
+  assertRegisteredAgent(agent);
+  if (!isAccountableAgent(agent)) {
+    throw new RangeError("agent accountability is suspended");
   }
 }
 

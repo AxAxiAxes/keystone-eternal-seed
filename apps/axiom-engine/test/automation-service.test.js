@@ -82,7 +82,7 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
   assert.match(report.agent.attributionScope, /creator ownership claim/);
   assert.deepEqual(
     report.timeline.map((event) => event.event).sort(),
-    ["origin", "task-created", "task-run"]
+    ["accountability-review", "origin", "task-created", "task-run"]
   );
   assert.equal(
     report.timeline.find((event) => event.event === "task-created").originCheckpoint,
@@ -176,6 +176,54 @@ test("reconciles default agents to the Genesis authority after a reset", async (
     "axi-genesis-creator-ownership"
   );
   assert.match(report.agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
+});
+
+test("suspends unreviewed agents and records accountability review history", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AutomationService({
+    directory,
+    memoryStore: createMemoryStore(),
+    now: () => new Date("2026-09-10T20:00:00.000Z")
+  });
+  const task = await service.createTask({
+    title: "Hold task pending accountability review",
+    action: "automation.noop",
+    agentId: "automation-executor",
+    originCheckpoint: "axi-accountability-review"
+  });
+
+  const suspended = await service.reviewAgentAccountability("automation-executor", {
+    status: "suspended",
+    reason: "Hold pending operator review."
+  });
+  assert.equal(suspended.accountability.status, "suspended");
+  assert.equal(suspended.accountability.history.length, 2);
+
+  await assert.rejects(
+    () => service.createTask({
+      title: "Attempt suspended assignment",
+      action: "automation.noop",
+      agentId: "automation-executor",
+      originCheckpoint: "axi-accountability-review"
+    }),
+    (error) => error instanceof RangeError &&
+      error.message === "agent accountability is suspended"
+  );
+  assert.deepEqual(await service.processDueTasks(), [{
+    taskId: task.id,
+    status: "blocked"
+  }]);
+  assert.equal((await service.listTasks("blocked"))[0].lastError,
+    "Assigned agent accountability is suspended.");
+
+  const report = await service.getAgentReport("automation-executor");
+  assert.equal(report.agent.accountability.status, "suspended");
+  assert.deepEqual(
+    report.timeline.filter((event) => event.event === "accountability-review")
+      .map((event) => event.status),
+    ["active", "suspended"]
+  );
 });
 
 test("keeps recurring tasks pending for their next execution", async (t) => {

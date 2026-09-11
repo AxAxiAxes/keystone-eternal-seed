@@ -92,7 +92,10 @@ test("reports engine health", async (t) => {
       "axi-genesis-creator-ownership"
     );
     assert.equal(report.agent.originCheckpoint, "axi-operations-observer");
-    assert.deepEqual(report.timeline.map((event) => event.event), ["origin"]);
+    assert.deepEqual(report.timeline.map((event) => event.event), [
+      "origin",
+      "accountability-review"
+    ]);
   });
 
   test("reports empty OpenAI usage before any provider requests", async (t) => {
