@@ -7,6 +7,7 @@ const AUTOMATION_PROFILE_ID = "axi-automation-profile-v1";
 const AUTOMATION_PROFILE_SCHEMA_VERSION = 1;
 const AUTOMATION_PROFILE_FILE_NAME = "automation-profiles.jsonl";
 const OPERATIONS_OBSERVATION_TEMPLATE = "operations-observation";
+const CONTINUITY_PROTECTION_TEMPLATE = "continuity-protection";
 const FOUNDER_CONFIGURED_TEMPLATE = "founder-configured";
 const PROFILE_NOTICE = "Founder-controlled internal schedules only. Profiles do not deploy, access accounts, send messages, publish, spend, accept payments, collect data, or make financial or legal decisions.";
 const PROFILE_HEALTH_NOTICE = "Read-only profile/task association status. This report does not expose task payloads or audit-error details, and does not change a profile, task, scheduler, or external system.";
@@ -54,8 +55,7 @@ class AutomationProfileService {
   async preview(input) {
     const agents = await this.listAgents();
     assertDraftInput(input, agents);
-    const taskTemplates = input.template === OPERATIONS_OBSERVATION_TEMPLATE
-      ? starterTemplates(input) : normalizeTaskTemplates(input.taskTemplates);
+    const taskTemplates = predefinedTemplates(input) || normalizeTaskTemplates(input.taskTemplates);
     assertCompletedDependencies(taskTemplates, await this.listTasks());
     const readiness = await this.readiness();
     const activationBlockers = activationReadinessIssues(readiness);
@@ -74,8 +74,7 @@ class AutomationProfileService {
   async createDraft(input) {
     const agents = await this.listAgents();
     assertDraftInput(input, agents);
-    const taskTemplates = input.template === OPERATIONS_OBSERVATION_TEMPLATE
-      ? starterTemplates(input) : normalizeTaskTemplates(input.taskTemplates);
+    const taskTemplates = predefinedTemplates(input) || normalizeTaskTemplates(input.taskTemplates);
     assertCompletedDependencies(taskTemplates, await this.listTasks());
     return this.withExclusiveAccess(async () => {
       const records = await this.validRecords();
@@ -214,13 +213,26 @@ function sourceMatrix(agents) {
   const active = agents.filter((agent) => agent.enabled && agent.accountability?.status === "active");
   return [
     { id: OPERATIONS_OBSERVATION_TEMPLATE, starter: true, taskTemplates: starterTemplates({ monitoringRecurrenceMinutes: 5, governanceRecurrenceMinutes: 60 }) },
+    { id: CONTINUITY_PROTECTION_TEMPLATE, starter: true, taskTemplates: continuityProtectionTemplates({ monitoringRecurrenceMinutes: 5, governanceRecurrenceMinutes: 60, checkpointRecurrenceMinutes: 1440, recoveryRecurrenceMinutes: 1440 }) },
     { id: FOUNDER_CONFIGURED_TEMPLATE, starter: false, roles: active.map((agent) => ({ agentId: agent.id, capabilities: agent.capabilities.filter((action) => ACTIONS.has(action)) })), taskSchema: { key: "lowercase kebab-case", action: [...ACTIONS], agentId: "active compatible registered role", recurrenceMinutes: "1..10080", dependsOnTaskIds: "existing completed task UUIDs", approvalRequired: "required for protected record actions", payload: "action-specific approved structured input only" } }
   ];
+}
+function predefinedTemplates(input) {
+  if (input.template === OPERATIONS_OBSERVATION_TEMPLATE) return starterTemplates(input);
+  if (input.template === CONTINUITY_PROTECTION_TEMPLATE) return continuityProtectionTemplates(input);
+  return null;
 }
 function starterTemplates(input) {
   return [
     { key: "monitoring-snapshot", action: "monitoring.snapshot", agentId: "operations-observer", recurrenceMinutes: input.monitoringRecurrenceMinutes, dependsOnTaskIds: [], approvalRequired: false, payload: {} },
     { key: "governance-readiness", action: "governance.readiness", agentId: "operations-observer", recurrenceMinutes: input.governanceRecurrenceMinutes, dependsOnTaskIds: [], approvalRequired: false, payload: {} }
+  ];
+}
+function continuityProtectionTemplates(input) {
+  return [
+    ...starterTemplates(input),
+    { key: "continuity-checkpoint", action: "continuity.checkpoint", agentId: "operations-observer", recurrenceMinutes: input.checkpointRecurrenceMinutes, dependsOnTaskIds: [], approvalRequired: false, payload: {} },
+    { key: "recovery-backup", action: "recovery.backup", agentId: "operations-observer", recurrenceMinutes: input.recoveryRecurrenceMinutes, dependsOnTaskIds: [], approvalRequired: false, payload: {} }
   ];
 }
 function normalizeTaskTemplates(templates) {
@@ -291,14 +303,22 @@ function summarizeProfileHealth(profile, tasks) {
 }
 
 function assertDraftInput(input, agents) {
-  if (!isRecord(input) || (input.template !== OPERATIONS_OBSERVATION_TEMPLATE && input.template !== FOUNDER_CONFIGURED_TEMPLATE)) throw new RangeError("profile must select operations-observation or founder-configured");
+  if (!isRecord(input) || ![OPERATIONS_OBSERVATION_TEMPLATE, CONTINUITY_PROTECTION_TEMPLATE, FOUNDER_CONFIGURED_TEMPLATE].includes(input.template)) throw new RangeError("profile must select operations-observation, continuity-protection, or founder-configured");
   if (!isId(input.profileId)) throw new TypeError("profileId must be a safe lowercase kebab-case identifier");
-  const starter = input.template === OPERATIONS_OBSERVATION_TEMPLATE;
-  const allowed = starter ? ["profileId", "template", "monitoringRecurrenceMinutes", "governanceRecurrenceMinutes"] : ["profileId", "template", "taskTemplates"];
+  const predefined = [OPERATIONS_OBSERVATION_TEMPLATE, CONTINUITY_PROTECTION_TEMPLATE].includes(input.template);
+  const allowed = input.template === OPERATIONS_OBSERVATION_TEMPLATE
+    ? ["profileId", "template", "monitoringRecurrenceMinutes", "governanceRecurrenceMinutes"]
+    : input.template === CONTINUITY_PROTECTION_TEMPLATE
+      ? ["profileId", "template", "monitoringRecurrenceMinutes", "governanceRecurrenceMinutes", "checkpointRecurrenceMinutes", "recoveryRecurrenceMinutes"]
+      : ["profileId", "template", "taskTemplates"];
   if (Object.keys(input).some((key) => !allowed.includes(key))) throw new TypeError("profile contains unsupported fields");
-  if (starter) {
+  if (predefined) {
     if (!Number.isInteger(input.monitoringRecurrenceMinutes) || input.monitoringRecurrenceMinutes < 5 || input.monitoringRecurrenceMinutes > 1440) throw new RangeError("monitoringRecurrenceMinutes must be an integer from 5 to 1440");
     if (!Number.isInteger(input.governanceRecurrenceMinutes) || input.governanceRecurrenceMinutes < 60 || input.governanceRecurrenceMinutes > 10080) throw new RangeError("governanceRecurrenceMinutes must be an integer from 60 to 10080");
+    if (input.template === CONTINUITY_PROTECTION_TEMPLATE &&
+      (!Number.isInteger(input.checkpointRecurrenceMinutes) || input.checkpointRecurrenceMinutes < 60 || input.checkpointRecurrenceMinutes > 10080)) throw new RangeError("checkpointRecurrenceMinutes must be an integer from 60 to 10080");
+    if (input.template === CONTINUITY_PROTECTION_TEMPLATE &&
+      (!Number.isInteger(input.recoveryRecurrenceMinutes) || input.recoveryRecurrenceMinutes < 60 || input.recoveryRecurrenceMinutes > 10080)) throw new RangeError("recoveryRecurrenceMinutes must be an integer from 60 to 10080");
   } else {
     if (!Array.isArray(input.taskTemplates) || input.taskTemplates.length < 1 || input.taskTemplates.length > 20) throw new RangeError("taskTemplates must contain 1 through 20 approved task templates");
     assertCompatibleTemplates(input.taskTemplates, agents);
@@ -355,7 +375,7 @@ function validateRecords(records) {
   for (let index = 0; index < records.length; index += 1) {
     const record = records[index]; const prior = profiles[record?.profileId]; const templates = record?.taskTemplates || starterFromLegacy(record || {});
     const legacy = record?.taskTemplates === undefined;
-    if (!record || record.schemaVersion !== AUTOMATION_PROFILE_SCHEMA_VERSION || !isUuid(record.id) || record.sequence !== index + 1 || !isTimestamp(record.recordedAt) || record.controller !== "founder" || !["draft-created", "activated", "paused", "resumed"].includes(record.event) || !isId(record.profileId) || ![OPERATIONS_OBSERVATION_TEMPLATE, FOUNDER_CONFIGURED_TEMPLATE].includes(record.template) || (legacy && record.template !== OPERATIONS_OBSERVATION_TEMPLATE) || !validTemplates(templates) || !isRecord(record.taskIds) || !["not-checked", "not-configured", "empty", "ready", "unavailable"].includes(record.recoveryReadiness) || record.previousHash !== previousHash || !isHash(record.hash) || record.hash !== hashRecord(record) || (record.event === "draft-created" && (prior || Object.keys(record.taskIds).length)) || (record.event === "activated" && (!prior || prior.status !== "draft" || !validTaskIds(record.taskIds, templates, legacy))) || (record.event === "paused" && (!prior || prior.status !== "active" || !same(record.taskIds, prior.taskIds))) || (record.event === "resumed" && (!prior || prior.status !== "paused" || !validTaskIds(record.taskIds, templates, legacy) || !same(record.taskIds, prior.taskIds)))) throw new TypeError("automation profile has an invalid record");
+    if (!record || record.schemaVersion !== AUTOMATION_PROFILE_SCHEMA_VERSION || !isUuid(record.id) || record.sequence !== index + 1 || !isTimestamp(record.recordedAt) || record.controller !== "founder" || !["draft-created", "activated", "paused", "resumed"].includes(record.event) || !isId(record.profileId) || ![OPERATIONS_OBSERVATION_TEMPLATE, CONTINUITY_PROTECTION_TEMPLATE, FOUNDER_CONFIGURED_TEMPLATE].includes(record.template) || (legacy && record.template !== OPERATIONS_OBSERVATION_TEMPLATE) || !validTemplates(templates) || !isRecord(record.taskIds) || !["not-checked", "not-configured", "empty", "ready", "unavailable"].includes(record.recoveryReadiness) || record.previousHash !== previousHash || !isHash(record.hash) || record.hash !== hashRecord(record) || (record.event === "draft-created" && (prior || Object.keys(record.taskIds).length)) || (record.event === "activated" && (!prior || prior.status !== "draft" || !validTaskIds(record.taskIds, templates, legacy))) || (record.event === "paused" && (!prior || prior.status !== "active" || !same(record.taskIds, prior.taskIds))) || (record.event === "resumed" && (!prior || prior.status !== "paused" || !validTaskIds(record.taskIds, templates, legacy) || !same(record.taskIds, prior.taskIds)))) throw new TypeError("automation profile has an invalid record");
     profiles[record.profileId] = { ...record, taskTemplates: templates, status: record.event === "draft-created" ? "draft" : ["activated", "resumed"].includes(record.event) ? "active" : "paused" }; previousHash = record.hash;
   }
 }
@@ -385,4 +405,4 @@ function isHash(value) { return typeof value === "string" && /^[a-f0-9]{64}$/i.t
 function isTimestamp(value) { return typeof value === "string" && !Number.isNaN(Date.parse(value)); }
 function isUuid(value) { return typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value); }
 function hashRecord(record) { const hashable = { schemaVersion: record.schemaVersion, id: record.id, sequence: record.sequence, recordedAt: record.recordedAt, controller: record.controller, event: record.event, profileId: record.profileId, template: record.template, taskIds: record.taskIds, recoveryReadiness: record.recoveryReadiness, previousHash: record.previousHash }; if (record.taskTemplates !== undefined) hashable.taskTemplates = record.taskTemplates; else { hashable.monitoringRecurrenceMinutes = record.monitoringRecurrenceMinutes; hashable.governanceRecurrenceMinutes = record.governanceRecurrenceMinutes; } return createHash("sha256").update(JSON.stringify(hashable)).digest("hex"); }
-module.exports = { AUTOMATION_PROFILE_FILE_NAME, AUTOMATION_PROFILE_ID, AUTOMATION_PROFILE_SCHEMA_VERSION, OPERATIONS_OBSERVATION_TEMPLATE, FOUNDER_CONFIGURED_TEMPLATE, PROFILE_NOTICE, AutomationProfileService };
+module.exports = { AUTOMATION_PROFILE_FILE_NAME, AUTOMATION_PROFILE_ID, AUTOMATION_PROFILE_SCHEMA_VERSION, OPERATIONS_OBSERVATION_TEMPLATE, CONTINUITY_PROTECTION_TEMPLATE, FOUNDER_CONFIGURED_TEMPLATE, PROFILE_NOTICE, AutomationProfileService };

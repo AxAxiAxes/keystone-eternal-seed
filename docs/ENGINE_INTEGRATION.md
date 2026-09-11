@@ -272,11 +272,12 @@ is no direct service-registry write endpoint.
 
 ## Private automation-profile endpoints
 
-`GET /automation/profiles` lists the sole supported internal template and
-private profile state. `POST /automation/profiles` creates a strict
-`operations-observation` draft. `POST /automation/profiles/:profileId/activate`
-and `/pause` require explicit confirmation through the protected operational
-process. The authenticated portal proxies these paths beneath
+`GET /automation/profiles` lists the `operations-observation`,
+`continuity-protection`, and `founder-configured` internal templates and
+private profile state. `POST /automation/profiles` creates a strict profile
+draft. `POST /automation/profiles/:profileId/activate` and `/pause` require
+explicit confirmation through the protected operational process. The
+authenticated portal proxies these paths beneath
 `/api/automation/profiles`; none is public. Profile status appears in system
 readiness, monitoring, checkpoints, recovery bundles, and Support Desk
 status. See `AXI_AUTOMATION_PROFILES.md`.

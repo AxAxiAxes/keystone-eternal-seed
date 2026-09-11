@@ -151,8 +151,9 @@ test("reports secret-safe runtime readiness", async (t) => {
   assert.equal(readiness.serviceRegistry.status, "ready");
   assert.equal(readiness.serviceRegistry.serviceCount, 0);
   assert.equal(readiness.automationProfiles.status, "ready");
-  assert.equal(readiness.automationProfiles.templates.length, 2);
+  assert.equal(readiness.automationProfiles.templates.length, 3);
   assert.equal(readiness.automationProfiles.templates[0].id, "operations-observation");
+  assert.equal(readiness.automationProfiles.templates[1].id, "continuity-protection");
   assert.ok(readiness.continuityRecord.recordCount >= 2);
   assert.equal(readiness.startupContext.id, "axes-memory-bank-startup-v1");
   assert.equal(readiness.automation.lastRunAt, null);

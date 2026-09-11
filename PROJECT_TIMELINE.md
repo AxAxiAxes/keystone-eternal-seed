@@ -11,6 +11,7 @@ from later repository implementation and deployment evidence.
 
 | Date | Status | Milestone | Evidence |
 | --- | --- | --- | --- |
+| 2026-09-11 | Complete | AXI continuity-protection profile added to automate the existing monitoring, governance, checkpoint, and recovery-bundle actions as one protected operating sequence | `apps/axiom-engine/automation-profile-service.js` and `docs/memory/2026-09-11-axi-continuity-protection-profile.md` |
 | 2026-09-11 | Complete | AXI implementation and reporting accountability review recorded two corrected validation defects, one reversed session-configuration breach, and one reporting-control rule without asserting monetary or production value | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` and `docs/memory/2026-09-11-axi-implementation-accountability-review.md` |
 | 2026-09-11 | Complete | AXI recovery bundles now fail closed when no persisted runtime files are present, preventing empty bundles from being reported as ready | `apps/axiom-engine/recovery-backup-service.js` and `docs/memory/2026-09-11-empty-recovery-bundle-integrity.md` |
 | 2026-09-11 | Complete | Private AXI memory storage usage and optional early-warning visibility added without a memory cap or automatic deletion | `apps/axiom-engine/storage-usage-service.js` and `docs/memory/2026-09-11-axi-memory-storage-visibility.md` |

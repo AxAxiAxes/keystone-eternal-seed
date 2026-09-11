@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-11 AXI continuity-protection profile](2026-09-11-axi-continuity-protection-profile.md)
 - [2026-09-11 AXI implementation accountability review](2026-09-11-axi-implementation-accountability-review.md)
 - [2026-09-11 empty recovery-bundle integrity](2026-09-11-empty-recovery-bundle-integrity.md)
 - [2026-09-11 AXI memory storage visibility](2026-09-11-axi-memory-storage-visibility.md)

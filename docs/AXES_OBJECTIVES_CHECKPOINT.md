@@ -94,7 +94,7 @@ readiness-review decision, not further silent automation:
 ## Automation activation profile foundation
 
 The private Automation Profile foundation retains
-`operations-observation` as a starter and gives the founder a protected,
+`operations-observation` and `continuity-protection` as starters and gives the founder a protected,
 strictly validated path to configure schedules from every active AXI role's
 existing allowlisted capabilities. It does not create external business action,
 autonomous roles, production readiness, or scheduler enablement.

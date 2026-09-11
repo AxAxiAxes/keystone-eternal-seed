@@ -107,6 +107,44 @@ test("creates, activates once, and pauses the exact operations-observation sched
   ]);
 });
 
+test("creates the continuity-protection schedule for monitoring, governance, checkpoint, and recovery", async (t) => {
+  const directory = path.join(process.cwd(), `automation-profile-test-${process.pid}-${Date.now()}`);
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const { service, tasks } = fixture(directory);
+
+  const draft = await service.createDraft({
+    profileId: "continuity-protection",
+    template: "continuity-protection",
+    monitoringRecurrenceMinutes: 5,
+    governanceRecurrenceMinutes: 60,
+    checkpointRecurrenceMinutes: 1440,
+    recoveryRecurrenceMinutes: 1440
+  });
+
+  assert.equal(draft.status, "draft");
+  assert.equal((await service.preview({
+    profileId: "continuity-preview",
+    template: "continuity-protection",
+    monitoringRecurrenceMinutes: 5,
+    governanceRecurrenceMinutes: 60,
+    checkpointRecurrenceMinutes: 1440,
+    recoveryRecurrenceMinutes: 1440
+  })).taskPlan.length, 4);
+
+  const active = await service.activate("continuity-protection", { confirmed: true });
+  assert.equal(active.status, "active");
+  assert.deepEqual(tasks.map((task) => ({
+    action: task.action,
+    agentId: task.agentId,
+    recurrenceMinutes: task.recurrenceMinutes
+  })), [
+    { action: "monitoring.snapshot", agentId: "operations-observer", recurrenceMinutes: 5 },
+    { action: "governance.readiness", agentId: "operations-observer", recurrenceMinutes: 60 },
+    { action: "continuity.checkpoint", agentId: "operations-observer", recurrenceMinutes: 1440 },
+    { action: "recovery.backup", agentId: "operations-observer", recurrenceMinutes: 1440 }
+  ]);
+});
+
 test("exposes every active role capability and activates a founder-configured template", async (t) => {
   const directory = path.join(process.cwd(), `automation-profile-test-${process.pid}-${Date.now()}`);
   t.after(() => fs.rm(directory, { recursive: true, force: true }));
@@ -225,7 +263,7 @@ test("rejects unsupported templates, unsafe inputs, missing confirmation, and in
   await assert.rejects(() => service.createDraft({
     profileId: "wrong-template", template: "anything-else",
     monitoringRecurrenceMinutes: 5, governanceRecurrenceMinutes: 60
-  }), /operations-observation or founder-configured/);
+  }), /operations-observation, continuity-protection, or founder-configured/);
   await assert.rejects(() => service.createDraft({
     profileId: "too-fast", template: "operations-observation",
     monitoringRecurrenceMinutes: 4, governanceRecurrenceMinutes: 59

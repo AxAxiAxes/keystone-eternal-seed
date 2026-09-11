@@ -9,13 +9,25 @@ schedule definitions, not autonomous agents or authority grants.
 
 ## Starter and founder-configured templates
 
-`operations-observation` remains the starter profile. Its two fixed task definitions
+`operations-observation` is the starter profile. Its two fixed task definitions
 are explicitly assigned to the existing `operations-observer` role:
 
 | Action | Safe recurrence |
 | --- | --- |
 | `monitoring.snapshot` | 5 minutes through 24 hours |
 | `governance.readiness` | 60 minutes through 7 days |
+
+`continuity-protection` extends that starter profile with private continuity
+checkpoint and recovery-bundle tasks for the same Operations Observer role:
+
+| Action | Safe recurrence |
+| --- | --- |
+| `continuity.checkpoint` | 60 minutes through 7 days |
+| `recovery.backup` | 60 minutes through 7 days |
+
+The profile definition is created and activated through the same founder-
+controlled process as every other profile. It does not create a backup
+destination, enable the scheduler, or activate any task by itself.
 
 `founder-configured` provides an extensible, protected configuration path for
 every active registered AXI software role and its existing allowlisted
@@ -88,5 +100,5 @@ input and returns a payload-free task plan plus the current activation-gate
 result. Preview does not create a profile, task, audit record, scheduler
 setting, or external request.
 
-Profiles cannot deploy, access accounts, send messages, publish, spend, accept
-payments, collect data, or make financial or legal decisions.
+Profiles do not themselves deploy, access accounts, send messages, publish,
+spend, accept payments, collect data, or make financial or legal decisions.

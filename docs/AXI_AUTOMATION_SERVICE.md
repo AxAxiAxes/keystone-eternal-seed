@@ -250,10 +250,10 @@ it does not silently claim completion.
 ## Automation Profiles
 
 `axi-automation-profile-v1` provides founder-controlled private schedules for
-already allowlisted internal operations. The only supported template is
-`operations-observation`, assigning `monitoring.snapshot` and
-`governance.readiness` to `operations-observer` within its documented safe
-recurrence bounds. The `founder-configured` path exposes every active
+already allowlisted internal operations. `operations-observation` assigns
+`monitoring.snapshot` and `governance.readiness` to `operations-observer`.
+`continuity-protection` adds `continuity.checkpoint` and `recovery.backup` to
+that operational sequence. The `founder-configured` path exposes every active
 registered role's existing allowlisted capabilities, compatible assignment,
 recurrence, dependencies, approval requirement, and action-specific structured
 input. Profiles are hash-linked records with a

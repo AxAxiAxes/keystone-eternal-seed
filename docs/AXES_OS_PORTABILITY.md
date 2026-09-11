@@ -18,7 +18,7 @@ boundaries.
 | `startup context` | Versioned non-sensitive AXES memory-bank basis available to AXI at startup | `startup-context.json` |
 | `usage` | Private provider token-usage accounting | `openai-usage.jsonl` |
 | `automation` | Allowlisted tasks, agent registry, runs, and schedules | `automation.json` |
-| `automation profiles` | Founder-controlled internal operations-observation schedules and audit | `automation-profiles.jsonl` |
+| `automation profiles` | Founder-controlled operations-observation, continuity-protection, and configured schedules with audit | `automation-profiles.jsonl` |
 | `business metrics` | Private hash-linked submitted revenue/expense metric journal | `business-metrics.jsonl` |
 | `service registry` | Founder-approved internal service planning/operating metadata journal | `service-registry.jsonl` |
 | `chat` | Private provider request orchestration and contextual retrieval | Uses memory and usage modules; does not own a separate data file |

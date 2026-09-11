@@ -226,8 +226,9 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     );
     assert.equal(profiles.status, 200);
     const profileStatus = await profiles.json();
-    assert.equal(profileStatus.templates.length, 2);
+    assert.equal(profileStatus.templates.length, 3);
     assert.equal(profileStatus.templates[0].id, "operations-observation");
+    assert.equal(profileStatus.templates[1].id, "continuity-protection");
 
     const profilePreview = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/profiles/preview`,
