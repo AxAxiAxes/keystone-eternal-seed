@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-10 KEYSTONE agent-registration review](2026-09-10-keystone-agent-registration-review.md)
 - [2026-09-10 agent operating model](2026-09-10-agent-operating-model.md)
 - [2026-09-10 startup readiness protocol](2026-09-10-startup-readiness-protocol.md)
 - [2026-09-09 production automation and platform plan](2026-09-09-production-automation-and-platform-plan.md)

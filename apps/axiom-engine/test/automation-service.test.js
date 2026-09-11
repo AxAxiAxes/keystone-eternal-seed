@@ -72,8 +72,9 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
 
   const report = await service.getAgentReport("memory-curator");
   assert.equal(report.agent.originCheckpoint, "axi-durable-memory-foundation");
-  assert.equal(report.agent.creator, "AXES project founder direction");
-  assert.match(report.agent.attributionScope, /not legal ownership/);
+  assert.equal(report.agent.creator, "Axel Urartu (AX) · Axes Contracting");
+  assert.equal(report.agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
+  assert.match(report.agent.attributionScope, /not independently verified legal ownership/);
   assert.deepEqual(
     report.timeline.map((event) => event.event).sort(),
     ["origin", "task-created", "task-run"]

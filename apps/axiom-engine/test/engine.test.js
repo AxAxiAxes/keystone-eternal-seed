@@ -84,7 +84,8 @@ test("reports engine health", async (t) => {
     );
     assert.equal(agentReport.status, 200);
     const report = await agentReport.json();
-    assert.equal(report.agent.creator, "AXES project founder direction");
+    assert.equal(report.agent.creator, "Axel Urartu (AX) · Axes Contracting");
+    assert.equal(report.agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
     assert.equal(report.agent.originCheckpoint, "axi-operations-observer");
     assert.deepEqual(report.timeline.map((event) => event.event), ["origin"]);
   });

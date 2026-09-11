@@ -17,7 +17,13 @@ const TASK_STATUSES = new Set([
   "cancelled"
 ]);
 const AGENT_ATTRIBUTION_SCOPE =
-  "Project attribution and stewardship only; not legal ownership, personhood, agency, or independent authority.";
+  "KEYSTONE protocol registration of origin, lineage, creator stewardship, and bounded duties; not independently verified legal ownership, personhood, agency, or authority outside the system.";
+const KEYSTONE_REGISTRATION = Object.freeze({
+  registry: "KEYSTONE origin and lineage registry",
+  sourceRecord: "KEYSTONE-ORIGIN-000001",
+  creatorAuthority: "Axel Urartu (AX) · Axes Contracting",
+  scope: AGENT_ATTRIBUTION_SCOPE
+});
 
 class AutomationService {
   constructor({
@@ -92,7 +98,8 @@ class AutomationService {
         creator: normalizeOptionalString(creator),
         purpose: normalizeOptionalString(purpose),
         duties: duties ? [...new Set(duties.map((duty) => duty.trim()))] : [],
-        attributionScope: AGENT_ATTRIBUTION_SCOPE
+        attributionScope: AGENT_ATTRIBUTION_SCOPE,
+        keystoneRegistration: KEYSTONE_REGISTRATION
       };
       if (state.agents.some((existingAgent) => existingAgent.id === agent.id)) {
         throw new RangeError(`agent already exists: ${agent.id}`);
@@ -151,7 +158,8 @@ class AutomationService {
           creator: agent.creator || null,
           purpose: agent.purpose || null,
           duties: agent.duties || [],
-          attributionScope: agent.attributionScope || AGENT_ATTRIBUTION_SCOPE
+          attributionScope: agent.attributionScope || AGENT_ATTRIBUTION_SCOPE,
+          keystoneRegistration: agent.keystoneRegistration || KEYSTONE_REGISTRATION
         },
         timeline
       };
@@ -513,13 +521,14 @@ function defaultAgents(now) {
       enabled: true,
       registeredAt,
       originCheckpoint: "axi-durable-memory-foundation",
-      creator: "AXES project founder direction",
+      creator: KEYSTONE_REGISTRATION.creatorAuthority,
       purpose: "Maintain factual, non-sensitive AXI continuity records.",
       duties: [
         "Prepare approved memory entries.",
         "Preserve concise operational continuity."
       ],
-      attributionScope: AGENT_ATTRIBUTION_SCOPE
+      attributionScope: AGENT_ATTRIBUTION_SCOPE,
+      keystoneRegistration: KEYSTONE_REGISTRATION
     },
     {
       id: "automation-executor",
@@ -528,13 +537,14 @@ function defaultAgents(now) {
       enabled: true,
       registeredAt,
       originCheckpoint: "axi-bounded-automation-foundation",
-      creator: "AXES project founder direction",
+      creator: KEYSTONE_REGISTRATION.creatorAuthority,
       purpose: "Run safe workflow checks within the explicit action allowlist.",
       duties: [
         "Execute approved no-op checks.",
         "Record bounded task outcomes."
       ],
-      attributionScope: AGENT_ATTRIBUTION_SCOPE
+      attributionScope: AGENT_ATTRIBUTION_SCOPE,
+      keystoneRegistration: KEYSTONE_REGISTRATION
     },
     {
       id: "automation-auditor",
@@ -543,13 +553,14 @@ function defaultAgents(now) {
       enabled: true,
       registeredAt,
       originCheckpoint: "axi-bounded-automation-foundation",
-      creator: "AXES project founder direction",
+      creator: KEYSTONE_REGISTRATION.creatorAuthority,
       purpose: "Provide an auditable fallback for approved bounded tasks.",
       duties: [
         "Review task outcomes.",
         "Record approved audit continuity."
       ],
-      attributionScope: AGENT_ATTRIBUTION_SCOPE
+      attributionScope: AGENT_ATTRIBUTION_SCOPE,
+      keystoneRegistration: KEYSTONE_REGISTRATION
     },
     {
       id: "operations-observer",
@@ -558,13 +569,14 @@ function defaultAgents(now) {
       enabled: true,
       registeredAt,
       originCheckpoint: "axi-operations-observer",
-      creator: "AXES project founder direction",
+      creator: KEYSTONE_REGISTRATION.creatorAuthority,
       purpose: "Capture private operational monitoring evidence.",
       duties: [
         "Run approved monitoring snapshots.",
         "Surface operational attention signals."
       ],
-      attributionScope: AGENT_ATTRIBUTION_SCOPE
+      attributionScope: AGENT_ATTRIBUTION_SCOPE,
+      keystoneRegistration: KEYSTONE_REGISTRATION
     }
   ];
 }
@@ -581,7 +593,8 @@ function seedMissingDefaultAgents(state, now) {
       "creator",
       "purpose",
       "duties",
-      "attributionScope"
+      "attributionScope",
+      "keystoneRegistration"
     ]) {
       if (existingAgent[field] === undefined) {
         existingAgent[field] = defaultAgent[field];
@@ -693,6 +706,7 @@ async function replaceFile(source, destination) {
 module.exports = {
   AutomationService,
   AGENT_ATTRIBUTION_SCOPE,
+  KEYSTONE_REGISTRATION,
   TASK_ACTIONS,
   TASK_STATUSES,
   summarizeAutomationState,

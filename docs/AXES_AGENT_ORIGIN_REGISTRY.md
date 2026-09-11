@@ -10,20 +10,26 @@ This registry links the currently implemented AXI agent records to their
 project origin checkpoints, creator purpose, duties, and attributable task
 templates. It supports a running, private timeline for each agent.
 
-These records establish project attribution and stewardship only. They do not
-create legal ownership, personhood, employment, agency, independent authority,
-or rights over people, data, assets, accounts, or decisions. The AXES project
-founder direction remains subject to applicable law, consent, and accountable
-human approval.
+These records implement the KEYSTONE protocol's internal registration of
+agent origin, lineage, creator stewardship, purpose, and bounded duties. They
+do not independently prove legal ownership, personhood, employment, agency,
+independent authority, or rights over people, data, assets, accounts, or
+decisions. Any external legal effect remains subject to applicable law, valid
+records, and qualified professional review.
+
+**KEYSTONE registration authority:** `KEYSTONE-ORIGIN-000001` records Axel
+Urartu (AX) · Axes Contracting as the creator authority for the KEYSTONE
+framework. Every current AXI agent inherits that internal creator-attribution
+record and identifies its own operational origin checkpoint below.
 
 ## Implemented agent origins
 
 | Agent ID | Origin checkpoint | Creator attribution | Purpose | Core duties |
 | --- | --- | --- | --- | --- |
-| `memory-curator` | `axi-durable-memory-foundation` | AXES project founder direction | Maintain factual, non-sensitive AXI continuity records. | Prepare approved memory entries; preserve concise operational continuity. |
-| `automation-executor` | `axi-bounded-automation-foundation` | AXES project founder direction | Run safe workflow checks within the explicit action allowlist. | Execute approved no-op checks; record bounded task outcomes. |
-| `automation-auditor` | `axi-bounded-automation-foundation` | AXES project founder direction | Provide an auditable fallback for approved bounded tasks. | Review task outcomes; record approved audit continuity. |
-| `operations-observer` | `axi-operations-observer` | AXES project founder direction | Capture private operational monitoring evidence. | Run approved monitoring snapshots; surface operational attention signals. |
+| `memory-curator` | `axi-durable-memory-foundation` | Axel Urartu (AX) · Axes Contracting | Maintain factual, non-sensitive AXI continuity records. | Prepare approved memory entries; preserve concise operational continuity. |
+| `automation-executor` | `axi-bounded-automation-foundation` | Axel Urartu (AX) · Axes Contracting | Run safe workflow checks within the explicit action allowlist. | Execute approved no-op checks; record bounded task outcomes. |
+| `automation-auditor` | `axi-bounded-automation-foundation` | Axel Urartu (AX) · Axes Contracting | Provide an auditable fallback for approved bounded tasks. | Review task outcomes; record approved audit continuity. |
+| `operations-observer` | `axi-operations-observer` | Axel Urartu (AX) · Axes Contracting | Capture private operational monitoring evidence. | Run approved monitoring snapshots; surface operational attention signals. |
 
 The origin checkpoint identifies the implementation milestone that established
 the role. It must not be used to imply that an agent owns that milestone or

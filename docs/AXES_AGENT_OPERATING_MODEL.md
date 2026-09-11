@@ -64,6 +64,9 @@ security, privacy, and operational review.
 The currently implemented agent origins, creator-purpose/duty records, and
 private per-agent task/run reports are defined in
 `AXES_AGENT_ORIGIN_REGISTRY.md`.
+The registry implements the KEYSTONE protocol's internal origin and lineage
+record; it does not independently determine legal ownership or authority
+outside the system.
 
 ## Role catalog
 
