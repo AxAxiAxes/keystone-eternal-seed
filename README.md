@@ -5,6 +5,8 @@ The canonical repository for the AXIOM engine, AXIOM deployment materials, AXI.C
 Track completed milestones and next checkpoints in [PROJECT_TIMELINE.md](PROJECT_TIMELINE.md).
 Before resuming work after an agent or operator startup, reset, or handoff,
 follow the [project startup and reset protocol](AGENTS.md).
+Repository-controlled automated validation is defined in
+[AXI_CONTINUOUS_VALIDATION.md](docs/AXI_CONTINUOUS_VALIDATION.md).
 
 The consolidated, public-safe business plan for AXES Contracting, Chichetki,
 XIIOM, the creative studio, and future ventures is in
