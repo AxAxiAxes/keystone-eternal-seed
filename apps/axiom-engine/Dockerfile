@@ -8,6 +8,7 @@ RUN npm ci --omit=dev
 COPY index.js ./
 COPY chat-service.js ./
 COPY memory-store.js ./
+COPY storage-usage-service.js ./
 COPY usage-store.js ./
 COPY automation-service.js ./
 COPY checkpoint-service.js ./
