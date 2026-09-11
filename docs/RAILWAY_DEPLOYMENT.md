@@ -9,6 +9,20 @@ Railway hosts the AXIOM runtime because SiteGround GrowBig shared hosting cannot
 
 Never create a public domain for `axiom-engine`. Its memory endpoints and OpenAI credential must remain private.
 
+## Legacy root Dockerfile and railway.toml
+
+The repository root also contains a `Dockerfile` and `railway.toml`. These
+predate the documented per-service setup below (Dockerfile path explicitly
+set to `apps/axiom-freedom/Dockerfile` in the Railway dashboard) and were
+found out of sync with the real portal app during a full repository review —
+missing several pages added after the initial Railway configuration commit.
+They have been re-synced with `apps/axiom-freedom/Dockerfile` as a safety net
+in case any Railway service still resolves the Dockerfile at the repository
+root by default, but no current documentation or CI job depends on them. An
+operator with Railway dashboard access should confirm whether any service
+still uses these root-level files; if not, remove both to eliminate the
+duplicate-maintenance risk.
+
 ## Current deployment state
 
 As of September 9, 2026:

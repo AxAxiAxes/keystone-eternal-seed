@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-11 Portal route and legacy-Dockerfile review](2026-09-11-portal-route-and-legacy-dockerfile-review.md)
 - [2026-09-11 XIIOM public interaction check](2026-09-11-xiiom-public-interaction-check.md)
 - [2026-09-11 AXI execution visibility](2026-09-11-axi-execution-visibility.md)
 - [2026-09-11 AXI continuity-protection profile](2026-09-11-axi-continuity-protection-profile.md)

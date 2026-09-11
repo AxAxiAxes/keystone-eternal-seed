@@ -112,6 +112,25 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.match(originContinuityPage, /Origin and Continuity/);
     assert.match(originContinuityPage, /Eteriti/);
 
+    const originContinuityWithTrailingSlash = await fetch(
+      `http://127.0.0.1:${webPort}/origin-continuity/`
+    );
+    assert.equal(originContinuityWithTrailingSlash.status, 200);
+
+    const axiomChatPage = await fetch(`http://127.0.0.1:${webPort}/axiom`);
+    assert.equal(axiomChatPage.status, 200);
+
+    const axiomChatPageWithTrailingSlash = await fetch(
+      `http://127.0.0.1:${webPort}/axiom/`
+    );
+    assert.equal(axiomChatPageWithTrailingSlash.status, 200);
+
+    for (const embedPath of ["/embed", "/embed/", "/axes/"]) {
+      const embed = await fetch(`http://127.0.0.1:${webPort}${embedPath}`);
+      assert.equal(embed.status, 200);
+      assert.match(await embed.text(), /not yet available/);
+    }
+
     const axesPortal = await request(webPort, { Host: "axescontracting.com" });
     assert.equal(axesPortal.statusCode, 200);
     assert.match(axesPortal.body, /The AXES Control Center/);
@@ -129,6 +148,11 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     const materials = await fetch(`http://127.0.0.1:${webPort}/materials`);
     assert.equal(materials.status, 200);
     assert.match(await materials.text(), /Materials Discovery/);
+
+    const materialsWithTrailingSlash = await fetch(
+      `http://127.0.0.1:${webPort}/materials/`
+    );
+    assert.equal(materialsWithTrailingSlash.status, 200);
 
     const unauthorizedConsole = await fetch(`http://127.0.0.1:${webPort}/automation`);
     assert.equal(unauthorizedConsole.status, 401);
@@ -149,6 +173,12 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.match(consoleMarkup, /Founder-controlled private operational process/);
     assert.match(consoleMarkup, /Do not enter account, invoice, customer\/vendor, payment, tax, financial-account, credential, or personal data/);
 
+    const consolePageWithTrailingSlash = await fetch(
+      `http://127.0.0.1:${webPort}/automation/`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(consolePageWithTrailingSlash.status, 200);
+
     const unauthorizedCommandCenter = await fetch(
       `http://127.0.0.1:${webPort}/command-center`
     );
@@ -162,6 +192,12 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.match(commandCenterMarkup, /AXES Command Center/);
     assert.match(commandCenterMarkup, /Live continuity clock and checkpoints/);
     assert.match(commandCenterMarkup, /api\/command-center\/checkpoints/);
+
+    const commandCenterWithTrailingSlash = await fetch(
+      `http://127.0.0.1:${webPort}/command-center/`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(commandCenterWithTrailingSlash.status, 200);
 
     const unauthorizedCheckpoints = await fetch(
       `http://127.0.0.1:${webPort}/api/command-center/checkpoints`

@@ -215,24 +215,24 @@ const server = http.createServer(async (req, res) => {
           serveFile(res, path.join(__dirname, page), 'text/html; charset=utf-8');
           return;
     }
-    if (pathname === '/axiom') {
+    if (pathname === '/axiom' || pathname === '/axiom/') {
           serveFile(res, path.join(__dirname, 'axiom_web_interface.html'), 'text/html; charset=utf-8');
           return;
     }
-    if (pathname === '/origin-continuity') {
+    if (pathname === '/origin-continuity' || pathname === '/origin-continuity/') {
           serveFile(res, path.join(__dirname, 'origin-continuity.html'), 'text/html; charset=utf-8');
           return;
     }
-    if (pathname === '/materials') {
+    if (pathname === '/materials' || pathname === '/materials/') {
           serveFile(res, path.join(__dirname, 'materials.html'), 'text/html; charset=utf-8');
           return;
     }
-    if (pathname === '/automation') {
+    if (pathname === '/automation' || pathname === '/automation/') {
           if (!requireAdmin(req, res)) return;
           serveFile(res, path.join(__dirname, 'automation.html'), 'text/html; charset=utf-8');
           return;
     }
-    if (pathname === '/command-center') {
+    if (pathname === '/command-center' || pathname === '/command-center/') {
           if (!requireAdmin(req, res)) return;
           serveFile(res, path.join(__dirname, 'command-center.html'), 'text/html; charset=utf-8');
           return;
@@ -250,8 +250,12 @@ const server = http.createServer(async (req, res) => {
           serveDocument(res, pathname);
           return;
     }
-    if (pathname === '/embed' || pathname === '/axes') {
-          serveFile(res, path.join(__dirname, 'axes_embed.html'), 'text/html; charset=utf-8');
+    if (pathname === '/embed' || pathname === '/embed/' || pathname === '/axes' || pathname === '/axes/') {
+          // No embed page has ever been built (axes_embed.html never existed). Return an
+          // honest "not yet available" response instead of a crashed/missing-file 404 so the
+          // widget.js chat bubble iframe fails clearly rather than silently.
+          res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+          res.end('<!doctype html><html><body style="font-family:sans-serif;text-align:center;padding:40px;color:#333"><p>This embedded chat widget is not yet available.</p></body></html>');
           return;
     }
     if (pathname === '/widget.js') {
