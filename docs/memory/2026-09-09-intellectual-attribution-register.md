@@ -274,3 +274,27 @@ home, and creator-origin visual work.
 publish, reproduce, train on, or present them as public AXES assets without
 specific founder approval for the proposed use. This entry records project
 provenance and is not a legal ownership determination.
+
+### IA-2026-09-10-14 — AXI, Copilot, and Meta source-design packet
+
+**Insight:** The founder identifies a private packet of 23 related
+founder-directed, AI-assisted source designs and historical screenshots. The
+packet includes Eternal Seed, NUR/UR pomegranate, KEYSTONE Dome, AXES
+architecture, AU/UR mark, Temple of Love, origin-coordinate, and Lyre of Light
+visual direction. The Lyre of Light is a source design for the Chichetki
+musical-instrument and Harmonics sound language.
+
+**Attribution:** The founder reports being the sole human creator/director for
+this packet. AXI, Copilot, and Meta are recorded as reported systems or tools
+in the creation history; no other human contributor is reported.
+**Source:** Private archive
+`private-archive/copilot-library/2026-09-10-axi-copilot-meta-source-designs/`,
+23 files. The SHA-256 manifest has fingerprint
+`F289C33BADEA005C199FCF60360D5A47E87957A040440F3FFA59B2F912C42245`.
+**Implementation interpretation:** Private visual and sound-direction source
+for Chichetki, Harmonics, Athanor, AU, NUR/UR, AXES, and KEYSTONE. Historical
+screenshots preserve claimed context and system history; they do not by
+themselves establish legal status, authorship, or provider rights.
+**Credit note:** The packet remains private. Do not publish, reproduce, train
+on, or present these files as public AXES assets without specific founder
+approval and a documented rights review for the intended use.
