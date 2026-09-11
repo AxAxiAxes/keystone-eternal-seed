@@ -9,6 +9,7 @@ const { CheckpointService } = require("./checkpoint-service");
 const { MonitoringService } = require("./monitoring-service");
 const {
   AutomationService,
+  evaluateGovernanceReadiness,
   summarizeAutomationState,
   startAutomationScheduler
 } = require("./automation-service");
@@ -87,7 +88,8 @@ app.get("/system/readiness", async (req, res, next) => {
       },
       monitoring: {
         status: monitoring.enabled ? "enabled" : "disabled"
-      }
+      },
+      governance: await automationService.getGovernanceReadiness()
     });
   } catch (error) {
     console.error("AXIOM runtime readiness check failed:", error.message);
@@ -109,16 +111,20 @@ app.get("/usage", async (req, res, next) => {
 
 async function captureMonitoringSnapshot(automationState) {
   await memoryStore.list("decision", 1);
-  const [automation, usage] = await Promise.all([
+  const [automation, usage, governance] = await Promise.all([
     automationState
       ? summarizeAutomationState(automationState)
       : automationService.status(),
-    usageStore.summary()
+    usageStore.summary(),
+    automationState
+      ? evaluateGovernanceReadiness(automationState)
+      : automationService.getGovernanceReadiness()
   ]);
   return monitoringService.record({
     memoryAvailable: true,
     scheduler: { ...scheduler },
     automation,
+    governance,
     usage
   });
 }
@@ -168,6 +174,14 @@ app.post("/system/checkpoints", async (req, res, next) => {
 app.get("/automation/status", async (req, res, next) => {
   try {
     res.json(await automationService.status());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/automation/readiness", async (req, res, next) => {
+  try {
+    res.json(await automationService.getGovernanceReadiness());
   } catch (error) {
     next(error);
   }

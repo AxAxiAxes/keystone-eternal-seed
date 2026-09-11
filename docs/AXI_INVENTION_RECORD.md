@@ -38,7 +38,7 @@ invention areas:
 | Creator accountability | Required creator authority, ownership-and-accountability claim, task assignment, review status, and retained history |
 | Protected execution | Explicit allowlist, capability matching, approval holds, retry bounds, and fail-closed suspension |
 | Evidence preservation | Private memory records, task/run audit trail, monitoring snapshots, checksummed portable checkpoints, and versioned repository history |
-| Governance | Human-reviewed decisions, correction paths, privacy limits, and prohibited consequential automation |
+| Governance | Human-reviewed decisions, correction paths, privacy limits, prohibited consequential automation, and private Genesis/governance-readiness signals |
 
 This record intentionally leaves room for additional embodiments,
 improvements, continuations, technical prototypes, and future implementation

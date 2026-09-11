@@ -106,6 +106,9 @@ function getAttention(snapshot) {
   if (snapshot.automation.failedTasks > 0) attention.push("failed-tasks");
   if (snapshot.scheduler.enabled && snapshot.scheduler.lastError) attention.push("scheduler-error");
   if (snapshot.automation.pendingTasks > 20) attention.push("queue-backlog");
+  if (snapshot.governance && snapshot.governance.status !== "ready") {
+    attention.push("governance-readiness");
+  }
   return attention;
 }
 

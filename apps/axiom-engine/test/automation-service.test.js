@@ -3,7 +3,10 @@ const fs = require("node:fs/promises");
 const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
-const { AutomationService } = require("../automation-service");
+const {
+  AutomationService,
+  evaluateGovernanceReadiness
+} = require("../automation-service");
 const { MemoryStore } = require("../memory-store");
 
 function createMemoryStore() {
@@ -145,6 +148,34 @@ test("upgrades legacy agent registrations with the ownership claim", async (t) =
   assert.match(report.agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
   assert.equal(report.agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
   assert.equal(report.agent.keystoneRegistration.genesisCheckpoint.id, "axi-genesis-creator-ownership");
+});
+
+test("fails closed when a custom agent loses its canonical Genesis source", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AutomationService({ directory, memoryStore: createMemoryStore() });
+  const agent = await service.registerAgent({
+    id: "source-integrity-test",
+    name: "Source Integrity Test",
+    capabilities: ["automation.noop"]
+  });
+  const statePath = path.join(directory, "automation.json");
+  const state = JSON.parse(await fs.readFile(statePath, "utf8"));
+  state.agents.find((entry) => entry.id === agent.id).keystoneRegistration.sourceRecord =
+    "KEYSTONE-ORIGIN-UNRECONCILED";
+  await fs.writeFile(statePath, JSON.stringify(state), "utf8");
+
+  await assert.rejects(
+    () => service.getAgent(agent.id),
+    (error) => error instanceof RangeError &&
+      error.message === "agent is not registered with creator ownership and accountability"
+  );
+  const readiness = await service.getGovernanceReadiness();
+  assert.equal(readiness.status, "attention");
+  assert.deepEqual(readiness.issues, [{
+    code: "unregistered-agent",
+    agentId: agent.id
+  }]);
 });
 
 test("reconciles default agents to the Genesis authority after a reset", async (t) => {
@@ -360,6 +391,53 @@ test("rejects task actions outside the allowlist", async (t) => {
     (error) => error instanceof RangeError &&
       error.message === "agent does not support task action: operations-observer"
   );
+});
+
+test("reports Genesis and governance readiness without making an ownership determination", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AutomationService({
+    directory,
+    memoryStore: createMemoryStore()
+  });
+
+  assert.deepEqual(await service.getGovernanceReadiness(), {
+    status: "ready",
+    genesisCheckpoint: {
+      id: "axi-genesis-creator-ownership",
+      sourceRecord: "KEYSTONE-ORIGIN-000001",
+      creatorAuthority: "Axel Urartu (AX) · Axes Contracting"
+    },
+    enabledAgents: 4,
+    activeAgents: 4,
+    issues: []
+  });
+
+  const task = await service.createTask({
+    title: "Assess private Genesis readiness",
+    action: "governance.readiness",
+    agentId: "operations-observer",
+    originCheckpoint: "axi-governance-readiness"
+  });
+  const [outcome] = await service.processDueTasks();
+  assert.equal(outcome.taskId, task.id);
+  assert.equal(outcome.status, "completed");
+  assert.deepEqual((await service.listRuns())[0].result, evaluateGovernanceReadiness({
+    agents: await service.listAgents(),
+    tasks: await service.listTasks(),
+    runs: await service.listRuns()
+  }));
+
+  await service.reviewAgentAccountability("operations-observer", {
+    status: "suspended",
+    reason: "Hold for readiness review."
+  });
+  const readiness = await service.getGovernanceReadiness();
+  assert.equal(readiness.status, "attention");
+  assert.deepEqual(readiness.issues, [{
+    code: "suspended-agent",
+    agentId: "operations-observer"
+  }]);
 });
 
 test("records a monitoring snapshot through the dedicated observer", async (t) => {

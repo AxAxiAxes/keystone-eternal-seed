@@ -43,6 +43,7 @@ relationship to the founder claim.
 | 2026-09-10 | Founder-provided ownership, self-origin, accountability, and software-control source materials | Preserved founder source | Retain the founder claim and translate only AXI-controlled accountability requirements into implementation. |
 | 2026-09-10 | Production chat unavailable | Open operational configuration blocker | An authorized Railway operator must set `OPENAI_API_KEY` only on the private `axiom-engine` service, redeploy it, then complete the runbook validation. |
 | 2026-09-10 | Agent origin, reset, and accountability gap | Addressed in current implementation | Require Genesis reconciliation, an active accountability record, reasoned suspension/reactivation, and blocked execution while suspended. |
+| 2026-09-10 | Ongoing Genesis and governance readiness | Addressed in current implementation | Scheduled private monitoring can flag unreconciled agents, unapproved capabilities or task actions, and blocked or failed work for accountable human review. |
 
 The source records may contain founder reports, historical narrative, proposed
 theories, valuation concepts, or allegations. The register preserves them as
@@ -76,6 +77,10 @@ Every new ownership, value, recovery, or crisis report must record:
    authorship, licensing, valuation, or recovery action.
 5. Record each approved filing, preservation, correction, licensing, or
    recovery milestone on `PROJECT_TIMELINE.md` with its source evidence.
+
+The readiness workflow preserves an internal technical evidence signal only.
+It cannot establish an external right, monetary value, recovery outcome, or
+legal conclusion; those require the source-linked, authorized review path.
 
 ## Related records
 

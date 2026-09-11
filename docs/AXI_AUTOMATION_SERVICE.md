@@ -14,6 +14,7 @@ controller. It accepts only the versioned action allowlist:
 | `memory.record` | `memory.record` | Writes a validated entry to a supported private memory layer. |
 | `automation.noop` | `automation.noop` | Runs a testable workflow placeholder without external side effects. |
 | `monitoring.snapshot` | `monitoring.snapshot` | Captures a private operational snapshot without contacting an external system. |
+| `governance.readiness` | `governance.readiness` | Assesses Genesis registration, active accountability, approved capabilities, and task attention states without making legal or external determinations. |
 
 The service rejects any unrecognized action. New external integrations must be
 implemented, reviewed, tested, and added to the allowlist before they can be
@@ -30,7 +31,7 @@ preserving existing agent records.
 | Memory Curator | `memory.record` | Maintains validated memory entries. |
 | Automation Executor | `automation.noop` | Runs bounded workflow checks. |
 | Automation Auditor | Both capabilities | Provides a general audited fallback. |
-| Operations Observer | `monitoring.snapshot` | Captures private health, queue, scheduler, and usage signals. |
+| Operations Observer | `monitoring.snapshot`, `governance.readiness` | Captures private health, queue, scheduler, usage, and Genesis/governance-readiness signals. |
 
 Tasks can specify an eligible `agentId`; otherwise the first enabled agent with
 the matching capability is assigned. Tasks have a priority from 1 (backlog) to
@@ -85,6 +86,7 @@ by the public portal.
 | Method | Path | Purpose |
 | --- | --- | --- |
 | `GET` | `/automation/status` | Counts agents, task states, and recorded runs. |
+| `GET` | `/automation/readiness` | Returns the secret-safe Genesis and governance readiness result. |
 | `GET` | `/automation/agents` | Lists registered agents. |
 | `POST` | `/automation/agents` | Registers an agent with a name and capability list. |
 | `GET` | `/automation/agents/:agentId/report` | Returns the agent's project-attribution record and private running timeline. |
@@ -117,6 +119,14 @@ successful execution. Without recurrence, a successful task becomes
 `completed`. Use `runAt` with an ISO-8601 timestamp to schedule a task for a
 specific time; omit it to make the task due immediately.
 
+Queue a recurring `governance.readiness` task only after the authorized
+operator has reviewed the registered-agent reports. The Operations Observer
+then records the state of the canonical Genesis checkpoint, active
+accountability, approved task capabilities, and blocked or failed tasks. A
+readiness result is an internal operational signal: it preserves and checks
+the AXI creator-claim record but does not make an external ownership,
+inventorship, valuation, legal-rights, or recovery determination.
+
 ## Opt-in scheduler
 
 Manual processing through `POST /automation/process` is always available from
@@ -147,11 +157,12 @@ AXIOM_MONITORING_POLL_INTERVAL_MS=60000
 ```
 
 Snapshots include memory availability, scheduler heartbeat and error state,
-task queue and failure counts, enabled agents, recorded runs, and private
-provider token totals. A history entry is retained only when a monitored state
-meaningfully changes or enters attention state, preventing repetitive records.
-Attention states include unavailable memory, failed tasks, scheduler errors,
-and a queue backlog above 20 tasks.
+task queue and failure counts, enabled agents, recorded runs, Genesis and
+governance readiness, and private provider token totals. A history entry is
+retained only when a monitored state meaningfully changes or enters attention
+state, preventing repetitive records. Attention states include unavailable
+memory, failed tasks, scheduler errors, a queue backlog above 20 tasks, and a
+Genesis/governance readiness issue.
 
 The protected console can capture a snapshot and display current signals and
 reevaluation history. The private API also provides `GET /monitoring/status`,

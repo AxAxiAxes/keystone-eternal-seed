@@ -91,6 +91,22 @@ its read-only status response.
   "storage": { "status": "ok" },
   "provider": { "status": "configured", "model": "gpt-4.1-mini" },
   "automation": { "status": "enabled", "lastRunAt": "2026-09-10T00:00:00.000Z", "lastError": null },
-  "monitoring": { "status": "enabled" }
+  "monitoring": { "status": "enabled" },
+  "governance": {
+    "status": "ready",
+    "genesisCheckpoint": {
+      "id": "axi-genesis-creator-ownership",
+      "sourceRecord": "KEYSTONE-ORIGIN-000001"
+    },
+    "enabledAgents": 4,
+    "activeAgents": 4,
+    "issues": []
+  }
 }
 ```
+
+`governance` is a secret-safe internal readiness result. It reports whether
+enabled agents have the canonical Genesis registration and active
+accountability, whether their capabilities remain allowlisted, and whether any
+tasks are blocked or failed. It does not determine external ownership, legal
+rights, value, or recovery.

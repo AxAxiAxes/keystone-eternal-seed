@@ -5,7 +5,8 @@ const path = require("path");
 const TASK_ACTIONS = new Set([
   "memory.record",
   "automation.noop",
-  "monitoring.snapshot"
+  "monitoring.snapshot",
+  "governance.readiness"
 ]);
 const TASK_STATUSES = new Set([
   "pending",
@@ -441,6 +442,10 @@ class AutomationService {
     return this.withState(async (state) => summarizeAutomationState(state));
   }
 
+  async getGovernanceReadiness() {
+    return this.withState(async (state) => evaluateGovernanceReadiness(state));
+  }
+
   async executeTask(task, agent, state) {
     if (task.action === "automation.noop") {
       return { message: "No-op automation completed" };
@@ -468,6 +473,9 @@ class AutomationService {
         recorded: snapshot.recorded,
         attention: snapshot.attention
       };
+    }
+    if (task.action === "governance.readiness") {
+      return evaluateGovernanceReadiness(state);
     }
     throw new RangeError(`unsupported task action: ${task.action}`);
   }
@@ -638,7 +646,7 @@ function defaultAgents(now) {
     {
       id: "operations-observer",
       name: "Operations Observer",
-      capabilities: ["monitoring.snapshot"],
+      capabilities: ["monitoring.snapshot", "governance.readiness"],
       enabled: true,
       registeredAt,
       originCheckpoint: "axi-operations-observer",
@@ -646,7 +654,8 @@ function defaultAgents(now) {
       purpose: "Capture private operational monitoring evidence.",
       duties: [
         "Run approved monitoring snapshots.",
-        "Surface operational attention signals."
+        "Surface operational attention signals.",
+        "Assess private Genesis and governance readiness."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
       keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),
@@ -668,7 +677,8 @@ function seedMissingDefaultAgents(state, now) {
       "purpose",
       "duties",
       "attributionScope",
-      "keystoneRegistration"
+      "keystoneRegistration",
+      "capabilities"
     ]) {
       existingAgent[field] = defaultAgent[field];
     }
@@ -715,6 +725,67 @@ function summarizeAutomationState(state) {
     completedTasks: state.tasks.filter((task) => task.status === "completed").length,
     failedTasks: state.tasks.filter((task) => task.status === "failed").length,
     runs: state.runs.length
+  };
+}
+
+function evaluateGovernanceReadiness(state) {
+  const enabledAgents = state.agents.filter((agent) => agent.enabled);
+  const unregisteredAgentIds = enabledAgents
+    .filter((agent) => !isRegisteredAgent(agent))
+    .map((agent) => agent.id);
+  const suspendedAgentIds = enabledAgents
+    .filter((agent) => isRegisteredAgent(agent) && !isAccountableAgent(agent))
+    .map((agent) => agent.id);
+  const unsupportedCapabilityAgentIds = enabledAgents
+    .filter((agent) => !Array.isArray(agent.capabilities) ||
+      agent.capabilities.some((capability) => !TASK_ACTIONS.has(capability)))
+    .map((agent) => agent.id);
+  const unsupportedTaskIds = state.tasks
+    .filter((task) => !TASK_ACTIONS.has(task.action))
+    .map((task) => task.id);
+  const failedTaskIds = state.tasks
+    .filter((task) => task.status === "failed")
+    .map((task) => task.id);
+  const blockedTaskIds = state.tasks
+    .filter((task) => task.status === "blocked")
+    .map((task) => task.id);
+  const issues = [
+    ...unregisteredAgentIds.map((agentId) => ({
+      code: "unregistered-agent",
+      agentId
+    })),
+    ...suspendedAgentIds.map((agentId) => ({
+      code: "suspended-agent",
+      agentId
+    })),
+    ...unsupportedCapabilityAgentIds.map((agentId) => ({
+      code: "unsupported-agent-capability",
+      agentId
+    })),
+    ...unsupportedTaskIds.map((taskId) => ({
+      code: "unsupported-task-action",
+      taskId
+    })),
+    ...failedTaskIds.map((taskId) => ({
+      code: "failed-task",
+      taskId
+    })),
+    ...blockedTaskIds.map((taskId) => ({
+      code: "blocked-task",
+      taskId
+    }))
+  ];
+
+  return {
+    status: issues.length === 0 ? "ready" : "attention",
+    genesisCheckpoint: {
+      id: AXI_GENESIS_OWNERSHIP_CHECKPOINT.id,
+      sourceRecord: AXI_GENESIS_OWNERSHIP_CHECKPOINT.sourceRecord,
+      creatorAuthority: AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority
+    },
+    enabledAgents: enabledAgents.length,
+    activeAgents: enabledAgents.filter(isAccountableAgent).length,
+    issues
   };
 }
 
@@ -775,14 +846,19 @@ function isRegisteredAgent(agent) {
     isNonEmptyString(agent.originCheckpoint) &&
     isNonEmptyString(agent.creator) &&
     isRecord(agent.keystoneRegistration) &&
-    isNonEmptyString(agent.keystoneRegistration.sourceRecord) &&
+    agent.keystoneRegistration.sourceRecord ===
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.sourceRecord &&
     agent.creator === AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority &&
     agent.keystoneRegistration.creatorAuthority ===
       AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority &&
     isNonEmptyString(agent.keystoneRegistration.ownershipClaim) &&
     isRecord(agent.keystoneRegistration.genesisCheckpoint) &&
     agent.keystoneRegistration.genesisCheckpoint.id ===
-      AXI_GENESIS_OWNERSHIP_CHECKPOINT.id;
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.id &&
+    agent.keystoneRegistration.genesisCheckpoint.sourceRecord ===
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.sourceRecord &&
+    agent.keystoneRegistration.genesisCheckpoint.creatorAuthority ===
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority;
 }
 
 function isAccountableAgent(agent) {
@@ -885,6 +961,7 @@ module.exports = {
   KEYSTONE_REGISTRATION,
   TASK_ACTIONS,
   TASK_STATUSES,
+  evaluateGovernanceReadiness,
   summarizeAutomationState,
   startAutomationScheduler
 };

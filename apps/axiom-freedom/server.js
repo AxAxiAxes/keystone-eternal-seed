@@ -241,6 +241,19 @@ const server = http.createServer(async (req, res) => {
           }
           return;
     }
+    if (pathname === '/api/automation/readiness' && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine('/automation/readiness');
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM automation readiness request failed:', error.message);
+                  res.writeHead(502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
+          }
+          return;
+    }
     if (pathname === '/api/automation/agents' && req.method === 'GET') {
           if (!requireAdmin(req, res)) return;
           try {

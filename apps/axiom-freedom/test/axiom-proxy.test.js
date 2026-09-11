@@ -1,6 +1,15 @@
 const assert = require("node:assert/strict");
 const http = require("node:http");
+const fs = require("node:fs/promises");
+const os = require("node:os");
+const path = require("node:path");
 const test = require("node:test");
+const memoryDirectory = path.join(
+  os.tmpdir(),
+  `axiom-freedom-proxy-test-${process.pid}`
+);
+const originalMemoryDirectory = process.env.AXIOM_MEMORY_DIRECTORY;
+process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
 const engine = require("../../axiom-engine");
 
 async function startServer(server) {
@@ -36,6 +45,7 @@ function request(port, headers, path = "/") {
 }
 
 test("forwards valid commands to the AXIOM engine", async (t) => {
+  t.after(() => fs.rm(memoryDirectory, { recursive: true, force: true }));
   const engineServer = await startServer(engine);
   const { port: enginePort } = engineServer.address();
 
@@ -154,6 +164,13 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(automationStatus.status, 200);
     assert.equal((await automationStatus.json()).agents, 4);
 
+    const governanceReadiness = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/readiness`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(governanceReadiness.status, 200);
+    assert.equal((await governanceReadiness.json()).status, "ready");
+
     const observerReport = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/agents/operations-observer/report`,
       { headers: { Authorization: authorization } }
@@ -231,5 +248,10 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     await stopServer(engineServer);
     delete process.env.AXIOM_ENGINE_URL;
     delete process.env.ADMIN_PASSWORD;
+    if (originalMemoryDirectory === undefined) {
+      delete process.env.AXIOM_MEMORY_DIRECTORY;
+    } else {
+      process.env.AXIOM_MEMORY_DIRECTORY = originalMemoryDirectory;
+    }
   }
 });

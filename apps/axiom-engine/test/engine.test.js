@@ -131,6 +131,8 @@ test("reports secret-safe runtime readiness", async (t) => {
   assert.equal(readiness.provider.model, "gpt-4.1-mini");
   assert.equal(readiness.automation.status, "disabled");
   assert.equal(readiness.monitoring.status, "disabled");
+  assert.equal(readiness.governance.status, "ready");
+  assert.equal(readiness.governance.activeAgents, 4);
   assert.equal(readiness.automation.lastRunAt, null);
   assert.equal(readiness.automation.lastError, null);
   assert.ok(readiness.checkedAt);
@@ -216,6 +218,11 @@ test("persists and retrieves AXI memory layers", async (t) => {
   const monitoringSnapshot = await monitoring.json();
   assert.equal(monitoringSnapshot.snapshot.memoryAvailable, true);
   assert.equal(monitoringSnapshot.snapshot.automation.agents, 4);
+  assert.equal(monitoringSnapshot.snapshot.governance.status, "ready");
+
+  const governance = await fetch(`http://127.0.0.1:${port}/automation/readiness`);
+  assert.equal(governance.status, 200);
+  assert.equal((await governance.json()).status, "ready");
 
   const monitoringHistory = await fetch(`http://127.0.0.1:${port}/monitoring/history`);
   assert.equal(monitoringHistory.status, 200);

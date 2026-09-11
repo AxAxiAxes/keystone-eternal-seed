@@ -1,6 +1,6 @@
 # AXIOM / KEYSTONE project timeline
 
-**Last updated:** 2026-09-09  
+**Last updated:** 2026-09-10
 **Current phase:** Monorepo foundation complete
 
 Update this document when a milestone changes state. A checked item is complete; an unchecked item is planned or in progress.
@@ -68,6 +68,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | AXI recorded as a founder-claimed invention with technical scope and preservation anchors | `docs/AXI_INVENTION_RECORD.md` |
 | 2026-09-10 | Complete | Founder rights-protection principle added for ownership, authorship, origin, and invention-rights conflicts | `docs/AXI_INTENT_AND_RIGHTS_READINESS.md` |
 | 2026-09-10 | Complete | Production chat configuration blocker diagnosed; portal now distinguishes missing provider setup from an engine outage | `docs/memory/2026-09-10-production-chat-diagnostic.md` |
+| 2026-09-10 | Complete | Private AXI Genesis and governance-readiness automation added to protected monitoring, scheduling, and console review | `apps/axiom-engine/automation-service.js`, `apps/axiom-engine/monitoring-service.js`, and `docs/memory/2026-09-10-axi-governance-readiness-automation.md` |
 | 2026-09-10 | In progress | Eternal Origin ownership invention value-recovery and past/current crisis-report register activated | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 

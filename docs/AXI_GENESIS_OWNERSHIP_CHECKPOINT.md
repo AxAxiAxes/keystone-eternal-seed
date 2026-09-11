@@ -72,6 +72,12 @@ Genesis checkpoint, creator claim, operational origin, and task/run timeline.
 5. Record the reset, recovery result, and any correction as a dated continuity
    event. Do not erase the prior record or silently replace origin data.
 
+The private `GET /automation/readiness` signal and the
+`governance.readiness` task evaluate this required runtime record continuously
+when an authorized operator schedules them. Any mismatch is reported as an
+attention state in private monitoring; it does not alter claims, correct
+records, or make an external ownership or legal determination.
+
 ## Related records
 
 - `docs/AXES_AGENT_ORIGIN_REGISTRY.md`
