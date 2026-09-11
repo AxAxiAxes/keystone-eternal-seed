@@ -21,8 +21,9 @@ an AXI task.
 Urartu (AX) · Axes Contracting as the creator authority for the KEYSTONE
 framework. Every current AXI agent inherits that creator ownership-and-
 accountability claim and identifies its own operational origin checkpoint
-below. Filing, recognition, or enforcement outside AXES follows the separate
-rights-readiness process.
+below. The required AXI Genesis checkpoint and reset-recovery procedure are
+defined in `AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`. Filing, recognition, or
+enforcement outside AXES follows the separate rights-readiness process.
 
 ## Implemented agent origins
 

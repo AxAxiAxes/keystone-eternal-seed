@@ -58,7 +58,7 @@
     </form>
   </section>
   <section><h2>Registered Agents</h2><div id="agents"></div></section>
-  <section><h2>Agent Timelines</h2><p class="note">Each AXI agent is shown with its recorded origin, creator ownership-and-accountability claim, assigned tasks, and run events.</p><div id="agent-timelines"></div></section>
+  <section><h2>Agent Timelines</h2><p class="note">Each AXI agent is shown with its recorded AXI Genesis checkpoint, creator ownership-and-accountability claim, origin, assigned tasks, and run events.</p><div id="agent-timelines"></div></section>
   <section><h2>Schedule</h2><p class="note">Due tasks run by priority first, then scheduled time. All execution remains limited to allowlisted actions.</p><div id="schedule"></div></section>
   <section><h2>Run History</h2><p class="note">Each completed, retrying, or failed execution is recorded privately.</p><div id="runs"></div></section>
   <section>
@@ -120,11 +120,12 @@ function renderAgentTimelines(reports) {
     const events = report.timeline.map(event => ({
       occurredAt: event.occurredAt,
       event: event.event,
+      genesisCheckpoint: event.genesisCheckpoint || agent.keystoneRegistration?.genesisCheckpoint?.id || "",
       originCheckpoint: event.originCheckpoint || "",
       status: event.status || "",
       detail: event.detail || event.title || event.action || ""
     }));
-    return `<h3>${escapeHtml(agent.name)}</h3><p class="note">${escapeHtml(attribution)}</p>${table(events, [["occurredAt","Time"],["event","Event"],["originCheckpoint","Origin"],["status","Status"],["detail","Detail"]])}`;
+    return `<h3>${escapeHtml(agent.name)}</h3><p class="note">${escapeHtml(attribution)}</p>${table(events, [["occurredAt","Time"],["event","Event"],["genesisCheckpoint","Genesis"],["originCheckpoint","Origin"],["status","Status"],["detail","Detail"]])}`;
   }).join("");
 }
 function renderSchedule(tasks) {

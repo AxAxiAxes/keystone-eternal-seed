@@ -75,6 +75,10 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
   assert.equal(report.agent.creator, "Axel Urartu (AX) · Axes Contracting");
   assert.equal(report.agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
   assert.match(report.agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
+  assert.equal(
+    report.agent.keystoneRegistration.genesisCheckpoint.id,
+    "axi-genesis-creator-ownership"
+  );
   assert.match(report.agent.attributionScope, /creator ownership claim/);
   assert.deepEqual(
     report.timeline.map((event) => event.event).sort(),
@@ -100,6 +104,17 @@ test("registers each AXI agent with creator accountability and an origin", async
   assert.equal(agent.originCheckpoint, "axi-agent-registration");
   assert.equal(agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
   assert.match(agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
+  assert.equal(agent.keystoneRegistration.genesisCheckpoint.id, "axi-genesis-creator-ownership");
+
+  await assert.rejects(
+    () => service.registerAgent({
+      name: "Unregistered Authority",
+      capabilities: ["automation.noop"],
+      creator: "Other authority"
+    }),
+    (error) => error instanceof RangeError &&
+      error.message === "agent creator must match the AXI Genesis ownership authority"
+  );
 });
 
 test("upgrades legacy agent registrations with the ownership claim", async (t) => {
@@ -129,6 +144,38 @@ test("upgrades legacy agent registrations with the ownership claim", async (t) =
 
   assert.match(report.agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
   assert.equal(report.agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
+  assert.equal(report.agent.keystoneRegistration.genesisCheckpoint.id, "axi-genesis-creator-ownership");
+});
+
+test("reconciles default agents to the Genesis authority after a reset", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  await fs.writeFile(path.join(directory, "automation.json"), JSON.stringify({
+    agents: [{
+      id: "operations-observer",
+      name: "Operations Observer",
+      capabilities: ["monitoring.snapshot"],
+      enabled: true,
+      registeredAt: "2026-09-10T00:00:00.000Z",
+      creator: "AXES project founder direction",
+      keystoneRegistration: {
+        sourceRecord: "KEYSTONE-ORIGIN-000001",
+        creatorAuthority: "AXES project founder direction"
+      }
+    }],
+    tasks: [],
+    runs: []
+  }), "utf8");
+  const service = new AutomationService({ directory, memoryStore: createMemoryStore() });
+
+  const report = await service.getAgentReport("operations-observer");
+
+  assert.equal(report.agent.creator, "Axel Urartu (AX) · Axes Contracting");
+  assert.equal(
+    report.agent.keystoneRegistration.genesisCheckpoint.id,
+    "axi-genesis-creator-ownership"
+  );
+  assert.match(report.agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
 });
 
 test("keeps recurring tasks pending for their next execution", async (t) => {

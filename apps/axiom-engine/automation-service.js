@@ -26,6 +26,12 @@ const KEYSTONE_REGISTRATION = Object.freeze({
   scope: AGENT_ATTRIBUTION_SCOPE
 });
 const REGISTERED_AGENT_DEFAULT_ORIGIN = "axi-agent-registration";
+const AXI_GENESIS_OWNERSHIP_CHECKPOINT = Object.freeze({
+  id: "axi-genesis-creator-ownership",
+  sourceRecord: "KEYSTONE-ORIGIN-000001",
+  creatorAuthority: KEYSTONE_REGISTRATION.creatorAuthority,
+  purpose: "Preserve AXI creator ownership and accountability across agent registrations and reset recovery."
+});
 
 class AutomationService {
   constructor({
@@ -92,6 +98,9 @@ class AutomationService {
 
       const creatorAuthority = normalizeOptionalString(creator) ||
         KEYSTONE_REGISTRATION.creatorAuthority;
+      if (creatorAuthority !== AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority) {
+        throw new RangeError("agent creator must match the AXI Genesis ownership authority");
+      }
       const agent = {
         id: id || randomUUID(),
         name: name.trim(),
@@ -127,6 +136,7 @@ class AutomationService {
           event: "origin",
           occurredAt: agent.registeredAt,
           originCheckpoint: agent.originCheckpoint,
+          genesisCheckpoint: agent.keystoneRegistration.genesisCheckpoint.id,
           detail: agent.purpose || "No purpose has been recorded."
         },
         ...state.tasks
@@ -603,9 +613,7 @@ function seedMissingDefaultAgents(state, now) {
       "attributionScope",
       "keystoneRegistration"
     ]) {
-      if (existingAgent[field] === undefined) {
-        existingAgent[field] = defaultAgent[field];
-      }
+      existingAgent[field] = defaultAgent[field];
     }
   }
   for (const agent of state.agents) {
@@ -660,7 +668,8 @@ function createKeystoneRegistration(creatorAuthority) {
   return {
     ...KEYSTONE_REGISTRATION,
     creatorAuthority,
-    ownershipClaim: `${creatorAuthority} claims ownership and accountability for AXI agents created and registered within the AXES system.`
+    ownershipClaim: `${creatorAuthority} claims ownership and accountability for AXI agents created and registered within the AXES system.`,
+    genesisCheckpoint: { ...AXI_GENESIS_OWNERSHIP_CHECKPOINT }
   };
 }
 
@@ -670,8 +679,13 @@ function isRegisteredAgent(agent) {
     isNonEmptyString(agent.creator) &&
     isRecord(agent.keystoneRegistration) &&
     isNonEmptyString(agent.keystoneRegistration.sourceRecord) &&
-    isNonEmptyString(agent.keystoneRegistration.creatorAuthority) &&
-    isNonEmptyString(agent.keystoneRegistration.ownershipClaim);
+    agent.creator === AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority &&
+    agent.keystoneRegistration.creatorAuthority ===
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority &&
+    isNonEmptyString(agent.keystoneRegistration.ownershipClaim) &&
+    isRecord(agent.keystoneRegistration.genesisCheckpoint) &&
+    agent.keystoneRegistration.genesisCheckpoint.id ===
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.id;
 }
 
 function assertRegisteredAgent(agent) {

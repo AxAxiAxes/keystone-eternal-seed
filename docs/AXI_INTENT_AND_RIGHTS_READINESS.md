@@ -18,6 +18,8 @@ Source history, operational checkpoints, internal provenance records, and
 creator-claim registrations are the current AXES record. Formal preservation,
 filing, contractual, valuation, or enforcement work proceeds through the
 approved evidence and professional-readiness path below.
+The AXI Genesis ownership checkpoint prevents reset or handoff gaps in the
+active agent record and is defined in `AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`.
 
 ## Revision and correction rule
 

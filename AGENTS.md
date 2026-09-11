@@ -6,19 +6,24 @@ deployment state.
 
 ## Required readiness check
 
-1. Read `README.md`, `PROJECT_TIMELINE.md`, and `docs/memory/README.md`, then
+1. For AXI work, read `docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md` and
+   `docs/AXES_AGENT_ORIGIN_REGISTRY.md`. Before registering, assigning, or
+   scheduling an agent, confirm its protected report has the required Genesis
+   checkpoint, creator ownership-and-accountability claim, and operational
+   origin. Do not use an unreconciled agent record.
+2. Read `README.md`, `PROJECT_TIMELINE.md`, and `docs/memory/README.md`, then
    read the latest relevant continuity record in `docs/memory/`.
-2. Read the plan, governance, and deployment records that apply to the
+3. Read the plan, governance, and deployment records that apply to the
    requested work. For AXI/XIIOM operations, include
    `docs/AXES_BUILD_PROGRAM.md`, `docs/AXES_PLATFORM_PLAN.md`,
    `docs/AXI_AUTOMATION_SERVICE.md`, `docs/ENGINE_INTEGRATION.md`, and
    `docs/RAILWAY_DEPLOYMENT.md`.
-3. Inspect the active branch, working-tree changes, recent commits, and the
+4. Inspect the active branch, working-tree changes, recent commits, and the
    current timeline checkpoints. Preserve unrelated work and do not overwrite
    it.
-4. State the concrete task, acceptance evidence, applicable boundaries, and
+5. State the concrete task, acceptance evidence, applicable boundaries, and
    whether the task can be completed from repository access alone.
-5. Confirm authority before any external or consequential action. Repository
+6. Confirm authority before any external or consequential action. Repository
    access does not authorize domain, DNS, Railway, email, cloud, payment,
    vendor, legal, or account changes.
 

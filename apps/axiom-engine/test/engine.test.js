@@ -87,6 +87,10 @@ test("reports engine health", async (t) => {
     assert.equal(report.agent.creator, "Axel Urartu (AX) · Axes Contracting");
     assert.equal(report.agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
     assert.match(report.agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
+    assert.equal(
+      report.agent.keystoneRegistration.genesisCheckpoint.id,
+      "axi-genesis-creator-ownership"
+    );
     assert.equal(report.agent.originCheckpoint, "axi-operations-observer");
     assert.deepEqual(report.timeline.map((event) => event.event), ["origin"]);
   });
