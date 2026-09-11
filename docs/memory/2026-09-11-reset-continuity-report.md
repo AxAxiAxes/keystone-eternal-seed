@@ -40,7 +40,7 @@ secret, or recovery-destination configuration.
 - GitHub Actions run `34577108121` passed AXI engine, protected portal, and
   AXI.Core validation for `85c37b7`.
 - The five current AXI roles remain Genesis-linked and accountability-gated.
-  The runtime exposes eight allowlisted actions only. This is not evidence of
+  The runtime exposes nine allowlisted actions only. This is not evidence of
   eighteen active agents or a fully autonomous system.
 - The private continuous-memory record and protected operator views remain
   repository implementation. Their live private state cannot be verified

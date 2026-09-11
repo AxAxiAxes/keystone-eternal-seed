@@ -6,6 +6,7 @@ const PERSISTED_FILE_NAMES = [
   "identity.json",
   "startup-context.json",
   "continuity-record.jsonl",
+  "source-catalog.jsonl",
   "episodic.jsonl",
   "semantic.jsonl",
   "decision.jsonl",

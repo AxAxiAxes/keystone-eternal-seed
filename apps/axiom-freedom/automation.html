@@ -53,6 +53,12 @@
     <div id="continuity-events"></div>
   </section>
   <section>
+    <h2>Private Source Catalog</h2>
+    <p class="note">Approved repository-source metadata and content hashes only. Raw source content is not copied into AXI memory, and restricted sources must use non-sensitive titles and references.</p>
+    <div id="source-catalog"></div>
+    <div id="source-catalog-entries"></div>
+  </section>
+  <section>
     <h2>Private Coordinate Center</h2>
     <p class="note">The gravity center is a technical Eternal Origin Ownership from Genesis reference. Bead-passport nodes apply only to registered AXI agents; they are not human passports, legal identities, credentials, or external listings.</p>
     <div id="gravity-center"></div>
@@ -72,7 +78,7 @@
     <h2>Queue Task</h2>
     <form id="task-form">
       <label>Title <input id="title" required maxlength="200" placeholder="Record a verified milestone"></label>
-      <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="continuity.record">Record approved continuity event</option><option value="monitoring.snapshot">Capture private monitoring snapshot</option><option value="governance.readiness">Assess Eternal Origin Ownership from Genesis readiness</option><option value="recovery.backup">Create verified runtime recovery bundle</option><option value="coordinate.record">Record a coordinate transition</option><option value="continuity.checkpoint">Create private continuity checkpoint</option><option value="automation.noop">Safe no-op test</option></select></label>
+      <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="continuity.record">Record approved continuity event</option><option value="source.catalog">Catalog approved source metadata</option><option value="monitoring.snapshot">Capture private monitoring snapshot</option><option value="governance.readiness">Assess Eternal Origin Ownership from Genesis readiness</option><option value="recovery.backup">Create verified runtime recovery bundle</option><option value="coordinate.record">Record a coordinate transition</option><option value="continuity.checkpoint">Create private continuity checkpoint</option><option value="automation.noop">Safe no-op test</option></select></label>
       <label>Assigned agent <select id="task-agent" required></select></label>
       <label>Origin checkpoint <input id="origin-checkpoint" required maxlength="120" placeholder="axi-operations-observer"></label>
       <label>Priority <select id="priority"><option value="5">P5 - Critical</option><option value="4">P4 - High</option><option value="3" selected>P3 - Normal</option><option value="2">P2 - Low</option><option value="1">P1 - Backlog</option></select></label>
@@ -88,6 +94,14 @@
       <div id="continuity-fields" class="hidden">
         <label>Source reference <input id="continuity-source-record" maxlength="200" placeholder="docs/memory/2026-09-11-record.md"></label>
         <label>Approved summary <textarea id="continuity-summary" maxlength="500" placeholder="Record a factual, non-sensitive continuity event."></textarea></label>
+      </div>
+      <div id="source-catalog-fields" class="hidden">
+        <label>Source ID <input id="source-catalog-id" maxlength="120" placeholder="axes-business-plan"></label>
+        <label>Non-sensitive title <input id="source-catalog-title" maxlength="200" placeholder="AXES business plan"></label>
+        <label>Source type <select id="source-catalog-type"><option value="document">Document</option><option value="dataset">Dataset</option><option value="media">Media</option><option value="application">Application</option><option value="record">Record</option><option value="other">Other</option></select></label>
+        <label>Classification <select id="source-catalog-classification"><option value="internal">Internal</option><option value="public">Public</option><option value="private">Private</option><option value="restricted">Restricted</option></select></label>
+        <label>Repository-relative source reference <input id="source-catalog-reference" maxlength="500" placeholder="docs/AXES_BUSINESS_PLAN.md"></label>
+        <label>SHA-256 content hash <input id="source-catalog-sha256" maxlength="64" placeholder="64 hexadecimal characters"></label>
       </div>
       <label>Repeat every minutes (optional) <input id="recurrence" type="number" min="1" max="10080"></label>
       <button type="submit">Queue Task</button>
@@ -280,6 +294,8 @@ async function refresh() {
     let monitoringHistory = [];
     let continuityRecord = { status: "unavailable" };
     let continuityEvents = [];
+    let sourceCatalog = { status: "unavailable" };
+    let sourceCatalogEntries = [];
     try {
       [monitoring, monitoringHistory] = await Promise.all([
         request("/api/automation/monitoring/status"),
@@ -295,6 +311,14 @@ async function refresh() {
       ]);
     } catch (error) {
       result.textContent = "Continuous memory will be available after the private engine deployment is updated.";
+    }
+    try {
+      [sourceCatalog, sourceCatalogEntries] = await Promise.all([
+        request("/api/automation/source-catalog"),
+        request("/api/automation/source-catalog/entries?limit=10")
+      ]);
+    } catch (error) {
+      result.textContent = "Source catalog will be available after the private engine deployment is updated.";
     }
     document.querySelector("#metrics").innerHTML = Object.entries(status).map(([key,value]) => `<div class="metric"><strong>${value}</strong><br>${key}</div>`).join("");
     document.querySelector("#governance").innerHTML = `<h3>Eternal Origin Ownership from Genesis readiness</h3>${table([{
@@ -340,6 +364,23 @@ async function refresh() {
         sourceRecord: entry.sourceRecord,
         summary: entry.summary
       })), [["sequence","Sequence"],["recordedAt","Recorded"],["eventType","Type"],["sourceRecord","Source"],["summary","Summary"]])}`;
+    document.querySelector("#source-catalog").innerHTML = table([{
+      status: sourceCatalog.status,
+      sourceCount: sourceCatalog.sourceCount ?? "unavailable",
+      latestSource: sourceCatalog.latestSource
+        ? `${sourceCatalog.latestSource.sourceId} at ${sourceCatalog.latestSource.recordedAt}`
+        : "none"
+    }], [["status","Status"],["sourceCount","Sources"],["latestSource","Latest source"]]);
+    document.querySelector("#source-catalog-entries").innerHTML =
+      `<h3>Recent catalog entries</h3>${table(sourceCatalogEntries.map(entry => ({
+        sequence: entry.sequence,
+        sourceId: entry.sourceId,
+        title: entry.title,
+        sourceType: entry.sourceType,
+        classification: entry.classification,
+        sourceReference: entry.sourceReference,
+        recordedAt: entry.recordedAt
+      })), [["sequence","Sequence"],["sourceId","Source ID"],["title","Title"],["sourceType","Type"],["classification","Classification"],["sourceReference","Reference"],["recordedAt","Recorded"]])}`;
     document.querySelector("#runs").innerHTML = table(runs.map(run => ({
       recordedAt: run.recordedAt,
       status: run.status,
@@ -367,15 +408,25 @@ async function refresh() {
 function updateTaskFields() {
   const action = document.querySelector("#action").value;
   const isContinuityRecord = action === "continuity.record";
+  const isSourceCatalog = action === "source.catalog";
   document.querySelector("#memory-fields").classList.toggle("hidden", action !== "memory.record");
   document.querySelector("#continuity-fields").classList.toggle("hidden", !isContinuityRecord);
+  document.querySelector("#source-catalog-fields").classList.toggle("hidden", !isSourceCatalog);
   document.querySelector("#continuity-source-record").required = isContinuityRecord;
   document.querySelector("#continuity-summary").required = isContinuityRecord;
+  for (const id of [
+    "#source-catalog-id",
+    "#source-catalog-title",
+    "#source-catalog-reference",
+    "#source-catalog-sha256"
+  ]) {
+    document.querySelector(id).required = isSourceCatalog;
+  }
   const approvalRequired = document.querySelector("#approval-required");
-  if (isContinuityRecord) {
+  if (isContinuityRecord || isSourceCatalog) {
     approvalRequired.checked = true;
   }
-  approvalRequired.disabled = isContinuityRecord;
+  approvalRequired.disabled = isContinuityRecord || isSourceCatalog;
   renderTaskAgentOptions();
 }
 document.querySelector("#action").addEventListener("change", updateTaskFields);
@@ -389,6 +440,14 @@ document.querySelector("#task-form").addEventListener("submit", async event => {
   const task = { title:document.querySelector("#title").value, action, agentId:document.querySelector("#task-agent").value, originCheckpoint:document.querySelector("#origin-checkpoint").value, priority:Number(document.querySelector("#priority").value), maxAttempts:Number(document.querySelector("#max-attempts").value), retryDelayMinutes:Number(document.querySelector("#retry-delay").value), approvalRequired:document.querySelector("#approval-required").checked, dependsOn:Array.from(document.querySelector("#depends-on").selectedOptions, option => option.value) };
   if (action === "memory.record") task.payload = { kind:document.querySelector("#kind").value, content:document.querySelector("#content").value };
   if (action === "continuity.record") task.payload = { sourceRecord:document.querySelector("#continuity-source-record").value, summary:document.querySelector("#continuity-summary").value };
+  if (action === "source.catalog") task.payload = {
+    sourceId:document.querySelector("#source-catalog-id").value,
+    title:document.querySelector("#source-catalog-title").value,
+    sourceType:document.querySelector("#source-catalog-type").value,
+    classification:document.querySelector("#source-catalog-classification").value,
+    sourceReference:document.querySelector("#source-catalog-reference").value,
+    sha256:document.querySelector("#source-catalog-sha256").value
+  };
   if (recurrence) task.recurrenceMinutes = Number(recurrence);
   const runAt = document.querySelector("#run-at").value;
   if (runAt) task.runAt = new Date(runAt).toISOString();

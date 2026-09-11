@@ -142,6 +142,7 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.match(consoleMarkup, /AXIOM Automation Console/);
     assert.match(consoleMarkup, /Continuity Tree/);
     assert.match(consoleMarkup, /Continuous Project Memory/);
+    assert.match(consoleMarkup, /Private Source Catalog/);
 
     const unauthorizedCommandCenter = await fetch(
       `http://127.0.0.1:${webPort}/command-center`
@@ -195,6 +196,7 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(support.readiness.storage.status, "ok");
     assert.equal(support.readiness.provider.status, "not-configured");
     assert.equal(support.continuityRecord.status, "ready");
+    assert.equal(support.sourceCatalog.status, "ready");
     assert.equal(support.email.status, "planned");
 
     const automationStatus = await fetch(
@@ -222,6 +224,25 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     );
     assert.equal(continuityEvents.status, 200);
     assert.ok((await continuityEvents.json()).length >= 2);
+
+    const unauthorizedSourceCatalog = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/source-catalog`
+    );
+    assert.equal(unauthorizedSourceCatalog.status, 401);
+
+    const sourceCatalog = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/source-catalog`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(sourceCatalog.status, 200);
+    assert.equal((await sourceCatalog.json()).status, "ready");
+
+    const sourceCatalogEntries = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/source-catalog/entries?limit=5`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(sourceCatalogEntries.status, 200);
+    assert.deepEqual(await sourceCatalogEntries.json(), []);
 
     const invalidContinuityTask = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/tasks`,

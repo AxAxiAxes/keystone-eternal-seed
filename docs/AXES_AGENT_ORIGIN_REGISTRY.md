@@ -46,7 +46,7 @@ system operation and decisions away from AXES.
 | Agent ID | Origin checkpoint | Creator attribution | Purpose | Core duties |
 | --- | --- | --- | --- | --- |
 | `memory-curator` | `axi-durable-memory-foundation` | Axel Urartu (AX) · Axes Contracting | Maintain factual, non-sensitive AXI continuity records. | Prepare approved memory entries; preserve concise operational continuity. |
-| `project-memory-manager` | `axi-project-memory-management` | Axel Urartu (AX) · Axes Contracting | Maintain approved, non-sensitive AXI project memory and the private continuous record. | Prepare operator-confirmed continuity entries; maintain supported memory-layer references; surface record attention states. |
+| `project-memory-manager` | `axi-project-memory-management` | Axel Urartu (AX) · Axes Contracting | Maintain approved, non-sensitive AXI project memory, the private continuous record, and source-catalog metadata. | Prepare operator-confirmed continuity entries; catalog approved source metadata and hashes without copying raw content; maintain supported memory-layer references; surface record attention states. |
 | `automation-executor` | `axi-bounded-automation-foundation` | Axel Urartu (AX) · Axes Contracting | Run safe workflow checks within the explicit action allowlist. | Execute approved no-op checks; record bounded task outcomes. |
 | `automation-auditor` | `axi-bounded-automation-foundation` | Axel Urartu (AX) · Axes Contracting | Provide an auditable fallback for approved bounded tasks. | Review task outcomes; record approved audit continuity. |
 | `operations-observer` | `axi-operations-observer` | Axel Urartu (AX) · Axes Contracting | Capture private operational, Genesis/governance-readiness, recovery, coordinate-chain, and continuity-checkpoint evidence. | Run approved monitoring snapshots; assess private readiness; create verified recovery bundles; record approved coordinate transitions and continuity checkpoints; surface operational attention signals. |
@@ -61,6 +61,7 @@ can decide its future direction.
 | --- | --- | --- | --- | --- |
 | `memory-curator` | Record an approved continuity checkpoint | `memory.record` | `axi-continuity-update` | Human confirms the factual content and retained data. |
 | `project-memory-manager` | Record an approved continuous-memory event | `continuity.record` | `axi-project-memory-management` | Human confirms the bounded source reference and summary; no personal data, secrets, source replacement, legal conclusion, or external action. |
+| `project-memory-manager` | Catalog an approved repository source | `source.catalog` | `axi-project-memory-management` | Human confirms non-sensitive metadata, repository-relative reference, and SHA-256 evidence; no raw-content ingestion, source replacement, legal conclusion, or external action. |
 | `automation-executor` | Run an approved safe workflow check | `automation.noop` | `axi-automation-validation` | Human defines the check and reviews the recorded result. |
 | `automation-auditor` | Record an approved automation audit | `memory.record` | `axi-automation-audit` | Human reviews the evidence and approves the record. |
 | `operations-observer` | Capture a recurring private monitoring snapshot | `monitoring.snapshot` | `axi-operations-observer` | Human creates the recurring task, chooses its interval, and investigates attention states. |

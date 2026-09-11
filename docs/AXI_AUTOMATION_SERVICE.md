@@ -19,6 +19,7 @@ controller. It accepts only the versioned action allowlist:
 | `coordinate.record` | `coordinate.record` | Records a source-linked, hash-chained private coordinate transition. |
 | `continuity.checkpoint` | `continuity.checkpoint` | Creates a checksummed private checkpoint manifest for current runtime files. |
 | `continuity.record` | `continuity.record` | Appends an operator-confirmed, bounded event to the private continuous memory record. |
+| `source.catalog` | `source.catalog` | Appends approved repository-source metadata and SHA-256 evidence to the private source catalog. |
 
 The service rejects any unrecognized action. New external integrations must be
 implemented, reviewed, tested, and added to the allowlist before they can be
@@ -57,7 +58,7 @@ automation-state access while preserving existing agent records.
 | Agent | Capabilities | Purpose |
 | --- | --- | --- |
 | Memory Curator | `memory.record` | Maintains validated memory entries. |
-| Project Memory Manager | `memory.record`, `continuity.record` | Maintains approved, non-sensitive project memory and continuous continuity entries. |
+| Project Memory Manager | `memory.record`, `continuity.record`, `source.catalog` | Maintains approved, non-sensitive project memory, continuous continuity entries, and source-catalog metadata. |
 | Automation Executor | `automation.noop` | Runs bounded workflow checks. |
 | Automation Auditor | Both capabilities | Provides a general audited fallback. |
 | Operations Observer | `monitoring.snapshot`, `governance.readiness`, `recovery.backup`, `coordinate.record`, `continuity.checkpoint` | Captures private health, queue, scheduler, usage, Genesis/governance-readiness, recovery, coordinate-chain signals, and approved continuity checkpoints. |
@@ -182,6 +183,14 @@ explicit assignment, approval, retry, run-history, and Genesis-accountability
 controls. It cannot write arbitrary files, record sensitive data, alter prior
 events, restore data, change source history, or take external action.
 
+Queue a `source.catalog` task only for the Project Memory Manager with a
+stable source ID, non-sensitive title, source type, classification,
+repository-relative source reference, and SHA-256 hash. The task requires
+explicit operator approval and appends metadata only; it does not read, copy,
+upload, classify, or interpret raw source content. Duplicate source IDs,
+unsafe paths, unsupported fields, malformed hashes, and invalid retained
+history fail explicitly. See `AXI_SOURCE_CATALOG.md`.
+
 ## Opt-in scheduler
 
 Manual processing through `POST /automation/process` is always available from
@@ -252,6 +261,10 @@ recent events. A continuity event can be queued only as a
 `continuity.record` task assigned to the Project Memory Manager. The console
 automatically requires operator approval for that action, and the engine
 enforces the same manager-assignment and approval requirements independently.
+
+The Console exposes the private source-catalog status and recent approved
+entries. It can queue a catalog entry only through an explicitly assigned,
+approval-required `source.catalog` task for the Project Memory Manager.
 
 The protected `/command-center` view extends this into build-management
 observation. It combines the continuity tree with agent/task/run-flow metrics,

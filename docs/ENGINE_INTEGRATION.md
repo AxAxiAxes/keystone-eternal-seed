@@ -118,6 +118,11 @@ its read-only status response.
     "status": "ready",
     "id": "axi-continuity-record-v1",
     "recordCount": 2
+  },
+  "sourceCatalog": {
+    "status": "ready",
+    "id": "axi-private-source-catalog-v1",
+    "sourceCount": 0
   }
 }
 ```
@@ -147,6 +152,13 @@ initialization, restart, material monitoring-change, and explicitly
 operator-confirmed event metadata without provider prompts, credentials,
 personal data, or private source content. A malformed record is preserved as
 an attention state and blocks manual and scheduled automation until reviewed.
+
+`sourceCatalog` reports the state of the private
+`axi-private-source-catalog-v1` hash-linked metadata index. It stores only
+approved source identifiers, non-sensitive titles, classifications,
+repository-relative references, and SHA-256 hashes; it does not ingest raw
+project content. A malformed retained catalog is an attention state that also
+blocks manual and scheduled automation until reviewed.
 
 ## Private recovery endpoints
 
@@ -180,6 +192,16 @@ at `/api/automation/continuity-record` and
 `/api/automation/continuity-record/events`. It does not proxy the direct
 recording endpoint; the protected console queues the approval-required manager
 task instead.
+
+## Private source-catalog endpoints
+
+`GET /system/source-catalog` reports secret-safe catalog readiness and a
+classification summary. `GET /system/source-catalog/entries?limit=20` returns
+recent approved metadata entries. Source entries can be created only through
+an explicitly assigned, operator-approved `source.catalog` task for the
+Project Memory Manager. The authenticated portal proxies the read-only routes
+at `/api/automation/source-catalog` and
+`/api/automation/source-catalog/entries`.
 
 ## Private coordinate endpoints
 

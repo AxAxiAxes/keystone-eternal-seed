@@ -38,7 +38,7 @@ defined private controls. It does not have complete project knowledge and
 cannot treat its records as substitutes for original sources, unreviewed
 history, human direction, or external evidence.
 
-Repository evidence currently supports five seeded AXI roles and eight
+Repository evidence currently supports five seeded AXI roles and nine
 allowlisted task actions. It does not support a claim of eighteen active
 agents, a fully automated AXES ecosystem, or integrated app-store services.
 Downloaded tools or services become part of the system only after their

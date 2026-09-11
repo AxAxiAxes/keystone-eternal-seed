@@ -124,6 +124,9 @@ function getAttention(snapshot) {
   if (snapshot.continuityRecord && snapshot.continuityRecord.status !== "ready") {
     attention.push("continuity-record-unavailable");
   }
+  if (snapshot.sourceCatalog && snapshot.sourceCatalog.status !== "ready") {
+    attention.push("source-catalog-unavailable");
+  }
   return attention;
 }
 

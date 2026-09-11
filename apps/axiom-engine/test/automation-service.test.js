@@ -113,6 +113,66 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
     }]);
     assert.equal((await service.listRuns())[0].agentId, "project-memory-manager");
   });
+  await t.test("catalogs approved source metadata through the Project Memory Manager", async (t) => {
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+    t.after(() => fs.rm(directory, { recursive: true, force: true }));
+    const catalogEntries = [];
+    const service = new AutomationService({
+      directory,
+      memoryStore: createMemoryStore(),
+      catalogSource: async (entry) => {
+        const recorded = { id: "source-entry-1", sequence: catalogEntries.length + 1, ...entry };
+        catalogEntries.push(recorded);
+        return recorded;
+      }
+    });
+    const payload = {
+      sourceId: "axi-memory-service",
+      title: "AXI persistent memory service",
+      sourceType: "document",
+      classification: "private",
+      sourceReference: "docs/AXI_MEMORY_SERVICE.md",
+      sha256: "a".repeat(64)
+    };
+
+    await assert.rejects(
+      () => service.createTask({
+        title: "Catalog source without approval",
+        action: "source.catalog",
+        agentId: "project-memory-manager",
+        originCheckpoint: "axi-project-memory-management",
+        payload
+      }),
+      /source\.catalog tasks require operator approval/
+    );
+    const nonManager = await service.registerAgent({
+      name: "Source Catalog Test Agent",
+      capabilities: ["source.catalog"]
+    });
+    await assert.rejects(
+      () => service.createTask({
+        title: "Catalog source with wrong agent",
+        action: "source.catalog",
+        agentId: nonManager.id,
+        approvalRequired: true,
+        originCheckpoint: "axi-project-memory-management",
+        payload
+      }),
+      /source\.catalog tasks must be assigned to the Project Memory Manager/
+    );
+
+    const task = await service.createTask({
+      title: "Catalog approved AXI memory source",
+      action: "source.catalog",
+      agentId: "project-memory-manager",
+      approvalRequired: true,
+      originCheckpoint: "axi-project-memory-management",
+      payload
+    });
+    await service.reviewTaskApproval(task.id, true);
+    assert.equal((await service.processDueTasks())[0].status, "completed");
+    assert.deepEqual(catalogEntries, [{ id: "source-entry-1", sequence: 1, ...payload }]);
+  });
   const outcomes = await service.processDueTasks();
 
   assert.deepEqual(outcomes, [{

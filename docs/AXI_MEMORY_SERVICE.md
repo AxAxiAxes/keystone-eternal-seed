@@ -9,6 +9,7 @@ The AXIOM engine implements the durable memory foundation described by the KEYST
 | Identity | `identity.json` | Current AXIOM name and concise identity summary. |
 | Startup context | `startup-context.json` | Versioned, non-sensitive AXES memory-bank source basis, startup timestamps, and startup count. |
 | Continuous record | `continuity-record.jsonl` | Hash-linked, append-only private operational continuity events. |
+| Source catalog | `source-catalog.jsonl` | Hash-linked, append-only metadata and SHA-256 evidence index for approved repository sources. |
 | Episodic | `episodic.jsonl` | Timestamped event records. |
 | Semantic | `semantic.jsonl` | Timestamped knowledge records. |
 | Decision | `decision.jsonl` | Timestamped decision records. |
@@ -35,6 +36,13 @@ action. The record stores a short source reference and summary only; it must
 not contain credentials, personal data, private source material, provider
 prompts, or legal/ownership conclusions.
 
+The source catalog records only approved, non-sensitive metadata: a stable
+source ID, title, source type, classification, repository-relative reference,
+and supplied SHA-256 content hash. It does not copy, parse, summarize, upload,
+or expose raw source content. A malformed catalog is preserved as an attention
+state and blocks manual and scheduled automation until reviewed. The complete
+contract is in `AXI_SOURCE_CATALOG.md`.
+
 ## Private API
 
 | Method | Path | Purpose |
@@ -46,6 +54,8 @@ prompts, or legal/ownership conclusions.
 | `GET` | `/system/continuity-record` | Read secret-safe continuous-record readiness and latest event metadata. |
 | `GET` | `/system/continuity-record/events?limit=20` | Read recent private continuous-record events. |
 | `POST` | `/system/continuity-record/events` | Append an operator-confirmed private continuity event. |
+| `GET` | `/system/source-catalog` | Read secret-safe source-catalog readiness and summary. |
+| `GET` | `/system/source-catalog/entries?limit=20` | Read recent approved source metadata entries. |
 
 Supported kinds are `episodic`, `semantic`, `decision`, and `procedure`. `limit` is an integer from 1 to 100.
 

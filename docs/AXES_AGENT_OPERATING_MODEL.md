@@ -34,7 +34,8 @@ That is not an operational capacity commitment. The current engine:
 - Persists the registry in one private JSON state file.
 - Supports only `memory.record`, `automation.noop`, `monitoring.snapshot`,
   `governance.readiness`, `recovery.backup`, `coordinate.record`,
-  `continuity.checkpoint`, and `continuity.record` task actions.
+  `continuity.checkpoint`, `continuity.record`, and `source.catalog` task
+  actions.
 - Processes due tasks sequentially in one service process, from 1 to 20 per
   cycle, with a default of 5.
 - Requires an authenticated operator to approve a task when the task is marked

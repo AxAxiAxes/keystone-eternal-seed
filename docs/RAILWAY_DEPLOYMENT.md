@@ -59,7 +59,8 @@ Enable monitoring first and confirm its snapshots appear through the protected
 console. Then enable the scheduler. The scheduler can process only the
 versioned `memory.record`, `automation.noop`, `monitoring.snapshot`,
 `governance.readiness`, `recovery.backup`, `coordinate.record`, and
-`continuity.checkpoint` allowlist; it cannot deploy, access third-party
+`continuity.checkpoint`, `continuity.record`, and `source.catalog` allowlist;
+it cannot deploy, access third-party
 accounts, send messages, publish, or take other external action.
 
 ## 3. Configure `axiom-web`

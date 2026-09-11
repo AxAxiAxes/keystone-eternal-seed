@@ -17,6 +17,10 @@ test("creates a checksummed portable checkpoint without secrets", async (t) => {
     path.join(directory, "continuity-record.jsonl"),
     "{\"sequence\":1,\"eventType\":\"continuity-initialized\"}\n"
   );
+  await fs.writeFile(
+    path.join(directory, "source-catalog.jsonl"),
+    "{\"sequence\":1,\"sourceId\":\"axi-memory-service\"}\n"
+  );
   await fs.writeFile(path.join(directory, "automation.json"), "{\"tasks\":[]}");
 
   const service = new CheckpointService({
@@ -30,7 +34,13 @@ test("creates a checksummed portable checkpoint without secrets", async (t) => {
   assert.equal(checkpoint.modules[0].id, "memory");
   assert.deepEqual(
     checkpoint.files.map((file) => file.path),
-    ["identity.json", "startup-context.json", "continuity-record.jsonl", "automation.json"]
+    [
+      "identity.json",
+      "startup-context.json",
+      "continuity-record.jsonl",
+      "source-catalog.jsonl",
+      "automation.json"
+    ]
   );
   assert.match(checkpoint.files[0].sha256, /^[a-f0-9]{64}$/);
   assert.equal(JSON.stringify(checkpoint).includes("OPENAI_API_KEY"), false);

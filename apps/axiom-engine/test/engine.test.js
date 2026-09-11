@@ -139,6 +139,8 @@ test("reports secret-safe runtime readiness", async (t) => {
   assert.equal(readiness.coordinates.status, "ready");
   assert.equal(readiness.startupContext.status, "ready");
   assert.equal(readiness.continuityRecord.status, "ready");
+  assert.equal(readiness.sourceCatalog.status, "ready");
+  assert.equal(readiness.sourceCatalog.sourceCount, 0);
   assert.ok(readiness.continuityRecord.recordCount >= 2);
   assert.equal(readiness.startupContext.id, "axes-memory-bank-startup-v1");
   assert.equal(readiness.automation.lastRunAt, null);
@@ -228,6 +230,65 @@ test("persists and exposes the private continuity record", async (t) => {
   );
   assert.equal(entriesResponse.status, 200);
   assert.equal((await entriesResponse.json())[0].eventType, "operator-confirmed");
+});
+
+test("catalogs approved source metadata through the private engine", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const statusResponse = await fetch(`http://127.0.0.1:${port}/system/source-catalog`);
+  assert.equal(statusResponse.status, 200);
+  assert.equal((await statusResponse.json()).status, "ready");
+
+  const taskResponse = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: "Catalog AXI memory source",
+      action: "source.catalog",
+      agentId: "project-memory-manager",
+      approvalRequired: true,
+      originCheckpoint: "axi-project-memory-management",
+      payload: {
+        sourceId: "axi-memory-service",
+        title: "AXI persistent memory service",
+        sourceType: "document",
+        classification: "private",
+        sourceReference: "docs/AXI_MEMORY_SERVICE.md",
+        sha256: "a".repeat(64)
+      }
+    })
+  });
+  assert.equal(taskResponse.status, 201);
+  const task = await taskResponse.json();
+  assert.equal(task.status, "awaiting_approval");
+
+  const approvalResponse = await fetch(
+    `http://127.0.0.1:${port}/automation/tasks/${task.id}/approval`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ approved: true })
+    }
+  );
+  assert.equal(approvalResponse.status, 200);
+
+  const processResponse = await fetch(`http://127.0.0.1:${port}/automation/process`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "{}"
+  });
+  assert.equal(processResponse.status, 200);
+  assert.equal((await processResponse.json())[0].status, "completed");
+
+  const entriesResponse = await fetch(
+    `http://127.0.0.1:${port}/system/source-catalog/entries?limit=5`
+  );
+  assert.equal(entriesResponse.status, 200);
+  const entries = await entriesResponse.json();
+  assert.equal(entries[0].sourceId, "axi-memory-service");
+  assert.equal(entries[0].reviewStatus, "operator-approved");
 });
 
 test("blocks automation when retained startup context is invalid", async (t) => {

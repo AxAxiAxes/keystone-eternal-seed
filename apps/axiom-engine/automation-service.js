@@ -10,7 +10,8 @@ const TASK_ACTIONS = new Set([
   "recovery.backup",
   "coordinate.record",
   "continuity.checkpoint",
-  "continuity.record"
+  "continuity.record",
+  "source.catalog"
 ]);
 const TASK_STATUSES = new Set([
   "pending",
@@ -49,6 +50,7 @@ class AutomationService {
     createCoordinate,
     createCheckpoint,
     recordContinuity,
+    catalogSource,
     now = () => new Date()
   }) {
     this.directory = directory;
@@ -59,6 +61,7 @@ class AutomationService {
     this.createCoordinate = createCoordinate;
     this.createCheckpoint = createCheckpoint;
     this.recordContinuity = recordContinuity;
+    this.catalogSource = catalogSource;
     this.now = now;
     this.operationQueue = Promise.resolve();
   }
@@ -301,11 +304,12 @@ class AutomationService {
       if (typeof approvalRequired !== "boolean") {
         throw new TypeError("task approvalRequired must be a boolean");
       }
-      if (action === "continuity.record" && agentId !== "project-memory-manager") {
-        throw new RangeError("continuity.record tasks must be assigned to the Project Memory Manager");
+      if ((action === "continuity.record" || action === "source.catalog") &&
+        agentId !== "project-memory-manager") {
+        throw new RangeError(`${action} tasks must be assigned to the Project Memory Manager`);
       }
-      if (action === "continuity.record" && !approvalRequired) {
-        throw new RangeError("continuity.record tasks require operator approval");
+      if ((action === "continuity.record" || action === "source.catalog") && !approvalRequired) {
+        throw new RangeError(`${action} tasks require operator approval`);
       }
       if (!Number.isInteger(maxAttempts) || maxAttempts < 1 || maxAttempts > 5) {
         throw new RangeError("task maxAttempts must be an integer from 1 to 5");
@@ -493,6 +497,17 @@ class AutomationService {
       });
       return { continuityRecordSequence: entry.sequence };
     }
+    if (task.action === "source.catalog") {
+      if (typeof this.catalogSource !== "function") {
+        throw new RangeError("source catalog is not configured");
+      }
+      const entry = await this.catalogSource(task.payload);
+      return {
+        sourceCatalogEntryId: entry.id,
+        sourceId: entry.sourceId,
+        sourceCatalogSequence: entry.sequence
+      };
+    }
     if (task.action === "monitoring.snapshot") {
       if (typeof this.captureMonitoringSnapshot !== "function") {
         throw new RangeError("monitoring snapshots are not configured");
@@ -676,7 +691,7 @@ function defaultAgents(now) {
     {
       id: "project-memory-manager",
       name: "Project Memory Manager",
-      capabilities: ["memory.record", "continuity.record"],
+      capabilities: ["memory.record", "continuity.record", "source.catalog"],
       enabled: true,
       registeredAt,
       originCheckpoint: "axi-project-memory-management",
@@ -685,7 +700,8 @@ function defaultAgents(now) {
       duties: [
         "Prepare operator-confirmed continuity entries with source references.",
         "Maintain approved records across supported private memory layers.",
-        "Surface continuity-record attention states for human review."
+        "Catalog approved source metadata without copying raw source content.",
+        "Surface continuity-record and source-catalog attention states for human review."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
       keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),
