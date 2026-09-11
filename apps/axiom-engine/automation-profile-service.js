@@ -9,6 +9,7 @@ const AUTOMATION_PROFILE_FILE_NAME = "automation-profiles.jsonl";
 const OPERATIONS_OBSERVATION_TEMPLATE = "operations-observation";
 const FOUNDER_CONFIGURED_TEMPLATE = "founder-configured";
 const PROFILE_NOTICE = "Founder-controlled internal schedules only. Profiles do not deploy, access accounts, send messages, publish, spend, accept payments, collect data, or make financial or legal decisions.";
+const PROFILE_HEALTH_NOTICE = "Read-only profile/task association status. This report does not expose task payloads or audit-error details, and does not change a profile, task, scheduler, or external system.";
 const ACTIONS = new Set(["memory.record", "automation.noop", "monitoring.snapshot", "governance.readiness", "recovery.backup", "coordinate.record", "continuity.checkpoint", "continuity.record", "source.catalog", "business.metric", "service.registry"]);
 const NO_PAYLOAD_ACTIONS = new Set(["automation.noop", "monitoring.snapshot", "governance.readiness", "recovery.backup", "continuity.checkpoint"]);
 const SENSITIVE = /\b(account|bank|card|client|credential|customer|email|invoice|name|password|payment|person|personal|tax|vendor)\b/i;
@@ -39,6 +40,16 @@ class AutomationProfileService {
       throw new RangeError("limit must be an integer between 1 and 100");
     }
     return (await this.validRecords()).slice(-limit).reverse().map(summarizeProfileEvent);
+  }
+  async health() {
+    const records = await this.validRecords();
+    const tasks = await this.listTasks();
+    return {
+      label: PROFILE_HEALTH_NOTICE,
+      profiles: Object.values(projectProfiles(records))
+        .filter((profile) => profile.status === "active" || profile.status === "paused")
+        .map((profile) => summarizeProfileHealth(profile, tasks))
+    };
   }
   async preview(input) {
     const agents = await this.listAgents();
@@ -225,6 +236,42 @@ function summarizeProfileEvent(record) {
     template: record.template,
     taskCount: Object.keys(record.taskIds).length,
     recoveryReadiness: record.recoveryReadiness
+  };
+}
+function summarizeProfileHealth(profile, tasks) {
+  const tasksById = new Map(tasks.map((task) => [task.id, task]));
+  const taskHealth = profile.taskTemplates.map((definition) => {
+    const taskId = profile.taskIds[definition.key] || profile.taskIds[definition.action];
+    const task = tasksById.get(taskId);
+    const associated = tasks.filter((candidate) =>
+      candidate.automationProfileId === profile.profileId &&
+      candidate.automationProfileKey === definition.key);
+    let associationStatus = "matching";
+    if (!taskId) associationStatus = "missing-retained-id";
+    else if (!task) associationStatus = "missing-task";
+    else if (associated.length !== 1) associationStatus = associated.length ? "duplicate-association" : "missing-association";
+    else if (associated[0].id !== taskId || !matchesDefinition(associated[0], definition)) associationStatus = "mismatched-association";
+    const attention = [];
+    if (associationStatus !== "matching") attention.push(associationStatus);
+    if (task?.lastAuditError) attention.push("task-run-audit-error");
+    if (task && ["blocked", "failed"].includes(task.status)) attention.push(`task-${task.status}`);
+    return {
+      key: definition.key,
+      taskId: taskId || null,
+      associationStatus,
+      taskStatus: task?.status || "missing",
+      attention
+    };
+  });
+  const attention = taskHealth.flatMap((task) => task.attention);
+  return {
+    profileId: profile.profileId,
+    profileStatus: profile.status,
+    updatedAt: profile.updatedAt,
+    recoveryReadiness: profile.recoveryReadiness,
+    associationStatus: attention.length ? "attention" : "ready",
+    attention,
+    tasks: taskHealth
   };
 }
 

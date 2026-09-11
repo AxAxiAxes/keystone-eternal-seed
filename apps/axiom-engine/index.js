@@ -378,6 +378,14 @@ app.get("/automation/profiles/history", async (req, res, next) => {
   }
 });
 
+app.get("/automation/profiles/health", async (req, res, next) => {
+  try {
+    res.json(await automationProfileService.health());
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/automation/profiles/preview", async (req, res, next) => {
   try {
     res.json(await automationProfileService.preview(req.body));

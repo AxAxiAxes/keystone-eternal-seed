@@ -112,51 +112,6 @@ test("exposes every active role capability and activates a founder-configured te
       payload: { kind: "decision", content: "Approved private operational observation." } }]
   });
 
-  test("previews a profile without creating a draft or task", async (t) => {
-    const directory = path.join(process.cwd(), `automation-profile-test-${process.pid}-${Date.now()}`);
-    t.after(() => fs.rm(directory, { recursive: true, force: true }));
-    const { service, tasks } = fixture(directory);
-
-    const preview = await service.preview({
-      profileId: "preview-observation",
-      template: "operations-observation",
-      monitoringRecurrenceMinutes: 5,
-      governanceRecurrenceMinutes: 60
-    });
-
-    assert.equal(preview.activation.status, "ready");
-    assert.deepEqual(preview.activation.blockers, []);
-    assert.equal(preview.taskPlan.length, 2);
-    assert.equal("payload" in preview.taskPlan[0], false);
-    assert.equal(tasks.length, 0);
-    assert.equal((await service.status()).profileCount, 0);
-  });
-
-  test("requires profile dependencies to be existing completed tasks", async (t) => {
-    const directory = path.join(process.cwd(), `automation-profile-test-${process.pid}-${Date.now()}`);
-    t.after(() => fs.rm(directory, { recursive: true, force: true }));
-    const { service, tasks } = fixture(directory);
-    const incompleteDependency = randomUUID();
-    const input = {
-      profileId: "dependency-profile", template: "founder-configured",
-      taskTemplates: [{ key: "dependent-noop", action: "automation.noop",
-        agentId: "automation-executor", recurrenceMinutes: 60,
-        dependsOnTaskIds: [incompleteDependency], approvalRequired: false, payload: {} }]
-    };
-
-    await assert.rejects(
-      () => service.preview(input),
-      /existing completed task/
-    );
-    await assert.rejects(
-      () => service.createDraft(input),
-      /existing completed task/
-    );
-    tasks.push({ id: incompleteDependency, status: "completed" });
-    const preview = await service.preview(input);
-    assert.equal(preview.activation.status, "ready");
-    assert.equal((await service.createDraft(input)).status, "draft");
-  });
   const active = await service.activate("curator-memory-profile", { confirmed: true });
   assert.equal(active.status, "active");
   assert.equal(tasks[0].agentId, "memory-curator");
@@ -172,6 +127,82 @@ test("exposes every active role capability and activates a founder-configured te
       recurrenceMinutes: 60, dependsOnTaskIds: [], approvalRequired: false,
       payload: { kind: "decision", content: "Customer account details" } }]
   }), /approved structured schema/);
+});
+
+test("previews a profile without creating a draft or task", async (t) => {
+  const directory = path.join(process.cwd(), `automation-profile-test-${process.pid}-${Date.now()}`);
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const { service, tasks } = fixture(directory);
+
+  const preview = await service.preview({
+    profileId: "preview-observation",
+    template: "operations-observation",
+    monitoringRecurrenceMinutes: 5,
+    governanceRecurrenceMinutes: 60
+  });
+
+  assert.equal(preview.activation.status, "ready");
+  assert.deepEqual(preview.activation.blockers, []);
+  assert.equal(preview.taskPlan.length, 2);
+  assert.equal("payload" in preview.taskPlan[0], false);
+  assert.equal(tasks.length, 0);
+  assert.equal((await service.status()).profileCount, 0);
+});
+
+test("requires profile dependencies to be existing completed tasks", async (t) => {
+  const directory = path.join(process.cwd(), `automation-profile-test-${process.pid}-${Date.now()}`);
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const { service, tasks } = fixture(directory);
+  const incompleteDependency = randomUUID();
+  const input = {
+    profileId: "dependency-profile", template: "founder-configured",
+    taskTemplates: [{ key: "dependent-noop", action: "automation.noop",
+      agentId: "automation-executor", recurrenceMinutes: 60,
+      dependsOnTaskIds: [incompleteDependency], approvalRequired: false, payload: {} }]
+  };
+
+  await assert.rejects(
+    () => service.preview(input),
+    /existing completed task/
+  );
+  await assert.rejects(
+    () => service.createDraft(input),
+    /existing completed task/
+  );
+  tasks.push({ id: incompleteDependency, status: "completed" });
+  const preview = await service.preview(input);
+  assert.equal(preview.activation.status, "ready");
+  assert.equal((await service.createDraft(input)).status, "draft");
+});
+
+test("reports payload-free profile task association health without writing state", async (t) => {
+  const directory = path.join(process.cwd(), `automation-profile-test-${process.pid}-${Date.now()}`);
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const { service, tasks } = fixture(directory);
+  await service.createDraft({
+    profileId: "profile-health", template: "operations-observation",
+    monitoringRecurrenceMinutes: 5, governanceRecurrenceMinutes: 60
+  });
+  await service.activate("profile-health", { confirmed: true });
+  tasks[0].status = "pending";
+  tasks[1].status = "blocked";
+  tasks[1].lastAuditError = "private audit write failure";
+  const profilePath = path.join(directory, AUTOMATION_PROFILE_FILE_NAME);
+  const before = await fs.readFile(profilePath, "utf8");
+
+  const health = await service.health();
+
+  assert.equal(await fs.readFile(profilePath, "utf8"), before);
+  assert.equal(health.profiles.length, 1);
+  assert.equal(health.profiles[0].associationStatus, "attention");
+  assert.equal(health.profiles[0].tasks[0].associationStatus, "matching");
+  assert.equal(health.profiles[0].tasks[0].taskStatus, "pending");
+  assert.deepEqual(health.profiles[0].tasks[1].attention, ["task-run-audit-error", "task-blocked"]);
+  assert.equal("payload" in health.profiles[0].tasks[0], false);
+
+  tasks[1].automationProfileKey = "wrong-key";
+  const mismatched = await service.health();
+  assert.ok(mismatched.profiles[0].tasks[1].attention.includes("missing-association"));
 });
 
 test("rejects unsupported templates, unsafe inputs, missing confirmation, and incomplete activation readiness", async (t) => {

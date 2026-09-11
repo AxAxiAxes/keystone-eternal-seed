@@ -309,6 +309,16 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(profileHistoryEntries[0].taskCount, 2);
     assert.equal("taskTemplates" in profileHistoryEntries[0], false);
 
+    const profileHealth = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/profiles/health`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(profileHealth.status, 200);
+    const profileHealthProjection = await profileHealth.json();
+    assert.equal(profileHealthProjection.profiles[0].profileId, "portal-observation");
+    assert.equal(profileHealthProjection.profiles[0].tasks.length, 2);
+    assert.equal("payload" in profileHealthProjection.profiles[0].tasks[0], false);
+
     const unauthorizedContinuityRecord = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/continuity-record`
     );

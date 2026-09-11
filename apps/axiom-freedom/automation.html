@@ -45,6 +45,7 @@
     <h2>Automation Activation Profiles</h2>
     <p class="note">Founder-controlled internal schedules, not autonomous agents. The sole supported profile schedules Operations Observer monitoring and governance checks. Profiles never enable the scheduler and do not deploy, access accounts, send messages, publish, spend, accept payments, collect data, or make financial or legal decisions.</p>
     <div id="automation-profiles"></div>
+    <div id="automation-profile-health"></div>
     <div id="automation-profile-history"></div>
     <h3>Create operations-observation draft</h3>
     <form id="automation-profile-form">
@@ -377,6 +378,7 @@ async function refresh() {
     let serviceRegistryProjection = { services: {} };
     let automationProfiles = { profiles: [], templates: [] };
     let automationProfileHistory = [];
+    let automationProfileHealth = { profiles: [] };
     try {
       [monitoring, monitoringHistory] = await Promise.all([
         request("/api/automation/monitoring/status"),
@@ -420,8 +422,11 @@ async function refresh() {
       result.textContent = "Service registry will be available after the private engine deployment is updated.";
     }
     try {
-      automationProfiles = await request("/api/automation/profiles");
-      automationProfileHistory = await request("/api/automation/profiles/history?limit=20");
+      [automationProfiles, automationProfileHistory, automationProfileHealth] = await Promise.all([
+        request("/api/automation/profiles"),
+        request("/api/automation/profiles/history?limit=20"),
+        request("/api/automation/profiles/health")
+      ]);
       profileTemplates = automationProfiles.templates || [];
       renderFounderProfileOptions();
     } catch (error) {
@@ -532,6 +537,18 @@ async function refresh() {
         : `<button class="resume-profile" data-profile-id="${escapeHtml(profile.profileId)}">Confirm resume</button>`}</td></tr>`).join("");
     document.querySelector("#automation-profiles").innerHTML =
       `<p class="note">${escapeHtml(automationProfiles.label || "")}</p>${profileRows ? `<table><thead><tr><th>Profile</th><th>Status</th><th>Monitoring minutes</th><th>Governance minutes</th><th>Recovery readiness</th><th>Founder control</th></tr></thead><tbody>${profileRows}</tbody></table>` : "<p class='note'>No profile drafts yet.</p>"}`;
+    const profileHealthRows = (automationProfileHealth.profiles || []).flatMap(profile =>
+      profile.tasks.map(task => ({
+        profileId: profile.profileId,
+        profileStatus: profile.profileStatus,
+        associationStatus: task.associationStatus,
+        taskKey: task.key,
+        taskStatus: task.taskStatus,
+        attention: task.attention.join(", ") || "none"
+      }))
+    );
+    document.querySelector("#automation-profile-health").innerHTML =
+      `<h3>Profile/task association health</h3><p class="note">${escapeHtml(automationProfileHealth.label || "")}</p>${profileHealthRows.length ? table(profileHealthRows, [["profileId","Profile"],["profileStatus","Profile state"],["associationStatus","Association"],["taskKey","Task key"],["taskStatus","Task state"],["attention","Attention"]]) : "<p class='note'>No active or paused profiles to assess.</p>"}`;
     document.querySelector("#automation-profile-history").innerHTML =
       `<h3>Profile transition history</h3><p class="note">Payload-free retained profile lifecycle evidence. It does not create, approve, or process work.</p>${table(automationProfileHistory, [["sequence","Sequence"],["recordedAt","Recorded"],["event","Transition"],["profileId","Profile"],["template","Template"],["taskCount","Retained tasks"],["recoveryReadiness","Recovery"]])}`;
     document.querySelectorAll(".activate-profile, .pause-profile, .resume-profile").forEach(button => {
