@@ -1,6 +1,6 @@
 # 2026-09-11 Comprehensive-review remediation
 
-**Status:** Completed repository-controlled correction; hosted validation pending
+**Status:** Completed repository-controlled correction; hosted validation passed
 
 ## Finding
 
@@ -29,7 +29,9 @@ probes in the protected Command Center.
 ## Evidence and boundary
 
 Local validation passed AXI engine 69/69, protected portal 1/1, AXI.Core 5/5,
-and `git diff --check`. Docker is unavailable in the local environment, so
-the revised hosted workflow supplies the image-startup evidence. No scheduler,
-task, deployment, endpoint probe, DNS/TLS setting, account, credential,
-payment, message, publication, or external integration was activated.
+and `git diff --check`. Docker is unavailable in the local environment. Hosted
+AXI continuity-validation runs `34585381877` and `34585380982` both passed for
+commit `72d9f5e`, including AXI engine tests, protected portal tests, AXI.Core
+tests, and engine/portal image startup checks. No scheduler, task, deployment,
+endpoint probe, DNS/TLS setting, account, credential, payment, message,
+publication, or external integration was activated.
