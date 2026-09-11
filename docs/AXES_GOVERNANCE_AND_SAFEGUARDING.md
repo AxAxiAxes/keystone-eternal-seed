@@ -27,9 +27,12 @@ employment, youth-safeguarding, tax, or professional advice.
    classification, and operational signals, but cannot make binding
    moderation, financial, employment, eligibility, safety, or publishing
    decisions.
-5. **Truthful scope:** Labels must distinguish public information, invite-only
+5. **Self-description:** AXES may support but must not define a person's
+   identity, origin, value, beliefs, or rights. Do not infer or collect
+   sensitive personal information for exploratory services.
+6. **Truthful scope:** Labels must distinguish public information, invite-only
    pilots, internal prototypes, and future concepts.
-6. **Accessible participation:** Public and pilot experiences must support
+7. **Accessible participation:** Public and pilot experiences must support
    keyboard use, readable contrast, text alternatives, captions or
    transcripts for media, and reduced-motion preferences.
 

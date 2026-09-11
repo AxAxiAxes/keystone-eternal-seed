@@ -124,6 +124,11 @@ Automation may record, monitor, and propose. It cannot independently create
 accounts, accept terms, spend money, deploy, contact people, publish media, or
 change domain/email settings. The founder or a designated human approver
 authorizes purchases, contracts, releases, and material operational changes.
+AXES respects an individual's self-description and must not use software to
+define a person's identity, value, beliefs, origin, eligibility, or rights.
+The related founder-provided constitutional source statement is preserved in
+`keystone/RIGHT_OF_SELF_ORIGIN.md`; it does not itself establish external legal
+rights or override these operating controls.
 
 ## Launch plan
 
