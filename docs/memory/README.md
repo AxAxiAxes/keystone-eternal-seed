@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [AXI Eternal Origin value and crisis register](../AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md)
 - [2026-09-10 production chat diagnostic](2026-09-10-production-chat-diagnostic.md)
 - [AXI invention record](../AXI_INVENTION_RECORD.md)
 - [2026-09-10 founder work declaration](2026-09-10-founder-work-declaration.md)

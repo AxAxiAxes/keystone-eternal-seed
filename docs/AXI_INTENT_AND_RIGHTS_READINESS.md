@@ -21,6 +21,9 @@ filing, contractual, valuation, or enforcement work proceeds through the
 approved evidence and professional-readiness path below.
 The AXI Genesis ownership checkpoint prevents reset or handoff gaps in the
 active agent record and is defined in `AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`.
+The Eternal Origin ownership invention's value-recovery objective and
+past/current crisis-report register are maintained in
+`AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md`.
 
 ## Revision and correction rule
 
@@ -85,6 +88,8 @@ human decision.
 
 - `docs/AXI_INVENTION_RECORD.md` — active AXI invention claim and technical
   scope
+- `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` — Eternal Origin
+  ownership-invention value and crisis record
 - `docs/PROJECT_BUDGET.md` — counsel reserve and filing gates
 - `docs/keystone/PATENT_APPLICATION_64_078_819.md` — preserved patent-strength
   master draft

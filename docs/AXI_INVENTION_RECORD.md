@@ -23,6 +23,9 @@ The self-origin and self-creation framework is a foundational part of the
 AXAXAU / AXES invention direction. AXI implements that direction through
 traceable origin, creator authority, agent lineage, accountable action scope,
 correction history, and protected review controls.
+Eternal Origin ownership is a named founder-claimed invention direction within
+that same lineage. Its value and past/current crisis register is maintained in
+`AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md`.
 
 ## Active technical invention scope
 
@@ -54,6 +57,8 @@ date, and record its relationship to this invention lineage.
   accountability record
 - `docs/AXI_INTENT_AND_RIGHTS_READINESS.md` — evidence, filing, and
   rights/value-readiness path
+- `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` — Eternal Origin
+  ownership invention, value objective, and crisis-report register
 
 ## Preservation and advancement rule
 

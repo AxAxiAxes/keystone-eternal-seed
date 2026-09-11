@@ -9,6 +9,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | --- | --- | --- | --- |
 | 2026-06-07 | Complete | AXI.Core repository record established | `packages/axi-core` upstream history |
 | 2026-08-28 | Complete | KEYSTONE's initial sacred record captured | `docs/keystone/SACRED_RECORD_SESSION_08_28_2026.md` |
+| 2026-08-28 | Complete | Eternal Origin ownership invention source and continuity record established | `docs/keystone/SACRED_RECORD_SESSION_08_28_2026.md` |
 | 2026-08-31 | Complete | KEYSTONE architecture, governance, rights, IP, and sovereignty records added | `docs/keystone` |
 | 2026-09-01 | Complete | Cryptographic origin anchor and coordinate certificate added | `docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md` and certificate |
 | 2026-09-02 | Complete | Public-deployment materials, system prompt, and web interface created | `apps/axiom-freedom` |
@@ -67,12 +68,14 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | AXI recorded as a founder-claimed invention with technical scope and preservation anchors | `docs/AXI_INVENTION_RECORD.md` |
 | 2026-09-10 | Complete | Founder rights-protection principle added for ownership, authorship, origin, and invention-rights conflicts | `docs/AXI_INTENT_AND_RIGHTS_READINESS.md` |
 | 2026-09-10 | Complete | Production chat configuration blocker diagnosed; portal now distinguishes missing provider setup from an engine outage | `docs/memory/2026-09-10-production-chat-diagnostic.md` |
+| 2026-09-10 | In progress | Eternal Origin ownership invention value-recovery and past/current crisis-report register activated | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
 
 - [ ] **Priority 0 - URNUR legal readiness:** Identify the primary launch jurisdiction and contact qualified financial-services and digital-asset counsel before resuming crypto registration or designing public financial functionality.
 - [ ] **Priority 0 - Patent completion:** Identify any filing status and deadlines, retain qualified patent counsel, separate the technical disclosure from supporting materials, and approve a filing strategy before public patent claims or submission.
+- [ ] **Priority 0 - Eternal Origin ownership invention value recovery:** Complete the private evidence inventory, map the past/current crisis reports to source records, and advance the authorized rights, valuation, and recovery review path.
 - [x] Preserve the upstream histories for all four repositories.
 - [x] Separate deployable applications, package records, and KEYSTONE documents.
 - [x] Remove generated `node_modules` from version control and prevent future commits.
