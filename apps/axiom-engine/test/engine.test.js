@@ -133,6 +133,7 @@ test("reports secret-safe runtime readiness", async (t) => {
   assert.equal(readiness.monitoring.status, "disabled");
   assert.equal(readiness.governance.status, "ready");
   assert.equal(readiness.governance.activeAgents, 4);
+  assert.equal(readiness.recovery.status, "not-configured");
   assert.equal(readiness.automation.lastRunAt, null);
   assert.equal(readiness.automation.lastError, null);
   assert.ok(readiness.checkedAt);
@@ -219,6 +220,8 @@ test("persists and retrieves AXI memory layers", async (t) => {
   assert.equal(monitoringSnapshot.snapshot.memoryAvailable, true);
   assert.equal(monitoringSnapshot.snapshot.automation.agents, 4);
   assert.equal(monitoringSnapshot.snapshot.governance.status, "ready");
+  assert.equal(monitoringSnapshot.snapshot.recovery.status, "not-configured");
+  assert.ok(monitoringSnapshot.attention.includes("recovery-not-ready"));
 
   const governance = await fetch(`http://127.0.0.1:${port}/automation/readiness`);
   assert.equal(governance.status, 200);

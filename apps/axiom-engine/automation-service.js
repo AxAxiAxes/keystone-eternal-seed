@@ -6,7 +6,8 @@ const TASK_ACTIONS = new Set([
   "memory.record",
   "automation.noop",
   "monitoring.snapshot",
-  "governance.readiness"
+  "governance.readiness",
+  "recovery.backup"
 ]);
 const TASK_STATUSES = new Set([
   "pending",
@@ -40,11 +41,15 @@ class AutomationService {
     directory,
     memoryStore,
     captureMonitoringSnapshot,
+    createRecoveryBackup,
+    verifyRecoveryBackup,
     now = () => new Date()
   }) {
     this.directory = directory;
     this.memoryStore = memoryStore;
     this.captureMonitoringSnapshot = captureMonitoringSnapshot;
+    this.createRecoveryBackup = createRecoveryBackup;
+    this.verifyRecoveryBackup = verifyRecoveryBackup;
     this.now = now;
     this.operationQueue = Promise.resolve();
   }
@@ -477,6 +482,17 @@ class AutomationService {
     if (task.action === "governance.readiness") {
       return evaluateGovernanceReadiness(state);
     }
+    if (task.action === "recovery.backup") {
+      if (typeof this.createRecoveryBackup !== "function" ||
+        typeof this.verifyRecoveryBackup !== "function") {
+        throw new RangeError("recovery backups are not configured");
+      }
+      const backup = await this.createRecoveryBackup();
+      return {
+        backup,
+        verification: await this.verifyRecoveryBackup(backup.id)
+      };
+    }
     throw new RangeError(`unsupported task action: ${task.action}`);
   }
 
@@ -646,7 +662,7 @@ function defaultAgents(now) {
     {
       id: "operations-observer",
       name: "Operations Observer",
-      capabilities: ["monitoring.snapshot", "governance.readiness"],
+      capabilities: ["monitoring.snapshot", "governance.readiness", "recovery.backup"],
       enabled: true,
       registeredAt,
       originCheckpoint: "axi-operations-observer",
@@ -655,7 +671,8 @@ function defaultAgents(now) {
       duties: [
         "Run approved monitoring snapshots.",
         "Surface operational attention signals.",
-        "Assess private Genesis and governance readiness."
+        "Assess private Genesis and governance readiness.",
+        "Create approved recovery backups."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
       keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),

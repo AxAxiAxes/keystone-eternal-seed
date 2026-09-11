@@ -15,6 +15,7 @@ controller. It accepts only the versioned action allowlist:
 | `automation.noop` | `automation.noop` | Runs a testable workflow placeholder without external side effects. |
 | `monitoring.snapshot` | `monitoring.snapshot` | Captures a private operational snapshot without contacting an external system. |
 | `governance.readiness` | `governance.readiness` | Assesses Genesis registration, active accountability, approved capabilities, and task attention states without making legal or external determinations. |
+| `recovery.backup` | `recovery.backup` | Creates and verifies a private runtime recovery bundle only at an explicitly configured, distinct backup location. |
 
 The service rejects any unrecognized action. New external integrations must be
 implemented, reviewed, tested, and added to the allowlist before they can be
@@ -31,7 +32,7 @@ preserving existing agent records.
 | Memory Curator | `memory.record` | Maintains validated memory entries. |
 | Automation Executor | `automation.noop` | Runs bounded workflow checks. |
 | Automation Auditor | Both capabilities | Provides a general audited fallback. |
-| Operations Observer | `monitoring.snapshot`, `governance.readiness` | Captures private health, queue, scheduler, usage, and Genesis/governance-readiness signals. |
+| Operations Observer | `monitoring.snapshot`, `governance.readiness`, `recovery.backup` | Captures private health, queue, scheduler, usage, Genesis/governance-readiness, and recovery signals. |
 
 Tasks can specify an eligible `agentId`; otherwise the first enabled agent with
 the matching capability is assigned. Tasks have a priority from 1 (backlog) to
@@ -127,6 +128,13 @@ readiness result is an internal operational signal: it preserves and checks
 the AXI creator-claim record but does not make an external ownership,
 inventorship, valuation, legal-rights, or recovery determination.
 
+Queue a recurring `recovery.backup` task only after the operator has
+configured and verified an independent backup destination. The action creates
+one private recovery bundle, verifies its hashes before completing the task,
+and retains the bundle for a separately authorized restore. It does not
+overwrite live memory, contact an external service, or prove that a configured
+storage location is independently durable.
+
 ## Opt-in scheduler
 
 Manual processing through `POST /automation/process` is always available from
@@ -158,11 +166,14 @@ AXIOM_MONITORING_POLL_INTERVAL_MS=60000
 
 Snapshots include memory availability, scheduler heartbeat and error state,
 task queue and failure counts, enabled agents, recorded runs, Genesis and
-governance readiness, and private provider token totals. A history entry is
+governance readiness, recovery-backup readiness, and private provider token
+totals. A history entry is
 retained only when a monitored state meaningfully changes or enters attention
 state, preventing repetitive records. Attention states include unavailable
 memory, failed tasks, scheduler errors, a queue backlog above 20 tasks, and a
 Genesis/governance readiness issue.
+A missing, empty, unavailable, or invalid recovery backup produces the
+`recovery-not-ready` attention state.
 
 The protected console can capture a snapshot and display current signals and
 reevaluation history. The private API also provides `GET /monitoring/status`,

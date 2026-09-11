@@ -68,9 +68,14 @@ On every service startup or configuration reset, treat automation as disabled
 until its private configuration is reviewed. Enable private monitoring first,
 inspect a protected-console snapshot, and then enable the scheduler only when
 an authorized operator accepts the configured allowlist, task limits, and
-rollback path. The scheduler must remain limited to the versioned actions in
+rollback and recovery path. Before enabling the scheduler, verify the latest
+private runtime recovery bundle and confirm it is stored in the separately
+configured recovery location. If a reset lost runtime state, restore the
+verified bundle only into the isolated recovery directory, compare it, and
+obtain an authorized decision before using it as engine state. The scheduler
+must remain limited to the versioned actions in
 `docs/AXI_AUTOMATION_SERVICE.md`; it cannot deploy, access accounts, spend,
-message, publish, or control third-party services.
+message, publish, control third-party services, or overwrite live memory.
 
 ## Continuity record
 

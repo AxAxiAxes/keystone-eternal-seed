@@ -12,6 +12,7 @@ COPY usage-store.js ./
 COPY automation-service.js ./
 COPY checkpoint-service.js ./
 COPY monitoring-service.js ./
+COPY recovery-backup-service.js ./
 
 EXPOSE 3000
 

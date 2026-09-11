@@ -78,6 +78,12 @@ when an authorized operator schedules them. Any mismatch is reported as an
 attention state in private monitoring; it does not alter claims, correct
 records, or make an external ownership or legal determination.
 
+Genesis reconciliation alone cannot recover memory deleted with an ephemeral
+or lost data volume. Before enabling scheduled work after a reset, confirm the
+private recovery status is `ready`, verify the latest recovery bundle, and
+conduct any restore only into an isolated staging directory. The complete
+runtime-timeline recovery procedure is in `AXI_RUNTIME_TIMELINE_RECOVERY.md`.
+
 ## Related records
 
 - `docs/AXES_AGENT_ORIGIN_REGISTRY.md`

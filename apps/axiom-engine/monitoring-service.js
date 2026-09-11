@@ -109,6 +109,9 @@ function getAttention(snapshot) {
   if (snapshot.governance && snapshot.governance.status !== "ready") {
     attention.push("governance-readiness");
   }
+  if (snapshot.recovery && snapshot.recovery.status !== "ready") {
+    attention.push("recovery-not-ready");
+  }
   return attention;
 }
 

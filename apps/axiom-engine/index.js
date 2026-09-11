@@ -7,6 +7,7 @@ const { MemoryStore } = require("./memory-store");
 const { UsageStore } = require("./usage-store");
 const { CheckpointService } = require("./checkpoint-service");
 const { MonitoringService } = require("./monitoring-service");
+const { RecoveryBackupService } = require("./recovery-backup-service");
 const {
   AutomationService,
   evaluateGovernanceReadiness,
@@ -14,19 +15,23 @@ const {
   startAutomationScheduler
 } = require("./automation-service");
 const app = express();
-const memoryStore = new MemoryStore(
-  process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data")
-);
-const usageStore = new UsageStore(
-  process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data")
-);
+const dataDirectory = process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data");
+const memoryStore = new MemoryStore(dataDirectory);
+const usageStore = new UsageStore(dataDirectory);
+const recoveryBackupService = new RecoveryBackupService({
+  sourceDirectory: dataDirectory,
+  backupDirectory: process.env.AXIOM_BACKUP_DIRECTORY,
+  restoreDirectory: process.env.AXIOM_RECOVERY_RESTORE_DIRECTORY
+});
 const automationService = new AutomationService({
-  directory: process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data"),
+  directory: dataDirectory,
   memoryStore,
-  captureMonitoringSnapshot
+  captureMonitoringSnapshot,
+  createRecoveryBackup: () => recoveryBackupService.create(),
+  verifyRecoveryBackup: (backupId) => recoveryBackupService.verify(backupId)
 });
 const checkpointService = new CheckpointService({
-  directory: process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data"),
+  directory: dataDirectory,
   modules: [
     { id: "memory", version: "1" },
     { id: "usage", version: "1" },
@@ -45,7 +50,7 @@ const monitoring = {
   enabled: process.env.AXIOM_MONITORING_ENABLED === "true"
 };
 const monitoringService = new MonitoringService({
-  directory: process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data"),
+  directory: dataDirectory,
   memoryStore
 });
 const chatService = new ChatService({
@@ -89,7 +94,8 @@ app.get("/system/readiness", async (req, res, next) => {
       monitoring: {
         status: monitoring.enabled ? "enabled" : "disabled"
       },
-      governance: await automationService.getGovernanceReadiness()
+      governance: await automationService.getGovernanceReadiness(),
+      recovery: await recoveryBackupService.status()
     });
   } catch (error) {
     console.error("AXIOM runtime readiness check failed:", error.message);
@@ -111,20 +117,22 @@ app.get("/usage", async (req, res, next) => {
 
 async function captureMonitoringSnapshot(automationState) {
   await memoryStore.list("decision", 1);
-  const [automation, usage, governance] = await Promise.all([
+  const [automation, usage, governance, recovery] = await Promise.all([
     automationState
       ? summarizeAutomationState(automationState)
       : automationService.status(),
     usageStore.summary(),
     automationState
       ? evaluateGovernanceReadiness(automationState)
-      : automationService.getGovernanceReadiness()
+      : automationService.getGovernanceReadiness(),
+    recoveryBackupService.status()
   ]);
   return monitoringService.record({
     memoryAvailable: true,
     scheduler: { ...scheduler },
     automation,
     governance,
+    recovery,
     usage
   });
 }
@@ -166,6 +174,39 @@ app.get("/system/checkpoints", async (req, res, next) => {
 app.post("/system/checkpoints", async (req, res, next) => {
   try {
     res.status(201).json(await checkpointService.create());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/backups", async (req, res, next) => {
+  try {
+    const limit = req.query.limit === undefined ? 20 : Number(req.query.limit);
+    res.json(await recoveryBackupService.list(limit));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/system/backups", async (req, res, next) => {
+  try {
+    res.status(201).json(await recoveryBackupService.create());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/system/backups/:backupId/verify", async (req, res, next) => {
+  try {
+    res.json(await recoveryBackupService.verify(req.params.backupId));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/system/backups/:backupId/restore", async (req, res, next) => {
+  try {
+    res.status(201).json(await recoveryBackupService.restore(req.params.backupId));
   } catch (error) {
     next(error);
   }

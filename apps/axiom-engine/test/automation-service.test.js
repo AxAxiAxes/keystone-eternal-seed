@@ -440,6 +440,37 @@ test("reports Genesis and governance readiness without making an ownership deter
   }]);
 });
 
+test("creates and verifies a recovery backup through the Operations Observer", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AutomationService({
+    directory,
+    memoryStore: createMemoryStore(),
+    createRecoveryBackup: async () => ({ id: "bc0c59f8-d711-4b96-9fa0-71b14c98f60d" }),
+    verifyRecoveryBackup: async (backupId) => ({
+      id: backupId,
+      integrity: "verified"
+    })
+  });
+  const task = await service.createTask({
+    title: "Create a private recovery backup",
+    action: "recovery.backup",
+    agentId: "operations-observer",
+    originCheckpoint: "axi-reset-recovery"
+  });
+
+  const [outcome] = await service.processDueTasks();
+  assert.equal(outcome.status, "completed");
+  assert.deepEqual((await service.listRuns())[0].result, {
+    backup: { id: "bc0c59f8-d711-4b96-9fa0-71b14c98f60d" },
+    verification: {
+      id: "bc0c59f8-d711-4b96-9fa0-71b14c98f60d",
+      integrity: "verified"
+    }
+  });
+  assert.equal(task.agentId, "operations-observer");
+});
+
 test("records a monitoring snapshot through the dedicated observer", async (t) => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));

@@ -15,6 +15,8 @@
 | `AXIOM_AUTOMATION_MAX_TASKS_PER_CYCLE` | `axiom-engine` | `5` | Maximum due tasks processed each scheduler cycle, from 1 to 20. |
 | `AXIOM_MONITORING_ENABLED` | `axiom-engine` | `false` | Enables private operational monitoring snapshots. |
 | `AXIOM_MONITORING_POLL_INTERVAL_MS` | `axiom-engine` | `60000` | Monitoring interval, from 1,000 to 3,600,000 milliseconds. |
+| `AXIOM_BACKUP_DIRECTORY` | `axiom-engine` | Unset | Required distinct location for private runtime recovery bundles. |
+| `AXIOM_RECOVERY_RESTORE_DIRECTORY` | `axiom-engine` | Unset | Required isolated location for verified recovery drills; never the live memory directory. |
 
 ## Command contract
 
@@ -110,3 +112,22 @@ enabled agents have the canonical Genesis registration and active
 accountability, whether their capabilities remain allowlisted, and whether any
 tasks are blocked or failed. It does not determine external ownership, legal
 rights, value, or recovery.
+
+`recovery` reports `not-configured`, `empty`, `ready`, or `unavailable`.
+`ready` means the latest private bundle was locally hash-verified; it does not
+represent an external durability, legal, or rights determination.
+
+## Private recovery endpoints
+
+The engine exposes recovery endpoints only on the private service network:
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/system/backups?limit=20` | Lists available private recovery bundles. |
+| `POST` | `/system/backups` | Creates one private runtime bundle at the configured distinct backup location. |
+| `POST` | `/system/backups/:backupId/verify` | Recomputes and verifies the bundle's file hashes. |
+| `POST` | `/system/backups/:backupId/restore` | Restores a verified bundle only into `AXIOM_RECOVERY_RESTORE_DIRECTORY`. |
+
+The restore endpoint is not public and refuses to write to the live memory or
+backup locations. Review the restored copy before changing an engine's memory
+directory or enabling automation.

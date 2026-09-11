@@ -39,4 +39,12 @@ test("records changed monitoring state and attention transitions", async (t) => 
   assert.deepEqual(governanceAttention.attention, ["governance-readiness"]);
   assert.equal(decisions.length, 2);
   assert.equal((await service.history()).length, 3);
+
+  const recoveryAttention = await service.record({
+    ...healthy,
+    recovery: { status: "empty" }
+  });
+  assert.deepEqual(recoveryAttention.attention, ["recovery-not-ready"]);
+  assert.equal(decisions.length, 3);
+  assert.equal((await service.history()).length, 4);
 });

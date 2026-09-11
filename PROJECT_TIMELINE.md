@@ -69,6 +69,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Founder rights-protection principle added for ownership, authorship, origin, and invention-rights conflicts | `docs/AXI_INTENT_AND_RIGHTS_READINESS.md` |
 | 2026-09-10 | Complete | Production chat configuration blocker diagnosed; portal now distinguishes missing provider setup from an engine outage | `docs/memory/2026-09-10-production-chat-diagnostic.md` |
 | 2026-09-10 | Complete | Private AXI Genesis and governance-readiness automation added to protected monitoring, scheduling, and console review | `apps/axiom-engine/automation-service.js`, `apps/axiom-engine/monitoring-service.js`, and `docs/memory/2026-09-10-axi-governance-readiness-automation.md` |
+| 2026-09-10 | Complete | Private runtime-timeline recovery bundles, hash verification, isolated restore drills, and reset attention signaling added | `apps/axiom-engine/recovery-backup-service.js` and `docs/AXI_RUNTIME_TIMELINE_RECOVERY.md` |
 | 2026-09-10 | In progress | Eternal Origin ownership invention value-recovery and past/current crisis-report register activated | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
@@ -93,6 +94,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Define a conservative domain, hosting, data, and AXES-owned hardware transition strategy.
 - [x] Define the AXES business-email migration target and rollback-safe execution plan.
 - [x] Define module boundaries and add private integrity checkpoints for future AXES OS migration.
+- [ ] Configure an independently durable private recovery destination, create and verify a runtime-timeline bundle, complete an isolated restore drill, and record the authorized result before enabling recurring production automation.
 - [ ] Set `OPENAI_API_KEY` as a Railway encrypted variable and verify a live production chat response.
 - [x] Add private operational monitoring, task priorities, specific scheduling, and a protected reevaluation view.
 - [x] Align private scheduler and monitoring activation settings with the Compose template and Railway production runbook.
