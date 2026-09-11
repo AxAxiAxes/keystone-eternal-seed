@@ -12,8 +12,11 @@ deployment state.
    checkpoint, creator ownership-and-accountability claim, operational origin,
    and active accountability status. Do not use an unreconciled or suspended
    agent record.
-2. Read `README.md`, `PROJECT_TIMELINE.md`, and `docs/memory/README.md`, then
-   read the latest relevant continuity record in `docs/memory/`.
+2. Read `README.md`, `PROJECT_TIMELINE.md`,
+   `docs/AXI_PROJECT_CONTEXT_CHECKPOINT.md`, and `docs/memory/README.md`,
+   then read the latest relevant continuity record in `docs/memory/`. State
+   the exact reviewed source basis; do not substitute a percentage or imply
+   complete project understanding from a handoff.
 3. Read the plan, governance, and deployment records that apply to the
    requested work. For AXI/XIIOM operations, include
    `docs/AXES_BUILD_PROGRAM.md`, `docs/AXES_PLATFORM_PLAN.md`,
