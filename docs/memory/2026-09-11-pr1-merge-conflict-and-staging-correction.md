@@ -34,9 +34,24 @@ merge failed: `apps/axiom-freedom/server.js`'s checkpoint parser captures
 is silently truncated to its first line. This was a **latent bug already on
 this branch before the merge** — the previous single-branch wording
 happened to keep the test's expected substring within line 1, masking it.
-Fixed by keeping "Current phase" as one unwrapped line (matching the base
-branch's own convention) rather than changing the parser, and updating the
-one assertion that named the old wording.
+As an immediate unblock, kept "Current phase" as one unwrapped line
+(matching the base branch's own convention) and updated the one assertion
+that named the old wording.
+
+### Root-cause fix (follow-up, same session)
+
+The one-line workaround above was noted at the time as leaving the actual
+parser fragility unfixed. Checkpoint titles in the same function already
+support wrapping via an indented-continuation convention (a line indented
+2+ spaces is appended to the previous checkpoint's title); the "Current
+phase" field had no equivalent. Brought it in line: `server.js`'s
+`getCommandCenterCheckpoints` now applies the same continuation rule to
+the phase field, so an indented second line is captured instead of
+dropped, while an unindented one is correctly treated as unrelated text
+and left out. `PROJECT_TIMELINE.md`'s intro paragraph now documents the
+convention. Added two focused unit tests exercising the function directly
+against synthetic fixtures (wrapped-and-captured, unindented-and-dropped)
+without touching the real timeline file or the full HTTP server.
 
 ## A staging mistake in resolving it (self-reported)
 
@@ -64,7 +79,8 @@ tree means the index (what will actually be committed) matches it.
 ## Verified end state
 
 - `apps/axiom-engine` — 76/76 passing
-- `apps/axiom-freedom` — 1/1 passing
+- `apps/axiom-freedom` — 3/3 passing (includes the two new checkpoint-parsing
+  unit tests added by the root-cause fix)
 - `AXIOM.sln` (AXI.Core) — 5/5 passing
 - Hosted CI on `9943a57` — 10/10 checks `SUCCESS`
 - `gh pr view 1` — `state: OPEN`, `mergeable: MERGEABLE`,
@@ -79,4 +95,9 @@ tree means the index (what will actually be committed) matches it.
   none of this branch's fixes reach production until PR #1 merges and a
   deploy runs.
 - PR #1 merging itself is a founder decision, not one this session takes
-  unilaterally.
+  unilaterally: merging into `axaxiaxes-axiom-monorepo` is the branch
+  Railway auto-deploys from, so it is a deploy-triggering action, not a
+  purely reversible in-repo one. Confirmed live status is healthy for
+  what's actually deployed (`/health`, `/`, `/axiom` all 200); the
+  `/origin-continuity` 404 seen live is expected, not a regression — that
+  page exists only on this still-open PR and has not shipped yet.

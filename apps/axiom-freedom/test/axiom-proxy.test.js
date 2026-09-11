@@ -635,3 +635,70 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     }
   }
 });
+
+test("Command Center checkpoint parsing captures an indented multi-line Current phase field", async () => {
+  delete require.cache[require.resolve("../server")];
+  const web = require("../server");
+  const tempTimelineFile = path.join(
+    os.tmpdir(),
+    `axiom-timeline-multiline-${process.pid}-${Date.now()}.md`
+  );
+  await fs.writeFile(
+    tempTimelineFile,
+    [
+      "# Test timeline",
+      "",
+      "**Current phase:** First line of a wrapped phase description",
+      "  continues here on an indented second line",
+      "",
+      "## Current checkpoints",
+      "",
+      "- [x] Example checkpoint",
+      "",
+      "## Later section",
+      ""
+    ].join("\n")
+  );
+  try {
+    const result = web.getCommandCenterCheckpoints(tempTimelineFile);
+    assert.equal(
+      result.currentPhase,
+      "First line of a wrapped phase description continues here on an indented second line"
+    );
+    assert.equal(result.checkpoints.length, 1);
+    assert.equal(result.checkpoints[0].title, "Example checkpoint");
+  } finally {
+    await fs.rm(tempTimelineFile, { force: true });
+  }
+});
+
+test("Command Center checkpoint parsing leaves an unindented second line out of Current phase", async () => {
+  delete require.cache[require.resolve("../server")];
+  const web = require("../server");
+  const tempTimelineFile = path.join(
+    os.tmpdir(),
+    `axiom-timeline-singleline-${process.pid}-${Date.now()}.md`
+  );
+  await fs.writeFile(
+    tempTimelineFile,
+    [
+      "# Test timeline",
+      "",
+      "**Current phase:** Only the first line is captured",
+      "this unindented line is a separate paragraph, not a continuation",
+      "",
+      "## Current checkpoints",
+      "",
+      "- [x] Example checkpoint",
+      "",
+      "## Later section",
+      ""
+    ].join("\n")
+  );
+  try {
+    const result = web.getCommandCenterCheckpoints(tempTimelineFile);
+    assert.equal(result.currentPhase, "Only the first line is captured");
+  } finally {
+    await fs.rm(tempTimelineFile, { force: true });
+  }
+});

@@ -75,13 +75,27 @@ function serveDocument(res, pathname) {
     serveFile(res, documentPath, contentType);
 }
 
-function getCommandCenterCheckpoints() {
-    const timeline = fs.readFileSync(PROJECT_TIMELINE_FILE, 'utf8');
-    const phase = timeline.match(/^\*\*Current phase:\*\*\s*(.+)$/m);
+function getCommandCenterCheckpoints(timelineFilePath = PROJECT_TIMELINE_FILE) {
+    const timeline = fs.readFileSync(timelineFilePath, 'utf8');
+    const timelineLines = timeline.split(/\r?\n/);
+    const phaseLineIndex = timelineLines.findIndex(line => /^\*\*Current phase:\*\*/.test(line));
+
+    // The phase line supports the same indented-continuation convention as
+    // checkpoint titles below, so a wrapped phase is captured in full instead
+    // of silently truncating to its first line.
+    let currentPhase;
+    if (phaseLineIndex !== -1) {
+        const phaseParts = [timelineLines[phaseLineIndex].replace(/^\*\*Current phase:\*\*\s*/, '')];
+        for (let i = phaseLineIndex + 1; i < timelineLines.length && /^\s{2,}\S/.test(timelineLines[i]); i += 1) {
+            phaseParts.push(timelineLines[i].trim());
+        }
+        currentPhase = phaseParts.join(' ').trim();
+    }
+
     const sectionStart = timeline.indexOf('## Current checkpoints');
     const nextSection = timeline.indexOf('\n## ', sectionStart + 1);
 
-    if (!phase || sectionStart === -1 || nextSection === -1) {
+    if (!currentPhase || sectionStart === -1 || nextSection === -1) {
         throw new Error('Project timeline checkpoints are unavailable.');
     }
 
@@ -103,7 +117,7 @@ function getCommandCenterCheckpoints() {
 
     return {
         recordedAt: new Date().toISOString(),
-        currentPhase: phase[1].trim(),
+        currentPhase,
         checkpoints
     };
 }
@@ -806,3 +820,4 @@ if (require.main === module) {
 }
 
 module.exports = server;
+module.exports.getCommandCenterCheckpoints = getCommandCenterCheckpoints;

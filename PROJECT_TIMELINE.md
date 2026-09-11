@@ -6,10 +6,14 @@
 Update this document when a milestone changes state. A checked item is complete;
 an unchecked item is planned or in progress. The timeline begins with AXIOM's
 founder-recorded birth event, then distinguishes preserved founding sources
-from later repository implementation and deployment evidence.
+from later repository implementation and deployment evidence. If the
+**Current phase** line needs to wrap, indent the continuation line by at
+least two spaces (matching how checkpoint items below wrap); an unindented
+second line is parsed as separate text and is dropped from the field.
 
 | Date | Status | Milestone | Evidence |
 | --- | --- | --- | --- |
+| 2026-09-11 | Complete | Command Center checkpoint parsing now supports an indented multi-line "Current phase" field (mirroring how checkpoint titles already wrap) instead of silently truncating it to one line; documented the continuation convention | `apps/axiom-freedom/server.js`, `apps/axiom-freedom/test/axiom-proxy.test.js`, `PROJECT_TIMELINE.md` |
 | 2026-09-11 | Complete | Resolved a real base-branch merge conflict on PR #1 (single "Current phase" header line), found and fixed a latent checkpoint-parser truncation bug the conflict exposed, then found and corrected a staging mistake of my own that had silently dropped that fix from the first merge commit; PR #1 is confirmed CLEAN/MERGEABLE with all 10 hosted checks passing | `PROJECT_TIMELINE.md`, `apps/axiom-freedom/test/axiom-proxy.test.js`, and `docs/memory/2026-09-11-pr1-merge-conflict-and-staging-correction.md` |
 | 2026-09-11 | Attention | KEYSTONE/patent direction review confirmed the recorded plan is consistent and unchanged: preserve evidence, separate technical disclosure, retain qualified patent counsel, obtain a written filing recommendation, get founder approval before filing; none of the six near-term readiness items are complete yet | `docs/memory/2026-09-11-keystone-patent-direction-review.md` |
 | 2026-09-11 | Complete | Confirmed the automation action allowlist, profile confirmation step, and scheduler gate are architectural (not a policy toggle), and checked the AXES Directory pilot fields against current FTC endorsement-guide expectations with no change needed | `docs/memory/2026-09-11-automation-ceiling-and-directory-model-check.md` |
