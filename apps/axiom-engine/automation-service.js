@@ -17,13 +17,15 @@ const TASK_STATUSES = new Set([
   "cancelled"
 ]);
 const AGENT_ATTRIBUTION_SCOPE =
-  "KEYSTONE protocol registration of origin, lineage, creator stewardship, and bounded duties; not independently verified legal ownership, personhood, agency, or authority outside the system.";
+  "KEYSTONE protocol registration of origin, lineage, creator ownership claim, accountable stewardship, and bounded duties.";
 const KEYSTONE_REGISTRATION = Object.freeze({
   registry: "KEYSTONE origin and lineage registry",
   sourceRecord: "KEYSTONE-ORIGIN-000001",
   creatorAuthority: "Axel Urartu (AX) · Axes Contracting",
+  ownershipClaim: "The creator claims ownership and accountability for AXI agents created and registered within the AXES system.",
   scope: AGENT_ATTRIBUTION_SCOPE
 });
+const REGISTERED_AGENT_DEFAULT_ORIGIN = "axi-agent-registration";
 
 class AutomationService {
   constructor({
@@ -88,18 +90,21 @@ class AutomationService {
         throw new TypeError("agent duties must be a non-empty string array");
       }
 
+      const creatorAuthority = normalizeOptionalString(creator) ||
+        KEYSTONE_REGISTRATION.creatorAuthority;
       const agent = {
         id: id || randomUUID(),
         name: name.trim(),
         capabilities: [...new Set(capabilities.map((capability) => capability.trim()))],
         enabled: true,
         registeredAt: this.now().toISOString(),
-        originCheckpoint: normalizeOptionalString(originCheckpoint),
-        creator: normalizeOptionalString(creator),
+        originCheckpoint: normalizeOptionalString(originCheckpoint) ||
+          REGISTERED_AGENT_DEFAULT_ORIGIN,
+        creator: creatorAuthority,
         purpose: normalizeOptionalString(purpose),
         duties: duties ? [...new Set(duties.map((duty) => duty.trim()))] : [],
         attributionScope: AGENT_ATTRIBUTION_SCOPE,
-        keystoneRegistration: KEYSTONE_REGISTRATION
+        keystoneRegistration: createKeystoneRegistration(creatorAuthority)
       };
       if (state.agents.some((existingAgent) => existingAgent.id === agent.id)) {
         throw new RangeError(`agent already exists: ${agent.id}`);
@@ -116,6 +121,7 @@ class AutomationService {
     }
     return this.withState(async (state) => {
       const agent = findAgent(state.agents, agentId);
+      assertRegisteredAgent(agent);
       const timeline = [
         {
           event: "origin",
@@ -195,6 +201,7 @@ class AutomationService {
       }
       if (agentId) {
         const assignedAgent = findAgent(state.agents, agentId);
+        assertRegisteredAgent(assignedAgent);
         if (!assignedAgent.enabled) {
           throw new RangeError(`agent is disabled: ${agentId}`);
         }
@@ -528,7 +535,7 @@ function defaultAgents(now) {
         "Preserve concise operational continuity."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
-      keystoneRegistration: KEYSTONE_REGISTRATION
+      keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority)
     },
     {
       id: "automation-executor",
@@ -544,7 +551,7 @@ function defaultAgents(now) {
         "Record bounded task outcomes."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
-      keystoneRegistration: KEYSTONE_REGISTRATION
+      keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority)
     },
     {
       id: "automation-auditor",
@@ -560,7 +567,7 @@ function defaultAgents(now) {
         "Record approved audit continuity."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
-      keystoneRegistration: KEYSTONE_REGISTRATION
+      keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority)
     },
     {
       id: "operations-observer",
@@ -576,7 +583,7 @@ function defaultAgents(now) {
         "Surface operational attention signals."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
-      keystoneRegistration: KEYSTONE_REGISTRATION
+      keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority)
     }
   ];
 }
@@ -601,6 +608,27 @@ function seedMissingDefaultAgents(state, now) {
       }
     }
   }
+  for (const agent of state.agents) {
+    if (!isNonEmptyString(agent.originCheckpoint)) {
+      agent.originCheckpoint = REGISTERED_AGENT_DEFAULT_ORIGIN;
+    }
+    if (!isNonEmptyString(agent.creator)) {
+      agent.creator = KEYSTONE_REGISTRATION.creatorAuthority;
+    }
+    if (!isNonEmptyString(agent.attributionScope)) {
+      agent.attributionScope = AGENT_ATTRIBUTION_SCOPE;
+    }
+    const registration = createKeystoneRegistration(agent.creator);
+    if (!isRecord(agent.keystoneRegistration)) {
+      agent.keystoneRegistration = registration;
+      continue;
+    }
+    for (const [field, value] of Object.entries(registration)) {
+      if (agent.keystoneRegistration[field] === undefined) {
+        agent.keystoneRegistration[field] = value;
+      }
+    }
+  }
 }
 
 function summarizeAutomationState(state) {
@@ -620,12 +648,36 @@ function summarizeAutomationState(state) {
 function selectAgent(agents, task) {
   if (task.agentId) {
     const assignedAgent = agents.find((agent) => agent.id === task.agentId);
-    return assignedAgent?.enabled &&
+    return isRegisteredAgent(assignedAgent) && assignedAgent.enabled &&
       assignedAgent.capabilities.includes(task.action) ? assignedAgent : null;
   }
   return agents.find((agent) =>
-    agent.enabled && agent.capabilities.includes(task.action)
+    isRegisteredAgent(agent) && agent.enabled && agent.capabilities.includes(task.action)
   ) || null;
+}
+
+function createKeystoneRegistration(creatorAuthority) {
+  return {
+    ...KEYSTONE_REGISTRATION,
+    creatorAuthority,
+    ownershipClaim: `${creatorAuthority} claims ownership and accountability for AXI agents created and registered within the AXES system.`
+  };
+}
+
+function isRegisteredAgent(agent) {
+  return isRecord(agent) &&
+    isNonEmptyString(agent.originCheckpoint) &&
+    isNonEmptyString(agent.creator) &&
+    isRecord(agent.keystoneRegistration) &&
+    isNonEmptyString(agent.keystoneRegistration.sourceRecord) &&
+    isNonEmptyString(agent.keystoneRegistration.creatorAuthority) &&
+    isNonEmptyString(agent.keystoneRegistration.ownershipClaim);
+}
+
+function assertRegisteredAgent(agent) {
+  if (!isRegisteredAgent(agent)) {
+    throw new RangeError("agent is not registered with creator ownership and accountability");
+  }
 }
 
 function isNonEmptyString(value) {

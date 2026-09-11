@@ -1,24 +1,23 @@
 # AXI intent and rights-readiness record
 
-**Status:** Active founder direction; revisable development record
+**Status:** Active founder claim and direction; revisable development record
 **Recorded:** 2026-09-10
-**Scope:** AXI development, evidence preparation, and professional-readiness
-planning. This is not a legal filing, valuation, assignment, or determination
-of rights.
+**Scope:** AXI development, creator-claim registration, evidence preparation,
+and professional-readiness planning.
 
 ## Current intent
 
-AXI is actively being built. The founder direction is to preserve its technical
-and governance development options, prepare reliable evidence of its work, and
-seek qualified review for any applicable intellectual-property, authorship,
-licensing, contractual, valuation, or recovery path.
+AXI is actively being built. The founder records a claim to AXI's originating
+inventions, self-creation framework, creator authority, and accountable agent
+ownership within AXES. The direction is to preserve technical and governance
+options, prepare reliable evidence of the work, and pursue the applicable
+intellectual-property, authorship, licensing, contractual, valuation, and
+recovery paths.
 
-No current repository artifact should be presented as proof that AXI is fully
-saved, filed, registered, granted, assigned, enforceable, valued, or entitled
-to recovery. Source history, operational checkpoints, and internal provenance
-records can support later review, but they do not substitute for an approved
-preservation plan, a formal filing, contractual rights, independent valuation,
-or legal advice.
+Source history, operational checkpoints, internal provenance records, and
+creator-claim registrations are the current AXES record. Formal preservation,
+filing, contractual, valuation, or enforcement work proceeds through the
+approved evidence and professional-readiness path below.
 
 ## Revision and correction rule
 
@@ -28,10 +27,10 @@ dated change with an accountable human approver. The original KEYSTONE source
 records remain preserved unchanged for provenance; current interpretations and
 implementation records must remain versioned, reviewable, and correctable.
 
-Changes may not silently rewrite source provenance, remove an audit trail,
-expand autonomous authority, or convert an unverified assertion into a public
-claim. Material changes to claimed inventorship, assignment, ownership,
-licensing, damages, or value require qualified legal review.
+Changes may not silently rewrite source provenance, remove an audit trail, or
+expand autonomous authority. Material changes to claimed inventorship,
+assignment, ownership, licensing, damages, or value must be versioned and
+prepared for the appropriate review or filing path.
 
 ## Rights and value-readiness path
 
@@ -47,10 +46,9 @@ licensing, damages, or value require qualified legal review.
    for rights, filing, inventorship, ownership, and licensing strategy.
    Obtain litigation, forensic, tax, accounting, or valuation review only
    where its specific expertise is needed.
-4. **Identify available remedies or value paths:** With counsel, determine
-   whether the evidence supports an applicable filing, agreement, licensing
-   discussion, correction request, claim, or other path. Do not assume that a
-   path exists or that it will result in a recovery.
+4. **Advance remedies or value paths:** With counsel, identify the appropriate
+   filing, agreement, licensing discussion, correction request, claim, or
+   other action supported by the record.
 5. **Approve before action:** A named human decision-maker approves the scope,
    budget, evidence packet, communications, submissions, and any public
    statement. AXI may organize records and flag gaps but cannot retain counsel,

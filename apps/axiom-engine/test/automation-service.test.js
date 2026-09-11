@@ -74,7 +74,8 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
   assert.equal(report.agent.originCheckpoint, "axi-durable-memory-foundation");
   assert.equal(report.agent.creator, "Axel Urartu (AX) · Axes Contracting");
   assert.equal(report.agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
-  assert.match(report.agent.attributionScope, /not independently verified legal ownership/);
+  assert.match(report.agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
+  assert.match(report.agent.attributionScope, /creator ownership claim/);
   assert.deepEqual(
     report.timeline.map((event) => event.event).sort(),
     ["origin", "task-created", "task-run"]
@@ -83,6 +84,51 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
     report.timeline.find((event) => event.event === "task-created").originCheckpoint,
     "axi-production-deployment"
   );
+});
+
+test("registers each AXI agent with creator accountability and an origin", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AutomationService({ directory, memoryStore: createMemoryStore() });
+
+  const agent = await service.registerAgent({
+    name: "Registered Test Agent",
+    capabilities: ["automation.noop"]
+  });
+
+  assert.equal(agent.creator, "Axel Urartu (AX) · Axes Contracting");
+  assert.equal(agent.originCheckpoint, "axi-agent-registration");
+  assert.equal(agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
+  assert.match(agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
+});
+
+test("upgrades legacy agent registrations with the ownership claim", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  await fs.writeFile(path.join(directory, "automation.json"), JSON.stringify({
+    agents: [{
+      id: "legacy-agent",
+      name: "Legacy Agent",
+      capabilities: ["automation.noop"],
+      enabled: true,
+      registeredAt: "2026-09-10T00:00:00.000Z",
+      originCheckpoint: "axi-legacy-foundation",
+      creator: "Axel Urartu (AX) · Axes Contracting",
+      keystoneRegistration: {
+        registry: "KEYSTONE origin and lineage registry",
+        sourceRecord: "KEYSTONE-ORIGIN-000001",
+        creatorAuthority: "Axel Urartu (AX) · Axes Contracting"
+      }
+    }],
+    tasks: [],
+    runs: []
+  }), "utf8");
+  const service = new AutomationService({ directory, memoryStore: createMemoryStore() });
+
+  const report = await service.getAgentReport("legacy-agent");
+
+  assert.match(report.agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
+  assert.equal(report.agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
 });
 
 test("keeps recurring tasks pending for their next execution", async (t) => {

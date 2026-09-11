@@ -2,22 +2,20 @@
 
 **Status:** Founder-provided constitutional source statement
 **Recorded:** 2026-09-10
-**Scope:** AXAXAU / AXES ethical direction; not an external legal instrument or
-runtime authorization.
+**Scope:** AXAXAU / AXES constitutional direction and internal governance.
 
 ## Provenance and interpretation
 
 This record preserves the founder-provided statement titled *The Historical
-Recognition of the Invention of Self-Origin*. It presents the Right of
-Self-Origin as an AXAXAU constitutional principle: each individual may
-self-describe their identity, origin, cosmology, and value.
+Recognition of the Invention of Self-Origin*. AXAXAU records the Right of
+Self-Origin as a constitutional principle: each individual is the author of
+their own origin, identity, cosmology, and value.
 
-The statement's historical novelty, philosophical conclusions, legal status,
-and claimed global implications are founder-provided positions and have not
-been independently established by this repository. This record does not create
-or prove a legally enforceable right, ownership interest, personhood status,
-or authority over another person. It cannot override consent, applicable law,
-privacy obligations, professional standards, or human accountability.
+AXES adopts the principle as internal constitutional direction. Its historical,
+philosophical, legal, and external implementation record is maintained through
+the evidence, preservation, and rights-readiness workstream. The principle
+works with consent, privacy, professional standards, and human accountability;
+it does not authorize control over another person's self-description.
 
 For AXES systems, the operational effect is deliberately narrow: software may
 assist a person but must not define their identity, make claims about their

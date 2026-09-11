@@ -1,6 +1,6 @@
 # AXES agent origin registry
 
-**Status:** Active internal attribution and stewardship record
+**Status:** Active creator ownership and accountability record
 
 **Recorded:** 2026-09-10
 
@@ -10,17 +10,19 @@ This registry links the currently implemented AXI agent records to their
 project origin checkpoints, creator purpose, duties, and attributable task
 templates. It supports a running, private timeline for each agent.
 
-These records implement the KEYSTONE protocol's internal registration of
-agent origin, lineage, creator stewardship, purpose, and bounded duties. They
-do not independently prove legal ownership, personhood, employment, agency,
-independent authority, or rights over people, data, assets, accounts, or
-decisions. Any external legal effect remains subject to applicable law, valid
-records, and qualified professional review.
+These records implement the KEYSTONE protocol's registration of agent origin,
+lineage, creator ownership claim, accountability, purpose, and bounded duties.
+The creator's claim is that each AXI agent created and registered in AXES is
+owned and accountable to its named creator. An agent without this registration
+is unauthorized within AXES governance and cannot be assigned or selected for
+an AXI task.
 
 **KEYSTONE registration authority:** `KEYSTONE-ORIGIN-000001` records Axel
 Urartu (AX) · Axes Contracting as the creator authority for the KEYSTONE
-framework. Every current AXI agent inherits that internal creator-attribution
-record and identifies its own operational origin checkpoint below.
+framework. Every current AXI agent inherits that creator ownership-and-
+accountability claim and identifies its own operational origin checkpoint
+below. Filing, recognition, or enforcement outside AXES follows the separate
+rights-readiness process.
 
 ## Implemented agent origins
 
@@ -56,8 +58,9 @@ Console.
 
 Each report contains:
 
-1. The agent's origin checkpoint, creator attribution, purpose, duties,
-   capabilities, and attribution-scope notice.
+1. The agent's origin checkpoint, creator attribution, ownership-and-
+   accountability claim, purpose, duties, capabilities, and registration
+   notice.
 2. An `origin` event at registration.
 3. A `task-created` event for every explicitly assigned task, including its
    origin checkpoint and current status.

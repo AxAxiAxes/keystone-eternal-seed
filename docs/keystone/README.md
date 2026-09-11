@@ -5,9 +5,9 @@ This directory contains the original KEYSTONE document corpus relocated from the
 The documents remain in their original form and preserve their Git history. Refer to the repository-root README for the current repository map and component ownership.
 
 `RIGHT_OF_SELF_ORIGIN.md` is a separately recorded founder-provided
-constitutional source statement. It is not an original preserved document and
-does not establish external legal rights or change AXI's bounded operational
-authority.
+constitutional source statement. It is not an original preserved document; its
+implementation and external rights-readiness work are tracked separately from
+the unchanged source corpus.
 
 ## Preserved source documents
 

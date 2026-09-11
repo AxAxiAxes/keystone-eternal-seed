@@ -58,7 +58,7 @@
     </form>
   </section>
   <section><h2>Registered Agents</h2><div id="agents"></div></section>
-  <section><h2>Agent Timelines</h2><p class="note">Origin, assigned-task, and run events are private project-attribution records, not legal ownership or independent authority.</p><div id="agent-timelines"></div></section>
+  <section><h2>Agent Timelines</h2><p class="note">Each AXI agent is shown with its recorded origin, creator ownership-and-accountability claim, assigned tasks, and run events.</p><div id="agent-timelines"></div></section>
   <section><h2>Schedule</h2><p class="note">Due tasks run by priority first, then scheduled time. All execution remains limited to allowlisted actions.</p><div id="schedule"></div></section>
   <section><h2>Run History</h2><p class="note">Each completed, retrying, or failed execution is recorded privately.</p><div id="runs"></div></section>
   <section>
@@ -113,6 +113,7 @@ function renderAgentTimelines(reports) {
     const agent = report.agent;
     const attribution = [
       agent.creator || "No creator attribution recorded.",
+      agent.keystoneRegistration?.ownershipClaim || "No ownership claim recorded.",
       agent.purpose || "No purpose recorded.",
       agent.duties.join("; ") || "No duties recorded."
     ].join(" | ");
