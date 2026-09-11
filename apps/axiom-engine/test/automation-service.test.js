@@ -32,6 +32,8 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
   const task = await service.createTask({
     title: "Record deployment decision",
     action: "memory.record",
+    agentId: "memory-curator",
+    originCheckpoint: "axi-production-deployment",
     payload: {
       kind: "decision",
       content: "Private production engine deployed."
@@ -67,6 +69,19 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
   assert.equal(run.taskId, task.id);
   assert.equal(run.agentId, "memory-curator");
   assert.equal(run.status, "completed");
+
+  const report = await service.getAgentReport("memory-curator");
+  assert.equal(report.agent.originCheckpoint, "axi-durable-memory-foundation");
+  assert.equal(report.agent.creator, "AXES project founder direction");
+  assert.match(report.agent.attributionScope, /not legal ownership/);
+  assert.deepEqual(
+    report.timeline.map((event) => event.event).sort(),
+    ["origin", "task-created", "task-run"]
+  );
+  assert.equal(
+    report.timeline.find((event) => event.event === "task-created").originCheckpoint,
+    "axi-production-deployment"
+  );
 });
 
 test("keeps recurring tasks pending for their next execution", async (t) => {
@@ -192,6 +207,16 @@ test("rejects task actions outside the allowlist", async (t) => {
     }),
     (error) => error instanceof RangeError &&
       error.message === "unsupported task action: shell.execute"
+  );
+
+  await assert.rejects(
+    () => service.createTask({
+      title: "Assign unsupported work",
+      action: "memory.record",
+      agentId: "operations-observer"
+    }),
+    (error) => error instanceof RangeError &&
+      error.message === "agent does not support task action: operations-observer"
   );
 });
 

@@ -245,6 +245,22 @@ const server = http.createServer(async (req, res) => {
           }
           return;
     }
+    const agentReportRoute = pathname.match(/^\/api\/automation\/agents\/([^/]+)\/report$/);
+    if (agentReportRoute && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine(
+                    '/automation/agents/' + encodeURIComponent(agentReportRoute[1]) + '/report'
+                  );
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM agent timeline request failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
+    }
     if (pathname === '/api/automation/tasks' && req.method === 'GET') {
           if (!requireAdmin(req, res)) return;
           try {

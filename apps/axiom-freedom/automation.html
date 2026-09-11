@@ -41,6 +41,8 @@
     <form id="task-form">
       <label>Title <input id="title" required maxlength="200" placeholder="Record a verified milestone"></label>
       <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="monitoring.snapshot">Capture private monitoring snapshot</option><option value="automation.noop">Safe no-op test</option></select></label>
+      <label>Assigned agent <select id="task-agent" required></select></label>
+      <label>Origin checkpoint <input id="origin-checkpoint" required maxlength="120" placeholder="axi-operations-observer"></label>
       <label>Priority <select id="priority"><option value="5">P5 - Critical</option><option value="4">P4 - High</option><option value="3" selected>P3 - Normal</option><option value="2">P2 - Low</option><option value="1">P1 - Backlog</option></select></label>
       <label>Run at (optional) <input id="run-at" type="datetime-local"><span class="note">Leave empty to make the task due now.</span></label>
       <label>Depends on (optional) <select id="depends-on" multiple></select><span class="note">Select completed prerequisites or tasks that must finish first.</span></label>
@@ -56,6 +58,7 @@
     </form>
   </section>
   <section><h2>Registered Agents</h2><div id="agents"></div></section>
+  <section><h2>Agent Timelines</h2><p class="note">Origin, assigned-task, and run events are private project-attribution records, not legal ownership or independent authority.</p><div id="agent-timelines"></div></section>
   <section><h2>Schedule</h2><p class="note">Due tasks run by priority first, then scheduled time. All execution remains limited to allowlisted actions.</p><div id="schedule"></div></section>
   <section><h2>Run History</h2><p class="note">Each completed, retrying, or failed execution is recorded privately.</p><div id="runs"></div></section>
   <section>
@@ -72,6 +75,7 @@
 </main>
 <script>
 const result = document.querySelector("#result");
+let registeredAgents = [];
 async function request(path, options) {
   const response = await fetch(path, { credentials:"same-origin", headers:{"Content-Type":"application/json"}, ...options });
   const payload = await response.json().catch(() => ({}));
@@ -89,6 +93,38 @@ function escapeHtml(value) {
 }
 function priorityLabel(priority) {
   return `P${priority}`;
+}
+function renderTaskAgentOptions() {
+  const select = document.querySelector("#task-agent");
+  const currentValue = select.value;
+  const action = document.querySelector("#action").value;
+  const eligibleAgents = registeredAgents.filter(agent =>
+    agent.enabled && agent.capabilities.includes(action)
+  );
+  select.innerHTML = eligibleAgents.map(agent =>
+    `<option value="${escapeHtml(agent.id)}">${escapeHtml(agent.name)}</option>`
+  ).join("");
+  if (eligibleAgents.some(agent => agent.id === currentValue)) {
+    select.value = currentValue;
+  }
+}
+function renderAgentTimelines(reports) {
+  document.querySelector("#agent-timelines").innerHTML = reports.map(report => {
+    const agent = report.agent;
+    const attribution = [
+      agent.creator || "No creator attribution recorded.",
+      agent.purpose || "No purpose recorded.",
+      agent.duties.join("; ") || "No duties recorded."
+    ].join(" | ");
+    const events = report.timeline.map(event => ({
+      occurredAt: event.occurredAt,
+      event: event.event,
+      originCheckpoint: event.originCheckpoint || "",
+      status: event.status || "",
+      detail: event.detail || event.title || event.action || ""
+    }));
+    return `<h3>${escapeHtml(agent.name)}</h3><p class="note">${escapeHtml(attribution)}</p>${table(events, [["occurredAt","Time"],["event","Event"],["originCheckpoint","Origin"],["status","Status"],["detail","Detail"]])}`;
+  }).join("");
 }
 function renderSchedule(tasks) {
   const scheduled = tasks.filter(task => task.status === "pending");
@@ -131,12 +167,17 @@ async function refresh() {
     }
     document.querySelector("#metrics").innerHTML = Object.entries(status).map(([key,value]) => `<div class="metric"><strong>${value}</strong><br>${key}</div>`).join("");
     document.querySelector("#agents").innerHTML = table(agents, [["name","Name"],["capabilities","Capabilities"],["enabled","Enabled"]]);
+    registeredAgents = agents;
+    renderTaskAgentOptions();
     document.querySelector("#chat-agent").innerHTML = agents.map(agent => `<option value="${agent.id}">${agent.name}</option>`).join("");
     document.querySelector("#depends-on").innerHTML = tasks.map(task =>
       `<option value="${escapeHtml(task.id)}">${escapeHtml(task.title)} (${escapeHtml(task.status)})</option>`
     ).join("");
     renderSchedule(tasks);
     renderTasks(tasks);
+    renderAgentTimelines(await Promise.all(
+      agents.map(agent => request(`/api/automation/agents/${encodeURIComponent(agent.id)}/report`))
+    ));
     document.querySelector("#runs").innerHTML = table(runs.map(run => ({
       recordedAt: run.recordedAt,
       status: run.status,
@@ -161,7 +202,10 @@ async function refresh() {
     if (monitoring.snapshot) result.textContent = "";
   } catch (error) { result.textContent = error.message; }
 }
-document.querySelector("#action").addEventListener("change", event => document.querySelector("#memory-fields").classList.toggle("hidden", event.target.value !== "memory.record"));
+document.querySelector("#action").addEventListener("change", event => {
+  document.querySelector("#memory-fields").classList.toggle("hidden", event.target.value !== "memory.record");
+  renderTaskAgentOptions();
+});
 document.querySelector("#refresh").addEventListener("click", refresh);
 document.querySelector("#capture-monitoring").addEventListener("click", async () => { try { result.textContent = `Snapshot: ${(await request("/api/automation/monitoring/snapshots", {method:"POST",body:"{}"})).recorded ? "recorded" : "unchanged"}`; await refresh(); } catch(error) { result.textContent=error.message; } });
 document.querySelector("#process").addEventListener("click", async () => { try { result.textContent = JSON.stringify(await request("/api/automation/process", {method:"POST",body:"{}"}),null,2); await refresh(); } catch(error) { result.textContent=error.message; } });
@@ -169,7 +213,7 @@ document.querySelector("#task-form").addEventListener("submit", async event => {
   event.preventDefault();
   const action = document.querySelector("#action").value;
   const recurrence = document.querySelector("#recurrence").value;
-  const task = { title:document.querySelector("#title").value, action, priority:Number(document.querySelector("#priority").value), maxAttempts:Number(document.querySelector("#max-attempts").value), retryDelayMinutes:Number(document.querySelector("#retry-delay").value), approvalRequired:document.querySelector("#approval-required").checked, dependsOn:Array.from(document.querySelector("#depends-on").selectedOptions, option => option.value) };
+  const task = { title:document.querySelector("#title").value, action, agentId:document.querySelector("#task-agent").value, originCheckpoint:document.querySelector("#origin-checkpoint").value, priority:Number(document.querySelector("#priority").value), maxAttempts:Number(document.querySelector("#max-attempts").value), retryDelayMinutes:Number(document.querySelector("#retry-delay").value), approvalRequired:document.querySelector("#approval-required").checked, dependsOn:Array.from(document.querySelector("#depends-on").selectedOptions, option => option.value) };
   if (action === "memory.record") task.payload = { kind:document.querySelector("#kind").value, content:document.querySelector("#content").value };
   if (recurrence) task.recurrenceMinutes = Number(recurrence);
   const runAt = document.querySelector("#run-at").value;

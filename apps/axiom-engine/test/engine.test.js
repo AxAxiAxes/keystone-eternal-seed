@@ -78,6 +78,15 @@ test("reports engine health", async (t) => {
       failedTasks: 0,
       runs: 0
     });
+
+    const agentReport = await fetch(
+      `http://127.0.0.1:${port}/automation/agents/operations-observer/report`
+    );
+    assert.equal(agentReport.status, 200);
+    const report = await agentReport.json();
+    assert.equal(report.agent.creator, "AXES project founder direction");
+    assert.equal(report.agent.originCheckpoint, "axi-operations-observer");
+    assert.deepEqual(report.timeline.map((event) => event.event), ["origin"]);
   });
 
   test("reports empty OpenAI usage before any provider requests", async (t) => {

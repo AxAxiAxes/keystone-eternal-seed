@@ -138,6 +138,13 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(automationStatus.status, 200);
     assert.equal((await automationStatus.json()).agents, 4);
 
+    const observerReport = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/agents/operations-observer/report`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(observerReport.status, 200);
+    assert.equal((await observerReport.json()).agent.name, "Operations Observer");
+
     const monitoringStatus = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/monitoring/status`,
       { headers: { Authorization: authorization } }

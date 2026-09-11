@@ -181,6 +181,14 @@ app.get("/automation/agents", async (req, res, next) => {
   }
 });
 
+app.get("/automation/agents/:agentId/report", async (req, res, next) => {
+  try {
+    res.json(await automationService.getAgentReport(req.params.agentId));
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/automation/agents", async (req, res, next) => {
   try {
     res.status(201).json(await automationService.registerAgent(req.body));

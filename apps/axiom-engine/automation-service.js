@@ -16,6 +16,8 @@ const TASK_STATUSES = new Set([
   "failed",
   "cancelled"
 ]);
+const AGENT_ATTRIBUTION_SCOPE =
+  "Project attribution and stewardship only; not legal ownership, personhood, agency, or independent authority.";
 
 class AutomationService {
   constructor({
@@ -51,7 +53,15 @@ class AutomationService {
     });
   }
 
-  async registerAgent({ id, name, capabilities }) {
+  async registerAgent({
+    id,
+    name,
+    capabilities,
+    originCheckpoint,
+    creator,
+    purpose,
+    duties
+  }) {
     return this.withState(async (state) => {
       if (id !== undefined && !isNonEmptyString(id)) {
         throw new TypeError("agent id must be a non-empty string");
@@ -63,13 +73,26 @@ class AutomationService {
         !capabilities.every(isNonEmptyString)) {
         throw new TypeError("agent capabilities must be a non-empty string array");
       }
+      assertOptionalString(originCheckpoint, "agent originCheckpoint");
+      assertOptionalString(creator, "agent creator");
+      assertOptionalString(purpose, "agent purpose");
+      if (duties !== undefined &&
+        (!Array.isArray(duties) || duties.length === 0 ||
+          !duties.every(isNonEmptyString))) {
+        throw new TypeError("agent duties must be a non-empty string array");
+      }
 
       const agent = {
         id: id || randomUUID(),
         name: name.trim(),
         capabilities: [...new Set(capabilities.map((capability) => capability.trim()))],
         enabled: true,
-        registeredAt: this.now().toISOString()
+        registeredAt: this.now().toISOString(),
+        originCheckpoint: normalizeOptionalString(originCheckpoint),
+        creator: normalizeOptionalString(creator),
+        purpose: normalizeOptionalString(purpose),
+        duties: duties ? [...new Set(duties.map((duty) => duty.trim()))] : [],
+        attributionScope: AGENT_ATTRIBUTION_SCOPE
       };
       if (state.agents.some((existingAgent) => existingAgent.id === agent.id)) {
         throw new RangeError(`agent already exists: ${agent.id}`);
@@ -77,6 +100,61 @@ class AutomationService {
 
       state.agents.push(agent);
       return agent;
+    });
+  }
+
+  async getAgentReport(agentId) {
+    if (!isNonEmptyString(agentId)) {
+      throw new TypeError("agentId must be a non-empty string");
+    }
+    return this.withState(async (state) => {
+      const agent = findAgent(state.agents, agentId);
+      const timeline = [
+        {
+          event: "origin",
+          occurredAt: agent.registeredAt,
+          originCheckpoint: agent.originCheckpoint,
+          detail: agent.purpose || "No purpose has been recorded."
+        },
+        ...state.tasks
+          .filter((task) => task.agentId === agent.id)
+          .map((task) => ({
+            event: "task-created",
+            occurredAt: task.createdAt,
+            taskId: task.id,
+            title: task.title,
+            action: task.action,
+            status: task.status,
+            originCheckpoint: task.originCheckpoint
+          })),
+        ...state.runs
+          .filter((run) => run.agentId === agent.id)
+          .map((run) => ({
+            event: "task-run",
+            occurredAt: run.recordedAt,
+            taskId: run.taskId,
+            action: run.action,
+            status: run.status,
+            runId: run.id
+          }))
+      ].sort((left, right) =>
+        new Date(right.occurredAt).valueOf() - new Date(left.occurredAt).valueOf());
+
+      return {
+        generatedAt: this.now().toISOString(),
+        agent: {
+          id: agent.id,
+          name: agent.name,
+          capabilities: agent.capabilities,
+          enabled: agent.enabled,
+          originCheckpoint: agent.originCheckpoint || null,
+          creator: agent.creator || null,
+          purpose: agent.purpose || null,
+          duties: agent.duties || [],
+          attributionScope: agent.attributionScope || AGENT_ATTRIBUTION_SCOPE
+        },
+        timeline
+      };
     });
   }
 
@@ -91,7 +169,8 @@ class AutomationService {
     dependsOn = [],
     approvalRequired = false,
     maxAttempts = 1,
-    retryDelayMinutes = 5
+    retryDelayMinutes = 5,
+    originCheckpoint
   }) {
     return this.withState(async (state) => {
       if (!isNonEmptyString(title)) {
@@ -106,9 +185,16 @@ class AutomationService {
       if (agentId !== undefined && !isNonEmptyString(agentId)) {
         throw new TypeError("task agentId must be a non-empty string");
       }
-      if (agentId && !state.agents.some((agent) => agent.id === agentId)) {
-        throw new RangeError(`agent does not exist: ${agentId}`);
+      if (agentId) {
+        const assignedAgent = findAgent(state.agents, agentId);
+        if (!assignedAgent.enabled) {
+          throw new RangeError(`agent is disabled: ${agentId}`);
+        }
+        if (!assignedAgent.capabilities.includes(action)) {
+          throw new RangeError(`agent does not support task action: ${agentId}`);
+        }
       }
+      assertOriginCheckpoint(originCheckpoint, "task originCheckpoint");
 
       const scheduledAt = runAt === undefined ? this.now() : new Date(runAt);
       if (Number.isNaN(scheduledAt.valueOf())) {
@@ -157,6 +243,7 @@ class AutomationService {
         approvalStatus: approvalRequired ? "pending" : "not-required",
         maxAttempts,
         retryDelayMinutes,
+        originCheckpoint: normalizeOptionalString(originCheckpoint),
         attemptCount: 0,
         runCount: 0,
         createdAt: this.now().toISOString(),
@@ -364,6 +451,7 @@ class AutomationService {
         if (task.maxAttempts === undefined) task.maxAttempts = 1;
         if (task.retryDelayMinutes === undefined) task.retryDelayMinutes = 5;
         if (task.attemptCount === undefined) task.attemptCount = 0;
+        if (task.originCheckpoint === undefined) task.originCheckpoint = null;
       }
       seedMissingDefaultAgents(state, this.now);
       return state;
@@ -423,37 +511,81 @@ function defaultAgents(now) {
       name: "Memory Curator",
       capabilities: ["memory.record"],
       enabled: true,
-      registeredAt
+      registeredAt,
+      originCheckpoint: "axi-durable-memory-foundation",
+      creator: "AXES project founder direction",
+      purpose: "Maintain factual, non-sensitive AXI continuity records.",
+      duties: [
+        "Prepare approved memory entries.",
+        "Preserve concise operational continuity."
+      ],
+      attributionScope: AGENT_ATTRIBUTION_SCOPE
     },
     {
       id: "automation-executor",
       name: "Automation Executor",
       capabilities: ["automation.noop"],
       enabled: true,
-      registeredAt
+      registeredAt,
+      originCheckpoint: "axi-bounded-automation-foundation",
+      creator: "AXES project founder direction",
+      purpose: "Run safe workflow checks within the explicit action allowlist.",
+      duties: [
+        "Execute approved no-op checks.",
+        "Record bounded task outcomes."
+      ],
+      attributionScope: AGENT_ATTRIBUTION_SCOPE
     },
     {
       id: "automation-auditor",
       name: "Automation Auditor",
       capabilities: ["memory.record", "automation.noop"],
       enabled: true,
-      registeredAt
+      registeredAt,
+      originCheckpoint: "axi-bounded-automation-foundation",
+      creator: "AXES project founder direction",
+      purpose: "Provide an auditable fallback for approved bounded tasks.",
+      duties: [
+        "Review task outcomes.",
+        "Record approved audit continuity."
+      ],
+      attributionScope: AGENT_ATTRIBUTION_SCOPE
     },
     {
       id: "operations-observer",
       name: "Operations Observer",
       capabilities: ["monitoring.snapshot"],
       enabled: true,
-      registeredAt
+      registeredAt,
+      originCheckpoint: "axi-operations-observer",
+      creator: "AXES project founder direction",
+      purpose: "Capture private operational monitoring evidence.",
+      duties: [
+        "Run approved monitoring snapshots.",
+        "Surface operational attention signals."
+      ],
+      attributionScope: AGENT_ATTRIBUTION_SCOPE
     }
   ];
 }
 
 function seedMissingDefaultAgents(state, now) {
-  const existingAgentIds = new Set(state.agents.map((agent) => agent.id));
-  for (const agent of defaultAgents(now)) {
-    if (!existingAgentIds.has(agent.id)) {
-      state.agents.push(agent);
+  for (const defaultAgent of defaultAgents(now)) {
+    const existingAgent = state.agents.find((agent) => agent.id === defaultAgent.id);
+    if (!existingAgent) {
+      state.agents.push(defaultAgent);
+      continue;
+    }
+    for (const field of [
+      "originCheckpoint",
+      "creator",
+      "purpose",
+      "duties",
+      "attributionScope"
+    ]) {
+      if (existingAgent[field] === undefined) {
+        existingAgent[field] = defaultAgent[field];
+      }
     }
   }
 }
@@ -489,6 +621,29 @@ function isNonEmptyString(value) {
 
 function isRecord(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function assertOptionalString(value, label) {
+  if (value !== undefined && !isNonEmptyString(value)) {
+    throw new TypeError(`${label} must be a non-empty string`);
+  }
+}
+
+function assertOriginCheckpoint(value, label) {
+  if (value === undefined) return;
+  if (typeof value !== "string" || !/^[a-z][a-z0-9-]{2,119}$/.test(value)) {
+    throw new TypeError(`${label} must be a lowercase kebab-case identifier`);
+  }
+}
+
+function normalizeOptionalString(value) {
+  return value === undefined ? null : value.trim();
+}
+
+function findAgent(agents, agentId) {
+  const agent = agents.find((entry) => entry.id === agentId);
+  if (!agent) throw new RangeError(`agent does not exist: ${agentId}`);
+  return agent;
 }
 
 function compareTasks(left, right) {
@@ -537,6 +692,7 @@ async function replaceFile(source, destination) {
 
 module.exports = {
   AutomationService,
+  AGENT_ATTRIBUTION_SCOPE,
   TASK_ACTIONS,
   TASK_STATUSES,
   summarizeAutomationState,

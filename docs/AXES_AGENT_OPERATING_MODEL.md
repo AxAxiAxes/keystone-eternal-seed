@@ -61,6 +61,10 @@ remaining profiles merely because they are defined. Any need for higher volume,
 parallel work, or new actions requires a separate architecture, provider-limit,
 security, privacy, and operational review.
 
+The currently implemented agent origins, creator-purpose/duty records, and
+private per-agent task/run reports are defined in
+`AXES_AGENT_ORIGIN_REGISTRY.md`.
+
 ## Role catalog
 
 | # | Area | Role profile | Bounded responsibility | Human authority and prohibited outcome |

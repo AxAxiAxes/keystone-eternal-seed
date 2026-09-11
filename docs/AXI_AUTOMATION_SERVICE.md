@@ -43,6 +43,13 @@ dependent task is blocked until every prerequisite is completed. Set
 `approvalRequired: true` to hold a task in `awaiting_approval`; an authenticated
 operator must approve or reject it through the console or private API.
 
+Every task created through the protected Automation Console must be explicitly
+assigned to an enabled agent that supports its action and must carry a stable
+lowercase kebab-case `originCheckpoint`. The report records its origin,
+creation, and run outcomes without exposing its payload. Existing private API
+clients may omit this optional field for backward compatibility, but new work
+should include it.
+
 Each task has `maxAttempts` from 1 through 5 (default 1) and
 `retryDelayMinutes` from 1 through 1,440 (default 5). Failed tasks retry only
 within that bound; afterward, they enter the terminal `failed` state with a
@@ -58,6 +65,7 @@ by the public portal.
 | `GET` | `/automation/status` | Counts agents, task states, and recorded runs. |
 | `GET` | `/automation/agents` | Lists registered agents. |
 | `POST` | `/automation/agents` | Registers an agent with a name and capability list. |
+| `GET` | `/automation/agents/:agentId/report` | Returns the agent's project-attribution record and private running timeline. |
 | `GET` | `/automation/tasks` | Lists tasks; optionally filter with `?status=pending`. |
 | `POST` | `/automation/tasks` | Creates a pending, scheduled task. |
 | `POST` | `/automation/tasks/:taskId/approval` | Approves or rejects a task awaiting approval. |
@@ -165,3 +173,5 @@ service. Until that encrypted variable is configured, the console returns
 
 The staged AXES-wide role profiles, current engine capacity, and activation
 requirements are defined in `AXES_AGENT_OPERATING_MODEL.md`.
+The implemented agent origins, purpose/duty descriptions, task templates, and
+per-agent report contract are defined in `AXES_AGENT_ORIGIN_REGISTRY.md`.

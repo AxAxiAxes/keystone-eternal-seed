@@ -56,6 +56,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Staged AXES agent-role catalog established with current engine capacity and human-approval boundaries | `docs/AXES_AGENT_OPERATING_MODEL.md` |
 | 2026-09-10 | Complete | Private runtime-readiness signal added to the AXIOM engine and authenticated AXES Support Desk | `apps/axiom-engine/index.js` and `apps/axiom-freedom/support.html` |
 | 2026-09-10 | Complete | Operations Observer and schedulable private monitoring snapshots added to bounded AXI automation | `apps/axiom-engine/automation-service.js` and `apps/axiom-freedom/automation.html` |
+| 2026-09-10 | Complete | Attributable AXI agent origins, creator-purpose/duty records, assigned task origins, and private per-agent timelines added | `docs/AXES_AGENT_ORIGIN_REGISTRY.md` and protected Automation Console |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
@@ -85,6 +86,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Define the staged AXES agent-role catalog and activation criteria without granting new autonomous capabilities.
 - [x] Expose private, secret-safe runtime readiness through the protected support desk.
 - [x] Add a dedicated Operations Observer and an opt-in scheduled private monitoring action.
+- [x] Add attributable agent origins, purpose/duty records, explicit task assignment, and private per-agent timeline reports.
 - [x] Add task dependencies, bounded retries, explicit approvals, and operator-visible task attempts.
 - [x] Add a dedicated protected run-history view for completed, retrying, and failed task outcomes.
 - [x] Archive and classify original AXES visual, audio, and interaction-prototype sources for staged reuse.
