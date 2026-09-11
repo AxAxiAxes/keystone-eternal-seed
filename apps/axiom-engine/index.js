@@ -11,6 +11,7 @@ const { RecoveryBackupService } = require("./recovery-backup-service");
 const { CoordinateService } = require("./coordinate-service");
 const { BeadPassportService } = require("./bead-passport-service");
 const { StartupContextService } = require("./startup-context-service");
+const { ContinuityRecordService } = require("./continuity-record-service");
 const {
   AutomationService,
   evaluateGovernanceReadiness,
@@ -23,6 +24,9 @@ const memoryStore = new MemoryStore(dataDirectory);
 const usageStore = new UsageStore(dataDirectory);
 const startupContextService = new StartupContextService({ directory: dataDirectory });
 const startupContextReady = startupContextService.initialize();
+const continuityRecordService = new ContinuityRecordService({ directory: dataDirectory });
+const continuityRecordReady = continuityRecordService.initialize();
+const runtimeContextReady = Promise.all([startupContextReady, continuityRecordReady]);
 const recoveryBackupService = new RecoveryBackupService({
   sourceDirectory: dataDirectory,
   backupDirectory: process.env.AXIOM_BACKUP_DIRECTORY,
@@ -47,7 +51,8 @@ const automationService = new AutomationService({
   createRecoveryBackup: () => recoveryBackupService.create(),
   verifyRecoveryBackup: (backupId) => recoveryBackupService.verify(backupId),
   createCoordinate: (coordinate) => coordinateService.create(coordinate),
-  createCheckpoint: () => checkpointService.create()
+  createCheckpoint: () => checkpointService.create(),
+  recordContinuity: (entry) => continuityRecordService.recordOperatorConfirmation(entry)
 });
 const beadPassportService = new BeadPassportService({
   directory: dataDirectory,
@@ -79,7 +84,7 @@ const chatService = new ChatService({
 app.use(express.json());
 app.use(async (req, res, next) => {
   try {
-    await startupContextReady;
+    await runtimeContextReady;
     next();
   } catch (error) {
     next(error);
@@ -119,7 +124,8 @@ app.get("/system/readiness", async (req, res, next) => {
       recovery: await recoveryBackupService.status(),
       coordinates: await coordinateService.status(),
       beadPassports: await beadPassportService.status(),
-      startupContext: await startupContextService.status()
+      startupContext: await startupContextService.status(),
+      continuityRecord: await continuityRecordService.status()
     });
   } catch (error) {
     console.error("AXIOM runtime readiness check failed:", error.message);
@@ -141,7 +147,7 @@ app.get("/usage", async (req, res, next) => {
 
 async function captureMonitoringSnapshot(automationState) {
   await memoryStore.list("decision", 1);
-  const [automation, usage, governance, recovery, coordinates, beadPassports, startupContext] = await Promise.all([
+  const [automation, usage, governance, recovery, coordinates, beadPassports, startupContext, continuityRecord] = await Promise.all([
     automationState
       ? summarizeAutomationState(automationState)
       : automationService.status(),
@@ -152,9 +158,10 @@ async function captureMonitoringSnapshot(automationState) {
     recoveryBackupService.status(),
     coordinateService.status(),
     beadPassportService.status(),
-    startupContextService.status()
+    startupContextService.status(),
+    continuityRecordService.status()
   ]);
-  return monitoringService.record({
+  const monitoringRecord = await monitoringService.record({
     memoryAvailable: true,
     scheduler: { ...scheduler },
     automation,
@@ -163,26 +170,65 @@ async function captureMonitoringSnapshot(automationState) {
     coordinates,
     beadPassports,
     startupContext,
+    continuityRecord,
     usage
   });
+  if (monitoringRecord.recorded) {
+    await continuityRecordService.recordMonitoringStateChange();
+  }
+  return monitoringRecord;
 }
 
 async function requireReadyStartupContext() {
-  await startupContextReady;
+  await runtimeContextReady;
   const startupContext = await startupContextService.status();
-  if (startupContext.status === "ready") {
+  if (startupContext.status !== "ready") {
+    const error = new Error(
+      `Automation is blocked until the startup context is ready (${startupContext.code}).`
+    );
+    error.statusCode = 409;
+    throw error;
+  }
+
+  const continuityRecord = await continuityRecordService.status();
+  if (continuityRecord.status === "ready") {
     return;
   }
-  const error = new Error(
-    `Automation is blocked until the startup context is ready (${startupContext.code}).`
+  const continuityError = new Error(
+    `Automation is blocked until the continuity record is ready (${continuityRecord.code}).`
   );
-  error.statusCode = 409;
-  throw error;
+  continuityError.statusCode = 409;
+  throw continuityError;
 }
 
 app.get("/system/startup-context", async (req, res, next) => {
   try {
     res.json(await startupContextService.status());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/continuity-record", async (req, res, next) => {
+  try {
+    res.json(await continuityRecordService.status());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/continuity-record/events", async (req, res, next) => {
+  try {
+    const limit = req.query.limit === undefined ? 20 : Number(req.query.limit);
+    res.json(await continuityRecordService.list(limit));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/system/continuity-record/events", async (req, res, next) => {
+  try {
+    res.status(201).json(await continuityRecordService.recordOperatorConfirmation(req.body));
   } catch (error) {
     next(error);
   }

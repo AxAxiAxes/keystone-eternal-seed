@@ -113,6 +113,11 @@ its read-only status response.
   "beadPassports": {
     "status": "ready",
     "passportCount": 0
+  },
+  "continuityRecord": {
+    "status": "ready",
+    "id": "axi-continuity-record-v1",
+    "recordCount": 2
   }
 }
 ```
@@ -136,6 +141,13 @@ credentials, or prompt content into runtime status. An absent record is
 reseeded from the deployed bootstrap definition; invalid and
 version-mismatched records are attention states and are not silently replaced.
 
+`continuityRecord` reports the state of the private
+`axi-continuity-record-v1` append-only, hash-linked event record. It retains
+initialization, restart, material monitoring-change, and explicitly
+operator-confirmed event metadata without provider prompts, credentials,
+personal data, or private source content. A malformed record is preserved as
+an attention state and blocks manual and scheduled automation until reviewed.
+
 ## Private recovery endpoints
 
 The engine exposes recovery endpoints only on the private service network:
@@ -150,6 +162,18 @@ The engine exposes recovery endpoints only on the private service network:
 The restore endpoint is not public and refuses to write to the live memory or
 backup locations. Review the restored copy before changing an engine's memory
 directory or enabling automation.
+
+## Private continuity-record endpoints
+
+`GET /system/continuity-record` reports secret-safe record readiness and
+latest-event metadata. `GET /system/continuity-record/events?limit=20` returns
+recent private events. `POST /system/continuity-record/events` records one
+operator-confirmed event with a bounded `sourceRecord` and `summary`.
+
+The Project Memory Manager can create the same event only through an explicitly
+assigned and approved `continuity.record` task. This does not permit arbitrary
+file writes, source-history replacement, recovery, publication, external
+communication, personal-data collection, or legal/ownership conclusions.
 
 ## Private coordinate endpoints
 

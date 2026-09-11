@@ -5,6 +5,7 @@ const path = require("path");
 const PERSISTED_FILE_NAMES = [
   "identity.json",
   "startup-context.json",
+  "continuity-record.jsonl",
   "episodic.jsonl",
   "semantic.jsonl",
   "decision.jsonl",

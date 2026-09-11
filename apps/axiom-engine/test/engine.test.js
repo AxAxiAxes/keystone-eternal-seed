@@ -72,7 +72,7 @@ test("reports engine health", async (t) => {
 
     assert.equal(response.status, 200);
     assert.deepEqual(await response.json(), {
-      agents: 4,
+      agents: 5,
       pendingTasks: 0,
       blockedTasks: 0,
       awaitingApprovalTasks: 0,
@@ -134,10 +134,12 @@ test("reports secret-safe runtime readiness", async (t) => {
   assert.equal(readiness.automation.status, "disabled");
   assert.equal(readiness.monitoring.status, "disabled");
   assert.equal(readiness.governance.status, "ready");
-  assert.equal(readiness.governance.activeAgents, 4);
+  assert.equal(readiness.governance.activeAgents, 5);
   assert.equal(readiness.recovery.status, "not-configured");
   assert.equal(readiness.coordinates.status, "ready");
   assert.equal(readiness.startupContext.status, "ready");
+  assert.equal(readiness.continuityRecord.status, "ready");
+  assert.ok(readiness.continuityRecord.recordCount >= 2);
   assert.equal(readiness.startupContext.id, "axes-memory-bank-startup-v1");
   assert.equal(readiness.automation.lastRunAt, null);
   assert.equal(readiness.automation.lastError, null);
@@ -158,6 +160,74 @@ test("reports the private startup context without exposing private source materi
   assert.equal(startupContext.id, "axes-memory-bank-startup-v1");
   assert.ok(startupContext.sourceRecords.includes("docs/memory/README.md"));
   assert.equal(JSON.stringify(startupContext).includes("OPENAI_API_KEY"), false);
+});
+
+test("persists and exposes the private continuity record", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const statusResponse = await fetch(
+    `http://127.0.0.1:${port}/system/continuity-record`
+  );
+  assert.equal(statusResponse.status, 200);
+  assert.equal((await statusResponse.json()).status, "ready");
+
+  const createdResponse = await fetch(
+    `http://127.0.0.1:${port}/system/continuity-record/events`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sourceRecord: "engine-test",
+        summary: "Operator confirmed the engine test continuity record."
+      })
+    }
+  );
+  assert.equal(createdResponse.status, 201);
+  assert.equal((await createdResponse.json()).eventType, "operator-confirmed");
+
+  const taskResponse = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: "Record managed continuity event",
+      action: "continuity.record",
+      agentId: "project-memory-manager",
+      approvalRequired: true,
+      originCheckpoint: "axi-project-memory-management",
+      payload: {
+        sourceRecord: "engine-test",
+        summary: "Operator approved a managed continuity event."
+      }
+    })
+  });
+  assert.equal(taskResponse.status, 201);
+  const task = await taskResponse.json();
+  assert.equal(task.status, "awaiting_approval");
+
+  const approvalResponse = await fetch(
+    `http://127.0.0.1:${port}/automation/tasks/${task.id}/approval`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ approved: true })
+    }
+  );
+  assert.equal(approvalResponse.status, 200);
+
+  const processResponse = await fetch(
+    `http://127.0.0.1:${port}/automation/process`,
+    { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }
+  );
+  assert.equal(processResponse.status, 200);
+  assert.equal((await processResponse.json())[0].status, "completed");
+
+  const entriesResponse = await fetch(
+    `http://127.0.0.1:${port}/system/continuity-record/events`
+  );
+  assert.equal(entriesResponse.status, 200);
+  assert.equal((await entriesResponse.json())[0].eventType, "operator-confirmed");
 });
 
 test("blocks automation when retained startup context is invalid", async (t) => {
@@ -259,7 +329,7 @@ test("persists and retrieves AXI memory layers", async (t) => {
   assert.equal(monitoring.status, 201);
   const monitoringSnapshot = await monitoring.json();
   assert.equal(monitoringSnapshot.snapshot.memoryAvailable, true);
-  assert.equal(monitoringSnapshot.snapshot.automation.agents, 4);
+  assert.equal(monitoringSnapshot.snapshot.automation.agents, 5);
   assert.equal(monitoringSnapshot.snapshot.governance.status, "ready");
   assert.equal(monitoringSnapshot.snapshot.recovery.status, "not-configured");
   assert.ok(monitoringSnapshot.attention.includes("recovery-not-ready"));

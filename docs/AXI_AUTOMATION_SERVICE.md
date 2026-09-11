@@ -18,6 +18,7 @@ controller. It accepts only the versioned action allowlist:
 | `recovery.backup` | `recovery.backup` | Creates and verifies a private runtime recovery bundle only at an explicitly configured, distinct backup location. |
 | `coordinate.record` | `coordinate.record` | Records a source-linked, hash-chained private coordinate transition. |
 | `continuity.checkpoint` | `continuity.checkpoint` | Creates a checksummed private checkpoint manifest for current runtime files. |
+| `continuity.record` | `continuity.record` | Appends an operator-confirmed, bounded event to the private continuous memory record. |
 
 The service rejects any unrecognized action. New external integrations must be
 implemented, reviewed, tested, and added to the allowlist before they can be
@@ -49,13 +50,14 @@ external action.
 
 ## Agents and assignments
 
-New installations seed four enabled agent records. Existing installations add
-the Operations Observer on their next private automation-state access while
-preserving existing agent records.
+New installations seed five enabled agent records. Existing installations add
+the Project Memory Manager and Operations Observer on their next private
+automation-state access while preserving existing agent records.
 
 | Agent | Capabilities | Purpose |
 | --- | --- | --- |
 | Memory Curator | `memory.record` | Maintains validated memory entries. |
+| Project Memory Manager | `memory.record`, `continuity.record` | Maintains approved, non-sensitive project memory and continuous continuity entries. |
 | Automation Executor | `automation.noop` | Runs bounded workflow checks. |
 | Automation Auditor | Both capabilities | Provides a general audited fallback. |
 | Operations Observer | `monitoring.snapshot`, `governance.readiness`, `recovery.backup`, `coordinate.record`, `continuity.checkpoint` | Captures private health, queue, scheduler, usage, Genesis/governance-readiness, recovery, coordinate-chain signals, and approved continuity checkpoints. |
@@ -173,6 +175,12 @@ Genesis-accountability controls as every other task. A checkpoint manifest is
 evidence of the files present at that time; it is not a backup and cannot
 restore erased data. Use `recovery.backup` with independently configured
 storage for recoverability.
+
+Queue a `continuity.record` task only for the Project Memory Manager with a
+short `sourceRecord` and `summary` in its payload. The task remains subject to
+explicit assignment, approval, retry, run-history, and Genesis-accountability
+controls. It cannot write arbitrary files, record sensitive data, alter prior
+events, restore data, change source history, or take external action.
 
 ## Opt-in scheduler
 

@@ -28,9 +28,10 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
   const service = new AutomationService({ directory, memoryStore });
 
   const agents = await service.listAgents();
-  assert.equal(agents.length, 4);
+  assert.equal(agents.length, 5);
   assert.equal(agents[0].id, "memory-curator");
-  assert.equal(agents[3].id, "operations-observer");
+  assert.equal(agents[1].id, "project-memory-manager");
+  assert.equal(agents[4].id, "operations-observer");
 
   const task = await service.createTask({
     title: "Record deployment decision",
@@ -41,6 +42,44 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
       kind: "decision",
       content: "Private production engine deployed."
     }
+  });
+
+  test("records an approved continuity event through the Project Memory Manager", async (t) => {
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+    t.after(() => fs.rm(directory, { recursive: true, force: true }));
+    const continuityEntries = [];
+    const service = new AutomationService({
+      directory,
+      memoryStore: createMemoryStore(),
+      recordContinuity: async (entry) => {
+        const recorded = { sequence: continuityEntries.length + 1, ...entry };
+        continuityEntries.push(recorded);
+        return recorded;
+      }
+    });
+
+    const task = await service.createTask({
+      title: "Record approved project continuity",
+      action: "continuity.record",
+      agentId: "project-memory-manager",
+      approvalRequired: true,
+      originCheckpoint: "axi-project-memory-management",
+      payload: {
+        sourceRecord: "docs/memory/README.md",
+        summary: "Operator confirmed the project continuity basis."
+      }
+    });
+    assert.equal(task.status, "awaiting_approval");
+
+    await service.reviewTaskApproval(task.id, true);
+    const outcomes = await service.processDueTasks();
+    assert.equal(outcomes[0].status, "completed");
+    assert.deepEqual(continuityEntries, [{
+      sequence: 1,
+      sourceRecord: "docs/memory/README.md",
+      summary: "Operator confirmed the project continuity basis."
+    }]);
+    assert.equal((await service.listRuns())[0].agentId, "project-memory-manager");
   });
   const outcomes = await service.processDueTasks();
 
@@ -408,8 +447,8 @@ test("reports Genesis and governance readiness without making an ownership deter
       sourceRecord: "KEYSTONE-ORIGIN-000001",
       creatorAuthority: "Axel Urartu (AX) · Axes Contracting"
     },
-    enabledAgents: 4,
-    activeAgents: 4,
+    enabledAgents: 5,
+    activeAgents: 5,
     issues: []
   });
 

@@ -121,6 +121,9 @@ function getAttention(snapshot) {
   if (snapshot.startupContext && snapshot.startupContext.status !== "ready") {
     attention.push("startup-context-unavailable");
   }
+  if (snapshot.continuityRecord && snapshot.continuityRecord.status !== "ready") {
+    attention.push("continuity-record-unavailable");
+  }
   return attention;
 }
 

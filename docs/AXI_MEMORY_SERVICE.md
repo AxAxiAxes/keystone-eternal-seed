@@ -8,6 +8,7 @@ The AXIOM engine implements the durable memory foundation described by the KEYST
 | --- | --- | --- |
 | Identity | `identity.json` | Current AXIOM name and concise identity summary. |
 | Startup context | `startup-context.json` | Versioned, non-sensitive AXES memory-bank source basis, startup timestamps, and startup count. |
+| Continuous record | `continuity-record.jsonl` | Hash-linked, append-only private operational continuity events. |
 | Episodic | `episodic.jsonl` | Timestamped event records. |
 | Semantic | `semantic.jsonl` | Timestamped knowledge records. |
 | Decision | `decision.jsonl` | Timestamped decision records. |
@@ -24,6 +25,16 @@ The startup context is reseeded only when it is absent. A retained malformed or
 version-mismatched startup context is preserved for review and blocks
 automation until its private readiness status is restored.
 
+The continuous record adds initialization, restart, material monitoring-change,
+and explicitly operator-confirmed records to one hash-linked sequence. Its
+status is checked before automation runs. A malformed or tampered retained
+record is preserved for review, surfaced as an attention state, and blocks
+manual and scheduled automation. The Project Memory Manager may record an
+operator-confirmed entry only through the bounded `continuity.record` task
+action. The record stores a short source reference and summary only; it must
+not contain credentials, personal data, private source material, provider
+prompts, or legal/ownership conclusions.
+
 ## Private API
 
 | Method | Path | Purpose |
@@ -32,6 +43,9 @@ automation until its private readiness status is restored.
 | `PUT` | `/memory/identity` | Create or replace identity using `name` and `summary`. |
 | `GET` | `/memory/:kind?limit=50` | Read the latest records for a supported layer. |
 | `POST` | `/memory/:kind` | Append an entry using `content` and optional object `metadata`. |
+| `GET` | `/system/continuity-record` | Read secret-safe continuous-record readiness and latest event metadata. |
+| `GET` | `/system/continuity-record/events?limit=20` | Read recent private continuous-record events. |
+| `POST` | `/system/continuity-record/events` | Append an operator-confirmed private continuity event. |
 
 Supported kinds are `episodic`, `semantic`, `decision`, and `procedure`. `limit` is an integer from 1 to 100.
 

@@ -9,7 +9,8 @@ const TASK_ACTIONS = new Set([
   "governance.readiness",
   "recovery.backup",
   "coordinate.record",
-  "continuity.checkpoint"
+  "continuity.checkpoint",
+  "continuity.record"
 ]);
 const TASK_STATUSES = new Set([
   "pending",
@@ -47,6 +48,7 @@ class AutomationService {
     verifyRecoveryBackup,
     createCoordinate,
     createCheckpoint,
+    recordContinuity,
     now = () => new Date()
   }) {
     this.directory = directory;
@@ -56,6 +58,7 @@ class AutomationService {
     this.verifyRecoveryBackup = verifyRecoveryBackup;
     this.createCoordinate = createCoordinate;
     this.createCheckpoint = createCheckpoint;
+    this.recordContinuity = recordContinuity;
     this.now = now;
     this.operationQueue = Promise.resolve();
   }
@@ -474,6 +477,16 @@ class AutomationService {
       });
       return { memoryEntryId: entry.id, memoryKind: entry.kind };
     }
+    if (task.action === "continuity.record") {
+      if (typeof this.recordContinuity !== "function") {
+        throw new RangeError("continuity recording is not configured");
+      }
+      const entry = await this.recordContinuity({
+        sourceRecord: task.payload.sourceRecord,
+        summary: task.payload.summary
+      });
+      return { continuityRecordSequence: entry.sequence };
+    }
     if (task.action === "monitoring.snapshot") {
       if (typeof this.captureMonitoringSnapshot !== "function") {
         throw new RangeError("monitoring snapshots are not configured");
@@ -649,6 +662,24 @@ function defaultAgents(now) {
       duties: [
         "Prepare approved memory entries.",
         "Preserve concise operational continuity."
+      ],
+      attributionScope: AGENT_ATTRIBUTION_SCOPE,
+      keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),
+      accountability: createAccountabilityRecord(registeredAt, "Genesis registration accepted.")
+    },
+    {
+      id: "project-memory-manager",
+      name: "Project Memory Manager",
+      capabilities: ["memory.record", "continuity.record"],
+      enabled: true,
+      registeredAt,
+      originCheckpoint: "axi-project-memory-management",
+      creator: KEYSTONE_REGISTRATION.creatorAuthority,
+      purpose: "Maintain approved, non-sensitive AXI project memory and continuous continuity records.",
+      duties: [
+        "Prepare operator-confirmed continuity entries with source references.",
+        "Maintain approved records across supported private memory layers.",
+        "Surface continuity-record attention states for human review."
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
       keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),

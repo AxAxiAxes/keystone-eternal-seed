@@ -40,8 +40,8 @@ for this work:
   `docs/memory/README.md`
 
 Current implemented services and tests reviewed include the AXI memory,
-automation, monitoring, recovery, coordinate, bead-passport, protected
-console, and portal-proxy surfaces.
+continuous-memory record, automation, monitoring, recovery, coordinate,
+bead-passport, protected console, and portal-proxy surfaces.
 
 ## Partial founder-source review
 
@@ -89,3 +89,9 @@ runtime state on startup; its status is monitored and it blocks automation if
 the retained record is invalid or version-mismatched. It does not automatically
 train an external model, recover material that was never preserved, or replace
 the need for an agent or operator to review the relevant source before acting.
+
+The complementary `axi-continuity-record-v1` private ledger retains a
+hash-linked operational event sequence across restarts. The Project Memory
+Manager can append an entry only through the defined private, approval-governed
+path. It preserves continuity metadata, not complete project knowledge or
+unreviewed/private source material.

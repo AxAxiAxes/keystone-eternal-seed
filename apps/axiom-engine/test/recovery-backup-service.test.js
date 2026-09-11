@@ -17,6 +17,10 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
     path.join(sourceDirectory, "startup-context.json"),
     "{\"id\":\"axes-memory-bank-startup-v1\"}"
   );
+  await fs.writeFile(
+    path.join(sourceDirectory, "continuity-record.jsonl"),
+    "{\"sequence\":1,\"eventType\":\"continuity-initialized\"}\n"
+  );
   await fs.writeFile(path.join(sourceDirectory, "decision.jsonl"), "{\"event\":\"origin\"}\n");
   await fs.writeFile(
     path.join(sourceDirectory, "coordinates.jsonl"),
@@ -45,7 +49,7 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
 
   const backup = await service.create();
   assert.equal(backup.createdAt, "2026-09-10T00:00:00.000Z");
-  assert.equal(backup.fileCount, 6);
+  assert.equal(backup.fileCount, 7);
   assert.ok(backup.totalBytes > 0);
   assert.deepEqual(await service.status(), {
     status: "ready",
@@ -67,6 +71,10 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
   assert.equal(
     await fs.readFile(path.join(restoreDirectory, backup.id, "startup-context.json"), "utf8"),
     "{\"id\":\"axes-memory-bank-startup-v1\"}"
+  );
+  assert.equal(
+    await fs.readFile(path.join(restoreDirectory, backup.id, "continuity-record.jsonl"), "utf8"),
+    "{\"sequence\":1,\"eventType\":\"continuity-initialized\"}\n"
   );
   assert.equal(
     await fs.readFile(
