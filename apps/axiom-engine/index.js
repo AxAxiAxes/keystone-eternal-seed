@@ -9,6 +9,7 @@ const { CheckpointService } = require("./checkpoint-service");
 const { MonitoringService } = require("./monitoring-service");
 const { RecoveryBackupService } = require("./recovery-backup-service");
 const { CoordinateService } = require("./coordinate-service");
+const { BeadPassportService } = require("./bead-passport-service");
 const {
   AutomationService,
   evaluateGovernanceReadiness,
@@ -32,6 +33,11 @@ const automationService = new AutomationService({
   createRecoveryBackup: () => recoveryBackupService.create(),
   verifyRecoveryBackup: (backupId) => recoveryBackupService.verify(backupId),
   createCoordinate: (coordinate) => coordinateService.create(coordinate)
+});
+const beadPassportService = new BeadPassportService({
+  directory: dataDirectory,
+  coordinateService,
+  getAgent: (agentId) => automationService.getAgent(agentId)
 });
 const checkpointService = new CheckpointService({
   directory: dataDirectory,
@@ -99,7 +105,8 @@ app.get("/system/readiness", async (req, res, next) => {
       },
       governance: await automationService.getGovernanceReadiness(),
       recovery: await recoveryBackupService.status(),
-      coordinates: await coordinateService.status()
+      coordinates: await coordinateService.status(),
+      beadPassports: await beadPassportService.status()
     });
   } catch (error) {
     console.error("AXIOM runtime readiness check failed:", error.message);
@@ -121,7 +128,7 @@ app.get("/usage", async (req, res, next) => {
 
 async function captureMonitoringSnapshot(automationState) {
   await memoryStore.list("decision", 1);
-  const [automation, usage, governance, recovery, coordinates] = await Promise.all([
+  const [automation, usage, governance, recovery, coordinates, beadPassports] = await Promise.all([
     automationState
       ? summarizeAutomationState(automationState)
       : automationService.status(),
@@ -130,7 +137,8 @@ async function captureMonitoringSnapshot(automationState) {
       ? evaluateGovernanceReadiness(automationState)
       : automationService.getGovernanceReadiness(),
     recoveryBackupService.status(),
-    coordinateService.status()
+    coordinateService.status(),
+    beadPassportService.status()
   ]);
   return monitoringService.record({
     memoryAvailable: true,
@@ -139,6 +147,7 @@ async function captureMonitoringSnapshot(automationState) {
     governance,
     recovery,
     coordinates,
+    beadPassports,
     usage
   });
 }
@@ -238,6 +247,39 @@ app.post("/system/coordinates", async (req, res, next) => {
 app.get("/system/coordinates/verify", async (req, res, next) => {
   try {
     res.json(await coordinateService.verify());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/gravity-center", async (req, res, next) => {
+  try {
+    res.json(await beadPassportService.getGravityCenter());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/bead-passports", async (req, res, next) => {
+  try {
+    const limit = req.query.limit === undefined ? 100 : Number(req.query.limit);
+    res.json(await beadPassportService.list(limit));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/system/bead-passports", async (req, res, next) => {
+  try {
+    res.status(201).json(await beadPassportService.register(req.body));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/bead-passports/verify", async (req, res, next) => {
+  try {
+    res.json(await beadPassportService.verify());
   } catch (error) {
     next(error);
   }

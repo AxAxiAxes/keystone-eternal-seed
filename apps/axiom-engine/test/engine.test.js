@@ -224,6 +224,7 @@ test("persists and retrieves AXI memory layers", async (t) => {
   assert.equal(monitoringSnapshot.snapshot.recovery.status, "not-configured");
   assert.ok(monitoringSnapshot.attention.includes("recovery-not-ready"));
   assert.equal(monitoringSnapshot.snapshot.coordinates.status, "ready");
+  assert.equal(monitoringSnapshot.snapshot.beadPassports.status, "ready");
 
   const governance = await fetch(`http://127.0.0.1:${port}/automation/readiness`);
   assert.equal(governance.status, 200);
@@ -246,6 +247,31 @@ test("persists and retrieves AXI memory layers", async (t) => {
   );
   assert.equal(coordinateVerification.status, 200);
   assert.equal((await coordinateVerification.json()).coordinateCount, 2);
+
+  const gravityCenterResponse = await fetch(
+    `http://127.0.0.1:${port}/system/gravity-center`
+  );
+  assert.equal(gravityCenterResponse.status, 200);
+  assert.equal((await gravityCenterResponse.json()).id, "axi-genesis-gravity-center");
+
+  const createdPassport = await fetch(`http://127.0.0.1:${port}/system/bead-passports`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      agentId: "operations-observer",
+      harmonicBand: "H4",
+      spatialVector: { x: 14.22, y: -3.88, z: 7.01 },
+      originCheckpoint: "axi-bead-passport-pilot"
+    })
+  });
+  assert.equal(createdPassport.status, 201);
+  assert.equal((await createdPassport.json()).passportId, "BPN-0001");
+
+  const passportVerification = await fetch(
+    `http://127.0.0.1:${port}/system/bead-passports/verify`
+  );
+  assert.equal(passportVerification.status, 200);
+  assert.equal((await passportVerification.json()).passportCount, 1);
 
   const monitoringHistory = await fetch(`http://127.0.0.1:${port}/monitoring/history`);
   assert.equal(monitoringHistory.status, 200);

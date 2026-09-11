@@ -115,6 +115,9 @@ function getAttention(snapshot) {
   if (snapshot.coordinates && snapshot.coordinates.status !== "ready") {
     attention.push("coordinate-chain-invalid");
   }
+  if (snapshot.beadPassports && snapshot.beadPassports.status !== "ready") {
+    attention.push("bead-passport-invalid");
+  }
   return attention;
 }
 

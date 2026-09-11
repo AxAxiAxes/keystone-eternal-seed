@@ -14,6 +14,7 @@ COPY checkpoint-service.js ./
 COPY monitoring-service.js ./
 COPY recovery-backup-service.js ./
 COPY coordinate-service.js ./
+COPY bead-passport-service.js ./
 
 EXPOSE 3000
 

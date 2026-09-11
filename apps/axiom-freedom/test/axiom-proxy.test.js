@@ -171,6 +171,29 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(governanceReadiness.status, 200);
     assert.equal((await governanceReadiness.json()).status, "ready");
 
+    const gravityCenter = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/gravity-center`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(gravityCenter.status, 200);
+    assert.equal((await gravityCenter.json()).id, "axi-genesis-gravity-center");
+
+    const createdPassport = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/bead-passports`,
+      {
+        method: "POST",
+        headers: { Authorization: authorization, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          agentId: "operations-observer",
+          harmonicBand: "H4",
+          spatialVector: { x: 14.22, y: -3.88, z: 7.01 },
+          originCheckpoint: "axi-bead-passport-pilot"
+        })
+      }
+    );
+    assert.equal(createdPassport.status, 201);
+    assert.equal((await createdPassport.json()).passportId, "BPN-0001");
+
     const observerReport = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/agents/operations-observer/report`,
       { headers: { Authorization: authorization } }

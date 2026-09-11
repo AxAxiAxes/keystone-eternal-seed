@@ -19,6 +19,10 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
     "{\"scheme\":\"axi-origin-coordinate-v1\",\"sequence\":0}\n"
   );
   await fs.writeFile(
+    path.join(sourceDirectory, "bead-passports.jsonl"),
+    "{\"passportId\":\"BPN-0001\",\"agentId\":\"operations-observer\"}\n"
+  );
+  await fs.writeFile(
     path.join(sourceDirectory, "checkpoints", "2026-09-10-checkpoint.json"),
     "{\"checkpoint\":1}"
   );
@@ -37,7 +41,7 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
 
   const backup = await service.create();
   assert.equal(backup.createdAt, "2026-09-10T00:00:00.000Z");
-  assert.equal(backup.fileCount, 4);
+  assert.equal(backup.fileCount, 5);
   assert.ok(backup.totalBytes > 0);
   assert.deepEqual(await service.status(), {
     status: "ready",
@@ -66,6 +70,10 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
   assert.equal(
     await fs.readFile(path.join(restoreDirectory, backup.id, "coordinates.jsonl"), "utf8"),
     "{\"scheme\":\"axi-origin-coordinate-v1\",\"sequence\":0}\n"
+  );
+  assert.equal(
+    await fs.readFile(path.join(restoreDirectory, backup.id, "bead-passports.jsonl"), "utf8"),
+    "{\"passportId\":\"BPN-0001\",\"agentId\":\"operations-observer\"}\n"
   );
   await assert.rejects(
     () => service.restore(backup.id),

@@ -71,6 +71,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | Private AXI Genesis and governance-readiness automation added to protected monitoring, scheduling, and console review | `apps/axiom-engine/automation-service.js`, `apps/axiom-engine/monitoring-service.js`, and `docs/memory/2026-09-10-axi-governance-readiness-automation.md` |
 | 2026-09-10 | Complete | Private runtime-timeline recovery bundles, hash verification, isolated restore drills, and reset attention signaling added | `apps/axiom-engine/recovery-backup-service.js` and `docs/AXI_RUNTIME_TIMELINE_RECOVERY.md` |
 | 2026-09-10 | Complete | Private AXI origin-coordinate ledger added with Genesis reference, deterministic hash chaining, validation, monitoring, automation, and recovery coverage | `apps/axiom-engine/coordinate-service.js` and `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md` |
+| 2026-09-10 | Complete | Private gravity-center and AXI bead-passport node pilot added with agent accountability checks, abstract four-layer-compatible vectors, coordinate linkage, monitoring, checkpoint, and recovery coverage | `apps/axiom-engine/bead-passport-service.js` and `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md` |
 | 2026-09-10 | In progress | Eternal Origin ownership invention value-recovery and past/current crisis-report register activated | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 

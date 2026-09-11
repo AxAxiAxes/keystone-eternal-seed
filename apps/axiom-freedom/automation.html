@@ -38,6 +38,22 @@
     <div id="monitoring-history"></div>
   </section>
   <section>
+    <h2>Private Coordinate Center</h2>
+    <p class="note">The gravity center is a technical Genesis reference. Bead-passport nodes apply only to registered AXI agents; they are not human passports, legal identities, credentials, or external listings.</p>
+    <div id="gravity-center"></div>
+    <h3>Register a bead-passport node</h3>
+    <form id="bead-passport-form">
+      <label>Registered AXI agent <select id="passport-agent" required></select></label>
+      <label>Harmonic band <select id="harmonic-band"><option value="H1">H1</option><option value="H2">H2</option><option value="H3">H3</option><option value="H4" selected>H4</option><option value="H5">H5</option><option value="H6">H6</option><option value="H7">H7</option></select></label>
+      <label>Spatial X <input id="spatial-x" type="number" min="-10000" max="10000" step="any" value="0" required></label>
+      <label>Spatial Y <input id="spatial-y" type="number" min="-10000" max="10000" step="any" value="0" required></label>
+      <label>Spatial Z <input id="spatial-z" type="number" min="-10000" max="10000" step="any" value="0" required></label>
+      <label>Origin checkpoint <input id="passport-origin-checkpoint" required maxlength="120" value="axi-bead-passport-pilot"></label>
+      <button type="submit">Register Node</button>
+    </form>
+    <div id="bead-passports"></div>
+  </section>
+  <section>
     <h2>Queue Task</h2>
     <form id="task-form">
       <label>Title <input id="title" required maxlength="200" placeholder="Record a verified milestone"></label>
@@ -115,6 +131,23 @@ function renderAgents(agents) {
     document.querySelector("#agents").innerHTML = "<p class='note'>None yet.</p>";
     return;
   }
+  function renderCoordinateCenter(gravityCenter, passports) {
+    document.querySelector("#gravity-center").innerHTML = `<h3>Gravity center</h3>${table([{
+      id: gravityCenter.id,
+      genesisCoordinate: gravityCenter.genesisCoordinateId,
+      source: gravityCenter.sourceRecord,
+      vector: JSON.stringify(gravityCenter.spatialVector),
+      status: gravityCenter.status
+    }], [["id","Reference"],["genesisCoordinate","Genesis coordinate"],["source","Source"],["vector","Vector"],["status","Status"]])}`;
+    document.querySelector("#bead-passports").innerHTML = `<h3>Bead-passport nodes</h3>${table(passports.map(passport => ({
+      passportId: passport.passportId,
+      agentId: passport.agentId,
+      harmonicBand: passport.harmonicBand,
+      vector: JSON.stringify(passport.spatialVector),
+      coordinateId: passport.coordinateId,
+      issuedAt: passport.issuedAt
+    })), [["passportId","Node"],["agentId","AXI agent"],["harmonicBand","Band"],["vector","Vector"],["coordinateId","Coordinate"],["issuedAt","Issued"]])}`;
+  }
   document.querySelector("#agents").innerHTML = `<table><thead><tr><th>Name</th><th>Capabilities</th><th>Enabled</th><th>Accountability</th><th>Review</th></tr></thead><tbody>${agents.map(agent => {
     const status = agent.accountability?.status || "unreconciled";
     const nextStatus = status === "suspended" ? "active" : "suspended";
@@ -185,10 +218,12 @@ function renderTasks(tasks) {
 }
 async function refresh() {
   try {
-    const [status, governance, agents, tasks, runs] = await Promise.all([
+    const [status, governance, agents, tasks, runs, gravityCenter, passports] = await Promise.all([
       request("/api/automation/status"), request("/api/automation/readiness"),
       request("/api/automation/agents"), request("/api/automation/tasks"),
-      request("/api/automation/runs?limit=25")
+      request("/api/automation/runs?limit=25"),
+      request("/api/automation/gravity-center"),
+      request("/api/automation/bead-passports?limit=100")
     ]);
     let monitoring = { status: "unavailable", attention: [] };
     let monitoringHistory = [];
@@ -210,6 +245,11 @@ async function refresh() {
     renderAgents(agents);
     registeredAgents = agents;
     renderTaskAgentOptions();
+    document.querySelector("#passport-agent").innerHTML = agents
+      .filter(agent => agent.enabled && agent.accountability?.status === "active")
+      .map(agent => `<option value="${escapeHtml(agent.id)}">${escapeHtml(agent.name)}</option>`)
+      .join("");
+    renderCoordinateCenter(gravityCenter, passports);
     document.querySelector("#chat-agent").innerHTML = agents
       .filter(agent => agent.enabled && agent.accountability?.status === "active")
       .map(agent => `<option value="${escapeHtml(agent.id)}">${escapeHtml(agent.name)}</option>`)
@@ -263,6 +303,29 @@ document.querySelector("#task-form").addEventListener("submit", async event => {
   const runAt = document.querySelector("#run-at").value;
   if (runAt) task.runAt = new Date(runAt).toISOString();
   try { result.textContent = `Queued: ${(await request("/api/automation/tasks",{method:"POST",body:JSON.stringify(task)})).id}`; event.target.reset(); await refresh(); } catch(error) { result.textContent=error.message; }
+});
+document.querySelector("#bead-passport-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  const passport = {
+    agentId: document.querySelector("#passport-agent").value,
+    harmonicBand: document.querySelector("#harmonic-band").value,
+    spatialVector: {
+      x: Number(document.querySelector("#spatial-x").value),
+      y: Number(document.querySelector("#spatial-y").value),
+      z: Number(document.querySelector("#spatial-z").value)
+    },
+    originCheckpoint: document.querySelector("#passport-origin-checkpoint").value
+  };
+  try {
+    const registered = await request(
+      "/api/automation/bead-passports",
+      { method:"POST", body:JSON.stringify(passport) }
+    );
+    result.textContent = `Registered private bead-passport node: ${registered.passportId}`;
+    await refresh();
+  } catch (error) {
+    result.textContent = error.message;
+  }
 });
 document.querySelector("#chat-form").addEventListener("submit", async event => {
   event.preventDefault();

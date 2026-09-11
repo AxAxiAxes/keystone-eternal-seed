@@ -425,6 +425,47 @@ const server = http.createServer(async (req, res) => {
               }
               return;
     }
+    if (pathname === '/api/automation/gravity-center' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(await invokeEngine('/system/gravity-center')));
+              } catch (error) {
+                      console.error('AXIOM gravity center request failed:', error.message);
+                      res.writeHead(502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: 'AXIOM coordinate service is unavailable' }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/bead-passports' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(await invokeEngine('/system/bead-passports' + parsed.search)));
+              } catch (error) {
+                      console.error('AXIOM bead passport request failed:', error.message);
+                      res.writeHead(502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: 'AXIOM coordinate service is unavailable' }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/bead-passports' && req.method === 'POST') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const passport = await invokeEngine(
+                        '/system/bead-passports',
+                        'POST',
+                        await parseBody(req)
+                      );
+                      res.writeHead(201, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(passport));
+              } catch (error) {
+                      console.error('AXIOM bead passport registration failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
     if (pathname === '/api/support/status' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
