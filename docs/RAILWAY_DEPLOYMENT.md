@@ -75,16 +75,25 @@ Railway private domains are available only between services in the same project.
 
 ## 4. Connect `axescontracting.com`
 
-1. In Railway, open the `axiom-web` service **Networking** settings and add `axescontracting.com` as a custom domain.
-2. Railway displays the DNS record required for the domain.
-3. In SiteGround Site Tools, open **Domain** → **DNS Zone Editor** and create exactly the record Railway specifies.
-4. Wait for Railway to issue TLS, then verify:
+1. In Railway, open the `axiom-web` service **Networking** settings and add
+   both `axescontracting.com` and `www.axescontracting.com` as custom domains.
+2. Railway displays a DNS record for each hostname. Record the current values
+   before changing them, then use exactly the values Railway provides.
+3. In SiteGround Site Tools, open **Domain** → **DNS Zone Editor** and replace
+   the legacy web records for both hostnames with the Railway records. Do not
+   leave either hostname pointed at a legacy host, and do not change unrelated
+   email MX records.
+4. Wait for Railway to issue TLS for both hostnames, then verify:
 
 ```text
 https://axescontracting.com/health
+https://www.axescontracting.com/health
 ```
 
-Do not change unrelated email MX records during this process; the pending Microsoft 365 migration is independent of website DNS routing.
+If a user-facing `www.xiiom.com` URL is required, add it as an `axiom-web`
+custom domain in Railway and set the exact matching DNS record. The current
+deployment supports the `xiiom.com` apex only; do not point a `www` hostname at
+an unrelated legacy host.
 
 ## 5. Production validation
 

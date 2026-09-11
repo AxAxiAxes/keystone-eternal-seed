@@ -84,6 +84,10 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(axesPortal.statusCode, 200);
     assert.match(axesPortal.body, /The AXES Control Center/);
 
+    const axesWwwPortal = await request(webPort, { Host: "www.axescontracting.com" });
+    assert.equal(axesWwwPortal.statusCode, 200);
+    assert.match(axesWwwPortal.body, /The AXES Control Center/);
+
     const library = await fetch(
       `http://127.0.0.1:${webPort}/library/memory/README.md`
     );

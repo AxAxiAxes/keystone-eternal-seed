@@ -92,7 +92,8 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Establish the conservative project budget, spending gates, patent reserve, and patent-completion execution track.
 - [x] Establish the AXES Control Center pilot with governance, data-handling, moderation, and safeguarding requirements.
 - [x] Define the AXES Directory's private-safe pilot fields, human approval and renewal lifecycle, correction/removal workflow, and track-specific limitations without enabling live listings.
-- [ ] Connect `axescontracting.com` to Railway and verify its dedicated hub page, TLS, and health endpoint.
+- [ ] Connect both `axescontracting.com` hostnames to Railway and verify the
+      dedicated hub page, TLS, and health endpoint.
 - [ ] Complete and validate `info@axescontracting.com` migration from SiteGround to Microsoft 365.
 - [ ] Connect the Railway `axiom-web` service to `axescontracting.com` through SiteGround DNS.
 - [ ] Obtain written legal guidance that defines URNUR's permitted first-release scope before any market data, financial simulation, exchange connectivity, token, custody, payment, or automated-trading implementation.

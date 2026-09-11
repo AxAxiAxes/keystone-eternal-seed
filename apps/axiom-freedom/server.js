@@ -12,7 +12,8 @@ const DOCUMENTS_DIRECTORY = fs.existsSync(path.join(__dirname, 'docs'))
 const AXIOM_ENGINE_URL = new URL(process.env.AXIOM_ENGINE_URL || 'http://127.0.0.1:3000');
 
 function isAxesContractingHost(host) {
-    return String(host || '').split(':')[0].toLowerCase() === 'axescontracting.com';
+    const hostname = String(host || '').split(':')[0].toLowerCase();
+    return hostname === 'axescontracting.com' || hostname === 'www.axescontracting.com';
 }
 
 function getLeads() {
