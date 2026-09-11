@@ -657,6 +657,20 @@ const server = http.createServer(async (req, res) => {
           }
           return;
     }
+    if (pathname === '/api/automation/profiles/preview' && req.method === 'POST') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(await invokeEngine(
+                    '/automation/profiles/preview', 'POST', await parseBody(req)
+                  )));
+          } catch (error) {
+                  console.error('AXIOM automation profile preview failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
+    }
     if (pathname === '/api/automation/profiles/history' && req.method === 'GET') {
           if (!requireAdmin(req, res)) return;
           try {

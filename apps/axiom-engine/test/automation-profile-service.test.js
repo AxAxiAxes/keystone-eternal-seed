@@ -111,6 +111,26 @@ test("exposes every active role capability and activates a founder-configured te
       recurrenceMinutes: 60, dependsOnTaskIds: [], approvalRequired: false,
       payload: { kind: "decision", content: "Approved private operational observation." } }]
   });
+
+  test("previews a profile without creating a draft or task", async (t) => {
+    const directory = path.join(process.cwd(), `automation-profile-test-${process.pid}-${Date.now()}`);
+    t.after(() => fs.rm(directory, { recursive: true, force: true }));
+    const { service, tasks } = fixture(directory);
+
+    const preview = await service.preview({
+      profileId: "preview-observation",
+      template: "operations-observation",
+      monitoringRecurrenceMinutes: 5,
+      governanceRecurrenceMinutes: 60
+    });
+
+    assert.equal(preview.activation.status, "ready");
+    assert.deepEqual(preview.activation.blockers, []);
+    assert.equal(preview.taskPlan.length, 2);
+    assert.equal("payload" in preview.taskPlan[0], false);
+    assert.equal(tasks.length, 0);
+    assert.equal((await service.status()).profileCount, 0);
+  });
   const active = await service.activate("curator-memory-profile", { confirmed: true });
   assert.equal(active.status, "active");
   assert.equal(tasks[0].agentId, "memory-curator");
@@ -150,6 +170,11 @@ test("rejects unsupported templates, unsafe inputs, missing confirmation, and in
   });
   await assert.rejects(() => service.activate("readiness-hold", { confirmed: false }), /confirmation/);
   await assert.rejects(() => service.activate("readiness-hold", { confirmed: true }), /sourceCatalog/);
+  const preview = await service.preview({
+    profileId: "readiness-preview", template: "operations-observation",
+    monitoringRecurrenceMinutes: 5, governanceRecurrenceMinutes: 60
+  });
+  assert.deepEqual(preview.activation.blockers, ["sourceCatalog"]);
 });
 
 test("reports tampering as attention and blocks profile-managed processing", async (t) => {

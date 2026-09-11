@@ -62,5 +62,10 @@ returns payload-free lifecycle evidence: sequence, timestamp, profile,
 transition, retained-task count, and recovery state. It does not expose task
 templates or payloads.
 
+`POST /automation/profiles/preview` accepts the same strictly validated draft
+input and returns a payload-free task plan plus the current activation-gate
+result. Preview does not create a profile, task, audit record, scheduler
+setting, or external request.
+
 Profiles cannot deploy, access accounts, send messages, publish, spend, accept
 payments, collect data, or make financial or legal decisions.

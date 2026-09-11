@@ -378,6 +378,14 @@ app.get("/automation/profiles/history", async (req, res, next) => {
   }
 });
 
+app.post("/automation/profiles/preview", async (req, res, next) => {
+  try {
+    res.json(await automationProfileService.preview(req.body));
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/automation/profiles/:profileId/activate", async (req, res, next) => {
   try {
     res.json(await automationProfileService.activate(req.params.profileId, req.body));

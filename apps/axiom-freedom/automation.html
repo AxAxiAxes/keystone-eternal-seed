@@ -51,6 +51,7 @@
       <label>Profile ID <input id="automation-profile-id" required maxlength="80" pattern="[a-z][a-z0-9-]{2,79}" placeholder="daily-operations-observation"></label>
       <label>Monitoring recurrence minutes <input id="profile-monitoring-recurrence" type="number" min="5" max="1440" value="60" required></label>
       <label>Governance recurrence minutes <input id="profile-governance-recurrence" type="number" min="60" max="10080" value="1440" required></label>
+      <button type="button" id="preview-observation-profile" class="secondary">Preview Without Changes</button>
       <button type="submit">Create Founder-Controlled Draft</button>
     </form>
     <h3>Configure an approved founder task template</h3>
@@ -64,6 +65,7 @@
       <label>Existing completed dependency task IDs (optional, comma-separated UUIDs) <input id="founder-profile-dependencies" maxlength="750"></label>
       <label><input id="founder-profile-approval" type="checkbox"> Require founder approval before execution (required for protected records)</label>
       <label>Approved structured payload JSON <textarea id="founder-profile-payload" maxlength="1600" required>{}</textarea></label>
+      <button type="button" id="preview-founder-profile" class="secondary">Preview Without Changes</button>
       <button type="submit">Create Founder-Configured Draft</button>
     </form>
   </section>
@@ -631,6 +633,17 @@ document.querySelector("#automation-profile-form").addEventListener("submit", as
     await refresh();
   } catch (error) { result.textContent = error.message; }
 });
+document.querySelector("#preview-observation-profile").addEventListener("click", async () => {
+  try {
+    const preview = await request("/api/automation/profiles/preview", { method:"POST", body:JSON.stringify({
+      profileId: document.querySelector("#automation-profile-id").value,
+      template: "operations-observation",
+      monitoringRecurrenceMinutes: Number(document.querySelector("#profile-monitoring-recurrence").value),
+      governanceRecurrenceMinutes: Number(document.querySelector("#profile-governance-recurrence").value)
+    }) });
+    result.textContent = `Profile preview: ${preview.activation.status}; blockers: ${preview.activation.blockers.join(", ") || "none"}; retained task plan: ${preview.taskPlan.length}. No changes were made.`;
+  } catch (error) { result.textContent = `Profile preview unavailable: ${error.message}`; }
+});
 function renderFounderProfileOptions() {
   const source = profileTemplates.find(template => template.id === "founder-configured");
   const role = document.querySelector("#founder-profile-role");
@@ -670,6 +683,26 @@ document.querySelector("#founder-profile-form").addEventListener("submit", async
     renderFounderProfileOptions();
     await refresh();
   } catch (error) { result.textContent = `Profile draft was not created: ${error.message}`; }
+});
+document.querySelector("#preview-founder-profile").addEventListener("click", async () => {
+  try {
+    const dependencies = document.querySelector("#founder-profile-dependencies").value.trim();
+    const payload = JSON.parse(document.querySelector("#founder-profile-payload").value);
+    const preview = await request("/api/automation/profiles/preview", { method:"POST", body:JSON.stringify({
+      profileId: document.querySelector("#founder-profile-id").value,
+      template: "founder-configured",
+      taskTemplates: [{
+        key: document.querySelector("#founder-profile-key").value,
+        agentId: document.querySelector("#founder-profile-role").value,
+        action: document.querySelector("#founder-profile-action").value,
+        recurrenceMinutes: Number(document.querySelector("#founder-profile-recurrence").value),
+        dependsOnTaskIds: dependencies ? dependencies.split(",").map(value => value.trim()) : [],
+        approvalRequired: document.querySelector("#founder-profile-approval").checked,
+        payload
+      }]
+    }) });
+    result.textContent = `Profile preview: ${preview.activation.status}; blockers: ${preview.activation.blockers.join(", ") || "none"}; retained task plan: ${preview.taskPlan.length}. No changes were made.`;
+  } catch (error) { result.textContent = `Profile preview unavailable: ${error.message}`; }
 });
 document.querySelector("#bead-passport-form").addEventListener("submit", async event => {
   event.preventDefault();

@@ -229,6 +229,25 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(profileStatus.templates.length, 2);
     assert.equal(profileStatus.templates[0].id, "operations-observation");
 
+    const profilePreview = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/profiles/preview`,
+      {
+        method: "POST",
+        headers: { Authorization: authorization, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          profileId: "portal-observation",
+          template: "operations-observation",
+          monitoringRecurrenceMinutes: 5,
+          governanceRecurrenceMinutes: 60
+        })
+      }
+    );
+    assert.equal(profilePreview.status, 200);
+    const preview = await profilePreview.json();
+    assert.equal(preview.activation.status, "ready");
+    assert.equal(preview.taskPlan.length, 2);
+    assert.equal("payload" in preview.taskPlan[0], false);
+
     const profileDraft = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/profiles`,
       {

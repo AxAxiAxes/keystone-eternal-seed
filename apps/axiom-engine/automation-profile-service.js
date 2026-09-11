@@ -40,6 +40,25 @@ class AutomationProfileService {
     }
     return (await this.validRecords()).slice(-limit).reverse().map(summarizeProfileEvent);
   }
+  async preview(input) {
+    const agents = await this.listAgents();
+    assertDraftInput(input, agents);
+    const taskTemplates = input.template === OPERATIONS_OBSERVATION_TEMPLATE
+      ? starterTemplates(input) : normalizeTaskTemplates(input.taskTemplates);
+    const readiness = await this.readiness();
+    const activationBlockers = activationReadinessIssues(readiness);
+    return {
+      label: PROFILE_NOTICE,
+      profileId: input.profileId.trim(),
+      template: input.template,
+      taskPlan: taskTemplates.map(summarizeTaskPlan),
+      activation: {
+        status: activationBlockers.length ? "blocked" : "ready",
+        blockers: activationBlockers,
+        recoveryReadiness: readiness.recovery?.status || "unavailable"
+      }
+    };
+  }
   async createDraft(input) {
     const agents = await this.listAgents();
     assertDraftInput(input, agents);
@@ -249,8 +268,10 @@ function assertPayload(action, payload) {
 function assertFields(value, fields, predicate) { if (Object.keys(value).length !== fields.length || fields.some((field) => !(field in value)) || !predicate(value)) throw new TypeError("task template payload does not match its approved structured schema"); }
 function safeText(value, limit) { return typeof value === "string" && value.trim().length > 0 && value.trim().length <= limit && /^[A-Za-z0-9][A-Za-z0-9 .,:;()&'/-]*$/.test(value.trim()) && !SENSITIVE.test(value); }
 function safePath(value) { return typeof value === "string" && value.length > 0 && value.length <= 500 && !value.includes("\\") && !value.startsWith("/") && !value.split("/").some((part) => !part || part === "." || part === ".."); }
-function assertActivationReadiness(readiness) { for (const key of ["startupContext", "sourceCatalog", "businessMetrics", "serviceRegistry", "governance"]) if (readiness?.[key]?.status !== "ready") throw new RangeError(`profile activation is blocked until ${key} is ready`); }
+function activationReadinessIssues(readiness) { return ["startupContext", "sourceCatalog", "businessMetrics", "serviceRegistry", "governance"].filter((key) => readiness?.[key]?.status !== "ready"); }
+function assertActivationReadiness(readiness) { const blockers = activationReadinessIssues(readiness); if (blockers.length) throw new RangeError(`profile activation is blocked until ${blockers[0]} is ready`); }
 function matchesDefinition(task, definition) { return task.action === definition.action && task.agentId === definition.agentId && task.recurrenceMinutes === definition.recurrenceMinutes && JSON.stringify(task.dependsOn) === JSON.stringify(definition.dependsOnTaskIds) && task.approvalRequired === definition.approvalRequired && JSON.stringify(task.payload) === JSON.stringify(definition.payload); }
+function summarizeTaskPlan(template) { return { key: template.key, action: template.action, agentId: template.agentId, recurrenceMinutes: template.recurrenceMinutes, dependsOnTaskIds: [...template.dependsOnTaskIds], approvalRequired: template.approvalRequired }; }
 function validateRecords(records) {
   if (!Array.isArray(records)) throw new TypeError("automation profiles must contain records");
   let previousHash = null; const profiles = {};
