@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-10 Application coordinate inventory](2026-09-10-application-coordinate-inventory.md)
 - [2026-09-10 Self-creation and Eteriti value unit](2026-09-10-self-creation-eteriti-value-unit.md)
 - [2026-09-10 Origin-continuity public statement](2026-09-10-origin-continuity-public-statement.md)
 - [2026-09-10 UI autonomy loss-model assessment](2026-09-10-ui-autonomy-loss-model-assessment.md)
