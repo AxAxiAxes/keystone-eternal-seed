@@ -76,3 +76,21 @@ administrative environment to read cumulative counts:
 The public portal does not proxy this endpoint. Token counts are not a billing
 statement; review the OpenAI billing dashboard for current prices, invoices,
 credits, or recharge settings.
+
+## Private runtime readiness
+
+Use the private engine endpoint `GET /system/readiness` to distinguish engine
+storage readiness from the deliberate status of the chat provider, scheduler,
+and monitoring. It returns no API key, prompt, memory content, or account
+information. The authenticated AXES Support Desk includes the same result in
+its read-only status response.
+
+```json
+{
+  "status": "ready",
+  "storage": { "status": "ok" },
+  "provider": { "status": "configured", "model": "gpt-4.1-mini" },
+  "automation": { "status": "enabled", "lastRunAt": "2026-09-10T00:00:00.000Z", "lastError": null },
+  "monitoring": { "status": "enabled" }
+}
+```

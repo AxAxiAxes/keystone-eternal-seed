@@ -98,6 +98,27 @@ test("reports engine health", async (t) => {
   });
 });
 
+test("reports secret-safe runtime readiness", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const response = await fetch(`http://127.0.0.1:${port}/system/readiness`);
+
+  assert.equal(response.status, 200);
+  const readiness = await response.json();
+  assert.equal(readiness.status, "ready");
+  assert.equal(readiness.storage.status, "ok");
+  assert.equal(readiness.provider.status, "not-configured");
+  assert.equal(readiness.provider.model, "gpt-4.1-mini");
+  assert.equal(readiness.automation.status, "disabled");
+  assert.equal(readiness.monitoring.status, "disabled");
+  assert.equal(readiness.automation.lastRunAt, null);
+  assert.equal(readiness.automation.lastError, null);
+  assert.ok(readiness.checkedAt);
+  assert.equal(JSON.stringify(readiness).includes("OPENAI_API_KEY"), false);
+});
+
 test("reports an unavailable chat provider when no key is configured", async (t) => {
   const server = await startServer();
   t.after(() => stopServer(server));

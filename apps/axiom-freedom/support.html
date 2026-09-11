@@ -53,6 +53,7 @@ async function refresh() {
     cards.innerHTML = [
       card("Public portal", status.portal, "Public site route and support desk are responding."),
       card("Private AXIOM engine", status.engine, status.engine.detail || "Private service reachability."),
+      card("Runtime readiness", status.readiness, status.readiness.status === "ready" ? `Storage ${status.readiness.storage.status}; provider ${status.readiness.provider.status}.` : "Private readiness signal is unavailable."),
       card("Automation", status.automation, status.automation.status === "ok" ? `${status.automation.pendingTasks || 0} pending; ${status.automation.failedTasks || 0} failed.` : "Private automation status is unavailable."),
       card("Email migration", status.email, `${status.email.mailbox}: ${status.email.detail}`)
     ].join("");
@@ -60,6 +61,8 @@ async function refresh() {
     const latest = status.checkpoints.latest;
     detail.innerHTML = `<table><tbody>
       <tr><th>Monitoring</th><td>${escapeHtml(status.monitoring.status)}</td></tr>
+      <tr><th>Provider</th><td>${escapeHtml(status.readiness.provider ? `${status.readiness.provider.status} (${status.readiness.provider.model})` : "Unavailable")}</td></tr>
+      <tr><th>Scheduler</th><td>${escapeHtml(status.readiness.automation ? `${status.readiness.automation.status}; ${status.readiness.automation.lastError || "no error"}` : "Unavailable")}</td></tr>
       <tr><th>Attention</th><td>${escapeHtml(snapshot ? (status.monitoring.attention || []).join(", ") || "none" : "No private monitoring snapshot available.")}</td></tr>
       <tr><th>Latest checkpoint</th><td>${escapeHtml(latest ? `${latest.createdAt || latest.recordedAt || "recorded"} (${latest.id || "no ID"})` : "None recorded or private engine unavailable.")}</td></tr>
       <tr><th>Email target</th><td>${escapeHtml(status.email.target)}</td></tr>

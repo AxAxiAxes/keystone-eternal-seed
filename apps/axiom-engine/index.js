@@ -1,4 +1,6 @@
 const express = require("express");
+const fs = require("fs/promises");
+const { constants: fsConstants } = require("fs");
 const path = require("path");
 const { ChatService } = require("./chat-service");
 const { MemoryStore } = require("./memory-store");
@@ -36,6 +38,9 @@ const scheduler = {
   lastRunAt: null,
   lastError: null
 };
+const monitoring = {
+  enabled: process.env.AXIOM_MONITORING_ENABLED === "true"
+};
 const monitoringService = new MonitoringService({
   directory: process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data"),
   memoryStore
@@ -59,6 +64,37 @@ app.get("/", (req, res) => {
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok", service: "AXIOM engine" });
+});
+
+app.get("/system/readiness", async (req, res, next) => {
+  try {
+    await fs.mkdir(memoryStore.directory, { recursive: true });
+    await fs.access(memoryStore.directory, fsConstants.R_OK | fsConstants.W_OK);
+    res.json({
+      status: "ready",
+      checkedAt: new Date().toISOString(),
+      storage: { status: "ok" },
+      provider: {
+        status: chatService.apiKey ? "configured" : "not-configured",
+        model: chatService.model
+      },
+      automation: {
+        status: scheduler.enabled ? "enabled" : "disabled",
+        lastRunAt: scheduler.lastRunAt,
+        lastError: scheduler.lastError
+      },
+      monitoring: {
+        status: monitoring.enabled ? "enabled" : "disabled"
+      }
+    });
+  } catch (error) {
+    console.error("AXIOM runtime readiness check failed:", error.message);
+    res.status(503).json({
+      status: "not-ready",
+      checkedAt: new Date().toISOString(),
+      storage: { status: "unavailable" }
+    });
+  }
 });
 
 app.get("/usage", async (req, res, next) => {

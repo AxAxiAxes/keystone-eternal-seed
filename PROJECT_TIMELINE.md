@@ -54,6 +54,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | AXI private scheduler and monitoring activation settings aligned across Compose and the Railway production runbook | `apps/axiom-freedom/.env.example`, `apps/axiom-freedom/docker-compose.yml`, and `docs/RAILWAY_DEPLOYMENT.md` |
 | 2026-09-10 | Complete | Mandatory repository startup/reset readiness protocol established for contextual review, authority limits, and safe AXI/XIIOM activation | `AGENTS.md` and `docs/memory/2026-09-10-startup-readiness-protocol.md` |
 | 2026-09-10 | Complete | Staged AXES agent-role catalog established with current engine capacity and human-approval boundaries | `docs/AXES_AGENT_OPERATING_MODEL.md` |
+| 2026-09-10 | Complete | Private runtime-readiness signal added to the AXIOM engine and authenticated AXES Support Desk | `apps/axiom-engine/index.js` and `apps/axiom-freedom/support.html` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints
@@ -81,6 +82,7 @@ Update this document when a milestone changes state. A checked item is complete;
 - [x] Align private scheduler and monitoring activation settings with the Compose template and Railway production runbook.
 - [x] Require contextual readiness, authority review, and bounded AXI/XIIOM restart checks after agent or operator startup, reset, or handoff.
 - [x] Define the staged AXES agent-role catalog and activation criteria without granting new autonomous capabilities.
+- [x] Expose private, secret-safe runtime readiness through the protected support desk.
 - [x] Add task dependencies, bounded retries, explicit approvals, and operator-visible task attempts.
 - [x] Add a dedicated protected run-history view for completed, retrying, and failed task outcomes.
 - [x] Archive and classify original AXES visual, audio, and interaction-prototype sources for staged reuse.

@@ -126,6 +126,9 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     const support = JSON.parse(supportStatus.body);
     assert.equal(support.portal.status, "ok");
     assert.equal(support.engine.status, "ok");
+    assert.equal(support.readiness.status, "ready");
+    assert.equal(support.readiness.storage.status, "ok");
+    assert.equal(support.readiness.provider.status, "not-configured");
     assert.equal(support.email.status, "planned");
 
     const automationStatus = await fetch(

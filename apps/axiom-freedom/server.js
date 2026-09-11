@@ -97,17 +97,21 @@ function invokeAxiomEngine(command) {
 async function getSupportStatus() {
     const checks = await Promise.allSettled([
         invokeEngine('/health'),
+        invokeEngine('/system/readiness'),
         invokeEngine('/automation/status'),
         invokeEngine('/monitoring/status'),
         invokeEngine('/system/checkpoints?limit=1')
     ]);
-    const [engine, automation, monitoring, checkpoints] = checks;
+    const [engine, readiness, automation, monitoring, checkpoints] = checks;
 
     return {
         recordedAt: new Date().toISOString(),
         portal: { status: 'ok', service: 'AXES Contracting support desk' },
         engine: engine.status === 'fulfilled'
             ? { status: 'ok', detail: engine.value.status || 'online' }
+            : { status: 'unavailable' },
+        readiness: readiness.status === 'fulfilled'
+            ? readiness.value
             : { status: 'unavailable' },
         automation: automation.status === 'fulfilled'
             ? { status: 'ok', ...automation.value }
