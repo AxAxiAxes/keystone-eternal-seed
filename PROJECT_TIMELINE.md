@@ -1,7 +1,7 @@
 # AXIOM / KEYSTONE project timeline
 
-**Last updated:** 2026-09-09  
-**Current phase:** Monorepo foundation complete
+**Last updated:** 2026-09-11
+**Current phase:** Tier 1 internal readiness controls complete; founder-controlled activation and external gates pending
 
 Update this document when a milestone changes state. A checked item is complete; an unchecked item is planned or in progress.
 
