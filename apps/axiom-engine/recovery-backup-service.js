@@ -37,6 +37,7 @@ class RecoveryBackupService {
       createdAt,
       files
     };
+    assertValidBundle(bundle);
     const backupPath = path.join(this.backupDirectory, this.fileName(bundle));
     const temporaryPath = `${backupPath}.${randomUUID()}.tmp`;
     await fs.writeFile(temporaryPath, JSON.stringify(bundle), "utf8");
@@ -88,7 +89,11 @@ class RecoveryBackupService {
       .sort()
       .reverse()
       .slice(0, limit)
-      .map(async (name) => summarizeBundle(await this.readBundleFile(name))));
+      .map(async (name) => {
+        const bundle = await this.readBundleFile(name);
+        assertValidBundle(bundle);
+        return summarizeBundle(bundle);
+      }));
   }
 
   async verify(backupId) {
@@ -226,6 +231,9 @@ function assertValidBundle(bundle) {
   if (!bundle || bundle.schemaVersion !== BACKUP_SCHEMA_VERSION || !isUuid(bundle.id) ||
     !isNonEmptyString(bundle.createdAt) || !Array.isArray(bundle.files)) {
     throw new TypeError("backup bundle has an invalid shape");
+  }
+  if (bundle.files.length === 0) {
+    throw new RangeError("backup bundle must contain at least one runtime file");
   }
   for (const file of bundle.files) {
     if (!file || !isSafeSourcePath(file.path) || !Number.isInteger(file.bytes) ||

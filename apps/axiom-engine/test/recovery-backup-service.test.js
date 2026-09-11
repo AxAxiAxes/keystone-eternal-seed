@@ -136,13 +136,19 @@ test("fails closed for unsafe or corrupted recovery storage", async (t) => {
   const sourceDirectory = path.join(root, "memory");
   const backupDirectory = path.join(root, "backups");
   await fs.mkdir(sourceDirectory);
-  await fs.writeFile(path.join(sourceDirectory, "identity.json"), "{\"name\":\"AXI\"}");
 
   const missing = new RecoveryBackupService({ sourceDirectory });
   await assert.rejects(
     () => missing.create(),
     (error) => error instanceof RangeError &&
       error.message.includes("AXIOM_BACKUP_DIRECTORY")
+  );
+
+  const empty = new RecoveryBackupService({ sourceDirectory, backupDirectory });
+  await assert.rejects(
+    () => empty.create(),
+    (error) => error instanceof RangeError &&
+      error.message === "backup bundle must contain at least one runtime file"
   );
 
   const unsafe = new RecoveryBackupService({
@@ -155,6 +161,7 @@ test("fails closed for unsafe or corrupted recovery storage", async (t) => {
       error.message.includes("must not be the memory directory")
   );
 
+  await fs.writeFile(path.join(sourceDirectory, "identity.json"), "{\"name\":\"AXI\"}");
   const service = new RecoveryBackupService({ sourceDirectory, backupDirectory });
   const backup = await service.create();
   const file = (await fs.readdir(backupDirectory))[0];

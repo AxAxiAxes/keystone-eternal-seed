@@ -19,10 +19,12 @@ runtime state and calculates a SHA-256 for every file. The service:
 
 1. Refuses to create a bundle without `AXIOM_BACKUP_DIRECTORY`.
 2. Refuses a backup path that overlaps live `AXIOM_MEMORY_DIRECTORY`.
-3. Verifies each bundle before reporting recovery status as `ready`.
-4. Restores only into the separate
+3. Refuses an empty bundle, so a bundle cannot report as recoverable without
+   at least one persisted runtime file.
+4. Verifies each bundle before reporting recovery status as `ready`.
+5. Restores only into the separate
    `AXIOM_RECOVERY_RESTORE_DIRECTORY/<backup-id>` staging path.
-5. Refuses to overwrite a prior restored bundle, live memory, or the backup
+6. Refuses to overwrite a prior restored bundle, live memory, or the backup
    location.
 
 The Operations Observer can run the allowlisted `recovery.backup` task only
