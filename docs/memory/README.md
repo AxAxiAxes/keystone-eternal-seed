@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-11 Production-source branch reconciliation](2026-09-11-production-branch-reconciliation.md)
 - [2026-09-11 Scope reconciliation](2026-09-11-scope-reconciliation.md)
 - [2026-09-11 Public site TLS status](2026-09-11-public-site-tls-status.md)
 - [2026-09-11 Continuous memory manager](2026-09-11-continuous-memory-manager.md)

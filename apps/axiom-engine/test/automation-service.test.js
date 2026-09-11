@@ -44,7 +44,7 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
     }
   });
 
-  test("records an approved continuity event through the Project Memory Manager", async (t) => {
+  await t.test("records an approved continuity event through the Project Memory Manager", async (t) => {
     const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
     t.after(() => fs.rm(directory, { recursive: true, force: true }));
     const continuityEntries = [];
