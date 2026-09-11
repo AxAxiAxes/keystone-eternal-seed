@@ -11,6 +11,7 @@ from later repository implementation and deployment evidence.
 
 | Date | Status | Milestone | Evidence |
 | --- | --- | --- | --- |
+| 2026-09-11 | Attention | Public XIIOM portal, AXI page, health route, and side-effect-free private-engine proxy were reachable; unauthenticated Support Desk access remained blocked and public checks could not establish usable chat-provider operation | `docs/memory/2026-09-11-xiiom-public-interaction-check.md` |
 | 2026-09-11 | Complete | Private AXI automation status now exposes overdue-work count and next scheduled task time for direct execution visibility | `apps/axiom-engine/automation-service.js` and `docs/memory/2026-09-11-axi-execution-visibility.md` |
 | 2026-09-11 | Complete | AXI continuity-protection profile added to automate the existing monitoring, governance, checkpoint, and recovery-bundle actions as one protected operating sequence | `apps/axiom-engine/automation-profile-service.js` and `docs/memory/2026-09-11-axi-continuity-protection-profile.md` |
 | 2026-09-11 | Complete | AXI implementation and reporting accountability review recorded two corrected validation defects, one reversed session-configuration breach, and one reporting-control rule without asserting monetary or production value | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` and `docs/memory/2026-09-11-axi-implementation-accountability-review.md` |
