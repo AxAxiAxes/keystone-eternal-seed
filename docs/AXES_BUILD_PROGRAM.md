@@ -145,5 +145,9 @@ next begins.
 3. Begin Release B with the AXES Control Center visual rebuild and the staged
    interaction catalog in `docs/INTERACTIVE_EXPERIENCE_CATALOG.md`.
 
+The current agent capacity, staged role catalog, and human-approval
+requirements for the Command Center, future Directory, and AXES ecosystem are
+defined in `AXES_AGENT_OPERATING_MODEL.md`.
+
 See `docs/URNUR_FINANCIAL_READINESS.md` for the attorney briefing packet and
 pre-launch engineering boundary.

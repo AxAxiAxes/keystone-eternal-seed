@@ -152,3 +152,6 @@ cannot claim to edit, deploy, access accounts, or execute changes.
 Agent Chat requires `OPENAI_API_KEY` in the private `axiom-engine` Railway
 service. Until that encrypted variable is configured, the console returns
 `OPENAI_API_KEY is not configured` and makes no provider request.
+
+The staged AXES-wide role profiles, current engine capacity, and activation
+requirements are defined in `AXES_AGENT_OPERATING_MODEL.md`.
