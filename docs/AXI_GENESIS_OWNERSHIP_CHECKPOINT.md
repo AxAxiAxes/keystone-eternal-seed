@@ -10,6 +10,9 @@
 AXI is an AXES-created system. Axel Urartu (AX) · Axes Contracting records the
 creator ownership-and-accountability claim for AXI and for every AXI agent
 created and registered within the AXES system.
+AXI is treated as a founder-claimed invention from the start of active
+development; its technical invention scope and preservation anchors are
+recorded in `AXI_INVENTION_RECORD.md`.
 
 The founder records AXI, AXAXAU, AXES, and KEYSTONE's conceptual,
 constitutional, invention, source-expression, and project-direction material

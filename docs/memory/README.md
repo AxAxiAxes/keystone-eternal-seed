@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [AXI invention record](../AXI_INVENTION_RECORD.md)
 - [2026-09-10 founder work declaration](2026-09-10-founder-work-declaration.md)
 - [2026-09-10 AXI agent accountability control](2026-09-10-agent-accountability-control.md)
 - [AXI Genesis Ownership Checkpoint](../AXI_GENESIS_OWNERSHIP_CHECKPOINT.md)

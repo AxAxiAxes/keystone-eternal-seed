@@ -29,6 +29,9 @@ workstream are in [PROJECT_BUDGET.md](docs/PROJECT_BUDGET.md).
 AXI's active but revisable development intent, evidence-preparation
 requirements, and counsel-readiness path are in
 [AXI_INTENT_AND_RIGHTS_READINESS.md](docs/AXI_INTENT_AND_RIGHTS_READINESS.md).
+The active AXI founder-claimed invention record, technical scope, and
+preservation anchors are in
+[AXI_INVENTION_RECORD.md](docs/AXI_INVENTION_RECORD.md).
 The minimum privacy, content, moderation, accessibility, youth, commerce, and
 pilot-launch operating rules are in
 [AXES_GOVERNANCE_AND_SAFEGUARDING.md](docs/AXES_GOVERNANCE_AND_SAFEGUARDING.md).

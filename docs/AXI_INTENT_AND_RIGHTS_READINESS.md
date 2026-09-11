@@ -7,7 +7,8 @@ and professional-readiness planning.
 
 ## Current intent
 
-AXI is actively being built. The founder records a claim to AXI's originating
+AXI is actively being built and is recorded as a founder-claimed invention in
+`AXI_INVENTION_RECORD.md`. The founder records a claim to AXI's originating
 inventions, self-creation framework, creator authority, and accountable agent
 ownership within AXES. The direction is to preserve technical and governance
 options, prepare reliable evidence of the work, and pursue the applicable
@@ -71,6 +72,8 @@ prepared for the appropriate review or filing path.
 
 ## Related records
 
+- `docs/AXI_INVENTION_RECORD.md` — active AXI invention claim and technical
+  scope
 - `docs/PROJECT_BUDGET.md` — counsel reserve and filing gates
 - `docs/keystone/PATENT_APPLICATION_64_078_819.md` — preserved patent-strength
   master draft
