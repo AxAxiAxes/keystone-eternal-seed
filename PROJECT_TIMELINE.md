@@ -63,6 +63,7 @@ Update this document when a milestone changes state. A checked item is complete;
 | 2026-09-10 | Complete | AXI agent creator ownership-and-accountability claim enforced and migrated for legacy registrations | private AXI registry and protected Automation Console |
 | 2026-09-10 | Complete | AXI Genesis ownership checkpoint added to agent registration, reports, and reset recovery | `docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md` |
 | 2026-09-10 | Complete | Agent accountability review, suspension, and fail-closed task controls added to AXI | private AXI registry and protected Automation Console |
+| 2026-09-10 | Complete | Founder work declaration aligned AXI, AXAXAU, AXES, and KEYSTONE provenance records | `docs/memory/2026-09-10-founder-work-declaration.md` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints

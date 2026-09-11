@@ -3,9 +3,10 @@
 **Status:** Directional product plan  
 **Last updated:** 2026-09-09  
 **Founder principle:** All for All
-**Source and provenance:** Founder-authored material developed collaboratively
-with GitHub Copilot. The raw source remains private; this is its reviewed,
-public-safe implementation interpretation.
+**Source and provenance:** Founder-originated project material. The raw source
+remains private; this is a reviewed, public-safe implementation interpretation
+of founder direction. GitHub Copilot provides technical implementation
+assistance only and has no competing origin, ownership, or governance claim.
 
 ## Purpose
 

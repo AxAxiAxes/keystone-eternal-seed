@@ -2,9 +2,10 @@
 
 **Status:** Long-range execution program  
 **Last updated:** 2026-09-09  
-**Source and provenance:** Founder-authored material developed collaboratively
-with GitHub Copilot. It is original project work, retained privately in raw
-form and translated here into a reviewed implementation program.
+**Source and provenance:** Founder-originated project material. This
+implementation program records the founder's direction; GitHub Copilot
+provides technical implementation assistance only and has no competing origin,
+ownership, or governance claim.
 
 ## Program outcome
 

@@ -11,6 +11,14 @@ AXI is an AXES-created system. Axel Urartu (AX) · Axes Contracting records the
 creator ownership-and-accountability claim for AXI and for every AXI agent
 created and registered within the AXES system.
 
+The founder records AXI, AXAXAU, AXES, and KEYSTONE's conceptual,
+constitutional, invention, source-expression, and project-direction material
+as founder work. Software tools and technical assistants may help organize,
+implement, or test founder-directed work; they do not acquire a competing
+origin, ownership, authorship, governance, or control claim through that
+assistance. Third-party software and external materials remain subject to
+their applicable licenses and documented permissions.
+
 Within AXI governance, the Genesis authority is the required creator authority
 for agent registration and task execution. No different creator authority may
 register, assign, select, or control an AXI agent through the active
@@ -61,5 +69,6 @@ Genesis checkpoint, creator claim, operational origin, and task/run timeline.
 
 - `docs/AXES_AGENT_ORIGIN_REGISTRY.md`
 - `docs/AXI_INTENT_AND_RIGHTS_READINESS.md`
+- `docs/memory/2026-09-10-founder-work-declaration.md`
 - `docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md`
 - `AGENTS.md`
