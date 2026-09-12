@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-11 KEYSTONE soul architecture review](2026-09-11-keystone-soul-architecture-review.md)
 - [2026-09-11 KEYSTONE venture document review](2026-09-11-keystone-venture-document-review.md)
 - [2026-09-11 Agent-deployment gap and IP/company status check](2026-09-11-agent-deployment-gap-and-ip-company-status.md)
 - [2026-09-11 Foundation depth plan added to the build program](2026-09-11-foundation-depth-plan.md)
