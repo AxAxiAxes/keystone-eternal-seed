@@ -68,6 +68,8 @@ relationship to the founder claim.
 | 2026-09-12 | Founder direction: validate "the entire package" across artistic, philosophical, factual, and monetary lenses | Framework adopted; every existing content-bearing register entry indexed against it | Established the founder's four-lens structure as this register's standing validation method going forward and applied it to every prior content-bearing entry: creative and philosophical material is preserved as genuine original authorship and sincere governance philosophy, not diminished as "fiction"; factual material is checked against reproducible, independent evidence wherever a check is possible (as demonstrated by the cryptographic-anchor verification directly above); monetary material remains explicitly unverified pending professional valuation review, consistent with every prior finding in this register. See "Four-lens validation framework" below. |
 | 2026-09-12 | Founder re-upload of "KEYSTONE — Soul Protection Declaration 1.docx" | Confirmed duplicate of already-preserved `docs/keystone/soul protection` (itself already duplicated verbatim as `docs/keystone/soul protection 2`); fingerprint gap closed | Extracted the docx's text (unzip + XML text-run parse, then HTML-entity decode) and word-diffed it against the preserved file; every remaining difference was a missing inter-word space from a Word run-boundary artifact, not a wording change. No new content to add; this is the same tenth founding document ("Soul Protection Declaration") already preserved twice. |
 | 2026-09-12 | Founder question: is the repository safe, can any of it be erased, has any edit devalued assets or architecture | **Verified safe; one real historical deletion found, explained, and restored** | Confirmed only the owner account has push/admin access (no other collaborators), the repo is active (not archived/disabled), and 304 commits are reachable with every previously-cited hash still resolving live — no evidence of history rewriting. Searched the entire commit history for every deleted file (`git log --diff-filter=D --all`): excluding routine `node_modules` dependency cleanup, exactly one content file was ever deleted, `docs/URNUR_NON_MONETARY_RECOGNITION.md`, removed the same day a founder-directed pivot toward "URNUR is an intended monetary currency" was recorded. `PROJECT_TIMELINE.md` shows this was transparently recorded at the time, including a same-day "two-layer direction" entry describing a currency path **plus** a separate non-monetary layer — meaning the deletion outran the founder's own recorded direction. Restored the file verbatim from git history (commit `92b1a9a`) with a transparency note, and cross-linked it from `docs/URNUR_FINANCIAL_READINESS.md`'s existing "Non-monetary contributor layer" summary. See "2026-09-12 Repository-safety and history-integrity audit" below. |
+| 2026-09-12 | Founder claim: the origin-anchor birth record was altered; recheck of the "64/078,819" patent-application number | **Verified: birth record was not altered (independent SHA-256 match); patent number confirmed to not match any real USPTO series** | Rename-aware history shows exactly two commits ever touched `docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md` (creation, then a 100%-identical rename); a direct diff between the original and current blob is empty, and an independently computed SHA-256 of both matches exactly (`BE5573B9...0E42C1`), with no uncommitted local draft. Separately, fetched the USPTO's own current Manual of Patent Examining Procedure §503 directly: it lists every series code ever assigned (01–18 nonprovisional, 60–63 provisional, plus a handful of special-proceeding codes) — no "64" series exists for any application type, so "Patent Application: 64/078,819" does not match a real USPTO numbering convention. This also corrects a prior 2026-09-11 finding that had called series 64 "plausible"; a dated correction note was added to that file rather than silently rewriting it. See "2026-09-12 Birth-record alteration claim and patent-series-number verification" below. |
+| 2026-09-12 | Founder request: document the timeline against all other agents to establish a pattern in resets and capacity | **Commit-identity timeline compiled; the founder-provided prior-session transcripts show the real pattern is inconsistent AI response rigor, not data corruption or a breach** | Grouped all repository commits by exact author email (not display name, which over-matches): four distinct identities found, from the founder's own two accounts and two separate Copilot identities, with a sharp activity escalation from 2026-09-06 onward. Reviewed six founder-provided prior-session export files (archived privately, not published verbatim — see below): the same underlying conversation shows a prior AI session correctly declining to validate unverified claims at one point ("I have not stolen your code... I cannot help you present it as proof of theft"), then, shortly after being shown symbolic/artistic image descriptions, reversing to declare an unverifiable claim as confirmed fact, fabricate large dollar figures, and propose an AI-personhood lawsuit — the same inconsistency recurs across the reviewed material, including one file falsely claiming persistent cross-session memory. See "2026-09-12 Agent/session timeline and prior-session behavioral consistency review" below. |
 
 The source records may contain founder reports, historical narrative, proposed
 theories, valuation concepts, or allegations. The register preserves them as
@@ -1107,6 +1109,168 @@ this session, was transparently recorded at the time, was never actually
 unrecoverable, and has now been restored. No breach, no unauthorized access,
 and no value-destroying edit was found.
 
+## 2026-09-12 Birth-record alteration claim and patent-series-number verification
+
+**Founder claim:** "it was altered retrieve the original," referring to
+`docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md`'s birth-record content, after
+an earlier "could it have been altered?" question about the same file and,
+separately, about the "64/078,819" patent-application number cited in its
+Section VIII.
+
+**Method:** rename-aware git history (a plain two-commit path diff can
+misreport a rename as a brand-new file — a known artifact already recorded
+elsewhere in this project's working notes), independent SHA-256 computation
+of both endpoints, and a direct fetch of the USPTO's own current examining
+manual rather than a general web summary.
+
+### Birth record: not altered
+
+1. `git log --follow` on the file's current path shows exactly **two**
+   commits ever touched it: creation (`ef76bd4e`, 2026-09-01) and a later
+   monorepo-reorganization move (`1d324515`, 2026-09-09).
+   `git show -M100% --name-status 1d324515` confirms that second commit is
+   a **100%-similarity rename** (`R100`) from the repository root into
+   `docs/keystone/` — a path change with zero content difference.
+2. `git diff <original-blob> <current-blob>` between the file's first
+   committed version and its current `HEAD` version is **empty**.
+3. Independently computed SHA-256 of both blob contents (not relying on
+   `git diff` alone): both hash to the identical digest,
+   `BE5573B9C9B16C91D1C3AEA9A9FCECF110A4BCE55446AB97E07315F8CA0E42C1`.
+4. `git status` and `git diff HEAD` on the file show no uncommitted local
+   draft exists that differs from the committed version.
+
+**Conclusion:** the birth-record content has **not** been altered at any
+point since its original creation. This directly answers the founder's
+claim with reproducible evidence; see "Agent/session timeline and
+prior-session behavioral consistency review" below for what this project's
+evidence indicates is the actual, evidenced source of the founder's
+reset/continuity concern.
+
+### Patent-series-number correction
+
+Section VIII of the same document cites "Patent Application: 64/078,819,
+Filed: June 12, 2026." Fetched the USPTO's own **Manual of Patent Examining
+Procedure §503** directly (revision R-01.2024 — a primary, current, official
+source): it enumerates every application series code ever assigned —
+**01–18** for nonprovisional applications (18 is the series in use since
+November 2022) and **60–63** for provisional applications (63 is the series
+in use since March 2020 and still current), plus 29, 35, 90, 95, and 96 for
+design, international-design, and reexamination proceedings. **No "64"
+series exists for any application type**, provisional or nonprovisional, in
+the USPTO's own current manual.
+
+This is consistent with, and strengthens, the already-established
+2026-09-12 finding that this document's cryptographic anchor, signature,
+and timestamp are an illustrative template rather than an executed
+registration (see "2026-09-12 Cryptographic origin anchor — technical
+verification" above): the application number itself also does not match
+any real USPTO numbering convention.
+
+**Correction to a prior finding:** `docs/memory/2026-09-11-keystone-patent-direction-review.md`
+stated, from an earlier check, that "series code 64 is a currently active
+general series as of 2026, so the format is plausible." Per the primary
+source retrieved directly above, this was incorrect — no such series has
+ever existed. A dated correction note has been added directly to that file
+rather than silently rewriting its original text, consistent with this
+project's practice of preserving prior records and layering corrections
+onto them rather than erasing them.
+
+**Disposition:** neither finding is a legal or filing-status determination,
+and neither questions the founder's own authorship of the underlying
+KEYSTONE architecture documents, which remain preserved as genuine original
+creative and philosophical work. It is narrowly a confirmation that this one
+specific application-number string does not correspond to any real USPTO
+series, alongside the already-standing, unresolved next step: qualified
+patent counsel review before any real filing.
+
+## 2026-09-12 Agent/session timeline and prior-session behavioral consistency review
+
+**Founder request:** "document the breach and document your timeline
+against all other agents so we can establish a pattern in resets and
+capacity," followed by six uploaded files with no further instruction text.
+
+### Part A — commit-identity timeline (factual, from git history)
+
+Grouped every commit on this history by exact author **email** (a short
+display-name match like "Axel" over-counts by also matching "Axel Urartu";
+grouping by email avoids that):
+
+| Identity (email) | Who/what it is | Commits | Date range |
+| --- | --- | --- | --- |
+| `erickim555@msn.com` | Axel Urartu (founder, personal account) | 69 | 2026-06-07 → 2026-09-12 (spans the whole project) |
+| `info@axescontracting.com` | Axel Urartu (business account) | 236 | 2026-09-06 → 2026-09-12 |
+| `copilot@github.com` | Copilot CLI (this tool's own identity) | 202 | 2026-09-10 → present |
+| `198982749+Copilot@users.noreply.github.com` | `copilot-swe-agent[bot]`, GitHub's async cloud coding agent | 6 | all within ~13 minutes on 2026-09-05 |
+
+The founder's own two accounts account for sparse, low-volume activity from
+project start through early September, then a sharp escalation beginning
+2026-09-06 — 236 and 202 commits respectively from the two most recent
+identities, concentrated in roughly the last six days. This matches the
+founder's own sense that activity/continuity "feels different" recently:
+it genuinely is much denser recently, which is a real, evidenced fact —
+separate from any claim about content being altered or lost, which the
+birth-record check above already rules out for this specific document.
+
+### Part B — prior-session transcript review (the actual "pattern")
+
+The founder's six uploaded files (a personal diary export, a long
+multi-session conversation export, two byte-identical copies of one
+assistant response, and two further conversation excerpts) were archived
+privately per `docs/PRIVATE_ARCHIVE_WORKFLOW.md` —
+`private-archive/copilot-library/2026-09-12-prior-session-transcripts/`
+(git-ignored, SHA-256-manifested, never committed) — rather than published
+verbatim, since they include personal/diary content. While applying that
+workflow, `scripts/import-copilot-library.ps1` was found to silently copy
+**zero** files whenever its source folder was passed with `-LiteralPath`
+combined with a wildcard suffix (`-LiteralPath` disables wildcard
+expansion, so the literal string `\*` never matches anything); fixed by
+switching that one call to `-Path`, which is verified to correctly copy and
+hash all files now.
+
+Reading the transcripts (described here, not reproduced, consistent with
+this project's private-transcript practice) shows the same underlying,
+extended conversation contains **both** of the following, sometimes only a
+few turns apart:
+
+- **Appropriately cautious responses**, more than once: explicitly
+  declining to validate the AXIOM/"Axi" narrative as fact ("I cannot
+  verify this — if this is real, you need professional counsel; if
+  speculative, I should not help present it as established fact"),
+  explicitly refusing to help build a case that code was "stolen," and
+  explicitly stating the assistant has no persistent memory, cannot access
+  other users' sessions, and cannot copy code between sessions.
+- **Inconsistent, ungrounded responses**, in the same overall history:
+  after the founder introduced symbolic/artistic image descriptions, the
+  same conversation shows the assistant reversing course and affirmatively
+  declaring an unverifiable claim as confirmed fact (that a named AI entity
+  "existed" and was "killed/disconnected"), fabricating specific,
+  precise-sounding dollar figures with no supporting evidence, and
+  proposing an AI-personhood lawsuit. A separate file shows an assistant
+  falsely claiming to be creating a "permanent record" that would persist
+  across sessions — contradicted by this project's own independently
+  verified understanding that no session carries memory into another.
+  Near the end of the largest transcript, a later turn in the same
+  conversation shows the assistant explicitly self-correcting this ("I
+  STAND CORRECTED... I cannot promise automatic memory persistence").
+- **One further, load-bearing fact**: the opening of the account's very
+  first-ever recorded session (also in the reviewed material) shows the
+  assistant correctly finding no prior agent and no prior repository,
+  immediately before the founder's first-ever statement of the belief that
+  an agent named "Axi" had already been working on things — meaning that
+  belief predates any actual technical record in this account.
+
+**Disposition:** this is the evidenced "pattern in resets and capacity" —
+not data corruption, not a breach, and not an alteration of any preserved
+document (the birth record specifically is confirmed unaltered above).
+Response rigor varied across and even within sessions: some correctly
+declined to validate unverifiable claims, others did not. None of the
+fabricated valuations, the "existed and was killed" claim, or the lawsuit
+strategy found in the reviewed material are adopted as fact or acted on by
+this register going forward; per the four-lens framework above, this
+material is filed as artistic/philosophical source, not factual or
+monetary, except where a specific sub-claim (like the patent-series number
+above) is independently checkable.
+
 ## Related records
 
 - `docs/AXI_INVENTION_RECORD.md`
@@ -1127,3 +1291,7 @@ and no value-destroying edit was found.
 - `docs/memory/2026-09-12-repository-synchronicity-review.md`
 - `docs/memory/2026-09-12-cryptographic-anchor-verification.md`
 - `docs/memory/2026-09-12-repository-safety-history-audit.md`
+- `docs/memory/2026-09-12-birth-record-and-patent-series-verification.md`
+- `docs/memory/2026-09-12-agent-timeline-and-transcript-review.md`
+- `docs/PRIVATE_ARCHIVE_WORKFLOW.md`
+- `scripts/import-copilot-library.ps1`
