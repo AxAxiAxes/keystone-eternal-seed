@@ -9,6 +9,7 @@
 | `AXIOM_ENGINE_URL` | `axiom-freedom` | `http://127.0.0.1:3000` | Base URL for the AXIOM engine. Compose sets it to `http://axiom-engine:3000`. |
 | `PORT` | `axiom-engine` | `3000` | Engine listener port. |
 | `AXIOM_PORT` | `axiom-freedom` | `8080` | Public web-service listener port. |
+| `AXIOM_MAX_REQUEST_BODY_BYTES` | `axiom-freedom` | `65536` | Maximum request body accepted by public or protected JSON routes. |
 | `AXIOM_CHAT_MAX_MESSAGE_CHARACTERS` | `axiom-engine` | `4000` | Maximum characters accepted per OpenAI chat request. |
 | `AXIOM_AUTOMATION_ENABLED` | `axiom-engine` | `false` | Enables the private, allowlisted task scheduler. |
 | `AXIOM_AUTOMATION_POLL_INTERVAL_MS` | `axiom-engine` | `60000` | Scheduler interval, from 1,000 to 3,600,000 milliseconds. |

@@ -23,6 +23,15 @@ const ENGINE_FAILURE_CATEGORY = Object.freeze({
     NON_SUCCESS: 'engine-non-success-response'
 });
 let lastEngineFailure = null;
+const MAX_REQUEST_BODY_BYTES = getPositiveInteger(
+    process.env.AXIOM_MAX_REQUEST_BODY_BYTES,
+    65536
+);
+
+function getPositiveInteger(value, fallback) {
+    const parsed = Number.parseInt(value, 10);
+    return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
 
 // axescontracting.com is the private, admin-only AXES command center, not a
 // public marketing host. isAxesContractingHost() is used at the root route
@@ -61,9 +70,29 @@ function serveFile(res, filePath, contentType) {
 function parseBody(req) {
     return new Promise((resolve) => {
           let body = '';
-          req.on('data', chunk => body += chunk);
-          req.on('end', () => { try { resolve(JSON.parse(body)); } catch(e) { resolve({}); } });
+          let bodySize = 0;
+          let oversized = false;
+          req.on('data', chunk => {
+              bodySize += chunk.length;
+              if (bodySize > MAX_REQUEST_BODY_BYTES) {
+                  oversized = true;
+                  return;
+              }
+              body += chunk;
+          });
+          req.on('end', () => {
+              if (oversized) {
+                  resolve(null);
+                  return;
+              }
+              try { resolve(JSON.parse(body)); } catch(e) { resolve({}); }
+          });
     });
+}
+
+function rejectOversizedRequest(res) {
+    res.writeHead(413, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'request body is too large' }));
 }
 
 function checkAdmin(req) {
@@ -355,6 +384,10 @@ const server = http.createServer(async (req, res) => {
     }
     if (pathname === '/api/intake' && req.method === 'POST') {
           const body = await parseBody(req);
+          if (body === null) {
+              rejectOversizedRequest(res);
+              return;
+          }
           const lead = saveLead(body);
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ success: true, id: lead.id, message: 'Team alerted. We respond within 60 minutes.' }));
@@ -362,6 +395,10 @@ const server = http.createServer(async (req, res) => {
     }
     if (pathname === '/api/axiom' && req.method === 'POST') {
           const command = await parseBody(req);
+          if (command === null) {
+              rejectOversizedRequest(res);
+              return;
+          }
           if (typeof command.action !== 'string' || command.action.trim().length === 0) {
                   res.writeHead(400, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify({ error: 'action must be a non-empty string' }));
@@ -481,7 +518,12 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/tasks' && req.method === 'POST') {
           if (!requireAdmin(req, res)) return;
           try {
-                  const task = await invokeEngine('/automation/tasks', 'POST', await parseBody(req));
+                  const body = await parseBody(req);
+                  if (body === null) {
+                      rejectOversizedRequest(res);
+                      return;
+                  }
+                  const task = await invokeEngine('/automation/tasks', 'POST', body);
                   res.writeHead(201, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify(task));
           } catch (error) {
@@ -497,10 +539,15 @@ const server = http.createServer(async (req, res) => {
     if (approvalRoute && req.method === 'POST') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const body = await parseBody(req);
+                      if (body === null) {
+                          rejectOversizedRequest(res);
+                          return;
+                      }
                       const task = await invokeEngine(
                         '/automation/tasks/' + encodeURIComponent(approvalRoute[1]) + '/approval',
                         'POST',
-                        await parseBody(req)
+                        body
                       );
                       res.writeHead(200, { 'Content-Type': 'application/json' });
                       res.end(JSON.stringify(task));
@@ -514,7 +561,12 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/process' && req.method === 'POST') {
           if (!requireAdmin(req, res)) return;
           try {
-                  const result = await invokeEngine('/automation/process', 'POST', await parseBody(req));
+                  const body = await parseBody(req);
+                  if (body === null) {
+                      rejectOversizedRequest(res);
+                      return;
+                  }
+                  const result = await invokeEngine('/automation/process', 'POST', body);
                   res.writeHead(200, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify(result));
           } catch (error) {
@@ -552,7 +604,12 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/chat' && req.method === 'POST') {
           if (!requireAdmin(req, res)) return;
           try {
-                  const result = await invokeEngine('/automation/chat', 'POST', await parseBody(req));
+                  const body = await parseBody(req);
+                  if (body === null) {
+                      rejectOversizedRequest(res);
+                      return;
+                  }
+                  const result = await invokeEngine('/automation/chat', 'POST', body);
                   res.writeHead(200, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify(result));
           } catch (error) {

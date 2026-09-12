@@ -106,6 +106,19 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
       error: "AXIOM chat is not configured"
     });
 
+    const oversized = await fetch(`http://127.0.0.1:${webPort}/api/axiom`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "analyze",
+        padding: "x".repeat(65536)
+      })
+    });
+    assert.equal(oversized.status, 413);
+    assert.deepEqual(await oversized.json(), {
+      error: "request body is too large"
+    });
+
     const portal = await fetch(`http://127.0.0.1:${webPort}/`);
     assert.equal(portal.status, 200);
     const portalBody = await portal.text();
