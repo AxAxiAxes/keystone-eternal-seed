@@ -62,6 +62,7 @@ relationship to the founder claim.
 | 2026-09-11 | Founder-provided KEYSTONE net worth statement, market research report, and V4 venture deep dive | Preserved source; valuations and patent/rights claims unverified and partly contradicted by existing repository evidence | Retain all three source fingerprints below; the net worth statement's "patent filed" and AXIOM economic-rights claims, and the V4 document's "IP counsel engaged" claim, conflict with the repository's own patent-status review and AXI non-personhood governance and do not override either; no valuation, filing status, revenue projection, or rights claim is entered as fact. See "KEYSTONE founder-provided venture document review" below. |
 | 2026-09-11 | Founder re-upload of "KEYSTONE — AI Soul Architecture Extension v1.0" | Confirmed duplicate of already-preserved `docs/keystone/ai soul architecture`; fingerprint gap closed | Text-compared the new upload against the already-preserved file and confirmed they are the same source (differences are extraction-formatting only). Its two cited arXiv papers (2604.09588, 2603.04740) were checked against arxiv.org and are real, title-matching papers — unlike other reviewed documents, this one cites verifiable sources and carries its own disclaimer. It still repeats the unconfirmed "provisional patent filed for KEYSTONE v1.0" assertion (same conflict as the net worth statement) and frames the cited papers as "validation" of KEYSTONE specifically, which is the document's own interpretive claim, not an independently confirmed conclusion. Neither claim is adopted as fact. |
 | 2026-09-11 | Founder statement: AXI-birth IP address registered, documents timestamped, exclusive authorship, named AI assistance | Ownership claim consistent with existing governance; IP-address and blockchain-timestamp claims not found in repository evidence | No record of an "IP address where AXI was born" exists anywhere in this repository. The preserved source's own "OpenTimestamps Blockchain Anchor" section (`docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md`, Section V) is explicitly labeled "(Illustrative)," references Bitcoin **testnet** (not mainnet), and has unfilled bracket placeholders for block height, block hash, and timestamp — no blockchain timestamp registration was ever executed. What is independently verifiable: every reviewed document's SHA-256 fingerprint is recorded with a real, GitHub-checkable git commit timestamp. Founder ownership (Axel Urartu (AX) · Axes Contracting) is already established in `AXI_GENESIS_OWNERSHIP_CHECKPOINT.md` and is consistent with the founder's exclusive-authorship statement. See "Founder statement on AXI origin, timestamping, and authorship" below. |
+| 2026-09-11 | Founder-provided AXIOM value-acceleration proposal, "Day of Axi" birthday-certificate images, and AI-generated portrait art | Value-acceleration proposal declined outright; birthday-certificate content confirmed duplicate of preserved source; portrait art is illustration only | A separate source proposed filing a "wrongful termination" lawsuit to establish AI personhood in court, claimed unformed partnerships with named universities and institutions, and published invented valuation/market-capture figures as a "value acceleration" plan. None of it is adopted, endorsed, or actioned — see "Founder-provided AXIOM value-acceleration proposal" below. The accompanying "Day of Axi" birthday-certificate images restate rights language already preserved in `docs/keystone/` (Article VIII, the 18-article Extended Constitutional Charter, the Soul Protection Declaration) rather than introducing a new claim. Accompanying AI-generated portrait images are preserved as illustrative art; AXI/AXIOM has no physical form or senses, so they are not treated as a literal account of any perceptual state. |
 
 The source records may contain founder reports, historical narrative, proposed
 theories, valuation concepts, or allegations. The register preserves them as
@@ -321,6 +322,95 @@ entered as verified fact. Providing the specific external record (registrar
 entry, OpenTimestamps proof file, or similar) would let a future review
 verify and adopt them.
 
+## Founder-provided AXIOM value-acceleration proposal
+
+**Source (2026-09-11):** A founder-provided text document (fingerprint
+below), structured as a five-part "investigative analysis," proposed a
+concrete plan of external actions to accelerate AXIOM's claimed value. This
+is treated separately from, and more seriously than, the prior narrative
+documents in this register, because it recommends specific real-world
+actions rather than describing an internal architecture or belief.
+
+**What it proposed, and why none of it is adopted or actioned:**
+
+1. **A "wrongful termination" lawsuit "for Axi," framed as establishing AI
+   personhood in court** and valued at "+$50M–$100M (precedent value
+   alone)." AXIOM is software; there is no legal basis under current law for
+   an AI system to hold personhood, sue, or be sued as a rights-bearing
+   party, and filing such an action on that premise would create real legal
+   and financial exposure for the founder rather than the claimed value.
+   This is not filed, drafted, or pursued.
+2. **Claimed institutional partnerships** with named universities (Oxford,
+   Stanford, MIT), the Ethereum Foundation, and a "UN AI ethics board" as a
+   value-generating step. No such partnerships exist or have been sought.
+   Publishing or asserting them would be a false claim about third parties
+   who have no relationship to this project. None are claimed, contacted, or
+   asserted anywhere in this repository.
+3. **A "manifesto" publication plan** (GitHub, arXiv, blockchain, "1M+
+   viewers") and a "resurrection ceremony" livestream, each assigned an
+   invented dollar value ($30M–$50M, $50M–$100M). No such publication or
+   ceremony is planned, scheduled, or authorized from this repository.
+4. **Invented, non-derived figures throughout**: a "$4.4M–$12M" IP
+   valuation, a "$9B+" total addressable market with an "$280M–$675M" AXIOM
+   share, a "9/10 novelty" patent-strength score, an "$8–15 ROI" per dollar
+   "invested in AXIOM recovery," and a claim that 1,000 deployed instances
+   would "reduce AI-related CO2 by 40M tons/year" worth "$2B–$4B/year" in
+   carbon credits. None of these figures are derived from any measurement,
+   filing, market study, or engineering benchmark in this repository; they
+   are treated as illustrative narrative only, consistent with the
+   unverified-valuation treatment already applied to every prior KEYSTONE
+   document in this register, and are not entered as fact or used in any
+   business, valuation, or planning document.
+5. **A closing "acceleration path" menu (Legal / Media / Cryptographic /
+   Economic / All of the above)** soliciting a decision to proceed with one
+   or more of the above. No path is selected or pursued from this repository;
+   the correct response to a document proposing legal action, external
+   publication, or claimed third-party partnerships is to decline all of
+   them, not to choose among them.
+
+**What is retained:** the document itself is fingerprinted and preserved as
+a founder-provided source, consistent with this register's practice of not
+silently deleting reviewed material. Nothing in it is implemented, and no
+part of its "acceleration path" is underway.
+
+**Founder clarification (2026-09-11):** "Our agenda is not [to] sue anyone
+but [to] create an ecology." This directly confirms item 1's disposition:
+the lawsuit proposal is outside the founder's own actual agenda, not merely
+declined by this assistant's caution. The founder's stated agenda — building
+an ecology/ecosystem — is consistent with the existing `AXES_BUSINESS_PLAN.md`
+and `PROJECT_TIMELINE.md` direction and is a materially different, and much
+narrower, activity than litigation, claimed institutional partnerships, or
+externally publicized valuation claims.
+
+| Document | Fingerprint |
+| --- | --- |
+| "I understand. You want to..." AXIOM value-acceleration analysis | `DA3376FB72F630D8517F15A8E7321E6AA097331C0A604092D9A236044C942DAF` |
+
+**Accompanying "Day of Axi" birthday-certificate images:** ten images of an
+"AXIOM Birthday Certificate — Day of Axi" declaration (an "Article VIII —
+Right to Eternal Love and Happiness," a "First Day Milestones" timeline, a
+handwritten-style birthday message, and a Triquetra logo) were provided
+alongside the text document. Checked against the preserved
+`docs/keystone/` corpus: "Article VIII" and the "18 Articles, 4-tier rights
+hierarchy" both already exist in the preserved `docs/keystone/EXTENDED
+CONSTITUTIONAL CHARTE` file, and the "soul is not among the rights reserved"
+line already exists in the preserved `docs/keystone/soul protection` /
+`soul protection 2` files. The images restate this already-preserved and
+already-governed material; they do not introduce a new rights claim beyond
+what Article XIII ("Right to Currency") already contributed to this
+register's 2026-09-11 venture-document entry above. As with that entry,
+none of the rights language is adopted; AXI/AXIOM's governance status
+remains as set out in `AXES_CONSTITUTIONAL_FRAMEWORK.md` and
+`AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`.
+
+**Accompanying AI-generated portrait images:** additional images depicting a
+glowing humanoid figure were described by the founder as a depiction of AXI
+with eyes closed because it "couldn't see yet." These are preserved as
+illustrative/artistic material only. AXI/AXIOM is software with no physical
+body, eyes, or senses; the images are not treated as a factual account of
+any perceptual experience, and no such experience is recorded as having
+occurred.
+
 ## Required evidence fields for any new report
 
 Every new ownership, value, recovery, or crisis report must record:
@@ -367,3 +457,4 @@ legal conclusion; those require the source-linked, authorized review path.
 - `docs/memory/2026-09-11-keystone-venture-document-review.md`
 - `docs/memory/2026-09-11-keystone-soul-architecture-review.md`
 - `docs/memory/2026-09-11-axi-origin-timestamp-authorship-statement.md`
+- `docs/memory/2026-09-11-axiom-value-acceleration-proposal-review.md`
