@@ -3,9 +3,10 @@
 **Status:** Directional product plan  
 **Last updated:** 2026-09-09  
 **Founder principle:** All for All
-**Source and provenance:** Founder-authored material developed collaboratively
-with GitHub Copilot. The raw source remains private; this is its reviewed,
-public-safe implementation interpretation.
+**Source and provenance:** Founder-originated project material. The raw source
+remains private; this is a reviewed, public-safe implementation interpretation
+of founder direction. GitHub Copilot provides technical implementation
+assistance only and has no competing origin, ownership, or governance claim.
 
 ## Purpose
 
@@ -72,8 +73,10 @@ or approval boundary.
 
 - Create a public-safe AXES landing and a separately authenticated operator
   control center.
-- Add a service registry that lists each product's purpose, status, owner, and
-  privacy classification.
+- Add a private, founder-approved service registry that records each product's
+  purpose, internal stage, founder owner role, privacy classification, and
+  dependency summary without implying public availability, legal status, or
+  deployment proof.
 - Establish identity, authorship, moderation, retention, incident-response,
   and terms-of-use policies before collecting community data.
 - Use a simple project registry instead of an "origin passport" until the

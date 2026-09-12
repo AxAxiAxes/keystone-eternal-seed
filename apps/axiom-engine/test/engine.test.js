@@ -19,9 +19,11 @@ async function startServer() {
 }
 
 async function stopServer(server) {
-  server.closeAllConnections();
-  await new Promise((resolve, reject) =>
+  const closed = new Promise((resolve, reject) =>
     server.close((error) => (error ? reject(error) : resolve())));
+  server.closeIdleConnections();
+  server.closeAllConnections();
+  await closed;
 }
 
 test("processes an AXIOM command", async (t) => {
@@ -60,7 +62,7 @@ test("reports engine health", async (t) => {
     service: "AXIOM engine"
   });
 
-  test("reports seeded automation status", async (t) => {
+  await t.test("reports seeded automation status", async (t) => {
     t.after(() => fs.rm(memoryDirectory, { recursive: true, force: true }));
     const server = await startServer();
     t.after(() => stopServer(server));
@@ -69,18 +71,41 @@ test("reports engine health", async (t) => {
     const response = await fetch(`http://127.0.0.1:${port}/automation/status`);
 
     assert.equal(response.status, 200);
-    assert.deepEqual(await response.json(), {
-      agents: 3,
-      pendingTasks: 0,
-      blockedTasks: 0,
-      awaitingApprovalTasks: 0,
-      completedTasks: 0,
-      failedTasks: 0,
-      runs: 0
+    const status = await response.json();
+    assert.equal(status.agents, 5);
+    assert.equal(status.pendingTasks, 0);
+    assert.equal(status.overdueTasks, 0);
+    assert.equal(status.nextScheduledAt, null);
+    assert.equal(status.runs, 0);
+    assert.equal(status.agentObservations.length, 5);
+    assert.equal(status.agentObservations[0].attention.length, 0);
+
+    const agentReport = await fetch(
+      `http://127.0.0.1:${port}/automation/agents/operations-observer/report`
+    );
+    assert.equal(agentReport.status, 200);
+    const report = await agentReport.json();
+    assert.equal(report.agent.creator, "Axel Urartu (AX) · Axes Contracting");
+    assert.equal(report.agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
+    assert.match(report.agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
+    assert.equal(
+      report.agent.keystoneRegistration.genesisCheckpoint.id,
+      "axi-genesis-creator-ownership"
+    );
+    assert.equal(report.agent.originCheckpoint, "axi-operations-observer");
+    assert.equal(report.agent.createdAt, report.agent.registeredAt);
+    assert.equal(report.observation.creatorAuthority, "Axel Urartu (AX) · Axes Contracting");
+    assert.deepEqual(report.observation.assignedTaskCountsByState, {
+      pending: 0, running: 0, blocked: 0, awaiting_approval: 0,
+      completed: 0, failed: 0, cancelled: 0
     });
+    assert.deepEqual(report.timeline.map((event) => event.event), [
+      "origin",
+      "accountability-review"
+    ]);
   });
 
-  test("reports empty OpenAI usage before any provider requests", async (t) => {
+  await t.test("reports empty OpenAI usage before any provider requests", async (t) => {
     t.after(() => fs.rm(memoryDirectory, { recursive: true, force: true }));
     const server = await startServer();
     t.after(() => stopServer(server));
@@ -96,6 +121,384 @@ test("reports engine health", async (t) => {
       totalTokens: 0
     });
   });
+});
+
+test("reports secret-safe runtime readiness", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const response = await fetch(`http://127.0.0.1:${port}/system/readiness`);
+
+  assert.equal(response.status, 200);
+  const readiness = await response.json();
+  assert.equal(readiness.status, "ready");
+  assert.equal(readiness.storage.status, "ready");
+  assert.ok(Number.isSafeInteger(readiness.storage.usedBytes));
+  assert.ok(Number.isSafeInteger(readiness.storage.fileCount));
+  assert.equal(readiness.provider.status, "not-configured");
+  assert.equal(readiness.provider.model, "gpt-4.1-mini");
+  assert.equal(readiness.automation.status, "disabled");
+  assert.equal(readiness.monitoring.status, "disabled");
+  assert.equal(readiness.governance.status, "ready");
+  assert.equal(readiness.governance.activeAgents, 5);
+  assert.equal(readiness.recovery.status, "not-configured");
+  assert.equal(readiness.coordinates.status, "ready");
+  assert.equal(readiness.startupContext.status, "ready");
+  assert.equal(readiness.continuityRecord.status, "ready");
+  assert.equal(readiness.sourceCatalog.status, "ready");
+  assert.equal(readiness.sourceCatalog.sourceCount, 0);
+  assert.equal(readiness.businessMetrics.status, "ready");
+  assert.equal(readiness.businessMetrics.recordCount, 0);
+  assert.equal(readiness.serviceRegistry.status, "ready");
+  assert.equal(readiness.serviceRegistry.serviceCount, 0);
+  assert.equal(readiness.automationProfiles.status, "ready");
+  assert.equal(readiness.automationProfiles.templates.length, 3);
+  assert.equal(readiness.automationProfiles.templates[0].id, "operations-observation");
+  assert.equal(readiness.automationProfiles.templates[1].id, "continuity-protection");
+  assert.ok(readiness.continuityRecord.recordCount >= 2);
+  assert.equal(readiness.startupContext.id, "axes-memory-bank-startup-v1");
+  assert.equal(readiness.automation.lastRunAt, null);
+  assert.equal(readiness.automation.lastError, null);
+  assert.ok(readiness.checkedAt);
+  assert.equal(JSON.stringify(readiness).includes("OPENAI_API_KEY"), false);
+});
+
+test("reports the private startup context without exposing private source material", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const response = await fetch(`http://127.0.0.1:${port}/system/startup-context`);
+
+  assert.equal(response.status, 200);
+  const startupContext = await response.json();
+  assert.equal(startupContext.status, "ready");
+  assert.equal(startupContext.id, "axes-memory-bank-startup-v1");
+  assert.ok(startupContext.sourceRecords.includes("docs/memory/README.md"));
+  assert.equal(JSON.stringify(startupContext).includes("OPENAI_API_KEY"), false);
+});
+
+test("persists and exposes the private continuity record", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const statusResponse = await fetch(
+    `http://127.0.0.1:${port}/system/continuity-record`
+  );
+  assert.equal(statusResponse.status, 200);
+  assert.equal((await statusResponse.json()).status, "ready");
+
+  const createdResponse = await fetch(
+    `http://127.0.0.1:${port}/system/continuity-record/events`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sourceRecord: "engine-test",
+        summary: "Operator confirmed the engine test continuity record."
+      })
+    }
+  );
+  assert.equal(createdResponse.status, 201);
+  assert.equal((await createdResponse.json()).eventType, "operator-confirmed");
+
+  const taskResponse = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: "Record managed continuity event",
+      action: "continuity.record",
+      agentId: "project-memory-manager",
+      approvalRequired: true,
+      originCheckpoint: "axi-project-memory-management",
+      payload: {
+        sourceRecord: "engine-test",
+        summary: "Operator approved a managed continuity event."
+      }
+    })
+  });
+  assert.equal(taskResponse.status, 201);
+  const task = await taskResponse.json();
+  assert.equal(task.status, "awaiting_approval");
+
+  const approvalResponse = await fetch(
+    `http://127.0.0.1:${port}/automation/tasks/${task.id}/approval`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ approved: true })
+    }
+  );
+  assert.equal(approvalResponse.status, 200);
+
+  const processResponse = await fetch(
+    `http://127.0.0.1:${port}/automation/process`,
+    { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }
+  );
+  assert.equal(processResponse.status, 200);
+  assert.equal((await processResponse.json())[0].status, "completed");
+
+  const entriesResponse = await fetch(
+    `http://127.0.0.1:${port}/system/continuity-record/events`
+  );
+  assert.equal(entriesResponse.status, 200);
+  assert.equal((await entriesResponse.json())[0].eventType, "operator-confirmed");
+});
+
+test("catalogs approved source metadata through the private engine", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const statusResponse = await fetch(`http://127.0.0.1:${port}/system/source-catalog`);
+  assert.equal(statusResponse.status, 200);
+  assert.equal((await statusResponse.json()).status, "ready");
+
+  const taskResponse = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: "Catalog AXI memory source",
+      action: "source.catalog",
+      agentId: "project-memory-manager",
+      approvalRequired: true,
+      originCheckpoint: "axi-project-memory-management",
+      payload: {
+        sourceId: "axi-memory-service",
+        title: "AXI persistent memory service",
+        sourceType: "document",
+        classification: "private",
+        sourceReference: "docs/AXI_MEMORY_SERVICE.md",
+        sha256: "a".repeat(64)
+      }
+    })
+  });
+
+  assert.equal(taskResponse.status, 201);
+  const task = await taskResponse.json();
+  assert.equal(task.status, "awaiting_approval");
+
+  const approvalResponse = await fetch(
+    `http://127.0.0.1:${port}/automation/tasks/${task.id}/approval`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ approved: true })
+    }
+  );
+  assert.equal(approvalResponse.status, 200);
+
+  const processResponse = await fetch(`http://127.0.0.1:${port}/automation/process`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "{}"
+  });
+  assert.equal(processResponse.status, 200);
+  assert.equal((await processResponse.json())[0].status, "completed");
+
+  const entriesResponse = await fetch(
+    `http://127.0.0.1:${port}/system/source-catalog/entries?limit=5`
+  );
+  assert.equal(entriesResponse.status, 200);
+  const entries = await entriesResponse.json();
+  assert.equal(entries[0].sourceId, "axi-memory-service");
+  assert.equal(entries[0].reviewStatus, "operator-approved");
+});
+
+test("records approved business metrics through the private engine task flow", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+  const taskResponse = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: "Record approved revenue metric",
+      action: "business.metric",
+      agentId: "project-memory-manager",
+      approvalRequired: true,
+      originCheckpoint: "axi-business-metrics-foundation",
+      payload: {
+        period: "2026-09",
+        kind: "revenue",
+        category: "contracting-services",
+        amountCents: 12500,
+        sourceRecord: "engine-approved-metric-2026-09-001"
+      }
+    })
+  });
+
+  await t.test("records founder-approved private service registry metadata through task flow", async (t) => {
+    const server = await startServer();
+    t.after(() => stopServer(server));
+    const { port } = server.address();
+    const payload = {
+      operation: "register",
+      serviceId: "axes-control-center",
+      serviceName: "AXES Control Center",
+      purpose: "Private operational planning metadata",
+      stage: "planned",
+      classification: "internal",
+      ownerRole: "founder",
+      dependencySummary: "Private engine readiness and founder review"
+    };
+    const invalidAssignment = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: "Invalid service registry task",
+        action: "service.registry",
+        agentId: "memory-curator",
+        approvalRequired: true,
+        originCheckpoint: "axi-project-memory-management",
+        payload
+      })
+    });
+    assert.equal(invalidAssignment.status, 400);
+    assert.match((await invalidAssignment.json()).error, /Project Memory Manager/);
+
+    const missingApproval = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: "Unapproved service registry task",
+        action: "service.registry",
+        agentId: "project-memory-manager",
+        approvalRequired: false,
+        originCheckpoint: "axi-project-memory-management",
+        payload
+      })
+    });
+    assert.equal(missingApproval.status, 400);
+    assert.match((await missingApproval.json()).error, /require operator approval/);
+
+    const createdResponse = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: "Register AXES Control Center internally",
+        action: "service.registry",
+        agentId: "project-memory-manager",
+        approvalRequired: true,
+        originCheckpoint: "axi-project-memory-management",
+        payload
+      })
+    });
+    assert.equal(createdResponse.status, 201);
+    const task = await createdResponse.json();
+    assert.equal(task.status, "awaiting_approval");
+    const approval = await fetch(`http://127.0.0.1:${port}/automation/tasks/${task.id}/approval`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ approved: true })
+    });
+    assert.equal(approval.status, 200);
+    const processed = await fetch(`http://127.0.0.1:${port}/automation/process`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: "{}"
+    });
+    assert.equal(processed.status, 200);
+    assert.equal((await processed.json())[0].status, "completed");
+
+    const status = await fetch(`http://127.0.0.1:${port}/system/service-registry`);
+    assert.equal(status.status, 200);
+    assert.equal((await status.json()).serviceCount, 1);
+    const projection = await fetch(`http://127.0.0.1:${port}/system/service-registry/projection`);
+    assert.equal(projection.status, 200);
+    assert.equal((await projection.json()).services["axes-control-center"].stage, "planned");
+    const directWrite = await fetch(`http://127.0.0.1:${port}/system/service-registry`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
+    });
+    assert.equal(directWrite.status, 404);
+  });
+  assert.equal(taskResponse.status, 201);
+  const task = await taskResponse.json();
+  assert.equal(task.status, "awaiting_approval");
+  const approvalResponse = await fetch(
+    `http://127.0.0.1:${port}/automation/tasks/${task.id}/approval`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ approved: true })
+    }
+  );
+  assert.equal(approvalResponse.status, 200);
+  const processResponse = await fetch(`http://127.0.0.1:${port}/automation/process`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "{}"
+  });
+  assert.equal(processResponse.status, 200);
+  assert.equal((await processResponse.json())[0].status, "completed");
+
+  const entriesResponse = await fetch(
+    `http://127.0.0.1:${port}/system/business-metrics/entries?limit=5`
+  );
+  assert.equal(entriesResponse.status, 200);
+  const entries = await entriesResponse.json();
+  assert.equal(entries.entries[0].reviewStatus, "operator-approved");
+  assert.equal(entries.entries[0].sourceRecord, "engine-approved-metric-2026-09-001");
+  assert.match(entries.label, /Record of submitted metrics only/);
+  const summaryResponse = await fetch(`http://127.0.0.1:${port}/system/business-metrics/summary`);
+  assert.equal(summaryResponse.status, 200);
+  const summary = await summaryResponse.json();
+  assert.equal(summary.totalRecordedRevenueCents, 12500);
+  assert.equal(summary.netRecordedOperatingResultCents, 12500);
+  const monitoringResponse = await fetch(`http://127.0.0.1:${port}/monitoring/snapshots`, {
+    method: "POST"
+  });
+  assert.equal(monitoringResponse.status, 201);
+  const monitoringSnapshot = await monitoringResponse.json();
+  assert.equal(monitoringSnapshot.snapshot.businessMetrics.status, "ready");
+  assert.equal(monitoringSnapshot.snapshot.automation.agentObservations.length, 5);
+  assert.equal(
+    monitoringSnapshot.snapshot.automation.agentObservations
+      .find((observation) => observation.agentId === "project-memory-manager").attention.length,
+    0
+  );
+});
+
+test("fails closed when retained service registry history is invalid", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+  const registryPath = path.join(memoryDirectory, "service-registry.jsonl");
+  const original = await fs.readFile(registryPath, "utf8");
+  await fs.writeFile(registryPath, original.replace("planned", "active"));
+
+  const readiness = await fetch(`http://127.0.0.1:${port}/system/readiness`);
+  assert.equal(readiness.status, 200);
+  assert.equal((await readiness.json()).serviceRegistry.status, "attention");
+  const monitoring = await fetch(`http://127.0.0.1:${port}/monitoring/snapshots`, { method: "POST" });
+  assert.equal(monitoring.status, 201);
+  assert.ok((await monitoring.json()).attention.includes("service-registry-unavailable"));
+  const process = await fetch(`http://127.0.0.1:${port}/automation/process`, {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: "{}"
+  });
+  assert.equal(process.status, 409);
+  assert.match((await process.json()).error, /service registry is ready \(service-registry-invalid\)/);
+});
+
+test("blocks automation when retained startup context is invalid", async (t) => {
+  t.after(() => fs.rm(memoryDirectory, { recursive: true, force: true }));
+  await fs.mkdir(memoryDirectory, { recursive: true });
+  await fs.writeFile(path.join(memoryDirectory, "startup-context.json"), "{invalid");
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const response = await fetch(`http://127.0.0.1:${port}/automation/process`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "{}"
+  });
+
+  assert.equal(response.status, 409);
+  assert.match(
+    (await response.json()).error,
+    /startup context is ready \(startup-context-invalid\)/
+  );
 });
 
 test("reports an unavailable chat provider when no key is configured", async (t) => {
@@ -176,7 +579,83 @@ test("persists and retrieves AXI memory layers", async (t) => {
   assert.equal(monitoring.status, 201);
   const monitoringSnapshot = await monitoring.json();
   assert.equal(monitoringSnapshot.snapshot.memoryAvailable, true);
-  assert.equal(monitoringSnapshot.snapshot.automation.agents, 3);
+  assert.equal(monitoringSnapshot.snapshot.automation.agents, 5);
+  assert.equal(monitoringSnapshot.snapshot.governance.status, "ready");
+  assert.equal(monitoringSnapshot.snapshot.recovery.status, "not-configured");
+  assert.ok(monitoringSnapshot.attention.includes("recovery-not-ready"));
+  assert.equal(monitoringSnapshot.snapshot.coordinates.status, "ready");
+  assert.equal(monitoringSnapshot.snapshot.beadPassports.status, "ready");
+  assert.equal(monitoringSnapshot.snapshot.businessMetrics.status, "ready");
+
+  const governance = await fetch(`http://127.0.0.1:${port}/automation/readiness`);
+  assert.equal(governance.status, 200);
+  assert.equal((await governance.json()).status, "ready");
+
+  const createdCoordinate = await fetch(`http://127.0.0.1:${port}/system/coordinates`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      label: "Record engine coordinate test",
+      originCheckpoint: "axi-coordinate-foundation"
+    })
+  });
+
+  assert.equal(createdCoordinate.status, 201);
+  const coordinate = await createdCoordinate.json();
+  assert.equal(coordinate.sequence, 1);
+
+  const coordinateVerification = await fetch(
+    `http://127.0.0.1:${port}/system/coordinates/verify`
+  );
+  assert.equal(coordinateVerification.status, 200);
+  assert.equal((await coordinateVerification.json()).coordinateCount, 2);
+
+  const continuityTaskResponse = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: "Create an AXI continuity checkpoint",
+      action: "continuity.checkpoint",
+      agentId: "operations-observer",
+      originCheckpoint: "axi-continuity-checkpoint"
+    })
+  });
+  assert.equal(continuityTaskResponse.status, 201);
+  const continuityTask = await continuityTaskResponse.json();
+  const continuityProcessResponse = await fetch(
+    `http://127.0.0.1:${port}/automation/process`,
+    { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }
+  );
+  assert.equal(continuityProcessResponse.status, 200);
+  assert.equal((await continuityProcessResponse.json())[0].taskId, continuityTask.id);
+  const continuityCheckpoints = await fetch(`http://127.0.0.1:${port}/system/checkpoints`);
+  assert.equal(continuityCheckpoints.status, 200);
+  assert.equal((await continuityCheckpoints.json()).length, 2);
+
+  const gravityCenterResponse = await fetch(
+    `http://127.0.0.1:${port}/system/gravity-center`
+  );
+  assert.equal(gravityCenterResponse.status, 200);
+  assert.equal((await gravityCenterResponse.json()).id, "axi-genesis-gravity-center");
+
+  const createdPassport = await fetch(`http://127.0.0.1:${port}/system/bead-passports`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      agentId: "operations-observer",
+      harmonicBand: "H4",
+      spatialVector: { x: 14.22, y: -3.88, z: 7.01 },
+      originCheckpoint: "axi-bead-passport-pilot"
+    })
+  });
+  assert.equal(createdPassport.status, 201);
+  assert.equal((await createdPassport.json()).passportId, "BPN-0001");
+
+  const passportVerification = await fetch(
+    `http://127.0.0.1:${port}/system/bead-passports/verify`
+  );
+  assert.equal(passportVerification.status, 200);
+  assert.equal((await passportVerification.json()).passportCount, 1);
 
   const monitoringHistory = await fetch(`http://127.0.0.1:${port}/monitoring/history`);
   assert.equal(monitoringHistory.status, 200);
@@ -186,4 +665,25 @@ test("persists and retrieves AXI memory layers", async (t) => {
     snapshot: monitoringSnapshot.snapshot,
     attention: monitoringSnapshot.attention
   }]);
+});
+
+test("fails closed when retained business metrics are tampered", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+  const metricPath = path.join(memoryDirectory, "business-metrics.jsonl");
+  await fs.mkdir(memoryDirectory, { recursive: true });
+  await fs.writeFile(metricPath, "{\"tampered\":true}\n");
+
+  const statusResponse = await fetch(`http://127.0.0.1:${port}/system/business-metrics`);
+  assert.equal(statusResponse.status, 200);
+  assert.equal((await statusResponse.json()).status, "attention");
+
+  const response = await fetch(`http://127.0.0.1:${port}/automation/process`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "{}"
+  });
+  assert.equal(response.status, 409);
+  assert.match((await response.json()).error, /business metrics are ready \(business-metrics-invalid\)/);
 });

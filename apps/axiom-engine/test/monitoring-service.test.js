@@ -31,4 +31,44 @@ test("records changed monitoring state and attention transitions", async (t) => 
   assert.deepEqual(attention.attention, ["failed-tasks"]);
   assert.equal(decisions.length, 1);
   assert.equal((await service.history()).length, 2);
+
+  const storageAttention = await service.record({
+    ...healthy,
+    storage: { status: "attention" }
+  });
+  assert.deepEqual(storageAttention.attention, ["memory-storage-warning"]);
+  assert.equal(decisions.length, 2);
+  assert.equal((await service.history()).length, 3);
+
+  const governanceAttention = await service.record({
+    ...healthy,
+    governance: { status: "attention" }
+  });
+  assert.deepEqual(governanceAttention.attention, ["governance-readiness"]);
+  assert.equal(decisions.length, 3);
+  assert.equal((await service.history()).length, 4);
+
+  const recoveryAttention = await service.record({
+    ...healthy,
+    recovery: { status: "empty" }
+  });
+  assert.deepEqual(recoveryAttention.attention, ["recovery-not-ready"]);
+  assert.equal(decisions.length, 4);
+  assert.equal((await service.history()).length, 5);
+
+  const coordinateAttention = await service.record({
+    ...healthy,
+    coordinates: { status: "invalid" }
+  });
+  assert.deepEqual(coordinateAttention.attention, ["coordinate-chain-invalid"]);
+  assert.equal(decisions.length, 5);
+  assert.equal((await service.history()).length, 6);
+
+  const startupContextAttention = await service.record({
+    ...healthy,
+    startupContext: { status: "attention" }
+  });
+  assert.deepEqual(startupContextAttention.attention, ["startup-context-unavailable"]);
+  assert.equal(decisions.length, 6);
+  assert.equal((await service.history()).length, 7);
 });

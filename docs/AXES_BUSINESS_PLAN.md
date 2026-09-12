@@ -22,6 +22,22 @@ and release small offerings that have a clear customer, owner, budget, and
 human approval path. New domains remain parked until a product earns its next
 stage.
 
+## Founder authority and present business status
+
+AXES is a founder-led company, brand, and business-building effort. Within
+AXES governance, Axel Urartu (AX) · Axes Contracting records the sole
+founder-and-project-owner claim for founder-created project direction and
+AXES-maintained project records. AXI is the project's current non-sentient
+software and operations system; it and its registered roles have no
+independent ownership, authority, or decision-making claim.
+
+This governance record directs work within the project and preserves
+accountability for founder-directed sessions and AXES-maintained continuity
+records. It does not determine legal ownership, enforceability, contractual
+rights, provider-platform records, or third-party rights. The applicable
+founder-claim and agent-accountability record is
+`AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`.
+
 ## Full business-plan objective
 
 Build a durable, founder-led AXES ecosystem that turns original design,
@@ -62,7 +78,7 @@ ready.
 
 | Area | Role | Current or initial offer | Boundary |
 | --- | --- | --- | --- |
-| AXES Contracting | Central public hub | Company story, service registry, design guidance, contact and scoped intake | No unreviewed claims or account-control actions |
+| AXES Contracting | Central public hub | Company story, design guidance, contact and scoped intake; authenticated operators may view a separate private service registry | No unreviewed claims, public registry availability claims, or account-control actions |
 | Architectural Design Desk | Design-education line | Tips, inspiration, material palettes, and consultation requests | Not licensed architecture, engineering, code, or safety advice without responsible professional review |
 | Building-Materials Discovery | Commercial discovery line | Curated materials, supplier links, sample/quote requests, and project inspiration | No checkout, inventory, fulfillment, warranties, tax, or payment processing until commerce operations are ready |
 | Chichetki Studio | Founder-led creative line | Founder-designed physical rhythm objects, collectible gems, art editions, sound, movement, and carefully scoped experiences | Separate substantiated product descriptions from health, therapeutic, cultural, patent, financial-value, prize, or market claims; California legal review before any gem game, prize, or exchange |
@@ -106,6 +122,27 @@ model:
 The gemstone-pomegranate reference remains inspiration only. It can inform
 color, material, light, and ornament but is not an AXES asset or logo and must
 not be copied or published without rights-holder permission.
+
+### Resource basis and competitive position
+
+Every offer in this plan is built from a real, founder-controlled resource —
+design skill, existing client relationships, curated material knowledge, or
+the operating budget recorded in `PROJECT_BUDGET.md` — not a speculative
+valuation or promised future funding. Revenue is expected to follow only
+where a service reciprocates real value to the people who use it; the staged
+revenue model above already withholds each offer's next stage until its
+operating requirements, not a projection, are satisfied.
+
+AXES does not attempt to out-scale large, well-funded incumbent directory and
+marketplace platforms, and makes no claim about how any specific competitor
+operates. The AXES Directory's planned competitive position is quality and
+trust rather than reach: every listing is opt-in and human-reviewed rather
+than scraped or automatically imported, carries a recorded source, approval,
+and renewal date rather than an indefinite unreviewed entry, and includes a
+working correction and removal path for the business it describes. These are
+committed data-model requirements (`AXES_DIRECTORY_DATA_MODEL.md`), not
+marketing language, and remain the differentiation strategy even at a much
+smaller initial scale than an established competitor.
 
 ### Chichetki and Athanor creative system
 
@@ -233,6 +270,11 @@ Automation may record, monitor, and propose. It cannot independently create
 accounts, accept terms, spend money, deploy, contact people, publish media, or
 change domain/email settings. The founder or a designated human approver
 authorizes purchases, contracts, releases, and material operational changes.
+AXES respects an individual's self-description and must not use software to
+define a person's identity, value, beliefs, origin, eligibility, or rights.
+The related founder-provided constitutional source statement is preserved in
+`keystone/RIGHT_OF_SELF_ORIGIN.md`; it does not itself establish external legal
+rights or override these operating controls.
 
 ## Launch plan
 
@@ -292,7 +334,10 @@ pilot-launch operating rules are maintained in
 `AXES_GOVERNANCE_AND_SAFEGUARDING.md`.
 
 The business-only directory and human-reviewed marketing-assistance path is
-defined in `AXES_DIRECTORY_READINESS.md`.
+defined in `AXES_DIRECTORY_READINESS.md`. Its proposed pilot listing fields,
+lifecycle, renewal record, correction/removal workflow, and track-specific
+limits are defined in `AXES_DIRECTORY_DATA_MODEL.md`; neither record enables a
+live directory or outreach activity.
 
 ## Success measures
 
@@ -304,6 +349,10 @@ Track only metrics that help decide whether a service should continue:
 - Pilot conversion, fulfillment reliability, support response time, and
   customer/participant feedback.
 - Actual monthly spending against the approved cap.
+- Internally submitted revenue and expense metrics only through the private,
+  approval-gated AXI journal, as a record of submitted metrics rather than a
+  financial statement, accounting treatment, tax calculation, cash balance,
+  valuation, profitability guarantee, or legal or financial advice.
 - Asset-rights completeness and content accessibility completion.
 - For collaborative pilots: participant safety, moderation response, consent,
   attribution, export, and deletion outcomes.
@@ -339,6 +388,9 @@ Track only metrics that help decide whether a service should continue:
 - `AXES_PROJECT_FULFILLMENT_READINESS.md`
 - `EMAIL_MIGRATION_PLAN.md`
 - `URNUR_FINANCIAL_READINESS.md`
+- `AXES_DIRECTORY_READINESS.md`
+- `AXES_DIRECTORY_DATA_MODEL.md`
 - `CHICHETKI_COLLECTIBLE_GEM_READINESS.md`
 - `AXES_OS_PORTABILITY.md`
+- `AXI_BUSINESS_METRICS.md`
 - `AXES_CREATOR_ORIGIN_CONSTITUTION.md`

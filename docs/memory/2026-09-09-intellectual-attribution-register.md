@@ -11,7 +11,7 @@ This register distinguishes three kinds of entries:
 | Type | Meaning |
 | --- | --- |
 | Founder-provided concept | Direction, language, or idea supplied by the founder in source material |
-| Collaborative synthesis | A structure or interpretation developed from founder direction in conversation with GitHub Copilot |
+| Founder-directed implementation synthesis | A structure or interpretation implemented from founder direction with technical-assistant support |
 | Technical assessment | An implementation, safety, or operations conclusion derived from the repository and deployment state |
 
 Entries are not legal determinations of authorship, ownership, novelty, or
@@ -28,16 +28,17 @@ sharing an AXES control center and a private XIIOM operations core. This turns
 an otherwise broad collection of ideas into a coherent, staged platform
 program.
 
-**Attribution:** Collaborative synthesis from founder-provided direction.  
+**Attribution:** Founder-directed implementation synthesis from
+founder-provided direction.
 **Source:** Private founder-and-Copilot source record
 `private-archive/copilot-library/2026-09-09-pasted-text-f2b84109/source.txt`,
 SHA-256
 `CAE78A6E802DA68D3DA9C0DE331D02A5D8C8D386DC6617C7F6E2C9CF661E4487`.  
 **Implementation interpretation:** `docs/AXES_PLATFORM_PLAN.md` and
 `docs/AXES_BUILD_PROGRAM.md`.  
-**Credit note:** The product names, constellation framing, and founder
-principle “All for All” are founder-provided. The dependency-ordered product
-program is a collaborative synthesis.
+**Credit note:** The product names, constellation framing, founder principle
+“All for All,” and product program are founder-originated. Technical assistance
+does not create a competing origin, ownership, or governance claim.
 
 ### IA-2026-09-09-02 — Reliability precedes public expansion
 
@@ -62,9 +63,9 @@ records consent, source references, version history, correction paths, and
 scope. It must not be presented as automatic proof of legal ownership or as an
 immutable record that prevents correction.
 
-**Attribution:** Collaborative synthesis from the founder's emphasis on truth,
-lineage, creators, and preservation, combined with technical and privacy
-constraints.  
+**Attribution:** Founder-directed implementation synthesis from the founder's
+emphasis on truth, lineage, creators, and preservation, implemented with
+technical and privacy constraints.
 **Source:** Private source record above; `docs/AXES_PLATFORM_PLAN.md`.  
 **Implementation interpretation:** Phase 4 and the Lineage Archive boundary in
 `docs/AXES_PLATFORM_PLAN.md`.  
@@ -78,8 +79,8 @@ accessible learning and project-invention program rather than an unrestricted
 social environment. Intergenerational participation requires deliberate cohort
 design, safeguarding, and accountable human moderation.
 
-**Attribution:** Founder-provided concept with collaborative product and safety
-interpretation.  
+**Attribution:** Founder-provided concept with founder-directed product and
+safety implementation interpretation.
 **Source:** Private source record above.  
 **Implementation interpretation:** Release C in `docs/AXES_BUILD_PROGRAM.md`.  
 **Credit note:** The school concept and its stated learning themes are
@@ -94,8 +95,8 @@ well, can contribute, and may wish to sustain. It should be offered as a
 voluntary educational exercise rather than a diagnostic, ranking system, or
 prescription for someone's life.
 
-**Attribution:** Founder-provided direction with collaborative implementation
-interpretation.
+**Attribution:** Founder-provided direction with founder-directed
+implementation interpretation.
 **Source:** Founder instruction recorded 2026-09-09 in this project session.
 **Implementation interpretation:** Phase 2 in `docs/AXES_PLATFORM_PLAN.md` and
 Release C in `docs/AXES_BUILD_PROGRAM.md`.

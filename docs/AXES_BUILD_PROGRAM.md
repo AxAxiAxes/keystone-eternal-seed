@@ -1,10 +1,11 @@
 # AXES build program
 
 **Status:** Long-range execution program  
-**Last updated:** 2026-09-09  
-**Source and provenance:** Founder-authored material developed collaboratively
-with GitHub Copilot. It is original project work, retained privately in raw
-form and translated here into a reviewed implementation program.
+**Last updated:** 2026-09-11  
+**Source and provenance:** Founder-originated project material. This
+implementation program records the founder's direction; GitHub Copilot
+provides technical implementation assistance only and has no competing origin,
+ownership, or governance claim.
 
 ## Program outcome
 
@@ -20,6 +21,62 @@ Build a coherent AXES ecosystem in deliberate stages:
 The program should be delivered as a sequence of independently useful products,
 not as a single large launch. Each stage must meet its exit criteria before the
 next begins.
+
+## Foundation depth principle
+
+Engineering framing: a building's required foundation depth scales with its
+height. Applied here, the depth of AXES's tested, governed, and decided
+groundwork must scale with how much new product "height" this program adds
+next. A workstream below does not start because it is planned; it starts
+because the ground under it is already dug to the matching depth.
+
+**Depth gauge (repository-controlled, no external access required):**
+
+1. **Automated test suites** — the closest analogy to poured, cured concrete.
+   Re-verified 2026-09-11: AXIOM engine 76/76, AXIOM portal 3/3, AXI.Core 5/5,
+   all passing and matching hosted CI.
+2. **Governance and constitutional stack** — the footing beneath every
+   product: `AGENTS.md`, `AXES_CREATOR_ORIGIN_CONSTITUTION.md`,
+   `AXES_GOVERNANCE_AND_SAFEGUARDING.md`,
+   `AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`, `AXES_AGENT_ORIGIN_REGISTRY.md`, and
+   `AXES_CONSTITUTIONAL_FRAMEWORK.md`.
+3. **`AXES_TIER_1_DECISION_REGISTER.md`** — the depth gauge itself. A
+   workstream below should not be treated as ready to start while a
+   decision-register row it depends on is still `Pending`, `Draft`, or
+   `Not approved`.
+
+**Gravel-for-fill rule:** rough or currently blocked material is not
+discarded; it becomes fill for the next attempt. Every existing "readiness,"
+"draft," or "not approved" record — including
+`AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md`,
+`KEYSTONE_CREATOR_ORIGIN_SETUP_READINESS.md`,
+`AXES_PROJECT_FULFILLMENT_READINESS.md`,
+`CHICHETKI_COLLECTIBLE_GEM_READINESS.md`, `ATHANOR_GAME_CONSOLE_READINESS.md`,
+`AXES_DIRECTORY_READINESS.md`, and the draft records in
+`docs/keystone/AXIOM_APPLICATION_DRAFT_RECORDS.md` — stays in the repository,
+stays linked from the decision register, and is reused once its blocking
+decision clears rather than rewritten from nothing.
+
+**Current depth-versus-height reading:**
+
+- *Poured (ready to build on):* the AXI operational core, agent
+  accountability/registry, memory/automation/recovery services, the
+  Directory pilot data model, and the constitutional/governance stack.
+- *Fill on hand (preserved, not yet load-bearing):* every `Pending`/`Draft`/
+  `Not approved` row in `AXES_TIER_1_DECISION_REGISTER.md`, most visibly the
+  Release B activation candidates below (`AXES-DMC-001`, `KEYSTONE-COS-001`)
+  and the later product tracks (Chichetki, Athanor, URNUR, AXEOUS, AUXAOUS).
+- *Bedrock not yet reached (outside repository control):* patent counsel
+  engagement, URNUR financial/digital-asset counsel, the Railway/DNS domain
+  connection, and the Microsoft 365 mailbox migration. No amount of
+  repository work reaches this layer; it requires the founder's or an
+  authorized human's external action.
+
+**Rule going forward:** before starting the next workstream below, check its
+dependent rows in `AXES_TIER_1_DECISION_REGISTER.md`. If any are still
+unresolved, dig there first — resolve the decision, or escalate it to the
+founder if it requires external authority — instead of adding height on top
+of it.
 
 ## Workstreams and sequencing
 
@@ -69,8 +126,9 @@ next begins.
 
 - A minimal AXES landing page and clearly separated authenticated operator
   dashboard.
-- A service registry: product name, purpose, stage, owner, privacy
-  classification, and operational status.
+- A private, founder-approved service registry: product name, purpose, internal
+  stage, founder owner role, privacy classification, and dependency summary,
+  without public availability or launch claims.
 - Plain-language product descriptions that distinguish current capabilities
   from future direction.
 - An Architectural Design Desk with general, non-professional design tips,
@@ -133,7 +191,8 @@ next begins.
 5. Preserve the founder principle, **All for All**, through accessible design,
    consent, truthful product claims, and accountable human governance.
 6. Build the operational foundation first. It is the prerequisite for a stable
-   public hub and every later world.
+   public hub and every later world. See "Foundation depth principle" above
+   for the concrete depth-versus-height check applied before each workstream.
 
 ## Current next action
 
@@ -144,6 +203,10 @@ next begins.
    then verify production chat and monitoring through the protected console.
 3. Begin Release B with the AXES Control Center visual rebuild and the staged
    interaction catalog in `docs/INTERACTIVE_EXPERIENCE_CATALOG.md`.
+
+The current agent capacity, staged role catalog, and human-approval
+requirements for the Command Center, future Directory, and AXES ecosystem are
+defined in `AXES_AGENT_OPERATING_MODEL.md`.
 
 See `docs/URNUR_FINANCIAL_READINESS.md` for the attorney briefing packet and
 pre-launch engineering boundary.

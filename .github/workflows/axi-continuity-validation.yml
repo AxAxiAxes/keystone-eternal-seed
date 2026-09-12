@@ -1,0 +1,96 @@
+name: AXI continuity validation
+
+on:
+  push:
+    branches:
+      - axaxiaxes-axes-directory-data-model
+      - axaxiaxes-axiom-monorepo
+  pull_request:
+    branches:
+      - axaxiaxes-axiom-monorepo
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: axi-continuity-validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  node-tests:
+    name: Node tests (${{ matrix.application }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        application:
+          - apps/axiom-engine
+          - apps/axiom-freedom
+    defaults:
+      run:
+        working-directory: ${{ matrix.application }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ${{ matrix.application }}/package-lock.json
+      - run: npm ci
+      - if: matrix.application == 'apps/axiom-freedom'
+        run: npm ci --prefix ../axiom-engine
+      - run: npm test
+
+  axi-core-tests:
+    name: AXI.Core tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test AXIOM.sln --configuration Release
+
+  engine-image:
+    name: AXIOM engine image
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker build --file apps/axiom-engine/Dockerfile --tag axiom-engine-validation apps/axiom-engine
+      - run: |
+          docker run --detach --name axiom-engine-validation axiom-engine-validation
+          for attempt in {1..10}; do
+            if docker exec axiom-engine-validation node -e "require('http').get('http://localhost:3000/health', response => process.exit(response.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"; then
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs axiom-engine-validation
+          exit 1
+      - if: always()
+        run: docker rm --force axiom-engine-validation || true
+
+  portal-image:
+    name: AXIOM portal image
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker build --file apps/axiom-freedom/Dockerfile --tag axiom-freedom-validation .
+      - run: |
+          docker run --detach --name axiom-freedom-validation --publish 8080:8080 axiom-freedom-validation
+          for attempt in {1..10}; do
+            if curl --fail --silent --show-error http://127.0.0.1:8080/health &&
+              curl --fail --silent --show-error http://127.0.0.1:8080/origin-continuity; then
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs axiom-freedom-validation
+          exit 1
+      - if: always()
+        run: docker rm --force axiom-freedom-validation || true

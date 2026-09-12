@@ -4,12 +4,20 @@ const path = require("path");
 
 const PERSISTED_FILE_NAMES = [
   "identity.json",
+  "startup-context.json",
+  "continuity-record.jsonl",
+  "source-catalog.jsonl",
+  "business-metrics.jsonl",
+  "service-registry.jsonl",
+  "automation-profiles.jsonl",
   "episodic.jsonl",
   "semantic.jsonl",
   "decision.jsonl",
   "procedure.jsonl",
   "automation.json",
   "monitoring.json",
+  "coordinates.jsonl",
+  "bead-passports.jsonl",
   "openai-usage.jsonl"
 ];
 

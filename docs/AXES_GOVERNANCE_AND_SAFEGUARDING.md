@@ -28,9 +28,12 @@ employment, youth-safeguarding, tax, or professional advice.
    classification, and operational signals, but cannot make binding
    moderation, financial, employment, eligibility, safety, or publishing
    decisions.
-5. **Truthful scope:** Labels must distinguish public information, invite-only
+5. **Self-description:** AXES may support but must not define a person's
+   identity, origin, value, beliefs, or rights. Do not infer or collect
+   sensitive personal information for exploratory services.
+6. **Truthful scope:** Labels must distinguish public information, invite-only
    pilots, internal prototypes, and future concepts.
-6. **Accessible participation:** Public and pilot experiences must support
+7. **Accessible participation:** Public and pilot experiences must support
    keyboard use, readable contrast, text alternatives, captions or
    transcripts for media, and reduced-motion preferences.
 
@@ -117,6 +120,13 @@ age-appropriate program is approved. Before admitting minors, AXES needs:
 
 - Materials discovery starts as education, supplier references, and human
   inquiries; it is not a checkout or fulfillment system.
+- The future AXES Directory is business-only and opt-in. It may publish only
+  owner- or authorized-representative-confirmed business name, category,
+  service area, website, and public business contact method after human
+  review. Its field, lifecycle, correction/removal, renewal, and
+  track-specific limits are defined in `AXES_DIRECTORY_DATA_MODEL.md`; it
+  must not represent a listing as verified, endorsed, licensed, insured, or
+  quality-assured.
 - Architectural content remains general education until a responsible licensed
   professional, jurisdiction, and service agreement are defined.
 - Chichetki product language may describe design, art, sound, craft, and
