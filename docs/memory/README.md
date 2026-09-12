@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-12 Founder-review investor/partner overview drafted](2026-09-12-investor-partner-overview-draft.md)
 - [2026-09-12 Data-loss and IP-ownership reports](2026-09-12-data-loss-and-ip-ownership-reports.md)
 - [2026-09-12 Copilot Library code-and-intel review](2026-09-12-copilot-library-code-and-intel-review.md)
 - [2026-09-12 axescontracting.com root converted to a private, admin-gated command center](2026-09-12-axescontracting-private-command-center.md)

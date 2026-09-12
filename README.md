@@ -20,6 +20,9 @@ AXI agent, and AXI's non-personhood status, are recorded in
 The consolidated, public-safe business plan for AXES Contracting, Chichetki,
 XIIOM, the creative studio, and future ventures is in
 [AXES_BUSINESS_PLAN.md](docs/AXES_BUSINESS_PLAN.md).
+A founder-review draft overview for a future investor or partner
+conversation, sourced only from already-adopted repository records, is in
+[AXES_INVESTOR_AND_PARTNER_OVERVIEW.md](docs/AXES_INVESTOR_AND_PARTNER_OVERVIEW.md).
 
 For production hosting on Railway with `axescontracting.com`, follow [RAILWAY_DEPLOYMENT.md](docs/RAILWAY_DEPLOYMENT.md).
 
