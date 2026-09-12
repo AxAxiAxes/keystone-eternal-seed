@@ -123,6 +123,27 @@ The gemstone-pomegranate reference remains inspiration only. It can inform
 color, material, light, and ornament but is not an AXES asset or logo and must
 not be copied or published without rights-holder permission.
 
+### Resource basis and competitive position
+
+Every offer in this plan is built from a real, founder-controlled resource —
+design skill, existing client relationships, curated material knowledge, or
+the operating budget recorded in `PROJECT_BUDGET.md` — not a speculative
+valuation or promised future funding. Revenue is expected to follow only
+where a service reciprocates real value to the people who use it; the staged
+revenue model above already withholds each offer's next stage until its
+operating requirements, not a projection, are satisfied.
+
+AXES does not attempt to out-scale large, well-funded incumbent directory and
+marketplace platforms, and makes no claim about how any specific competitor
+operates. The AXES Directory's planned competitive position is quality and
+trust rather than reach: every listing is opt-in and human-reviewed rather
+than scraped or automatically imported, carries a recorded source, approval,
+and renewal date rather than an indefinite unreviewed entry, and includes a
+working correction and removal path for the business it describes. These are
+committed data-model requirements (`AXES_DIRECTORY_DATA_MODEL.md`), not
+marketing language, and remain the differentiation strategy even at a much
+smaller initial scale than an established competitor.
+
 ### Chichetki and Athanor creative system
 
 Chichetki is a founder-directed musical instrument and creative rhythm system
