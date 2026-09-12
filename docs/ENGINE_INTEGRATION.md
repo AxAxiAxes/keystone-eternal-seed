@@ -297,3 +297,11 @@ ownership, rights, valuation, or patent determinations.
 pilot. The authenticated Automation Console proxies those private controls for
 an authorized operator; no public identity, passport, or coordinate registry
 is exposed.
+
+## Creation tools scope
+
+The `chat` action described above is the only implemented creative
+capability today; there is no separate document, image, audio, or video
+generation action in this codebase. See `AXIOM_CREATION_TOOLS.md` for the
+full, honest scope of what AXIOM can create now versus what remains
+deferred pending explicit founder authorization.
