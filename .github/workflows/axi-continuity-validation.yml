@@ -54,6 +54,20 @@ jobs:
           dotnet-version: 8.0.x
       - run: dotnet test AXIOM.sln --configuration Release
 
+  directory-fixture-validation:
+    name: AXES Directory fixture validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: docs/fixtures/axes-directory
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+      - run: node --test
+
   engine-image:
     name: AXIOM engine image
     runs-on: ubuntu-latest

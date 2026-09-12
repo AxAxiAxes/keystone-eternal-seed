@@ -117,6 +117,17 @@ The directory must not add ranking, reviews, ratings, lead resale, paid
 placement, advertising, personalized marketing, automated outreach, messaging,
 or payment features to any track.
 
+## Machine-readable schema and fixture
+
+`docs/fixtures/axes-directory/` encodes the listing and correction/removal
+request records above as JSON Schema, with a private-safe fixture of
+fictional example records (using the IETF-reserved `.example` domain) and a
+dependency-free validator, so the rules in this document are testable in CI
+rather than descriptive only. See that directory's `README.md` for details,
+including one open documentation nuance the schema deliberately did not
+resolve on its own (a lifecycle-transition edge case around
+`correction_pending`/`removal_pending`).
+
 ## Governance and launch gate
 
 Before collection or publication, the founder must approve the launch
