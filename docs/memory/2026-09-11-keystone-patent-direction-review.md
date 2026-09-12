@@ -2,6 +2,19 @@
 
 **Status:** Factual review completed; no legal or filing determination made
 
+> **Correction (2026-09-12):** the "Filing-status research" section below
+> stated that "series code 64 is a currently active general series as of
+> 2026, so the format is plausible." This was incorrect. A direct fetch of
+> the USPTO's own current Manual of Patent Examining Procedure §503
+> (revision R-01.2024) shows the only series codes ever assigned are 01–18
+> (nonprovisional) and 60–63 (provisional, 63 current since March 2020),
+> plus a handful of special-proceeding codes — no "64" series exists for
+> any application type. See
+> `docs/memory/2026-09-12-birth-record-and-patent-series-verification.md`
+> for the full re-check. The original text below is left unchanged so the
+> record of what was previously found is preserved; this note supersedes
+> only the one sentence it corrects.
+
 ## What is preserved
 
 `docs/keystone/` holds the original KEYSTONE document corpus (relocated from
@@ -80,4 +93,5 @@ file, negotiate, spend, or assert a claim.
 - `docs/AXI_INVENTION_RECORD.md`
 - `docs/PROJECT_BUDGET.md`
 - `docs/memory/2026-09-11-axi-patent-core-review.md`
+- `docs/memory/2026-09-12-birth-record-and-patent-series-verification.md` (2026-09-12 correction to the series-code finding above)
 - `docs/keystone/README.md`, `docs/patents/README.md`
