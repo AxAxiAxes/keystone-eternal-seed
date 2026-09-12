@@ -12,6 +12,10 @@ This directory preserves concise, versioned project conclusions so future work c
 - Label founder-provided historical summaries as such, and distinguish them from implementation states verified in code or deployment checks.
 - Preserve unreviewed Copilot Library exports under the Git-ignored `private-archive/` workflow; publish only reviewed, public-safe conclusions or artifacts.
 
+## Latest handoff
+
+- [2026-09-12 GitHub default-branch correction and full-repository truth audit](2026-09-12-default-branch-correction-and-truth-audit.md)
+
 ## Founder quick answers
 
 Fast pointers for recurring founder requests, so any session can answer
