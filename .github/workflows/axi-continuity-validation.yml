@@ -123,7 +123,7 @@ jobs:
 
   copilot-workflow-run-continuity:
     name: Copilot workflow continuity signal
-    if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'copilot/') }}
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
