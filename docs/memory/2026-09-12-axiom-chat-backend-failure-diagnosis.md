@@ -18,6 +18,23 @@ the `NON_SUCCESS` category, never the separate `UNREACHABLE` category (which
 carries no `statusCode` at all). In plain terms: **the `axiom-engine`
 Railway service is up and responding correctly; it is specifically missing
 (or has an empty) `OPENAI_API_KEY` environment variable.** This supersedes
+
+**Update (2026-09-12, still later same day) — variable present in Railway,
+chat still failing identically:** the founder shared a screenshot of the
+`axiom-engine` service's Railway "Variables" tab showing `OPENAI_API_KEY`
+already listed (value masked, as Railway masks every row identically
+regardless of content). A live re-test immediately after, and a second
+re-test roughly 45 seconds later, both still returned the exact same HTTP
+503 `"AXIOM chat is not configured"`. Two explanations remain, and only an
+operator with Railway access can distinguish them: (1) the variable's actual
+value is blank, whitespace, or a placeholder rather than a real key, or (2)
+the value is real but the running `axiom-engine` process has not been
+redeployed/restarted since it was set — `process.env.OPENAI_API_KEY` is read
+once at process startup (`apps/axiom-engine/index.js`), so a saved variable
+never takes effect on its own. The founder's screenshot also showed an
+unrelated `AXIOM_AUTOMATION_ENABLED` variable; confirmed by source
+inspection (`apps/axiom-engine/index.js`) that this only toggles the
+background agent/task automation scheduler and has no bearing on chat.
 this record's original "engine unreachable, service maybe not running"
 hypothesis below — that was a reasonable reading of a 100%-failure-rate
 symptom at the time, but a real HTTP 503 with a JSON body is conclusive
@@ -95,19 +112,24 @@ OpenAI API key.
 
 ## Recommended next step (founder-controlled)
 
-1. In the Railway dashboard, open the `axiom-engine` service's environment
-   variables and set `OPENAI_API_KEY` to a real, active OpenAI API key (the
-   engine already reads `process.env.OPENAI_API_KEY` — no code change is
-   needed).
-2. After saving, confirm the fix live: `POST https://xiiom.com/api/axiom`
-   with body `{"action":"chat","message":"hello"}` should return HTTP 200
-   with a real reply instead of HTTP 503 with `"AXIOM chat is not
-   configured"`.
-3. If the key is set and the failure persists, re-run the same live test;
-   a `"AXIOM chat is temporarily unavailable"` message (rather than "is not
-   configured") would indicate a different, new failure (for example, an
-   invalid key or an OpenAI-side error) worth a fresh diagnosis rather than
-   assuming this same root cause.
+1. In the Railway dashboard, open the `axiom-engine` service's `Variables`
+   tab, click into the existing `OPENAI_API_KEY` row, and check whether it
+   actually holds a real key. If it is blank, whitespace, or a placeholder,
+   paste in a real, active OpenAI API key (the engine already reads
+   `process.env.OPENAI_API_KEY` — no code change is needed).
+2. Whether or not the value needed changing, explicitly **redeploy/restart**
+   the `axiom-engine` service. Railway does not restart a running container
+   just because a variable was viewed or edited; the process only reads
+   `process.env.OPENAI_API_KEY` once, at startup.
+3. After the redeploy finishes, confirm the fix live: `POST
+   https://xiiom.com/api/axiom` with body `{"action":"chat","message":"hello"}`
+   should return HTTP 200 with a real reply instead of HTTP 503 with `"AXIOM
+   chat is not configured"`.
+4. If the key is confirmed real and the service has been redeployed, but the
+   failure persists, re-run the same live test; a `"AXIOM chat is temporarily
+   unavailable"` message (rather than "is not configured") would indicate a
+   different, new failure (for example, an invalid key or an OpenAI-side
+   error) worth a fresh diagnosis rather than assuming this same root cause.
 
 ## Related records
 
