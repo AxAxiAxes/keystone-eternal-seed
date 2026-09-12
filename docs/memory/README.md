@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-11 Agent-deployment gap and IP/company status check](2026-09-11-agent-deployment-gap-and-ip-company-status.md)
 - [2026-09-11 Foundation depth plan added to the build program](2026-09-11-foundation-depth-plan.md)
 - [2026-09-11 AXES project manifest](2026-09-11-axes-project-manifest.md)
 - [2026-09-11 AXES constitutional framework added](2026-09-11-constitutional-framework.md)
