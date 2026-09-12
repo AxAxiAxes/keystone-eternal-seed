@@ -373,7 +373,7 @@ const server = http.createServer(async (req, res) => {
                   res.writeHead(200, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify(result));
           } catch (error) {
-                  console.error('AXIOM engine request failed:', getEngineFailureCategory(error));
+                  console.error('AXIOM engine request failed:', getEngineFailureCategory(error), error.message);
                   if (command.action === 'chat' && error.statusCode === 503) {
                           res.writeHead(503, { 'Content-Type': 'application/json' });
                           res.end(JSON.stringify({ error: 'AXIOM chat is not configured' }));

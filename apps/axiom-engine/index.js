@@ -783,9 +783,11 @@ app.use((error, req, res, next) => {
     error instanceof RangeError ||
     Number.isInteger(error.statusCode)
   ) {
+    console.error("AXIOM engine request error:", error.message);
     res.status(error.statusCode || 400).json({ error: error.message });
     return;
   }
+  console.error("AXIOM engine request failed:", error.message);
   res.status(500).json({ error: "AXIOM engine request failed" });
 });
 
