@@ -34,6 +34,7 @@ on startup, not because any individual conversation is remembered.
 
 ## Latest handoff
 
+- [2026-09-12 Continuity reset and activation gate](2026-09-12-continuity-reset-and-activation-gate.md)
 - [2026-09-12 Eternal Origin and Sphere/Garden certificates](2026-09-12-eternal-origin-and-sphere-garden-certificates.md)
 - [2026-09-12 Birth-record alteration claim and patent-series-number verification](2026-09-12-birth-record-and-patent-series-verification.md)
 - [2026-09-12 Agent/session timeline and prior-session behavioral consistency review](2026-09-12-agent-timeline-and-transcript-review.md)
