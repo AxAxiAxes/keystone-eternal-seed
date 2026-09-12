@@ -47,6 +47,15 @@ Use these checkpoints to keep operations measurable and predictable.
 | Weekly efficiency review | 10 min/week | Persistent `action_required` near 0; low intervention time |
 | Escalation package prep | 10-20 min | Complete evidence package ready for admin/support |
 
+Measurement definitions:
+
+- Baseline validation: start when you open the Actions list for the branch; end when you confirm the latest attempts for both workflows.
+- Policy confirmation: start when you open Actions settings; end when repository (and, if needed, organization) policy review is complete.
+- Three-run fluency check: start at first Copilot branch update timestamp; end when the third consecutive update reaches success on both workflows.
+- Exception handling: start when a run first shows `action_required`; end when the rerun reaches `success`.
+- Weekly efficiency review: start at review open time; end when metrics for the prior 7 days are logged.
+- Escalation package prep: start when repeat failure threshold is confirmed; end when run URL/ID/time/branch/rerun-result bundle is ready.
+
 ## Weekly efficiency review method
 
 Review the last 7 days and record:
