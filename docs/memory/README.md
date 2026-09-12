@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-12 Architectural Design Desk added; PR #1/#2/#3 resolution recorded](2026-09-12-architectural-design-desk-and-decision-register.md)
 - [2026-09-12 AXIOM chat backend failure diagnosed (frontend up, engine unreachable)](2026-09-12-axiom-chat-backend-failure-diagnosis.md)
 - [2026-09-12 Founder-review investor/partner overview drafted](2026-09-12-investor-partner-overview-draft.md)
 - [2026-09-12 Data-loss and IP-ownership reports](2026-09-12-data-loss-and-ip-ownership-reports.md)

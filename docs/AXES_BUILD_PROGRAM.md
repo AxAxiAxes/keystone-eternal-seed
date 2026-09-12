@@ -137,6 +137,27 @@ of it.
   and inquiries, not checkout, payment processing, inventory claims, or
   fulfillment.
 
+**Progress (2026-09-12)**
+
+- `command-center.html` (authenticated, `/command-center`) already serves as
+  the operator dashboard: governance status, agent/task/run continuity, and
+  build/efficiency metrics from `/api/automation/*`.
+- `materials.html` (public, `/materials`) already serves as the
+  Building-Materials Discovery catalog: a read-only reference collection with
+  an explicit "not a store" notice.
+- `design-desk.html` (public, `/design-desk`) adds the Architectural Design
+  Desk's general design tips and material education, with an explicit note
+  that no request or personal information is collected.
+- The Architectural Design Desk's "scoped consultation-request path" remains
+  intentionally unbuilt: `AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md`
+  gates candidate offer `AXES-DMC-001` behind founder approval of every
+  activation-record item, none of which are yet approved. Do not add a live
+  request/intake form for this offer before that approval.
+- Still open: a public service registry view distinguishing active,
+  experimental, and planned services for visitors (the existing service
+  registry API is operator-facing only), and a minimal AXES-branded public
+  landing page distinct from the XIIOM portal.
+
 **Exit criteria**
 
 - Visitors and operators can tell which services are active, experimental, or
@@ -201,8 +222,11 @@ of it.
    URNUR.
 2. Deploy the completed private-engine monitoring and task-control updates,
    then verify production chat and monitoring through the protected console.
-3. Begin Release B with the AXES Control Center visual rebuild and the staged
-   interaction catalog in `docs/INTERACTIVE_EXPERIENCE_CATALOG.md`.
+3. Continue Release B: a public service-registry view for visitors and a
+   minimal AXES-branded public landing page remain open (see "Progress
+   (2026-09-12)" under Release B). The Architectural Design Desk's
+   consultation-request path stays blocked pending founder approval of
+   `AXES-DMC-001` in `AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md`.
 
 The current agent capacity, staged role catalog, and human-approval
 requirements for the Command Center, future Directory, and AXES ecosystem are

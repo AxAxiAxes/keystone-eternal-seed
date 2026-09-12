@@ -185,6 +185,17 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     );
     assert.equal(materialsWithTrailingSlash.status, 200);
 
+    const designDesk = await fetch(`http://127.0.0.1:${webPort}/design-desk`);
+    assert.equal(designDesk.status, 200);
+    const designDeskBody = await designDesk.text();
+    assert.match(designDeskBody, /Architectural Design Desk/);
+    assert.match(designDeskBody, /under internal review/);
+
+    const designDeskWithTrailingSlash = await fetch(
+      `http://127.0.0.1:${webPort}/design-desk/`
+    );
+    assert.equal(designDeskWithTrailingSlash.status, 200);
+
     const unauthorizedConsole = await fetch(`http://127.0.0.1:${webPort}/automation`);
     assert.equal(unauthorizedConsole.status, 401);
 
