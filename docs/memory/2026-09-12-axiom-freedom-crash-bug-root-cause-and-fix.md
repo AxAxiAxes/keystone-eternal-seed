@@ -116,6 +116,26 @@ All suites pass: AXIOM portal (`apps/axiom-freedom`) 6/6, AXIOM engine
 (`apps/axiom-engine`) 77/77 (untouched, unaffected), AXI.Core (`dotnet test
 AXIOM.sln`) 5/5 (untouched, unaffected).
 
+## Live verification (post-merge)
+
+PR #13 merged as `f6e492d` into `axaxiaxes-axiom-monorepo` and redeployed
+automatically. Post-deploy live checks against `xiiom.com`:
+
+- `GET /health` → `200 {"status":"ok","service":"AXIOM","version":"2.0.0"}`,
+  consistently.
+- `POST /api/axiom` (`action: "chat"`) → a clean, stable `502
+  {"error":"AXIOM chat is temporarily unavailable"}` across 5 consecutive
+  attempts, 2 seconds apart, with no crash, no dropped connection, and no
+  raw/garbled response.
+
+This confirms the crash-loop itself is resolved: the process now handles a
+repeated engine failure gracefully instead of terminating. Chat is **still
+not functionally working**, but this is no longer a process-stability
+question — it is now cleanly isolated to `axiom-engine` itself (its own
+active-deployment/source-connection status and/or an OpenAI-side cause),
+which requires Railway dashboard access this session does not have. Updated
+`docs/AXES_TIER_1_DECISION_REGISTER.md`'s P0 chat row accordingly.
+
 ## What this session still cannot do
 
 This session cannot access Railway to confirm live redeploy or that
