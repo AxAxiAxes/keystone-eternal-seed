@@ -79,7 +79,9 @@ financial rights, personal levels, social rank, citizenship status,
 eligibility, or access to essential services. It must remain opt-in,
 contribution-specific, human-reviewed, private by default, correctable, and
 subject to the creator-origin, privacy, accessibility, moderation, and
-participant-policy safeguards.
+participant-policy safeguards. See `URNUR_NON_MONETARY_RECOGNITION.md` for
+the detailed constitutional boundaries, prohibited mechanics, allowed forms,
+and review process this layer must follow.
 
 This is a long-term community aspiration, not a claim that the system creates
 an eternal civilization, permanent identity, or irreversible responsibility.
