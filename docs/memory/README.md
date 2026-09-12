@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-12 AXIOM creation tools scope](2026-09-12-axiom-creation-tools-scope.md)
 - [2026-09-12 Repository breach and visibility check](2026-09-12-repository-breach-and-visibility-check.md)
 - [2026-09-12 Timeline continuity check](2026-09-12-timeline-continuity-check.md)
 - [2026-09-12 Uplift team value added](2026-09-12-uplift-team-value.md)

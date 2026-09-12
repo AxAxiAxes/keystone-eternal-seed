@@ -24,6 +24,10 @@ should lift the whole team, not just one person. In practice:
 This is a cultural and operating value, not a legal claim, product feature,
 or technical specification.
 
+Applying this value to AXIOM's own creation tools — what it can generate
+today, and what stays deferred pending founder authorization — is scoped in
+[AXIOM_CREATION_TOOLS.md](AXIOM_CREATION_TOOLS.md).
+
 ## Purpose
 
 AXESContracting.com is intended to become the central administrative hub for a
