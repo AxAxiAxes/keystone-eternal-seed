@@ -18,6 +18,11 @@ const PUBLIC_DOCUMENTS = new Set([
     'ENGINE_INTEGRATION.md'
 ]);
 const AXIOM_ENGINE_URL = new URL(process.env.AXIOM_ENGINE_URL || 'http://127.0.0.1:3000');
+const ENGINE_FAILURE_CATEGORY = Object.freeze({
+    UNREACHABLE: 'unreachable-private-engine',
+    NON_SUCCESS: 'engine-non-success-response'
+});
+let lastEngineFailure = null;
 
 // axescontracting.com is the private, admin-only AXES command center, not a
 // public marketing host. isAxesContractingHost() is used at the root route
@@ -149,25 +154,60 @@ function getCommandCenterCheckpoints(timelineFilePath = PROJECT_TIMELINE_FILE) {
 }
 
 async function invokeEngine(endpoint, method = 'GET', body) {
-    const response = await fetch(new URL(endpoint, AXIOM_ENGINE_URL), {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: body === undefined ? undefined : JSON.stringify(body),
-        signal: AbortSignal.timeout(60000)
-    });
+    let response;
+    try {
+        response = await fetch(new URL(endpoint, AXIOM_ENGINE_URL), {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: body === undefined ? undefined : JSON.stringify(body),
+            signal: AbortSignal.timeout(60000)
+        });
+    } catch (error) {
+        throw recordEngineFailure(ENGINE_FAILURE_CATEGORY.UNREACHABLE);
+    }
 
     if (!response.ok) {
         const payload = await response.json().catch(() => ({}));
-        const error = new Error(payload.error || 'AXIOM engine returned HTTP ' + response.status);
-        error.statusCode = response.status;
-        throw error;
+        throw recordEngineFailure(
+            ENGINE_FAILURE_CATEGORY.NON_SUCCESS,
+            response.status,
+            payload.error || 'AXIOM engine returned HTTP ' + response.status
+        );
     }
 
-    return response.json();
+    try {
+        return await response.json();
+    } catch (error) {
+        throw recordEngineFailure(ENGINE_FAILURE_CATEGORY.NON_SUCCESS);
+    }
 }
 
 function invokeAxiomEngine(command) {
     return invokeEngine('/axiom', 'POST', command);
+}
+
+function recordEngineFailure(category, statusCode, message) {
+    lastEngineFailure = {
+        category,
+        recordedAt: new Date().toISOString()
+    };
+    const error = new Error(message || 'AXIOM engine request failed');
+    error.diagnosticCategory = category;
+    if (Number.isInteger(statusCode)) error.statusCode = statusCode;
+    return error;
+}
+
+function getEngineFailureCategory(error) {
+    return Object.values(ENGINE_FAILURE_CATEGORY).includes(error.diagnosticCategory)
+        ? error.diagnosticCategory
+        : ENGINE_FAILURE_CATEGORY.UNREACHABLE;
+}
+
+function unavailableEngineStatus(error) {
+    return {
+        status: 'unavailable',
+        diagnostic: { category: getEngineFailureCategory(error) }
+    };
 }
 
 async function getSupportStatus() {
@@ -190,19 +230,19 @@ async function getSupportStatus() {
         portal: { status: 'ok', service: 'AXES Contracting support desk' },
         engine: engine.status === 'fulfilled'
             ? { status: 'ok', detail: engine.value.status || 'online' }
-            : { status: 'unavailable' },
+            : unavailableEngineStatus(engine.reason),
         readiness: readiness.status === 'fulfilled'
             ? readiness.value
             : { status: 'unavailable' },
         automation: automation.status === 'fulfilled'
             ? { status: 'ok', ...automation.value }
-            : { status: 'unavailable' },
+            : unavailableEngineStatus(automation.reason),
         monitoring: monitoring.status === 'fulfilled'
             ? { status: 'ok', ...monitoring.value }
-            : { status: 'unavailable' },
+            : unavailableEngineStatus(monitoring.reason),
         checkpoints: checkpoints.status === 'fulfilled'
             ? { status: 'ok', latest: checkpoints.value[0] || null }
-            : { status: 'unavailable' },
+            : unavailableEngineStatus(checkpoints.reason),
         continuityRecord: continuityRecord.status === 'fulfilled'
             ? continuityRecord.value
             : { status: 'unavailable' },
@@ -218,6 +258,7 @@ async function getSupportStatus() {
         automationProfiles: automationProfiles.status === 'fulfilled'
             ? { status: 'ok', ...automationProfiles.value }
             : { status: 'unavailable' },
+        lastEngineFailure,
         email: {
             status: 'planned',
             mailbox: 'info@axescontracting.com',
@@ -328,7 +369,7 @@ const server = http.createServer(async (req, res) => {
                   res.writeHead(200, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify(result));
           } catch (error) {
-                  console.error('AXIOM engine request failed:', error.message);
+                  console.error('AXIOM engine request failed:', getEngineFailureCategory(error));
                   if (command.action === 'chat' && error.statusCode === 503) {
                           res.writeHead(503, { 'Content-Type': 'application/json' });
                           res.end(JSON.stringify({ error: 'AXIOM chat is not configured' }));
@@ -511,9 +552,9 @@ const server = http.createServer(async (req, res) => {
                   res.writeHead(200, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify(result));
           } catch (error) {
-                  console.error('AXIOM agent chat failed:', error.message);
+                  console.error('AXIOM agent chat failed:', getEngineFailureCategory(error));
                   res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify({ error: error.message }));
+                  res.end(JSON.stringify({ error: 'AXIOM engine request failed' }));
           }
           return;
     }

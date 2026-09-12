@@ -140,7 +140,10 @@ non-financial, consented, and auditable.
    community features.
 
 The detailed execution sequence is maintained in
-[AXES_BUILD_PROGRAM.md](AXES_BUILD_PROGRAM.md).
+[AXES_BUILD_PROGRAM.md](AXES_BUILD_PROGRAM.md). A founder-shared long-term
+architecture direction beyond this plan's phases is preserved as reference
+material, reconciled against current repository evidence, in
+[AXES_OS_VISION_AND_ARCHITECTURE.md](AXES_OS_VISION_AND_ARCHITECTURE.md).
 
 ## Decisions requiring explicit review
 

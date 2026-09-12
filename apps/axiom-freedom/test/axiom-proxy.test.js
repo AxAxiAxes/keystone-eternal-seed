@@ -27,6 +27,10 @@ async function stopServer(server) {
     server.close((error) => (error ? reject(error) : resolve())));
 }
 
+function adminAuthorization() {
+  return `Basic ${Buffer.from("admin:test-admin-password").toString("base64")}`;
+}
+
 function request(port, headers, path = "/") {
   return new Promise((resolve, reject) => {
     const request = http.get(
@@ -662,7 +666,7 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     );
     assert.equal(unavailableAgentChat.status, 503);
     assert.deepEqual(await unavailableAgentChat.json(), {
-      error: "OPENAI_API_KEY is not configured"
+      error: "AXIOM engine request failed"
     });
   } finally {
     if (webServer) {
@@ -743,5 +747,103 @@ test("Command Center checkpoint parsing leaves an unindented second line out of 
     assert.equal(result.currentPhase, "Only the first line is captured");
   } finally {
     await fs.rm(tempTimelineFile, { force: true });
+  }
+});
+
+test("keeps unreachable private-engine details out of public AXIOM responses", async () => {
+  const unavailableServer = await startServer(http.createServer());
+  const { port: unavailablePort } = unavailableServer.address();
+  await stopServer(unavailableServer);
+
+  let webServer;
+  try {
+    process.env.AXIOM_ENGINE_URL = `http://127.0.0.1:${unavailablePort}`;
+    process.env.ADMIN_PASSWORD = "test-admin-password";
+    delete require.cache[require.resolve("../server")];
+    const web = require("../server");
+    webServer = await startServer(web);
+    const { port: webPort } = webServer.address();
+
+    const publicResponse = await fetch(`http://127.0.0.1:${webPort}/api/axiom`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "analyze" })
+    });
+    assert.equal(publicResponse.status, 502);
+    assert.deepEqual(await publicResponse.json(), {
+      error: "AXIOM engine is unavailable"
+    });
+
+    const supportResponse = await fetch(`http://127.0.0.1:${webPort}/api/support/status`, {
+      headers: { Authorization: adminAuthorization() }
+    });
+    assert.equal(supportResponse.status, 200);
+    const support = await supportResponse.json();
+    assert.deepEqual(support.engine, {
+      status: "unavailable",
+      diagnostic: { category: "unreachable-private-engine" }
+    });
+    assert.equal(support.lastEngineFailure.category, "unreachable-private-engine");
+    assert.doesNotMatch(JSON.stringify(support), /127\.0\.0\.1|ECONNREFUSED|fetch failed/i);
+  } finally {
+    if (webServer) {
+      await stopServer(webServer);
+    }
+    delete process.env.AXIOM_ENGINE_URL;
+    delete process.env.ADMIN_PASSWORD;
+  }
+});
+
+test("reports private-engine non-success responses only to authenticated support", async () => {
+  const upstream = http.createServer((req, res) => {
+    res.writeHead(503, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({
+      error: "private upstream response body must not be relayed",
+      endpoint: "http://private-engine.example.internal"
+    }));
+  });
+  const upstreamServer = await startServer(upstream);
+  const { port: upstreamPort } = upstreamServer.address();
+
+  let webServer;
+  try {
+    process.env.AXIOM_ENGINE_URL = `http://127.0.0.1:${upstreamPort}`;
+    process.env.ADMIN_PASSWORD = "test-admin-password";
+    delete require.cache[require.resolve("../server")];
+    const web = require("../server");
+    webServer = await startServer(web);
+    const { port: webPort } = webServer.address();
+
+    const publicResponse = await fetch(`http://127.0.0.1:${webPort}/api/axiom`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "analyze" })
+    });
+    assert.equal(publicResponse.status, 502);
+    assert.deepEqual(await publicResponse.json(), {
+      error: "AXIOM engine is unavailable"
+    });
+
+    const supportResponse = await fetch(`http://127.0.0.1:${webPort}/api/support/status`, {
+      headers: { Authorization: adminAuthorization() }
+    });
+    assert.equal(supportResponse.status, 200);
+    const support = await supportResponse.json();
+    assert.deepEqual(support.engine, {
+      status: "unavailable",
+      diagnostic: { category: "engine-non-success-response" }
+    });
+    assert.equal(support.lastEngineFailure.category, "engine-non-success-response");
+    assert.doesNotMatch(
+      JSON.stringify(support),
+      /private upstream response body|private-engine\.example\.internal/i
+    );
+  } finally {
+    if (webServer) {
+      await stopServer(webServer);
+    }
+    await stopServer(upstreamServer);
+    delete process.env.AXIOM_ENGINE_URL;
+    delete process.env.ADMIN_PASSWORD;
   }
 });
