@@ -1,12 +1,28 @@
 # AXES platform plan
 
 **Status:** Directional product plan  
-**Last updated:** 2026-09-09  
+**Last updated:** 2026-09-12  
 **Founder principle:** All for All
 **Source and provenance:** Founder-originated project material. The raw source
 remains private; this is a reviewed, public-safe implementation interpretation
 of founder direction. GitHub Copilot provides technical implementation
 assistance only and has no competing origin, ownership, or governance claim.
+
+## Uplift - a shared team movement
+
+"Uplift" names a team-wide value, not a private or individual one: progress
+should lift the whole team, not just one person. In practice:
+
+- Wins, lessons, and momentum are shared across the team rather than held by
+  one person.
+- Team members support each other's growth and workload, especially during
+  stressful or high-effort stretches.
+- Documentation, decisions, and safeguards (like the ones in this plan) are
+  written so any current or future team member can pick up the work without
+  starting from zero.
+
+This is a cultural and operating value, not a legal claim, product feature,
+or technical specification.
 
 ## Purpose
 
