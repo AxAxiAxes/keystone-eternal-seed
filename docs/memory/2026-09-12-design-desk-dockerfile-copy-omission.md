@@ -79,11 +79,11 @@ per-page `COPY` pattern exactly.
 
 ## What still requires the founder
 
-The code-level bug is fixed and merged, but an authorized operator still
-needs to trigger (or wait for) the next Railway redeploy of `axiom-web` from
-the corrected commit and confirm `https://xiiom.com/design-desk` returns
-`200` in production. That trigger/confirmation cannot be done from this
-repository alone.
+Nothing further for this item. Live re-check ~90 seconds after PR #16
+(`d3fca4e`) merged confirmed `GET https://xiiom.com/design-desk` returns
+`200` consistently across 5 attempts, with the expected page body, and
+`/axescontracting` remains `200`. Railway's existing branch-push auto-deploy
+picked up the fix without any manual operator action.
 
 ## Related records
 

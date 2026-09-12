@@ -110,9 +110,11 @@ As of September 9, 2026:
   ever have included the file. `/axescontracting` (added later, and present
   in the `COPY` list) already returned `200`, confirming Railway itself was
   redeploying correctly; only this one file was missing from the image.
-  Fixed by adding the missing `COPY` line to both Dockerfiles. An operator
-  still needs to confirm the next Railway redeploy of `axiom-web` picks this
-  up and that `https://xiiom.com/design-desk` returns `200` in production.
+  Fixed by adding the missing `COPY` line to both Dockerfiles. Live re-check
+  ~90 seconds after the fix merged (PR #16, `d3fca4e`) confirmed
+  `https://xiiom.com/design-desk` returns `200` consistently, with the
+  correct page body — Railway's existing auto-deploy picked it up with no
+  manual operator action needed.
 
 ## 1. Create the Railway project
 
