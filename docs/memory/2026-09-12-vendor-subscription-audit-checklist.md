@@ -54,6 +54,29 @@ recommended or authorized; any lifetime-license reuse or new purchase still
 requires the founder's own written-quote-and-approval process already in
 `docs/PROJECT_BUDGET.md`.
 
+## Update: founder-provided reconstruction (same day)
+
+The founder pasted a response from a separate AI conversation offering a more
+specific reconstruction of the full pre-AXES stack, including named products
+for both previously-unmatched terms:
+
+- **"croc"** → Crocoblock, the company behind the "Jet" WordPress plugin
+  family (JetEngine, JetSmartFilters, JetBlocks, JetElements, JetThemeCore,
+  JetPopup, JetMenu, JetFormBuilder), reportedly purchased as a bundle
+  ("Dynamic Suite").
+- **"emancipator"** → guessed as JetEngine, reasoned from JetEngine
+  "emancipating" WordPress via custom post types/fields — this specific
+  product alias is that other conversation's inference, not a confirmed
+  fact, and is labeled as such.
+- **Elementor Pro** — newly named as the core page-builder the Jet plugins
+  were used alongside.
+
+`docs/VENDOR_AND_SUBSCRIPTION_AUDIT.md` was updated to fold in this more
+specific list while keeping the same caution: this is still an
+externally-reconstructed guess, not verified against the founder's actual
+email receipts or billing records, and the document continues to label it
+as unconfirmed pending the founder's own check.
+
 ## Related records
 
 - `docs/VENDOR_AND_SUBSCRIPTION_AUDIT.md`

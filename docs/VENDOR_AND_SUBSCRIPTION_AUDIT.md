@@ -23,27 +23,35 @@ These came from `docs/keystone/SACRED_RECORD_SESSION_08_28_2026.md`,
 `docs/keystone/sacred record 8.28.26 full`, and
 `docs/keystone/THE_PERFECT_HARMONICS_ATHANOR_VISION.md` — founder-provided
 transcripts of an earlier attempt to build on WordPress, before the current
-AXES/GitHub/Railway direction. They describe tools tried, not the current
-technical stack.
+AXES/GitHub/Railway direction, refined by a founder-provided reconstruction
+from a separate AI conversation (2026-09-12) that named specific products for
+two previously-unmatched terms. **None of this list has been checked against
+actual billing/account records** — treat every row as "go verify," not
+"confirmed."
 
 | Vendor/tool | What it is | What the record says | Still active? | Renewal/cost | Action needed |
 | --- | --- | --- | --- | --- | --- |
-| JetFormBuilder ("JetForms") | WordPress form-builder plugin | Founder reported a **lifetime license** purchase; told to check email for the license key | *(fill in)* | *(fill in — lifetime licenses usually have no recurring cost, but confirm)* | Search email for "JetFormBuilder" or "JetForms" receipt |
+| JetFormBuilder ("JetForms") | WordPress form-builder plugin (dynamic forms, workflows, conditional logic) | Founder reported a **lifetime license** purchase; one of the largest purchases in the stack | *(fill in)* | *(fill in — lifetime licenses usually have no recurring cost, but confirm)* | Search email for "JetFormBuilder" or "JetForms" receipt |
+| Crocoblock Dynamic Suite ("croc") | The company/bundle behind the "Jet" plugin family | Matches the founder's "croc" recollection; reported as a bundle purchase covering JetEngine, JetSmartFilters, JetBlocks, JetElements, JetThemeCore, JetPopup, JetMenu, and JetFormBuilder | *(fill in)* | *(fill in — Crocoblock sells both subscription and lifetime tiers; confirm which was bought)* | Search email for "Crocoblock" receipt/invoice |
+| JetEngine ("Emancipator"?) | Crocoblock plugin adding custom post types, custom fields, and dynamic content to WordPress | Reconstruction suggests this is what was recalled as "Emancipator" (unconfirmed folk association, not a verified product name) | *(fill in)* | *(fill in — included in Dynamic Suite if that was purchased)* | Confirm with founder whether "Emancipator" means this, a separate product, or something not yet identified |
+| Elementor Pro | WordPress page-builder plugin (drag-and-drop UI, theme building, templates) | Reported as the core UI tool the Jet plugins were built on top of | *(fill in)* | *(fill in)* | Search email for "Elementor" receipt |
 | WordPress (3 separate accounts/sites) | Website CMS | Founder reported **3 different WordPress accounts**, each needing separate email-based recovery | *(fill in ×3)* | *(fill in)* | Identify which 3 emails were used; check each for WordPress.com or hosting-account confirmations |
 | Microsoft accounts (3 separate) | Cloud/productivity accounts (not necessarily 365 business mail — unclear from the record) | Founder reported **3 different Microsoft accounts**; unclear which email addresses | *(fill in ×3)* | *(fill in)* | Identify the 3 email addresses; this is separate from the Microsoft 365 business-mail plan in `EMAIL_MIGRATION_PLAN.md` |
 | GoDaddy | Former domain registrar | Founder switched away to SiteGround; GoDaddy account access/recovery was called out as unresolved | *(fill in)* | *(fill in)* | Check whether any domains or paid add-ons remain on the old GoDaddy account before assuming it's fully closed out |
 
-### Likely matches for names mentioned but not found verbatim
+### Reconstructed name matches — still unverified
 
-Two names raised were not found exactly as written anywhere in the repository.
-The closest documented terms are below — **please confirm or correct these**
-rather than treating them as verified:
+A founder-provided reconstruction from a separate AI conversation offered
+specific guesses for the two names that weren't found verbatim in repository
+records. These are plausible and more specific than the first pass, but they
+are still **that other conversation's inference from general product
+knowledge, not a checked fact** — confirm against your own receipts before
+treating them as settled:
 
-| You said | Closest match found in records | My best-guess interpretation | Confidence |
-| --- | --- | --- | --- |
-| "emancipator" | `Emancipator` is listed once, in `docs/keystone/THE_PERFECT_HARMONICS_ATHANOR_VISION.md`, in a list of website-building tools alongside WordPress, JetFormBuilder, and SiteGround | Possibly a mistyped/misheard reference to **Elementor**, the WordPress page-builder plugin that JetFormBuilder is commonly used alongside | Low — please confirm which product you actually mean |
-| "croc" | Not found in repository records | JetFormBuilder's publisher is a company called **Crocoblock**, which is known for lifetime-deal pricing on its "Jet" plugin suite (JetFormBuilder, JetEngine, JetElements, etc.) | Low — this is my inference from general product knowledge, not a repository record; please confirm |
-| "lifetime member" | Matches the "Lifetime Subscriptions You Purchased" heading used in the founder-provided transcript | Refers to the JetFormBuilder/Crocoblock-style lifetime-license purchases generally, not one single named product | Medium |
+| You said | Reconstructed as | Confidence |
+| --- | --- | --- |
+| "croc" | Crocoblock (the company behind the "Jet" WordPress plugin suite) | Medium — a real company name that fits the context well |
+| "emancipator" | JetEngine (reasoned from "emancipates WordPress" via custom fields/post types) | Low — a plausible-sounding explanation, not a documented product alias; could also be a different product entirely |
 
 ### Current, governance-approved infrastructure (for contrast — not "extra" spend to chase down)
 
@@ -79,8 +87,8 @@ checklist of names to go verify — not a record of the verified answers.
 ## Suggested next steps
 
 1. Search your email (all email addresses you've used, not just one) for
-   receipts containing: "JetForm", "Elementor", "Crocoblock", "WordPress",
-   "GoDaddy", "Microsoft 365", "SiteGround".
+   receipts containing: "JetForm", "JetEngine", "Crocoblock", "Elementor",
+   "WordPress", "GoDaddy", "Microsoft 365", "SiteGround".
 2. For each hit, note in your private inventory: is it still billing you,
    and is there anything (a license, a domain, an export) worth recovering
    before an account lapses or is deleted.
