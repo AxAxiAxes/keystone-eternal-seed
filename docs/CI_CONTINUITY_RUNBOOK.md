@@ -78,7 +78,7 @@ Target trend:
 
 Use this table each week:
 
-| Week (UTC) | Copilot updates observed | `action_required` count | Avg recovery-to-green | Manual minutes | Escalated? |
+| Week (UTC) | Copilot updates observed | `action_required` count | Avg blocked-to-success time | Manual minutes | Escalated? |
 | --- | ---: | ---: | --- | ---: | --- |
 | YYYY-MM-DD | 0 | 0 | 0m | 0 | No |
 
