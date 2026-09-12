@@ -68,6 +68,11 @@ as a substitute for an approved retention, access, export, deletion, and
 incident-response process. Do not add client contact details or intake content
 to source code, documentation, test fixtures, prompts, or public artifacts.
 
+Protected operator routes require the configured administrative credential.
+Invalid, malformed, or absent credentials must be denied without exposing
+credential details; access controls do not grant authority to change external
+accounts, deployments, domain/email settings, payments, or public content.
+
 ## Content, attribution, and media
 
 - Record the creator/source, rights status, intended use, approval date, and

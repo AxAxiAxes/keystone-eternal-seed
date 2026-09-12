@@ -171,6 +171,7 @@ second line is parsed as separate text and is dropped from the field.
 | 2026-09-11 | Complete | Public portal regression coverage added for direct private-archive denial and document-library traversal denial | `apps/axiom-freedom/test/axiom-proxy.test.js` |
 | 2026-09-11 | Complete | Portal intake-record file excluded from version control and client-record handling boundary documented | `.gitignore`, `docs/AXES_GOVERNANCE_AND_SAFEGUARDING.md` |
 | 2026-09-11 | Complete | Public document library restricted to an explicit public-safe allowlist; source, patent, creator, and internal records denied by regression coverage | `apps/axiom-freedom/server.js`, `apps/axiom-freedom/test/axiom-proxy.test.js` |
+| 2026-09-11 | Complete | Protected portal route authentication hardened with strict Basic credential parsing, constant-time password comparison, and invalid-credential regression coverage | `apps/axiom-freedom/server.js`, `apps/axiom-freedom/test/axiom-proxy.test.js` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 
 ## Current checkpoints

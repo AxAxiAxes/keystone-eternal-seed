@@ -1,4 +1,5 @@
 const http = require('http');
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
@@ -62,9 +63,20 @@ function parseBody(req) {
 
 function checkAdmin(req) {
     if (!ADMIN_PASSWORD) return false;
-    const b64 = ((req.headers['authorization'] || '').split(' ')[1] || '');
-    const parts = Buffer.from(b64, 'base64').toString().split(':');
-    return parts[1] === ADMIN_PASSWORD;
+    const authorization = req.headers.authorization;
+    if (typeof authorization !== 'string') return false;
+
+    const match = /^Basic\s+([A-Za-z0-9+/]+={0,2})$/.exec(authorization);
+    if (!match) return false;
+
+    const decoded = Buffer.from(match[1], 'base64').toString('utf8');
+    const separator = decoded.indexOf(':');
+    if (separator < 0) return false;
+
+    const providedPassword = Buffer.from(decoded.slice(separator + 1));
+    const expectedPassword = Buffer.from(ADMIN_PASSWORD);
+    return providedPassword.length === expectedPassword.length
+        && crypto.timingSafeEqual(providedPassword, expectedPassword);
 }
 
 function serveDocument(res, pathname) {

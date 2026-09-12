@@ -188,6 +188,18 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     const unauthorizedConsole = await fetch(`http://127.0.0.1:${webPort}/automation`);
     assert.equal(unauthorizedConsole.status, 401);
 
+    const malformedConsole = await fetch(`http://127.0.0.1:${webPort}/automation`, {
+      headers: { Authorization: "******" }
+    });
+    assert.equal(malformedConsole.status, 401);
+
+    const wrongPasswordConsole = await fetch(`http://127.0.0.1:${webPort}/automation`, {
+      headers: {
+        Authorization: `Basic ${Buffer.from("admin:wrong-password").toString("base64")}`
+      }
+    });
+    assert.equal(wrongPasswordConsole.status, 401);
+
     const consolePage = await fetch(`http://127.0.0.1:${webPort}/automation`, {
       headers: { Authorization: authorization }
     });
