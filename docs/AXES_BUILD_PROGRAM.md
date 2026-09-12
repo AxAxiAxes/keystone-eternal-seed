@@ -33,10 +33,12 @@ because the ground under it is already dug to the matching depth.
 **Depth gauge (repository-controlled, no external access required):**
 
 1. **Automated test suites** — the closest analogy to poured, cured concrete.
-   Re-verified 2026-09-12: AXIOM engine 77/77, AXIOM portal 5/5, AXI.Core 5/5,
-   all passing and matching hosted CI. Growth since the last reading reflects
-   the merged private-command-center auth-gating coverage and the restored
-   engine-error-message-forwarding fix.
+   Re-verified 2026-09-12 (post-Release-C-readiness-review): AXIOM engine
+   77/77, AXIOM portal **6/6**, AXI.Core 5/5, all passing and matching hosted
+   CI. The portal count is one higher than the prior reading; the additional
+   passing test (`survives engine failures on every automation status route
+   without crashing the process`) already existed but was undercounted in
+   that earlier snapshot.
 2. **Governance and constitutional stack** — the footing beneath every
    product: `AGENTS.md`, `AXES_CREATOR_ORIGIN_CONSTITUTION.md`,
    `AXES_GOVERNANCE_AND_SAFEGUARDING.md`,
