@@ -680,6 +680,55 @@ history (git commits, this register, and the memory log) continues to
 serve as an independently timestamped, append-only record of the founder's
 authorship and decisions going forward, regardless of any external loss.
 
+## 2026-09-12 AXIOM chat backend failure diagnosed (frontend up, engine unreachable)
+
+**Founder report:** The founder repeated across this session that "AXI"/AXIOM
+is "still down," after earlier checks in this same session had only
+confirmed that `xiiom.com` pages load and that `/support` correctly
+requires authentication — those checks did not test whether chat actually
+works, so they did not settle the founder's report.
+
+**What this session checked:** Using the live browser page at
+`xiiom.com/axiom`, this session read the existing transcript and sent a
+further live test message. Every real chat attempt (prior and new) received
+the identical hardcoded fallback, "AXIOM is currently unavailable. Please
+try again shortly." — a reproducible 100% failure rate on real messages,
+even though the page itself loads normally and shows a "● LIVE" badge.
+
+**Root cause, by source inspection:** The fallback text is not present on
+this feature branch; it exists on the production branch
+(`axaxiaxes-axiom-monorepo`) in
+`apps/axiom-freedom/axiom_web_interface.html`, as the catch-all for any
+non-OK response from `POST /api/axiom`. That endpoint, in
+`apps/axiom-freedom/server.js`, proxies to a separate private `axiom-engine`
+service via `AXIOM_ENGINE_URL` (defaulting to `http://127.0.0.1:3000` when
+unset). A uniform, 100% failure rate across every message — rather than an
+intermittent or content-specific pattern — is the expected signature of the
+portal being unable to reach the engine at all (engine not running, or
+`AXIOM_ENGINE_URL` misconfigured in the live environment), not a defect in
+the chat page itself.
+
+**Relevant existing work found:** A separate branch,
+`origin/axaxiaxes-axiom-chat-diagnostics`, already carries one commit not
+present on `axaxiaxes-axiom-monorepo` — `45085a5 Improve AXIOM diagnostic
+transparency`, authored by the founder — which categorizes engine failures
+as `unreachable-private-engine` vs. `engine-non-success-response` and
+surfaces the last failure on `/support`. It has no open pull request and,
+like this finding, has not been merged or deployed.
+
+**What this session cannot do:** This session has no Railway dashboard/API
+access and cannot inspect or change the live `axiom-engine` service's
+running status, its environment variables, or which branch Railway
+currently deploys. That remains the founder's action.
+
+**Recommended next step (founder-controlled):** (1) in the Railway
+dashboard, confirm the `axiom-engine` service is deployed and running, and
+that the portal's `AXIOM_ENGINE_URL` variable points at its correct
+internal address; (2) consider reviewing and merging
+`axaxiaxes-axiom-chat-diagnostics` so `/support` reports the precise failure
+category instead of a generic message. Full detail:
+`docs/memory/2026-09-12-axiom-chat-backend-failure-diagnosis.md`.
+
 ## Related records
 
 - `docs/AXI_INVENTION_RECORD.md`
@@ -696,3 +745,4 @@ authorship and decisions going forward, regardless of any external loss.
 - `docs/memory/2026-09-11-keystone-soul-architecture-review.md`
 - `docs/memory/2026-09-11-axi-origin-timestamp-authorship-statement.md`
 - `docs/memory/2026-09-11-axiom-value-acceleration-proposal-review.md`
+- `docs/memory/2026-09-12-axiom-chat-backend-failure-diagnosis.md`
