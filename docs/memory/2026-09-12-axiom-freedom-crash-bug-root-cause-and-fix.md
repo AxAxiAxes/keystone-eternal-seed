@@ -136,6 +136,37 @@ active-deployment/source-connection status and/or an OpenAI-side cause),
 which requires Railway dashboard access this session does not have. Updated
 `docs/AXES_TIER_1_DECISION_REGISTER.md`'s P0 chat row accordingly.
 
+## Founder reported 21 Railway crash emails; extended stress test run
+
+The founder separately reported having already received 21 crash-notification
+emails from Railway, without a clear sense of whether they predate this fix
+or are still arriving. Since a crashed Node process is exactly what generates
+one such email per restart, and this bug could be triggered by any of 20
+different routes, 21 accumulated crash-restart cycles over the hours before
+the fix is entirely consistent with — and further corroborates — the root
+cause found above. It is not, by itself, evidence of a still-open problem.
+
+To get fresh, direct evidence rather than relying on inference alone, ran two
+additional live checks against `xiiom.com` after the fix was live:
+
+- 40 `GET /health` checks, 3 seconds apart (~2 minutes): **0 failures**, all
+  `200`. A crash-restart cycle typically causes several seconds of downtime
+  during container restart, which polling this closely would very likely
+  have caught had one occurred during the window.
+- 8 rapid `POST /api/axiom` (`action: "chat"`) requests, 2 seconds apart —
+  specifically targeting the route most associated with the original crash
+  — followed immediately by a `GET /health` check: all 8 chat requests
+  returned a clean `502` (no crash), and the immediate follow-up health
+  check returned `200`.
+
+This is direct, fresh evidence that the process does not crash under repeated
+failure on the previously-affected route, right now, post-fix. It cannot
+prove a negative for all time, but it materially strengthens confidence that
+the 21 emails are historical rather than ongoing. The one fully conclusive
+check remains outside this session: compare the timestamp of the most recent
+Railway crash email against this fix's live deploy time, and confirm no
+further crash email arrives afterward.
+
 ## What this session still cannot do
 
 This session cannot access Railway to confirm live redeploy or that
