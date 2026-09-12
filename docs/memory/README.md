@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-12 Release C readiness review](2026-09-12-release-c-readiness-review.md)
 - [2026-09-12 Automation/UI inventory and domain status re-verification](2026-09-12-automation-ui-and-domain-status-reverification.md)
 - [2026-09-12 AXIOM creation tools scope](2026-09-12-axiom-creation-tools-scope.md)
 - [2026-09-12 Repository breach and visibility check](2026-09-12-repository-breach-and-visibility-check.md)
