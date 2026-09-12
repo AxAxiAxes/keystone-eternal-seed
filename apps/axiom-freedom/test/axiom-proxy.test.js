@@ -990,3 +990,75 @@ test("survives engine failures on every automation status route without crashing
     delete process.env.ADMIN_PASSWORD;
   }
 });
+
+test("rejects malformed /api/intake lead payloads and only persists a valid one", async (t) => {
+  // /api/intake has no live public form wired to it today, but it stays
+  // reachable, so malformed submissions must never reach saveLead()/disk.
+  const leadsFile = path.join(__dirname, "..", "leads.json");
+  const leadsFileExistedBefore = await fs
+    .access(leadsFile)
+    .then(() => true, () => false);
+  t.after(async () => {
+    if (!leadsFileExistedBefore) {
+      await fs.rm(leadsFile, { force: true });
+    }
+  });
+
+  let webServer;
+  try {
+    process.env.AXIOM_ENGINE_URL = "http://127.0.0.1:1";
+    delete require.cache[require.resolve("../server")];
+    const web = require("../server");
+    webServer = await startServer(web);
+    const { port: webPort } = webServer.address();
+
+    const invalidPayloads = [
+      [{}, "name must be a non-empty string"],
+      [{ name: "   ", phone: "555-0100" }, "name must be a non-empty string"],
+      [{ name: "Jordan", phone: "" }, "phone must be a non-empty string"],
+      [{ name: 42, phone: "555-0100" }, "name must be a non-empty string"],
+      [
+        { name: "Jordan", phone: "555-0100", damageType: "x".repeat(501) },
+        "damageType must be 500 characters or fewer"
+      ]
+    ];
+
+    for (const [payload, expectedError] of invalidPayloads) {
+      const response = await fetch(`http://127.0.0.1:${webPort}/api/intake`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      assert.equal(response.status, 400);
+      assert.deepEqual(await response.json(), { error: expectedError });
+    }
+
+    const preRejectionLeads = await fs
+      .access(leadsFile)
+      .then(() => true, () => false);
+    assert.equal(
+      preRejectionLeads,
+      leadsFileExistedBefore,
+      "no leads.json write should occur for a rejected payload"
+    );
+
+    const valid = await fetch(`http://127.0.0.1:${webPort}/api/intake`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: "Jordan",
+        phone: "555-0100",
+        damageType: "water"
+      })
+    });
+    assert.equal(valid.status, 200);
+    const validBody = await valid.json();
+    assert.equal(validBody.success, true);
+    assert.equal(typeof validBody.id, "number");
+  } finally {
+    if (webServer) {
+      await stopServer(webServer);
+    }
+    delete process.env.AXIOM_ENGINE_URL;
+  }
+});

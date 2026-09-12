@@ -27,6 +27,8 @@ const MAX_REQUEST_BODY_BYTES = getPositiveInteger(
     process.env.AXIOM_MAX_REQUEST_BODY_BYTES,
     65536
 );
+const MAX_LEAD_FIELD_LENGTH = 500;
+const REQUIRED_LEAD_FIELDS = ['name', 'phone'];
 
 function getPositiveInteger(value, fallback) {
     const parsed = Number.parseInt(value, 10);
@@ -47,6 +49,33 @@ function getLeads() {
           if (fs.existsSync(LEADS_FILE)) return JSON.parse(fs.readFileSync(LEADS_FILE, 'utf8'));
     } catch(e) {}
     return [];
+}
+
+// The /api/intake endpoint has no live public form wired to it (a prior,
+// currently unused iteration of this portal), but it stays reachable, so it
+// must not accept and persist arbitrary/malformed payloads. Every required
+// field must be a non-empty, reasonably bounded string; any other value
+// (missing, wrong type, empty/whitespace-only, or too long) is rejected
+// before anything is written to disk.
+function validateLeadPayload(body) {
+    if (body === null || typeof body !== 'object' || Array.isArray(body)) {
+        return 'lead payload must be a JSON object';
+    }
+    for (const field of REQUIRED_LEAD_FIELDS) {
+        const value = body[field];
+        if (typeof value !== 'string' || value.trim().length === 0) {
+            return field + ' must be a non-empty string';
+        }
+        if (value.length > MAX_LEAD_FIELD_LENGTH) {
+            return field + ' must be ' + MAX_LEAD_FIELD_LENGTH + ' characters or fewer';
+        }
+    }
+    for (const [key, value] of Object.entries(body)) {
+        if (typeof value === 'string' && value.length > MAX_LEAD_FIELD_LENGTH) {
+            return key + ' must be ' + MAX_LEAD_FIELD_LENGTH + ' characters or fewer';
+        }
+    }
+    return null;
 }
 
 function saveLead(lead) {
@@ -386,6 +415,12 @@ const server = http.createServer(async (req, res) => {
           const body = await parseBody(req);
           if (body === null) {
               rejectOversizedRequest(res);
+              return;
+          }
+          const validationError = validateLeadPayload(body);
+          if (validationError) {
+              res.writeHead(400, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: validationError }));
               return;
           }
           const lead = saveLead(body);
