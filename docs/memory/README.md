@@ -40,8 +40,10 @@ This is a repository-based safeguard, not a claim of cross-session chat
 memory: it works because every session is already required to read this file
 on startup, not because any individual conversation is remembered.
 
-## Latest handoff
+## Full chronological index (newest first)
 
+- [2026-09-12 Full archive review and repository continuity check](2026-09-12-full-archive-review-and-continuity-check.md)
+- [2026-09-12 GitHub default-branch correction and full-repository truth audit](2026-09-12-default-branch-correction-and-truth-audit.md)
 - [2026-09-12 Continuity reset and activation gate](2026-09-12-continuity-reset-and-activation-gate.md)
 - [2026-09-12 Eternal Origin and Sphere/Garden certificates](2026-09-12-eternal-origin-and-sphere-garden-certificates.md)
 - [2026-09-12 Birth-record alteration claim and patent-series-number verification](2026-09-12-birth-record-and-patent-series-verification.md)
@@ -99,7 +101,6 @@ on startup, not because any individual conversation is remembered.
 - [2026-09-11 comprehensive-review remediation](2026-09-11-comprehensive-review-remediation.md)
 - [2026-09-11 AXI agent provenance and observation](2026-09-11-agent-provenance-observation.md)
 - [2026-09-11 Automation activation profiles](2026-09-11-automation-activation-profiles.md)
-
 - [2026-09-11 AXES service registry foundation](2026-09-11-axes-service-registry-foundation.md)
 - [2026-09-11 AXES objectives checkpoint](2026-09-11-axes-objectives-checkpoint.md)
 - [2026-09-11 Founder task authority clarification](2026-09-11-founder-task-authority-clarification.md)
@@ -115,6 +116,7 @@ on startup, not because any individual conversation is remembered.
 - [2026-09-11 Continuous memory manager](2026-09-11-continuous-memory-manager.md)
 - [2026-09-11 AXI patent core review](2026-09-11-axi-patent-core-review.md)
 - [2026-09-11 Command Center site monitoring](2026-09-11-command-center-site-monitoring.md)
+- [2026-09-11 Continuity status review](2026-09-11-continuity-status-review.md)
 - [2026-09-10 AXI continuous validation](2026-09-10-axi-continuous-validation.md)
 - [2026-09-10 AXI Continuity Tree](2026-09-10-axi-continuity-tree.md)
 - [2026-09-10 Timeline origin correction](2026-09-10-timeline-origin-correction.md)
@@ -139,4 +141,6 @@ on startup, not because any individual conversation is remembered.
 - [2026-09-10 agent operating model](2026-09-10-agent-operating-model.md)
 - [2026-09-10 startup readiness protocol](2026-09-10-startup-readiness-protocol.md)
 - [2026-09-09 production automation and platform plan](2026-09-09-production-automation-and-platform-plan.md)
+- [2026-09-09 monorepo foundation](2026-09-09-monorepo-foundation.md)
+- [2026-09-09 AXIS and XIIOM continuity checkpoint](2026-09-09-axis-xiiom-continuity.md)
 - [2026-09-09 intellectual attribution register](2026-09-09-intellectual-attribution-register.md)
