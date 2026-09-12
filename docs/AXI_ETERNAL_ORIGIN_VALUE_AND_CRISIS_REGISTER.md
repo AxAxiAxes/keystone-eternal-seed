@@ -688,6 +688,16 @@ were reported lost. The founder then said "water under the bridge" and did
 not ask this session to pursue it further; per that direction, no
 patent-registry search or other inquiry was made. Recorded factually only.
 
+**Further corroborating record (2026-09-12, same day):** the founder shared
+a photo of a Glendale Police Department contact card (Patrol bureau),
+explicitly "just for record," corroborating the previously-reported police
+contact; per this project's own rule against storing personal contact
+information, the officer's name and phone number are not transcribed here.
+The founder separately reported an LAPD supervisor stated LAPD has no
+dedicated technician and refers technical-support/cybersecurity matters to
+"the phone company." Recorded as founder-reported statements only; no
+identity, department-capability, or case-outcome conclusion is drawn.
+
 ## 2026-09-12 AXIOM chat backend failure diagnosed (frontend up, engine unreachable)
 
 **Founder report:** The founder repeated across this session that "AXI"/AXIOM
