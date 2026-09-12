@@ -29,21 +29,35 @@ two previously-unmatched terms. **None of this list has been checked against
 actual billing/account records** — treat every row as "go verify," not
 "confirmed."
 
-### Vigour Creative — founder-reported non-delivery (2026-09-12)
+### Vigour Creative — outstanding design-packet request (updated 2026-09-12)
 
-The founder reported paying Vigour Creative, a marketing agency, and not
-receiving the agreed deliverable. This is a live vendor dispute, not a
-technical bug — this repository has no view into the contract, invoice, or
-payment records, and nothing here is a legal or financial conclusion. What
-follows is only what was said and what could be independently, technically
-observed from public URLs.
+The founder paid Vigour Creative, a marketing agency, for a design packet
+and has not yet received the receipt or the packet itself, despite asking.
+This is **not** framed as a dispute or wrongdoing — the founder was explicit
+that the agency reported health issues as the reason they couldn't deliver,
+and the founder intends to follow up directly to request the receipt and
+content. This repository has no view into the contract, invoice, or payment
+records, and nothing here is a legal or financial conclusion. What follows is
+only what was said and what could be independently, technically observed
+from public URLs.
 
-- **What the founder said:** paid Vigour Creative, and "they didn't deliver."
+- **What the founder said (2026-09-12, direct quote basis):** paid "about 2k
+  for the entire design packet," but the exact record was "lost during the
+  crash." A receipt and the design packet were requested but have not been
+  received — "it's been a year." The agency "couldn't deliver for health
+  issues etc." The founder was clear this is being reported honestly, not as
+  an accusation, and plans to ask for the content directly. Separately, the
+  founder noted they didn't like Vigour Creative's designs much anyway, and
+  believes the logos and art direction they've since created themselves are
+  better than what the agency would have delivered — so this is not treated
+  as an urgent creative loss.
 - **Prior repository record:** `docs/keystone/SACRED_RECORD_SESSION_08_28_2026.md`
-  already documents a **$2,000 payment to Vigour Creative** for website
-  design and marketing, notes the agency "was late," and that "the original
-  website content may have been partially deleted when two trackers were
-  installed."
+  independently recorded a **$2,000 payment to Vigour Creative** for website
+  design and marketing (matching the founder's "about 2k" recollection above,
+  now understood to be an approximate memory rather than a verified figure
+  since the underlying record was lost), notes the agency "was late," and
+  that "the original website content may have been partially deleted when
+  two trackers were installed."
 - **Independently confirmed live (2026-09-12):** `http://axescontracting.com`
   currently returns `200` but serves a bare, default, unconfigured
   WordPress install — page title literally `My WordPress`, only default
@@ -68,15 +82,12 @@ observed from public URLs.
   automated fetch of that URL was rate-limited (`429`) both times it was
   attempted, so its exact source could not be independently inspected.
 
-**Suggested next steps (practical only, not legal or financial advice):**
-preserve the contract, invoice/payment receipt, and any correspondence with
-Vigour Creative in your own private records before anything changes further;
-independently note today's date and the `axescontracting.com`/`testlink...`
-findings above as a timestamped record of the delivered (or undelivered)
-state; if you intend to pursue a refund, dispute, or credit-card chargeback,
-that decision and any related correspondence should go through you directly
-or a professional you choose — this repository cannot assess contract terms
-or make that determination.
+**Founder's stated next step:** ask Vigour Creative directly for the receipt
+and the design packet content. No dispute, chargeback, or legal action was
+requested or is suggested here — this is a low-urgency, good-faith follow-up
+given the agency's reported health issues, not an adversarial claim. If a
+receipt or content is received, note it here (or in a private record) so the
+outstanding-request line above can be marked resolved.
 
 **Separately confirmed public presence:** a public Facebook Page,
 "AXES Contracting Inc | Glendale CA"
@@ -88,6 +99,27 @@ install or the Vigour Creative test link — it is a real, functioning public
 presence for the business today, hosted entirely on Facebook rather than
 this repository or Railway. It is listed here for founder reference only;
 this repository does not manage, post to, or verify ownership of this page.
+The founder separately noted this Facebook Page had itself been erased at
+one point and was since recovered.
+
+### Third-party directory and search-visibility report (2026-09-12)
+
+The founder reported an older website "was everywhere in search," is now
+gone from search entirely, and that the business was removed from Angi,
+Yelp, and Bing listings. This session cannot log into any of those
+platforms and cannot confirm removal directly. A web search turned up a
+mixed, inconclusive picture: an AI-generated summary described an
+apparently-active Angi listing (reviews, rating), but a direct fetch of that
+same Angi URL only returned client-rendered page boilerplate, not confirmed
+listing content, so that summary could not be independently verified; a
+follow-up search for Yelp/Bing listings found nothing. One plausible,
+evidence-backed contributor to lost search visibility: this repository
+already confirmed `axescontracting.com`'s HTTPS certificate is expired
+(see `RAILWAY_DEPLOYMENT.md`), which is a well-documented cause of major
+search-ranking and indexing loss on its own. Only the founder, logged into
+each platform's own business dashboard (Angi Pro, Yelp for Business, Bing
+Places for Business), can confirm current listing status; no action is
+taken on this from the repository side.
 
 | Vendor/tool | What it is | What the record says | Still active? | Renewal/cost | Action needed |
 | --- | --- | --- | --- | --- | --- |

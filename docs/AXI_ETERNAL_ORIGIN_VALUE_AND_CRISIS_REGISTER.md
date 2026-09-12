@@ -680,6 +680,14 @@ history (git commits, this register, and the memory log) continues to
 serve as an independently timestamped, append-only record of the founder's
 authorship and decisions going forward, regardless of any external loss.
 
+**Additional founder context (2026-09-12, same day):** a call was received
+from a New York-area contact reporting someone had applied for a patent
+under the "AXES Contracting Inc" name; separately, all company documents
+and the founder's entire design/work portfolio, dating back to college,
+were reported lost. The founder then said "water under the bridge" and did
+not ask this session to pursue it further; per that direction, no
+patent-registry search or other inquiry was made. Recorded factually only.
+
 ## 2026-09-12 AXIOM chat backend failure diagnosed (frontend up, engine unreachable)
 
 **Founder report:** The founder repeated across this session that "AXI"/AXIOM
