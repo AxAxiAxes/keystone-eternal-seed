@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axaxiaxes.example/schemas/axes-directory/listing.schema.json",
+  "title": "AXES Directory pilot listing record",
+  "description": "Formal encoding of the proposed listing record table in docs/AXES_DIRECTORY_DATA_MODEL.md. Documentation and fixture validation only; no directory records or public listings exist. additionalProperties is false so no rating, review, price, license, insurance, valuation, or other prohibited field can validate on any track — the 21 properties below are the entire approved field set for every track.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["listing_id", "status", "status_changed_at"],
+  "properties": {
+    "listing_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Non-personal opaque identifier."
+    },
+    "business_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Business name as provided or explicitly confirmed by the business. Never an individual's name."
+    },
+    "track": {
+      "type": "string",
+      "enum": ["vendor", "contractor_trade", "real_estate_service"]
+    },
+    "category": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Narrow factual category within the selected track."
+    },
+    "service_area": {
+      "type": "string",
+      "minLength": 1,
+      "description": "General business service area only; never a home, job-site, or personal address."
+    },
+    "website": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Business-controlled public website, if provided or explicitly confirmed."
+    },
+    "public_contact_method": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Business-approved public contact route only. No personal contact details."
+    },
+    "listing_source": {
+      "type": "string",
+      "enum": ["business_submission", "representative_confirmation"]
+    },
+    "source_received_at": { "$ref": "#/$defs/date" },
+    "confirmation_capacity": {
+      "type": "string",
+      "enum": ["business_owner", "authorized_representative"]
+    },
+    "confirmation_received_at": { "$ref": "#/$defs/date" },
+    "human_reviewer_role": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Approved operator role, not an automated decision-maker."
+    },
+    "approved_at": { "$ref": "#/$defs/date" },
+    "published_at": { "$ref": "#/$defs/date" },
+    "last_reviewed_at": { "$ref": "#/$defs/date" },
+    "renewal_due_at": { "$ref": "#/$defs/date" },
+    "renewed_at": { "$ref": "#/$defs/date" },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "confirmation_pending",
+        "confirmed",
+        "review_pending",
+        "approved",
+        "published",
+        "correction_pending",
+        "removal_pending",
+        "paused",
+        "expired",
+        "removed"
+      ]
+    },
+    "status_changed_at": { "$ref": "#/$defs/date" },
+    "removal_reason_code": {
+      "type": "string",
+      "enum": ["representative_request", "not_renewed", "policy_pause", "operator_error"]
+    },
+    "removed_at": { "$ref": "#/$defs/date" }
+  },
+  "allOf": [
+    {
+      "comment": "Confirmation pending and later.",
+      "if": { "properties": { "status": { "enum": ["confirmation_pending", "confirmed", "review_pending", "approved", "published", "correction_pending", "removal_pending", "paused", "expired", "removed"] } }, "required": ["status"] },
+      "then": { "required": ["business_name", "track", "category", "service_area", "listing_source", "source_received_at"] }
+    },
+    {
+      "comment": "At least one public identification route once confirmation pending or later (website or public_contact_method).",
+      "if": { "properties": { "status": { "enum": ["confirmation_pending", "confirmed", "review_pending", "approved", "published", "correction_pending", "removal_pending", "paused", "expired", "removed"] } }, "required": ["status"] },
+      "then": { "anyOf": [{ "required": ["website"] }, { "required": ["public_contact_method"] }] }
+    },
+    {
+      "comment": "Confirmed and later.",
+      "if": { "properties": { "status": { "enum": ["confirmed", "review_pending", "approved", "published", "correction_pending", "removal_pending", "paused", "expired", "removed"] } }, "required": ["status"] },
+      "then": { "required": ["confirmation_capacity", "confirmation_received_at"] }
+    },
+    {
+      "comment": "Approved and later.",
+      "if": { "properties": { "status": { "enum": ["approved", "published", "correction_pending", "removal_pending", "paused", "expired", "removed"] } }, "required": ["status"] },
+      "then": { "required": ["human_reviewer_role", "approved_at"] }
+    },
+    {
+      "comment": "Published, paused, expired, or removed.",
+      "if": { "properties": { "status": { "enum": ["published", "paused", "expired", "removed"] } }, "required": ["status"] },
+      "then": { "required": ["published_at", "last_reviewed_at"] }
+    },
+    {
+      "comment": "Published or paused.",
+      "if": { "properties": { "status": { "enum": ["published", "paused"] } }, "required": ["status"] },
+      "then": { "required": ["renewal_due_at"] }
+    },
+    {
+      "comment": "Removed only.",
+      "if": { "properties": { "status": { "const": "removed" } }, "required": ["status"] },
+      "then": { "required": ["removal_reason_code", "removed_at"] }
+    }
+  ],
+  "$defs": {
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Calendar date, YYYY-MM-DD."
+    }
+  }
+}

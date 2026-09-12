@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axaxiaxes.example/schemas/axes-directory/correction-removal-request.schema.json",
+  "title": "AXES Directory pilot correction and removal request record",
+  "description": "Formal encoding of the proposed correction/removal request record table in docs/AXES_DIRECTORY_DATA_MODEL.md. Documentation and fixture validation only. Contact identity, correspondence, evidence, and free-form request content are intentionally excluded from this schema; they belong in a restricted operator system, not this record.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["request_id", "listing_id", "request_type", "received_at", "request_route", "review_status"],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Non-personal opaque identifier."
+    },
+    "listing_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "References the affected listing."
+    },
+    "request_type": {
+      "type": "string",
+      "enum": ["correction", "removal"]
+    },
+    "received_at": { "$ref": "#/$defs/date" },
+    "request_route": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Controlled route label for the published correction/removal channel."
+    },
+    "authority_confirmed_at": { "$ref": "#/$defs/date" },
+    "review_status": {
+      "type": "string",
+      "enum": ["received", "under_review", "implemented", "declined", "closed"]
+    },
+    "reviewed_at": { "$ref": "#/$defs/date" },
+    "resolution_code": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Controlled outcome code; never personal details or free-form correspondence."
+    },
+    "public_change_at": { "$ref": "#/$defs/date" }
+  },
+  "allOf": [
+    {
+      "comment": "A human reviewer's decision (implemented, declined, or closed) must record when it happened.",
+      "if": { "properties": { "review_status": { "enum": ["implemented", "declined", "closed"] } }, "required": ["review_status"] },
+      "then": { "required": ["reviewed_at"] }
+    }
+  ],
+  "$defs": {
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Calendar date, YYYY-MM-DD."
+    }
+  }
+}
