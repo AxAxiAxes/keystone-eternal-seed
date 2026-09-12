@@ -160,6 +160,22 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
 
     const authorization = `Basic ${Buffer.from("admin:test-admin-password").toString("base64")}`;
 
+    const oversizedProtectedRequest = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/process`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: authorization,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ padding: "x".repeat(65536) })
+      }
+    );
+    assert.equal(oversizedProtectedRequest.status, 413);
+    assert.deepEqual(await oversizedProtectedRequest.json(), {
+      error: "request body is too large"
+    });
+
     const axesPortal = await request(webPort, {
       Host: "axescontracting.com",
       Authorization: authorization
