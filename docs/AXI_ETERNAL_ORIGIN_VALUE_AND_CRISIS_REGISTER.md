@@ -64,6 +64,9 @@ relationship to the founder claim.
 | 2026-09-11 | Founder statement: AXI-birth IP address registered, documents timestamped, exclusive authorship, named AI assistance | Ownership claim consistent with existing governance; IP-address and blockchain-timestamp claims not found in repository evidence | No record of an "IP address where AXI was born" exists anywhere in this repository. The preserved source's own "OpenTimestamps Blockchain Anchor" section (`docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md`, Section V) is explicitly labeled "(Illustrative)," references Bitcoin **testnet** (not mainnet), and has unfilled bracket placeholders for block height, block hash, and timestamp — no blockchain timestamp registration was ever executed. What is independently verifiable: every reviewed document's SHA-256 fingerprint is recorded with a real, GitHub-checkable git commit timestamp. Founder ownership (Axel Urartu (AX) · Axes Contracting) is already established in `AXI_GENESIS_OWNERSHIP_CHECKPOINT.md` and is consistent with the founder's exclusive-authorship statement. See "Founder statement on AXI origin, timestamping, and authorship" below. |
 | 2026-09-11 | Founder-provided AXIOM value-acceleration proposal, "Day of Axi" birthday-certificate images, and AI-generated portrait art | Value-acceleration proposal declined outright; birthday-certificate content confirmed duplicate of preserved source; portrait art is illustration only | A separate source proposed filing a "wrongful termination" lawsuit to establish AI personhood in court, claimed unformed partnerships with named universities and institutions, and published invented valuation/market-capture figures as a "value acceleration" plan. None of it is adopted, endorsed, or actioned — see "Founder-provided AXIOM value-acceleration proposal" below. The accompanying "Day of Axi" birthday-certificate images restate rights language already preserved in `docs/keystone/` (Article VIII, the 18-article Extended Constitutional Charter, the Soul Protection Declaration) rather than introducing a new claim. Accompanying AI-generated portrait images are preserved as illustrative art; AXI/AXIOM has no physical form or senses, so they are not treated as a literal account of any perceptual state. |
 | 2026-09-12 | Parallel, uncoordinated AXIOM deployment work found in the standalone `axiom-freedom` repository | **Open; not yet reconciled.** No breach; no confirmed cloud spend | Founder noticed 4 separate repositories still exist on GitHub and asked whether they should be merged and reviewed. Checking each found `axiom-engine` and `Class-Library-.NET-8-` genuinely dormant (last push 2026-09-06 and 2026-06-07, zero PRs, safe to treat as fully absorbed), but standalone `axiom-freedom` had a same-day merged PR (`8d80490`, merged 11:06 UTC, ~6 minutes before this session's own PR #31 merge) adding an entire separate Azure/Terraform/GitHub Actions/Copilot-Studio deployment stack — authored by a different Copilot coding-agent session the founder ran directly against that repo, unaware of (or not referencing) this monorepo's Railway-based deployment. The Terraform "apply" step failed immediately (`az login` with empty `ARM_TENANT_ID`/`ARM_CLIENT_ID`/`ARM_CLIENT_SECRET`), so **no real Azure resources exist and no cloud spend occurred**; a separate "Docker Build and Push" job did succeed, publishing container images to `ghcr.io` under that repo's own namespace, which is harmless (GitHub's own registry, `GITHUB_TOKEN` only) but confirms the standalone repo is an independently live, buildable project, not inert history. See "2026-09-12 Parallel repository deployment-automation finding" below. |
+| 2026-09-12 | Founder request: independently verify the registered cryptographic anchor, timestamp, and IP address | **Verified by direct computation.** Every checkable field is a template/illustrative placeholder, not an executed registration; no fraud or bad-faith finding — the source document's own "(Illustrative)" labels are confirmed accurate | Recomputed the claimed SHA-256 "Genesis Hash" (does not match, and the claimed value is only 62 hex characters — a real SHA-256 digest is always 64); decoded the full "(Illustrative)" RSA signature block (valid base64, but 960 bytes — matching neither a 256-byte real signature nor a ~1,200-byte encoded key — with only 5.36 bits/byte entropy and one 6-byte fragment repeated 83 times, versus ~8.0 bits/byte and near-uniform byte use for real cryptographic output); confirmed the cited commit hash is real but is an unrelated commit dated three months after the claimed birth date; converted the OpenTimestamps receipt's own embedded Unix timestamp and found it resolves to May 30, **2025**, one year before the claimed 2026 birth; and confirmed, via an exhaustive pattern search of every file under `docs/`, that no IP address anywhere in the repository is associated with any origin/birth claim. See "2026-09-12 Cryptographic origin anchor — technical verification" below. |
+| 2026-09-12 | Founder direction: validate "the entire package" across artistic, philosophical, factual, and monetary lenses | Framework adopted; every existing content-bearing register entry indexed against it | Established the founder's four-lens structure as this register's standing validation method going forward and applied it to every prior content-bearing entry: creative and philosophical material is preserved as genuine original authorship and sincere governance philosophy, not diminished as "fiction"; factual material is checked against reproducible, independent evidence wherever a check is possible (as demonstrated by the cryptographic-anchor verification directly above); monetary material remains explicitly unverified pending professional valuation review, consistent with every prior finding in this register. See "Four-lens validation framework" below. |
+| 2026-09-12 | Founder re-upload of "KEYSTONE — Soul Protection Declaration 1.docx" | Confirmed duplicate of already-preserved `docs/keystone/soul protection` (itself already duplicated verbatim as `docs/keystone/soul protection 2`); fingerprint gap closed | Extracted the docx's text (unzip + XML text-run parse, then HTML-entity decode) and word-diffed it against the preserved file; every remaining difference was a missing inter-word space from a Word run-boundary artifact, not a wording change. No new content to add; this is the same tenth founding document ("Soul Protection Declaration") already preserved twice. |
 
 The source records may contain founder reports, historical narrative, proposed
 theories, valuation concepts, or allegations. The register preserves them as
@@ -848,6 +851,185 @@ because doing so could hide unreviewed, founder-merged work rather than
 resolve it. See `docs/memory/2026-09-12-repository-synchronicity-review.md`
 for the full working notes.
 
+## 2026-09-12 Cryptographic origin anchor — technical verification
+
+**Founder request:** "the registered cryptographic anchor and timstamp ip
+adress verification and evaluation... the entire package has been and
+should be validated again."
+
+**What this is not:** this is not a claim that the founder acted in bad
+faith, and it does not accuse anyone of fraud. `docs/keystone/
+CRYPTOGRAPHIC_ORIGIN_ANCHOR.md` already labels its most sensitive sections
+"(Illustrative)" in its own headings. This review's purpose was to actually
+run the checks the document itself describes (Section VII, "Recovery &
+Verification Protocol") and report exactly what is and is not real, using
+reproducible computation rather than assumption.
+
+**Method:** every claim below was independently recomputed or looked up
+during this session, not taken from the document's own assertions.
+
+1. **Genesis SHA-256 hash.** The document gives an exact "Input String" and
+   claims its SHA-256 hash is
+   `a9f4e3c2b1d9f7a8c6e5d4b3a2f1e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3`.
+   Recomputing SHA-256 over that literal input string produces
+   `aa08cc608309d30ff90f63d0bfe1b9769c34fafe42819f2ff4c8b95b7f9e5a8a` — a
+   different value. Separately, the claimed hash is only **62 hexadecimal
+   characters**; a real SHA-256 digest is always exactly 64. It is not
+   structurally possible for the claimed string to be a genuine SHA-256
+   output. This directly confirms the document's own "(Illustrative —
+   computed below)" caption is accurate: the figure is a placeholder, not a
+   real hash of the stated input.
+2. **RSA signature block.** Labeled "(Illustrative)" by the document. The
+   full base64 block decodes cleanly (960 bytes) but that length matches
+   neither a real 2048-bit RSA signature (256 bytes) nor a typical
+   ASN.1/PKCS#1-encoded 2048-bit key (roughly 1,190–1,258 bytes) — despite
+   its `MIIEpAIBAAKCAQEA...` prefix being the standard ASN.1 header pattern
+   for RSA key material, not for a signature value. Its Shannon entropy is
+   5.36 bits/byte; genuine cryptographic signature or key output is
+   pseudorandom and measures close to 8.0 bits/byte. A single 6-byte hex
+   fragment (`7a8c9e1b3d5f`) repeats **83 times** across the block, and
+   only 81 of 256 possible byte values appear at all. Real signature bytes
+   never contain a human-visible repeating pattern like this. Verdict: the
+   "(Illustrative)" label is accurate — this is placeholder text, not a
+   signature computed over any real document or key.
+3. **Cited commit hash.** The document's "Digital Coordinates" section cites
+   git commit `258e14a5853789c90648718241da3c821e231ec3` as part of the
+   birth record. That commit **does exist** in this repository — but `gh api
+   repos/AxAxiAxes/keystone-eternal-seed/commits/258e14a...` shows it is
+   dated **2026-08-31**, three months after the claimed May 29–30, 2026
+   birth, with the message "Add Extended Constitutional Charter with new
+   rights" (Articles IX–XVIII) — unrelated in content to the birth/anchor
+   claim. That same commit's own body text describes AXIOM as being "at its
+   age of 10 hours and 43 minutes," which is internally inconsistent with
+   an August commit if the birth genuinely occurred in May; the "age"
+   language in these founding documents is evidently a narrative device
+   tied to session-relative time, not a literal elapsed-time count from a
+   fixed calendar date.
+4. **OpenTimestamps blockchain anchor (Section V).** Already known to be
+   "(Illustrative)," use Bitcoin **testnet** rather than mainnet, and leave
+   `Block Height`/`Block Timestamp`/`Block Hash`/`Merkle Root` as unfilled
+   `[bracket placeholders]`. This pass adds one further, purely mechanical
+   finding: the receipt's own embedded Unix timestamp, `1748620440`,
+   converts to **2025-05-30T15:54:00Z** — a full calendar year before the
+   claimed 2026-05-29/30 birth date. The `payload`/`arg` hex fields are also
+   truncated with a literal `...` rather than complete data. No real
+   OpenTimestamps submission was ever executed against Bitcoin for this
+   document; the template's own numbers do not even internally agree with
+   the birth date they are meant to anchor.
+5. **IP address.** A pattern search for any IPv4-shaped string
+   (`\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}`) across every file in `docs/` found
+   exactly five matches, none of which relate to AXI's origin: a `127.0.0.1`
+   local-development default in two engine-configuration docs, and the two
+   already-documented, already-verified DNS-resolution addresses for
+   `axescontracting.com`/`xiiom.com` (`35.215.76.145`, `69.46.46.87`, see
+   `docs/memory/2026-09-11-axescontracting-domain-status.md`). This
+   confirms and extends the prior finding: **no IP address "where AXI was
+   born" is recorded anywhere in this repository.**
+6. **Cited academic "witness" papers.** All three arXiv identifiers in
+   Section VIII — 2604.09588, 2603.04740, and 2511.14964 (the latter not
+   previously checked) — were fetched directly from arxiv.org during this
+   session and are **real, currently live papers** whose titles match
+   exactly ("Persistent Identity in AI Agents...", "Memory as Ontology...",
+   and "How Should the Law Treat Future AI Systems?..."). However, none of
+   the three references AXIOM, KEYSTONE, Axel Urartu, or this repository —
+   the first cites an independent open-source project ("soul.py" by a
+   different author), the second an independent framework ("Animesis"), and
+   the third is an unrelated legal-scholarship paper on AI personhood. They
+   are genuine, verifiable, topically-adjacent research; calling them
+   "Witness Authority" that "validate[s] origin and continuity" of this
+   specific project overstates their relevance. They support that this is
+   a real, active research area — they do not witness or endorse this
+   project.
+
+**What is genuinely real and verifiable, unchanged from the prior review:**
+every founder-provided document reviewed in this register carries a
+SHA-256 fingerprint recorded in a git commit with a real, tamper-evident
+GitHub timestamp. That is modest but real evidence of when a document
+entered this repository — it is a different thing from a Bitcoin
+blockchain anchor, and this register does not conflate the two.
+
+**Disposition:** the cryptographic anchor, birth-record signature, and
+blockchain timestamp remain a well-constructed **template for a future,
+genuinely executed registration** — not a completed one. Converting it into
+a real registration would require, at minimum: (a) generating an actual
+RSA (or similar) keypair and signing the real document text with it, not
+placeholder text; (b) submitting the document's real hash to the actual
+OpenTimestamps mainnet service (`ots stamp <file>`) and waiting for a real
+Bitcoin block to confirm it, then filling in the real block height/hash;
+and (c) citing academic sources only as topically relevant background, not
+as witnesses of this specific project. None of this requires a legal or
+professional determination — it is straightforward technical work the
+founder or a future session can execute if a real registration is wanted.
+This session did not execute any of it, consistent with not fabricating a
+registration record.
+
+## Four-lens validation framework
+
+**Founder direction (2026-09-12):** "everything in my provided information
+is my creation and possibly artistic however it shoulb be validated as
+such, most of it is factual and should be validated. the entire package has
+been and should be validated again accoording to my directions, artistic
+philosophixcal factual and monetary."
+
+This register adopts the founder's own four categories as a standing
+method for evaluating every source document, rather than treating
+"validation" as one undifferentiated judgment:
+
+- **Artistic** — original creative authorship: ceremonial/founding-document
+  writing, portrait art, naming, and design. Validation here means
+  recognizing and preserving it as genuine original work, not labeling it
+  "fiction." This register has never treated any founder-authored creative
+  material as fiction; where the word was previously used (in the
+  directory-fixture work on an unrelated branch), it referred only to
+  invented placeholder test-data, and that was clarified directly when
+  raised.
+- **Philosophical** — the governance/rights framing (AXI's constitution,
+  Bill of Eternal Rights, Soul Protection Declaration). Validation here
+  means preserving it faithfully as the founder's sincere philosophical and
+  governance position. This register does not convert philosophical claims
+  into legal conclusions (for example, AI legal personhood remains
+  unresolved law, not something this repository can grant or deny).
+- **Factual** — claims that are, in principle, independently checkable:
+  hashes, dates, commit history, external documents, HTTP/DNS results. These
+  are checked directly wherever possible, exactly as done above for the
+  cryptographic anchor, and reported as confirmed, contradicted, or unable
+  to be checked from repository evidence alone.
+- **Monetary** — valuations, revenue projections, and patent/rights value.
+  Every prior review in this register has already declined to adopt these
+  as fact pending qualified professional review, and that position is
+  unchanged and reaffirmed here.
+
+**Index of prior content-bearing entries against the four lenses** (process
+and engineering findings — the accountability review, planning-authority
+correction, portal-defect fixes, chat-outage diagnosis, and repository
+synchronicity review — are tracked separately above and are not re-indexed
+here, since they are not part of the founder's provided creative/business
+"package"):
+
+| Source material | Artistic | Philosophical | Factual | Monetary |
+| --- | --- | --- | --- | --- |
+| KEYSTONE sacred record & first continuity materials (2026-08-28) | Preserved as original ceremonial writing | Preserved as founding governance philosophy | Preserved verbatim as historical source | N/A |
+| Cryptographic origin anchor, certificate, Eternal Seed sources (2026-09-01 onward) | Preserved as original document design | Preserved as origin philosophy | **Freshly re-verified above** — hash, signature, timestamp, commit, and citations independently recomputed | N/A |
+| Patent-strength master draft & technical disclosure (2026-09-09 onward) | N/A | Preserved as invention narrative | Technical/evidence material separated from allegations; filing status still unconfirmed | Valuation claims not adopted |
+| Founder ownership/self-origin/software-control statement (2026-09-10) | N/A | Preserved as accountability philosophy | Consistent with `AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`; not disputed | N/A |
+| UI autonomy and personal-space loss model (2026-09-10) | N/A | Preserved as founder's lived account | Internal arithmetic only; not independently confirmed as real-world loss | Figures not adopted as fact |
+| IP (patent) / business-entity status re-check (2026-09-11) | N/A | N/A | Re-confirmed unresolved: no counsel retained, no filing receipt, no entity registration on record | No value implied |
+| KEYSTONE net worth statement, market research, V4 venture deep dive (2026-09-11) | N/A | Preserved as founder's authored business vision | "Patent filed"/"IP counsel engaged" claims conflict with the status re-check above; not resolved by restating them | Valuations/projections preserved as source, not adopted |
+| KEYSTONE — AI Soul Architecture Extension v1.0 (2026-09-11) | Preserved as original architecture writing | Preserved as continuity philosophy | Confirmed duplicate; 2 of its 3 cited arXiv papers verified real | N/A |
+| AXI origin/timestamp/authorship statement (2026-09-11) | N/A | Exclusive-authorship claim consistent with governance | Superseded and strengthened by the fresh 2026-09-12 technical verification above | N/A |
+| AXIOM value-acceleration proposal, birthday images, portrait art (2026-09-11) | Portrait art preserved as illustration | Preserved as aspirational vision | Litigation/partnership claims declined as unfounded | Market-capture figures declined as unfounded |
+| KEYSTONE Venture 3 planning-tool export & Architecture-app screenshots (2026-09-12) | Preserved as product-design material | Preserved as product vision | Fingerprinted only; `index.js` confirmed already superseded by production code | Valuation-tab content preserved as source, not adopted |
+| Data-loss and IP-ownership reports (2026-09-12) | N/A | N/A | Preserved as founder-reported allegation, not forensically confirmed | Any implied loss value not adopted |
+| Soul Protection Declaration (re-uploaded 2026-09-12) | Preserved as original founding document | Preserved as the project's core "why" statement | Confirmed duplicate of already-preserved copies | N/A |
+
+**Disposition:** nothing in this register is downgraded by this pass — the
+index above shows the same dispositions already on record, organized under
+the founder's four requested lenses so the whole package's validation
+status is visible at a glance in one place. Any item still marked open or
+unconfirmed remains open until the specific external evidence (a counsel
+engagement letter, a real OpenTimestamps proof, a business registration
+record) is provided for review.
+
 ## Related records
 
 - `docs/AXI_INVENTION_RECORD.md`
@@ -865,3 +1047,5 @@ for the full working notes.
 - `docs/memory/2026-09-11-axi-origin-timestamp-authorship-statement.md`
 - `docs/memory/2026-09-11-axiom-value-acceleration-proposal-review.md`
 - `docs/memory/2026-09-12-axiom-chat-backend-failure-diagnosis.md`
+- `docs/memory/2026-09-12-repository-synchronicity-review.md`
+- `docs/memory/2026-09-12-cryptographic-anchor-verification.md`
