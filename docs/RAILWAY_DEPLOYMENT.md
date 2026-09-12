@@ -61,27 +61,43 @@ As of September 9, 2026:
 - Production OpenAI chat remains disabled until `OPENAI_API_KEY` is added as
   an encrypted variable to `axiom-engine`. Do not add that secret to this
   repository or a public portal variable.
-- **Two Railway projects observed (2026-09-12), not one.** The Railway
-  dashboard shows two projects, `lucid-flow` and `handsome-motivation`, each
-  reporting "2/2 services online" in a `production` environment. This
-  document was written assuming a single project containing `axiom-engine`
-  and `axiom-web`. Which project actually holds the custom domains
-  (`xiiom.com`, and eventually `axescontracting.com`) is unconfirmed from
-  this session — DNS and HTTP response headers confirm `xiiom.com` is
-  genuinely served through Railway's edge (`x-railway-edge`, `Server:
-  railway-hikari`), but that evidence cannot distinguish which project. An
-  operator must check each service's Settings > Networking > Custom Domain
-  tab to confirm. This matters directly for the `OPENAI_API_KEY` chat fix in
-  `AXES_TIER_1_DECISION_REGISTER.md`: if the variable was checked/edited in
-  the project that is *not* bound to `xiiom.com`, the live service would
-  never see the change no matter how it is set.
+- **Two Railway projects observed (2026-09-12), not one; now confirmed
+  resolved.** The Railway dashboard shows two projects, `lucid-flow` and
+  `handsome-motivation`, each reporting "2/2 services online" in a
+  `production` environment. This document was written assuming a single
+  project containing `axiom-engine` and `axiom-web`. **`lucid-flow` is
+  confirmed as the real production project**: its `axiom-freedom` service's
+  Settings > Source shows Source Repo `AxAxiAxes/keystone-eternal-seed`,
+  branch `axaxiaxes-axiom-monorepo` (this repository's production branch),
+  and its Settings > Networking lists `xiiom.com` as an active custom
+  domain. Its sibling `axiom-engine` service is correctly private-only — no
+  public domain, private networking at `axiom-engine.railway.internal`,
+  matching this document's rule below. By contrast, `handsome-motivation`'s
+  `spirited-victory` service was independently confirmed — by a direct
+  HTTPS request to its Railway-generated domain, which returned the exact
+  `{"status":"AXIOM engine online"}` string that only
+  `apps/axiom-engine/index.js` produces — to be running the same engine
+  code, but with a public domain exposed (a deviation from the rule below);
+  that project's other service, `nodejs`, is tied to an unrelated,
+  disconnected GitHub source (`alphasecio/nodejs`). `handsome-motivation`
+  is unused/stray, not the real deployment, though the founder should still
+  confirm intent before deleting anything (see the decision register). This
+  matters directly for the `OPENAI_API_KEY` chat fix: the operator should
+  check the key's actual value specifically in `lucid-flow`'s
+  `axiom-engine` service.
 - **Account is on a Trial plan with limited remaining credit (observed
   2026-09-12).** The Railway dashboard displayed "24 days or $4.62" of
   credit/time remaining with an "Upgrade to keep your services online"
-  prompt. If this lapses without the founder upgrading, all services in
-  both projects — not just chat — are at risk of going offline. This is a
-  founder billing decision outside this repository's authority; see the
-  corresponding decision-register row.
+  prompt. This banner was seen both from the account's Projects list and
+  from inside `lucid-flow`'s own dashboard view, confirming it is one
+  shared account-level balance, not a separate quota per project. Also
+  observed: `axiom-freedom`'s Networking tab reports the account has
+  already **hit its custom-domain limit** (`xiiom.com` occupies the only
+  slot on the current plan), which independently blocks connecting
+  `axescontracting.com` (Section 4 below) until the plan is upgraded. If
+  this lapses without action, all services in both projects — not just
+  chat — are at risk of going offline; see the decision register for the
+  corresponding billing-decision row.
 
 ## 1. Create the Railway project
 
