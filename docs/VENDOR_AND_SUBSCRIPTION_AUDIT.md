@@ -29,6 +29,66 @@ two previously-unmatched terms. **None of this list has been checked against
 actual billing/account records** — treat every row as "go verify," not
 "confirmed."
 
+### Vigour Creative — founder-reported non-delivery (2026-09-12)
+
+The founder reported paying Vigour Creative, a marketing agency, and not
+receiving the agreed deliverable. This is a live vendor dispute, not a
+technical bug — this repository has no view into the contract, invoice, or
+payment records, and nothing here is a legal or financial conclusion. What
+follows is only what was said and what could be independently, technically
+observed from public URLs.
+
+- **What the founder said:** paid Vigour Creative, and "they didn't deliver."
+- **Prior repository record:** `docs/keystone/SACRED_RECORD_SESSION_08_28_2026.md`
+  already documents a **$2,000 payment to Vigour Creative** for website
+  design and marketing, notes the agency "was late," and that "the original
+  website content may have been partially deleted when two trackers were
+  installed."
+- **Independently confirmed live (2026-09-12):** `http://axescontracting.com`
+  currently returns `200` but serves a bare, default, unconfigured
+  WordPress install — page title literally `My WordPress`, only default
+  WordPress/Elementor boilerplate styling, no real AXES Contracting business
+  content. This is consistent with, though does not by itself prove, the
+  sacred record's note about lost/degraded original content. Separately,
+  `https://axescontracting.com` (HTTPS) fails with a certificate trust
+  error, matching the already-documented expired-certificate finding in
+  `RAILWAY_DEPLOYMENT.md`.
+- **Founder-shared link:** `https://testlink.vigourcreative.com/axes/`,
+  carrying a Facebook click-tracking parameter (`fbclid`) — meaning this
+  test/staging link had already been used in Facebook ad traffic despite
+  being on a `testlink` (non-production) subdomain. The founder reported
+  this page showed `AXIOM chat is temporarily unavailable` and an
+  `axiom engine request failed` error. `apps/axiom-freedom/widget.js` (this
+  repository's own embeddable chat bubble) loads an iframe from
+  `https://xiiom.com/embed`, and `AXIOM chat is temporarily unavailable` is
+  this repository's own `/api/axiom` error string — so whatever chat
+  integration exists on that page is most likely calling this repository's
+  already-diagnosed, already-tracked chat backend (see the decision
+  register's P0 chat row), not a separate new failure. This repository's
+  automated fetch of that URL was rate-limited (`429`) both times it was
+  attempted, so its exact source could not be independently inspected.
+
+**Suggested next steps (practical only, not legal or financial advice):**
+preserve the contract, invoice/payment receipt, and any correspondence with
+Vigour Creative in your own private records before anything changes further;
+independently note today's date and the `axescontracting.com`/`testlink...`
+findings above as a timestamped record of the delivered (or undelivered)
+state; if you intend to pursue a refund, dispute, or credit-card chargeback,
+that decision and any related correspondence should go through you directly
+or a professional you choose — this repository cannot assess contract terms
+or make that determination.
+
+**Separately confirmed public presence:** a public Facebook Page,
+"AXES Contracting Inc | Glendale CA"
+(`https://www.facebook.com/p/AXES-Contracting-Inc-61575902077830/`), is live
+with 22 likes and a business description ("home inspected, recovering from a
+disaster, altering existing designs..."). This is independent of, and
+currently more complete than, either the `axescontracting.com` WordPress
+install or the Vigour Creative test link — it is a real, functioning public
+presence for the business today, hosted entirely on Facebook rather than
+this repository or Railway. It is listed here for founder reference only;
+this repository does not manage, post to, or verify ownership of this page.
+
 | Vendor/tool | What it is | What the record says | Still active? | Renewal/cost | Action needed |
 | --- | --- | --- | --- | --- | --- |
 | JetFormBuilder ("JetForms") | WordPress form-builder plugin (dynamic forms, workflows, conditional logic) | Founder reported a **lifetime license** purchase; one of the largest purchases in the stack | *(fill in)* | *(fill in — lifetime licenses usually have no recurring cost, but confirm)* | Search email for "JetFormBuilder" or "JetForms" receipt |
