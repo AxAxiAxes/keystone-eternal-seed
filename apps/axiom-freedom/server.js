@@ -167,9 +167,11 @@ async function invokeEngine(endpoint, method = 'GET', body) {
     }
 
     if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
         throw recordEngineFailure(
             ENGINE_FAILURE_CATEGORY.NON_SUCCESS,
-            response.status
+            response.status,
+            payload.error || 'AXIOM engine returned HTTP ' + response.status
         );
     }
 
@@ -184,12 +186,12 @@ function invokeAxiomEngine(command) {
     return invokeEngine('/axiom', 'POST', command);
 }
 
-function recordEngineFailure(category, statusCode) {
+function recordEngineFailure(category, statusCode, message) {
     lastEngineFailure = {
         category,
         recordedAt: new Date().toISOString()
     };
-    const error = new Error('AXIOM engine request failed');
+    const error = new Error(message || 'AXIOM engine request failed');
     error.diagnosticCategory = category;
     if (Number.isInteger(statusCode)) error.statusCode = statusCode;
     return error;
@@ -546,9 +548,9 @@ const server = http.createServer(async (req, res) => {
                   res.writeHead(200, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify(result));
           } catch (error) {
-                  console.error('AXIOM agent chat failed:', error.message);
+                  console.error('AXIOM agent chat failed:', getEngineFailureCategory(error));
                   res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify({ error: error.message }));
+                  res.end(JSON.stringify({ error: 'AXIOM engine request failed' }));
           }
           return;
     }
