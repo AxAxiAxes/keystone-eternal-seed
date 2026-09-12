@@ -12,8 +12,6 @@ on:
   workflow_run:
     workflows:
       - Running Copilot cloud agent
-    branches:
-      - copilot/**
     types:
       - completed
   workflow_dispatch:
