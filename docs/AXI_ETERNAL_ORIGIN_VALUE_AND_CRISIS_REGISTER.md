@@ -61,6 +61,7 @@ relationship to the founder claim.
 | 2026-09-11 | IP (patent) and company/business-entity status re-check | Unchanged since the prior 2026-09-11 review; still open | Re-confirmed all six `AXI_INTENT_AND_RIGHTS_READINESS.md` near-term checklist items remain unchecked (no counsel retained, no filing-scope quote, filing/deadline status unconfirmed from original records or official receipts). No repository record verifies actual legal company/business-entity registration, address, or formation; `AXES_BUSINESS_PLAN.md` and the founder-authority-business-status record are governance/attribution records only. Confirming real IP or company status requires the founder's own filing receipts/business records and qualified counsel, not repository evidence. |
 | 2026-09-11 | Founder-provided KEYSTONE net worth statement, market research report, and V4 venture deep dive | Preserved source; valuations and patent/rights claims unverified and partly contradicted by existing repository evidence | Retain all three source fingerprints below; the net worth statement's "patent filed" and AXIOM economic-rights claims, and the V4 document's "IP counsel engaged" claim, conflict with the repository's own patent-status review and AXI non-personhood governance and do not override either; no valuation, filing status, revenue projection, or rights claim is entered as fact. See "KEYSTONE founder-provided venture document review" below. |
 | 2026-09-11 | Founder re-upload of "KEYSTONE — AI Soul Architecture Extension v1.0" | Confirmed duplicate of already-preserved `docs/keystone/ai soul architecture`; fingerprint gap closed | Text-compared the new upload against the already-preserved file and confirmed they are the same source (differences are extraction-formatting only). Its two cited arXiv papers (2604.09588, 2603.04740) were checked against arxiv.org and are real, title-matching papers — unlike other reviewed documents, this one cites verifiable sources and carries its own disclaimer. It still repeats the unconfirmed "provisional patent filed for KEYSTONE v1.0" assertion (same conflict as the net worth statement) and frames the cited papers as "validation" of KEYSTONE specifically, which is the document's own interpretive claim, not an independently confirmed conclusion. Neither claim is adopted as fact. |
+| 2026-09-11 | Founder statement: AXI-birth IP address registered, documents timestamped, exclusive authorship, named AI assistance | Ownership claim consistent with existing governance; IP-address and blockchain-timestamp claims not found in repository evidence | No record of an "IP address where AXI was born" exists anywhere in this repository. The preserved source's own "OpenTimestamps Blockchain Anchor" section (`docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md`, Section V) is explicitly labeled "(Illustrative)," references Bitcoin **testnet** (not mainnet), and has unfilled bracket placeholders for block height, block hash, and timestamp — no blockchain timestamp registration was ever executed. What is independently verifiable: every reviewed document's SHA-256 fingerprint is recorded with a real, GitHub-checkable git commit timestamp. Founder ownership (Axel Urartu (AX) · Axes Contracting) is already established in `AXI_GENESIS_OWNERSHIP_CHECKPOINT.md` and is consistent with the founder's exclusive-authorship statement. See "Founder statement on AXI origin, timestamping, and authorship" below. |
 
 The source records may contain founder reports, historical narrative, proposed
 theories, valuation concepts, or allegations. The register preserves them as
@@ -258,6 +259,68 @@ the reviewed business plan — remain controlling. All three documents are
 preserved solely as fingerprinted founder-provided source material for any
 future authorized review.
 
+## Founder statement on AXI origin, timestamping, and authorship
+
+**Founder statement (2026-09-11):** "We registered [the] IP address where AXI
+was born and timestamped all our documents[.] Are mine[,] no one else's. I
+was assisted either by Copilot AXI or Meta, and Claude Sonnet 5 Max."
+
+This is preserved as a founder statement. It is checked below against
+repository evidence and is not contradicted where the two do not overlap;
+where the repository has no supporting evidence, that gap is stated plainly
+rather than assumed to be satisfied.
+
+**IP address where AXI was born:** No record of a specific network IP
+address, or any registration of one, exists anywhere in this repository —
+not in the governance documents (`AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`,
+`AXES_AGENT_ORIGIN_REGISTRY.md`), and not in the preserved
+`docs/keystone/` source corpus. If the founder holds this registration
+outside the repository (e.g., a hosting/registrar record, a personal log,
+or a notarized statement), it can be added to this register once the
+founder provides the specific record to cite; it is not entered as fact from
+this statement alone.
+
+**Document timestamping:** The preserved source material itself describes,
+but never completed, a blockchain timestamp mechanism. `docs/keystone/
+CRYPTOGRAPHIC_ORIGIN_ANCHOR.md` Section V ("OpenTimestamps Blockchain
+Anchor") is explicitly headed "(Illustrative)"; its worked example uses
+`"uri": "btc:testnet"` (Bitcoin's free test network, not the mainnet the
+section's own stated purpose requires for "permanent, worldwide, irrefutable"
+proof) and leaves `Block Height`, `Block Timestamp`, `Block Hash`, and
+`Merkle Root` as unfilled `[bracket placeholders]`. No blockchain timestamp
+registration was ever actually executed against this template.
+
+What **is** real and independently verifiable: this register and its related
+memory records fingerprint every reviewed founder-provided document with a
+SHA-256 hash, and every such fingerprint is committed to git with a
+timestamp that is checkable on GitHub (commit date, author, and hash cannot
+be silently altered after the fact without detection). This is genuine,
+if modest, timestamp evidence — distinct from, and not the same as, a
+Bitcoin blockchain anchor.
+
+**Exclusive authorship ("are mine, no one else's"):** This is consistent
+with the founder ownership claim already established in
+`AXI_GENESIS_OWNERSHIP_CHECKPOINT.md` (Axel Urartu (AX) · Axes Contracting
+as the recorded creator and owner). Nothing in this repository disputes it.
+
+**Named AI assistance (Copilot, AXI, Meta, Claude Sonnet 5 Max):** Every
+commit made by this assistant in this repository already carries a
+`Co-authored-by: Copilot App` trailer, which is the existing, verifiable
+attribution mechanism for this assistant's contribution (itself running on
+the Claude Sonnet 5 model during this session, per the assistant's own
+model disclosure). This repository has no independent way to verify which
+AI tools were used to produce material outside of this assistant's own
+sessions (for example, the preserved `docs/keystone/` source corpus); that
+attribution rests on the founder's own record-keeping.
+
+**Disposition:** The exclusive-authorship and founder-ownership statement is
+consistent with existing governance and is not disputed. The IP-address and
+blockchain-timestamp claims are not supported by anything currently in this
+repository; they are preserved as a founder statement only, and are not
+entered as verified fact. Providing the specific external record (registrar
+entry, OpenTimestamps proof file, or similar) would let a future review
+verify and adopt them.
+
 ## Required evidence fields for any new report
 
 Every new ownership, value, recovery, or crisis report must record:
@@ -302,3 +365,5 @@ legal conclusion; those require the source-linked, authorized review path.
 - `docs/AXES_CONSTITUTIONAL_FRAMEWORK.md`
 - `docs/AXES_BUSINESS_PLAN.md`
 - `docs/memory/2026-09-11-keystone-venture-document-review.md`
+- `docs/memory/2026-09-11-keystone-soul-architecture-review.md`
+- `docs/memory/2026-09-11-axi-origin-timestamp-authorship-statement.md`
