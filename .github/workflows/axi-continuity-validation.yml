@@ -5,9 +5,15 @@ on:
     branches:
       - axaxiaxes-axes-directory-data-model
       - axaxiaxes-axiom-monorepo
+      - copilot/**
   pull_request:
     branches:
       - axaxiaxes-axiom-monorepo
+  workflow_run:
+    workflows:
+      - Running Copilot cloud agent
+    types:
+      - completed
   workflow_dispatch:
 
 permissions:
@@ -20,6 +26,7 @@ concurrency:
 jobs:
   node-tests:
     name: Node tests (${{ matrix.application }})
+    if: ${{ github.event_name != 'workflow_run' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     strategy:
@@ -45,6 +52,7 @@ jobs:
 
   axi-core-tests:
     name: AXI.Core tests
+    if: ${{ github.event_name != 'workflow_run' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -56,6 +64,7 @@ jobs:
 
   directory-fixture-validation:
     name: AXES Directory fixture validation
+    if: ${{ github.event_name != 'workflow_run' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     defaults:
@@ -70,6 +79,7 @@ jobs:
 
   engine-image:
     name: AXIOM engine image
+    if: ${{ github.event_name != 'workflow_run' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -90,6 +100,7 @@ jobs:
 
   portal-image:
     name: AXIOM portal image
+    if: ${{ github.event_name != 'workflow_run' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -107,3 +118,14 @@ jobs:
           exit 1
       - if: always()
         run: docker rm --force axiom-freedom-validation || true
+
+  copilot-workflow-run-continuity:
+    name: Copilot workflow continuity signal
+    if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'copilot/') && github.event.workflow_run.head_repository.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - run: |
+          echo "Copilot workflow completed for branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "Result: ${{ github.event.workflow_run.conclusion }}"
+          echo "If CI push/pull_request runs remain action_required, this is controlled by repository/org approval policy."
