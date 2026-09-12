@@ -314,6 +314,10 @@ const server = http.createServer(async (req, res) => {
           serveFile(res, path.join(__dirname, 'design-desk.html'), 'text/html; charset=utf-8');
           return;
     }
+    if (pathname === '/axescontracting' || pathname === '/axescontracting/') {
+          serveFile(res, path.join(__dirname, 'axescontracting.html'), 'text/html; charset=utf-8');
+          return;
+    }
     if (pathname === '/automation' || pathname === '/automation/') {
           if (!requireAdmin(req, res)) return;
           serveFile(res, path.join(__dirname, 'automation.html'), 'text/html; charset=utf-8');

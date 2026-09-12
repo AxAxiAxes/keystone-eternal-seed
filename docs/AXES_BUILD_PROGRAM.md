@@ -155,10 +155,17 @@ of it.
   gates candidate offer `AXES-DMC-001` behind founder approval of every
   activation-record item, none of which are yet approved. Do not add a live
   request/intake form for this offer before that approval.
-- Still open: a public service registry view distinguishing active,
-  experimental, and planned services for visitors (the existing service
-  registry API is operator-facing only), and a minimal AXES-branded public
-  landing page distinct from the XIIOM portal.
+- `axescontracting.html` (public, `/axescontracting`) was an already-written,
+  unwired draft from an earlier iteration; reactivated as the minimal
+  AXES-branded public landing page, linked from the main portal
+  (`index.html`). Its state labels (Planning / First release / Deferred /
+  Future internal workspace) already satisfy the "plain-language product
+  descriptions" build item and the visitor-facing exit criterion below.
+  Distinct from `axescontracting.com`'s private, admin-gated domain root,
+  which stays unchanged.
+- With the above, every Release B build item now has a corresponding,
+  CI-tested implementation. No further Release B build work is planned
+  beyond the still-gated consultation-request path.
 
 **Exit criteria**
 
@@ -224,11 +231,13 @@ of it.
    URNUR.
 2. Deploy the completed private-engine monitoring and task-control updates,
    then verify production chat and monitoring through the protected console.
-3. Continue Release B: a public service-registry view for visitors and a
-   minimal AXES-branded public landing page remain open (see "Progress
-   (2026-09-12)" under Release B). The Architectural Design Desk's
-   consultation-request path stays blocked pending founder approval of
-   `AXES-DMC-001` in `AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md`.
+3. Release B build items are now all implemented (see "Progress
+   (2026-09-12)" under Release B); confirm the new routes reach production
+   once the founder verifies the Railway deploy (see decision register).
+   The Architectural Design Desk's consultation-request path stays blocked
+   pending founder approval of `AXES-DMC-001` in
+   `AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md`. Release C readiness
+   review is the next open planning step.
 
 The current agent capacity, staged role catalog, and human-approval
 requirements for the Command Center, future Directory, and AXES ecosystem are
