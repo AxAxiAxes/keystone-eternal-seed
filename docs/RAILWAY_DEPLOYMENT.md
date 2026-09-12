@@ -28,9 +28,27 @@ duplicate-maintenance risk.
 As of September 9, 2026:
 
 - `axiom-freedom` is public at `https://xiiom.com` and deploys from the
-  `axaxiaxes-axiom-monorepo` branch of this repository.
+  `axaxiaxes-axiom-monorepo` branch of this repository. Its public `/axiom`
+  chat page and its `requireAdmin`-gated `/admin`, `/support`, and
+  `/automation` consoles are all live and responding as designed (verified
+  2026-09-11: `/axiom` returns 200; the other three correctly return 401
+  without credentials, which is the intended protected-console behavior, not
+  a fault).
 - `axiom-engine` is deployed privately in the same Railway project, has a
   persistent Volume mounted at `/app/data`, and has no public domain.
+- **`axescontracting.com` is not yet connected to Railway.** Verified
+  2026-09-11: both `axescontracting.com` and `www.axescontracting.com`
+  resolve via nameserver `ns1.siteground.net` (the legacy SiteGround hosting
+  this document's introduction says Railway replaced), not the Railway IP
+  serving `xiiom.com`. HTTPS to `axescontracting.com` fails with an expired
+  server certificate (`SEC_E_CERT_EXPIRED`); plain HTTP returns `200` from
+  whatever content SiteGround still serves there. This confirms Section 4
+  below ("Connect `axescontracting.com`") and the "Immediate domain tasks"
+  in `DOMAIN_PORTFOLIO.md` were never completed — the domain intended as the
+  main AXES control center currently serves stale, insecure legacy content,
+  not the `axiom-web` portal. Completing this requires an operator with both
+  Railway dashboard access and SiteGround/registrar DNS access; it cannot be
+  done from repository access alone.
 - The portal successfully forwards `POST /api/axiom` commands to the private
   engine over Railway networking.
 - Production OpenAI chat remains disabled until `OPENAI_API_KEY` is added as
