@@ -68,6 +68,18 @@ active investigation or recovery. Per that direction, no further inquiry
 factually, as a founder-reported claim only, consistent with the rest of
 this document.
 
+## Further corroborating record (2026-09-12, same day)
+
+The founder shared a photo of a Glendale Police Department contact card
+(Patrol bureau), explicitly "just for record" — corroborating the
+previously-reported police contact. Per this directory's own entry rules,
+the officer's name and personal phone number are not transcribed here. The
+founder separately reported that an LAPD supervisor stated LAPD does not
+have a dedicated technician and refers technical-support and cybersecurity
+matters to "the phone company." Both points are recorded as founder-reported
+statements only; no identity, department-capability, or case-outcome
+conclusion is drawn from either.
+
 ## Related records
 
 - `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md`
