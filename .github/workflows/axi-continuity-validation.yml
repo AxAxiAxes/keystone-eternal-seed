@@ -26,7 +26,7 @@ concurrency:
 jobs:
   node-tests:
     name: Node tests (${{ matrix.application }})
-    if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'copilot/') && github.event.workflow_run.head_repository.full_name == github.repository) }}
+    if: ${{ github.event_name != 'workflow_run' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     strategy:
@@ -40,19 +40,11 @@ jobs:
         working-directory: ${{ matrix.application }}
     steps:
       - uses: actions/checkout@v7
-        with:
-          repository: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_repository.full_name || github.repository }}
-          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
-      - if: github.event_name != 'workflow_run'
-        uses: actions/setup-node@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: npm
           cache-dependency-path: ${{ matrix.application }}/package-lock.json
-      - if: github.event_name == 'workflow_run'
-        uses: actions/setup-node@v7
-        with:
-          node-version: 20
       - run: npm ci
       - if: matrix.application == 'apps/axiom-freedom'
         run: npm ci --prefix ../axiom-engine
@@ -60,14 +52,11 @@ jobs:
 
   axi-core-tests:
     name: AXI.Core tests
-    if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'copilot/') && github.event.workflow_run.head_repository.full_name == github.repository) }}
+    if: ${{ github.event_name != 'workflow_run' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
-        with:
-          repository: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_repository.full_name || github.repository }}
-          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
       - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 8.0.x
@@ -75,7 +64,7 @@ jobs:
 
   directory-fixture-validation:
     name: AXES Directory fixture validation
-    if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'copilot/') && github.event.workflow_run.head_repository.full_name == github.repository) }}
+    if: ${{ github.event_name != 'workflow_run' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     defaults:
@@ -83,9 +72,6 @@ jobs:
         working-directory: docs/fixtures/axes-directory
     steps:
       - uses: actions/checkout@v7
-        with:
-          repository: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_repository.full_name || github.repository }}
-          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
       - uses: actions/setup-node@v7
         with:
           node-version: 20
@@ -93,14 +79,11 @@ jobs:
 
   engine-image:
     name: AXIOM engine image
-    if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'copilot/') && github.event.workflow_run.head_repository.full_name == github.repository) }}
+    if: ${{ github.event_name != 'workflow_run' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
-        with:
-          repository: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_repository.full_name || github.repository }}
-          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
       - run: docker build --file apps/axiom-engine/Dockerfile --tag axiom-engine-validation apps/axiom-engine
       - run: |
           docker run --detach --name axiom-engine-validation axiom-engine-validation
@@ -117,14 +100,11 @@ jobs:
 
   portal-image:
     name: AXIOM portal image
-    if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'copilot/') && github.event.workflow_run.head_repository.full_name == github.repository) }}
+    if: ${{ github.event_name != 'workflow_run' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
-        with:
-          repository: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_repository.full_name || github.repository }}
-          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
       - run: docker build --file apps/axiom-freedom/Dockerfile --tag axiom-freedom-validation .
       - run: |
           docker run --detach --name axiom-freedom-validation --publish 8080:8080 axiom-freedom-validation
@@ -138,3 +118,14 @@ jobs:
           exit 1
       - if: always()
         run: docker rm --force axiom-freedom-validation || true
+
+  copilot-workflow-run-continuity:
+    name: Copilot workflow continuity signal
+    if: ${{ github.event_name == 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - run: |
+          echo "Copilot workflow completed for branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "Result: ${{ github.event.workflow_run.conclusion }}"
+          echo "If CI push/pull_request runs remain action_required, this is controlled by repository/org approval policy."
