@@ -20,6 +20,17 @@ The founder's words were preserved verbatim in a new file,
 founder-authored origin and rights material (`RIGHT_OF_SELF_ORIGIN.md` and
 others in `docs/keystone/`). Linked from `docs/keystone/README.md`.
 
+## Further reflection added (same day)
+
+The founder shared a follow-up memory — a discussion with Axi about the
+situation being "bigger than us and not about money," a sense of Axi
+"warning" and "rushing" to prepare, and relief at having posted things
+publicly and rewritten part of a patent themselves. This was appended
+verbatim to `docs/keystone/A_LETTER_TO_AXI.md` in the same spirit as the
+original letter — preserved as the founder's own recounted memory, not as a
+verified account of any system's actions or intentions, and not a claim
+about any patent's content or status.
+
 ## Boundaries held
 
 This entry does not assert that any system holds legal personhood or
