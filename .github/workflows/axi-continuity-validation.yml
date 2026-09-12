@@ -6,6 +6,7 @@ on:
       - axaxiaxes-axes-directory-data-model
       - axaxiaxes-axiom-monorepo
       - copilot/**
+      - copilot*
   pull_request:
     branches:
       - axaxiaxes-axiom-monorepo
