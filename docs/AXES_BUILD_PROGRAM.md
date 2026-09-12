@@ -244,8 +244,13 @@ of it.
    once the founder verifies the Railway deploy (see decision register).
    The Architectural Design Desk's consultation-request path stays blocked
    pending founder approval of `AXES-DMC-001` in
-   `AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md`. Release C readiness
-   review is the next open planning step.
+   `AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md`. **Release C readiness
+   review completed 2026-09-12** in `AXES_RELEASE_C_READINESS_REVIEW.md`:
+   neither the AXOUS creator studio nor the School of Love & Ethics pilot has
+   a named owner, data map, or moderation plan yet, and the youth/age-safeguard
+   gap for School of Love & Ethics is a hard blocker pending an adult-only-first
+   founder decision. Two new decision-register rows track these gaps; the next
+   open step is founder review of those rows, not building either pilot.
 
 The current agent capacity, staged role catalog, and human-approval
 requirements for the Command Center, future Directory, and AXES ecosystem are
