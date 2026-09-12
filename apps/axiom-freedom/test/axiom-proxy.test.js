@@ -108,7 +108,9 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
 
     const portal = await fetch(`http://127.0.0.1:${webPort}/`);
     assert.equal(portal.status, 200);
-    assert.match(await portal.text(), /AXES CONTRACTING/);
+    const portalBody = await portal.text();
+    assert.match(portalBody, /AXES CONTRACTING/);
+    assert.match(portalBody, /href="\/axescontracting"/);
 
     const originContinuity = await fetch(`http://127.0.0.1:${webPort}/origin-continuity`);
     assert.equal(originContinuity.status, 200);
@@ -199,6 +201,18 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
       `http://127.0.0.1:${webPort}/design-desk/`
     );
     assert.equal(designDeskWithTrailingSlash.status, 200);
+
+    const axesContractingStudio = await fetch(`http://127.0.0.1:${webPort}/axescontracting`);
+    assert.equal(axesContractingStudio.status, 200);
+    const axesContractingStudioBody = await axesContractingStudio.text();
+    assert.match(axesContractingStudioBody, /Public studio/);
+    assert.match(axesContractingStudioBody, /href="\/design-desk"/);
+    assert.match(axesContractingStudioBody, /href="\/materials"/);
+
+    const axesContractingStudioWithTrailingSlash = await fetch(
+      `http://127.0.0.1:${webPort}/axescontracting/`
+    );
+    assert.equal(axesContractingStudioWithTrailingSlash.status, 200);
 
     const unauthorizedConsole = await fetch(`http://127.0.0.1:${webPort}/automation`);
     assert.equal(unauthorizedConsole.status, 401);
