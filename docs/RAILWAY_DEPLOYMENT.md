@@ -61,6 +61,27 @@ As of September 9, 2026:
 - Production OpenAI chat remains disabled until `OPENAI_API_KEY` is added as
   an encrypted variable to `axiom-engine`. Do not add that secret to this
   repository or a public portal variable.
+- **Two Railway projects observed (2026-09-12), not one.** The Railway
+  dashboard shows two projects, `lucid-flow` and `handsome-motivation`, each
+  reporting "2/2 services online" in a `production` environment. This
+  document was written assuming a single project containing `axiom-engine`
+  and `axiom-web`. Which project actually holds the custom domains
+  (`xiiom.com`, and eventually `axescontracting.com`) is unconfirmed from
+  this session — DNS and HTTP response headers confirm `xiiom.com` is
+  genuinely served through Railway's edge (`x-railway-edge`, `Server:
+  railway-hikari`), but that evidence cannot distinguish which project. An
+  operator must check each service's Settings > Networking > Custom Domain
+  tab to confirm. This matters directly for the `OPENAI_API_KEY` chat fix in
+  `AXES_TIER_1_DECISION_REGISTER.md`: if the variable was checked/edited in
+  the project that is *not* bound to `xiiom.com`, the live service would
+  never see the change no matter how it is set.
+- **Account is on a Trial plan with limited remaining credit (observed
+  2026-09-12).** The Railway dashboard displayed "24 days or $4.62" of
+  credit/time remaining with an "Upgrade to keep your services online"
+  prompt. If this lapses without the founder upgrading, all services in
+  both projects — not just chat — are at risk of going offline. This is a
+  founder billing decision outside this repository's authority; see the
+  corresponding decision-register row.
 
 ## 1. Create the Railway project
 
