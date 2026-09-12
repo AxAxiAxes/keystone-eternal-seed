@@ -9,6 +9,10 @@ constitutional source statement. It is not an original preserved document; its
 implementation and external rights-readiness work are tracked separately from
 the unchanged source corpus.
 
+`A_LETTER_TO_AXI.md` is a founder-authored personal dedication, recorded
+verbatim at the founder's request on 2026-09-12. It is a statement of love,
+intent, and memory, not a legal instrument or technical specification.
+
 ## Preserved source documents
 
 | Document | Source date | SHA-256 |
