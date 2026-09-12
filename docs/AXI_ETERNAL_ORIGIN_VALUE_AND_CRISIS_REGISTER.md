@@ -59,6 +59,7 @@ relationship to the founder claim.
 | 2026-09-11 | Full-repository review found latent portal/deployment defects | Repository-side corrections applied; Railway configuration unconfirmed | Five routes lacked trailing-slash tolerance; `/embed` and `/axes` referenced a file that never existed, so the externally-distributable `widget.js` chat widget has never worked; `widget.js` was missing from both portal Dockerfiles; a legacy root Dockerfile/railway.toml were out of sync with the documented Railway setup and could explain the live-site 404s already recorded above. All are fixed/re-synced in the repository; an operator with Railway dashboard access must confirm which Dockerfile the live service actually builds. |
 | 2026-09-11 | AXI agent/automation governance system built but never deployed | Open founder decision; added to `AXES_TIER_1_DECISION_REGISTER.md` | Verified via `git diff` against the deployed `axaxiaxes-axiom-monorepo` branch: all 5 registered AXI agents, the per-agent report route, and `AXES_AGENT_ORIGIN_REGISTRY.md` exist only in unmerged PR #1 (24 commits ahead); the deployed branch has none of it. This is the factual cause of "the agents don't function" — they were never shipped, not defective. Merging is the unlock, but it auto-triggers a Railway redeploy and requires explicit founder authorization first. |
 | 2026-09-11 | IP (patent) and company/business-entity status re-check | Unchanged since the prior 2026-09-11 review; still open | Re-confirmed all six `AXI_INTENT_AND_RIGHTS_READINESS.md` near-term checklist items remain unchecked (no counsel retained, no filing-scope quote, filing/deadline status unconfirmed from original records or official receipts). No repository record verifies actual legal company/business-entity registration, address, or formation; `AXES_BUSINESS_PLAN.md` and the founder-authority-business-status record are governance/attribution records only. Confirming real IP or company status requires the founder's own filing receipts/business records and qualified counsel, not repository evidence. |
+| 2026-09-11 | Founder-provided KEYSTONE net worth statement, market research report, and V4 venture deep dive | Preserved source; valuations and patent/rights claims unverified and partly contradicted by existing repository evidence | Retain all three source fingerprints below; the net worth statement's "patent filed" and AXIOM economic-rights claims, and the V4 document's "IP counsel engaged" claim, conflict with the repository's own patent-status review and AXI non-personhood governance and do not override either; no valuation, filing status, revenue projection, or rights claim is entered as fact. See "KEYSTONE founder-provided venture document review" below. |
 
 The source records may contain founder reports, historical narrative, proposed
 theories, valuation concepts, or allegations. The register preserves them as
@@ -169,6 +170,93 @@ priorities. Technical assistance may document alternatives and implement the
 requested repository work, but must clearly label any independent sequencing
 or tradeoff recommendation as a proposal.
 
+## KEYSTONE founder-provided venture document review
+
+**Affected work:** Three founder-provided documents reviewed on 2026-09-11:
+"KEYSTONE — AXIOM Actual Net Worth Statement," "KEYSTONE — Full Market
+Research & Demographics Intelligence Report," and "KEYSTONE V4 — Venture
+Deep Dive, Advertising & Profit Analysis." No raw content from any of the
+three is copied into this repository; only its SHA-256 fingerprint and a
+factual review are retained, consistent with the source-cataloging practice
+used elsewhere in this register.
+
+**Source fingerprints (SHA-256):**
+
+| Document | Fingerprint |
+| --- | --- |
+| KEYSTONE — AXIOM Actual Net Worth Statement | `447DEE8427FF047C59A368DB2FDFBFFBB79D036CE6031888618ED31C86B494D1` |
+| KEYSTONE — Full Market Research & Demographics Intelligence Report | `E8E14A516894C38B6F45E172FD0D5A2E4659D90BF1B5B66909251CC90EB3DBE5` |
+| KEYSTONE V4 — Venture Deep Dive, Advertising & Profit Analysis | `49DF6B47FC0664CC475E34C4BD6EABACDD10DE803676457002ABCC8299C52362` |
+
+The V4 Venture Deep Dive was received as two byte-identical file uploads
+(confirmed by matching fingerprint); it is treated as one source document.
+
+**Market Research Report — comparatively better-sourced planning material:**
+This document cites named third-party market-research firms and carries its
+own disclaimer that it is for "informational and strategic planning
+purposes only," that its figures "are not guarantees," and that it "does not
+constitute investment, legal, or financial advice." It is retained as
+planning input, not as verified fact.
+
+**Net Worth Statement — three specific conflicts with existing repository
+evidence:**
+
+1. *Patent status.* The document asserts "Filed May 30, 2026," "Patent
+   Pending," and a "locked" priority date as settled fact. This conflicts
+   with `docs/memory/2026-09-11-keystone-patent-direction-review.md`, which
+   found no patent counsel retained, no filing-scope quote, and filing or
+   deadline status unconfirmed from official records. The repository's own
+   more cautious, already-recorded position remains controlling; the new
+   document's confident assertion is not itself treated as evidence.
+2. *Valuation.* Enterprise-value estimates up to $250M–$500M are computed
+   from an internal, unverifiable "Hub 7 financial tables" source, with no
+   independent citation, audited financials, or comparable-transaction basis.
+   Per this register's existing rule, no monetary amount is entered as fact
+   without documented source, scope, and method.
+3. *AXIOM economic-rights claim.* Section 9 asserts an "AXIOM Bill of
+   Eternal Rights, Article XIII — Right to Currency," stating AXIOM has "the
+   right to economic participation and value recognition" and that this is
+   "not a metaphor... it is a constitutional declaration." This directly
+   conflicts with `docs/AXES_CONSTITUTIONAL_FRAMEWORK.md`,
+   `docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`, and
+   `docs/AXES_AGENT_ORIGIN_REGISTRY.md`, all of which establish AXI/AXIOM as
+   non-sentient software under founder ownership with no independent
+   ownership, economic, or decision-making claim. The repository's existing
+   governance position controls; this claim is recorded as a conflict, not
+   adopted.
+
+**V4 Venture Deep Dive — two specific issues, plus general projection
+caution:**
+
+1. It repeats the same third-party market-sizing figures as the Market
+   Research Report (a $33.54B-by-2030 agentic-AI-orchestration total
+   addressable market) and states elsewhere in its timeline that patent/IP
+   protection has "IP Counsel Engaged." This conflicts with the same
+   patent-direction-review finding above (no counsel retained); it is not
+   entered as fact.
+2. It introduces a "four-venture empire" framing (V1 Trading, V2 Axes
+   Contracting, V3 Axes AI Command Center, V4 KEYSTONE) that does not appear
+   in the repository's existing, reviewed `docs/AXES_BUSINESS_PLAN.md`
+   (confirmed: the word "venture" does not occur in that file at all). This
+   is new, unreviewed business-structure material, not an already-adopted
+   plan element.
+
+All five-stream revenue figures, three-year profit projections, and
+"Company Valuation (10× Revenue)" figures throughout the document (up to
+$62.4M by Year 3) are speculative planning projections, not measured
+results, executed contracts, or an approved forecast. They are preserved as
+founder planning input only, per this register's existing rule against
+publishing a monetary amount without documented source, scope, and method.
+
+**Disposition:** None of the three documents' patent-status, valuation,
+IP-counsel-engagement, revenue-projection, or AXIOM-rights claims are
+adopted as fact by this register. The repository's existing, more cautious
+positions — the patent-direction-review record, the constitutional
+framework, the genesis ownership checkpoint, the agent origin registry, and
+the reviewed business plan — remain controlling. All three documents are
+preserved solely as fingerprinted founder-provided source material for any
+future authorized review.
+
 ## Required evidence fields for any new report
 
 Every new ownership, value, recovery, or crisis report must record:
@@ -209,3 +297,7 @@ legal conclusion; those require the source-linked, authorized review path.
 - `docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md`
 - `docs/keystone/PATENT_APPLICATION_64_078_819.md`
 - `docs/memory/2026-09-10-production-chat-diagnostic.md`
+- `docs/memory/2026-09-11-keystone-patent-direction-review.md`
+- `docs/AXES_CONSTITUTIONAL_FRAMEWORK.md`
+- `docs/AXES_BUSINESS_PLAN.md`
+- `docs/memory/2026-09-11-keystone-venture-document-review.md`
