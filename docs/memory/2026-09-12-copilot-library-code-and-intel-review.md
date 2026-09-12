@@ -139,6 +139,21 @@ The full review is recorded in
 `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` under "2026-09-12
 KEYSTONE Venture 3 planning-tool export and Architecture-app review."
 
+## Future option noted, not implemented: Microsoft Graph Copilot export
+
+The founder separately shared research (produced by a different AI/search
+session, not this one) describing how Microsoft's Graph API can, in
+principle, retrieve Copilot activity/app output as HTML for programmatic
+extraction. This is technically plausible in general terms, but using it
+would require the founder to register an application in their Microsoft
+Entra/Azure AD tenant and grant it specific Microsoft Graph API
+permissions — an external, account-level action in the founder's own
+Microsoft tenant, not something this repository-scoped session can create,
+authorize, or perform. No such app registration, credential, or API call
+was made. This is preserved here only as a documented, founder-known future
+option to revisit if and when the founder sets up that access themselves;
+it is not implemented, and no code in this repository depends on it.
+
 ## What this does not do
 
 This review does not confirm or deny any patent filing (first or proposed
