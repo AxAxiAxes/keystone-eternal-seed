@@ -8,7 +8,7 @@ Use this runbook to keep Copilot branch delivery fluent when GitHub Actions may 
   - `axaxiaxes-axes-directory-data-model`
   - `axaxiaxes-axiom-monorepo`
   - `copilot/*` (single-segment branch names)
-  - `copilot/**`
+  - `copilot/**` (nested Copilot branch names)
 - `AXI continuity validation` runs on pull requests targeting `axaxiaxes-axiom-monorepo`.
 - `AXI continuity validation` also receives a safe `workflow_run` continuity signal after `Running Copilot cloud agent` completes successfully on same-repository `copilot/` branches.
 - Code-executing jobs are skipped for `workflow_run` events by design (security boundary).
@@ -39,6 +39,7 @@ Source: `.github/workflows/axi-continuity-validation.yml`.
 
 Use these checkpoints to keep operations measurable and predictable.
 These times are initial operating targets (planning estimates), not strict SLA penalties.
+Source basis: latest observed repository run behavior plus conservative operator planning assumptions, to be refined by weekly measurements.
 
 | Checkpoint | Target time | Success gate |
 | --- | --- | --- |
