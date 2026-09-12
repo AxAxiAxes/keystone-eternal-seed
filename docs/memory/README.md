@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-12 Cryptographic origin anchor verification and four-lens validation framework](2026-09-12-cryptographic-anchor-verification.md)
 - [2026-09-12 Repository synchronicity review: parallel Azure deployment work found in standalone `axiom-freedom`](2026-09-12-repository-synchronicity-review.md)
 - [2026-09-12 AXES Directory schema, fixture, and validator added](2026-09-12-axes-directory-schema-and-fixture.md)
 - [2026-09-12 Release C readiness review](2026-09-12-release-c-readiness-review.md)
