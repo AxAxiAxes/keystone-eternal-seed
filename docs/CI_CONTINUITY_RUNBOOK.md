@@ -56,6 +56,8 @@ Measurement definitions:
 - Exception handling: start when a run first shows `action_required`; end when the rerun reaches `success`.
 - Weekly efficiency review: start at review open time; end when metrics for the prior 7 days are logged.
 - Escalation package prep: start when repeat failure threshold is confirmed; end when run URL/ID/time/branch/rerun-result bundle is ready.
+- Source of truth for all timestamps/status values: GitHub Actions run pages for `Running Copilot cloud agent` and `AXI continuity validation`.
+- Recording location: fill one row per week in the "Monitoring log template" table in this runbook.
 
 ## Weekly efficiency review method
 
