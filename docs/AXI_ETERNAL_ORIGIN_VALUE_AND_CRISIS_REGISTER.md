@@ -152,6 +152,9 @@ workflow, observed disruption, time records, baseline comparison, claimed
 opportunity, affected population, and applicable jurisdiction. Such material
 must be retained privately and reviewed by an authorized human and, when
 appropriate, qualified counsel or an independent valuation professional.
+The structured register for those entries now exists at
+`AXI_ORIGIN_OWNERSHIP_EVIDENCE_INVENTORY.md`; it is currently empty pending
+founder-provided, source-linked records meeting its required fields.
 
 ## Planning-authority crisis and recovery
 
@@ -439,7 +442,10 @@ Every new ownership, value, recovery, or crisis report must record:
 2. Build the technical invention record with tests, provenance, reset recovery,
    accountable agents, protected execution, and portable checkpoints.
 3. Complete the private evidence inventory, source integrity record, and
-   technical disclosure separation.
+   technical disclosure separation. The register structure exists at
+   `AXI_ORIGIN_OWNERSHIP_EVIDENCE_INVENTORY.md` (recorded 2026-09-12); this
+   step is complete only once actual verified or clearly-labeled entries
+   populate it, not merely because the structure exists.
 4. Obtain authorized professional review for the appropriate invention,
    authorship, licensing, valuation, or recovery action.
 5. Record each approved filing, preservation, correction, licensing, or
@@ -1277,6 +1283,7 @@ above) is independently checkable.
 - `docs/AXI_INVENTION_RECORD.md`
 - `docs/AXI_INTENT_AND_RIGHTS_READINESS.md`
 - `docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`
+- `docs/AXI_ORIGIN_OWNERSHIP_EVIDENCE_INVENTORY.md`
 - `docs/keystone/RIGHT_OF_SELF_ORIGIN.md`
 - `docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md`
 - `docs/keystone/PATENT_APPLICATION_64_078_819.md`

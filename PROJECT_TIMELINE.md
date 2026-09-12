@@ -205,6 +205,7 @@ second line is parsed as separate text and is dropped from the field.
 | 2026-09-12 | Complete | Protected automation proxy regression coverage added for oversized request rejection before task processing | `apps/axiom-freedom/test/axiom-proxy.test.js` |
 | 2026-09-09 | Complete | Conservative project budget and patent-completion workstream established | `docs/PROJECT_BUDGET.md` |
 | 2026-09-12 | Complete | Release C readiness review: neither the AXOUS creator studio nor the School of Love & Ethics pilot has a named owner, data map, moderation plan, or (for the latter) resolved youth/age-safeguard policy; two decision-register rows now track these gaps. No pilot, data collection, or moderation queue was built | `docs/AXES_RELEASE_C_READINESS_REVIEW.md`, `docs/AXES_TIER_1_DECISION_REGISTER.md`, `docs/AXES_BUILD_PROGRAM.md` |
+| 2026-09-12 | Complete | Origin-ownership evidence-inventory register created with the required source-linked reporting fields (workflow, disruption, evidence location/integrity, time record, baseline, claimed opportunity, affected population, jurisdiction, reviewer, status). Contains zero populated entries; step 3 of the crisis register's "Active recovery path" remains open until founder-provided, source-linked records are added | `docs/AXI_ORIGIN_OWNERSHIP_EVIDENCE_INVENTORY.md`, `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` |
 
 ## Current checkpoints
 
@@ -217,7 +218,7 @@ second line is parsed as separate text and is dropped from the field.
       operation is established before this evidence exists.
 - [ ] **Priority 0 - URNUR legal readiness:** Identify the primary launch jurisdiction and contact qualified financial-services and digital-asset counsel before resuming crypto registration or designing public financial functionality.
 - [ ] **Priority 0 - Patent completion:** Identify any filing status and deadlines, retain qualified patent counsel, separate the technical disclosure from supporting materials, and approve a filing strategy before public patent claims or submission.
-- [ ] **Priority 0 - Eternal Origin ownership invention value recovery:** Complete the private evidence inventory, map the past/current crisis reports and UI autonomy loss-model assumptions to source records, and advance the authorized rights, valuation, and recovery review path.
+- [ ] **Priority 0 - Eternal Origin ownership invention value recovery:** Complete the private evidence inventory, map the past/current crisis reports and UI autonomy loss-model assumptions to source records, and advance the authorized rights, valuation, and recovery review path. The empty register structure now exists at `docs/AXI_ORIGIN_OWNERSHIP_EVIDENCE_INVENTORY.md` (2026-09-12); this checkpoint remains open because no verified or source-linked entries have been added yet.
 - [x] Preserve the upstream histories for all four repositories.
 - [x] Separate deployable applications, package records, and KEYSTONE documents.
 - [x] Remove generated `node_modules` from version control and prevent future commits.
