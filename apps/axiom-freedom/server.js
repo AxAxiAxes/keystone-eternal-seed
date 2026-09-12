@@ -565,8 +565,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/monitoring/status' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const result = await invokeEngine('/monitoring/status');
                       res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await invokeEngine('/monitoring/status')));
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXIOM monitoring status request failed:', error.message);
                       res.writeHead(502, { 'Content-Type': 'application/json' });
@@ -577,8 +578,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/monitoring/history' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const result = await invokeEngine('/monitoring/history' + parsed.search);
                       res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await invokeEngine('/monitoring/history' + parsed.search)));
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXIOM monitoring history request failed:', error.message);
                       res.writeHead(502, { 'Content-Type': 'application/json' });
@@ -602,8 +604,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/continuity-record' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const result = await invokeEngine('/system/continuity-record');
                       res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await invokeEngine('/system/continuity-record')));
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXIOM continuity record status request failed:', error.message);
                       res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -614,10 +617,11 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/continuity-record/events' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
-                      res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await invokeEngine(
+                      const result = await invokeEngine(
                         '/system/continuity-record/events' + parsed.search
-                      )));
+                      );
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXIOM continuity record history request failed:', error.message);
                       res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -628,8 +632,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/source-catalog' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const result = await invokeEngine('/system/source-catalog');
                       res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await invokeEngine('/system/source-catalog')));
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXIOM source catalog status request failed:', error.message);
                       res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -640,10 +645,11 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/source-catalog/entries' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
-                      res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await invokeEngine(
+                      const result = await invokeEngine(
                         '/system/source-catalog/entries' + parsed.search
-                      )));
+                      );
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXIOM source catalog entry request failed:', error.message);
                       res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -654,8 +660,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/business-metrics' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const result = await invokeEngine('/system/business-metrics');
                       res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await invokeEngine('/system/business-metrics')));
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXIOM business metrics status request failed:', error.message);
                       res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -666,10 +673,11 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/business-metrics/entries' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
-                      res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await invokeEngine(
+                      const result = await invokeEngine(
                         '/system/business-metrics/entries' + parsed.search
-                      )));
+                      );
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXIOM business metrics entry request failed:', error.message);
                       res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -680,8 +688,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/business-metrics/summary' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const result = await invokeEngine('/system/business-metrics/summary');
                       res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await invokeEngine('/system/business-metrics/summary')));
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXIOM business metrics summary request failed:', error.message);
                       res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -692,8 +701,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/service-registry' && req.method === 'GET') {
                   if (!requireAdmin(req, res)) return;
                   try {
+                          const result = await invokeEngine('/system/service-registry');
                           res.writeHead(200, { 'Content-Type': 'application/json' });
-                          res.end(JSON.stringify(await invokeEngine('/system/service-registry')));
+                          res.end(JSON.stringify(result));
                   } catch (error) {
                           console.error('AXIOM service registry status request failed:', error.message);
                           res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -704,10 +714,11 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/service-registry/entries' && req.method === 'GET') {
                   if (!requireAdmin(req, res)) return;
                   try {
-                          res.writeHead(200, { 'Content-Type': 'application/json' });
-                          res.end(JSON.stringify(await invokeEngine(
+                          const result = await invokeEngine(
                             '/system/service-registry/entries' + parsed.search
-                          )));
+                          );
+                          res.writeHead(200, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify(result));
                   } catch (error) {
                           console.error('AXIOM service registry history request failed:', error.message);
                           res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -718,8 +729,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/service-registry/projection' && req.method === 'GET') {
                   if (!requireAdmin(req, res)) return;
                   try {
+                          const result = await invokeEngine('/system/service-registry/projection');
                           res.writeHead(200, { 'Content-Type': 'application/json' });
-                          res.end(JSON.stringify(await invokeEngine('/system/service-registry/projection')));
+                          res.end(JSON.stringify(result));
                   } catch (error) {
                           console.error('AXIOM service registry projection request failed:', error.message);
                           res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -730,8 +742,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/profiles' && req.method === 'GET') {
           if (!requireAdmin(req, res)) return;
           try {
+                  const result = await invokeEngine('/automation/profiles');
                   res.writeHead(200, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify(await invokeEngine('/automation/profiles')));
+                  res.end(JSON.stringify(result));
           } catch (error) {
                   console.error('AXIOM automation profile status request failed:', error.message);
                   res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -742,8 +755,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/storage' && req.method === 'GET') {
           if (!requireAdmin(req, res)) return;
           try {
+                  const result = await invokeEngine('/system/storage');
                   res.writeHead(200, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify(await invokeEngine('/system/storage')));
+                  res.end(JSON.stringify(result));
           } catch (error) {
                   console.error('AXIOM storage status request failed:', error.message);
                   res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -767,10 +781,11 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/profiles/preview' && req.method === 'POST') {
           if (!requireAdmin(req, res)) return;
           try {
-                  res.writeHead(200, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify(await invokeEngine(
+                  const result = await invokeEngine(
                     '/automation/profiles/preview', 'POST', await parseBody(req)
-                  )));
+                  );
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
           } catch (error) {
                   console.error('AXIOM automation profile preview failed:', error.message);
                   res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -781,8 +796,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/profiles/history' && req.method === 'GET') {
           if (!requireAdmin(req, res)) return;
           try {
+                  const result = await invokeEngine('/automation/profiles/history' + parsed.search);
                   res.writeHead(200, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify(await invokeEngine('/automation/profiles/history' + parsed.search)));
+                  res.end(JSON.stringify(result));
           } catch (error) {
                   console.error('AXIOM automation profile history request failed:', error.message);
                   res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -793,8 +809,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/profiles/health' && req.method === 'GET') {
           if (!requireAdmin(req, res)) return;
           try {
+                  const result = await invokeEngine('/automation/profiles/health');
                   res.writeHead(200, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify(await invokeEngine('/automation/profiles/health')));
+                  res.end(JSON.stringify(result));
           } catch (error) {
                   console.error('AXIOM automation profile health request failed:', error.message);
                   res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
@@ -822,8 +839,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/gravity-center' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const result = await invokeEngine('/system/gravity-center');
                       res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await invokeEngine('/system/gravity-center')));
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXIOM gravity center request failed:', error.message);
                       res.writeHead(502, { 'Content-Type': 'application/json' });
@@ -834,8 +852,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/bead-passports' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const result = await invokeEngine('/system/bead-passports' + parsed.search);
                       res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await invokeEngine('/system/bead-passports' + parsed.search)));
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXIOM bead passport request failed:', error.message);
                       res.writeHead(502, { 'Content-Type': 'application/json' });
@@ -863,8 +882,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/support/status' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const result = await getSupportStatus();
                       res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await getSupportStatus()));
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXES support status request failed:', error.message);
                       res.writeHead(500, { 'Content-Type': 'application/json' });
