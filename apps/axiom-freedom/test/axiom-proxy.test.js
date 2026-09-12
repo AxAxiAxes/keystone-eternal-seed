@@ -861,3 +861,103 @@ test("reports private-engine non-success responses only to authenticated support
     delete process.env.ADMIN_PASSWORD;
   }
 });
+
+test("survives engine failures on every automation status route without crashing the process", async () => {
+  // Regression test for the writeHead-before-await bug: these routes used to call
+  // res.writeHead(200, ...) and only then `await invokeEngine(...)` inside
+  // JSON.stringify(). When the engine call rejected, the catch block's second
+  // writeHead() threw ERR_HTTP_HEADERS_SENT as an unhandled rejection, which
+  // crashed the whole process (this test runs the server in-process, so an
+  // unfixed regression here would crash the entire test run, not just fail an
+  // assertion).
+  // 404 matches the real production crash log: the engine returned HTTP 404
+  // for routes its stale deployment did not yet have.
+  const upstream = http.createServer((req, res) => {
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "simulated stale-engine 404" }));
+  });
+  const upstreamServer = await startServer(upstream);
+  const { port: upstreamPort } = upstreamServer.address();
+
+  let webServer;
+  try {
+    process.env.AXIOM_ENGINE_URL = `http://127.0.0.1:${upstreamPort}`;
+    process.env.ADMIN_PASSWORD = "test-admin-password";
+    delete require.cache[require.resolve("../server")];
+    const web = require("../server");
+    webServer = await startServer(web);
+    const { port: webPort } = webServer.address();
+    const authorization = adminAuthorization();
+
+    // Expected status per route: most relay `error.statusCode || 502`, so a
+    // 404 upstream is relayed as 404; monitoring/status, monitoring/history,
+    // gravity-center, and bead-passports hardcode 502 instead of relaying;
+    // support/status absorbs the failure internally and stays 200.
+    const failingRoutes = [
+      ["/api/automation/monitoring/status", 502],
+      ["/api/automation/monitoring/history", 502],
+      ["/api/automation/continuity-record", 404],
+      ["/api/automation/continuity-record/events", 404],
+      ["/api/automation/source-catalog", 404],
+      ["/api/automation/source-catalog/entries", 404],
+      ["/api/automation/business-metrics", 404],
+      ["/api/automation/business-metrics/entries", 404],
+      ["/api/automation/business-metrics/summary", 404],
+      ["/api/automation/service-registry", 404],
+      ["/api/automation/service-registry/entries", 404],
+      ["/api/automation/service-registry/projection", 404],
+      ["/api/automation/profiles", 404],
+      ["/api/automation/storage", 404],
+      ["/api/automation/profiles/history", 404],
+      ["/api/automation/profiles/health", 404],
+      ["/api/automation/gravity-center", 502],
+      ["/api/automation/bead-passports", 502],
+      ["/api/support/status", 200]
+    ];
+
+    for (const [route, expectedStatus] of failingRoutes) {
+      const response = await fetch(`http://127.0.0.1:${webPort}${route}`, {
+        headers: { Authorization: authorization }
+      });
+      assert.equal(
+        response.status,
+        expectedStatus,
+        `${route} should respond gracefully instead of crashing the server`
+      );
+      const body = await response.json();
+      assert.equal(
+        typeof (route === "/api/support/status" ? body.engine : body.error) !== "undefined",
+        true,
+        `${route} should return a JSON body, not a dropped connection`
+      );
+    }
+
+    const preview = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/profiles/preview`,
+      {
+        method: "POST",
+        headers: { Authorization: authorization, "Content-Type": "application/json" },
+        body: JSON.stringify({ profile: "operations-observer" })
+      }
+    );
+    assert.equal(preview.status, 404);
+    assert.equal(typeof (await preview.json()).error, "string");
+
+    // The process must still be alive and serving requests after every
+    // failure above -- proving the crash bug did not take down the server.
+    const stillHealthy = await request(webPort, {}, "/health");
+    assert.equal(stillHealthy.statusCode, 200);
+    assert.deepEqual(JSON.parse(stillHealthy.body), {
+      status: "ok",
+      service: "AXIOM",
+      version: "2.0.0"
+    });
+  } finally {
+    if (webServer) {
+      await stopServer(webServer);
+    }
+    await stopServer(upstreamServer);
+    delete process.env.AXIOM_ENGINE_URL;
+    delete process.env.ADMIN_PASSWORD;
+  }
+});

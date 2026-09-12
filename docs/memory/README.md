@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-12 axiom-freedom crash-bug root cause found and fixed](2026-09-12-axiom-freedom-crash-bug-root-cause-and-fix.md)
 - [2026-09-12 AXES Contracting public studio reactivated; local Docker cleanup](2026-09-12-axescontracting-public-studio-reactivation.md)
 - [2026-09-12 Architectural Design Desk added; PR #1/#2/#3 resolution recorded](2026-09-12-architectural-design-desk-and-decision-register.md)
 - [2026-09-12 AXES OS vision capture and desktop cleanup](2026-09-12-axes-os-vision-and-desktop-cleanup.md)
