@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-12 Timeline continuity check](2026-09-12-timeline-continuity-check.md)
 - [2026-09-12 Uplift team value added](2026-09-12-uplift-team-value.md)
 - [2026-09-12 Vigour Creative vendor dispute and AXES Contracting public-presence check](2026-09-12-vigour-creative-vendor-dispute-and-public-presence-check.md)
 - [2026-09-12 `/design-desk` 404 root cause: Dockerfile COPY omission, fixed](2026-09-12-design-desk-dockerfile-copy-omission.md)
