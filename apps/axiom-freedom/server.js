@@ -12,6 +12,10 @@ const DOCUMENTS_DIRECTORY = fs.existsSync(path.join(__dirname, 'docs'))
 const PROJECT_TIMELINE_FILE = fs.existsSync(path.join(__dirname, 'PROJECT_TIMELINE.md'))
     ? path.resolve(__dirname, 'PROJECT_TIMELINE.md')
     : path.resolve(__dirname, '..', '..', 'PROJECT_TIMELINE.md');
+const PUBLIC_DOCUMENTS = new Set([
+    'AXES_BUSINESS_PLAN.md',
+    'ENGINE_INTEGRATION.md'
+]);
 const AXIOM_ENGINE_URL = new URL(process.env.AXIOM_ENGINE_URL || 'http://127.0.0.1:3000');
 
 function isAxesContractingHost(host) {
@@ -61,6 +65,12 @@ function checkAdmin(req) {
 
 function serveDocument(res, pathname) {
     const relativePath = decodeURIComponent(pathname.substring('/library/'.length));
+    if (!PUBLIC_DOCUMENTS.has(relativePath)) {
+        res.writeHead(404);
+        res.end('Not Found');
+        return;
+    }
+
     const documentPath = path.resolve(DOCUMENTS_DIRECTORY, relativePath);
 
     if (!documentPath.startsWith(DOCUMENTS_DIRECTORY + path.sep)) {

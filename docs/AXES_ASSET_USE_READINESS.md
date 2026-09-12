@@ -22,7 +22,10 @@ an external prompt, or a public deliverable.
 
 The portal must expose only its explicit public routes. Its regression suite
 checks that a direct private-archive path returns `404` and that an attempted
-document-library traversal toward a private-archive path returns `403`.
+document-library traversal toward a private-archive path returns `404`.
+The document library has an explicit public-safe allowlist and must not serve
+creator records, source archives, patent materials, or internal operational
+documents.
 
 ## Current source-group register
 

@@ -140,10 +140,15 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.match(axesWwwPortal.body, /The AXES Control Center/);
 
     const library = await fetch(
-      `http://127.0.0.1:${webPort}/library/memory/README.md`
+      `http://127.0.0.1:${webPort}/library/AXES_BUSINESS_PLAN.md`
     );
     assert.equal(library.status, 200);
-    assert.match(await library.text(), /AXI project memory/);
+    assert.match(await library.text(), /AXES business plan/);
+
+    const privateSourceDocument = await fetch(
+      `http://127.0.0.1:${webPort}/library/keystone/PATENT_APPLICATION_64_078_819.md`
+    );
+    assert.equal(privateSourceDocument.status, 404);
 
     const privateArchive = await fetch(
       `http://127.0.0.1:${webPort}/private-archive/copilot-library/source.png`
@@ -153,7 +158,7 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     const libraryTraversal = await fetch(
       `http://127.0.0.1:${webPort}/library/%2e%2e%2fprivate-archive/source.png`
     );
-    assert.equal(libraryTraversal.status, 403);
+    assert.equal(libraryTraversal.status, 404);
 
     const materials = await fetch(`http://127.0.0.1:${webPort}/materials`);
     assert.equal(materials.status, 200);
