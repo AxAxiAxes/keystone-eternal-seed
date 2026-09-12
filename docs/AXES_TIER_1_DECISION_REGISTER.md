@@ -45,6 +45,8 @@ archive contents remain excluded from the repository.
 
 ## Related records
 
+- `AXES_BUILD_PROGRAM.md` (this register is the foundation-depth gauge its
+  "Foundation depth principle" section checks before each workstream starts)
 - `PROJECT_TIMELINE.md`
 - `FOUNDER_REVENUE_PRIORITY_OVERLAY.md`
 - `KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md`
