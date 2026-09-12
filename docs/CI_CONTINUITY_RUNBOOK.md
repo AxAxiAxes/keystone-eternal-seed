@@ -34,6 +34,42 @@ Source: `.github/workflows/axi-continuity-validation.yml`.
    - approve and re-run from the GitHub UI;
    - confirm the new attempt is `success`.
 
+## Checkpoint timing and efficiency targets
+
+Use these checkpoints to keep operations measurable and predictable.
+
+| Checkpoint | Target time | Success gate |
+| --- | --- | --- |
+| Baseline validation | 15-20 min | Latest attempts for both workflows are `success` |
+| Policy confirmation (one-time) | 10-15 min | No repeated approval prompts for trusted internal Copilot runs |
+| Three-run fluency check | 30-90 min total | Three consecutive Copilot updates pass both workflows |
+| Exception handling (per incident) | 3-8 min | `action_required` resolved to `success` in one retry cycle |
+| Weekly efficiency review | 10 min/week | Persistent `action_required` near 0; low intervention time |
+| Escalation package prep | 10-20 min | Complete evidence package ready for admin/support |
+
+## Weekly efficiency review method
+
+Review the last 7 days and record:
+
+1. Count of `action_required` runs.
+2. Count of reruns required to reach green.
+3. Average time from first blocked run to successful run.
+4. Total manual operator time spent on approvals/reruns.
+
+Target trend:
+
+- persistent `action_required` events near zero,
+- rerun-to-green within one retry,
+- operator time under 10 minutes per week.
+
+## Monitoring log template
+
+Use this table each week:
+
+| Week (UTC) | Copilot updates observed | `action_required` count | Avg recovery-to-green | Manual minutes | Escalated? |
+| --- | ---: | ---: | --- | ---: | --- |
+| YYYY-MM-DD | 0 | 0 | 0m | 0 | No |
+
 ## Fluent-state acceptance check
 
 Treat the workflow as fluent when all three conditions hold:
