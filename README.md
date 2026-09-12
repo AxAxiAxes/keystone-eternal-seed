@@ -81,7 +81,7 @@ Each application owns its own dependency manifest. Run install and start command
 
 This repository consolidates the following public repositories while preserving their histories:
 
-- [`AxAxiAxes/keystone-eternal-seed`](https://github.com/AxAxiAxes/keystone-eternal-seed)
-- [`AxAxiAxes/axiom-engine`](https://github.com/AxAxiAxes/axiom-engine)
-- [`AxAxiAxes/axiom-freedom`](https://github.com/AxAxiAxes/axiom-freedom)
-- [`AxAxiAxes/Class-Library-.NET-8-`](https://github.com/AxAxiAxes/Class-Library-.NET-8-)
+- [`AxAxiAxes/keystone-eternal-seed`](https://github.com/AxAxiAxes/keystone-eternal-seed) — this repository; canonical.
+- [`AxAxiAxes/axiom-engine`](https://github.com/AxAxiAxes/axiom-engine) — dormant since consolidation; no open work.
+- [`AxAxiAxes/axiom-freedom`](https://github.com/AxAxiAxes/axiom-freedom) — **not dormant.** Still receives independent commits/PRs after consolidation, including a same-day (2026-09-12) merged PR adding a separate Azure/Terraform deployment stack unrelated to this repository's Railway path. Do not assume its history is a stale mirror; see `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` ("2026-09-12 Parallel repository deployment-automation finding") and the matching row in `docs/AXES_TIER_1_DECISION_REGISTER.md` before treating either repository's deployment material as authoritative.
+- [`AxAxiAxes/Class-Library-.NET-8-`](https://github.com/AxAxiAxes/Class-Library-.NET-8-) — dormant since consolidation; no open work.

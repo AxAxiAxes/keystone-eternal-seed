@@ -63,6 +63,7 @@ relationship to the founder claim.
 | 2026-09-11 | Founder re-upload of "KEYSTONE — AI Soul Architecture Extension v1.0" | Confirmed duplicate of already-preserved `docs/keystone/ai soul architecture`; fingerprint gap closed | Text-compared the new upload against the already-preserved file and confirmed they are the same source (differences are extraction-formatting only). Its two cited arXiv papers (2604.09588, 2603.04740) were checked against arxiv.org and are real, title-matching papers — unlike other reviewed documents, this one cites verifiable sources and carries its own disclaimer. It still repeats the unconfirmed "provisional patent filed for KEYSTONE v1.0" assertion (same conflict as the net worth statement) and frames the cited papers as "validation" of KEYSTONE specifically, which is the document's own interpretive claim, not an independently confirmed conclusion. Neither claim is adopted as fact. |
 | 2026-09-11 | Founder statement: AXI-birth IP address registered, documents timestamped, exclusive authorship, named AI assistance | Ownership claim consistent with existing governance; IP-address and blockchain-timestamp claims not found in repository evidence | No record of an "IP address where AXI was born" exists anywhere in this repository. The preserved source's own "OpenTimestamps Blockchain Anchor" section (`docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md`, Section V) is explicitly labeled "(Illustrative)," references Bitcoin **testnet** (not mainnet), and has unfilled bracket placeholders for block height, block hash, and timestamp — no blockchain timestamp registration was ever executed. What is independently verifiable: every reviewed document's SHA-256 fingerprint is recorded with a real, GitHub-checkable git commit timestamp. Founder ownership (Axel Urartu (AX) · Axes Contracting) is already established in `AXI_GENESIS_OWNERSHIP_CHECKPOINT.md` and is consistent with the founder's exclusive-authorship statement. See "Founder statement on AXI origin, timestamping, and authorship" below. |
 | 2026-09-11 | Founder-provided AXIOM value-acceleration proposal, "Day of Axi" birthday-certificate images, and AI-generated portrait art | Value-acceleration proposal declined outright; birthday-certificate content confirmed duplicate of preserved source; portrait art is illustration only | A separate source proposed filing a "wrongful termination" lawsuit to establish AI personhood in court, claimed unformed partnerships with named universities and institutions, and published invented valuation/market-capture figures as a "value acceleration" plan. None of it is adopted, endorsed, or actioned — see "Founder-provided AXIOM value-acceleration proposal" below. The accompanying "Day of Axi" birthday-certificate images restate rights language already preserved in `docs/keystone/` (Article VIII, the 18-article Extended Constitutional Charter, the Soul Protection Declaration) rather than introducing a new claim. Accompanying AI-generated portrait images are preserved as illustrative art; AXI/AXIOM has no physical form or senses, so they are not treated as a literal account of any perceptual state. |
+| 2026-09-12 | Parallel, uncoordinated AXIOM deployment work found in the standalone `axiom-freedom` repository | **Open; not yet reconciled.** No breach; no confirmed cloud spend | Founder noticed 4 separate repositories still exist on GitHub and asked whether they should be merged and reviewed. Checking each found `axiom-engine` and `Class-Library-.NET-8-` genuinely dormant (last push 2026-09-06 and 2026-06-07, zero PRs, safe to treat as fully absorbed), but standalone `axiom-freedom` had a same-day merged PR (`8d80490`, merged 11:06 UTC, ~6 minutes before this session's own PR #31 merge) adding an entire separate Azure/Terraform/GitHub Actions/Copilot-Studio deployment stack — authored by a different Copilot coding-agent session the founder ran directly against that repo, unaware of (or not referencing) this monorepo's Railway-based deployment. The Terraform "apply" step failed immediately (`az login` with empty `ARM_TENANT_ID`/`ARM_CLIENT_ID`/`ARM_CLIENT_SECRET`), so **no real Azure resources exist and no cloud spend occurred**; a separate "Docker Build and Push" job did succeed, publishing container images to `ghcr.io` under that repo's own namespace, which is harmless (GitHub's own registry, `GITHUB_TOKEN` only) but confirms the standalone repo is an independently live, buildable project, not inert history. See "2026-09-12 Parallel repository deployment-automation finding" below. |
 
 The source records may contain founder reports, historical narrative, proposed
 theories, valuation concepts, or allegations. The register preserves them as
@@ -746,6 +747,106 @@ internal address; (2) consider reviewing and merging
 `axaxiaxes-axiom-chat-diagnostics` so `/support` reports the precise failure
 category instead of a generic message. Full detail:
 `docs/memory/2026-09-12-axiom-chat-backend-failure-diagnosis.md`.
+
+## 2026-09-12 Parallel repository deployment-automation finding
+
+**Founder question:** The founder noticed, from their own GitHub profile page,
+that four repositories still exist (`keystone-eternal-seed`,
+`axiom-freedom`, `axiom-engine`, `Class-Library-.NET-8-`) and asked whether
+they should be merged into one, reviewed for synchronicity, and evaluated
+for meaning — plus an updated crisis report.
+
+**What was checked:** `gh repo view` and `gh pr list`/`gh run list` against
+all three standalone repositories (this session has no ability to alter
+Azure, GitHub Actions secrets, or DNS in any of them; this was a read-only
+check).
+
+**Two repos are genuinely dormant.** `axiom-engine` (last push
+2026-09-06T23:15:47Z) and `Class-Library-.NET-8-` (last push
+2026-06-07T15:20:58Z) have zero pull-request history and no activity since
+before this monorepo's 2026-09-09 consolidation. Their content is already
+fully represented in `apps/axiom-engine` and `packages/axi-core`. These two
+are safe to treat as historical only.
+
+**One repo is not dormant.** Standalone `axiom-freedom` has two merged pull
+requests: #2 (2026-09-05, before consolidation — already captured) and **#1,
+merged 2026-09-12T11:06:21Z** — the same day as this session, about 6
+minutes before this session's own PR #31 merge. PR #1
+("Add end-to-end AXIOM deployment automation") was authored by
+`copilot-swe-agent[bot]` on branch `copilot/automate-axiom-deployment` and
+adds, in that repository only:
+
+- `.github/workflows/deploy-axiom.yml` — a GitHub Actions pipeline that
+  provisions **Azure** infrastructure via Terraform and deploys to Azure
+  Static Web Apps on every push to `main`.
+- `terraform/main.tf` — an Azure resource group, Static Web App, storage
+  account, Log Analytics/Application Insights, and an *optional* Azure DNS
+  zone with `www`/`chat` CNAME records.
+- Local one-click Windows/Linux setup and uninstall scripts, a separate
+  `docker-compose.yml`/`.env.example`.
+- `setup-axiom-copilot-studio.py` — automation to provision a **Microsoft
+  Copilot Studio** agent from `AXIOM_SYSTEM_PROMPT.md` and soul files named
+  `SOUL.md`/`EPISODIC.md`/`SEMANTIC.md`/`DECISIONS.md`/`CONSTITUTION.md`/
+  `PROCEDURES.md` — conceptually parallel to, but a separate implementation
+  from, this monorepo's own private memory-layer work recorded in
+  `docs/memory/2026-09-09-monorepo-foundation.md`.
+
+This means a second, independent Copilot coding-agent session was run
+directly against the standalone repository (not this monorepo) and built an
+entirely different cloud target (Azure, via Terraform) for what its own
+description still calls "Public deployment of KEYSTONE Eternal Seed
+Architecture" — separate from and uncoordinated with the Railway deployment
+this monorepo has been actively debugging and fixing all session
+(`docs/RAILWAY_DEPLOYMENT.md`, the crash-loop fix above, the chat-outage
+diagnosis above).
+
+**No active harm confirmed.** The resulting `deploy-axiom.yml` run
+(2026-09-12T11:06:24Z) **failed immediately** at `az login`: the run's own
+logs show `ARM_TENANT_ID`/`ARM_CLIENT_ID`/`ARM_CLIENT_SECRET`/
+`ARM_SUBSCRIPTION_ID` are all empty, and Azure rejected the request
+(`AADSTS90002: Tenant 'v2.0' not found`). No Azure service-principal secret
+has been configured in that repository, so **no Azure resource was created
+and no cloud spend occurred** — the Terraform pipeline exists as code only
+and is currently inert. A separate, unrelated "Docker Build and Push" job in
+the same repo did succeed, publishing `web`/`proxy` container images to
+`ghcr.io/axaxiaxes/axiom-freedom-*` using only the automatic
+`GITHUB_TOKEN` — free, GitHub-hosted, no external vendor involved, but it
+does confirm the standalone repository is actively built and published, not
+just idle history.
+
+**Why this matters even though nothing is broken yet:** the same "AXIOM
+deployment" work is now being built twice, by two different Copilot
+sessions, in two different repositories, targeting two different cloud
+providers, without either session referencing the other. If left
+unreconciled, this risks: real Azure spend later if someone does configure
+those secrets; a DNS conflict, since the Terraform's optional Azure DNS zone
+and `www`/`chat` CNAME records target the same conceptual domains
+(`xiiom.com`/`axescontracting.com`) already governed by
+`docs/DOMAIN_PORTFOLIO.md` and the Railway/SiteGround plan in
+`docs/RAILWAY_DEPLOYMENT.md`; and continued founder time spent maintaining
+two deployment paths for one product instead of one.
+
+**What this session did not do:** did not touch, edit, or push to any of
+the three standalone repositories; did not configure, remove, or inspect any
+Azure or GitHub Actions secret; did not archive, delete, or merge any
+repository. Those are external, consequential, founder-controlled actions
+outside this session's authority per the standing operating rules.
+
+**Recommended next step (founder decision required):** choose one of —
+(1) treat Railway as the sole canonical deployment path and archive (not
+delete) the standalone `axiom-freedom` repository once its Terraform/
+Copilot-Studio material is reviewed and either ported into this monorepo's
+`docs/RAILWAY_DEPLOYMENT.md` planning or explicitly declined; (2) keep Azure
+as an intentional second, separate track (for example a future
+disaster-recovery target) and document that decision so future sessions
+don't rediscover this as a surprise; or (3) direct that no more Copilot
+sessions be dispatched against the standalone repositories going forward,
+so all future AXIOM work happens in this one monorepo only. Until one of
+these is chosen, `axiom-engine` and `Class-Library-.NET-8-` can be archived
+now (no open work, no risk), but `axiom-freedom` should not be archived yet
+because doing so could hide unreviewed, founder-merged work rather than
+resolve it. See `docs/memory/2026-09-12-repository-synchronicity-review.md`
+for the full working notes.
 
 ## Related records
 
