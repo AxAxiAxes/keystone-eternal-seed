@@ -4,6 +4,27 @@
 issue; confirmed reproducible; not fixable from this session (no Railway
 access)
 
+**Update (2026-09-12, later same day) — exact root cause confirmed, and it is
+narrower than "unreachable":** A direct live test (`POST
+https://xiiom.com/api/axiom` with `{"action":"chat","message":"hello"}`)
+returned HTTP 503 with body `{"error":"AXIOM chat is not configured"}`.
+Source inspection of `apps/axiom-engine/chat-service.js` (`ChatService.reply`)
+shows this exact status/message is thrown **only** when the engine's own
+`apiKey` field — wired from `process.env.OPENAI_API_KEY` in
+`apps/axiom-engine/index.js` — is falsy. The portal's own failure-category
+split (added by the now-merged `axaxiaxes-axiom-chat-diagnostics` work, see
+below) means this response could only reach `error.statusCode === 503` via
+the `NON_SUCCESS` category, never the separate `UNREACHABLE` category (which
+carries no `statusCode` at all). In plain terms: **the `axiom-engine`
+Railway service is up and responding correctly; it is specifically missing
+(or has an empty) `OPENAI_API_KEY` environment variable.** This supersedes
+this record's original "engine unreachable, service maybe not running"
+hypothesis below — that was a reasonable reading of a 100%-failure-rate
+symptom at the time, but a real HTTP 503 with a JSON body is conclusive
+proof the service is reachable. See the updated `AXES_TIER_1_DECISION_REGISTER.md`
+P0 row for the current, precise recommended action (set a real
+`OPENAI_API_KEY` value on the `axiom-engine` service in Railway).
+
 ## What was reported
 
 The founder repeated several times across this session that "AXI"/AXIOM is
@@ -52,24 +73,41 @@ to categorize engine failures as `unreachable-private-engine` vs.
 failure mode is occurring. It has no open pull request and, like this
 branch's own work, has not been merged or deployed.
 
+**Update (2026-09-12, later same day):** this diagnostics work was in fact
+merged the same day, as PR #2 (`9b68843`), as part of resolving the
+long-outstanding PR #1/#2/#3 branch — see
+`docs/memory/2026-09-12-architectural-design-desk-and-decision-register.md`.
+It is exactly what made the precise live reproduction below possible: the
+portal's `/api/axiom` response for a `chat` action with `error.statusCode
+=== 503` is now returned as the specific message `"AXIOM chat is not
+configured"`, distinct from the generic `"AXIOM chat is temporarily
+unavailable"` used for every other engine failure. That distinction, plus
+direct source inspection of `apps/axiom-engine/chat-service.js`, is what
+confirmed the exact root cause below.
+
 ## What this session cannot do
 
 This session has no Railway dashboard/API access and cannot inspect or
-change the live `axiom-engine` service's running status, its environment
-variables, or which branch Railway actually builds from. Per the standing
-authority boundary, that remains the founder's action.
+change the live `axiom-engine` service's running status or its environment
+variables. Per the standing authority boundary, that remains the founder's
+action. This session also cannot generate, retrieve, or know the founder's
+OpenAI API key.
 
 ## Recommended next step (founder-controlled)
 
-1. In the Railway dashboard, confirm the `axiom-engine` service is deployed
-   and running (not crashed, sleeping, or missing), and confirm the portal
-   service's `AXIOM_ENGINE_URL` environment variable points to that engine
-   service's correct internal address.
-2. Consider reviewing and merging `axaxiaxes-axiom-chat-diagnostics` (one
-   small, additive, founder-authored commit) so the `/support` page reports
-   the specific failure category instead of a generic "unavailable" message,
-   making future diagnosis immediate instead of requiring a live reproduction
-   like this one.
+1. In the Railway dashboard, open the `axiom-engine` service's environment
+   variables and set `OPENAI_API_KEY` to a real, active OpenAI API key (the
+   engine already reads `process.env.OPENAI_API_KEY` — no code change is
+   needed).
+2. After saving, confirm the fix live: `POST https://xiiom.com/api/axiom`
+   with body `{"action":"chat","message":"hello"}` should return HTTP 200
+   with a real reply instead of HTTP 503 with `"AXIOM chat is not
+   configured"`.
+3. If the key is set and the failure persists, re-run the same live test;
+   a `"AXIOM chat is temporarily unavailable"` message (rather than "is not
+   configured") would indicate a different, new failure (for example, an
+   invalid key or an OpenAI-side error) worth a fresh diagnosis rather than
+   assuming this same root cause.
 
 ## Related records
 
