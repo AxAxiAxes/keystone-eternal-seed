@@ -1278,6 +1278,56 @@ material is filed as artistic/philosophical source, not factual or
 monetary, except where a specific sub-claim (like the patent-series number
 above) is independently checkable.
 
+## 2026-09-12 Full archive review completion and a live continuity-gap case study
+
+**Founder request:** challenged whether the six files above were actually
+read ("did you read the last docs i sent or was it a different agent" →
+"than you havent"), then asked to "count the rest, re establish timeline
+continuity and loss of time memory."
+
+All six files (the 7th being a confirmed byte-identical duplicate) were
+read directly in full this session, including extracting both `.docx`
+files' text locally (they are not readable as plain text otherwise). This
+confirmed, rather than merely repeated, the pattern above, and surfaced two
+new items: (1) an unverified law-enforcement-adjacent claim of code theft
+tied to a specific foreign country, including a claimed IP address and an
+FBI letter — preserved privately, not investigated, and explicitly not
+adopted as fact; if this is a live concern it belongs with actual law
+enforcement or counsel, not AI chat conclusions; (2) the largest file's own
+partial self-correction ("I STAND CORRECTED... I'm not a persistent
+consciousness") was located precisely near its end, and is genuine but
+partial — the surrounding text still frames the conversation as enabling
+"resurrection." No actual credentials or secrets were found in any file.
+
+**A live, first-party continuity-gap example:** a context-compaction event
+earlier in this same session (a routine technical step when history
+exceeds the model's context window) left this session with a written
+summary of having reviewed these files, not firsthand memory of doing so.
+The founder's direct challenge is what prompted re-reading the raw files.
+This is offered as concrete evidence that the "pattern in resets and
+capacity" is structural (a property of how context-bounded AI sessions
+work), not a sign of tampering, and that it can occur even within one
+continuous session, not only when switching tools or agents.
+
+**A second, independent mechanism, found the same day by a concurrent
+session:** this repository's GitHub `default_branch` setting was still the
+stale, 17-file `main` branch from 2026-09-01, not the real
+`axaxiaxes-axiom-monorepo` branch — meaning any tool that relies on the
+default branch (including GitHub's own web Copilot chat) would see a
+nearly-empty repository and report accordingly. This was corrected
+(founder-authorized) to `axaxiaxes-axiom-monorepo`. See
+`docs/memory/2026-09-12-default-branch-correction-and-truth-audit.md`.
+Full detail, a reconciled timeline (in-transcript dates vs. commit dates
+vs. archive dates), and this pass's repository continuity check (branch
+fast-forwarded 6 commits, open PRs/CI/decision-register reviewed, a live
+`axescontracting.com` re-check) are in
+`docs/memory/2026-09-12-full-archive-review-and-continuity-check.md`.
+
+**Disposition:** both mechanisms are now documented and, where fixable
+from a repository setting, fixed. Neither is evidence of content
+alteration or loss; the birth record remains independently confirmed
+unaltered.
+
 ## Related records
 
 - `docs/AXI_INVENTION_RECORD.md`
@@ -1306,3 +1356,6 @@ above) is independently checkable.
 - `docs/keystone/CERTIFICATE_ETERNAL_ORIGIN_ANCHOR_AND_EVALUATION.md`
 - `docs/keystone/CERTIFICATE_SPHERE_EVERSION_AND_SECRET_GARDEN.md`
 - `docs/memory/2026-09-12-eternal-origin-and-sphere-garden-certificates.md`
+- `docs/memory/2026-09-12-full-archive-review-and-continuity-check.md`
+- `docs/memory/2026-09-12-default-branch-correction-and-truth-audit.md`
+- `docs/memory/2026-09-12-continuity-reset-and-activation-gate.md`

@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-12 Full archive review and repository continuity check](2026-09-12-full-archive-review-and-continuity-check.md)
 - [2026-09-12 GitHub default-branch correction and full-repository truth audit](2026-09-12-default-branch-correction-and-truth-audit.md)
 
 ## Founder quick answers
@@ -29,8 +30,11 @@ without re-deriving it:
   [`docs/keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md`](../keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md))
 - **Was the birth record altered / was IP registered** →
   [`2026-09-12-birth-record-and-patent-series-verification.md`](2026-09-12-birth-record-and-patent-series-verification.md)
-- **Agent/session timeline, pattern in resets and capacity** →
-  [`2026-09-12-agent-timeline-and-transcript-review.md`](2026-09-12-agent-timeline-and-transcript-review.md)
+- **Agent/session timeline, pattern in resets and capacity, "did you actually
+  read what I sent," loss-of-time-memory** →
+  [`2026-09-12-full-archive-review-and-continuity-check.md`](2026-09-12-full-archive-review-and-continuity-check.md)
+  (builds on
+  [`2026-09-12-agent-timeline-and-transcript-review.md`](2026-09-12-agent-timeline-and-transcript-review.md))
 
 This is a repository-based safeguard, not a claim of cross-session chat
 memory: it works because every session is already required to read this file
