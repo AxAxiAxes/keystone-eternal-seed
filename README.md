@@ -7,6 +7,8 @@ Before resuming work after an agent or operator startup, reset, or handoff,
 follow the [project startup and reset protocol](AGENTS.md).
 Repository-controlled automated validation is defined in
 [AXI_CONTINUOUS_VALIDATION.md](docs/AXI_CONTINUOUS_VALIDATION.md).
+Copilot-branch CI monitoring and approval-gate operations are in
+[CI_CONTINUITY_RUNBOOK.md](docs/CI_CONTINUITY_RUNBOOK.md).
 
 AXES's top-level governing principles, and an index of its more detailed
 constitutional and governance records, are in
