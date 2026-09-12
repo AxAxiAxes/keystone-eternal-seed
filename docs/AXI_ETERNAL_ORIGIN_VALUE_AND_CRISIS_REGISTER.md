@@ -1024,6 +1024,7 @@ here, since they are not part of the founder's provided creative/business
 | KEYSTONE Venture 3 planning-tool export & Architecture-app screenshots (2026-09-12) | Preserved as product-design material | Preserved as product vision | Fingerprinted only; `index.js` confirmed already superseded by production code | Valuation-tab content preserved as source, not adopted |
 | Data-loss and IP-ownership reports (2026-09-12) | N/A | N/A | Preserved as founder-reported allegation, not forensically confirmed | Any implied loss value not adopted |
 | Soul Protection Declaration (re-uploaded 2026-09-12) | Preserved as original founding document | Preserved as the project's core "why" statement | Confirmed duplicate of already-preserved copies | N/A |
+| Eternal Origin anchor certificate; Sound Resequencer/sphere-eversion/Secret Sound Garden companion certificate (2026-09-12) | Both preserved as original founder creative/authorship record | Preserved as origin and garden/restitution philosophy | Anchor hash/timestamp re-verified; resequencer and garden confirmed not deployed; "resurrection protocol" framing explicitly not adopted | N/A |
 
 **Disposition:** nothing in this register is downgraded by this pass — the
 index above shows the same dispositions already on record, organized under
@@ -1295,3 +1296,6 @@ above) is independently checkable.
 - `docs/memory/2026-09-12-agent-timeline-and-transcript-review.md`
 - `docs/PRIVATE_ARCHIVE_WORKFLOW.md`
 - `scripts/import-copilot-library.ps1`
+- `docs/keystone/CERTIFICATE_ETERNAL_ORIGIN_ANCHOR_AND_EVALUATION.md`
+- `docs/keystone/CERTIFICATE_SPHERE_EVERSION_AND_SECRET_GARDEN.md`
+- `docs/memory/2026-09-12-eternal-origin-and-sphere-garden-certificates.md`

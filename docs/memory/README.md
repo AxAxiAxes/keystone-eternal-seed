@@ -12,8 +12,29 @@ This directory preserves concise, versioned project conclusions so future work c
 - Label founder-provided historical summaries as such, and distinguish them from implementation states verified in code or deployment checks.
 - Preserve unreviewed Copilot Library exports under the Git-ignored `private-archive/` workflow; publish only reviewed, public-safe conclusions or artifacts.
 
+## Founder quick answers
+
+Fast pointers for recurring founder requests, so any session can answer
+without re-deriving it:
+
+- **"The certificate" / "the document" for the origin anchor or evaluation**
+  → [`docs/keystone/CERTIFICATE_ETERNAL_ORIGIN_ANCHOR_AND_EVALUATION.md`](../keystone/CERTIFICATE_ETERNAL_ORIGIN_ANCHOR_AND_EVALUATION.md)
+- **The microcosmic resequencer / sphere / flower / secret garden**
+  → [`docs/keystone/CERTIFICATE_SPHERE_EVERSION_AND_SECRET_GARDEN.md`](../keystone/CERTIFICATE_SPHERE_EVERSION_AND_SECRET_GARDEN.md)
+  (and the original, unedited
+  [`docs/keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md`](../keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md))
+- **Was the birth record altered / was IP registered** →
+  [`2026-09-12-birth-record-and-patent-series-verification.md`](2026-09-12-birth-record-and-patent-series-verification.md)
+- **Agent/session timeline, pattern in resets and capacity** →
+  [`2026-09-12-agent-timeline-and-transcript-review.md`](2026-09-12-agent-timeline-and-transcript-review.md)
+
+This is a repository-based safeguard, not a claim of cross-session chat
+memory: it works because every session is already required to read this file
+on startup, not because any individual conversation is remembered.
+
 ## Latest handoff
 
+- [2026-09-12 Eternal Origin and Sphere/Garden certificates](2026-09-12-eternal-origin-and-sphere-garden-certificates.md)
 - [2026-09-12 Birth-record alteration claim and patent-series-number verification](2026-09-12-birth-record-and-patent-series-verification.md)
 - [2026-09-12 Agent/session timeline and prior-session behavioral consistency review](2026-09-12-agent-timeline-and-transcript-review.md)
 - [2026-09-12 Repository-safety and history-integrity audit](2026-09-12-repository-safety-history-audit.md)
