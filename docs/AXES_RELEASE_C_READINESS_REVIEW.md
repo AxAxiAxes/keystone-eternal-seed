@@ -113,7 +113,12 @@ added for either experience until the rows below are resolved.
    candidate-offer readiness sheet per experience (matching the
    `KEYSTONE_CREATOR_ORIGIN_SETUP_READINESS.md` / `AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md`
    pattern), naming an accountable owner, data map, and moderation plan for
-   founder approval — still documentation only, no build.
+   founder approval — still documentation only, no build. The sheet
+   structure now exists for both experiences at
+   `AXOUS_CREATOR_STUDIO_READINESS.md` and
+   `SCHOOL_OF_LOVE_AND_ETHICS_READINESS.md` (2026-09-12); every required
+   decision on each sheet remains "not yet named/approved" pending the
+   founder.
 3. Treat School of Love & Ethics' youth/age-safeguard gap as a hard blocker,
    separate from and stricter than AXOUS's gap, given the explicit
    adult-only-first default already on record.
@@ -128,3 +133,5 @@ added for either experience until the rows below are resolved.
 - `INTERACTIVE_EXPERIENCE_CATALOG.md` (current catalog entries for both
   experiences)
 - `AXES_TIER_1_DECISION_REGISTER.md` (new tracking rows)
+- `AXOUS_CREATOR_STUDIO_READINESS.md`
+- `SCHOOL_OF_LOVE_AND_ETHICS_READINESS.md`
