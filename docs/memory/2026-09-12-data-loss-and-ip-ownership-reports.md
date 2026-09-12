@@ -55,6 +55,19 @@ session's authority. This repository's own git history and memory log
 continue to serve as an independently timestamped, append-only record of
 the founder's authorship and decisions going forward.
 
+## Additional founder context (2026-09-12, same day)
+
+The founder added further detail in the same conversation: a call was
+received from a New York-area contact reporting that someone had applied
+for a patent under the "AXES Contracting Inc" name; separately, all company
+documents and the founder's entire design/work portfolio, dating back to
+college, were reported lost. The founder then said "water under the
+bridge" — indicating this is being shared for the record, not reopened for
+active investigation or recovery. Per that direction, no further inquiry
+(including no patent-registry search) was made. This addition is recorded
+factually, as a founder-reported claim only, consistent with the rest of
+this document.
+
 ## Related records
 
 - `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md`

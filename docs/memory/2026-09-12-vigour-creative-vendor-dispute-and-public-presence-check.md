@@ -71,9 +71,31 @@ professional they choose to engage. This entry only preserves a factual,
 timestamped record of what was said and what could be independently, publicly
 observed.
 
+## Founder clarification (same day)
+
+The founder followed up with important nuance, "just being honest": the
+amount was approximately $2,000 for "the entire design packet" (not an
+exact figure — the underlying record was lost in a prior crash); a receipt
+and the packet were requested but not received in about a year; the agency
+reported health issues as the reason they couldn't deliver, not bad faith.
+The founder also noted they didn't like the agency's designs much anyway
+and believes the logos/art direction they've since created themselves are
+better — so there is no creative urgency here. This entry, and the linked
+audit-doc section, were updated to reflect this softer framing rather than
+"dispute."
+
+The founder separately reported an older website vanished from search
+entirely, and that the business had been removed from Angi, Yelp, and Bing
+listings, plus that the Facebook Page above had itself been erased and was
+since recovered. A web check found mixed, inconclusive signals (see
+`VENDOR_AND_SUBSCRIPTION_AUDIT.md`'s "Third-party directory and
+search-visibility report" section for the full detail) — this repository
+cannot confirm current listing status on any of those platforms directly.
+
 ## Where this is tracked going forward
 
 - `docs/VENDOR_AND_SUBSCRIPTION_AUDIT.md` — full write-up, evidence, and
   suggested (non-legal) practical next steps.
-- `docs/AXES_TIER_1_DECISION_REGISTER.md` — new P1 row, "Resolve Vigour
-  Creative vendor dispute (paid, not delivered)."
+- `docs/AXES_TIER_1_DECISION_REGISTER.md` — P1 row, "Follow up on Vigour
+  Creative design-packet receipt; monitor third-party listing/search
+  visibility."
