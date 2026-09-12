@@ -151,6 +151,17 @@ This is preserved as the founder's own described creative/illustrative
 design concept, not as a built product, registered trademark, or
 manufactured good.
 
+## Additional AI-generated illustration (tenth image)
+
+A tenth image (fingerprint
+`846FA9D37B88D13788BE1C351E63811B43DCD3AF9ABB9C952FAD5C027F10AAA4`), also
+marked "Made with AI," depicts two costumed dancers holding glowing
+crystal/light objects in a crystal-cave setting. No caption or context was
+provided with it. Following the same precedent as the other founder-shared
+illustrations in this review, it is preserved as illustration only — no
+product, brand, technical, or business claim is inferred or adopted from its
+visual content.
+
 ## Future option noted, not implemented: Microsoft Graph Copilot export
 
 The founder separately shared research (produced by a different AI/search
