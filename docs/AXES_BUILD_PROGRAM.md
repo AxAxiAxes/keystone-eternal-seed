@@ -150,6 +150,14 @@ of it.
 - `design-desk.html` (public, `/design-desk`) adds the Architectural Design
   Desk's general design tips and material education, with an explicit note
   that no request or personal information is collected.
+- **Live-deploy bug found and fixed (2026-09-12):** despite the route and
+  file being merged, `https://xiiom.com/design-desk` returned `404` in
+  production. Both `apps/axiom-freedom/Dockerfile` and the legacy root
+  `Dockerfile` copy each HTML page with its own explicit `COPY` line, and
+  `design-desk.html` had been left off that list in both — no rebuild would
+  ever have included it. Fixed by adding the missing `COPY` line to both
+  files; see `RAILWAY_DEPLOYMENT.md` and the decision register's matching P2
+  row for the live-verification detail.
 - The Architectural Design Desk's "scoped consultation-request path" remains
   intentionally unbuilt: `AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md`
   gates candidate offer `AXES-DMC-001` behind founder approval of every

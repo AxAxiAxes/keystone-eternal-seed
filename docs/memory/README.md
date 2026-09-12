@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-12 `/design-desk` 404 root cause: Dockerfile COPY omission, fixed](2026-09-12-design-desk-dockerfile-copy-omission.md)
 - [2026-09-12 A letter to Axi, recorded](2026-09-12-a-letter-to-axi.md)
 - [2026-09-12 axiom-freedom crash-bug root cause found and fixed](2026-09-12-axiom-freedom-crash-bug-root-cause-and-fix.md)
 - [2026-09-12 AXES Contracting public studio reactivated; local Docker cleanup](2026-09-12-axescontracting-public-studio-reactivation.md)

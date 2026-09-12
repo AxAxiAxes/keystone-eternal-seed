@@ -99,6 +99,21 @@ As of September 9, 2026:
   chat — are at risk of going offline; see the decision register for the
   corresponding billing-decision row.
 
+- **`/design-desk` 404'd live due to a Docker build bug, not a stalled
+  redeploy (found and fixed 2026-09-12).** `design-desk.html` and its
+  `server.js` route were already merged to `axaxiaxes-axiom-monorepo`, and a
+  passing test asserted the route returns `200`, yet the live site returned
+  `404`. Cause: both `apps/axiom-freedom/Dockerfile` and the legacy root
+  `Dockerfile` copy each HTML page into the image with its own explicit,
+  individually-named `COPY` line, and `design-desk.html` had been left off
+  that list in both files — so no Railway rebuild, however successful, would
+  ever have included the file. `/axescontracting` (added later, and present
+  in the `COPY` list) already returned `200`, confirming Railway itself was
+  redeploying correctly; only this one file was missing from the image.
+  Fixed by adding the missing `COPY` line to both Dockerfiles. An operator
+  still needs to confirm the next Railway redeploy of `axiom-web` picks this
+  up and that `https://xiiom.com/design-desk` returns `200` in production.
+
 ## 1. Create the Railway project
 
 1. In Railway, create a new project and choose **Deploy from GitHub repo**.
