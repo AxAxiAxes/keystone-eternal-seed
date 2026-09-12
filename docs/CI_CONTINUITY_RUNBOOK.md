@@ -38,6 +38,7 @@ Source: `.github/workflows/axi-continuity-validation.yml`.
 ## Checkpoint timing and efficiency targets
 
 Use these checkpoints to keep operations measurable and predictable.
+These times are initial operating targets (planning estimates), not strict SLA penalties.
 
 | Checkpoint | Target time | Success gate |
 | --- | --- | --- |
