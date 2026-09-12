@@ -7,6 +7,7 @@ Use this runbook to keep Copilot branch delivery fluent when GitHub Actions may 
 - `AXI continuity validation` runs on push to:
   - `axaxiaxes-axes-directory-data-model`
   - `axaxiaxes-axiom-monorepo`
+  - `copilot/*` (single-segment branch names)
   - `copilot/**`
 - `AXI continuity validation` runs on pull requests targeting `axaxiaxes-axiom-monorepo`.
 - `AXI continuity validation` also receives a safe `workflow_run` continuity signal after `Running Copilot cloud agent` completes successfully on same-repository `copilot/` branches.
