@@ -131,13 +131,29 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
       assert.match(await embed.text(), /not yet available/);
     }
 
-    const axesPortal = await request(webPort, { Host: "axescontracting.com" });
-    assert.equal(axesPortal.statusCode, 200);
-    assert.match(axesPortal.body, /The AXES Control Center/);
+    const unauthorizedAxesPortal = await request(webPort, { Host: "axescontracting.com" });
+    assert.equal(unauthorizedAxesPortal.statusCode, 401);
 
-    const axesWwwPortal = await request(webPort, { Host: "www.axescontracting.com" });
+    const unauthorizedAxesWwwPortal = await request(webPort, {
+      Host: "www.axescontracting.com"
+    });
+    assert.equal(unauthorizedAxesWwwPortal.statusCode, 401);
+
+    const authorization = `Basic ${Buffer.from("admin:test-admin-password").toString("base64")}`;
+
+    const axesPortal = await request(webPort, {
+      Host: "axescontracting.com",
+      Authorization: authorization
+    });
+    assert.equal(axesPortal.statusCode, 200);
+    assert.match(axesPortal.body, /AXES Command Center/);
+
+    const axesWwwPortal = await request(webPort, {
+      Host: "www.axescontracting.com",
+      Authorization: authorization
+    });
     assert.equal(axesWwwPortal.statusCode, 200);
-    assert.match(axesWwwPortal.body, /The AXES Control Center/);
+    assert.match(axesWwwPortal.body, /AXES Command Center/);
 
     const library = await fetch(
       `http://127.0.0.1:${webPort}/library/AXES_BUSINESS_PLAN.md`
@@ -172,7 +188,6 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     const unauthorizedConsole = await fetch(`http://127.0.0.1:${webPort}/automation`);
     assert.equal(unauthorizedConsole.status, 401);
 
-    const authorization = `Basic ${Buffer.from("admin:test-admin-password").toString("base64")}`;
     const consolePage = await fetch(`http://127.0.0.1:${webPort}/automation`, {
       headers: { Authorization: authorization }
     });

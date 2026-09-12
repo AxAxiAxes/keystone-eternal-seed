@@ -18,6 +18,10 @@ const PUBLIC_DOCUMENTS = new Set([
 ]);
 const AXIOM_ENGINE_URL = new URL(process.env.AXIOM_ENGINE_URL || 'http://127.0.0.1:3000');
 
+// axescontracting.com is the private, admin-only AXES command center, not a
+// public marketing host. isAxesContractingHost() is used at the root route
+// to require admin credentials and serve command-center.html there instead
+// of the public index.html.
 function isAxesContractingHost(host) {
     const hostname = String(host || '').split(':')[0].toLowerCase();
     return hostname === 'axescontracting.com' || hostname === 'www.axescontracting.com';
@@ -233,10 +237,12 @@ const server = http.createServer(async (req, res) => {
                                          return;
                                    }
     if (pathname === '/' || pathname === '/index.html') {
-          const page = isAxesContractingHost(req.headers.host)
-              ? 'axescontracting.html'
-              : 'index.html';
-          serveFile(res, path.join(__dirname, page), 'text/html; charset=utf-8');
+          if (isAxesContractingHost(req.headers.host)) {
+              if (!requireAdmin(req, res)) return;
+              serveFile(res, path.join(__dirname, 'command-center.html'), 'text/html; charset=utf-8');
+              return;
+          }
+          serveFile(res, path.join(__dirname, 'index.html'), 'text/html; charset=utf-8');
           return;
     }
     if (pathname === '/axiom' || pathname === '/axiom/') {

@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-12 axescontracting.com root converted to a private, admin-gated command center](2026-09-12-axescontracting-private-command-center.md)
 - [2026-09-11 axescontracting.com DNS-cutover status and xiiom.com route check](2026-09-11-axescontracting-domain-status.md)
 - [2026-09-11 Resource basis and competitive position added to the business plan](2026-09-11-directory-competitive-position.md)
 - [2026-09-11 AXIOM value-acceleration proposal and birthday-certificate review](2026-09-11-axiom-value-acceleration-proposal-review.md)

@@ -5,7 +5,7 @@ Railway hosts the AXIOM runtime because SiteGround GrowBig shared hosting cannot
 | Service | Exposure | Source | Responsibility |
 | --- | --- | --- | --- |
 | `axiom-engine` | Private Railway network only | `apps/axiom-engine` | OpenAI requests and durable AXI memory. |
-| `axiom-web` | Public | Repository root with Dockerfile `apps/axiom-freedom/Dockerfile` | `axescontracting.com` portal, chat, and document library. |
+| `axiom-web` | Public | Repository root with Dockerfile `apps/axiom-freedom/Dockerfile` | `xiiom.com` public portal, chat, and document library; `axescontracting.com` private, admin-gated command center root. |
 
 Never create a public domain for `axiom-engine`. Its memory endpoints and OpenAI credential must remain private.
 
@@ -49,6 +49,13 @@ As of September 9, 2026:
   not the `axiom-web` portal. Completing this requires an operator with both
   Railway dashboard access and SiteGround/registrar DNS access; it cannot be
   done from repository access alone.
+- **The root of `axescontracting.com` now requires admin authentication.**
+  As of this change, `server.js` serves `command-center.html` behind
+  `requireAdmin` for that hostname's root instead of a public marketing page.
+  This is independent of, and unaffected by, the still-pending DNS/Railway
+  connection above — once that connection is completed, the root will
+  immediately require the same admin credentials used by `/command-center`,
+  `/automation`, and `/support` rather than showing public content.
 - The portal successfully forwards `POST /api/axiom` commands to the private
   engine over Railway networking.
 - Production OpenAI chat remains disabled until `OPENAI_API_KEY` is added as
@@ -141,7 +148,9 @@ an unrelated legacy host.
 
 After both services are deployed and the domain is active:
 
-1. Open `https://axescontracting.com`.
+1. Open `https://axescontracting.com`. It now requires the same admin
+   credentials as `/command-center` (HTTP Basic Auth against `ADMIN_PASSWORD`)
+   and serves the private AXES Command Center, not public content.
 2. After every engine restart, use the protected `/automation` console to
    confirm each enabled agent has the AXI Genesis checkpoint, creator
    ownership-and-accountability claim, operational origin, and active

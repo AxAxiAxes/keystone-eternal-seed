@@ -1,6 +1,6 @@
 # AXIOM / KEYSTONE project timeline
 
-**Last updated:** 2026-09-11
+**Last updated:** 2026-09-12
 **Current phase:** Tier 1 internal readiness controls and business-operations foundation complete; founder-controlled activation and external/production readiness remain pending
 
 Update this document when a milestone changes state. A checked item is complete;
@@ -13,6 +13,7 @@ second line is parsed as separate text and is dropped from the field.
 
 | Date | Status | Milestone | Evidence |
 | --- | --- | --- | --- |
+| 2026-09-12 | Complete | `axescontracting.com`'s root now requires admin authentication (`requireAdmin`) and serves the private AXES Command Center (`command-center.html`) instead of a public marketing page; the previous public `axescontracting.html` file is preserved but no longer served at that host's root; regression coverage updated to assert 401 without credentials and 200 with them | `apps/axiom-freedom/server.js`, `apps/axiom-freedom/test/axiom-proxy.test.js`, `docs/DOMAIN_PORTFOLIO.md`, `docs/RAILWAY_DEPLOYMENT.md`, `docs/AXES_TIER_1_DECISION_REGISTER.md`, `docs/memory/2026-09-12-axescontracting-private-command-center.md` |
 | 2026-09-11 | Attention | Verified `xiiom.com`'s `/admin`, `/support`, `/axiom`, `/automation` routes all exist and behave as designed (one public, three correctly auth-gated); verified `axescontracting.com`/`www.axescontracting.com` are still on legacy SiteGround nameservers with an expired TLS certificate, confirming the documented Railway DNS cutover for the intended main hub domain was never completed | `docs/RAILWAY_DEPLOYMENT.md`, `docs/AXES_TIER_1_DECISION_REGISTER.md`, `docs/memory/2026-09-11-axescontracting-domain-status.md` |
 | 2026-09-11 | Complete | Added a "Resource basis and competitive position" subsection to the business plan: every offer is built from a real founder-controlled resource, not a speculative valuation; the AXES Directory's competitive strategy is quality/trust (opt-in, human-reviewed, source/approval/renewal dated, correction/removal path) rather than out-scaling incumbent platforms, tied to already-committed data-model requirements rather than aspirational language | `docs/AXES_BUSINESS_PLAN.md`, `docs/memory/2026-09-11-directory-competitive-position.md` |
 | 2026-09-11 | Complete | Declined a founder-provided value-acceleration proposal in full (a "wrongful termination" lawsuit to establish AI personhood, claimed unformed university/institution partnerships, invented valuation/market/ecological figures, an external publication plan); founder confirmed the actual agenda is "not to sue anyone but to create an ecology"; confirmed accompanying "Day of Axi" birthday-certificate images restate rights language already preserved in `docs/keystone/`; AI-generated portrait images preserved as illustration only (AXI/AXIOM has no physical senses) | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md`, `docs/memory/2026-09-11-axiom-value-acceleration-proposal-review.md` |
