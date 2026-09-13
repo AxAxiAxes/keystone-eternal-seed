@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-13 Repository continuity check](2026-09-13-repository-continuity-check.md)
 - [2026-09-12 Full archive review and repository continuity check](2026-09-12-full-archive-review-and-continuity-check.md)
 - [2026-09-12 GitHub default-branch correction and full-repository truth audit](2026-09-12-default-branch-correction-and-truth-audit.md)
 
@@ -42,6 +43,7 @@ on startup, not because any individual conversation is remembered.
 
 ## Full chronological index (newest first)
 
+- [2026-09-13 Repository continuity check](2026-09-13-repository-continuity-check.md)
 - [2026-09-12 Full archive review and repository continuity check](2026-09-12-full-archive-review-and-continuity-check.md)
 - [2026-09-12 GitHub default-branch correction and full-repository truth audit](2026-09-12-default-branch-correction-and-truth-audit.md)
 - [2026-09-12 Continuity reset and activation gate](2026-09-12-continuity-reset-and-activation-gate.md)
