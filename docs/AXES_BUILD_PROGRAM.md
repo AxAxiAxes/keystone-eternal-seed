@@ -1,7 +1,7 @@
 # AXES build program
 
 **Status:** Long-range execution program  
-**Last updated:** 2026-09-11  
+**Last updated:** 2026-09-13  
 **Source and provenance:** Founder-originated project material. This
 implementation program records the founder's direction; GitHub Copilot
 provides technical implementation assistance only and has no competing origin,
@@ -33,12 +33,10 @@ because the ground under it is already dug to the matching depth.
 **Depth gauge (repository-controlled, no external access required):**
 
 1. **Automated test suites** — the closest analogy to poured, cured concrete.
-   Re-verified 2026-09-12 (post-Release-C-readiness-review): AXIOM engine
-   77/77, AXIOM portal **6/6**, AXI.Core 5/5, all passing and matching hosted
-   CI. The portal count is one higher than the prior reading; the additional
-   passing test (`survives engine failures on every automation status route
-   without crashing the process`) already existed but was undercounted in
-   that earlier snapshot.
+   Re-verified 2026-09-13 (post-axiom-engine-admin-auth-gate): AXIOM engine
+   **79/79** (2 new tests cover the `requireAdmin` gate added to every
+   state-mutating route), AXIOM portal **7/7**, AXI.Core 5/5, all passing and
+   matching hosted CI.
 2. **Governance and constitutional stack** — the footing beneath every
    product: `AGENTS.md`, `AXES_CREATOR_ORIGIN_CONSTITUTION.md`,
    `AXES_GOVERNANCE_AND_SAFEGUARDING.md`,
