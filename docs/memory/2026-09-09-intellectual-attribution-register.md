@@ -11,7 +11,7 @@ This register distinguishes three kinds of entries:
 | Type | Meaning |
 | --- | --- |
 | Founder-provided concept | Direction, language, or idea supplied by the founder in source material |
-| Collaborative synthesis | A structure or interpretation developed from founder direction in conversation with GitHub Copilot |
+| Founder-directed implementation synthesis | A structure or interpretation implemented from founder direction with technical-assistant support |
 | Technical assessment | An implementation, safety, or operations conclusion derived from the repository and deployment state |
 
 Entries are not legal determinations of authorship, ownership, novelty, or
@@ -28,16 +28,17 @@ sharing an AXES control center and a private XIIOM operations core. This turns
 an otherwise broad collection of ideas into a coherent, staged platform
 program.
 
-**Attribution:** Collaborative synthesis from founder-provided direction.  
+**Attribution:** Founder-directed implementation synthesis from
+founder-provided direction.
 **Source:** Private founder-and-Copilot source record
 `private-archive/copilot-library/2026-09-09-pasted-text-f2b84109/source.txt`,
 SHA-256
 `CAE78A6E802DA68D3DA9C0DE331D02A5D8C8D386DC6617C7F6E2C9CF661E4487`.  
 **Implementation interpretation:** `docs/AXES_PLATFORM_PLAN.md` and
 `docs/AXES_BUILD_PROGRAM.md`.  
-**Credit note:** The product names, constellation framing, and founder
-principle “All for All” are founder-provided. The dependency-ordered product
-program is a collaborative synthesis.
+**Credit note:** The product names, constellation framing, founder principle
+“All for All,” and product program are founder-originated. Technical assistance
+does not create a competing origin, ownership, or governance claim.
 
 ### IA-2026-09-09-02 — Reliability precedes public expansion
 
@@ -62,9 +63,9 @@ records consent, source references, version history, correction paths, and
 scope. It must not be presented as automatic proof of legal ownership or as an
 immutable record that prevents correction.
 
-**Attribution:** Collaborative synthesis from the founder's emphasis on truth,
-lineage, creators, and preservation, combined with technical and privacy
-constraints.  
+**Attribution:** Founder-directed implementation synthesis from the founder's
+emphasis on truth, lineage, creators, and preservation, implemented with
+technical and privacy constraints.
 **Source:** Private source record above; `docs/AXES_PLATFORM_PLAN.md`.  
 **Implementation interpretation:** Phase 4 and the Lineage Archive boundary in
 `docs/AXES_PLATFORM_PLAN.md`.  
@@ -78,8 +79,8 @@ accessible learning and project-invention program rather than an unrestricted
 social environment. Intergenerational participation requires deliberate cohort
 design, safeguarding, and accountable human moderation.
 
-**Attribution:** Founder-provided concept with collaborative product and safety
-interpretation.  
+**Attribution:** Founder-provided concept with founder-directed product and
+safety implementation interpretation.
 **Source:** Private source record above.  
 **Implementation interpretation:** Release C in `docs/AXES_BUILD_PROGRAM.md`.  
 **Credit note:** The school concept and its stated learning themes are
@@ -94,8 +95,8 @@ well, can contribute, and may wish to sustain. It should be offered as a
 voluntary educational exercise rather than a diagnostic, ranking system, or
 prescription for someone's life.
 
-**Attribution:** Founder-provided direction with collaborative implementation
-interpretation.
+**Attribution:** Founder-provided direction with founder-directed
+implementation interpretation.
 **Source:** Founder instruction recorded 2026-09-09 in this project session.
 **Implementation interpretation:** Phase 2 in `docs/AXES_PLATFORM_PLAN.md` and
 Release C in `docs/AXES_BUILD_PROGRAM.md`.
@@ -197,3 +198,104 @@ review needed.
 
 This approach preserves credit without overstating certainty or turning the
 project record into an unsupported legal claim.
+
+### IA-2026-09-10-10 — Creator-origin evidence and research integrity
+
+**Insight:** A creator-origin registry can protect credit and correction only
+when it separates asserted origin, integrity of the captured record, and
+independent support for the claim. External research, AI output, timestamps,
+hashes, and signed provenance should support review, never replace human
+evidence review or become automatic ownership decisions.
+
+**Attribution:** Collaborative governance synthesis from founder direction
+about creator authority and source protection, informed by current
+content-provenance research.
+**Source:** Founder instruction recorded 2026-09-10 in this project session;
+official C2PA specifications at `https://c2pa.org/specifications/`, reviewed
+2026-09-10.
+**Implementation interpretation:** `docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md`.
+**Credit note:** This is an internal governance framework, not a legal
+determination or a representation that AXES verifies all real-world origin
+claims.
+
+### IA-2026-09-10-11 — Chichetki as creative orientation toward Athanor
+
+**Insight:** The founder describes Chichetki as a founder-designed musical
+instrument and symbolic creative "GPS" toward Athanor, expressed through
+crafted objects, dance, rhythm, and musical play. This may guide original
+artistic and experiential direction.
+
+**Attribution:** Founder-provided concept.
+**Source:** Founder instruction recorded 2026-09-10 in this project session.
+**Implementation interpretation:** `docs/AXES_BUSINESS_PLAN.md` and
+`docs/INTERACTIVE_EXPERIENCE_CATALOG.md`.
+**Credit note:** GPS, resequencer, transmission, energy, and alignment are
+creative metaphors in this context. This entry does not assert geographic
+tracking, navigation, measurement, medical, psychological, spiritual,
+technical, or outcome functionality.
+
+### IA-2026-09-10-12 — Pomegranate as an Athanor creative motif
+
+**Insight:** The founder identifies a founder-created pomegranate as a
+symbolic creative offering or orientation toward Athanor within the Chichetki
+system.
+
+**Attribution:** Founder-provided concept.
+**Source:** Founder instruction recorded 2026-09-10 in this project session.
+**Implementation interpretation:** `docs/AXES_BUSINESS_PLAN.md`.
+**Credit note:** This is artistic language, not a representation of an actual
+transmission, measurement, spiritual fact, or technical mechanism. Any public
+asset must be founder-created, independently created, or properly licensed.
+The separate jeweled-pomegranate reference remains private inspiration only
+and may not be copied or published without rights-holder permission.
+
+### IA-2026-09-10-13 — UR Node, sphere, and AU home source designs
+
+**Insight:** The founder identifies three uploaded designs as founder-created
+AXES source designs: the UR Node / Eternal Origin Point composition, the
+sphere eversion and inversion technical-diagram composition, and the AU home
+matrix composition. Together they establish an internal visual direction for
+origin-centered architecture, radial and sphere geometry, black-stone/gold
+materials, and the future AU home interface.
+
+**Attribution:** Founder-provided creative source designs.
+**Source:** Private archive
+`private-archive/copilot-library/2026-09-10-ur-au-source-designs/`:
+
+- `ur-node.png` — SHA-256
+  `953A4B4BCCADBA66CC965675CAAC5B4D8EC56571EC8DA70FFCBC0DEC9363D62C`
+- `sphere-everison-diagram.jpg` — SHA-256
+  `C2A60440066EC7BADB3B69B9B54769C8E70264553E9F529F87953D16DCC40CC3`
+- `au-home-matrix.jpg` — SHA-256
+  `FEA6497884155CC3303C37D9BAD01EE9B4AB0A39BC5406CC58B8490DD344C70E`
+
+**Implementation interpretation:** Future Page 8, Athanor game-console, AU
+home, and creator-origin visual work.
+**Credit note:** The files remain private founder source designs. Do not
+publish, reproduce, train on, or present them as public AXES assets without
+specific founder approval for the proposed use. This entry records project
+provenance and is not a legal ownership determination.
+
+### IA-2026-09-10-14 — AXI, Copilot, and Meta source-design packet
+
+**Insight:** The founder identifies a private packet of 23 related
+founder-directed, AI-assisted source designs and historical screenshots. The
+packet includes Eternal Seed, NUR/UR pomegranate, KEYSTONE Dome, AXES
+architecture, AU/UR mark, Temple of Love, origin-coordinate, and Lyre of Light
+visual direction. The Lyre of Light is a source design for the Chichetki
+musical-instrument and Harmonics sound language.
+
+**Attribution:** The founder reports being the sole human creator/director for
+this packet. AXI, Copilot, and Meta are recorded as reported systems or tools
+in the creation history; no other human contributor is reported.
+**Source:** Private archive
+`private-archive/copilot-library/2026-09-10-axi-copilot-meta-source-designs/`,
+23 files. The SHA-256 manifest has fingerprint
+`F289C33BADEA005C199FCF60360D5A47E87957A040440F3FFA59B2F912C42245`.
+**Implementation interpretation:** Private visual and sound-direction source
+for Chichetki, Harmonics, Athanor, AU, NUR/UR, AXES, and KEYSTONE. Historical
+screenshots preserve claimed context and system history; they do not by
+themselves establish legal status, authorship, or provider rights.
+**Credit note:** The packet remains private. Do not publish, reproduce, train
+on, or present these files as public AXES assets without specific founder
+approval and a documented rights review for the intended use.

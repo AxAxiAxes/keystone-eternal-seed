@@ -1,0 +1,132 @@
+name: AXI continuity validation
+
+on:
+  push:
+    branches:
+      - axaxiaxes-axes-directory-data-model
+      - axaxiaxes-axiom-monorepo
+      - copilot/*
+      - copilot/**
+  pull_request:
+    branches:
+      - axaxiaxes-axiom-monorepo
+  workflow_run:
+    workflows:
+      - Running Copilot cloud agent
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: axi-continuity-validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  node-tests:
+    name: Node tests (${{ matrix.application }})
+    if: ${{ github.event_name != 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        application:
+          - apps/axiom-engine
+          - apps/axiom-freedom
+    defaults:
+      run:
+        working-directory: ${{ matrix.application }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ${{ matrix.application }}/package-lock.json
+      - run: npm ci
+      - if: matrix.application == 'apps/axiom-freedom'
+        run: npm ci --prefix ../axiom-engine
+      - run: npm test
+
+  axi-core-tests:
+    name: AXI.Core tests
+    if: ${{ github.event_name != 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test AXIOM.sln --configuration Release
+
+  directory-fixture-validation:
+    name: AXES Directory fixture validation
+    if: ${{ github.event_name != 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: docs/fixtures/axes-directory
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+      - run: node --test
+
+  engine-image:
+    name: AXIOM engine image
+    if: ${{ github.event_name != 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker build --file apps/axiom-engine/Dockerfile --tag axiom-engine-validation apps/axiom-engine
+      - run: |
+          docker run --detach --name axiom-engine-validation axiom-engine-validation
+          for attempt in {1..10}; do
+            if docker exec axiom-engine-validation node -e "require('http').get('http://localhost:3000/health', response => process.exit(response.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"; then
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs axiom-engine-validation
+          exit 1
+      - if: always()
+        run: docker rm --force axiom-engine-validation || true
+
+  portal-image:
+    name: AXIOM portal image
+    if: ${{ github.event_name != 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker build --file apps/axiom-freedom/Dockerfile --tag axiom-freedom-validation .
+      - run: |
+          docker run --detach --name axiom-freedom-validation --publish 8080:8080 axiom-freedom-validation
+          for attempt in {1..10}; do
+            if curl --fail --silent --show-error http://127.0.0.1:8080/health; then
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs axiom-freedom-validation
+          exit 1
+      - if: always()
+        run: docker rm --force axiom-freedom-validation || true
+
+  copilot-workflow-run-continuity:
+    name: Copilot workflow continuity signal
+    if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Running Copilot cloud agent' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch && startsWith(github.event.workflow_run.head_branch, 'copilot') && github.event.workflow_run.head_repository && github.event.workflow_run.head_repository.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - run: |
+          echo "Copilot workflow completed for branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "Result: ${{ github.event.workflow_run.conclusion }}"
+          echo "If CI push/pull_request runs remain action_required, this is controlled by repository/org approval policy."

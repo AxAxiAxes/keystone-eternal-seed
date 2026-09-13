@@ -72,6 +72,15 @@ those claims without verified filing records and counsel review.
 6. Track filing receipts, deadlines, office actions, attorney invoices, and
    maintenance fees in a private legal register outside the public repository.
 
+### Rights and value-recovery readiness
+
+AXI is an active, revisable development effort. Before claiming, seeking, or
+presenting any legal right, recovery, valuation, damages, licensing value, or
+ownership conclusion, use the staged evidence and professional-review path in
+`AXI_INTENT_AND_RIGHTS_READINESS.md`. The budget reserve supports scoped
+professional review; it is not a determination that a right, recovery, or
+valuation exists.
+
 ## Monthly review
 
 At the beginning of each month, the founder reviews:

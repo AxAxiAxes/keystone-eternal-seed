@@ -1,4 +1,5 @@
 const http = require('http');
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
@@ -9,15 +10,38 @@ const LEADS_FILE = path.join(__dirname, 'leads.json');
 const DOCUMENTS_DIRECTORY = fs.existsSync(path.join(__dirname, 'docs'))
     ? path.resolve(__dirname, 'docs')
     : path.resolve(__dirname, '..', '..', 'docs');
+const PROJECT_TIMELINE_FILE = fs.existsSync(path.join(__dirname, 'PROJECT_TIMELINE.md'))
+    ? path.resolve(__dirname, 'PROJECT_TIMELINE.md')
+    : path.resolve(__dirname, '..', '..', 'PROJECT_TIMELINE.md');
+const PUBLIC_DOCUMENTS = new Set([
+    'AXES_BUSINESS_PLAN.md',
+    'ENGINE_INTEGRATION.md'
+]);
 const AXIOM_ENGINE_URL = new URL(process.env.AXIOM_ENGINE_URL || 'http://127.0.0.1:3000');
 const ENGINE_FAILURE_CATEGORY = Object.freeze({
     UNREACHABLE: 'unreachable-private-engine',
     NON_SUCCESS: 'engine-non-success-response'
 });
 let lastEngineFailure = null;
+const MAX_REQUEST_BODY_BYTES = getPositiveInteger(
+    process.env.AXIOM_MAX_REQUEST_BODY_BYTES,
+    65536
+);
+const MAX_LEAD_FIELD_LENGTH = 500;
+const REQUIRED_LEAD_FIELDS = ['name', 'phone'];
 
+function getPositiveInteger(value, fallback) {
+    const parsed = Number.parseInt(value, 10);
+    return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+// axescontracting.com is the private, admin-only AXES command center, not a
+// public marketing host. isAxesContractingHost() is used at the root route
+// to require admin credentials and serve command-center.html there instead
+// of the public index.html.
 function isAxesContractingHost(host) {
-    return String(host || '').split(':')[0].toLowerCase() === 'axescontracting.com';
+    const hostname = String(host || '').split(':')[0].toLowerCase();
+    return hostname === 'axescontracting.com' || hostname === 'www.axescontracting.com';
 }
 
 function getLeads() {
@@ -25,6 +49,33 @@ function getLeads() {
           if (fs.existsSync(LEADS_FILE)) return JSON.parse(fs.readFileSync(LEADS_FILE, 'utf8'));
     } catch(e) {}
     return [];
+}
+
+// The /api/intake endpoint has no live public form wired to it (a prior,
+// currently unused iteration of this portal), but it stays reachable, so it
+// must not accept and persist arbitrary/malformed payloads. Every required
+// field must be a non-empty, reasonably bounded string; any other value
+// (missing, wrong type, empty/whitespace-only, or too long) is rejected
+// before anything is written to disk.
+function validateLeadPayload(body) {
+    if (body === null || typeof body !== 'object' || Array.isArray(body)) {
+        return 'lead payload must be a JSON object';
+    }
+    for (const field of REQUIRED_LEAD_FIELDS) {
+        const value = body[field];
+        if (typeof value !== 'string' || value.trim().length === 0) {
+            return field + ' must be a non-empty string';
+        }
+        if (value.length > MAX_LEAD_FIELD_LENGTH) {
+            return field + ' must be ' + MAX_LEAD_FIELD_LENGTH + ' characters or fewer';
+        }
+    }
+    for (const [key, value] of Object.entries(body)) {
+        if (typeof value === 'string' && value.length > MAX_LEAD_FIELD_LENGTH) {
+            return key + ' must be ' + MAX_LEAD_FIELD_LENGTH + ' characters or fewer';
+        }
+    }
+    return null;
 }
 
 function saveLead(lead) {
@@ -48,20 +99,57 @@ function serveFile(res, filePath, contentType) {
 function parseBody(req) {
     return new Promise((resolve) => {
           let body = '';
-          req.on('data', chunk => body += chunk);
-          req.on('end', () => { try { resolve(JSON.parse(body)); } catch(e) { resolve({}); } });
+          let bodySize = 0;
+          let oversized = false;
+          req.on('data', chunk => {
+              bodySize += chunk.length;
+              if (bodySize > MAX_REQUEST_BODY_BYTES) {
+                  oversized = true;
+                  return;
+              }
+              body += chunk;
+          });
+          req.on('end', () => {
+              if (oversized) {
+                  resolve(null);
+                  return;
+              }
+              try { resolve(JSON.parse(body)); } catch(e) { resolve({}); }
+          });
     });
+}
+
+function rejectOversizedRequest(res) {
+    res.writeHead(413, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'request body is too large' }));
 }
 
 function checkAdmin(req) {
     if (!ADMIN_PASSWORD) return false;
-    const b64 = ((req.headers['authorization'] || '').split(' ')[1] || '');
-    const parts = Buffer.from(b64, 'base64').toString().split(':');
-    return parts[1] === ADMIN_PASSWORD;
+    const authorization = req.headers.authorization;
+    if (typeof authorization !== 'string') return false;
+
+    const match = /^Basic\s+([A-Za-z0-9+/]+={0,2})$/.exec(authorization);
+    if (!match) return false;
+
+    const decoded = Buffer.from(match[1], 'base64').toString('utf8');
+    const separator = decoded.indexOf(':');
+    if (separator < 0) return false;
+
+    const providedPassword = Buffer.from(decoded.slice(separator + 1));
+    const expectedPassword = Buffer.from(ADMIN_PASSWORD);
+    return providedPassword.length === expectedPassword.length
+        && crypto.timingSafeEqual(providedPassword, expectedPassword);
 }
 
 function serveDocument(res, pathname) {
     const relativePath = decodeURIComponent(pathname.substring('/library/'.length));
+    if (!PUBLIC_DOCUMENTS.has(relativePath)) {
+        res.writeHead(404);
+        res.end('Not Found');
+        return;
+    }
+
     const documentPath = path.resolve(DOCUMENTS_DIRECTORY, relativePath);
 
     if (!documentPath.startsWith(DOCUMENTS_DIRECTORY + path.sep)) {
@@ -74,6 +162,53 @@ function serveDocument(res, pathname) {
         ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         : 'text/plain; charset=utf-8';
     serveFile(res, documentPath, contentType);
+}
+
+function getCommandCenterCheckpoints(timelineFilePath = PROJECT_TIMELINE_FILE) {
+    const timeline = fs.readFileSync(timelineFilePath, 'utf8');
+    const timelineLines = timeline.split(/\r?\n/);
+    const phaseLineIndex = timelineLines.findIndex(line => /^\*\*Current phase:\*\*/.test(line));
+
+    // The phase line supports the same indented-continuation convention as
+    // checkpoint titles below, so a wrapped phase is captured in full instead
+    // of silently truncating to its first line.
+    let currentPhase;
+    if (phaseLineIndex !== -1) {
+        const phaseParts = [timelineLines[phaseLineIndex].replace(/^\*\*Current phase:\*\*\s*/, '')];
+        for (let i = phaseLineIndex + 1; i < timelineLines.length && /^\s{2,}\S/.test(timelineLines[i]); i += 1) {
+            phaseParts.push(timelineLines[i].trim());
+        }
+        currentPhase = phaseParts.join(' ').trim();
+    }
+
+    const sectionStart = timeline.indexOf('## Current checkpoints');
+    const nextSection = timeline.indexOf('\n## ', sectionStart + 1);
+
+    if (!currentPhase || sectionStart === -1 || nextSection === -1) {
+        throw new Error('Project timeline checkpoints are unavailable.');
+    }
+
+    const checkpoints = [];
+    let currentCheckpoint;
+    const lines = timeline.slice(sectionStart, nextSection).split(/\r?\n/);
+    for (const line of lines) {
+        const entry = line.match(/^- \[([ xX])\]\s+(.+)$/);
+        if (entry) {
+            currentCheckpoint = {
+                status: entry[1].toLowerCase() === 'x' ? 'complete' : 'planned',
+                title: entry[2].trim()
+            };
+            checkpoints.push(currentCheckpoint);
+        } else if (currentCheckpoint && /^\s{2,}\S/.test(line)) {
+            currentCheckpoint.title += ' ' + line.trim();
+        }
+    }
+
+    return {
+        recordedAt: new Date().toISOString(),
+        currentPhase,
+        checkpoints
+    };
 }
 
 async function invokeEngine(endpoint, method = 'GET', body) {
@@ -90,9 +225,11 @@ async function invokeEngine(endpoint, method = 'GET', body) {
     }
 
     if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
         throw recordEngineFailure(
             ENGINE_FAILURE_CATEGORY.NON_SUCCESS,
-            response.status
+            response.status,
+            payload.error || 'AXIOM engine returned HTTP ' + response.status
         );
     }
 
@@ -107,12 +244,12 @@ function invokeAxiomEngine(command) {
     return invokeEngine('/axiom', 'POST', command);
 }
 
-function recordEngineFailure(category, statusCode) {
+function recordEngineFailure(category, statusCode, message) {
     lastEngineFailure = {
         category,
         recordedAt: new Date().toISOString()
     };
-    const error = new Error('AXIOM engine request failed');
+    const error = new Error(message || 'AXIOM engine request failed');
     error.diagnosticCategory = category;
     if (Number.isInteger(statusCode)) error.statusCode = statusCode;
     return error;
@@ -134,11 +271,17 @@ function unavailableEngineStatus(error) {
 async function getSupportStatus() {
     const checks = await Promise.allSettled([
         invokeEngine('/health'),
+        invokeEngine('/system/readiness'),
         invokeEngine('/automation/status'),
         invokeEngine('/monitoring/status'),
-        invokeEngine('/system/checkpoints?limit=1')
+        invokeEngine('/system/checkpoints?limit=1'),
+        invokeEngine('/system/continuity-record'),
+        invokeEngine('/system/source-catalog'),
+        invokeEngine('/system/business-metrics'),
+        invokeEngine('/system/service-registry'),
+        invokeEngine('/automation/profiles')
     ]);
-    const [engine, automation, monitoring, checkpoints] = checks;
+    const [engine, readiness, automation, monitoring, checkpoints, continuityRecord, sourceCatalog, businessMetrics, serviceRegistry, automationProfiles] = checks;
 
     return {
         recordedAt: new Date().toISOString(),
@@ -146,6 +289,9 @@ async function getSupportStatus() {
         engine: engine.status === 'fulfilled'
             ? { status: 'ok', detail: engine.value.status || 'online' }
             : unavailableEngineStatus(engine.reason),
+        readiness: readiness.status === 'fulfilled'
+            ? readiness.value
+            : { status: 'unavailable' },
         automation: automation.status === 'fulfilled'
             ? { status: 'ok', ...automation.value }
             : unavailableEngineStatus(automation.reason),
@@ -155,6 +301,21 @@ async function getSupportStatus() {
         checkpoints: checkpoints.status === 'fulfilled'
             ? { status: 'ok', latest: checkpoints.value[0] || null }
             : unavailableEngineStatus(checkpoints.reason),
+        continuityRecord: continuityRecord.status === 'fulfilled'
+            ? continuityRecord.value
+            : { status: 'unavailable' },
+        sourceCatalog: sourceCatalog.status === 'fulfilled'
+            ? sourceCatalog.value
+            : { status: 'unavailable' },
+        businessMetrics: businessMetrics.status === 'fulfilled'
+            ? businessMetrics.value
+            : { status: 'unavailable' },
+        serviceRegistry: serviceRegistry.status === 'fulfilled'
+            ? serviceRegistry.value
+            : { status: 'unavailable' },
+        automationProfiles: automationProfiles.status === 'fulfilled'
+            ? { status: 'ok', ...automationProfiles.value }
+            : { status: 'unavailable' },
         lastEngineFailure,
         email: {
             status: 'planned',
@@ -187,26 +348,45 @@ const server = http.createServer(async (req, res) => {
                                          return;
                                    }
     if (pathname === '/' || pathname === '/index.html') {
-          const page = isAxesContractingHost(req.headers.host)
-              ? 'axescontracting.html'
-              : 'index.html';
-          serveFile(res, path.join(__dirname, page), 'text/html; charset=utf-8');
+          if (isAxesContractingHost(req.headers.host)) {
+              if (!requireAdmin(req, res)) return;
+              serveFile(res, path.join(__dirname, 'command-center.html'), 'text/html; charset=utf-8');
+              return;
+          }
+          serveFile(res, path.join(__dirname, 'index.html'), 'text/html; charset=utf-8');
           return;
     }
-    if (pathname === '/axiom') {
+    if (pathname === '/axiom' || pathname === '/axiom/') {
           serveFile(res, path.join(__dirname, 'axiom_web_interface.html'), 'text/html; charset=utf-8');
           return;
     }
-    if (pathname === '/materials') {
+    if (pathname === '/origin-continuity' || pathname === '/origin-continuity/') {
+          serveFile(res, path.join(__dirname, 'origin-continuity.html'), 'text/html; charset=utf-8');
+          return;
+    }
+    if (pathname === '/materials' || pathname === '/materials/') {
           serveFile(res, path.join(__dirname, 'materials.html'), 'text/html; charset=utf-8');
           return;
     }
-    if (pathname === '/automation') {
+    if (pathname === '/design-desk' || pathname === '/design-desk/') {
+          serveFile(res, path.join(__dirname, 'design-desk.html'), 'text/html; charset=utf-8');
+          return;
+    }
+    if (pathname === '/axescontracting' || pathname === '/axescontracting/') {
+          serveFile(res, path.join(__dirname, 'axescontracting.html'), 'text/html; charset=utf-8');
+          return;
+    }
+    if (pathname === '/automation' || pathname === '/automation/') {
           if (!requireAdmin(req, res)) return;
           serveFile(res, path.join(__dirname, 'automation.html'), 'text/html; charset=utf-8');
           return;
     }
-    if (pathname === '/support') {
+    if (pathname === '/command-center' || pathname === '/command-center/') {
+          if (!requireAdmin(req, res)) return;
+          serveFile(res, path.join(__dirname, 'command-center.html'), 'text/html; charset=utf-8');
+          return;
+    }
+    if (pathname === '/support' || pathname === '/support/') {
           if (!requireAdmin(req, res)) return;
           serveFile(res, path.join(__dirname, 'support.html'), 'text/html; charset=utf-8');
           return;
@@ -219,8 +399,12 @@ const server = http.createServer(async (req, res) => {
           serveDocument(res, pathname);
           return;
     }
-    if (pathname === '/embed' || pathname === '/axes') {
-          serveFile(res, path.join(__dirname, 'axes_embed.html'), 'text/html; charset=utf-8');
+    if (pathname === '/embed' || pathname === '/embed/' || pathname === '/axes' || pathname === '/axes/') {
+          // No embed page has ever been built (axes_embed.html never existed). Return an
+          // honest "not yet available" response instead of a crashed/missing-file 404 so the
+          // widget.js chat bubble iframe fails clearly rather than silently.
+          res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+          res.end('<!doctype html><html><body style="font-family:sans-serif;text-align:center;padding:40px;color:#333"><p>This embedded chat widget is not yet available.</p></body></html>');
           return;
     }
     if (pathname === '/widget.js') {
@@ -229,6 +413,16 @@ const server = http.createServer(async (req, res) => {
     }
     if (pathname === '/api/intake' && req.method === 'POST') {
           const body = await parseBody(req);
+          if (body === null) {
+              rejectOversizedRequest(res);
+              return;
+          }
+          const validationError = validateLeadPayload(body);
+          if (validationError) {
+              res.writeHead(400, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: validationError }));
+              return;
+          }
           const lead = saveLead(body);
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ success: true, id: lead.id, message: 'Team alerted. We respond within 60 minutes.' }));
@@ -236,6 +430,10 @@ const server = http.createServer(async (req, res) => {
     }
     if (pathname === '/api/axiom' && req.method === 'POST') {
           const command = await parseBody(req);
+          if (command === null) {
+              rejectOversizedRequest(res);
+              return;
+          }
           if (typeof command.action !== 'string' || command.action.trim().length === 0) {
                   res.writeHead(400, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify({ error: 'action must be a non-empty string' }));
@@ -247,9 +445,18 @@ const server = http.createServer(async (req, res) => {
                   res.writeHead(200, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify(result));
           } catch (error) {
-                  console.error('AXIOM engine request failed:', getEngineFailureCategory(error));
+                  console.error('AXIOM engine request failed:', getEngineFailureCategory(error), error.message);
+                  if (command.action === 'chat' && error.statusCode === 503) {
+                          res.writeHead(503, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify({ error: 'AXIOM chat is not configured' }));
+                          return;
+                  }
                   res.writeHead(502, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify({ error: 'AXIOM engine is unavailable' }));
+                  res.end(JSON.stringify({
+                    error: command.action === 'chat'
+                      ? 'AXIOM chat is temporarily unavailable'
+                      : 'AXIOM engine is unavailable'
+                  }));
           }
           return;
     }
@@ -266,6 +473,19 @@ const server = http.createServer(async (req, res) => {
           }
           return;
     }
+    if (pathname === '/api/automation/readiness' && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine('/automation/readiness');
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM automation readiness request failed:', error.message);
+                  res.writeHead(502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
+          }
+          return;
+    }
     if (pathname === '/api/automation/agents' && req.method === 'GET') {
           if (!requireAdmin(req, res)) return;
           try {
@@ -276,6 +496,44 @@ const server = http.createServer(async (req, res) => {
                   console.error('AXIOM automation agent request failed:', error.message);
                   res.writeHead(502, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
+          }
+          return;
+    }
+    const agentReportRoute = pathname.match(/^\/api\/automation\/agents\/([^/]+)\/report$/);
+    if (agentReportRoute && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine(
+                    '/automation/agents/' + encodeURIComponent(agentReportRoute[1]) + '/report'
+                  );
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM agent timeline request failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
+    }
+    const agentAccountabilityRoute = pathname.match(
+      /^\/api\/automation\/agents\/([^/]+)\/accountability$/
+    );
+    if (agentAccountabilityRoute && req.method === 'POST') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine(
+                    '/automation/agents/' +
+                      encodeURIComponent(agentAccountabilityRoute[1]) +
+                      '/accountability',
+                    'POST',
+                    await parseBody(req)
+                  );
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM agent accountability review failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
           }
           return;
     }
@@ -295,13 +553,20 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/tasks' && req.method === 'POST') {
           if (!requireAdmin(req, res)) return;
           try {
-                  const task = await invokeEngine('/automation/tasks', 'POST', await parseBody(req));
+                  const body = await parseBody(req);
+                  if (body === null) {
+                      rejectOversizedRequest(res);
+                      return;
+                  }
+                  const task = await invokeEngine('/automation/tasks', 'POST', body);
                   res.writeHead(201, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify(task));
           } catch (error) {
                   console.error('AXIOM automation task creation failed:', error.message);
-                  res.writeHead(502, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({
+                    error: error.statusCode ? error.message : 'AXIOM automation service is unavailable'
+                  }));
           }
           return;
     }
@@ -309,10 +574,15 @@ const server = http.createServer(async (req, res) => {
     if (approvalRoute && req.method === 'POST') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const body = await parseBody(req);
+                      if (body === null) {
+                          rejectOversizedRequest(res);
+                          return;
+                      }
                       const task = await invokeEngine(
                         '/automation/tasks/' + encodeURIComponent(approvalRoute[1]) + '/approval',
                         'POST',
-                        await parseBody(req)
+                        body
                       );
                       res.writeHead(200, { 'Content-Type': 'application/json' });
                       res.end(JSON.stringify(task));
@@ -326,7 +596,12 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/process' && req.method === 'POST') {
           if (!requireAdmin(req, res)) return;
           try {
-                  const result = await invokeEngine('/automation/process', 'POST', await parseBody(req));
+                  const body = await parseBody(req);
+                  if (body === null) {
+                      rejectOversizedRequest(res);
+                      return;
+                  }
+                  const result = await invokeEngine('/automation/process', 'POST', body);
                   res.writeHead(200, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify(result));
           } catch (error) {
@@ -349,24 +624,42 @@ const server = http.createServer(async (req, res) => {
               }
               return;
     }
+    if (pathname === '/api/command-center/checkpoints' && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(getCommandCenterCheckpoints()));
+          } catch (error) {
+                  console.error('AXES Command Center checkpoint request failed:', error.message);
+                  res.writeHead(500, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: 'AXES Command Center checkpoints are unavailable' }));
+          }
+          return;
+    }
     if (pathname === '/api/automation/chat' && req.method === 'POST') {
           if (!requireAdmin(req, res)) return;
           try {
-                  const result = await invokeEngine('/automation/chat', 'POST', await parseBody(req));
+                  const body = await parseBody(req);
+                  if (body === null) {
+                      rejectOversizedRequest(res);
+                      return;
+                  }
+                  const result = await invokeEngine('/automation/chat', 'POST', body);
                   res.writeHead(200, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify(result));
           } catch (error) {
-                  console.error('AXIOM agent chat failed:', error.message);
+                  console.error('AXIOM agent chat failed:', getEngineFailureCategory(error));
                   res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify({ error: error.message }));
+                  res.end(JSON.stringify({ error: 'AXIOM engine request failed' }));
           }
           return;
     }
     if (pathname === '/api/automation/monitoring/status' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const result = await invokeEngine('/monitoring/status');
                       res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await invokeEngine('/monitoring/status')));
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXIOM monitoring status request failed:', error.message);
                       res.writeHead(502, { 'Content-Type': 'application/json' });
@@ -377,8 +670,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/automation/monitoring/history' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const result = await invokeEngine('/monitoring/history' + parsed.search);
                       res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await invokeEngine('/monitoring/history' + parsed.search)));
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXIOM monitoring history request failed:', error.message);
                       res.writeHead(502, { 'Content-Type': 'application/json' });
@@ -399,11 +693,290 @@ const server = http.createServer(async (req, res) => {
               }
               return;
     }
+    if (pathname === '/api/automation/continuity-record' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const result = await invokeEngine('/system/continuity-record');
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(result));
+              } catch (error) {
+                      console.error('AXIOM continuity record status request failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/continuity-record/events' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const result = await invokeEngine(
+                        '/system/continuity-record/events' + parsed.search
+                      );
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(result));
+              } catch (error) {
+                      console.error('AXIOM continuity record history request failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/source-catalog' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const result = await invokeEngine('/system/source-catalog');
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(result));
+              } catch (error) {
+                      console.error('AXIOM source catalog status request failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/source-catalog/entries' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const result = await invokeEngine(
+                        '/system/source-catalog/entries' + parsed.search
+                      );
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(result));
+              } catch (error) {
+                      console.error('AXIOM source catalog entry request failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/business-metrics' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const result = await invokeEngine('/system/business-metrics');
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(result));
+              } catch (error) {
+                      console.error('AXIOM business metrics status request failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/business-metrics/entries' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const result = await invokeEngine(
+                        '/system/business-metrics/entries' + parsed.search
+                      );
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(result));
+              } catch (error) {
+                      console.error('AXIOM business metrics entry request failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/business-metrics/summary' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const result = await invokeEngine('/system/business-metrics/summary');
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(result));
+              } catch (error) {
+                      console.error('AXIOM business metrics summary request failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/service-registry' && req.method === 'GET') {
+                  if (!requireAdmin(req, res)) return;
+                  try {
+                          const result = await invokeEngine('/system/service-registry');
+                          res.writeHead(200, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify(result));
+                  } catch (error) {
+                          console.error('AXIOM service registry status request failed:', error.message);
+                          res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify({ error: error.message }));
+                  }
+                  return;
+    }
+    if (pathname === '/api/automation/service-registry/entries' && req.method === 'GET') {
+                  if (!requireAdmin(req, res)) return;
+                  try {
+                          const result = await invokeEngine(
+                            '/system/service-registry/entries' + parsed.search
+                          );
+                          res.writeHead(200, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify(result));
+                  } catch (error) {
+                          console.error('AXIOM service registry history request failed:', error.message);
+                          res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify({ error: error.message }));
+                  }
+                  return;
+    }
+    if (pathname === '/api/automation/service-registry/projection' && req.method === 'GET') {
+                  if (!requireAdmin(req, res)) return;
+                  try {
+                          const result = await invokeEngine('/system/service-registry/projection');
+                          res.writeHead(200, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify(result));
+                  } catch (error) {
+                          console.error('AXIOM service registry projection request failed:', error.message);
+                          res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify({ error: error.message }));
+                  }
+                  return;
+    }
+    if (pathname === '/api/automation/profiles' && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine('/automation/profiles');
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM automation profile status request failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
+    }
+    if (pathname === '/api/automation/storage' && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine('/system/storage');
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM storage status request failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
+    }
+    if (pathname === '/api/automation/profiles' && req.method === 'POST') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const profile = await invokeEngine('/automation/profiles', 'POST', await parseBody(req));
+                  res.writeHead(201, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(profile));
+          } catch (error) {
+                  console.error('AXIOM automation profile creation failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
+    }
+    if (pathname === '/api/automation/profiles/preview' && req.method === 'POST') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine(
+                    '/automation/profiles/preview', 'POST', await parseBody(req)
+                  );
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM automation profile preview failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
+    }
+    if (pathname === '/api/automation/profiles/history' && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine('/automation/profiles/history' + parsed.search);
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM automation profile history request failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
+    }
+    if (pathname === '/api/automation/profiles/health' && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const result = await invokeEngine('/automation/profiles/health');
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(result));
+          } catch (error) {
+                  console.error('AXIOM automation profile health request failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
+    }
+    const profileLifecycleRoute = pathname.match(/^\/api\/automation\/profiles\/([^/]+)\/(activate|pause|resume)$/);
+    if (profileLifecycleRoute && req.method === 'POST') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const profile = await invokeEngine(
+                    '/automation/profiles/' + encodeURIComponent(profileLifecycleRoute[1]) + '/' + profileLifecycleRoute[2],
+                    'POST', await parseBody(req)
+                  );
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(profile));
+          } catch (error) {
+                  console.error('AXIOM automation profile lifecycle request failed:', error.message);
+                  res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: error.message }));
+          }
+          return;
+    }
+    if (pathname === '/api/automation/gravity-center' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const result = await invokeEngine('/system/gravity-center');
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(result));
+              } catch (error) {
+                      console.error('AXIOM gravity center request failed:', error.message);
+                      res.writeHead(502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: 'AXIOM coordinate service is unavailable' }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/bead-passports' && req.method === 'GET') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const result = await invokeEngine('/system/bead-passports' + parsed.search);
+                      res.writeHead(200, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(result));
+              } catch (error) {
+                      console.error('AXIOM bead passport request failed:', error.message);
+                      res.writeHead(502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: 'AXIOM coordinate service is unavailable' }));
+              }
+              return;
+    }
+    if (pathname === '/api/automation/bead-passports' && req.method === 'POST') {
+              if (!requireAdmin(req, res)) return;
+              try {
+                      const passport = await invokeEngine(
+                        '/system/bead-passports',
+                        'POST',
+                        await parseBody(req)
+                      );
+                      res.writeHead(201, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify(passport));
+              } catch (error) {
+                      console.error('AXIOM bead passport registration failed:', error.message);
+                      res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                      res.end(JSON.stringify({ error: error.message }));
+              }
+              return;
+    }
     if (pathname === '/api/support/status' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {
+                      const result = await getSupportStatus();
                       res.writeHead(200, { 'Content-Type': 'application/json' });
-                      res.end(JSON.stringify(await getSupportStatus()));
+                      res.end(JSON.stringify(result));
               } catch (error) {
                       console.error('AXES support status request failed:', error.message);
                       res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -413,7 +986,8 @@ const server = http.createServer(async (req, res) => {
     }
     if (pathname === '/admin') {
           if (!requireAdmin(req, res)) return;
-          serveFile(res, path.join(__dirname, 'admin.html'), 'text/html; charset=utf-8');
+          res.writeHead(302, { Location: '/support' });
+          res.end();
           return;
     }
     if (pathname === '/api/leads' && req.method === 'GET') {
@@ -435,3 +1009,4 @@ if (require.main === module) {
 }
 
 module.exports = server;
+module.exports.getCommandCenterCheckpoints = getCommandCenterCheckpoints;

@@ -6,5 +6,6 @@ bin/
 obj/
 apps/axiom-engine/data/
 apps/axiom-freedom/axiom_memory/
+apps/axiom-freedom/leads.json
 private-archive/
 .railway/

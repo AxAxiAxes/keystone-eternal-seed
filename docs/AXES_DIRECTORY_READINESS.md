@@ -25,10 +25,16 @@ automated marketing platform.
 ## Listing data rule
 
 Only publish data that a business owner has submitted or explicitly confirmed
-for that public listing. Every listing needs a source, listing owner/contact,
-review date, correction route, removal route, and published-at timestamp.
+for that public listing. Every listing needs a permitted source, an
+owner-or-authorized-representative confirmation basis, review date, correction
+route, removal route, and published-at timestamp.
 Do not scrape personal records or publish home addresses, personal phone
 numbers, identity documents, private contact details, or sensitive categories.
+
+The proposed pilot field set, internal/public separation, lifecycle states,
+renewal evidence, correction/removal record, and track-specific limits are in
+`AXES_DIRECTORY_DATA_MODEL.md`. That record is an internal planning contract,
+not a live data store or a permission to collect listings.
 
 ## Marketing-assistance boundary
 
@@ -51,6 +57,9 @@ Do not begin a public pilot until:
       communications requirements have been reviewed for the actual scope.
 - [ ] A human owner and correction/removal contact are assigned.
 - [ ] The directory data model has a listing source and consent record.
+- [ ] The approved implementation conforms to
+      `AXES_DIRECTORY_DATA_MODEL.md`, including its correction/removal and
+      renewal lifecycle.
 - [ ] Terms, privacy notice, moderation/review process, and incident path are
       ready.
 - [ ] Security, access control, backup, and deletion/export behavior are
@@ -117,6 +126,7 @@ availability guarantee, or endorsement by AXES.
 
 ## Related records
 
+- `AXES_DIRECTORY_DATA_MODEL.md`
 - `AXES_BUSINESS_PLAN.md`
 - `AXES_GOVERNANCE_AND_SAFEGUARDING.md`
 - `AXES_PLATFORM_PLAN.md`

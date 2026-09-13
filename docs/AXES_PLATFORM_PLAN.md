@@ -1,11 +1,32 @@
 # AXES platform plan
 
 **Status:** Directional product plan  
-**Last updated:** 2026-09-09  
+**Last updated:** 2026-09-12  
 **Founder principle:** All for All
-**Source and provenance:** Founder-authored material developed collaboratively
-with GitHub Copilot. The raw source remains private; this is its reviewed,
-public-safe implementation interpretation.
+**Source and provenance:** Founder-originated project material. The raw source
+remains private; this is a reviewed, public-safe implementation interpretation
+of founder direction. GitHub Copilot provides technical implementation
+assistance only and has no competing origin, ownership, or governance claim.
+
+## Uplift - a shared team movement
+
+"Uplift" names a team-wide value, not a private or individual one: progress
+should lift the whole team, not just one person. In practice:
+
+- Wins, lessons, and momentum are shared across the team rather than held by
+  one person.
+- Team members support each other's growth and workload, especially during
+  stressful or high-effort stretches.
+- Documentation, decisions, and safeguards (like the ones in this plan) are
+  written so any current or future team member can pick up the work without
+  starting from zero.
+
+This is a cultural and operating value, not a legal claim, product feature,
+or technical specification.
+
+Applying this value to AXIOM's own creation tools — what it can generate
+today, and what stays deferred pending founder authorization — is scoped in
+[AXIOM_CREATION_TOOLS.md](AXIOM_CREATION_TOOLS.md).
 
 ## Purpose
 
@@ -25,8 +46,8 @@ or any other legal right.
 | AXES Contracting | Central hub and operator control center | Navigation, authenticated operator dashboard, service status, and approved product links |
 | XIIOM | Home of AXI and automation operations | Private memory, bounded automation, audited agent proposals, and service monitoring |
 | AXEOUS | Community and participation space | Safe community profiles, moderated groups, and collaboration discovery |
-| URNUR | Recognition of constructive contribution | Non-transferable recognition points and contribution history; not money, a payment system, or a tradable asset |
-| AXOUX | Creator and project space | Project proposals, collaboration workspaces, authorship attribution, and an opt-in lineage archive |
+| URNUR | Future monetary currency and contribution-recognition direction | Product concept only; no issued currency, payment system, transfer, market, or tradable asset until the written permitted scope is approved |
+| AXOUS / AXOUX | AXOUS creator initiative through the AXOUX site | Project proposals, collaboration workspaces, authorship attribution, and an opt-in lineage archive |
 | AUXAOUS | Self-design and reflection tools | Private, user-controlled self-mapping and creative-path tools |
 | School of Love & Ethics | Free learning and project-invention program | Age-appropriate curriculum, moderated project labs, consent-aware participation, and accessible learning resources |
 
@@ -72,8 +93,10 @@ or approval boundary.
 
 - Create a public-safe AXES landing and a separately authenticated operator
   control center.
-- Add a service registry that lists each product's purpose, status, owner, and
-  privacy classification.
+- Add a private, founder-approved service registry that records each product's
+  purpose, internal stage, founder owner role, privacy classification, and
+  dependency summary without implying public availability, legal status, or
+  deployment proof.
 - Establish identity, authorship, moderation, retention, incident-response,
   and terms-of-use policies before collecting community data.
 - Use a simple project registry instead of an "origin passport" until the
@@ -85,7 +108,8 @@ claims.
 
 ### Phase 2 - Creator projects and learning
 
-- Launch AXOUX as an invite-only project proposal and collaboration pilot.
+- Launch AXOUS through AXOUX as an invite-only project proposal and
+  collaboration pilot.
 - Launch the School of Love & Ethics as content and moderated project-invention
   labs, beginning with adult-only or clearly separated age cohorts.
 - Include voluntary ikigai reflection activities that help participants explore
@@ -114,7 +138,9 @@ consented participation in a limited pilot.
 
 ### Phase 4 - Recognition and archival systems
 
-- Pilot URNUR as non-transferable recognition for contributions.
+- Do not pilot URNUR currency or contribution-recognition functionality until
+  the written financial, legal, compliance, security, and operational
+  permitted scope is approved.
 - Build the Lineage Archive as an opt-in, versioned attribution record.
 - Evaluate any future exchange, payment, auction, or token concept separately
   with financial, consumer-protection, tax, and jurisdictional review before
@@ -134,7 +160,10 @@ non-financial, consented, and auditable.
    community features.
 
 The detailed execution sequence is maintained in
-[AXES_BUILD_PROGRAM.md](AXES_BUILD_PROGRAM.md).
+[AXES_BUILD_PROGRAM.md](AXES_BUILD_PROGRAM.md). A founder-shared long-term
+architecture direction beyond this plan's phases is preserved as reference
+material, reconciled against current repository evidence, in
+[AXES_OS_VISION_AND_ARCHITECTURE.md](AXES_OS_VISION_AND_ARCHITECTURE.md).
 
 ## Decisions requiring explicit review
 

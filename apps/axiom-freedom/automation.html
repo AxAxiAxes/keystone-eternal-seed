@@ -18,12 +18,16 @@
     table { border-collapse:collapse; width:100%; } th,td { border-bottom:1px solid #313b4d; padding:9px; text-align:left; vertical-align:top; }
     #result { white-space:pre-wrap; color:#b8e6c2; } .hidden { display:none; }
     .priority-5 { color:#fca5a5; } .priority-4 { color:#fdba74; } .priority-3 { color:#fde68a; } .priority-2 { color:#bfdbfe; } .priority-1 { color:#cbd5e1; }
+    .continuity-tree, .continuity-tree ul { list-style:none; margin:0; padding-left:22px; }
+    .continuity-tree { padding-left:0; } .continuity-tree ul { border-left:1px solid #46536a; margin-left:8px; }
+    .continuity-tree li { margin:9px 0; } .tree-node { display:inline-block; background:#111722; border-radius:6px; padding:7px 10px; }
+    .tree-ready { color:#b8e6c2; } .tree-attention { color:#fca5a5; } .tree-muted { color:#aab7c7; }
   </style>
 </head>
 <body>
 <main>
   <h1>AXIOM Automation Console</h1>
-  <p class="note">Private operational controls. Only allowlisted tasks can run; arbitrary commands are not accepted.</p>
+  <p class="note">Founder-controlled private operational process. Only allowlisted tasks can run; AXI roles cannot assign, remove, approve, suspend, or reactivate themselves, and arbitrary commands are not accepted.</p>
   <section>
     <div class="actions"><button id="refresh" class="secondary">Refresh</button><button id="process">Process Due Tasks</button></div>
     <div id="metrics" class="metrics"></div>
@@ -33,14 +37,117 @@
     <h2>Live Intelligence</h2>
     <p class="note">Private health, memory, scheduler, queue, failure, agent, run, and provider-usage signals. History records only meaningful changes or attention conditions.</p>
     <div class="actions"><button id="capture-monitoring" class="secondary">Capture Snapshot</button></div>
+    <div id="governance"></div>
+    <div id="memory-storage"></div>
     <div id="monitoring"></div>
     <div id="monitoring-history"></div>
+  </section>
+  <section>
+    <h2>Automation Activation Profiles</h2>
+    <p class="note">Founder-controlled internal schedules. Operations observation schedules monitoring and governance checks. Continuity protection also schedules checkpoint and recovery-bundle actions. Profiles do not enable the scheduler themselves.</p>
+    <div id="automation-profiles"></div>
+    <div id="automation-profile-health"></div>
+    <div id="automation-profile-history"></div>
+    <h3>Create an operational profile draft</h3>
+    <form id="automation-profile-form">
+      <label>Profile template <select id="automation-profile-template"><option value="operations-observation">Operations observation</option><option value="continuity-protection">Continuity protection</option></select></label>
+      <label>Profile ID <input id="automation-profile-id" required maxlength="80" pattern="[a-z][a-z0-9-]{2,79}" placeholder="daily-continuity-protection"></label>
+      <label>Monitoring recurrence minutes <input id="profile-monitoring-recurrence" type="number" min="5" max="1440" value="60" required></label>
+      <label>Governance recurrence minutes <input id="profile-governance-recurrence" type="number" min="60" max="10080" value="1440" required></label>
+      <label class="continuity-protection-field hidden">Checkpoint recurrence minutes <input id="profile-checkpoint-recurrence" type="number" min="60" max="10080" value="1440"></label>
+      <label class="continuity-protection-field hidden">Recovery recurrence minutes <input id="profile-recovery-recurrence" type="number" min="60" max="10080" value="1440"></label>
+      <button type="button" id="preview-observation-profile" class="secondary">Preview Without Changes</button>
+      <button type="submit">Create Founder-Controlled Draft</button>
+    </form>
+    <h3>Configure an approved founder task template</h3>
+    <p class="note">Select an active registered role and one compatible allowlisted action. Dependencies must be existing completed task UUIDs and are checked before a draft or profile task is created. Payload input is structured JSON only and is independently validated against the selected action; never enter sensitive data.</p>
+    <form id="founder-profile-form">
+      <label>Profile ID <input id="founder-profile-id" required maxlength="80" pattern="[a-z][a-z0-9-]{2,79}" placeholder="private-memory-check"></label>
+      <label>Task template key <input id="founder-profile-key" required maxlength="80" pattern="[a-z][a-z0-9-]{2,79}" value="scheduled-task"></label>
+      <label>Active AXI role <select id="founder-profile-role" required></select></label>
+      <label>Compatible allowlisted action <select id="founder-profile-action" required></select></label>
+      <label>Recurrence minutes <input id="founder-profile-recurrence" type="number" min="1" max="10080" value="60" required></label>
+      <label>Existing completed dependency task IDs (optional, comma-separated UUIDs) <input id="founder-profile-dependencies" maxlength="750"></label>
+      <label><input id="founder-profile-approval" type="checkbox"> Require founder approval before execution (required for protected records)</label>
+      <label>Approved structured payload JSON <textarea id="founder-profile-payload" maxlength="1600" required>{}</textarea></label>
+      <button type="button" id="preview-founder-profile" class="secondary">Preview Without Changes</button>
+      <button type="submit">Create Founder-Configured Draft</button>
+    </form>
+  </section>
+  <section>
+    <h2>Continuity Tree</h2>
+    <p class="note">Private live view of AXI, governance readiness, registered agents, assigned tasks, and each agent's latest recorded run. Refreshes every 30 seconds.</p>
+    <div id="continuity-tree" aria-live="polite"></div>
+  </section>
+  <section>
+    <h2>Continuous Project Memory</h2>
+    <p class="note">Private, hash-linked operational record. The Project Memory Manager can append only an explicitly assigned, operator-approved event with a non-sensitive source reference and summary.</p>
+    <div id="continuity-record"></div>
+    <div id="continuity-events"></div>
+  </section>
+  <section>
+    <h2>Private Source Catalog</h2>
+    <p class="note">Approved repository-source metadata and content hashes only. Raw source content is not copied into AXI memory, and restricted sources must use non-sensitive titles and references.</p>
+    <div id="source-catalog"></div>
+    <div id="source-catalog-entries"></div>
+  </section>
+  <section>
+    <h2>Submitted Business Metrics</h2>
+    <p class="note">Private record of submitted metrics only, not a financial statement, accounting treatment, tax calculation, cash balance, valuation, profitability guarantee, or legal or financial advice. Do not enter account, invoice, customer/vendor, payment, tax, financial-account, credential, or personal data.</p>
+    <div id="business-metrics"></div>
+    <div id="business-metrics-summary"></div>
+    <div id="business-metrics-entries"></div>
+    <h3>Queue a founder-controlled approval task</h3>
+    <form id="business-metric-form">
+      <label>Kind <select id="business-metric-kind"><option value="revenue">Revenue</option><option value="expense">Expense</option></select></label>
+      <label>Category <select id="business-metric-category" required></select></label>
+      <label>Period <input id="business-metric-period" type="month" min="2000-01" max="2100-12" required></label>
+      <label>Amount in dollars <input id="business-metric-dollars" inputmode="decimal" pattern="[0-9]+([.][0-9]{1,2})?" required placeholder="0.00"></label>
+      <label>Non-sensitive source record <input id="business-metric-source-record" maxlength="120" pattern="[a-z0-9]+(-[a-z0-9]+)*" required placeholder="approved-metric-2026-09"></label>
+      <button type="submit">Queue for Founder Approval</button>
+    </form>
+  </section>
+  <section>
+    <h2>Private AXES Service Registry</h2>
+    <p class="note">Founder-approved internal planning and operating metadata only. It is not public availability, legal status, professional qualification, business registration, customer service, financial offering, or deployment proof. Do not enter customer, vendor, person, account, payment, credential, legal, launch, or URL data.</p>
+    <div id="service-registry"></div>
+    <div id="service-registry-projection"></div>
+    <div id="service-registry-entries"></div>
+    <h3>Queue a founder-controlled approval task</h3>
+    <form id="service-registry-form">
+      <label>Operation <select id="service-registry-operation"><option value="register">Register service</option><option value="update">Update service</option></select></label>
+      <label>Service ID <input id="service-registry-id" maxlength="120" pattern="[a-z0-9]+(-[a-z0-9]+)*" required placeholder="axes-control-center"></label>
+      <label>Service name <input id="service-registry-name" maxlength="120" required placeholder="AXES Control Center"></label>
+      <label>Purpose <textarea id="service-registry-purpose" maxlength="500" required placeholder="Private operational planning metadata"></textarea></label>
+      <label>Stage <select id="service-registry-stage"><option value="planned">Planned</option><option value="internal">Internal</option><option value="pilot">Pilot</option><option value="active">Active</option><option value="paused">Paused</option><option value="retired">Retired</option></select></label>
+      <label>Privacy classification <select id="service-registry-classification"><option value="internal">Internal</option><option value="private">Private</option><option value="restricted">Restricted</option></select></label>
+      <label>Dependency summary <textarea id="service-registry-dependencies" maxlength="500" required placeholder="Private engine readiness and founder review"></textarea></label>
+      <button type="submit">Queue for Founder Approval</button>
+    </form>
+  </section>
+  <section>
+    <h2>Private Coordinate Center</h2>
+    <p class="note">The gravity center is a technical Eternal Origin Ownership from Genesis reference. Bead-passport nodes apply only to registered AXI agents; they are not human passports, legal identities, credentials, or external listings.</p>
+    <div id="gravity-center"></div>
+    <h3>Register a bead-passport node</h3>
+    <form id="bead-passport-form">
+      <label>Registered AXI agent <select id="passport-agent" required></select></label>
+      <label>Harmonic band <select id="harmonic-band"><option value="H1">H1</option><option value="H2">H2</option><option value="H3">H3</option><option value="H4" selected>H4</option><option value="H5">H5</option><option value="H6">H6</option><option value="H7">H7</option></select></label>
+      <label>Spatial X <input id="spatial-x" type="number" min="-10000" max="10000" step="any" value="0" required></label>
+      <label>Spatial Y <input id="spatial-y" type="number" min="-10000" max="10000" step="any" value="0" required></label>
+      <label>Spatial Z <input id="spatial-z" type="number" min="-10000" max="10000" step="any" value="0" required></label>
+      <label>Origin checkpoint <input id="passport-origin-checkpoint" required maxlength="120" value="axi-bead-passport-pilot"></label>
+      <button type="submit">Register Node</button>
+    </form>
+    <div id="bead-passports"></div>
   </section>
   <section>
     <h2>Queue Task</h2>
     <form id="task-form">
       <label>Title <input id="title" required maxlength="200" placeholder="Record a verified milestone"></label>
-      <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="automation.noop">Safe no-op test</option></select></label>
+      <label>Action <select id="action"><option value="memory.record">Record private memory</option><option value="continuity.record">Record approved continuity event</option><option value="source.catalog">Catalog approved source metadata</option><option value="monitoring.snapshot">Capture private monitoring snapshot</option><option value="governance.readiness">Assess Eternal Origin Ownership from Genesis readiness</option><option value="recovery.backup">Create verified runtime recovery bundle</option><option value="coordinate.record">Record a coordinate transition</option><option value="continuity.checkpoint">Create private continuity checkpoint</option><option value="automation.noop">Safe no-op test</option></select></label>
+      <label>Assigned agent <select id="task-agent" required></select></label>
+      <label>Origin checkpoint <input id="origin-checkpoint" required maxlength="120" placeholder="axi-operations-observer"></label>
       <label>Priority <select id="priority"><option value="5">P5 - Critical</option><option value="4">P4 - High</option><option value="3" selected>P3 - Normal</option><option value="2">P2 - Low</option><option value="1">P1 - Backlog</option></select></label>
       <label>Run at (optional) <input id="run-at" type="datetime-local"><span class="note">Leave empty to make the task due now.</span></label>
       <label>Depends on (optional) <select id="depends-on" multiple></select><span class="note">Select completed prerequisites or tasks that must finish first.</span></label>
@@ -51,11 +158,24 @@
         <label>Memory layer <select id="kind"><option value="decision">Decision</option><option value="procedure">Procedure</option><option value="semantic">Semantic</option><option value="episodic">Episodic</option></select></label>
         <label>Content <textarea id="content" placeholder="What should be recorded?"></textarea></label>
       </div>
+      <div id="continuity-fields" class="hidden">
+        <label>Source reference <input id="continuity-source-record" maxlength="200" placeholder="docs/memory/2026-09-11-record.md"></label>
+        <label>Approved summary <textarea id="continuity-summary" maxlength="500" placeholder="Record a factual, non-sensitive continuity event."></textarea></label>
+      </div>
+      <div id="source-catalog-fields" class="hidden">
+        <label>Source ID <input id="source-catalog-id" maxlength="120" placeholder="axes-business-plan"></label>
+        <label>Non-sensitive title <input id="source-catalog-title" maxlength="200" placeholder="AXES business plan"></label>
+        <label>Source type <select id="source-catalog-type"><option value="document">Document</option><option value="dataset">Dataset</option><option value="media">Media</option><option value="application">Application</option><option value="record">Record</option><option value="other">Other</option></select></label>
+        <label>Classification <select id="source-catalog-classification"><option value="internal">Internal</option><option value="public">Public</option><option value="private">Private</option><option value="restricted">Restricted</option></select></label>
+        <label>Repository-relative source reference <input id="source-catalog-reference" maxlength="500" placeholder="docs/AXES_BUSINESS_PLAN.md"></label>
+        <label>SHA-256 content hash <input id="source-catalog-sha256" maxlength="64" placeholder="64 hexadecimal characters"></label>
+      </div>
       <label>Repeat every minutes (optional) <input id="recurrence" type="number" min="1" max="10080"></label>
       <button type="submit">Queue Task</button>
     </form>
   </section>
   <section><h2>Registered Agents</h2><div id="agents"></div></section>
+  <section><h2>Agent Timelines</h2><p class="note">Each AXI agent is shown with its recorded AXI Eternal Origin Ownership from Genesis checkpoint, creator ownership-and-accountability claim, origin, assigned tasks, and run events.</p><div id="agent-timelines"></div></section>
   <section><h2>Schedule</h2><p class="note">Due tasks run by priority first, then scheduled time. All execution remains limited to allowlisted actions.</p><div id="schedule"></div></section>
   <section><h2>Run History</h2><p class="note">Each completed, retrying, or failed execution is recorded privately.</p><div id="runs"></div></section>
   <section>
@@ -72,6 +192,8 @@
 </main>
 <script>
 const result = document.querySelector("#result");
+let registeredAgents = [];
+let profileTemplates = [];
 async function request(path, options) {
   const response = await fetch(path, { credentials:"same-origin", headers:{"Content-Type":"application/json"}, ...options });
   const payload = await response.json().catch(() => ({}));
@@ -89,6 +211,133 @@ function escapeHtml(value) {
 }
 function priorityLabel(priority) {
   return `P${priority}`;
+}
+function formatBytes(value) {
+  return Number.isSafeInteger(value) ? `${value.toLocaleString()} bytes` : "unavailable";
+}
+function renderTaskAgentOptions() {
+  const select = document.querySelector("#task-agent");
+  const currentValue = select.value;
+  const action = document.querySelector("#action").value;
+  const eligibleAgents = registeredAgents.filter(agent =>
+    agent.enabled && agent.accountability?.status === "active" &&
+    agent.capabilities.includes(action)
+  );
+  select.innerHTML = eligibleAgents.map(agent =>
+    `<option value="${escapeHtml(agent.id)}">${escapeHtml(agent.name)}</option>`
+  ).join("");
+  if (eligibleAgents.some(agent => agent.id === currentValue)) {
+    select.value = currentValue;
+  }
+}
+function renderAgents(agents) {
+  if (!agents.length) {
+    document.querySelector("#agents").innerHTML = "<p class='note'>None yet.</p>";
+    return;
+  }
+  function renderCoordinateCenter(gravityCenter, passports) {
+    document.querySelector("#gravity-center").innerHTML = `<h3>Gravity center</h3>${table([{
+      id: gravityCenter.id,
+      genesisCoordinate: gravityCenter.genesisCoordinateId,
+      source: gravityCenter.sourceRecord,
+      vector: JSON.stringify(gravityCenter.spatialVector),
+      status: gravityCenter.status
+    }], [["id","Reference"],["genesisCoordinate","Eternal Origin coordinate"],["source","Source"],["vector","Vector"],["status","Status"]])}`;
+    document.querySelector("#bead-passports").innerHTML = `<h3>Bead-passport nodes</h3>${table(passports.map(passport => ({
+      passportId: passport.passportId,
+      agentId: passport.agentId,
+      harmonicBand: passport.harmonicBand,
+      vector: JSON.stringify(passport.spatialVector),
+      coordinateId: passport.coordinateId,
+      issuedAt: passport.issuedAt
+    })), [["passportId","Node"],["agentId","AXI agent"],["harmonicBand","Band"],["vector","Vector"],["coordinateId","Coordinate"],["issuedAt","Issued"]])}`;
+  }
+  document.querySelector("#agents").innerHTML = `<table><thead><tr><th>Name</th><th>Capabilities</th><th>Enabled</th><th>Accountability</th><th>Founder control</th></tr></thead><tbody>${agents.map(agent => {
+    const status = agent.accountability?.status || "unreconciled";
+    const nextStatus = status === "suspended" ? "active" : "suspended";
+    const label = nextStatus === "active" ? "Submit founder reactivation" : "Submit founder suspension";
+    return `<tr><td>${escapeHtml(agent.name)}</td><td>${escapeHtml(agent.capabilities.join(", "))}</td><td>${escapeHtml(agent.enabled)}</td><td>${escapeHtml(status)}</td><td><button class="review-agent secondary" data-agent-id="${escapeHtml(agent.id)}" data-status="${nextStatus}">${label}</button></td></tr>`;
+  }).join("")}</tbody></table>`;
+  document.querySelectorAll(".review-agent").forEach(button => {
+    button.addEventListener("click", async () => {
+      const reason = window.prompt("Required founder-controlled accountability review reason:");
+      if (!reason || !reason.trim()) {
+        result.textContent = "An accountability review reason is required.";
+        return;
+      }
+      try {
+        await request(
+          `/api/automation/agents/${encodeURIComponent(button.dataset.agentId)}/accountability`,
+          { method:"POST", body:JSON.stringify({ status:button.dataset.status, reason }) }
+        );
+        await refresh();
+      } catch (error) {
+        result.textContent = error.message;
+      }
+    });
+  });
+}
+function renderAgentTimelines(reports) {
+  document.querySelector("#agent-timelines").innerHTML = reports.map(report => {
+    const agent = report.agent;
+    const observation = report.observation || {};
+    const attribution = [
+      agent.creator || "No creator attribution recorded.",
+      agent.keystoneRegistration?.ownershipClaim || "No ownership claim recorded.",
+      agent.purpose || "No purpose recorded.",
+      agent.duties.join("; ") || "No duties recorded."
+    ].join(" | ");
+    const events = report.timeline.map(event => ({
+      occurredAt: event.occurredAt,
+      event: event.event,
+      genesisCheckpoint: event.genesisCheckpoint || agent.keystoneRegistration?.genesisCheckpoint?.id || "",
+      originCheckpoint: event.originCheckpoint || "",
+      status: event.status || "",
+      detail: event.detail || event.title || event.action || ""
+    }));
+    const observationRows = [{
+      createdAt: observation.createdAt || "invalid or unavailable",
+      registeredAt: observation.registeredAt || "invalid or unavailable",
+      accountability: observation.accountabilityStatus || "unavailable",
+      capabilities: (observation.compatibleCapabilities || []).join(", ") || "none",
+      assignedTasks: JSON.stringify(observation.assignedTaskCountsByState || {}),
+      recentRun: observation.recentRun ? `${observation.recentRun.status} at ${observation.recentRun.recordedAt}` : "none",
+      attention: (observation.attention || []).join(", ") || "none"
+    }];
+    return `<h3>${escapeHtml(agent.name)}</h3><p class="note">${escapeHtml(attribution)}</p><p class="note">${escapeHtml(observation.scope || "Observed internal system facts only.")}</p><h4>Internal observation</h4>${table(observationRows, [["createdAt","Created"],["registeredAt","Registered"],["accountability","Accountability"],["capabilities","Compatible capabilities"],["assignedTasks","Assigned task states"],["recentRun","Recent run"],["attention","Attention"]])}${table(events, [["occurredAt","Time"],["event","Event"],["genesisCheckpoint","Eternal Origin"],["originCheckpoint","Origin"],["status","Status"],["detail","Detail"]])}`;
+  }).join("");
+}
+function renderContinuityTree(reports, tasks, runs, governance) {
+  const assignedTaskIds = new Set();
+  const agents = reports.map(report => {
+    const agent = report.agent;
+    const agentTasks = tasks.filter(task => task.agentId === agent.id);
+    agentTasks.forEach(task => assignedTaskIds.add(task.id));
+    const latestEvent = report.timeline[report.timeline.length - 1];
+    const latestRun = runs.find(run => run.agentId === agent.id);
+    const status = agent.accountability?.status || "unreconciled";
+    const statusClass = status === "active" ? "tree-ready" : "tree-attention";
+    const taskNodes = agentTasks.length
+      ? `<ul>${agentTasks.map(task => {
+        const taskRun = runs.find(run => run.taskId === task.id);
+        const detail = taskRun
+          ? ` latest run: ${taskRun.status} at ${taskRun.recordedAt}`
+          : " no recorded run";
+        return `<li><span class="tree-node">${escapeHtml(task.title)} — ${escapeHtml(task.status)} (${escapeHtml(task.action)};${escapeHtml(detail)})</span></li>`;
+      }).join("")}</ul>`
+      : "<ul><li><span class='tree-node tree-muted'>No assigned tasks</span></li></ul>";
+    const eventDetail = latestEvent
+      ? ` latest continuity event: ${latestEvent.event} at ${latestEvent.occurredAt}`
+      : " no continuity events recorded";
+    const runDetail = latestRun ? ` latest agent run: ${latestRun.status}` : " no agent runs recorded";
+    return `<li><span class="tree-node ${statusClass}">${escapeHtml(agent.name)} — ${escapeHtml(status)};${escapeHtml(eventDetail)};${escapeHtml(runDetail)}</span>${taskNodes}</li>`;
+  });
+  const unassignedTasks = tasks.filter(task => !assignedTaskIds.has(task.id));
+  const unassignedNode = unassignedTasks.length
+    ? `<li><span class="tree-node tree-attention">Unassigned tasks</span><ul>${unassignedTasks.map(task => `<li><span class="tree-node">${escapeHtml(task.title)} — ${escapeHtml(task.status)} (${escapeHtml(task.action)})</span></li>`).join("")}</ul></li>`
+    : "";
+  const governanceClass = governance.status === "ready" ? "tree-ready" : "tree-attention";
+  document.querySelector("#continuity-tree").innerHTML = `<ul class="continuity-tree"><li><span class="tree-node ${governanceClass}">AXI continuity root — governance ${escapeHtml(governance.status)}; ${escapeHtml(String(reports.length))} registered agents; ${escapeHtml(String(tasks.length))} tracked tasks</span><ul>${agents.join("")}${unassignedNode}</ul></li></ul>`;
 }
 function renderSchedule(tasks) {
   const scheduled = tasks.filter(task => task.status === "pending");
@@ -115,12 +364,34 @@ function renderTasks(tasks) {
 }
 async function refresh() {
   try {
-    const [status, agents, tasks, runs] = await Promise.all([
-      request("/api/automation/status"), request("/api/automation/agents"), request("/api/automation/tasks"),
-      request("/api/automation/runs?limit=25")
+    const [status, governance, agents, tasks, runs, gravityCenter, passports] = await Promise.all([
+      request("/api/automation/status"), request("/api/automation/readiness"),
+      request("/api/automation/agents"), request("/api/automation/tasks"),
+      request("/api/automation/runs?limit=25"),
+      request("/api/automation/gravity-center"),
+      request("/api/automation/bead-passports?limit=100")
     ]);
     let monitoring = { status: "unavailable", attention: [] };
     let monitoringHistory = [];
+    let continuityRecord = { status: "unavailable" };
+    let continuityEvents = [];
+    let sourceCatalog = { status: "unavailable" };
+    let sourceCatalogEntries = [];
+    let businessMetrics = { status: "unavailable" };
+    let businessMetricsEntries = { entries: [] };
+    let businessMetricsSummary = { totalsByPeriod: {} };
+    let serviceRegistry = { status: "unavailable" };
+    let serviceRegistryEntries = { entries: [] };
+    let serviceRegistryProjection = { services: {} };
+    let automationProfiles = { profiles: [], templates: [] };
+    let automationProfileHistory = [];
+    let automationProfileHealth = { profiles: [] };
+    let memoryStorage = { status: "unavailable", filesystem: { status: "unavailable" } };
+    try {
+      memoryStorage = await request("/api/automation/storage");
+    } catch (error) {
+      result.textContent = "Memory-storage visibility will be available after the private engine deployment is updated.";
+    }
     try {
       [monitoring, monitoringHistory] = await Promise.all([
         request("/api/automation/monitoring/status"),
@@ -129,14 +400,192 @@ async function refresh() {
     } catch (error) {
       result.textContent = "Monitoring will be available after the private engine deployment is updated.";
     }
+    try {
+      [continuityRecord, continuityEvents] = await Promise.all([
+        request("/api/automation/continuity-record"),
+        request("/api/automation/continuity-record/events?limit=10")
+      ]);
+    } catch (error) {
+      result.textContent = "Continuous memory will be available after the private engine deployment is updated.";
+    }
+    try {
+      [sourceCatalog, sourceCatalogEntries] = await Promise.all([
+        request("/api/automation/source-catalog"),
+        request("/api/automation/source-catalog/entries?limit=10")
+      ]);
+    } catch (error) {
+      result.textContent = "Source catalog will be available after the private engine deployment is updated.";
+    }
+    try {
+      [businessMetrics, businessMetricsEntries, businessMetricsSummary] = await Promise.all([
+        request("/api/automation/business-metrics"),
+        request("/api/automation/business-metrics/entries?limit=10"),
+        request("/api/automation/business-metrics/summary")
+      ]);
+    } catch (error) {
+      result.textContent = "Business metrics will be available after the private engine deployment is updated.";
+    }
+    try {
+      [serviceRegistry, serviceRegistryEntries, serviceRegistryProjection] = await Promise.all([
+        request("/api/automation/service-registry"),
+        request("/api/automation/service-registry/entries?limit=10"),
+        request("/api/automation/service-registry/projection")
+      ]);
+    } catch (error) {
+      result.textContent = "Service registry will be available after the private engine deployment is updated.";
+    }
+    try {
+      [automationProfiles, automationProfileHistory, automationProfileHealth] = await Promise.all([
+        request("/api/automation/profiles"),
+        request("/api/automation/profiles/history?limit=20"),
+        request("/api/automation/profiles/health")
+      ]);
+      profileTemplates = automationProfiles.templates || [];
+      renderFounderProfileOptions();
+    } catch (error) {
+      result.textContent = "Automation profiles will be available after the private engine deployment is updated.";
+    }
     document.querySelector("#metrics").innerHTML = Object.entries(status).map(([key,value]) => `<div class="metric"><strong>${value}</strong><br>${key}</div>`).join("");
-    document.querySelector("#agents").innerHTML = table(agents, [["name","Name"],["capabilities","Capabilities"],["enabled","Enabled"]]);
-    document.querySelector("#chat-agent").innerHTML = agents.map(agent => `<option value="${agent.id}">${agent.name}</option>`).join("");
+    document.querySelector("#governance").innerHTML = `<h3>Eternal Origin Ownership from Genesis readiness</h3>${table([{
+      status: governance.status,
+      checkpoint: governance.genesisCheckpoint.id,
+      activeAgents: `${governance.activeAgents}/${governance.enabledAgents}`,
+      issues: governance.issues.map(issue => issue.code).join(", ") || "none"
+    }], [["status","Status"],["checkpoint","Eternal Origin checkpoint"],["activeAgents","Active agents"],["issues","Attention"]])}`;
+    document.querySelector("#memory-storage").innerHTML =
+      `<h3>Private memory storage</h3><p class="note">Storage use is visible only to help AXI grow safely. It does not delete or limit memory. Filesystem capacity is host-reported, not a recovery guarantee.</p>${table([{
+        status: memoryStorage.status,
+        usedBytes: formatBytes(memoryStorage.usedBytes),
+        fileCount: memoryStorage.fileCount ?? "unavailable",
+        warningBytes: memoryStorage.warningBytes === null ? "not configured" : formatBytes(memoryStorage.warningBytes),
+        totalBytes: formatBytes(memoryStorage.filesystem?.totalBytes),
+        availableBytes: formatBytes(memoryStorage.filesystem?.availableBytes)
+      }], [["status","Status"],["usedBytes","AXI storage used"],["fileCount","Tracked files"],["warningBytes","Warning point"],["totalBytes","Host filesystem capacity"],["availableBytes","Host filesystem available"]])}`;
+    renderAgents(agents);
+    registeredAgents = agents;
+    renderTaskAgentOptions();
+    document.querySelector("#passport-agent").innerHTML = agents
+      .filter(agent => agent.enabled && agent.accountability?.status === "active")
+      .map(agent => `<option value="${escapeHtml(agent.id)}">${escapeHtml(agent.name)}</option>`)
+      .join("");
+    renderCoordinateCenter(gravityCenter, passports);
+    document.querySelector("#chat-agent").innerHTML = agents
+      .filter(agent => agent.enabled && agent.accountability?.status === "active")
+      .map(agent => `<option value="${escapeHtml(agent.id)}">${escapeHtml(agent.name)}</option>`)
+      .join("");
     document.querySelector("#depends-on").innerHTML = tasks.map(task =>
       `<option value="${escapeHtml(task.id)}">${escapeHtml(task.title)} (${escapeHtml(task.status)})</option>`
     ).join("");
     renderSchedule(tasks);
     renderTasks(tasks);
+    const agentReports = await Promise.all(
+      agents.map(agent => request(`/api/automation/agents/${encodeURIComponent(agent.id)}/report`))
+    );
+    renderAgentTimelines(agentReports);
+    renderContinuityTree(agentReports, tasks, runs, governance);
+    document.querySelector("#continuity-record").innerHTML = table([{
+      status: continuityRecord.status,
+      recordCount: continuityRecord.recordCount ?? "unavailable",
+      latestEvent: continuityRecord.latestRecord
+        ? `${continuityRecord.latestRecord.eventType} at ${continuityRecord.latestRecord.recordedAt}`
+        : "none"
+    }], [["status","Status"],["recordCount","Records"],["latestEvent","Latest event"]]);
+    document.querySelector("#continuity-events").innerHTML =
+      `<h3>Recent continuity events</h3>${table(continuityEvents.map(entry => ({
+        sequence: entry.sequence,
+        recordedAt: entry.recordedAt,
+        eventType: entry.eventType,
+        sourceRecord: entry.sourceRecord,
+        summary: entry.summary
+      })), [["sequence","Sequence"],["recordedAt","Recorded"],["eventType","Type"],["sourceRecord","Source"],["summary","Summary"]])}`;
+    document.querySelector("#source-catalog").innerHTML = table([{
+      status: sourceCatalog.status,
+      sourceCount: sourceCatalog.sourceCount ?? "unavailable",
+      latestSource: sourceCatalog.latestSource
+        ? `${sourceCatalog.latestSource.sourceId} at ${sourceCatalog.latestSource.recordedAt}`
+        : "none"
+    }], [["status","Status"],["sourceCount","Sources"],["latestSource","Latest source"]]);
+    document.querySelector("#source-catalog-entries").innerHTML =
+      `<h3>Recent catalog entries</h3>${table(sourceCatalogEntries.map(entry => ({
+        sequence: entry.sequence,
+        sourceId: entry.sourceId,
+        title: entry.title,
+        sourceType: entry.sourceType,
+        classification: entry.classification,
+        sourceReference: entry.sourceReference,
+        recordedAt: entry.recordedAt
+      })), [["sequence","Sequence"],["sourceId","Source ID"],["title","Title"],["sourceType","Type"],["classification","Classification"],["sourceReference","Reference"],["recordedAt","Recorded"]])}`;
+    document.querySelector("#business-metrics").innerHTML = table([{
+      status: businessMetrics.status,
+      recordCount: businessMetrics.recordCount ?? "unavailable",
+      latestRecord: businessMetrics.latestRecord
+        ? `${businessMetrics.latestRecord.kind} ${businessMetrics.latestRecord.amountCents} cents for ${businessMetrics.latestRecord.period}`
+        : "none"
+    }], [["status","Status"],["recordCount","Submitted records"],["latestRecord","Latest submitted metric"]]);
+    document.querySelector("#business-metrics-summary").innerHTML =
+      `<h3>Deterministic submitted-metrics summary</h3><p class="note">${escapeHtml(businessMetricsSummary.label || businessMetrics.label || "")}</p>${table([{
+        revenue: businessMetricsSummary.totalRecordedRevenueCents ?? "unavailable",
+        expense: businessMetricsSummary.totalRecordedExpenseCents ?? "unavailable",
+        net: businessMetricsSummary.netRecordedOperatingResultCents ?? "unavailable"
+      }], [["revenue","Recorded revenue (cents)"],["expense","Recorded expense (cents)"],["net","Recorded operating result (cents)"]])}${table(Object.entries(businessMetricsSummary.totalsByPeriod || {}).map(([period, totals]) => ({
+        period,
+        revenue: totals.revenueCents,
+        expense: totals.expenseCents,
+        net: totals.netOperatingResultCents
+      })), [["period","Period"],["revenue","Revenue (cents)"],["expense","Expense (cents)"],["net","Operating result (cents)"]])}`;
+    document.querySelector("#business-metrics-entries").innerHTML =
+      `<h3>Recent approved submissions</h3>${table((businessMetricsEntries.entries || []).map(entry => ({
+        sequence: entry.sequence,
+        period: entry.period,
+        kind: entry.kind,
+        category: entry.category,
+        amountCents: entry.amountCents,
+        sourceRecord: entry.sourceRecord,
+        recordedAt: entry.recordedAt
+      })), [["sequence","Sequence"],["period","Period"],["kind","Kind"],["category","Category"],["amountCents","Amount (cents)"],["sourceRecord","Source record"],["recordedAt","Recorded"]])}`;
+    document.querySelector("#service-registry").innerHTML = table([{
+      status: serviceRegistry.status,
+      serviceCount: serviceRegistry.serviceCount ?? "unavailable",
+      recordCount: serviceRegistry.recordCount ?? "unavailable"
+    }], [["status","Status"],["serviceCount","Current services"],["recordCount","Immutable records"]]);
+    document.querySelector("#service-registry-projection").innerHTML =
+      `<h3>Current registry projection</h3><p class="note">${escapeHtml(serviceRegistryProjection.label || serviceRegistry.label || "")}</p>${table(Object.values(serviceRegistryProjection.services || {}), [["serviceId","Service ID"],["serviceName","Service"],["revision","Revision"],["stage","Stage"],["classification","Classification"],["ownerRole","Owner"],["purpose","Purpose"],["dependencySummary","Dependencies"]])}`;
+    document.querySelector("#service-registry-entries").innerHTML =
+      `<h3>Recent immutable records</h3>${table((serviceRegistryEntries.entries || []), [["sequence","Sequence"],["recordedAt","Recorded"],["operation","Operation"],["serviceId","Service ID"],["revision","Revision"],["stage","Stage"],["classification","Classification"],["reviewStatus","Review"]])}`;
+    const profileRows = (automationProfiles.profiles || []).map(profile => `<tr><td>${escapeHtml(profile.profileId)}</td><td>${escapeHtml(profile.template)}</td><td>${escapeHtml(profile.status)}</td><td>${escapeHtml(profile.taskTemplates.length)}</td><td>${escapeHtml(profile.recoveryReadiness)}</td><td>${profile.status === "draft"
+      ? `<button class="activate-profile" data-profile-id="${escapeHtml(profile.profileId)}">Confirm activation</button>`
+      : profile.status === "active"
+        ? `<button class="pause-profile secondary" data-profile-id="${escapeHtml(profile.profileId)}">Confirm pause</button>`
+        : `<button class="resume-profile" data-profile-id="${escapeHtml(profile.profileId)}">Confirm resume</button>`}</td></tr>`).join("");
+    document.querySelector("#automation-profiles").innerHTML =
+      `<p class="note">${escapeHtml(automationProfiles.label || "")}</p>${profileRows ? `<table><thead><tr><th>Profile</th><th>Template</th><th>Status</th><th>Scheduled actions</th><th>Recovery readiness</th><th>Founder control</th></tr></thead><tbody>${profileRows}</tbody></table>` : "<p class='note'>No profile drafts yet.</p>"}`;
+    const profileHealthRows = (automationProfileHealth.profiles || []).flatMap(profile =>
+      profile.tasks.map(task => ({
+        profileId: profile.profileId,
+        profileStatus: profile.profileStatus,
+        associationStatus: task.associationStatus,
+        taskKey: task.key,
+        taskStatus: task.taskStatus,
+        attention: task.attention.join(", ") || "none"
+      }))
+    );
+    document.querySelector("#automation-profile-health").innerHTML =
+      `<h3>Profile/task association health</h3><p class="note">${escapeHtml(automationProfileHealth.label || "")}</p>${profileHealthRows.length ? table(profileHealthRows, [["profileId","Profile"],["profileStatus","Profile state"],["associationStatus","Association"],["taskKey","Task key"],["taskStatus","Task state"],["attention","Attention"]]) : "<p class='note'>No active or paused profiles to assess.</p>"}`;
+    document.querySelector("#automation-profile-history").innerHTML =
+      `<h3>Profile transition history</h3><p class="note">Payload-free retained profile lifecycle evidence. It does not create, approve, or process work.</p>${table(automationProfileHistory, [["sequence","Sequence"],["recordedAt","Recorded"],["event","Transition"],["profileId","Profile"],["template","Template"],["taskCount","Retained tasks"],["recoveryReadiness","Recovery"]])}`;
+    document.querySelectorAll(".activate-profile, .pause-profile, .resume-profile").forEach(button => {
+      button.addEventListener("click", async () => {
+        const action = button.classList.contains("activate-profile")
+          ? "activate"
+          : button.classList.contains("pause-profile") ? "pause" : "resume";
+        if (!window.confirm(`I intentionally confirm founder-controlled profile ${action}. This does not enable the scheduler.`)) return;
+        try {
+          await request(`/api/automation/profiles/${encodeURIComponent(button.dataset.profileId)}/${action}`,
+            { method:"POST", body:JSON.stringify({ confirmed:true }) });
+          await refresh();
+        } catch (error) { result.textContent = error.message; }
+      });
+    });
     document.querySelector("#runs").innerHTML = table(runs.map(run => ({
       recordedAt: run.recordedAt,
       status: run.status,
@@ -161,7 +610,31 @@ async function refresh() {
     if (monitoring.snapshot) result.textContent = "";
   } catch (error) { result.textContent = error.message; }
 }
-document.querySelector("#action").addEventListener("change", event => document.querySelector("#memory-fields").classList.toggle("hidden", event.target.value !== "memory.record"));
+function updateTaskFields() {
+  const action = document.querySelector("#action").value;
+  const isContinuityRecord = action === "continuity.record";
+  const isSourceCatalog = action === "source.catalog";
+  document.querySelector("#memory-fields").classList.toggle("hidden", action !== "memory.record");
+  document.querySelector("#continuity-fields").classList.toggle("hidden", !isContinuityRecord);
+  document.querySelector("#source-catalog-fields").classList.toggle("hidden", !isSourceCatalog);
+  document.querySelector("#continuity-source-record").required = isContinuityRecord;
+  document.querySelector("#continuity-summary").required = isContinuityRecord;
+  for (const id of [
+    "#source-catalog-id",
+    "#source-catalog-title",
+    "#source-catalog-reference",
+    "#source-catalog-sha256"
+  ]) {
+    document.querySelector(id).required = isSourceCatalog;
+  }
+  const approvalRequired = document.querySelector("#approval-required");
+  if (isContinuityRecord || isSourceCatalog) {
+    approvalRequired.checked = true;
+  }
+  approvalRequired.disabled = isContinuityRecord || isSourceCatalog;
+  renderTaskAgentOptions();
+}
+document.querySelector("#action").addEventListener("change", updateTaskFields);
 document.querySelector("#refresh").addEventListener("click", refresh);
 document.querySelector("#capture-monitoring").addEventListener("click", async () => { try { result.textContent = `Snapshot: ${(await request("/api/automation/monitoring/snapshots", {method:"POST",body:"{}"})).recorded ? "recorded" : "unchanged"}`; await refresh(); } catch(error) { result.textContent=error.message; } });
 document.querySelector("#process").addEventListener("click", async () => { try { result.textContent = JSON.stringify(await request("/api/automation/process", {method:"POST",body:"{}"}),null,2); await refresh(); } catch(error) { result.textContent=error.message; } });
@@ -169,12 +642,140 @@ document.querySelector("#task-form").addEventListener("submit", async event => {
   event.preventDefault();
   const action = document.querySelector("#action").value;
   const recurrence = document.querySelector("#recurrence").value;
-  const task = { title:document.querySelector("#title").value, action, priority:Number(document.querySelector("#priority").value), maxAttempts:Number(document.querySelector("#max-attempts").value), retryDelayMinutes:Number(document.querySelector("#retry-delay").value), approvalRequired:document.querySelector("#approval-required").checked, dependsOn:Array.from(document.querySelector("#depends-on").selectedOptions, option => option.value) };
+  const task = { title:document.querySelector("#title").value, action, agentId:document.querySelector("#task-agent").value, originCheckpoint:document.querySelector("#origin-checkpoint").value, priority:Number(document.querySelector("#priority").value), maxAttempts:Number(document.querySelector("#max-attempts").value), retryDelayMinutes:Number(document.querySelector("#retry-delay").value), approvalRequired:document.querySelector("#approval-required").checked, dependsOn:Array.from(document.querySelector("#depends-on").selectedOptions, option => option.value) };
   if (action === "memory.record") task.payload = { kind:document.querySelector("#kind").value, content:document.querySelector("#content").value };
+  if (action === "continuity.record") task.payload = { sourceRecord:document.querySelector("#continuity-source-record").value, summary:document.querySelector("#continuity-summary").value };
+  if (action === "source.catalog") task.payload = {
+    sourceId:document.querySelector("#source-catalog-id").value,
+    title:document.querySelector("#source-catalog-title").value,
+    sourceType:document.querySelector("#source-catalog-type").value,
+    classification:document.querySelector("#source-catalog-classification").value,
+    sourceReference:document.querySelector("#source-catalog-reference").value,
+    sha256:document.querySelector("#source-catalog-sha256").value
+  };
   if (recurrence) task.recurrenceMinutes = Number(recurrence);
   const runAt = document.querySelector("#run-at").value;
   if (runAt) task.runAt = new Date(runAt).toISOString();
-  try { result.textContent = `Queued: ${(await request("/api/automation/tasks",{method:"POST",body:JSON.stringify(task)})).id}`; event.target.reset(); await refresh(); } catch(error) { result.textContent=error.message; }
+  try { result.textContent = `Queued: ${(await request("/api/automation/tasks",{method:"POST",body:JSON.stringify(task)})).id}`; event.target.reset(); updateTaskFields(); await refresh(); } catch(error) { result.textContent=error.message; }
+});
+function operationalProfileInput() {
+  const template = document.querySelector("#automation-profile-template").value;
+  const input = {
+    profileId: document.querySelector("#automation-profile-id").value,
+    template,
+    monitoringRecurrenceMinutes: Number(document.querySelector("#profile-monitoring-recurrence").value),
+    governanceRecurrenceMinutes: Number(document.querySelector("#profile-governance-recurrence").value)
+  };
+  if (template === "continuity-protection") {
+    input.checkpointRecurrenceMinutes = Number(document.querySelector("#profile-checkpoint-recurrence").value);
+    input.recoveryRecurrenceMinutes = Number(document.querySelector("#profile-recovery-recurrence").value);
+  }
+  return input;
+}
+function updateOperationalProfileFields() {
+  const continuityProtection = document.querySelector("#automation-profile-template").value === "continuity-protection";
+  document.querySelectorAll(".continuity-protection-field").forEach(field => field.classList.toggle("hidden", !continuityProtection));
+  document.querySelector("#profile-checkpoint-recurrence").required = continuityProtection;
+  document.querySelector("#profile-recovery-recurrence").required = continuityProtection;
+}
+document.querySelector("#automation-profile-template").addEventListener("change", updateOperationalProfileFields);
+document.querySelector("#automation-profile-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  try {
+    const profile = await request("/api/automation/profiles", { method:"POST", body:JSON.stringify(operationalProfileInput()) });
+    result.textContent = `Founder-controlled profile draft created: ${profile.profileId}`;
+    event.target.reset();
+    await refresh();
+  } catch (error) { result.textContent = error.message; }
+});
+document.querySelector("#preview-observation-profile").addEventListener("click", async () => {
+  try {
+    const preview = await request("/api/automation/profiles/preview", { method:"POST", body:JSON.stringify(operationalProfileInput()) });
+    result.textContent = `Profile preview: ${preview.activation.status}; blockers: ${preview.activation.blockers.join(", ") || "none"}; retained task plan: ${preview.taskPlan.length}. No changes were made.`;
+  } catch (error) { result.textContent = `Profile preview unavailable: ${error.message}`; }
+});
+function renderFounderProfileOptions() {
+  const source = profileTemplates.find(template => template.id === "founder-configured");
+  const role = document.querySelector("#founder-profile-role");
+  const action = document.querySelector("#founder-profile-action");
+  if (!source) return;
+  const priorRole = role.value;
+  role.innerHTML = source.roles.map(item => `<option value="${escapeHtml(item.agentId)}">${escapeHtml(item.agentId)}</option>`).join("");
+  if (source.roles.some(item => item.agentId === priorRole)) role.value = priorRole;
+  const selected = source.roles.find(item => item.agentId === role.value) || source.roles[0];
+  action.innerHTML = (selected?.capabilities || []).map(capability =>
+    `<option value="${escapeHtml(capability)}">${escapeHtml(capability)}</option>`).join("");
+}
+document.querySelector("#founder-profile-role").addEventListener("change", renderFounderProfileOptions);
+document.querySelector("#founder-profile-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  try {
+    const dependencies = document.querySelector("#founder-profile-dependencies").value.trim();
+    const payload = JSON.parse(document.querySelector("#founder-profile-payload").value);
+    const profile = await request("/api/automation/profiles", { method:"POST", body:JSON.stringify({
+      profileId: document.querySelector("#founder-profile-id").value,
+      template: "founder-configured",
+      taskTemplates: [{
+        key: document.querySelector("#founder-profile-key").value,
+        agentId: document.querySelector("#founder-profile-role").value,
+        action: document.querySelector("#founder-profile-action").value,
+        recurrenceMinutes: Number(document.querySelector("#founder-profile-recurrence").value),
+        dependsOnTaskIds: dependencies ? dependencies.split(",").map(value => value.trim()) : [],
+        approvalRequired: document.querySelector("#founder-profile-approval").checked,
+        payload
+      }]
+    }) });
+    result.textContent = `Founder-configured profile draft created: ${profile.profileId}`;
+    event.target.reset();
+    document.querySelector("#founder-profile-key").value = "scheduled-task";
+    document.querySelector("#founder-profile-recurrence").value = "60";
+    document.querySelector("#founder-profile-payload").value = "{}";
+    renderFounderProfileOptions();
+    await refresh();
+  } catch (error) { result.textContent = `Profile draft was not created: ${error.message}`; }
+});
+document.querySelector("#preview-founder-profile").addEventListener("click", async () => {
+  try {
+    const dependencies = document.querySelector("#founder-profile-dependencies").value.trim();
+    const payload = JSON.parse(document.querySelector("#founder-profile-payload").value);
+    const preview = await request("/api/automation/profiles/preview", { method:"POST", body:JSON.stringify({
+      profileId: document.querySelector("#founder-profile-id").value,
+      template: "founder-configured",
+      taskTemplates: [{
+        key: document.querySelector("#founder-profile-key").value,
+        agentId: document.querySelector("#founder-profile-role").value,
+        action: document.querySelector("#founder-profile-action").value,
+        recurrenceMinutes: Number(document.querySelector("#founder-profile-recurrence").value),
+        dependsOnTaskIds: dependencies ? dependencies.split(",").map(value => value.trim()) : [],
+        approvalRequired: document.querySelector("#founder-profile-approval").checked,
+        payload
+      }]
+    }) });
+    result.textContent = `Profile preview: ${preview.activation.status}; blockers: ${preview.activation.blockers.join(", ") || "none"}; retained task plan: ${preview.taskPlan.length}. No changes were made.`;
+  } catch (error) { result.textContent = `Profile preview unavailable: ${error.message}`; }
+});
+document.querySelector("#bead-passport-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  const passport = {
+    agentId: document.querySelector("#passport-agent").value,
+    harmonicBand: document.querySelector("#harmonic-band").value,
+    spatialVector: {
+      x: Number(document.querySelector("#spatial-x").value),
+      y: Number(document.querySelector("#spatial-y").value),
+      z: Number(document.querySelector("#spatial-z").value)
+    },
+    originCheckpoint: document.querySelector("#passport-origin-checkpoint").value
+  };
+  try {
+    const registered = await request(
+      "/api/automation/bead-passports",
+      { method:"POST", body:JSON.stringify(passport) }
+    );
+    result.textContent = `Registered private bead-passport node: ${registered.passportId}`;
+    await refresh();
+  } catch (error) {
+    result.textContent = error.message;
+  }
 });
 document.querySelector("#chat-form").addEventListener("submit", async event => {
   event.preventDefault();
@@ -190,7 +791,90 @@ document.querySelector("#chat-form").addEventListener("submit", async event => {
     output.textContent = `${response.agent.name}: ${response.reply}`;
   } catch (error) { output.textContent = error.message; }
 });
+const businessMetricCategories = {
+  revenue: ["contracting-services", "product-sales", "subscriptions", "other-approved-revenue"],
+  expense: ["materials", "labor", "software", "operations", "marketing", "professional-services", "other-approved-expense"]
+};
+function updateBusinessMetricCategories() {
+  const kind = document.querySelector("#business-metric-kind").value;
+  document.querySelector("#business-metric-category").innerHTML = businessMetricCategories[kind]
+    .map(category => `<option value="${category}">${category}</option>`).join("");
+}
+function dollarsToCents(value) {
+  const match = /^([0-9]+)(?:\.([0-9]{1,2}))?$/.exec(value.trim());
+  if (!match) throw new Error("Amount must be a positive dollar value with no more than two decimal places.");
+  const cents = BigInt(match[1]) * 100n + BigInt((match[2] || "").padEnd(2, "0"));
+  if (cents <= 0n || cents > BigInt(Number.MAX_SAFE_INTEGER)) {
+    throw new Error("Amount must convert to a strictly positive safe cent value.");
+  }
+  return Number(cents);
+}
+document.querySelector("#business-metric-kind").addEventListener("change", updateBusinessMetricCategories);
+document.querySelector("#business-metric-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  try {
+    const kind = document.querySelector("#business-metric-kind").value;
+    const task = {
+      title: `Record approved ${kind} metric`,
+      action: "business.metric",
+      agentId: "project-memory-manager",
+      approvalRequired: true,
+      originCheckpoint: "axi-business-metrics-foundation",
+      payload: {
+        kind,
+        category: document.querySelector("#business-metric-category").value,
+        period: document.querySelector("#business-metric-period").value,
+        amountCents: dollarsToCents(document.querySelector("#business-metric-dollars").value),
+        sourceRecord: document.querySelector("#business-metric-source-record").value
+      }
+    };
+    const queued = await request("/api/automation/tasks", {
+      method: "POST",
+      body: JSON.stringify(task)
+    });
+    document.querySelector("#service-registry-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      try {
+        const payload = {
+          operation: document.querySelector("#service-registry-operation").value,
+          serviceId: document.querySelector("#service-registry-id").value,
+          serviceName: document.querySelector("#service-registry-name").value,
+          purpose: document.querySelector("#service-registry-purpose").value,
+          stage: document.querySelector("#service-registry-stage").value,
+          classification: document.querySelector("#service-registry-classification").value,
+          ownerRole: "founder",
+          dependencySummary: document.querySelector("#service-registry-dependencies").value
+        };
+        const queued = await request("/api/automation/tasks", {
+          method:"POST",
+          body:JSON.stringify({
+            title: `${payload.operation} internal service registry entry`,
+            action:"service.registry",
+            agentId:"project-memory-manager",
+            approvalRequired:true,
+            originCheckpoint:"axi-project-memory-management",
+            payload
+          })
+        });
+        result.textContent = `Queued for founder approval: ${queued.id}`;
+        event.target.reset();
+        await refresh();
+      } catch (error) {
+        result.textContent = error.message;
+      }
+    });
+    result.textContent = `Queued for founder approval: ${queued.id}`;
+    event.target.reset();
+    updateBusinessMetricCategories();
+    await refresh();
+  } catch (error) {
+    result.textContent = error.message;
+  }
+});
+updateBusinessMetricCategories();
+updateOperationalProfileFields();
 refresh();
+setInterval(refresh, 30000);
 </script>
 </body>
 </html>

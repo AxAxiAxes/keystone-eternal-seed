@@ -9,6 +9,30 @@ test("creates a checksummed portable checkpoint without secrets", async (t) => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-checkpoint-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));
   await fs.writeFile(path.join(directory, "identity.json"), "{\"name\":\"AXI\"}");
+  await fs.writeFile(
+    path.join(directory, "startup-context.json"),
+    "{\"id\":\"axes-memory-bank-startup-v1\"}"
+  );
+  await fs.writeFile(
+    path.join(directory, "continuity-record.jsonl"),
+    "{\"sequence\":1,\"eventType\":\"continuity-initialized\"}\n"
+  );
+  await fs.writeFile(
+    path.join(directory, "source-catalog.jsonl"),
+    "{\"sequence\":1,\"sourceId\":\"axi-memory-service\"}\n"
+  );
+  await fs.writeFile(
+    path.join(directory, "business-metrics.jsonl"),
+    "{\"sequence\":1,\"kind\":\"revenue\",\"amountCents\":12500}\n"
+  );
+  await fs.writeFile(
+    path.join(directory, "service-registry.jsonl"),
+    "{\"sequence\":1,\"serviceId\":\"axes-control-center\",\"stage\":\"planned\"}\n"
+  );
+  await fs.writeFile(
+    path.join(directory, "automation-profiles.jsonl"),
+    "{\"sequence\":1,\"event\":\"draft-created\",\"profileId\":\"private-observation\"}\n"
+  );
   await fs.writeFile(path.join(directory, "automation.json"), "{\"tasks\":[]}");
 
   const service = new CheckpointService({
@@ -22,7 +46,16 @@ test("creates a checksummed portable checkpoint without secrets", async (t) => {
   assert.equal(checkpoint.modules[0].id, "memory");
   assert.deepEqual(
     checkpoint.files.map((file) => file.path),
-    ["identity.json", "automation.json"]
+    [
+      "identity.json",
+      "startup-context.json",
+      "continuity-record.jsonl",
+      "source-catalog.jsonl",
+      "business-metrics.jsonl",
+      "service-registry.jsonl",
+      "automation-profiles.jsonl",
+      "automation.json"
+    ]
   );
   assert.match(checkpoint.files[0].sha256, /^[a-f0-9]{64}$/);
   assert.equal(JSON.stringify(checkpoint).includes("OPENAI_API_KEY"), false);

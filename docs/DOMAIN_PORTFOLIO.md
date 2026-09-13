@@ -20,14 +20,15 @@ it is planned or used.
 
 | Domain | Product role | Initial status |
 | --- | --- | --- |
-| `axescontracting.com` | Central AXES hub and control center | First public pilot; connect only to the public portal service |
+| `axescontracting.com` | Private, admin-only AXES command center | Root requires admin sign-in (`apps/axiom-freedom/server.js`); not a public marketing site. Connect to the public portal service only after this private-root behavior is understood by the operator |
 | `xiiom.com` | Home of AXI and private operations entry | Active public portal; private engine remains inaccessible from the internet |
 | `axoux.com` | Creator projects and collaboration | Park or redirect until the creator pilot is ready |
 | `auxaous.com` | Private self-design and reflection tools | Park or redirect until the self-design pilot is ready |
-| `urnur.com` | Contribution recognition and lineage direction | Park or redirect pending the blocking legal-readiness review; no payments, token, market, or trading functionality |
+| `urnur.com` | Future monetary currency and banking direction | Park or redirect pending the blocking banking and legal-readiness review; no application, banking claim, issuance, deposits, payments, token, market, or trading functionality |
 | `axaxaxu.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
 | `axianaxiunaixia.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
 | `axaxiaxes.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
+| `axaxes.com` | Newly reported AXES site | Park pending confirmed registration, purpose, owner, privacy classification, budget, and operating model |
 | `uxaxu.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
 | `owawawao.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
 | `aulaux.com` | Founder-defined future product or cultural direction | Park pending a scoped product brief |
@@ -36,12 +37,13 @@ it is planned or used.
 ## Rollout order
 
 1. **AXES Contracting:** Connect `axescontracting.com` to the existing public
-   Railway portal. It receives a dedicated hub page while `xiiom.com` retains
-   its current home page.
+   Railway portal. Its root now requires admin authentication and serves the
+   private AXES Command Center (`command-center.html`), not a public hub page,
+   while `xiiom.com` retains its current public home page.
 2. **XIIOM:** Finish monitoring, task controls, production chat verification,
    and source-connected deployment. Do not expose the private engine.
-3. **AXOUX and the School of Love & Ethics:** Use an invite-only creator and
-   learning pilot before activating a separate public domain.
+3. **AXOUS through AXOUX and the School of Love & Ethics:** Use an invite-only
+   creator and learning pilot before activating a separate public domain.
 4. **AUXAOUS and AXEOUS:** Activate only after privacy, moderation,
    safeguarding, export, and deletion capabilities exist.
 5. **URNUR and remaining domains:** Keep parked until they have documented

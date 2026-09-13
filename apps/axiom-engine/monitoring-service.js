@@ -103,9 +103,41 @@ class MonitoringService {
 function getAttention(snapshot) {
   const attention = [];
   if (!snapshot.memoryAvailable) attention.push("memory-unavailable");
+  if (snapshot.storage?.status === "attention") attention.push("memory-storage-warning");
   if (snapshot.automation.failedTasks > 0) attention.push("failed-tasks");
+  if (snapshot.automation.auditAttentionTasks > 0) attention.push("task-run-audit-error");
   if (snapshot.scheduler.enabled && snapshot.scheduler.lastError) attention.push("scheduler-error");
   if (snapshot.automation.pendingTasks > 20) attention.push("queue-backlog");
+  if (snapshot.governance && snapshot.governance.status !== "ready") {
+    attention.push("governance-readiness");
+  }
+  if (snapshot.recovery && snapshot.recovery.status !== "ready") {
+    attention.push("recovery-not-ready");
+  }
+  if (snapshot.coordinates && snapshot.coordinates.status !== "ready") {
+    attention.push("coordinate-chain-invalid");
+  }
+  if (snapshot.beadPassports && snapshot.beadPassports.status !== "ready") {
+    attention.push("bead-passport-invalid");
+  }
+  if (snapshot.startupContext && snapshot.startupContext.status !== "ready") {
+    attention.push("startup-context-unavailable");
+  }
+  if (snapshot.continuityRecord && snapshot.continuityRecord.status !== "ready") {
+    attention.push("continuity-record-unavailable");
+  }
+  if (snapshot.sourceCatalog && snapshot.sourceCatalog.status !== "ready") {
+    attention.push("source-catalog-unavailable");
+  }
+  if (snapshot.businessMetrics && snapshot.businessMetrics.status !== "ready") {
+    attention.push("business-metrics-unavailable");
+  }
+  if (snapshot.serviceRegistry && snapshot.serviceRegistry.status !== "ready") {
+    attention.push("service-registry-unavailable");
+  }
+  if (snapshot.automationProfiles && snapshot.automationProfiles.status !== "ready") {
+    attention.push("automation-profile-unavailable");
+  }
   return attention;
 }
 

@@ -1,0 +1,43 @@
+{
+  "$comment": "Private-safe fixture for docs/AXES_DIRECTORY_DATA_MODEL.md. Every identifier below is fictional and references listing_id values from sample-listings.json. Contact identity, correspondence, and free-form request content are intentionally absent, matching the data model's boundary that those belong in a restricted operator system, not this record. Validated against correction-removal-request.schema.json in validate.test.js.",
+  "requests": [
+    {
+      "request_id": "example-request-0001",
+      "listing_id": "example-listing-0006",
+      "request_type": "correction",
+      "received_at": "2027-02-01",
+      "request_route": "published_directory_correction_form",
+      "review_status": "received"
+    },
+    {
+      "request_id": "example-request-0002",
+      "listing_id": "example-listing-0007",
+      "request_type": "correction",
+      "received_at": "2027-02-08",
+      "request_route": "published_directory_correction_form",
+      "authority_confirmed_at": "2027-02-09",
+      "review_status": "under_review"
+    },
+    {
+      "request_id": "example-request-0003",
+      "listing_id": "example-listing-0008",
+      "request_type": "removal",
+      "received_at": "2027-02-11",
+      "request_route": "published_directory_removal_form",
+      "authority_confirmed_at": "2027-02-12",
+      "review_status": "under_review"
+    },
+    {
+      "request_id": "example-request-0004",
+      "listing_id": "example-listing-0011",
+      "request_type": "removal",
+      "received_at": "2025-11-28",
+      "request_route": "published_directory_removal_form",
+      "authority_confirmed_at": "2025-11-29",
+      "review_status": "implemented",
+      "reviewed_at": "2025-12-01",
+      "resolution_code": "representative_requested_removal_completed",
+      "public_change_at": "2025-12-01"
+    }
+  ]
+}

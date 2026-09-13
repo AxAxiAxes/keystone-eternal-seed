@@ -21,7 +21,9 @@ if (Test-Path -LiteralPath $archiveRoot) {
 }
 
 New-Item -ItemType Directory -Path $archiveRoot -Force | Out-Null
-Copy-Item -LiteralPath (Join-Path $source '*') -Destination $archiveRoot -Recurse -Force
+# -Path (not -LiteralPath) is required here so the trailing '*' expands as a wildcard;
+# -LiteralPath treats '*' as a literal character and silently copies zero files.
+Copy-Item -Path (Join-Path $source '*') -Destination $archiveRoot -Recurse -Force
 
 $manifest = Get-ChildItem -LiteralPath $archiveRoot -Recurse -File |
     ForEach-Object {
