@@ -7,7 +7,26 @@ const test = require("node:test");
 
 const memoryDirectory = path.join(os.tmpdir(), `axiom-engine-test-${process.pid}`);
 process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
+const TEST_ADMIN_PASSWORD = "engine-test-admin-password";
+process.env.AXIOM_ENGINE_ADMIN_PASSWORD = TEST_ADMIN_PASSWORD;
 const app = require("../index");
+
+const ADMIN_AUTH_HEADER = `Basic ${Buffer.from(`admin:${TEST_ADMIN_PASSWORD}`).toString("base64")}`;
+
+// Every mutating route now requires admin credentials (see index.js's
+// requireAdmin). Rather than touch each of this file's POST call sites, the
+// global fetch used by every test below is wrapped so it always carries
+// valid admin credentials unless a call explicitly overrides/omits them --
+// which is exactly what the dedicated auth-enforcement tests further down
+// do, by calling nativeFetch directly.
+const nativeFetch = global.fetch;
+global.fetch = (url, options = {}) => {
+  const headers = new Headers(options.headers || {});
+  if (!headers.has("Authorization")) {
+    headers.set("Authorization", ADMIN_AUTH_HEADER);
+  }
+  return nativeFetch(url, { ...options, headers });
+};
 
 async function startServer() {
   const server = http.createServer(app);
@@ -25,6 +44,47 @@ async function stopServer(server) {
   server.closeAllConnections();
   await closed;
 }
+
+test("rejects mutating requests without admin credentials", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const noAuth = await nativeFetch(`http://127.0.0.1:${port}/axiom`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "analyze", payload: {} })
+  });
+  assert.equal(noAuth.status, 401);
+  assert.equal(noAuth.headers.get("www-authenticate"), 'Basic realm="AXIOM Engine Admin"');
+  assert.deepEqual(await noAuth.json(), { error: "admin credentials required" });
+
+  const wrongAuth = await nativeFetch(`http://127.0.0.1:${port}/system/checkpoints`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Basic ${Buffer.from("admin:wrong-password").toString("base64")}`
+    },
+    body: JSON.stringify({})
+  });
+  assert.equal(wrongAuth.status, 401);
+
+  const correctAuth = await fetch(`http://127.0.0.1:${port}/axiom`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "analyze", payload: {} })
+  });
+  assert.equal(correctAuth.status, 200);
+});
+
+test("leaves read-only status routes open without admin credentials", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const response = await nativeFetch(`http://127.0.0.1:${port}/health`);
+  assert.equal(response.status, 200);
+});
 
 test("processes an AXIOM command", async (t) => {
   const server = await startServer();

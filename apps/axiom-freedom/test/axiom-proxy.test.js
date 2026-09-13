@@ -10,6 +10,8 @@ const memoryDirectory = path.join(
 );
 const originalMemoryDirectory = process.env.AXIOM_MEMORY_DIRECTORY;
 process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
+const ENGINE_ADMIN_PASSWORD = "engine-test-admin-password";
+process.env.AXIOM_ENGINE_ADMIN_PASSWORD = ENGINE_ADMIN_PASSWORD;
 const engine = require("../../axiom-engine");
 
 async function startServer(server) {

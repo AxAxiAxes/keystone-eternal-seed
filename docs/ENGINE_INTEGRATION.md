@@ -205,7 +205,10 @@ valuation, profitability guarantee, or legal or financial advice.
 
 ## Private recovery endpoints
 
-The engine exposes recovery endpoints only on the private service network:
+The engine exposes recovery endpoints only on the private service network,
+and every `POST` route below additionally requires `AXIOM_ENGINE_ADMIN_PASSWORD`
+HTTP Basic Auth (see `docs/RAILWAY_DEPLOYMENT.md`); this applies to every
+state-mutating route in this document, not only the ones listed here.
 
 | Method | Path | Purpose |
 | --- | --- | --- |

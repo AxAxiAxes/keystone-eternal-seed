@@ -18,6 +18,12 @@ const PUBLIC_DOCUMENTS = new Set([
     'ENGINE_INTEGRATION.md'
 ]);
 const AXIOM_ENGINE_URL = new URL(process.env.AXIOM_ENGINE_URL || 'http://127.0.0.1:3000');
+// apps/axiom-engine now requires admin credentials on every state-mutating
+// route (see its requireAdmin middleware); this proxy must present them on
+// every engine call it makes so legitimate forwarded commands are not
+// rejected. Read-only engine status routes ignore the header, so it is safe
+// to always attach it when configured.
+const AXIOM_ENGINE_ADMIN_PASSWORD = process.env.AXIOM_ENGINE_ADMIN_PASSWORD;
 const ENGINE_FAILURE_CATEGORY = Object.freeze({
     UNREACHABLE: 'unreachable-private-engine',
     NON_SUCCESS: 'engine-non-success-response'
@@ -213,10 +219,14 @@ function getCommandCenterCheckpoints(timelineFilePath = PROJECT_TIMELINE_FILE) {
 
 async function invokeEngine(endpoint, method = 'GET', body) {
     let response;
+    const headers = { 'Content-Type': 'application/json' };
+    if (AXIOM_ENGINE_ADMIN_PASSWORD) {
+        headers.Authorization = 'Basic ' + Buffer.from('admin:' + AXIOM_ENGINE_ADMIN_PASSWORD).toString('base64');
+    }
     try {
         response = await fetch(new URL(endpoint, AXIOM_ENGINE_URL), {
             method,
-            headers: { 'Content-Type': 'application/json' },
+            headers,
             body: body === undefined ? undefined : JSON.stringify(body),
             signal: AbortSignal.timeout(60000)
         });

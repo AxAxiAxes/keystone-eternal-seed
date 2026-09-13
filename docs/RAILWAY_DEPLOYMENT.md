@@ -139,12 +139,20 @@ AXIOM_BACKUP_DIRECTORY=<separate-recovery-location>
 AXIOM_RECOVERY_RESTORE_DIRECTORY=<isolated-recovery-staging-location>
 OPENAI_API_KEY=<set as a Railway secret>
 OPENAI_MODEL=gpt-4.1-mini
+AXIOM_ENGINE_ADMIN_PASSWORD=<set as a Railway secret, distinct from ADMIN_PASSWORD>
 AXIOM_MONITORING_ENABLED=true
 AXIOM_MONITORING_POLL_INTERVAL_MS=60000
 AXIOM_AUTOMATION_ENABLED=true
 AXIOM_AUTOMATION_POLL_INTERVAL_MS=60000
 AXIOM_AUTOMATION_MAX_TASKS_PER_CYCLE=5
 ```
+
+`AXIOM_ENGINE_ADMIN_PASSWORD` gates every state-mutating route (automation
+profiles, checkpoints, backups, coordinates, bead passports, memory writes,
+`/axiom`, etc.) behind HTTP Basic Auth. Leaving it unset denies all of those
+routes by default (fail-closed), so it must be set before any operator or
+integration needs to call them; read-only `/health` and `/system/*` status
+routes remain reachable without credentials.
 
 6. Do not generate a public domain for this service.
 
@@ -166,13 +174,14 @@ accounts, send messages, publish, or take other external action.
 apps/axiom-freedom/Dockerfile
 ```
 
-3. Add this service variable, replacing the value with the private domain displayed by the `axiom-engine` service:
+3. Add these service variables, replacing the URL value with the private domain displayed by the `axiom-engine` service and the password with the exact same value configured for `axiom-engine`'s `AXIOM_ENGINE_ADMIN_PASSWORD`:
 
 ```dotenv
 AXIOM_ENGINE_URL=http://<axiom-engine-private-domain>:3000
+AXIOM_ENGINE_ADMIN_PASSWORD=<same secret value set on axiom-engine>
 ```
 
-Railway private domains are available only between services in the same project. Do not use the engine's public domain or expose one.
+Railway private domains are available only between services in the same project. Do not use the engine's public domain or expose one. Without a matching `AXIOM_ENGINE_ADMIN_PASSWORD`, every mutating command this proxy forwards (chat, checkpoints, backups, etc.) is rejected by `axiom-engine`'s admin gate.
 
 4. Generate a Railway public domain for `axiom-web` and verify its `/health` endpoint before connecting the custom domain.
 

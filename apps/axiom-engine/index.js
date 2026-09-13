@@ -1,4 +1,5 @@
 const express = require("express");
+const crypto = require("crypto");
 const fs = require("fs/promises");
 const { constants: fsConstants } = require("fs");
 const path = require("path");
@@ -24,6 +25,40 @@ const {
   startAutomationScheduler
 } = require("./automation-service");
 const app = express();
+const ADMIN_PASSWORD = process.env.AXIOM_ENGINE_ADMIN_PASSWORD;
+
+// All state-mutating AXIOM engine routes (automation profiles, checkpoints,
+// backups, coordinates, bead passports, memory writes, etc.) must require
+// admin credentials before this service is reachable from any public network
+// path. This mirrors apps/axiom-freedom/server.js's requireAdmin pattern: a
+// Basic-Auth password compared with a constant-time check, denying access by
+// default whenever AXIOM_ENGINE_ADMIN_PASSWORD is unset.
+function checkAdminAuth(req) {
+  if (!ADMIN_PASSWORD) return false;
+  const authorization = req.headers.authorization;
+  if (typeof authorization !== "string") return false;
+
+  const match = /^Basic\s+([A-Za-z0-9+/]+={0,2})$/.exec(authorization);
+  if (!match) return false;
+
+  const decoded = Buffer.from(match[1], "base64").toString("utf8");
+  const separator = decoded.indexOf(":");
+  if (separator < 0) return false;
+
+  const providedPassword = Buffer.from(decoded.slice(separator + 1));
+  const expectedPassword = Buffer.from(ADMIN_PASSWORD);
+  return (
+    providedPassword.length === expectedPassword.length &&
+    crypto.timingSafeEqual(providedPassword, expectedPassword)
+  );
+}
+
+function requireAdmin(req, res, next) {
+  if (checkAdminAuth(req)) return next();
+  res.set("WWW-Authenticate", 'Basic realm="AXIOM Engine Admin"');
+  res.status(401).json({ error: "admin credentials required" });
+}
+
 const dataDirectory = process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data");
 const memoryStore = new MemoryStore(dataDirectory);
 const storageUsageService = new StorageUsageService({ directory: dataDirectory });
@@ -374,7 +409,7 @@ app.get("/automation/profiles", async (req, res, next) => {
   }
 });
 
-app.post("/automation/profiles", async (req, res, next) => {
+app.post("/automation/profiles", requireAdmin, async (req, res, next) => {
   try {
     res.status(201).json(await automationProfileService.createDraft(req.body));
   } catch (error) {
@@ -399,7 +434,7 @@ app.get("/automation/profiles/health", async (req, res, next) => {
   }
 });
 
-app.post("/automation/profiles/preview", async (req, res, next) => {
+app.post("/automation/profiles/preview", requireAdmin, async (req, res, next) => {
   try {
     res.json(await automationProfileService.preview(req.body));
   } catch (error) {
@@ -407,7 +442,7 @@ app.post("/automation/profiles/preview", async (req, res, next) => {
   }
 });
 
-app.post("/automation/profiles/:profileId/activate", async (req, res, next) => {
+app.post("/automation/profiles/:profileId/activate", requireAdmin, async (req, res, next) => {
   try {
     res.json(await automationProfileService.activate(req.params.profileId, req.body));
   } catch (error) {
@@ -415,7 +450,7 @@ app.post("/automation/profiles/:profileId/activate", async (req, res, next) => {
   }
 });
 
-app.post("/automation/profiles/:profileId/pause", async (req, res, next) => {
+app.post("/automation/profiles/:profileId/pause", requireAdmin, async (req, res, next) => {
   try {
     res.json(await automationProfileService.pause(req.params.profileId, req.body));
   } catch (error) {
@@ -423,7 +458,7 @@ app.post("/automation/profiles/:profileId/pause", async (req, res, next) => {
   }
 });
 
-app.post("/automation/profiles/:profileId/resume", async (req, res, next) => {
+app.post("/automation/profiles/:profileId/resume", requireAdmin, async (req, res, next) => {
   try {
     res.json(await automationProfileService.resume(req.params.profileId, req.body));
   } catch (error) {
@@ -456,7 +491,7 @@ app.get("/system/continuity-record/events", async (req, res, next) => {
   }
 });
 
-app.post("/system/continuity-record/events", async (req, res, next) => {
+app.post("/system/continuity-record/events", requireAdmin, async (req, res, next) => {
   try {
     res.status(201).json(await continuityRecordService.recordOperatorConfirmation(req.body));
   } catch (error) {
@@ -481,7 +516,7 @@ app.get("/monitoring/history", async (req, res, next) => {
   }
 });
 
-app.post("/monitoring/snapshots", async (req, res, next) => {
+app.post("/monitoring/snapshots", requireAdmin, async (req, res, next) => {
   try {
     res.status(201).json(await captureMonitoringSnapshot());
   } catch (error) {
@@ -498,7 +533,7 @@ app.get("/system/checkpoints", async (req, res, next) => {
   }
 });
 
-app.post("/system/checkpoints", async (req, res, next) => {
+app.post("/system/checkpoints", requireAdmin, async (req, res, next) => {
   try {
     res.status(201).json(await checkpointService.create());
   } catch (error) {
@@ -515,7 +550,7 @@ app.get("/system/backups", async (req, res, next) => {
   }
 });
 
-app.post("/system/backups", async (req, res, next) => {
+app.post("/system/backups", requireAdmin, async (req, res, next) => {
   try {
     res.status(201).json(await recoveryBackupService.create());
   } catch (error) {
@@ -523,7 +558,7 @@ app.post("/system/backups", async (req, res, next) => {
   }
 });
 
-app.post("/system/backups/:backupId/verify", async (req, res, next) => {
+app.post("/system/backups/:backupId/verify", requireAdmin, async (req, res, next) => {
   try {
     res.json(await recoveryBackupService.verify(req.params.backupId));
   } catch (error) {
@@ -531,7 +566,7 @@ app.post("/system/backups/:backupId/verify", async (req, res, next) => {
   }
 });
 
-app.post("/system/backups/:backupId/restore", async (req, res, next) => {
+app.post("/system/backups/:backupId/restore", requireAdmin, async (req, res, next) => {
   try {
     res.status(201).json(await recoveryBackupService.restore(req.params.backupId));
   } catch (error) {
@@ -548,7 +583,7 @@ app.get("/system/coordinates", async (req, res, next) => {
   }
 });
 
-app.post("/system/coordinates", async (req, res, next) => {
+app.post("/system/coordinates", requireAdmin, async (req, res, next) => {
   try {
     res.status(201).json(await coordinateService.create(req.body));
   } catch (error) {
@@ -581,7 +616,7 @@ app.get("/system/bead-passports", async (req, res, next) => {
   }
 });
 
-app.post("/system/bead-passports", async (req, res, next) => {
+app.post("/system/bead-passports", requireAdmin, async (req, res, next) => {
   try {
     res.status(201).json(await beadPassportService.register(req.body));
   } catch (error) {
@@ -629,7 +664,7 @@ app.get("/automation/agents/:agentId/report", async (req, res, next) => {
   }
 });
 
-app.post("/automation/agents/:agentId/accountability", async (req, res, next) => {
+app.post("/automation/agents/:agentId/accountability", requireAdmin, async (req, res, next) => {
   try {
     res.json(await automationService.reviewAgentAccountability(
       req.params.agentId,
@@ -640,7 +675,7 @@ app.post("/automation/agents/:agentId/accountability", async (req, res, next) =>
   }
 });
 
-app.post("/automation/agents", async (req, res, next) => {
+app.post("/automation/agents", requireAdmin, async (req, res, next) => {
   try {
     res.status(201).json(await automationService.registerAgent(req.body));
   } catch (error) {
@@ -656,7 +691,7 @@ app.get("/automation/tasks", async (req, res, next) => {
   }
 });
 
-app.post("/automation/tasks", async (req, res, next) => {
+app.post("/automation/tasks", requireAdmin, async (req, res, next) => {
   try {
     res.status(201).json(await automationService.createTask(req.body));
   } catch (error) {
@@ -664,7 +699,7 @@ app.post("/automation/tasks", async (req, res, next) => {
   }
 });
 
-app.post("/automation/tasks/:taskId/approval", async (req, res, next) => {
+app.post("/automation/tasks/:taskId/approval", requireAdmin, async (req, res, next) => {
   try {
     res.json(await automationService.reviewTaskApproval(
       req.params.taskId,
@@ -675,7 +710,7 @@ app.post("/automation/tasks/:taskId/approval", async (req, res, next) => {
   }
 });
 
-app.post("/automation/process", async (req, res, next) => {
+app.post("/automation/process", requireAdmin, async (req, res, next) => {
   try {
     await requireReadyStartupContext();
     const maxTasks = req.body.maxTasks === undefined ? 5 : Number(req.body.maxTasks);
@@ -685,7 +720,7 @@ app.post("/automation/process", async (req, res, next) => {
   }
 });
 
-app.post("/automation/chat", async (req, res, next) => {
+app.post("/automation/chat", requireAdmin, async (req, res, next) => {
   try {
     const agent = await automationService.getAgent(req.body.agentId);
     const reply = await chatService.reply(req.body.message, { agent });
@@ -734,7 +769,7 @@ app.get("/memory/:kind", async (req, res, next) => {
   }
 });
 
-app.post("/memory/:kind", async (req, res, next) => {
+app.post("/memory/:kind", requireAdmin, async (req, res, next) => {
   try {
     res.status(201).json(await memoryStore.record({
       kind: req.params.kind,
@@ -747,7 +782,7 @@ app.post("/memory/:kind", async (req, res, next) => {
 });
 
 // Core automation route
-app.post("/axiom", async (req, res, next) => {
+app.post("/axiom", requireAdmin, async (req, res, next) => {
   const { action, payload } = req.body;
 
   try {
