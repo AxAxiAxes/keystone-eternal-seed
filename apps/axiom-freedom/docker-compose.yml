@@ -7,6 +7,7 @@ services:
     expose:
       - "3000"
     environment:
+      AXIOM_ENGINE_ADMIN_PASSWORD: ${AXIOM_ENGINE_ADMIN_PASSWORD:-}
       AXIOM_MEMORY_DIRECTORY: ${AXIOM_MEMORY_DIRECTORY:-/app/data}
       AXIOM_BACKUP_DIRECTORY: /app/backups
       AXIOM_RECOVERY_RESTORE_DIRECTORY: /app/recovery-staging
