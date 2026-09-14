@@ -107,3 +107,5 @@ access, payment handling, or any financial/marketplace action.
 - `AXES_TIER_1_EVIDENCE_LEDGER.md`
 - `KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md`
 - `FOUNDER_REVENUE_PRIORITY_OVERLAY.md`
+- `KEYSTONE_CREATOR_ORIGIN_SETUP_INTAKE_TEMPLATE.md` — draft record shapes
+  for candidate deliverables 1-4; itself not yet approved for use
