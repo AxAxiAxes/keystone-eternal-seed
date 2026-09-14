@@ -1,0 +1,11 @@
+# Normalize line endings for consistent, smaller diffs.
+* text=auto
+
+# These are very large exported/generated documents (chat transcripts,
+# patent drafts). Marking them as generated/documentation tells GitHub to
+# collapse them by default in diffs and skip them in language statistics,
+# which speeds up page loads when browsing commits/PRs that touch this repo.
+PATENT_APPLICATION_64_078_819.md linguist-documentation
+SACRED_RECORD_SESSION_08_28_2026.md linguist-generated
+THE_PERFECT_HARMONICS_ATHANOR_VISION.md linguist-documentation
+"sacred record 8.28.26 full" linguist-generated
