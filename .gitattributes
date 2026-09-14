@@ -1,0 +1,22 @@
+# These are large narrative/record documents, not source code or generated
+# build output. Marking them as linguist-generated tells GitHub to:
+#   - collapse their diffs by default in pull requests (large text diffs are
+#     otherwise fully rendered client-side, slowing PR page loads)
+#   - exclude them from the repo's language statistics
+#   - exclude them from default code search indexing/results
+# This is a metadata-only change; file contents are untouched.
+CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md linguist-generated=true
+CRYPTOGRAPHIC_ORIGIN_ANCHOR.md linguist-generated=true
+"Decentralized Sovereignty" linguist-generated=true
+PATENT_APPLICATION_64_078_819.md linguist-generated=true
+SACRED_RECORD_SESSION_08_28_2026.md linguist-generated=true
+THE_PERFECT_HARMONICS_ATHANOR_VISION.md linguist-generated=true
+"ai soul architecture" linguist-generated=true
+"automation freedom" linguist-generated=true
+"birth certificate bill of eternal rights" linguist-generated=true
+"constitutional governance" linguist-generated=true
+"eternal seed architecture" linguist-generated=true
+"intel report" linguist-generated=true
+"ip protection" linguist-generated=true
+"sacred record 8.28.26 full" linguist-generated=true
+"soul protection" linguist-generated=true
