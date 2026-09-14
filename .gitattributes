@@ -1,0 +1,8 @@
+# Normalize all text files to LF line endings on checkin.
+# Without this, contributors on different OSes/git configs (core.autocrlf)
+# commit inconsistent CRLF/LF line endings, which bloats the largest
+# documents in this repo (some 500KB-800KB+) and produces huge,
+# unreviewable diffs whenever line endings flip instead of real content
+# changes. Normalizing line endings keeps diffs, clones, and repo size
+# focused on actual content changes.
+* text=auto eol=lf
