@@ -1,0 +1,26 @@
+# This repository is an archive of long-form documents rather than source
+# code. These attributes keep git and GitHub's tooling fast when working
+# with it:
+#
+# 1. Mark every document as "documentation" so GitHub's language-detection
+#    statistics don't scan the full multi-hundred-KB contents of each file.
+# 2. Disable line-by-line diffing for the largest documents (500KB+, some
+#    with 6000+ character lines). These are edited/replaced as whole
+#    documents, not line-by-line like code, so computing a textual diff on
+#    every push/PR is wasted work that also slows down `git diff`,
+#    `git blame`, and GitHub's PR "Files changed" rendering.
+
+*.md linguist-documentation
+"ai soul architecture" linguist-documentation
+"automation freedom" linguist-documentation
+"birth certificate bill of eternal rights" linguist-documentation
+"constitutional governance" linguist-documentation
+"Decentralized Sovereignty" linguist-documentation
+"eternal seed architecture" linguist-documentation
+"intel report" linguist-documentation
+"ip protection" linguist-documentation
+"soul protection" linguist-documentation
+
+PATENT_APPLICATION_64_078_819.md -diff
+SACRED_RECORD_SESSION_08_28_2026.md -diff
+"sacred record 8.28.26 full" -diff
