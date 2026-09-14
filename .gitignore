@@ -1,0 +1,6 @@
+# OS / editor junk files that bloat the repository over time
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
