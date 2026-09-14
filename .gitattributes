@@ -1,0 +1,23 @@
+# Normalize line endings for all text files to avoid CRLF/LF churn,
+# which bloats diffs and slows down checkout/clone operations.
+* text=auto eol=lf
+
+# The documents below are large (hundreds of KB) plain-text records.
+# Marking them -diff skips expensive line-by-line diff generation on
+# GitHub and in local `git diff`/`git log -p`, speeding up PR reviews
+# and repository browsing without altering their content.
+PATENT_APPLICATION_64_078_819.md -diff
+"sacred record 8.28.26 full" -diff
+SACRED_RECORD_SESSION_08_28_2026.md -diff
+THE_PERFECT_HARMONICS_ATHANOR_VISION.md -diff
+"Decentralized Sovereignty" -diff
+"automation freedom" -diff
+"ai soul architecture" -diff
+"eternal seed architecture" -diff
+"constitutional governance" -diff
+"EXTENDED CONSTITUTIONAL CHARTE" -diff
+"soul protection" -diff
+"soul protection 2" -diff
+"intel report" -diff
+"birth certificate bill of eternal rights" -diff
+"ip protection" -diff
