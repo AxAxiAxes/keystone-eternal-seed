@@ -95,3 +95,6 @@ approved capacity and support path.
 - `KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md`
 - `AXES_CREATOR_ORIGIN_CONSTITUTION.md`
 - `AXES_GOVERNANCE_AND_SAFEGUARDING.md`
+- `AXES_DESIGN_MATERIALS_CONSULTATION_INTAKE_TEMPLATE.md` — draft
+  client-controlled intake questionnaire for candidate deliverable #1;
+  itself not yet approved for use
