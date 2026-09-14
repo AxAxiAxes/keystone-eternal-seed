@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-14 Duplicate scheduled automation targeting the stale `main` branch](2026-09-14-duplicate-automation-and-stale-branch-prs.md)
 - [2026-09-13 Repository continuity check](2026-09-13-repository-continuity-check.md)
 - [2026-09-12 Full archive review and repository continuity check](2026-09-12-full-archive-review-and-continuity-check.md)
 - [2026-09-12 GitHub default-branch correction and full-repository truth audit](2026-09-12-default-branch-correction-and-truth-audit.md)
@@ -36,6 +37,9 @@ without re-deriving it:
   [`2026-09-12-full-archive-review-and-continuity-check.md`](2026-09-12-full-archive-review-and-continuity-check.md)
   (builds on
   [`2026-09-12-agent-timeline-and-transcript-review.md`](2026-09-12-agent-timeline-and-transcript-review.md))
+- **Why are there so many open PRs / duplicate "remove duplicate files"
+  PRs / PRs that won't merge into the real branch** →
+  [`2026-09-14-duplicate-automation-and-stale-branch-prs.md`](2026-09-14-duplicate-automation-and-stale-branch-prs.md)
 
 This is a repository-based safeguard, not a claim of cross-session chat
 memory: it works because every session is already required to read this file
@@ -43,6 +47,7 @@ on startup, not because any individual conversation is remembered.
 
 ## Full chronological index (newest first)
 
+- [2026-09-14 Duplicate scheduled automation targeting the stale `main` branch](2026-09-14-duplicate-automation-and-stale-branch-prs.md)
 - [2026-09-13 Repository continuity check](2026-09-13-repository-continuity-check.md)
 - [2026-09-12 Full archive review and repository continuity check](2026-09-12-full-archive-review-and-continuity-check.md)
 - [2026-09-12 GitHub default-branch correction and full-repository truth audit](2026-09-12-default-branch-correction-and-truth-audit.md)
