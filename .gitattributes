@@ -1,0 +1,5 @@
+# Normalize line endings to LF for all text files.
+# This avoids cross-platform CRLF/LF churn that causes entire files
+# to show as changed on every diff, keeping git diff/blame/clone
+# operations fast and history clean.
+* text=auto eol=lf
