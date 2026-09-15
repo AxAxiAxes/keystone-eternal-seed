@@ -19,7 +19,9 @@ class CoordinateService {
     if (!Number.isInteger(limit) || limit < 1 || limit > 1_000) {
       throw new RangeError("limit must be an integer between 1 and 1000");
     }
-    return this.withCoordinates(async (coordinates) => coordinates.slice(-limit).reverse());
+    return this.withCoordinates(async (coordinates) => coordinates.slice(-limit).reverse(), {
+      persist: false
+    });
   }
 
   async create({
@@ -74,7 +76,7 @@ class CoordinateService {
         latestCoordinateId: latest.id,
         latestCoordinateHash: latest.coordinateHash
       };
-    });
+    }, { persist: false });
   }
 
   async status() {
@@ -89,11 +91,17 @@ class CoordinateService {
     }
   }
 
-  async withCoordinates(operation) {
+  async withCoordinates(operation, { persist = true } = {}) {
     const queuedOperation = this.operationQueue.then(async () => {
-      const coordinates = await this.readCoordinates();
+      const { coordinates, bootstrapped } = await this.readCoordinates();
       const result = await operation(coordinates);
-      await this.writeCoordinates(coordinates);
+      // Read-only callers (list/verify) pass persist: false to avoid an
+      // unnecessary write-and-rename on every poll, but a freshly
+      // bootstrapped Genesis coordinate must still be persisted so its
+      // hash (which embeds recordedAt) stays stable across future reads.
+      if (persist || bootstrapped) {
+        await this.writeCoordinates(coordinates);
+      }
       return result;
     });
     this.operationQueue = queuedOperation.catch(() => {});
@@ -107,12 +115,12 @@ class CoordinateService {
         ? contents.trim().split("\n").map((line) => JSON.parse(line))
         : [];
       if (coordinates.length === 0) {
-        return [createGenesisCoordinate(this.now)];
+        return { coordinates: [createGenesisCoordinate(this.now)], bootstrapped: true };
       }
-      return coordinates;
+      return { coordinates, bootstrapped: false };
     } catch (error) {
       if (error.code === "ENOENT") {
-        return [createGenesisCoordinate(this.now)];
+        return { coordinates: [createGenesisCoordinate(this.now)], bootstrapped: true };
       }
       throw error;
     }
