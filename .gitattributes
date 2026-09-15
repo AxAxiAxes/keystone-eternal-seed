@@ -1,0 +1,23 @@
+# Normalize line endings for all text files to avoid diff/clone bloat from
+# inconsistent CRLF/LF churn.
+* text=auto eol=lf
+
+# These are large, single-blob prose documents (hundreds of KB, effectively
+# one long paragraph per file). Line-based diffing/rendering them on every
+# change is expensive for git, CI, and the GitHub PR UI. Mark them as
+# generated so diffs are collapsed by default and diff/blame computation is
+# skipped, which speeds up checkouts, pushes, and PR page loads.
+PATENT_APPLICATION_64_078_819.md linguist-generated=true diff=false
+"sacred record 8.28.26 full" linguist-generated=true diff=false
+SACRED_RECORD_SESSION_08_28_2026.md linguist-generated=true diff=false
+THE_PERFECT_HARMONICS_ATHANOR_VISION.md linguist-generated=true diff=false
+"Decentralized Sovereignty" linguist-generated=true diff=false
+"automation freedom" linguist-generated=true diff=false
+"ai soul architecture" linguist-generated=true diff=false
+"eternal seed architecture" linguist-generated=true diff=false
+"constitutional governance" linguist-generated=true diff=false
+"soul protection" linguist-generated=true diff=false
+"intel report" linguist-generated=true diff=false
+"birth certificate bill of eternal rights" linguist-generated=true diff=false
+CRYPTOGRAPHIC_ORIGIN_ANCHOR.md linguist-generated=true diff=false
+CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md linguist-generated=true diff=false
