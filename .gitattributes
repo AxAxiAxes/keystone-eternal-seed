@@ -6,18 +6,21 @@
 # one long paragraph per file). Line-based diffing/rendering them on every
 # change is expensive for git, CI, and the GitHub PR UI. Mark them as
 # generated so diffs are collapsed by default and diff/blame computation is
-# skipped, which speeds up checkouts, pushes, and PR page loads.
-PATENT_APPLICATION_64_078_819.md linguist-generated=true diff=false
-"sacred record 8.28.26 full" linguist-generated=true diff=false
-SACRED_RECORD_SESSION_08_28_2026.md linguist-generated=true diff=false
-THE_PERFECT_HARMONICS_ATHANOR_VISION.md linguist-generated=true diff=false
-"Decentralized Sovereignty" linguist-generated=true diff=false
-"automation freedom" linguist-generated=true diff=false
-"ai soul architecture" linguist-generated=true diff=false
-"eternal seed architecture" linguist-generated=true diff=false
-"constitutional governance" linguist-generated=true diff=false
-"soul protection" linguist-generated=true diff=false
-"intel report" linguist-generated=true diff=false
-"birth certificate bill of eternal rights" linguist-generated=true diff=false
-CRYPTOGRAPHIC_ORIGIN_ANCHOR.md linguist-generated=true diff=false
-CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md linguist-generated=true diff=false
+# skipped, which speeds up checkouts, pushes, and PR page loads. They are
+# also already stored with pure LF endings, so `-text` skips the redundant
+# per-checkout/per-add line-ending renormalization scan that `text=auto`
+# would otherwise still perform on their full (hundreds-of-KB) content.
+PATENT_APPLICATION_64_078_819.md linguist-generated=true diff=false -text
+"sacred record 8.28.26 full" linguist-generated=true diff=false -text
+SACRED_RECORD_SESSION_08_28_2026.md linguist-generated=true diff=false -text
+THE_PERFECT_HARMONICS_ATHANOR_VISION.md linguist-generated=true diff=false -text
+"Decentralized Sovereignty" linguist-generated=true diff=false -text
+"automation freedom" linguist-generated=true diff=false -text
+"ai soul architecture" linguist-generated=true diff=false -text
+"eternal seed architecture" linguist-generated=true diff=false -text
+"constitutional governance" linguist-generated=true diff=false -text
+"soul protection" linguist-generated=true diff=false -text
+"intel report" linguist-generated=true diff=false -text
+"birth certificate bill of eternal rights" linguist-generated=true diff=false -text
+CRYPTOGRAPHIC_ORIGIN_ANCHOR.md linguist-generated=true diff=false -text
+CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md linguist-generated=true diff=false -text
