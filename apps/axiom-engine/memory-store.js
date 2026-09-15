@@ -47,12 +47,16 @@ class MemoryStore {
 
     try {
       const contents = await fs.readFile(this.entriesPath(kind), "utf8");
+      // Slice to the requested tail before parsing: this log is
+      // append-only and grows without bound, so parsing every line just to
+      // discard all but the last `limit` wastes CPU proportional to the
+      // full file size on every read.
       return contents
         .trim()
         .split("\n")
         .filter(Boolean)
-        .map((line) => JSON.parse(line))
         .slice(-limit)
+        .map((line) => JSON.parse(line))
         .reverse();
     } catch (error) {
       if (error.code === "ENOENT") {
