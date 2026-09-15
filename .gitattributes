@@ -1,0 +1,10 @@
+# Large document files (500KB+) in this repo are single, mostly-prose
+# text/markdown records. Computing line-by-line diffs for them on every
+# `git diff`, `git log -p`, `git blame`, and GitHub PR render is expensive
+# and rarely useful for prose content. Mark them so Git and GitHub skip
+# generating textual diffs and treat them as generated/opaque content,
+# which speeds up local git operations and PR diff rendering.
+PATENT_APPLICATION_64_078_819.md -diff linguist-generated=true
+"sacred record 8.28.26 full" -diff linguist-generated=true
+SACRED_RECORD_SESSION_08_28_2026.md -diff linguist-generated=true
+THE_PERFECT_HARMONICS_ATHANOR_VISION.md -diff linguist-generated=true
