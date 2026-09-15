@@ -1,0 +1,21 @@
+# Large narrative/reference documents (tens to hundreds of KB of plain text).
+# Marking them as generated + non-diffable keeps GitHub's PR diff renderer and
+# language-stat scanner from doing expensive full-text work on every push, and
+# keeps `git diff`/`git log -p` fast locally by treating them as opaque blobs.
+# ("?" matches a single character; used here to match the literal space in
+# these filenames, since patterns cannot be quoted or space-escaped.)
+ai?soul?architecture linguist-generated=true -diff linguist-documentation
+automation?freedom linguist-generated=true -diff linguist-documentation
+birth?certificate?bill?of?eternal?rights linguist-generated=true -diff linguist-documentation
+constitutional?governance linguist-generated=true -diff linguist-documentation
+Decentralized?Sovereignty linguist-generated=true -diff linguist-documentation
+eternal?seed?architecture linguist-generated=true -diff linguist-documentation
+intel?report linguist-generated=true -diff linguist-documentation
+ip?protection linguist-generated=true -diff linguist-documentation
+sacred?record?8.28.26?full linguist-generated=true -diff linguist-documentation
+soul?protection linguist-generated=true -diff linguist-documentation
+PATENT_APPLICATION_64_078_819.md linguist-generated=true -diff linguist-documentation
+SACRED_RECORD_SESSION_08_28_2026.md linguist-generated=true -diff linguist-documentation
+THE_PERFECT_HARMONICS_ATHANOR_VISION.md linguist-generated=true -diff linguist-documentation
+CRYPTOGRAPHIC_ORIGIN_ANCHOR.md linguist-generated=true -diff linguist-documentation
+CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md linguist-generated=true -diff linguist-documentation
