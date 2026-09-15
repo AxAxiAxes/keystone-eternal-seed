@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "site": {
+    "name": "AXES Contracting",
+    "intendedProductionOrigin": "https://axescontracting.com",
+    "publicationState": "approval-gated",
+    "deploymentState": "not-configured",
+    "localPreviewPath": "web/preview/index.html"
+  },
+  "global": {
+    "robots": "noindex, nofollow, noarchive, nosnippet",
+    "socialMetadata": {
+      "enabled": false,
+      "reason": "Founder-approved brand assets and public claims are not yet available."
+    },
+    "structuredData": {
+      "enabled": false,
+      "reason": "Do not publish organization, service, review, or local-business data until the owner verifies it."
+    }
+  },
+  "routes": [
+    {
+      "path": "/",
+      "status": "planned-public-safe",
+      "localPreviewPath": "web/preview/index.html",
+      "title": "AXES Contracting | Website in preparation",
+      "description": "The AXES Contracting website is in preparation. Public information will be published after owner approval.",
+      "canonical": "https://axescontracting.com/",
+      "robots": "noindex, nofollow, noarchive, nosnippet",
+      "h1": "AXES Contracting",
+      "bodyPurpose": "Provide an owner-approved, factual introduction only after deployment and publication approval.",
+      "forms": [],
+      "externalLinks": []
+    }
+  ],
+  "publicationGuards": {
+    "clientIntake": "prohibited",
+    "leadCollection": "prohibited",
+    "paidOffers": "prohibited",
+    "prices": "prohibited",
+    "professionalServiceAvailabilityClaims": "prohibited",
+    "solicitation": "prohibited",
+    "requireOwnerApprovalBeforeIndexing": true,
+    "requireDeploymentVerificationBeforeIndexing": true
+  }
+}
