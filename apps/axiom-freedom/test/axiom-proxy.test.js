@@ -1197,16 +1197,24 @@ test("GET /api/axiom/history surfaces public chat entries and filters out agent 
         body: JSON.stringify({ content, metadata })
       });
 
-    await seed("Hello AXIOM", { role: "user", source: "chat" });
-    await seed("Hello, how can I help?", { role: "assistant", source: "chat" });
+    const bootstrap = await fetch(`http://127.0.0.1:${webPort}/api/axiom/history`);
+    const setCookie = bootstrap.headers.get("set-cookie");
+    const sessionId = /axiom_session=([^;]+)/.exec(setCookie || "")?.[1];
+    assert.equal(typeof sessionId, "string");
+    const cookieHeader = { Cookie: `axiom_session=${sessionId}` };
+
+    await seed("Hello AXIOM", { role: "user", source: "chat", sessionId });
+    await seed("Hello, how can I help?", { role: "assistant", source: "chat", sessionId });
     await seed("internal agent turn", {
       role: "assistant",
       source: "chat",
+      sessionId,
       agentId: "agent-1"
     });
-    await seed("unrelated memory kind entry", { source: "other" });
+    await seed("unrelated memory kind entry", { source: "other", sessionId });
+    await seed("a different visitor's chat turn", { role: "user", source: "chat", sessionId: "someone-else" });
 
-    const history = await fetch(`http://127.0.0.1:${webPort}/api/axiom/history`);
+    const history = await fetch(`http://127.0.0.1:${webPort}/api/axiom/history`, { headers: cookieHeader });
     assert.equal(history.status, 200);
     const entries = await history.json();
     assert.equal(Array.isArray(entries), true);
@@ -1222,10 +1230,18 @@ test("GET /api/axiom/history surfaces public chat entries and filters out agent 
     assert.equal(typeof entries[0].recordedAt, "string");
 
     const invalidLimit = await fetch(
-      `http://127.0.0.1:${webPort}/api/axiom/history?limit=0`
+      `http://127.0.0.1:${webPort}/api/axiom/history?limit=0`,
+      { headers: cookieHeader }
     );
     assert.equal(invalidLimit.status, 200);
     assert.equal((await invalidLimit.json()).length, 2);
+
+    // Privacy: a request with no session cookie (a brand-new visitor) sees
+    // none of the above -- not even the public chat turns -- because it is
+    // issued its own fresh, unrelated session id.
+    const freshVisitor = await fetch(`http://127.0.0.1:${webPort}/api/axiom/history`);
+    assert.equal(freshVisitor.status, 200);
+    assert.deepEqual(await freshVisitor.json(), []);
   } finally {
     if (webServer) {
       await stopServer(webServer);

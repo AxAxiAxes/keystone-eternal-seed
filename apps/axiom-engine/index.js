@@ -935,7 +935,18 @@ app.put("/memory/identity", async (req, res, next) => {
 app.get("/memory/:kind", async (req, res, next) => {
   try {
     const limit = req.query.limit === undefined ? 50 : Number(req.query.limit);
-    res.json(await memoryStore.list(req.params.kind, limit));
+    // Optional privacy scoping: when a sessionId is supplied (the public
+    // portal always supplies its visitor's own session id when reading back
+    // chat history), only that session's own entries are returned instead
+    // of every visitor's episodic history.
+    const sessionId = typeof req.query.sessionId === "string" && req.query.sessionId.trim().length > 0
+      ? req.query.sessionId.trim()
+      : undefined;
+    res.json(await memoryStore.list(
+      req.params.kind,
+      limit,
+      sessionId ? { metadataFilter: { sessionId } } : undefined
+    ));
   } catch (error) {
     next(error);
   }
@@ -959,11 +970,20 @@ app.post("/axiom", requireAdmin, async (req, res, next) => {
 
   try {
     if (action === "chat") {
-      const reply = await chatService.reply(payload?.message);
+      // Every chat session is private by default: a caller that supplies no
+      // sessionId (or an empty one) gets a brand-new, isolated id here, so
+      // it starts with zero prior context and its turns cannot be read back
+      // by any other session. This is the seam the public portal's
+      // per-visitor cookie plugs into (see apps/axiom-freedom/server.js).
+      const sessionId = typeof payload?.sessionId === "string" && payload.sessionId.trim().length > 0
+        ? payload.sessionId.trim()
+        : crypto.randomUUID();
+      const reply = await chatService.reply(payload?.message, { sessionId });
       res.json({
         engine: "AXIOM",
         actionReceived: action,
         reply,
+        sessionId,
         status: "processed"
       });
       return;

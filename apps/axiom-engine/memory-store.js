@@ -37,7 +37,7 @@ class MemoryStore {
     return entry;
   }
 
-  async list(kind, limit = 50) {
+  async list(kind, limit = 50, { metadataFilter, scanLimit = 500 } = {}) {
     if (!ENTRY_KINDS.has(kind)) {
       throw new RangeError(`Unsupported memory kind: ${kind}`);
     }
@@ -47,17 +47,34 @@ class MemoryStore {
 
     try {
       const contents = await fs.readFile(this.entriesPath(kind), "utf8");
-      // Slice to the requested tail before parsing: this log is
-      // append-only and grows without bound, so parsing every line just to
-      // discard all but the last `limit` wastes CPU proportional to the
-      // full file size on every read.
-      return contents
-        .trim()
-        .split("\n")
-        .filter(Boolean)
-        .slice(-limit)
-        .map((line) => JSON.parse(line))
-        .reverse();
+      const lines = contents.trim().split("\n").filter(Boolean);
+
+      if (!metadataFilter) {
+        // Slice to the requested tail before parsing: this log is
+        // append-only and grows without bound, so parsing every line just
+        // to discard all but the last `limit` wastes CPU proportional to
+        // the full file size on every read.
+        return lines
+          .slice(-limit)
+          .map((line) => JSON.parse(line))
+          .reverse();
+      }
+
+      // Filtered reads (e.g. scoping a chat session's own history) can't
+      // rely on the plain tail slice above, since matching entries may sit
+      // further back than the most recent `limit` lines once other
+      // sessions have interleaved entries. Scan backward from the tail up
+      // to `scanLimit` raw lines -- bounded work, not the whole file --
+      // stopping once `limit` matches are found.
+      const scanned = lines.slice(-scanLimit);
+      const matches = [];
+      for (let i = scanned.length - 1; i >= 0 && matches.length < limit; i -= 1) {
+        const entry = JSON.parse(scanned[i]);
+        if (matchesMetadata(entry.metadata, metadataFilter)) {
+          matches.push(entry);
+        }
+      }
+      return matches;
     } catch (error) {
       if (error.code === "ENOENT") {
         return [];
@@ -107,6 +124,11 @@ class MemoryStore {
 
 function isRecord(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function matchesMetadata(metadata, filter) {
+  if (!isRecord(metadata)) return false;
+  return Object.entries(filter).every(([key, value]) => metadata[key] === value);
 }
 
 module.exports = { ENTRY_KINDS, MemoryStore };

@@ -178,6 +178,36 @@ function checkAdmin(req) {
         && crypto.timingSafeEqual(providedPassword, expectedPassword);
 }
 
+const CHAT_SESSION_COOKIE = 'axiom_session';
+const CHAT_SESSION_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30; // 30 days
+
+// Every visitor's chat is private to their own browser: this reads (or
+// mints) an opaque, anonymous per-visitor session id carried in a cookie.
+// It is not an account or a "guest login" -- there is no password or
+// identity attached -- it only keeps one visitor's chat turns and history
+// from being recorded or returned alongside anyone else's. A new browser
+// (or a cleared/absent cookie) always starts a brand-new, empty session.
+function readSessionCookie(req) {
+    const header = req.headers.cookie;
+    if (typeof header !== 'string') return null;
+    for (const part of header.split(';')) {
+        const separator = part.indexOf('=');
+        if (separator < 0) continue;
+        if (part.slice(0, separator).trim() !== CHAT_SESSION_COOKIE) continue;
+        const value = part.slice(separator + 1).trim();
+        return value.length > 0 ? value : null;
+    }
+    return null;
+}
+
+function ensureSessionId(req, res) {
+    const existing = readSessionCookie(req);
+    if (existing) return existing;
+    const sessionId = crypto.randomUUID();
+    res.setHeader('Set-Cookie', `${CHAT_SESSION_COOKIE}=${sessionId}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${CHAT_SESSION_COOKIE_MAX_AGE_SECONDS}`);
+    return sessionId;
+}
+
 function serveDocument(res, pathname) {
     const relativePath = decodeURIComponent(pathname.substring('/library/'.length));
     if (!PUBLIC_DOCUMENTS.has(relativePath)) {
@@ -523,6 +553,12 @@ const server = http.createServer(async (req, res) => {
                   res.end(JSON.stringify({ error: 'action must be a non-empty string' }));
                   return;
           }
+          // The server -- not the browser script -- owns the session id, so
+          // a visitor cannot spoof or read another visitor's session by
+          // supplying their own value in the request body.
+          if (command.action === 'chat') {
+              command.sessionId = ensureSessionId(req, res);
+          }
 
           try {
                   const result = await invokeAxiomEngine(command);
@@ -545,19 +581,21 @@ const server = http.createServer(async (req, res) => {
           return;
     }
     if (pathname === '/api/axiom/history' && req.method === 'GET') {
-          // Public: mirrors the engine's own open GET /memory/episodic route
-          // (chat history is not admin-gated there either -- only writes
-          // and every other memory kind require admin credentials). Filters
-          // to the public chat channel only, excluding internal
-          // agent-to-agent conversations recorded under /automation/chat,
-          // which share the same "episodic" memory kind but carry an
-          // agentId.
+          // Public, but private per visitor: mirrors the engine's own open
+          // GET /memory/episodic route (chat history is not admin-gated
+          // there either -- only writes and every other memory kind require
+          // admin credentials), scoped down to this browser's own session
+          // id so one visitor can never read back another visitor's chat.
+          // Also excludes internal agent-to-agent conversations recorded
+          // under /automation/chat, which share the same "episodic" memory
+          // kind but carry an agentId.
           const requestedLimit = Number.parseInt(parsed.searchParams.get('limit'), 10);
           const limit = Number.isInteger(requestedLimit) && requestedLimit > 0 && requestedLimit <= 100
               ? requestedLimit
               : 100;
+          const sessionId = ensureSessionId(req, res);
           try {
-                  const entries = await invokeEngine(`/memory/episodic?limit=${limit}`);
+                  const entries = await invokeEngine(`/memory/episodic?limit=${limit}&sessionId=${encodeURIComponent(sessionId)}`);
                   const publicChat = Array.isArray(entries)
                       ? entries.filter(entry => entry?.metadata?.source === 'chat' && !entry?.metadata?.agentId)
                       : [];

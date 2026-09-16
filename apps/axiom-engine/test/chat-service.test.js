@@ -109,6 +109,44 @@ test("injects the actual current date/time into the model instructions instead o
   assert.match(capturedInstructions, /do not guess or rely on your training data/);
 });
 
+test("scopes conversation context and recorded turns to the given sessionId", async () => {
+  const recordedEntries = [];
+  let capturedListArgs;
+  const memoryStore = {
+    async list(...args) {
+      capturedListArgs = args;
+      return [];
+    },
+    async record(entry) {
+      recordedEntries.push(entry);
+    }
+  };
+  const service = new ChatService({
+    apiKey: "test-key",
+    model: "test-model",
+    memoryStore,
+    fetchImplementation: async () => ({
+      ok: true,
+      async json() {
+        return {
+          id: "response-test",
+          output: [{
+            type: "message",
+            content: [{ type: "output_text", text: "Reply" }]
+          }]
+        };
+      }
+    })
+  });
+
+  await service.reply("Hi", { sessionId: "visitor-42" });
+
+  assert.deepEqual(capturedListArgs, ["episodic", 10, { metadataFilter: { sessionId: "visitor-42" } }]);
+  assert.equal(recordedEntries.length, 2);
+  assert.equal(recordedEntries[0].metadata.sessionId, "visitor-42");
+  assert.equal(recordedEntries[1].metadata.sessionId, "visitor-42");
+});
+
 test("rejects oversized chat messages before contacting the provider", async () => {
   const service = new ChatService({
     apiKey: "test-key",

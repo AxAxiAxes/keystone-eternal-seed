@@ -17,7 +17,7 @@ class ChatService {
     this.now = now;
   }
 
-  async reply(message, { agent } = {}) {
+  async reply(message, { agent, sessionId } = {}) {
     if (!this.apiKey) {
       const error = new Error("OPENAI_API_KEY is not configured");
       error.statusCode = 503;
@@ -33,7 +33,16 @@ class ChatService {
         `message must not exceed ${this.maxMessageCharacters} characters`
       );
     }
-    const recentEntries = await this.memoryStore.list("episodic", 10);
+    // Scope the "recent conversation" context to this caller's own session
+    // when one is supplied, so one visitor's chat never leaks into another
+    // visitor's context or history. A missing sessionId (e.g. internal
+    // agent-to-agent calls that pass none) keeps the prior unscoped
+    // behavior for backward compatibility.
+    const recentEntries = await this.memoryStore.list(
+      "episodic",
+      10,
+      sessionId ? { metadataFilter: { sessionId } } : undefined
+    );
     const response = await this.fetchImplementation("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
@@ -89,6 +98,7 @@ class ChatService {
       metadata: {
         role: "user",
         source: "chat",
+        ...(sessionId ? { sessionId } : {}),
         ...(agent ? { agentId: agent.id } : {})
       }
     });
@@ -99,6 +109,7 @@ class ChatService {
         role: "assistant",
         source: "chat",
         model: this.model,
+        ...(sessionId ? { sessionId } : {}),
         ...(agent ? { agentId: agent.id } : {})
       }
     });
