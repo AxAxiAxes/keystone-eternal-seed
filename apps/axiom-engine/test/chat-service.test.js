@@ -78,6 +78,37 @@ test("generates a reply and records both chat turns", async () => {
   ]);
 });
 
+test("injects the actual current date/time into the model instructions instead of relying on training data", async () => {
+  const fixedNow = new Date("2026-09-16T08:00:00.000Z");
+  let capturedInstructions;
+  const service = new ChatService({
+    apiKey: "test-key",
+    model: "test-model",
+    memoryStore: { async list() { return []; }, async record() {} },
+    now: () => fixedNow,
+    fetchImplementation: async (url, options) => {
+      capturedInstructions = JSON.parse(options.body).instructions;
+      return {
+        ok: true,
+        async json() {
+          return {
+            id: "response-test",
+            output: [{
+              type: "message",
+              content: [{ type: "output_text", text: "It is currently 2026-09-16." }]
+            }]
+          };
+        }
+      };
+    }
+  });
+
+  await service.reply("What is today's date?");
+
+  assert.match(capturedInstructions, /2026-09-16T08:00:00\.000Z/);
+  assert.match(capturedInstructions, /do not guess or rely on your training data/);
+});
+
 test("rejects oversized chat messages before contacting the provider", async () => {
   const service = new ChatService({
     apiKey: "test-key",
