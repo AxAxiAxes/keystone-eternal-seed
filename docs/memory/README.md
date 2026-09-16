@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-16 Recommendations for further study and improvement](2026-09-16-forward-recommendations-and-diary-practice.md)
 - [2026-09-16 AXI web-access capability shipped (bounded, read-only); email and browser-tab control remain out of scope](2026-09-16-web-access-capability-shipped.md)
 - [2026-09-16 Follow-up: how to further enable AXI web/email/browser access](2026-09-16-web-email-access-scoping-followup.md)
 - [2026-09-16 Founder request declined pending authorization: unbounded AXI access](2026-09-16-unbounded-access-request-declined.md)
