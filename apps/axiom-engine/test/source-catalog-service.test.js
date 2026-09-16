@@ -5,7 +5,10 @@ const path = require("node:path");
 const test = require("node:test");
 const {
   SOURCE_CATALOG_ID,
-  SourceCatalogService
+  SOURCE_TYPES,
+  CLASSIFICATIONS,
+  SourceCatalogService,
+  describeOptions
 } = require("../source-catalog-service");
 
 function sampleEntry(overrides = {}) {
@@ -98,4 +101,13 @@ test("rejects unsafe entries and preserves malformed catalog history", async (t)
     "AXES business plan",
     "Tampered title"
   ));
+});
+
+test("describes every supported sourceType/classification option and field constraint", () => {
+  const options = describeOptions();
+  assert.deepEqual(new Set(options.sourceTypes), SOURCE_TYPES);
+  assert.deepEqual(new Set(options.classifications), CLASSIFICATIONS);
+  assert.equal(options.reviewStatus, "operator-approved");
+  assert.ok(options.fields.sourceReference.includes(".."));
+  assert.ok(options.notes.some((note) => note.includes("does not read, copy, upload")));
 });

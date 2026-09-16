@@ -86,6 +86,36 @@ test("leaves read-only status routes open without admin credentials", async (t) 
   assert.equal(response.status, 200);
 });
 
+test("exposes the automation action catalog as a read-only discovery route", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const response = await nativeFetch(`http://127.0.0.1:${port}/automation/actions`);
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.ok(Array.isArray(body.actions));
+  const sourceCatalog = body.actions.find((entry) => entry.action === "source.catalog");
+  assert.equal(sourceCatalog.requiresApproval, true);
+  assert.equal(sourceCatalog.fixedAgentId, "project-memory-manager");
+  const noop = body.actions.find((entry) => entry.action === "automation.noop");
+  assert.equal(noop.requiresApproval, false);
+});
+
+test("exposes source-catalog options as a read-only discovery route", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const response = await nativeFetch(`http://127.0.0.1:${port}/system/source-catalog/options`);
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.ok(body.sourceTypes.includes("document"));
+  assert.ok(body.sourceTypes.includes("other"));
+  assert.ok(body.classifications.includes("restricted"));
+  assert.equal(body.reviewStatus, "operator-approved");
+});
+
 test("processes an AXIOM command", async (t) => {
   const server = await startServer();
   t.after(() => stopServer(server));

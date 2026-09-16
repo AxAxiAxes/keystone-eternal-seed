@@ -4,7 +4,9 @@ const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
 const {
-  AutomationService
+  AutomationService,
+  TASK_ACTIONS,
+  listActionCatalog
 } = require("../automation-service");
 const { MemoryStore } = require("../memory-store");
 
@@ -19,6 +21,38 @@ function createMemoryStore() {
     }
   };
 }
+
+test("action catalog exactly covers the allowlist and matches approval rules", () => {
+  const catalog = listActionCatalog();
+  const catalogActions = catalog.map((entry) => entry.action).sort();
+  assert.deepEqual(catalogActions, [...TASK_ACTIONS].sort());
+
+  const approvalGatedActions = new Set([
+    "continuity.record",
+    "source.catalog",
+    "business.metric",
+    "service.registry"
+  ]);
+  for (const entry of catalog) {
+    assert.equal(
+      entry.requiresApproval,
+      approvalGatedActions.has(entry.action),
+      `${entry.action} approval flag should match the allowlist`
+    );
+    if (approvalGatedActions.has(entry.action)) {
+      assert.equal(entry.fixedAgentId, "project-memory-manager");
+    } else {
+      assert.equal(entry.fixedAgentId, null);
+    }
+    assert.ok(typeof entry.effect === "string" && entry.effect.length > 0);
+    assert.ok(Array.isArray(entry.payloadFields));
+  }
+
+  // Returned arrays must be independent copies -- mutating one call's
+  // result must not corrupt the frozen catalog or a later call's result.
+  catalog[0].payloadFields.push("mutated");
+  assert.notDeepEqual(listActionCatalog()[0].payloadFields, catalog[0].payloadFields);
+});
 
 test("reports overdue work and the next scheduled task", async (t) => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));

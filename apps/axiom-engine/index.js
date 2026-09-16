@@ -14,7 +14,7 @@ const { CoordinateService } = require("./coordinate-service");
 const { BeadPassportService } = require("./bead-passport-service");
 const { StartupContextService } = require("./startup-context-service");
 const { ContinuityRecordService } = require("./continuity-record-service");
-const { SourceCatalogService } = require("./source-catalog-service");
+const { SourceCatalogService, describeOptions: sourceCatalogDescribeOptions } = require("./source-catalog-service");
 const { BusinessMetricsService } = require("./business-metrics-service");
 const { ServiceRegistryService } = require("./service-registry-service");
 const { AutomationProfileService } = require("./automation-profile-service");
@@ -22,7 +22,8 @@ const {
   AutomationService,
   evaluateGovernanceReadiness,
   summarizeAutomationState,
-  startAutomationScheduler
+  startAutomationScheduler,
+  listActionCatalog
 } = require("./automation-service");
 const app = express();
 const ADMIN_PASSWORD = process.env.AXIOM_ENGINE_ADMIN_PASSWORD;
@@ -101,6 +102,14 @@ app.get("/system/source-catalog/entries", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+// Read-only discovery route: exposes the valid sourceType/classification
+// values and field constraints, so a caller does not need to hardcode or
+// reverse-engineer the schema. sourceType is a metadata classification, not
+// a file-extension allowlist -- every kind of file is representable.
+app.get("/system/source-catalog/options", (req, res) => {
+  res.json(sourceCatalogDescribeOptions());
 });
 app.get("/system/business-metrics", async (req, res, next) => {
   try {
@@ -638,6 +647,13 @@ app.get("/automation/status", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+// Read-only discovery route: lists every allowlisted action with its
+// approval requirement, fixed agent (if any), and expected payload fields,
+// so a caller can query available options instead of hardcoding them.
+app.get("/automation/actions", (req, res) => {
+  res.json({ actions: listActionCatalog() });
 });
 
 app.get("/automation/readiness", async (req, res, next) => {

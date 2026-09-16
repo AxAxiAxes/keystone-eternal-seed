@@ -140,6 +140,7 @@ by the public portal.
 | Method | Path | Purpose |
 | --- | --- | --- |
 | `GET` | `/automation/status` | Counts agents, task states, and recorded runs. |
+| `GET` | `/automation/actions` | Read-only discovery: lists every allowlisted action with its approval requirement, fixed agent (if any), and expected payload fields. |
 | `GET` | `/automation/readiness` | Returns the secret-safe Genesis and governance readiness result. |
 | `GET` | `/automation/agents` | Lists registered agents. |
 | `POST` | `/automation/agents` | Registers an agent with a name and capability list. |
@@ -150,6 +151,7 @@ by the public portal.
 | `POST` | `/automation/tasks/:taskId/approval` | Approves or rejects a task awaiting approval. |
 | `POST` | `/automation/process` | Processes due tasks, up to `maxTasks` (default 5; maximum 20). |
 | `GET` | `/automation/runs` | Lists recent execution records; use `?limit=50`. |
+| `GET` | `/system/source-catalog/options` | Read-only discovery: lists valid `sourceType`/`classification` values and field constraints for `source.catalog` tasks. |
 
 Create a memory-record task:
 
@@ -209,11 +211,21 @@ events, restore data, change source history, or take external action.
 
 Queue a `source.catalog` task only for the Project Memory Manager with a
 stable source ID, non-sensitive title, source type, classification,
-repository-relative source reference, and SHA-256 hash. The task requires
-explicit operator approval and appends metadata only; it does not read, copy,
-upload, classify, or interpret raw source content. Duplicate source IDs,
-unsafe paths, unsupported fields, malformed hashes, and invalid retained
-history fail explicitly. See `AXI_SOURCE_CATALOG.md`.
+repository-relative source reference, and SHA-256 hash. `sourceType`
+(`application`, `dataset`, `document`, `media`, `record`, `other`) is a
+metadata classification, not a file-extension allowlist: every kind of file
+is representable, with `other` as the explicit catch-all. Call
+`GET /system/source-catalog/options` to discover the current valid values and
+field constraints instead of hardcoding them. The task requires explicit
+operator approval and appends metadata only; it does not read, copy, upload,
+classify, or interpret raw source content -- the caller supplies an
+independently computed SHA-256 for content that must already exist at the
+given repository-relative path. This is a deliberate safety boundary, not a
+current limitation: expanding this service to accept and store raw uploaded
+file bytes would be a new capability requiring explicit founder review and
+addition to the versioned allowlist, not an unattended repository change.
+Duplicate source IDs, unsafe paths, unsupported fields, malformed hashes, and
+invalid retained history fail explicitly. See `AXI_SOURCE_CATALOG.md`.
 
 Queue a `business.metric` task only for the Project Memory Manager with
 `approvalRequired: true` and only the restrictive fields in
