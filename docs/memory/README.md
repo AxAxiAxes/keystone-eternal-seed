@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-16 AXI Workspace Library page and public-chat minimize toggle](2026-09-16-workspace-library-and-chat-minimize.md)
 - [2026-09-15 Public AXIOM chat: continuous history, day-timeline, and gated uploads](2026-09-15-public-chat-timeline-and-uploads.md)
 - [2026-09-15 Founder-approved GitHub write access (comment, open PR, merge PR)](2026-09-15-github-write-access-founder-approved.md)
 - [2026-09-15 AXI GitHub access: read-only visibility shipped, write access declined](2026-09-15-github-read-only-access-and-image-capability.md)
@@ -63,6 +64,12 @@ without re-deriving it:
   for the original read-only shipment. Images: **no** — AXI can now store
   image bytes via the upload endpoint but has no vision/image-understanding
   code path; chat only ever sends plain text to the model)
+- **Is xiiom.com live / does /automation work** →
+  [`2026-09-16-workspace-library-and-chat-minimize.md`](2026-09-16-workspace-library-and-chat-minimize.md)
+  (live-verified: root site renders correctly; `/automation` returns 401 as
+  designed — admin-gated, not broken. Also ships the new admin-gated
+  `/workspace` Workspace Library page and a collapse/minimize toggle on the
+  public chat window)
 - **Can we send AXI documents to review and file in his memory / can intake
   handle all file types** →
   [`2026-09-15-document-filing-and-intake-options-discovery.md`](2026-09-15-document-filing-and-intake-options-discovery.md)

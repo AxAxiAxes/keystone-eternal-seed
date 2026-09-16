@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AXI Workspace Library</title>
+  <style>
+    body { background:#10131a; color:#edf2f7; font:16px system-ui,sans-serif; margin:0; }
+    main { max-width:1200px; margin:0 auto; padding:32px 20px 64px; }
+    h1,h2 { margin:0; } .note { color:#aab7c7; }
+    nav.tabs { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+    nav.tabs button { background:#1a202b; border:1px solid #313b4d; color:#edf2f7; border-radius:8px; cursor:pointer; font:inherit; padding:9px 16px; }
+    nav.tabs button.active { background:#d5a94d; border-color:#d5a94d; color:#18130a; font-weight:700; }
+    section.panel { background:#1a202b; border:1px solid #313b4d; border-radius:10px; margin-top:20px; padding:20px; display:none; }
+    section.panel.active { display:block; }
+    .search { display:flex; gap:8px; margin-bottom:14px; }
+    .search input { background:#111722; border:1px solid #313b4d; border-radius:6px; color:#edf2f7; flex:1; font:inherit; padding:9px 12px; }
+    table { border-collapse:collapse; width:100%; } th,td { border-bottom:1px solid #313b4d; padding:9px; text-align:left; vertical-align:top; }
+    th { color:#aab7c7; font-weight:600; }
+    .badge { border-radius:5px; display:inline-block; font-size:0.8rem; padding:2px 8px; }
+    .badge.ready, .badge.active, .badge.completed, .badge.approved { background:#16351f; color:#b8e6c2; }
+    .badge.draft, .badge.pending, .badge.paused { background:#3a2f14; color:#f0d99a; }
+    .badge.attention, .badge.blocked, .badge.failed { background:#3a1616; color:#fca5a5; }
+    .day-group { margin-top:18px; }
+    .day-group h3 { color:#d5a94d; font-size:0.95rem; margin:0 0 8px; }
+    .day-group .entry { border-left:2px solid #313b4d; margin:6px 0; padding:4px 0 4px 12px; }
+    .day-group .entry .role { color:#aab7c7; font-size:0.75rem; }
+    .empty { color:#aab7c7; font-style:italic; }
+    button.refresh { background:#d5a94d; color:#18130a; border:0; border-radius:6px; cursor:pointer; font:inherit; font-weight:700; padding:9px 14px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>AXI Workspace Library</h1>
+  <p class="note">Private, admin-gated index of everything filed with AXI: apps/services, documents, automations, and the public chat history — one indexed place to browse instead of separate pages. Read-only view; it does not create, approve, or delete anything.</p>
+  <p><button class="refresh" id="refresh">Refresh now</button> <span id="updated" class="note"></span></p>
+
+  <nav class="tabs">
+    <button data-panel="apps" class="active">Apps &amp; services</button>
+    <button data-panel="docs">Documents</button>
+    <button data-panel="automations">Automations</button>
+    <button data-panel="history">Chat history</button>
+  </nav>
+
+  <section class="panel active" id="panel-apps">
+    <h2>Apps &amp; services</h2>
+    <p class="note">Every service registered in the private service registry, with its current stage.</p>
+    <div class="search"><input id="apps-search" placeholder="Filter by name, purpose, or stage…"></div>
+    <div id="apps-list"></div>
+  </section>
+
+  <section class="panel" id="panel-docs">
+    <h2>Documents</h2>
+    <p class="note">Every source filed in the approval-gated source catalog (title, type, classification). Filing a new document still requires the existing <code>source.catalog</code> approval workflow.</p>
+    <div class="search"><input id="docs-search" placeholder="Filter by title, type, or classification…"></div>
+    <div id="docs-list"></div>
+  </section>
+
+  <section class="panel" id="panel-automations">
+    <h2>Automations</h2>
+    <p class="note">Automation profiles and tracked tasks. Activating, pausing, or creating automations is not done here — see the Automation console.</p>
+    <div class="search"><input id="automations-search" placeholder="Filter by profile, task, or status…"></div>
+    <div id="automations-list"></div>
+  </section>
+
+  <section class="panel" id="panel-history">
+    <h2>Chat history, indexed by day</h2>
+    <p class="note">The same public AXIOM chat history shown on <a href="/axiom">/axiom</a>, indexed here day-by-day for quick browsing.</p>
+    <div class="search"><input id="history-search" placeholder="Filter by message text…"></div>
+    <div id="history-list"></div>
+  </section>
+</main>
+<script>
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[character]);
+}
+
+async function request(path) {
+  const response = await fetch(path, { credentials:"same-origin", cache:"no-store" });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || `Request failed (${response.status})`);
+  return payload;
+}
+
+function badge(status) {
+  return `<span class="badge ${escapeHtml(status)}">${escapeHtml(status)}</span>`;
+}
+
+let cache = { apps: [], docs: [], profiles: {}, tasks: [], history: [] };
+
+function renderApps(filterText) {
+  const filter = filterText.trim().toLowerCase();
+  const rows = cache.apps
+    .filter(service => !filter || `${service.serviceName} ${service.purpose} ${service.stage}`.toLowerCase().includes(filter))
+    .map(service => `<tr><td>${escapeHtml(service.serviceName)}</td><td>${badge(service.stage)}</td><td>${escapeHtml(service.purpose)}</td><td>${escapeHtml(service.classification)}</td></tr>`)
+    .join("");
+  document.querySelector("#apps-list").innerHTML = rows
+    ? `<table><thead><tr><th>Service</th><th>Stage</th><th>Purpose</th><th>Classification</th></tr></thead><tbody>${rows}</tbody></table>`
+    : `<p class="empty">No registered services match.</p>`;
+}
+
+function renderDocs(filterText) {
+  const filter = filterText.trim().toLowerCase();
+  const rows = cache.docs
+    .filter(entry => !filter || `${entry.title} ${entry.sourceType} ${entry.classification}`.toLowerCase().includes(filter))
+    .map(entry => `<tr><td>${escapeHtml(entry.title)}</td><td>${escapeHtml(entry.sourceType)}</td><td>${escapeHtml(entry.classification)}</td><td>${badge(entry.reviewStatus)}</td><td>${escapeHtml(new Date(entry.recordedAt).toLocaleString())}</td></tr>`)
+    .join("");
+  document.querySelector("#docs-list").innerHTML = rows
+    ? `<table><thead><tr><th>Title</th><th>Type</th><th>Classification</th><th>Review</th><th>Filed</th></tr></thead><tbody>${rows}</tbody></table>`
+    : `<p class="empty">No filed documents match.</p>`;
+}
+
+function renderAutomations(filterText) {
+  const filter = filterText.trim().toLowerCase();
+  const profileRows = cache.profiles
+    .filter(profile => !filter || `${profile.profileId} ${profile.template} ${profile.status}`.toLowerCase().includes(filter))
+    .map(profile => `<tr><td>${escapeHtml(profile.profileId)}</td><td>${escapeHtml(profile.template)}</td><td>${badge(profile.status)}</td></tr>`)
+    .join("");
+  const taskRows = cache.tasks
+    .filter(task => !filter || `${task.title} ${task.action} ${task.status}`.toLowerCase().includes(filter))
+    .map(task => `<tr><td>${escapeHtml(task.title)}</td><td>${escapeHtml(task.action)}</td><td>${badge(task.status)}</td></tr>`)
+    .join("");
+  document.querySelector("#automations-list").innerHTML = `
+    <h3 style="color:#00d4ff;font-size:0.9rem;">Profiles</h3>
+    ${profileRows ? `<table><thead><tr><th>Profile</th><th>Template</th><th>Status</th></tr></thead><tbody>${profileRows}</tbody></table>` : `<p class="empty">No automation profiles match.</p>`}
+    <h3 style="color:#00d4ff;font-size:0.9rem;margin-top:16px;">Tasks</h3>
+    ${taskRows ? `<table><thead><tr><th>Task</th><th>Action</th><th>Status</th></tr></thead><tbody>${taskRows}</tbody></table>` : `<p class="empty">No tracked tasks match.</p>`}
+  `;
+}
+
+function renderHistory(filterText) {
+  const filter = filterText.trim().toLowerCase();
+  const chronological = cache.history
+    .map(entry => ({
+      text: entry.content,
+      role: entry.metadata?.role === "assistant" ? "AXIOM" : "You",
+      date: new Date(entry.recordedAt)
+    }))
+    .filter(entry => typeof entry.text === "string" && !Number.isNaN(entry.date.getTime()))
+    .filter(entry => !filter || entry.text.toLowerCase().includes(filter))
+    .sort((a, b) => a.date - b.date);
+
+  const groups = new Map();
+  for (const entry of chronological) {
+    const key = entry.date.toISOString().slice(0, 10);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(entry);
+  }
+
+  const html = [...groups.entries()].map(([key, entries]) => {
+    const weekday = entries[0].date.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+    const rows = entries.map(entry => `<div class="entry"><span class="role">${escapeHtml(entry.role)} · ${escapeHtml(entry.date.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" }))}</span><div>${escapeHtml(entry.text)}</div></div>`).join("");
+    return `<div class="day-group"><h3>${escapeHtml(weekday)} (${entries.length} message${entries.length === 1 ? "" : "s"})</h3>${rows}</div>`;
+  }).join("");
+
+  document.querySelector("#history-list").innerHTML = html || `<p class="empty">No chat history matches.</p>`;
+}
+
+async function refresh() {
+  const [appsProjection, docs, profiles, tasks, history] = await Promise.all([
+    request("/api/automation/service-registry/projection"),
+    request("/api/automation/source-catalog/entries?limit=100"),
+    request("/api/automation/profiles"),
+    request("/api/automation/tasks"),
+    fetch("/api/axiom/history?limit=100", { credentials: "same-origin", cache: "no-store" }).then(response => response.json())
+  ]);
+  cache.apps = Object.values(appsProjection.services || appsProjection || {});
+  cache.docs = docs;
+  cache.profiles = Array.isArray(profiles.profiles) ? profiles.profiles : [];
+  cache.tasks = tasks;
+  cache.history = Array.isArray(history) ? history : [];
+
+  renderApps(document.querySelector("#apps-search").value);
+  renderDocs(document.querySelector("#docs-search").value);
+  renderAutomations(document.querySelector("#automations-search").value);
+  renderHistory(document.querySelector("#history-search").value);
+  document.querySelector("#updated").textContent = `Last refreshed: ${new Date().toLocaleString()}`;
+}
+
+document.querySelectorAll("nav.tabs button").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll("nav.tabs button").forEach(other => other.classList.remove("active"));
+    document.querySelectorAll("section.panel").forEach(panel => panel.classList.remove("active"));
+    button.classList.add("active");
+    document.querySelector(`#panel-${button.dataset.panel}`).classList.add("active");
+  });
+});
+
+document.querySelector("#apps-search").addEventListener("input", event => renderApps(event.target.value));
+document.querySelector("#docs-search").addEventListener("input", event => renderDocs(event.target.value));
+document.querySelector("#automations-search").addEventListener("input", event => renderAutomations(event.target.value));
+document.querySelector("#history-search").addEventListener("input", event => renderHistory(event.target.value));
+
+document.querySelector("#refresh").addEventListener("click", () => refresh().catch(error => {
+  document.querySelector("#updated").textContent = error.message;
+}));
+refresh().catch(error => {
+  document.querySelector("#updated").textContent = error.message;
+});
+</script>
+</body>
+</html>

@@ -466,6 +466,15 @@ const server = http.createServer(async (req, res) => {
           serveFile(res, path.join(__dirname, 'support.html'), 'text/html; charset=utf-8');
           return;
     }
+    if (pathname === '/workspace' || pathname === '/workspace/') {
+          // Admin-gated indexed view combining apps/services, filed documents,
+          // automations, and chat history in one place -- distinct from the
+          // public, static /library/ page, which intentionally serves only
+          // public-safe read-only records.
+          if (!requireAdmin(req, res)) return;
+          serveFile(res, path.join(__dirname, 'workspace.html'), 'text/html; charset=utf-8');
+          return;
+    }
     if (pathname === '/library/' || pathname === '/library') {
           serveFile(res, path.join(__dirname, 'library.html'), 'text/html; charset=utf-8');
           return;
