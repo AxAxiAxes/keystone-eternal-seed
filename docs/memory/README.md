@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-15 Founder-approved GitHub write access (comment, open PR, merge PR)](2026-09-15-github-write-access-founder-approved.md)
 - [2026-09-15 AXI GitHub access: read-only visibility shipped, write access declined](2026-09-15-github-read-only-access-and-image-capability.md)
 - [2026-09-15 Raw source-file upload capability (founder-authorized)](2026-09-15-raw-source-upload-capability.md)
 - [2026-09-15 AXI document filing + source-catalog/automation options discovery](2026-09-15-document-filing-and-intake-options-discovery.md)
@@ -51,13 +52,16 @@ without re-deriving it:
   (code verified working, 26/26 tests; still off by design — enabling it is a
   founder/Railway decision, not a repository change)
 - **Does AXI have GitHub access / can he repo / can AXI read images** →
+  [`2026-09-15-github-write-access-founder-approved.md`](2026-09-15-github-write-access-founder-approved.md)
+  (**shipped**: read GitHub status/PRs/issues/repo info, **plus
+  founder-approved write actions** — comment on issues/PRs, open pull
+  requests, merge pull requests — all admin-gated, off by default, no token
+  AXI can generate itself, merges remain subject to GitHub's own branch
+  protection/required checks. See also
   [`2026-09-15-github-read-only-access-and-image-capability.md`](2026-09-15-github-read-only-access-and-image-capability.md)
-  (**shipped**: read-only GitHub status — PRs/issues/repo info, admin-gated,
-  off by default, no token AXI can generate itself; write/merge access
-  explicitly declined pending a separate founder decision documented in
-  `docs/AXI_GITHUB_ACCESS.md`. Images: **no** — AXI can now store image
-  bytes via the upload endpoint but has no vision/image-understanding code
-  path; chat only ever sends plain text to the model)
+  for the original read-only shipment. Images: **no** — AXI can now store
+  image bytes via the upload endpoint but has no vision/image-understanding
+  code path; chat only ever sends plain text to the model)
 - **Can we send AXI documents to review and file in his memory / can intake
   handle all file types** →
   [`2026-09-15-document-filing-and-intake-options-discovery.md`](2026-09-15-document-filing-and-intake-options-discovery.md)
@@ -91,6 +95,7 @@ on startup, not because any individual conversation is remembered.
 
 ## Full chronological index (newest first)
 
+- [2026-09-15 Founder-approved GitHub write access (comment, open PR, merge PR)](2026-09-15-github-write-access-founder-approved.md)
 - [2026-09-15 AXI GitHub access: read-only visibility shipped, write access declined](2026-09-15-github-read-only-access-and-image-capability.md)
 - [2026-09-15 Raw source-file upload capability (founder-authorized)](2026-09-15-raw-source-upload-capability.md)
 - [2026-09-15 AXI document filing + source-catalog/automation options discovery](2026-09-15-document-filing-and-intake-options-discovery.md)

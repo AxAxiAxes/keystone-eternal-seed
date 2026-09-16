@@ -153,6 +153,13 @@ by the public portal.
 | `GET` | `/automation/runs` | Lists recent execution records; use `?limit=50`. |
 | `GET` | `/system/source-catalog/options` | Read-only discovery: lists valid `sourceType`/`classification` values and field constraints for `source.catalog` tasks, plus the upload endpoint's route, auth, and size cap. |
 | `POST` | `/system/source-catalog/uploads` | Admin-authenticated: stores raw file bytes (request body) to this instance's own local data directory and returns a `sourceReference`/`sha256` computed from the stored bytes. Size-capped via `AXIOM_SOURCE_UPLOAD_MAX_BYTES` (default 5 MB). Storing bytes does not create a catalog entry. |
+| `GET` | `/system/github` | Open: reports whether GitHub access is configured (never the token). |
+| `GET` | `/system/github/repository` | Admin: repository name, default branch, visibility, open-issue count. |
+| `GET` | `/system/github/pull-requests` | Admin: lists pull requests (`?state`, `?limit`). |
+| `GET` | `/system/github/issues` | Admin: lists issues, excluding pull requests. |
+| `POST` | `/system/github/issues/:number/comments` | Admin: posts a comment on an issue or pull request (founder-approved 2026-09-15). |
+| `POST` | `/system/github/pull-requests` | Admin: opens a pull request (founder-approved 2026-09-15). |
+| `PUT` | `/system/github/pull-requests/:number/merge` | Admin: merges a pull request, subject to GitHub's own branch protection/required checks (founder-approved 2026-09-15). |
 
 Create a memory-record task:
 
