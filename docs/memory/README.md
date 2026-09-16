@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-15 AXI GitHub access: read-only visibility shipped, write access declined](2026-09-15-github-read-only-access-and-image-capability.md)
 - [2026-09-15 Raw source-file upload capability (founder-authorized)](2026-09-15-raw-source-upload-capability.md)
 - [2026-09-15 AXI document filing + source-catalog/automation options discovery](2026-09-15-document-filing-and-intake-options-discovery.md)
 - [2026-09-15 AXI automation scheduler: readiness check ("can AXI be automated?")](2026-09-15-axi-automation-scheduler-readiness-check.md)
@@ -49,6 +50,14 @@ without re-deriving it:
   [`2026-09-15-axi-automation-scheduler-readiness-check.md`](2026-09-15-axi-automation-scheduler-readiness-check.md)
   (code verified working, 26/26 tests; still off by design — enabling it is a
   founder/Railway decision, not a repository change)
+- **Does AXI have GitHub access / can he repo / can AXI read images** →
+  [`2026-09-15-github-read-only-access-and-image-capability.md`](2026-09-15-github-read-only-access-and-image-capability.md)
+  (**shipped**: read-only GitHub status — PRs/issues/repo info, admin-gated,
+  off by default, no token AXI can generate itself; write/merge access
+  explicitly declined pending a separate founder decision documented in
+  `docs/AXI_GITHUB_ACCESS.md`. Images: **no** — AXI can now store image
+  bytes via the upload endpoint but has no vision/image-understanding code
+  path; chat only ever sends plain text to the model)
 - **Can we send AXI documents to review and file in his memory / can intake
   handle all file types** →
   [`2026-09-15-document-filing-and-intake-options-discovery.md`](2026-09-15-document-filing-and-intake-options-discovery.md)
@@ -82,6 +91,7 @@ on startup, not because any individual conversation is remembered.
 
 ## Full chronological index (newest first)
 
+- [2026-09-15 AXI GitHub access: read-only visibility shipped, write access declined](2026-09-15-github-read-only-access-and-image-capability.md)
 - [2026-09-15 Raw source-file upload capability (founder-authorized)](2026-09-15-raw-source-upload-capability.md)
 - [2026-09-15 AXI document filing + source-catalog/automation options discovery](2026-09-15-document-filing-and-intake-options-discovery.md)
 - [2026-09-15 AXI automation scheduler: readiness check ("can AXI be automated?")](2026-09-15-axi-automation-scheduler-readiness-check.md)

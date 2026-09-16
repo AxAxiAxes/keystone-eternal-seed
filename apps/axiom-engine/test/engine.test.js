@@ -118,6 +118,26 @@ test("exposes source-catalog options as a read-only discovery route", async (t) 
   assert.equal(body.upload.maxBytes, 5 * 1024 * 1024);
 });
 
+test("reports GitHub read-only status as unconfigured by default and gates real reads behind admin auth", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const status = await nativeFetch(`http://127.0.0.1:${port}/system/github`);
+  assert.equal(status.status, 200);
+  const statusBody = await status.json();
+  assert.equal(statusBody.configured, false);
+  assert.equal(statusBody.repo, null);
+
+  const unauthenticated = await nativeFetch(`http://127.0.0.1:${port}/system/github/pull-requests`);
+  assert.equal(unauthenticated.status, 401);
+
+  const unconfigured = await fetch(`http://127.0.0.1:${port}/system/github/pull-requests`);
+  assert.equal(unconfigured.status, 503);
+  const unconfiguredBody = await unconfigured.json();
+  assert.match(unconfiguredBody.error, /GitHub read-only access is not configured/);
+});
+
 test("stores an uploaded file's bytes locally and requires admin credentials", async (t) => {
   const server = await startServer();
   t.after(() => stopServer(server));
@@ -299,6 +319,7 @@ test("reports secret-safe runtime readiness", async (t) => {
   assert.equal(readiness.automationProfiles.templates.length, 3);
   assert.equal(readiness.automationProfiles.templates[0].id, "operations-observation");
   assert.equal(readiness.automationProfiles.templates[1].id, "continuity-protection");
+  assert.equal(readiness.github.configured, false);
   assert.ok(readiness.continuityRecord.recordCount >= 2);
   assert.equal(readiness.startupContext.id, "axes-memory-bank-startup-v1");
   assert.equal(readiness.automation.lastRunAt, null);

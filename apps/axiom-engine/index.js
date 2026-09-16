@@ -25,6 +25,7 @@ const {
   startAutomationScheduler,
   listActionCatalog
 } = require("./automation-service");
+const { GithubStatusService } = require("./github-status-service");
 const app = express();
 const ADMIN_PASSWORD = process.env.AXIOM_ENGINE_ADMIN_PASSWORD;
 // Raw source-file uploads are capped and admin-authenticated (see the
@@ -85,6 +86,15 @@ const businessMetricsService = new BusinessMetricsService({ directory: dataDirec
 const businessMetricsReady = businessMetricsService.initialize();
 const serviceRegistryService = new ServiceRegistryService({ directory: dataDirectory });
 const serviceRegistryReady = serviceRegistryService.initialize();
+// Read-only GitHub visibility, off by default: reports "not configured"
+// (and refuses every read call) unless an authorized operator has supplied
+// both AXIOM_GITHUB_TOKEN and AXIOM_GITHUB_REPO out-of-band. AXI cannot
+// generate its own GitHub credentials and this service never issues a
+// write, comment, merge, or push request.
+const githubStatusService = new GithubStatusService({
+  token: process.env.AXIOM_GITHUB_TOKEN,
+  repo: process.env.AXIOM_GITHUB_REPO
+});
 const runtimeContextReady = Promise.all([
   startupContextReady,
   continuityRecordReady,
@@ -122,6 +132,44 @@ app.get("/system/source-catalog/entries", async (req, res, next) => {
 app.get("/system/source-catalog/options", (req, res) => {
   res.json(sourceCatalogDescribeOptions({ maxUploadBytes: SOURCE_UPLOAD_MAX_BYTES }));
 });
+
+// Read-only GitHub visibility. Reports "not configured" until an operator
+// supplies AXIOM_GITHUB_TOKEN/AXIOM_GITHUB_REPO out-of-band; AXI never
+// generates its own credentials. Status alone is safe to leave open (it
+// reveals only whether a token is present, never the token itself); the
+// routes that actually list real repository data require admin auth.
+app.get("/system/github", (req, res) => {
+  res.json(githubStatusService.status());
+});
+
+app.get("/system/github/repository", requireAdmin, async (req, res, next) => {
+  try {
+    res.json(await githubStatusService.repository());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/github/pull-requests", requireAdmin, async (req, res, next) => {
+  try {
+    const state = req.query.state === undefined ? "open" : req.query.state;
+    const limit = req.query.limit === undefined ? 20 : Number(req.query.limit);
+    res.json(await githubStatusService.listPullRequests({ state, limit }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/github/issues", requireAdmin, async (req, res, next) => {
+  try {
+    const state = req.query.state === undefined ? "open" : req.query.state;
+    const limit = req.query.limit === undefined ? 20 : Number(req.query.limit);
+    res.json(await githubStatusService.listIssues({ state, limit }));
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get("/system/business-metrics", async (req, res, next) => {
   try {
     res.json(await businessMetricsService.status());
@@ -295,7 +343,8 @@ app.get("/system/readiness", async (req, res, next) => {
       sourceCatalog: await sourceCatalogService.status(),
       businessMetrics: await businessMetricsService.status(),
       serviceRegistry: await serviceRegistryService.status(),
-      automationProfiles: await automationProfileService.status()
+      automationProfiles: await automationProfileService.status(),
+      github: githubStatusService.status()
     });
   } catch (error) {
     console.error("AXIOM runtime readiness check failed:", error.message);
