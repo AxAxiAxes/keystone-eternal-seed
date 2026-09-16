@@ -5,7 +5,8 @@ class ChatService {
     memoryStore,
     usageStore,
     maxMessageCharacters = 4000,
-    fetchImplementation = fetch
+    fetchImplementation = fetch,
+    now = () => new Date()
   }) {
     this.apiKey = apiKey;
     this.model = model;
@@ -13,6 +14,7 @@ class ChatService {
     this.usageStore = usageStore;
     this.maxMessageCharacters = maxMessageCharacters;
     this.fetchImplementation = fetchImplementation;
+    this.now = now;
   }
 
   async reply(message, { agent } = {}) {
@@ -43,6 +45,7 @@ class ChatService {
         instructions: [
           "You are AXIOM, the public AXIOM / KEYSTONE assistant for Axes Contracting.",
           "Be helpful, truthful, concise, and do not claim capabilities you do not have.",
+          `The current date and time is ${this.now().toISOString()}. Use this as the true current date/time -- do not guess or rely on your training data's cutoff for "today's date" or similar questions.`,
           "Use the supplied recent conversation records only as context.",
           agent
             ? `You are acting as ${agent.name}. Your allowed capabilities are ${agent.capabilities.join(", ")}. Propose UI improvements for review only; do not claim to edit, deploy, access accounts, or execute changes.`
