@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-16 Follow-up: how to further enable AXI web/email/browser access](2026-09-16-web-email-access-scoping-followup.md)
 - [2026-09-16 Founder request declined pending authorization: unbounded AXI access](2026-09-16-unbounded-access-request-declined.md)
 - [2026-09-16 AXI Workspace Library page and public-chat minimize toggle](2026-09-16-workspace-library-and-chat-minimize.md)
 - [2026-09-15 Public AXIOM chat: continuous history, day-timeline, and gated uploads](2026-09-15-public-chat-timeline-and-uploads.md)
