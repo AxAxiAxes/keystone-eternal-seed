@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-15 AXIOM chat persistent memory: confirmed already implemented (PR #73)](2026-09-15-axiom-chat-memory-already-implemented.md)
 - [2026-09-15 Plan-mode guardrail verified working (PR #70)](2026-09-15-plan-mode-guardrail-verified-working.md)
 - [2026-09-15 Automation governance fix: plan-mode gate and base-branch guardrails](2026-09-15-automation-governance-plan-mode-fix.md)
 - [2026-09-15 Continuity check: remaining automation still targets stale `main`](2026-09-15-continuity-check-and-remaining-automation-still-targets-main.md)
