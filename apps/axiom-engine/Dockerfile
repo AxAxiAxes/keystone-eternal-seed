@@ -23,6 +23,7 @@ COPY business-metrics-service.js ./
 COPY service-registry-service.js ./
 COPY automation-profile-service.js ./
 COPY github-status-service.js ./
+COPY web-access-service.js ./
 
 EXPOSE 3000
 

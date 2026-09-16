@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-16 AXI web-access capability shipped (bounded, read-only); email and browser-tab control remain out of scope](2026-09-16-web-access-capability-shipped.md)
 - [2026-09-16 Follow-up: how to further enable AXI web/email/browser access](2026-09-16-web-email-access-scoping-followup.md)
 - [2026-09-16 Founder request declined pending authorization: unbounded AXI access](2026-09-16-unbounded-access-request-declined.md)
 - [2026-09-16 AXI Workspace Library page and public-chat minimize toggle](2026-09-16-workspace-library-and-chat-minimize.md)
@@ -69,9 +70,13 @@ without re-deriving it:
 - **Give AXI full/unlimited access, web browsing, computer access, "don't
   limit access"** →
   [`2026-09-16-unbounded-access-request-declined.md`](2026-09-16-unbounded-access-request-declined.md)
-  (declined — conflicts with AXI's own governance record; no browsing/computer
-  capability exists to enable; GitHub write access and the automation
-  scheduler remain available as already-reviewed, bounded, opt-in options)
+  (declined — conflicts with AXI's own governance record; **update:** a
+  bounded, read-only, single-URL web-fetch capability has since shipped,
+  see
+  [`2026-09-16-web-access-capability-shipped.md`](2026-09-16-web-access-capability-shipped.md);
+  email and browser/tab control remain unbuilt — email needs a real
+  founder-supplied mailbox credential, browser control needs dedicated
+  sandboxing/safety review)
 - **Is xiiom.com live / does /automation work** →
   [`2026-09-16-workspace-library-and-chat-minimize.md`](2026-09-16-workspace-library-and-chat-minimize.md)
   (live-verified: root site renders correctly; `/automation` returns 401 as

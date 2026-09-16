@@ -26,6 +26,7 @@ const {
   listActionCatalog
 } = require("./automation-service");
 const { GithubStatusService } = require("./github-status-service");
+const { WebAccessService } = require("./web-access-service");
 const app = express();
 app.use(express.json());
 const ADMIN_PASSWORD = process.env.AXIOM_ENGINE_ADMIN_PASSWORD;
@@ -98,6 +99,14 @@ const serviceRegistryReady = serviceRegistryService.initialize();
 const githubStatusService = new GithubStatusService({
   token: process.env.AXIOM_GITHUB_TOKEN,
   repo: process.env.AXIOM_GITHUB_REPO
+});
+// Bounded, read-only web-fetch capability, admin-gated. Off by default:
+// reports "not enabled" (and refuses every fetch) unless an authorized
+// operator sets AXIOM_WEB_ACCESS_ENABLED=true out-of-band. Not a browser --
+// fetches exactly one URL server-side, blocks private/reserved addresses,
+// does not follow redirects, and caps/truncates the response.
+const webAccessService = new WebAccessService({
+  enabled: process.env.AXIOM_WEB_ACCESS_ENABLED === "true"
 });
 const runtimeContextReady = Promise.all([
   startupContextReady,
@@ -204,6 +213,23 @@ app.put("/system/github/pull-requests/:number/merge", requireAdmin, async (req, 
     const number = Number(req.params.number);
     const { mergeMethod, commitTitle } = req.body || {};
     res.json(await githubStatusService.mergePullRequest(number, { mergeMethod, commitTitle }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Bounded web-fetch capability, admin-gated. Status alone is safe to leave
+// open (it only reveals whether the capability is enabled, never fetches
+// anything); the actual fetch route requires admin auth and is off by
+// default until AXIOM_WEB_ACCESS_ENABLED=true is set out-of-band.
+app.get("/system/web-access", (req, res) => {
+  res.json(webAccessService.status());
+});
+
+app.post("/system/web-access/fetch", requireAdmin, async (req, res, next) => {
+  try {
+    const url = req.body && req.body.url;
+    res.json(await webAccessService.fetchUrl(url));
   } catch (error) {
     next(error);
   }
@@ -383,7 +409,8 @@ app.get("/system/readiness", async (req, res, next) => {
       businessMetrics: await businessMetricsService.status(),
       serviceRegistry: await serviceRegistryService.status(),
       automationProfiles: await automationProfileService.status(),
-      github: githubStatusService.status()
+      github: githubStatusService.status(),
+      webAccess: webAccessService.status()
     });
   } catch (error) {
     console.error("AXIOM runtime readiness check failed:", error.message);
