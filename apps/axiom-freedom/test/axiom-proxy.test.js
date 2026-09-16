@@ -1162,3 +1162,233 @@ test("reports private-engine non-success responses only to authenticated support
     delete process.env.ADMIN_PASSWORD;
   }
 });
+
+test("GET /api/axiom/history surfaces public chat entries and filters out agent chat", async (t) => {
+  const localMemoryDirectory = path.join(
+    os.tmpdir(),
+    `axiom-freedom-history-test-${process.pid}`
+  );
+  t.after(() => fs.rm(localMemoryDirectory, { recursive: true, force: true }));
+
+  let engineServer;
+  let webServer;
+  try {
+    process.env.AXIOM_MEMORY_DIRECTORY = localMemoryDirectory;
+    delete require.cache[require.resolve("../../axiom-engine")];
+    const localEngine = require("../../axiom-engine");
+    engineServer = await startServer(localEngine);
+    const { port: enginePort } = engineServer.address();
+
+    process.env.AXIOM_ENGINE_URL = `http://127.0.0.1:${enginePort}`;
+    process.env.ADMIN_PASSWORD = "test-admin-password";
+    delete require.cache[require.resolve("../server")];
+    const web = require("../server");
+    webServer = await startServer(web);
+    const { port: webPort } = webServer.address();
+
+    const engineAuthorization = `Basic ${Buffer.from(`admin:${ENGINE_ADMIN_PASSWORD}`).toString("base64")}`;
+    const seed = async (content, metadata) =>
+      fetch(`http://127.0.0.1:${enginePort}/memory/episodic`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: engineAuthorization
+        },
+        body: JSON.stringify({ content, metadata })
+      });
+
+    await seed("Hello AXIOM", { role: "user", source: "chat" });
+    await seed("Hello, how can I help?", { role: "assistant", source: "chat" });
+    await seed("internal agent turn", {
+      role: "assistant",
+      source: "chat",
+      agentId: "agent-1"
+    });
+    await seed("unrelated memory kind entry", { source: "other" });
+
+    const history = await fetch(`http://127.0.0.1:${webPort}/api/axiom/history`);
+    assert.equal(history.status, 200);
+    const entries = await history.json();
+    assert.equal(Array.isArray(entries), true);
+    assert.equal(entries.length, 2);
+    assert.equal(
+      entries.every((entry) => entry.metadata?.source === "chat" && !entry.metadata?.agentId),
+      true
+    );
+    assert.deepEqual(
+      entries.map((entry) => entry.content).sort(),
+      ["Hello AXIOM", "Hello, how can I help?"].sort()
+    );
+    assert.equal(typeof entries[0].recordedAt, "string");
+
+    const invalidLimit = await fetch(
+      `http://127.0.0.1:${webPort}/api/axiom/history?limit=0`
+    );
+    assert.equal(invalidLimit.status, 200);
+    assert.equal((await invalidLimit.json()).length, 2);
+  } finally {
+    if (webServer) {
+      await stopServer(webServer);
+    }
+    if (engineServer) {
+      await stopServer(engineServer);
+    }
+    delete process.env.AXIOM_ENGINE_URL;
+    delete process.env.ADMIN_PASSWORD;
+    process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
+  }
+});
+
+test("GET /api/axiom/history reports engine-unreachable failures as 502", async () => {
+  let webServer;
+  try {
+    process.env.AXIOM_ENGINE_URL = "http://127.0.0.1:1";
+    delete require.cache[require.resolve("../server")];
+    const web = require("../server");
+    webServer = await startServer(web);
+    const { port: webPort } = webServer.address();
+
+    const history = await fetch(`http://127.0.0.1:${webPort}/api/axiom/history`);
+    assert.equal(history.status, 502);
+    assert.deepEqual(await history.json(), {
+      error: "AXIOM chat history is temporarily unavailable"
+    });
+  } finally {
+    if (webServer) {
+      await stopServer(webServer);
+    }
+    delete process.env.AXIOM_ENGINE_URL;
+  }
+});
+
+test("POST /api/axiom/uploads requires admin credentials and forwards accepted uploads to the engine", async (t) => {
+  const localMemoryDirectory = path.join(
+    os.tmpdir(),
+    `axiom-freedom-uploads-test-${process.pid}`
+  );
+  t.after(() => fs.rm(localMemoryDirectory, { recursive: true, force: true }));
+
+  let engineServer;
+  let webServer;
+  try {
+    process.env.AXIOM_MEMORY_DIRECTORY = localMemoryDirectory;
+    delete require.cache[require.resolve("../../axiom-engine")];
+    const localEngine = require("../../axiom-engine");
+    engineServer = await startServer(localEngine);
+    const { port: enginePort } = engineServer.address();
+
+    process.env.AXIOM_ENGINE_URL = `http://127.0.0.1:${enginePort}`;
+    process.env.ADMIN_PASSWORD = "test-admin-password";
+    delete require.cache[require.resolve("../server")];
+    const web = require("../server");
+    webServer = await startServer(web);
+    const { port: webPort } = webServer.address();
+
+    const unauthorized = await fetch(`http://127.0.0.1:${webPort}/api/axiom/uploads`, {
+      method: "POST",
+      headers: { "X-Source-Filename": "notes.txt" },
+      body: "hello from an anonymous visitor"
+    });
+    assert.equal(unauthorized.status, 401);
+
+    const emptyBody = await fetch(`http://127.0.0.1:${webPort}/api/axiom/uploads`, {
+      method: "POST",
+      headers: { Authorization: adminAuthorization() },
+      body: ""
+    });
+    assert.equal(emptyBody.status, 400);
+    assert.deepEqual(await emptyBody.json(), {
+      error: "request body must be a non-empty file upload"
+    });
+
+    const success = await fetch(`http://127.0.0.1:${webPort}/api/axiom/uploads`, {
+      method: "POST",
+      headers: {
+        Authorization: adminAuthorization(),
+        "X-Source-Filename": "founder-notes.txt"
+      },
+      body: "these are founder notes"
+    });
+    assert.equal(success.status, 201);
+    const stored = await success.json();
+    assert.match(stored.sourceReference, /^uploads\//);
+    assert.equal(typeof stored.sha256, "string");
+    assert.equal(stored.sha256.length, 64);
+    assert.equal(stored.size, Buffer.byteLength("these are founder notes"));
+    assert.equal(stored.originalFilename, "founder-notes.txt");
+  } finally {
+    if (webServer) {
+      await stopServer(webServer);
+    }
+    if (engineServer) {
+      await stopServer(engineServer);
+    }
+    delete process.env.AXIOM_ENGINE_URL;
+    delete process.env.ADMIN_PASSWORD;
+    process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
+  }
+});
+
+test("POST /api/axiom/uploads rejects oversized files with 413 and passes through engine failures", async (t) => {
+  const localMemoryDirectory = path.join(
+    os.tmpdir(),
+    `axiom-freedom-uploads-oversize-test-${process.pid}`
+  );
+  t.after(() => fs.rm(localMemoryDirectory, { recursive: true, force: true }));
+
+  let engineServer;
+  let webServer;
+  try {
+    process.env.AXIOM_MEMORY_DIRECTORY = localMemoryDirectory;
+    process.env.AXIOM_MAX_UPLOAD_BODY_BYTES = "1024";
+    delete require.cache[require.resolve("../../axiom-engine")];
+    const localEngine = require("../../axiom-engine");
+    engineServer = await startServer(localEngine);
+    const { port: enginePort } = engineServer.address();
+
+    process.env.AXIOM_ENGINE_URL = `http://127.0.0.1:${enginePort}`;
+    process.env.ADMIN_PASSWORD = "test-admin-password";
+    delete require.cache[require.resolve("../server")];
+    const web = require("../server");
+    webServer = await startServer(web);
+    const { port: webPort } = webServer.address();
+
+    const oversized = await fetch(`http://127.0.0.1:${webPort}/api/axiom/uploads`, {
+      method: "POST",
+      headers: {
+        Authorization: adminAuthorization(),
+        "X-Source-Filename": "big.bin"
+      },
+      body: "x".repeat(2048)
+    });
+    assert.equal(oversized.status, 413);
+    assert.deepEqual(await oversized.json(), { error: "request body is too large" });
+
+    await stopServer(engineServer);
+    engineServer = null;
+
+    const unreachable = await fetch(`http://127.0.0.1:${webPort}/api/axiom/uploads`, {
+      method: "POST",
+      headers: {
+        Authorization: adminAuthorization(),
+        "X-Source-Filename": "notes.txt"
+      },
+      body: "engine is gone now"
+    });
+    assert.equal(unreachable.status, 502);
+    assert.deepEqual(await unreachable.json(), {
+      error: "AXIOM document/image upload is temporarily unavailable"
+    });
+  } finally {
+    if (webServer) {
+      await stopServer(webServer);
+    }
+    if (engineServer) {
+      await stopServer(engineServer);
+    }
+    delete process.env.AXIOM_ENGINE_URL;
+    delete process.env.ADMIN_PASSWORD;
+    delete process.env.AXIOM_MAX_UPLOAD_BODY_BYTES;
+    process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
+  }
+});

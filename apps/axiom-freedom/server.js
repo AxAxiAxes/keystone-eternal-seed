@@ -33,6 +33,13 @@ const MAX_REQUEST_BODY_BYTES = getPositiveInteger(
     process.env.AXIOM_MAX_REQUEST_BODY_BYTES,
     65536
 );
+// Separate, much larger cap for the document/image upload proxy below.
+// Matches apps/axiom-engine's own default (5 MB); the engine enforces its
+// own cap independently regardless of what this proxy allows through.
+const MAX_UPLOAD_BODY_BYTES = getPositiveInteger(
+    process.env.AXIOM_MAX_UPLOAD_BODY_BYTES,
+    5 * 1024 * 1024
+);
 const MAX_LEAD_FIELD_LENGTH = 500;
 const REQUIRED_LEAD_FIELDS = ['name', 'phone'];
 
@@ -121,6 +128,29 @@ function parseBody(req) {
                   return;
               }
               try { resolve(JSON.parse(body)); } catch(e) { resolve({}); }
+          });
+    });
+}
+
+// Raw-byte counterpart to parseBody(), used only for the document/image
+// upload proxy below. Unlike parseBody(), this never attempts to parse the
+// body as JSON -- it is forwarded to the engine's upload endpoint exactly as
+// received. Resolves null on oversize, matching parseBody()'s contract.
+function parseRawBody(req, maxBytes) {
+    return new Promise((resolve) => {
+          const chunks = [];
+          let bodySize = 0;
+          let oversized = false;
+          req.on('data', chunk => {
+              bodySize += chunk.length;
+              if (bodySize > maxBytes) {
+                  oversized = true;
+                  return;
+              }
+              chunks.push(chunk);
+          });
+          req.on('end', () => {
+              resolve(oversized ? null : Buffer.concat(chunks));
           });
     });
 }
@@ -252,6 +282,41 @@ async function invokeEngine(endpoint, method = 'GET', body) {
 
 function invokeAxiomEngine(command) {
     return invokeEngine('/axiom', 'POST', command);
+}
+
+// Forwards a raw file upload to the engine's admin-gated upload endpoint.
+// Distinct from invokeEngine() because the request/response bodies here are
+// raw bytes and a JSON envelope, not the JSON-in/JSON-out shape every other
+// engine call uses.
+async function invokeEngineUpload(buffer, filename) {
+    let response;
+    const headers = {};
+    if (AXIOM_ENGINE_ADMIN_PASSWORD) {
+        headers.Authorization = 'Basic ' + Buffer.from('admin:' + AXIOM_ENGINE_ADMIN_PASSWORD).toString('base64');
+    }
+    if (typeof filename === 'string' && filename.length > 0) {
+        headers['X-Source-Filename'] = filename;
+    }
+    try {
+        response = await fetch(new URL('/system/source-catalog/uploads', AXIOM_ENGINE_URL), {
+            method: 'POST',
+            headers,
+            body: buffer,
+            signal: AbortSignal.timeout(60000)
+        });
+    } catch (error) {
+        throw recordEngineFailure(ENGINE_FAILURE_CATEGORY.UNREACHABLE);
+    }
+
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        throw recordEngineFailure(
+            ENGINE_FAILURE_CATEGORY.NON_SUCCESS,
+            response.status,
+            payload.error || 'AXIOM engine returned HTTP ' + response.status
+        );
+    }
+    return payload;
 }
 
 function recordEngineFailure(category, statusCode, message) {
@@ -467,6 +532,70 @@ const server = http.createServer(async (req, res) => {
                       ? 'AXIOM chat is temporarily unavailable'
                       : 'AXIOM engine is unavailable'
                   }));
+          }
+          return;
+    }
+    if (pathname === '/api/axiom/history' && req.method === 'GET') {
+          // Public: mirrors the engine's own open GET /memory/episodic route
+          // (chat history is not admin-gated there either -- only writes
+          // and every other memory kind require admin credentials). Filters
+          // to the public chat channel only, excluding internal
+          // agent-to-agent conversations recorded under /automation/chat,
+          // which share the same "episodic" memory kind but carry an
+          // agentId.
+          const requestedLimit = Number.parseInt(parsed.searchParams.get('limit'), 10);
+          const limit = Number.isInteger(requestedLimit) && requestedLimit > 0 && requestedLimit <= 100
+              ? requestedLimit
+              : 100;
+          try {
+                  const entries = await invokeEngine(`/memory/episodic?limit=${limit}`);
+                  const publicChat = Array.isArray(entries)
+                      ? entries.filter(entry => entry?.metadata?.source === 'chat' && !entry?.metadata?.agentId)
+                      : [];
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(publicChat));
+          } catch (error) {
+                  console.error('AXIOM history request failed:', getEngineFailureCategory(error), error.message);
+                  res.writeHead(502, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: 'AXIOM chat history is temporarily unavailable' }));
+          }
+          return;
+    }
+    if (pathname === '/api/axiom/uploads' && req.method === 'POST') {
+          // Admin-gated (this proxy's own ADMIN_PASSWORD, via the browser's
+          // native Basic-Auth prompt -- the same mechanism command-center.html
+          // and the other private pages already rely on). Forwarded to the
+          // engine's own admin-gated upload route with the engine's separate
+          // admin password; nothing here bypasses either gate. Anonymous
+          // visitors to the public chat page cannot complete this request
+          // without the admin password.
+          if (!requireAdmin(req, res)) return;
+          const buffer = await parseRawBody(req, MAX_UPLOAD_BODY_BYTES);
+          if (buffer === null) {
+              rejectOversizedRequest(res);
+              return;
+          }
+          if (buffer.length === 0) {
+              res.writeHead(400, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: 'request body must be a non-empty file upload' }));
+              return;
+          }
+          try {
+                  const filenameHeader = req.headers['x-source-filename'];
+                  const stored = await invokeEngineUpload(
+                      buffer,
+                      typeof filenameHeader === 'string' ? filenameHeader : null
+                  );
+                  res.writeHead(201, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(stored));
+          } catch (error) {
+                  console.error('AXIOM upload request failed:', getEngineFailureCategory(error), error.message);
+                  const statusCode = Number.isInteger(error.statusCode) ? error.statusCode : 502;
+                  const message = statusCode === 502
+                      ? 'AXIOM document/image upload is temporarily unavailable'
+                      : error.message;
+                  res.writeHead(statusCode, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: message }));
           }
           return;
     }
