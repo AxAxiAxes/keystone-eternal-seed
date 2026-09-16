@@ -157,6 +157,33 @@ test("reports GitHub status as unconfigured by default and gates real reads/writ
   assert.equal(unconfiguredMerge.status, 503);
 });
 
+test("reports web access as disabled by default and gates the fetch route behind admin auth", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const status = await nativeFetch(`http://127.0.0.1:${port}/system/web-access`);
+  assert.equal(status.status, 200);
+  const statusBody = await status.json();
+  assert.equal(statusBody.enabled, false);
+
+  const unauthenticated = await nativeFetch(`http://127.0.0.1:${port}/system/web-access/fetch`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url: "https://example.com" })
+  });
+  assert.equal(unauthenticated.status, 401);
+
+  const disabled = await fetch(`http://127.0.0.1:${port}/system/web-access/fetch`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url: "https://example.com" })
+  });
+  assert.equal(disabled.status, 503);
+  const disabledBody = await disabled.json();
+  assert.match(disabledBody.error, /web access is not enabled/);
+});
+
 test("stores an uploaded file's bytes locally and requires admin credentials", async (t) => {
   const server = await startServer();
   t.after(() => stopServer(server));
@@ -339,6 +366,7 @@ test("reports secret-safe runtime readiness", async (t) => {
   assert.equal(readiness.automationProfiles.templates[0].id, "operations-observation");
   assert.equal(readiness.automationProfiles.templates[1].id, "continuity-protection");
   assert.equal(readiness.github.configured, false);
+  assert.equal(readiness.webAccess.enabled, false);
   assert.ok(readiness.continuityRecord.recordCount >= 2);
   assert.equal(readiness.startupContext.id, "axes-memory-bank-startup-v1");
   assert.equal(readiness.automation.lastRunAt, null);
