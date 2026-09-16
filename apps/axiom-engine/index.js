@@ -27,6 +27,7 @@ const {
 } = require("./automation-service");
 const { GithubStatusService } = require("./github-status-service");
 const app = express();
+app.use(express.json());
 const ADMIN_PASSWORD = process.env.AXIOM_ENGINE_ADMIN_PASSWORD;
 // Raw source-file uploads are capped and admin-authenticated (see the
 // requireAdmin route below): 5 MB is a safe default for the intended use
@@ -86,11 +87,14 @@ const businessMetricsService = new BusinessMetricsService({ directory: dataDirec
 const businessMetricsReady = businessMetricsService.initialize();
 const serviceRegistryService = new ServiceRegistryService({ directory: dataDirectory });
 const serviceRegistryReady = serviceRegistryService.initialize();
-// Read-only GitHub visibility, off by default: reports "not configured"
-// (and refuses every read call) unless an authorized operator has supplied
-// both AXIOM_GITHUB_TOKEN and AXIOM_GITHUB_REPO out-of-band. AXI cannot
-// generate its own GitHub credentials and this service never issues a
-// write, comment, merge, or push request.
+// GitHub visibility and write actions, founder-approved 2026-09-15. Off by
+// default: reports "not configured" (and refuses every call) unless an
+// authorized operator has supplied both AXIOM_GITHUB_TOKEN and
+// AXIOM_GITHUB_REPO out-of-band. AXI cannot generate its own GitHub
+// credentials -- the token itself must come from a human. Write routes
+// (comment/open PR/merge) remain subject to GitHub's own branch protection
+// and required status checks, which reject an unsafe merge the same way
+// they would for a human caller.
 const githubStatusService = new GithubStatusService({
   token: process.env.AXIOM_GITHUB_TOKEN,
   repo: process.env.AXIOM_GITHUB_REPO
@@ -133,11 +137,12 @@ app.get("/system/source-catalog/options", (req, res) => {
   res.json(sourceCatalogDescribeOptions({ maxUploadBytes: SOURCE_UPLOAD_MAX_BYTES }));
 });
 
-// Read-only GitHub visibility. Reports "not configured" until an operator
-// supplies AXIOM_GITHUB_TOKEN/AXIOM_GITHUB_REPO out-of-band; AXI never
-// generates its own credentials. Status alone is safe to leave open (it
-// reveals only whether a token is present, never the token itself); the
-// routes that actually list real repository data require admin auth.
+// GitHub visibility, founder-approved 2026-09-15. Reports "not configured"
+// until an operator supplies AXIOM_GITHUB_TOKEN/AXIOM_GITHUB_REPO
+// out-of-band; AXI never generates its own credentials. Status alone is
+// safe to leave open (it reveals only whether a token is present, never
+// the token itself); every route that reads or writes real repository data
+// requires admin auth.
 app.get("/system/github", (req, res) => {
   res.json(githubStatusService.status());
 });
@@ -169,6 +174,41 @@ app.get("/system/github/issues", requireAdmin, async (req, res, next) => {
     next(error);
   }
 });
+
+// Write actions, founder-approved 2026-09-15. Admin-gated. GitHub's own
+// branch protection and required status checks on the target repository
+// are the real safety backstop -- a merge GitHub itself would reject
+// (failing/pending required checks, unmet review requirements) fails here
+// exactly the same way it would for a human using the API directly.
+app.post("/system/github/issues/:number/comments", requireAdmin, async (req, res, next) => {
+  try {
+    const number = Number(req.params.number);
+    const body = req.body && req.body.body;
+    res.status(201).json(await githubStatusService.createIssueComment(number, body));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/system/github/pull-requests", requireAdmin, async (req, res, next) => {
+  try {
+    const { title, head, base, body } = req.body || {};
+    res.status(201).json(await githubStatusService.createPullRequest({ title, head, base, body }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.put("/system/github/pull-requests/:number/merge", requireAdmin, async (req, res, next) => {
+  try {
+    const number = Number(req.params.number);
+    const { mergeMethod, commitTitle } = req.body || {};
+    res.json(await githubStatusService.mergePullRequest(number, { mergeMethod, commitTitle }));
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 app.get("/system/business-metrics", async (req, res, next) => {
   try {
@@ -293,7 +333,6 @@ const chatService = new ChatService({
   )
 });
 
-app.use(express.json());
 app.use(async (req, res, next) => {
   try {
     await runtimeContextReady;

@@ -118,7 +118,7 @@ test("exposes source-catalog options as a read-only discovery route", async (t) 
   assert.equal(body.upload.maxBytes, 5 * 1024 * 1024);
 });
 
-test("reports GitHub read-only status as unconfigured by default and gates real reads behind admin auth", async (t) => {
+test("reports GitHub status as unconfigured by default and gates real reads/writes behind admin auth", async (t) => {
   const server = await startServer();
   t.after(() => stopServer(server));
   const { port } = server.address();
@@ -135,7 +135,26 @@ test("reports GitHub read-only status as unconfigured by default and gates real 
   const unconfigured = await fetch(`http://127.0.0.1:${port}/system/github/pull-requests`);
   assert.equal(unconfigured.status, 503);
   const unconfiguredBody = await unconfigured.json();
-  assert.match(unconfiguredBody.error, /GitHub read-only access is not configured/);
+  assert.match(unconfiguredBody.error, /GitHub access is not configured/);
+
+  const unauthenticatedComment = await nativeFetch(`http://127.0.0.1:${port}/system/github/issues/1/comments`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ body: "hi" })
+  });
+  assert.equal(unauthenticatedComment.status, 401);
+
+  const unconfiguredComment = await fetch(`http://127.0.0.1:${port}/system/github/issues/1/comments`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ body: "hi" })
+  });
+  assert.equal(unconfiguredComment.status, 503);
+
+  const unconfiguredMerge = await fetch(`http://127.0.0.1:${port}/system/github/pull-requests/1/merge`, {
+    method: "PUT"
+  });
+  assert.equal(unconfiguredMerge.status, 503);
 });
 
 test("stores an uploaded file's bytes locally and requires admin credentials", async (t) => {
