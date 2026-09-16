@@ -151,7 +151,8 @@ by the public portal.
 | `POST` | `/automation/tasks/:taskId/approval` | Approves or rejects a task awaiting approval. |
 | `POST` | `/automation/process` | Processes due tasks, up to `maxTasks` (default 5; maximum 20). |
 | `GET` | `/automation/runs` | Lists recent execution records; use `?limit=50`. |
-| `GET` | `/system/source-catalog/options` | Read-only discovery: lists valid `sourceType`/`classification` values and field constraints for `source.catalog` tasks. |
+| `GET` | `/system/source-catalog/options` | Read-only discovery: lists valid `sourceType`/`classification` values and field constraints for `source.catalog` tasks, plus the upload endpoint's route, auth, and size cap. |
+| `POST` | `/system/source-catalog/uploads` | Admin-authenticated: stores raw file bytes (request body) to this instance's own local data directory and returns a `sourceReference`/`sha256` computed from the stored bytes. Size-capped via `AXIOM_SOURCE_UPLOAD_MAX_BYTES` (default 5 MB). Storing bytes does not create a catalog entry. |
 
 Create a memory-record task:
 
@@ -210,20 +211,31 @@ controls. It cannot write arbitrary files, record sensitive data, alter prior
 events, restore data, change source history, or take external action.
 
 Queue a `source.catalog` task only for the Project Memory Manager with a
-stable source ID, non-sensitive title, source type, classification,
-repository-relative source reference, and SHA-256 hash. `sourceType`
+stable source ID, non-sensitive title, source type, classification, a
+source reference, and SHA-256 hash. `sourceType`
 (`application`, `dataset`, `document`, `media`, `record`, `other`) is a
 metadata classification, not a file-extension allowlist: every kind of file
 is representable, with `other` as the explicit catch-all. Call
-`GET /system/source-catalog/options` to discover the current valid values and
-field constraints instead of hardcoding them. The task requires explicit
-operator approval and appends metadata only; it does not read, copy, upload,
-classify, or interpret raw source content -- the caller supplies an
-independently computed SHA-256 for content that must already exist at the
-given repository-relative path. This is a deliberate safety boundary, not a
-current limitation: expanding this service to accept and store raw uploaded
-file bytes would be a new capability requiring explicit founder review and
-addition to the versioned allowlist, not an unattended repository change.
+`GET /system/source-catalog/options` to discover the current valid values,
+field constraints, and upload details instead of hardcoding them.
+
+The task requires explicit operator approval and appends metadata only; the
+`source.catalog` action itself still does not read, copy, upload, classify,
+or interpret raw content -- it only records a `sourceReference` and a
+SHA-256 that the caller already computed. Two supported ways to obtain that
+`sourceReference` exist:
+
+1. A repository-relative path (e.g. `docs/AXES_BUSINESS_PLAN.md`) to content
+   that already exists in this repository.
+2. An `uploads/<name>` path returned by `POST /system/source-catalog/uploads`
+   (admin-authenticated, size-capped via `AXIOM_SOURCE_UPLOAD_MAX_BYTES`,
+   default 5 MB), which stores raw file bytes to this instance's own local
+   data directory -- never the git repository, never an external/cloud
+   store -- and returns a `sha256` computed from the stored bytes, not a
+   caller-supplied value. Storing an upload does not, by itself, catalog it;
+   an operator-approved `source.catalog` task must still reference the
+   returned path and hash before it becomes a catalog entry.
+
 Duplicate source IDs, unsafe paths, unsupported fields, malformed hashes, and
 invalid retained history fail explicitly. See `AXI_SOURCE_CATALOG.md`.
 

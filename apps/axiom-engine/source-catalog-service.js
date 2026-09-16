@@ -15,6 +15,15 @@ const SOURCE_TYPES = new Set([
 ]);
 const CLASSIFICATIONS = new Set(["public", "internal", "private", "restricted"]);
 const REVIEW_STATUS = "operator-approved";
+// Uploaded file bytes are stored under this subdirectory of the catalog's
+// own data directory (never the git repository), so a stored sourceReference
+// like "uploads/<uuid>.pdf" is visibly distinguishable from a repository
+// path like "docs/foo.md". Storing is admin-authenticated and size-capped at
+// the HTTP layer (see index.js); this service only persists whatever bytes
+// it is given and reports their sha256, it does not classify or catalog
+// them -- filing a catalog entry for an upload still goes through the
+// existing operator-approved source.catalog automation task.
+const UPLOAD_SUBDIRECTORY = "uploads";
 
 class SourceCatalogService {
   constructor({ directory, now = () => new Date() }) {
@@ -85,6 +94,29 @@ class SourceCatalogService {
       await fs.appendFile(this.statePath(), `${JSON.stringify(entry)}\n`, "utf8");
       return entry;
     });
+  }
+
+  // Stores raw uploaded file bytes to local disk (under this service's own
+  // data directory) and returns a sourceReference + sha256 computed from the
+  // actual stored bytes -- never a client-supplied hash. This only persists
+  // the file; it intentionally does not create a catalog entry, so filing
+  // still requires an approved source.catalog automation task, preserving
+  // the existing governance/approval boundary while adding real storage.
+  async storeUpload({ buffer, filename }) {
+    if (!Buffer.isBuffer(buffer) || buffer.length === 0) {
+      throw new TypeError("uploaded file must be a non-empty buffer");
+    }
+    const extension = sanitizeUploadExtension(filename);
+    const storedName = `${randomUUID()}${extension}`;
+    const uploadDirectory = path.join(this.directory, UPLOAD_SUBDIRECTORY);
+    await fs.mkdir(uploadDirectory, { recursive: true });
+    await fs.writeFile(path.join(uploadDirectory, storedName), buffer);
+    return {
+      sourceReference: `${UPLOAD_SUBDIRECTORY}/${storedName}`,
+      sha256: createHash("sha256").update(buffer).digest("hex"),
+      size: buffer.length,
+      originalFilename: typeof filename === "string" && filename.trim() ? filename.trim().slice(0, 200) : null
+    };
   }
 
   statusFromEntries(entries) {
@@ -213,6 +245,18 @@ function normalizeSourceReference(value) {
   return value.trim().replaceAll("\\", "/");
 }
 
+// Only ever used to preserve a readable file extension on disk (e.g. ".pdf")
+// -- never the caller-supplied name or path itself, so this cannot be used
+// for path traversal or to overwrite an arbitrary file. Anything that is
+// not a short alphanumeric extension is dropped in favor of no extension.
+function sanitizeUploadExtension(filename) {
+  if (typeof filename !== "string") {
+    return "";
+  }
+  const match = /\.[A-Za-z0-9]{1,10}$/.exec(filename.trim());
+  return match ? match[0].toLowerCase() : "";
+}
+
 function summarizeEntry(entry) {
   return {
     sourceId: entry.sourceId,
@@ -267,7 +311,7 @@ function isUuid(value) {
 // covers every kind of file/source a founder might want cataloged
 // (application, dataset, document, media, record, other); "other" is the
 // deliberate catch-all so this list never blocks a legitimate submission.
-function describeOptions() {
+function describeOptions({ maxUploadBytes } = {}) {
   return {
     sourceTypes: [...SOURCE_TYPES],
     classifications: [...CLASSIFICATIONS],
@@ -277,12 +321,18 @@ function describeOptions() {
       title: "non-empty string, up to 200 characters",
       sourceType: `one of: ${[...SOURCE_TYPES].join(", ")}`,
       classification: `one of: ${[...CLASSIFICATIONS].join(", ")}`,
-      sourceReference: "repository-relative path, up to 500 characters, no leading slash or .. segments",
+      sourceReference: "repository-relative path, up to 500 characters, no leading slash or .. segments (or an uploads/<name> path returned by the upload endpoint)",
       sha256: "64-character hexadecimal hash of the source content"
+    },
+    upload: {
+      route: "POST /system/source-catalog/uploads",
+      auth: "admin (HTTP Basic)",
+      maxBytes: Number.isInteger(maxUploadBytes) ? maxUploadBytes : null,
+      notes: "Accepts raw file bytes as the request body, stores them under this service's own data directory (never the git repository), and returns a sourceReference/sha256 computed from the stored bytes. This only stores bytes -- it does not create a catalog entry. Filing the resulting sourceReference still requires a source.catalog automation task with operator approval."
     },
     notes: [
       "sourceType is a metadata classification, not a file-extension allowlist: every file type is representable via one of the listed values.",
-      "This service appends approved metadata only; it does not read, copy, upload, or store raw source bytes. Every entry requires operator approval (see docs/AXI_AUTOMATION_SERVICE.md)."
+      "This service appends approved metadata only. Uploading raw bytes (see the upload field above) is a separate, admin-authenticated, size-capped step; cataloging an entry still requires operator approval (see docs/AXI_AUTOMATION_SERVICE.md)."
     ]
   };
 }
