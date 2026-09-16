@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-15 AXI automation scheduler: readiness check ("can AXI be automated?")](2026-09-15-axi-automation-scheduler-readiness-check.md)
 - [2026-09-15 CI-gated auto-merge configured; all stale `main`-targeted PRs closed](2026-09-15-ci-gated-auto-merge-and-stale-pr-closure.md)
 - [2026-09-15 AXIOM chat persistent memory: confirmed already implemented (PR #73)](2026-09-15-axiom-chat-memory-already-implemented.md)
 - [2026-09-15 Plan-mode guardrail verified working (PR #70)](2026-09-15-plan-mode-guardrail-verified-working.md)
@@ -42,6 +43,10 @@ without re-deriving it:
   [`2026-09-12-full-archive-review-and-continuity-check.md`](2026-09-12-full-archive-review-and-continuity-check.md)
   (builds on
   [`2026-09-12-agent-timeline-and-transcript-review.md`](2026-09-12-agent-timeline-and-transcript-review.md))
+- **Can AXI be automated / is the scheduler on** →
+  [`2026-09-15-axi-automation-scheduler-readiness-check.md`](2026-09-15-axi-automation-scheduler-readiness-check.md)
+  (code verified working, 26/26 tests; still off by design — enabling it is a
+  founder/Railway decision, not a repository change)
 - **Why are there so many open PRs / duplicate "remove duplicate files"
   PRs / PRs that won't merge into the real branch / is the automation fixed
   yet / are merges automated now** →
@@ -63,6 +68,7 @@ on startup, not because any individual conversation is remembered.
 
 ## Full chronological index (newest first)
 
+- [2026-09-15 AXI automation scheduler: readiness check ("can AXI be automated?")](2026-09-15-axi-automation-scheduler-readiness-check.md)
 - [2026-09-15 CI-gated auto-merge configured; all stale `main`-targeted PRs closed](2026-09-15-ci-gated-auto-merge-and-stale-pr-closure.md)
 - [2026-09-15 Plan-mode guardrail verified working (PR #70)](2026-09-15-plan-mode-guardrail-verified-working.md)
 - [2026-09-15 Automation governance fix: plan-mode gate and base-branch guardrails](2026-09-15-automation-governance-plan-mode-fix.md)
