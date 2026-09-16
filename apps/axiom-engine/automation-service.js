@@ -17,6 +17,94 @@ const TASK_ACTIONS = new Set([
   "business.metric",
   "service.registry"
 ]);
+
+// Read-only discovery catalog for every allowlisted action: a caller can
+// query this instead of hardcoding or reverse-engineering payload shapes
+// and approval rules from source. This does not add, widen, or bypass any
+// capability -- it only describes what already exists in TASK_ACTIONS.
+const ACTION_CATALOG = Object.freeze([
+  {
+    action: "memory.record",
+    requiresApproval: false,
+    fixedAgentId: null,
+    effect: "Writes a validated entry to a supported private memory layer.",
+    payloadFields: ["kind (episodic|semantic|decision|procedure)", "content (non-empty string)", "metadata (object, optional)"]
+  },
+  {
+    action: "automation.noop",
+    requiresApproval: false,
+    fixedAgentId: null,
+    effect: "Runs a testable workflow placeholder without external side effects.",
+    payloadFields: []
+  },
+  {
+    action: "monitoring.snapshot",
+    requiresApproval: false,
+    fixedAgentId: null,
+    effect: "Captures a private operational snapshot without contacting an external system.",
+    payloadFields: []
+  },
+  {
+    action: "governance.readiness",
+    requiresApproval: false,
+    fixedAgentId: null,
+    effect: "Assesses Genesis registration, active accountability, approved capabilities, and task attention states.",
+    payloadFields: []
+  },
+  {
+    action: "recovery.backup",
+    requiresApproval: false,
+    fixedAgentId: null,
+    effect: "Creates and verifies a private runtime recovery bundle at a configured backup location.",
+    payloadFields: []
+  },
+  {
+    action: "coordinate.record",
+    requiresApproval: false,
+    fixedAgentId: null,
+    effect: "Records a source-linked, hash-chained private coordinate transition.",
+    payloadFields: []
+  },
+  {
+    action: "continuity.checkpoint",
+    requiresApproval: false,
+    fixedAgentId: null,
+    effect: "Creates a checksummed private checkpoint manifest for current runtime files.",
+    payloadFields: []
+  },
+  {
+    action: "continuity.record",
+    requiresApproval: true,
+    fixedAgentId: "project-memory-manager",
+    effect: "Appends an operator-confirmed, bounded event to the private continuous memory record.",
+    payloadFields: ["sourceRecord (string)", "summary (string)"]
+  },
+  {
+    action: "source.catalog",
+    requiresApproval: true,
+    fixedAgentId: "project-memory-manager",
+    effect: "Appends approved repository-source metadata and SHA-256 evidence to the private source catalog. Metadata only -- does not read, copy, upload, or store raw source content.",
+    payloadFields: ["sourceId", "title", "sourceType", "classification", "sourceReference", "sha256"]
+  },
+  {
+    action: "business.metric",
+    requiresApproval: true,
+    fixedAgentId: "project-memory-manager",
+    effect: "Appends one approved non-sensitive revenue or expense metric to the private hash-linked journal.",
+    payloadFields: ["period (YYYY-MM)", "kind (revenue|expense)", "category", "amountCents (positive integer)", "sourceRecord"]
+  },
+  {
+    action: "service.registry",
+    requiresApproval: true,
+    fixedAgentId: "project-memory-manager",
+    effect: "Appends one founder-approved internal service-registry registration or revision.",
+    payloadFields: ["operation", "serviceId", "serviceName", "purpose", "stage", "classification", "ownerRole", "dependencySummary"]
+  }
+]);
+
+function listActionCatalog() {
+  return ACTION_CATALOG.map((entry) => ({ ...entry, payloadFields: [...entry.payloadFields] }));
+}
 const TASK_STATUSES = new Set([
   "pending",
   "running",
@@ -1258,5 +1346,6 @@ module.exports = {
   observeAgent,
   evaluateGovernanceReadiness,
   summarizeAutomationState,
-  startAutomationScheduler
+  startAutomationScheduler,
+  listActionCatalog
 };

@@ -261,9 +261,38 @@ function isUuid(value) {
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
 }
 
+// Read-only discovery data for API/console consumers, so a caller can query
+// the valid sourceType/classification values and field constraints instead
+// of hardcoding or reverse-engineering them from source. sourceType already
+// covers every kind of file/source a founder might want cataloged
+// (application, dataset, document, media, record, other); "other" is the
+// deliberate catch-all so this list never blocks a legitimate submission.
+function describeOptions() {
+  return {
+    sourceTypes: [...SOURCE_TYPES],
+    classifications: [...CLASSIFICATIONS],
+    reviewStatus: REVIEW_STATUS,
+    fields: {
+      sourceId: "lowercase kebab-case, up to 120 characters, must be unique",
+      title: "non-empty string, up to 200 characters",
+      sourceType: `one of: ${[...SOURCE_TYPES].join(", ")}`,
+      classification: `one of: ${[...CLASSIFICATIONS].join(", ")}`,
+      sourceReference: "repository-relative path, up to 500 characters, no leading slash or .. segments",
+      sha256: "64-character hexadecimal hash of the source content"
+    },
+    notes: [
+      "sourceType is a metadata classification, not a file-extension allowlist: every file type is representable via one of the listed values.",
+      "This service appends approved metadata only; it does not read, copy, upload, or store raw source bytes. Every entry requires operator approval (see docs/AXI_AUTOMATION_SERVICE.md)."
+    ]
+  };
+}
+
 module.exports = {
   SOURCE_CATALOG_FILE_NAME,
   SOURCE_CATALOG_ID,
   SOURCE_CATALOG_SCHEMA_VERSION,
-  SourceCatalogService
+  SOURCE_TYPES,
+  CLASSIFICATIONS,
+  SourceCatalogService,
+  describeOptions
 };
