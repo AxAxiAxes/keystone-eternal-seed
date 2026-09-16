@@ -89,6 +89,41 @@ test("record() validates kind, content, and metadata", async () => {
   });
 });
 
+test("list() with a metadataFilter scopes results to matching entries only, most-recent first", async () => {
+  await withTempDirectory(async (directory) => {
+    const store = new MemoryStore(directory);
+    await store.record({ kind: "episodic", content: "visitor A turn 1", metadata: { sessionId: "a" } });
+    await store.record({ kind: "episodic", content: "visitor B turn 1", metadata: { sessionId: "b" } });
+    await store.record({ kind: "episodic", content: "visitor A turn 2", metadata: { sessionId: "a" } });
+    await store.record({ kind: "episodic", content: "visitor B turn 2", metadata: { sessionId: "b" } });
+
+    const visitorA = await store.list("episodic", 10, { metadataFilter: { sessionId: "a" } });
+    assert.deepEqual(visitorA.map((entry) => entry.content), ["visitor A turn 2", "visitor A turn 1"]);
+
+    const unknownVisitor = await store.list("episodic", 10, { metadataFilter: { sessionId: "does-not-exist" } });
+    assert.deepEqual(unknownVisitor, []);
+  });
+});
+
+test("list() with a metadataFilter respects the limit and honors a bounded scanLimit", async () => {
+  await withTempDirectory(async (directory) => {
+    const store = new MemoryStore(directory);
+    await store.record({ kind: "episodic", content: "match", metadata: { sessionId: "target" } });
+    for (let i = 0; i < 5; i += 1) {
+      await store.record({ kind: "episodic", content: `noise ${i}`, metadata: { sessionId: "noisy" } });
+    }
+
+    const limited = await store.list("episodic", 10, { metadataFilter: { sessionId: "noisy" } });
+    assert.equal(limited.length, 5);
+
+    const scannedOut = await store.list("episodic", 10, { metadataFilter: { sessionId: "target" }, scanLimit: 3 });
+    assert.deepEqual(scannedOut, []);
+
+    const scannedIn = await store.list("episodic", 10, { metadataFilter: { sessionId: "target" }, scanLimit: 6 });
+    assert.equal(scannedIn.length, 1);
+  });
+});
+
 test("writeIdentity/readIdentity round-trip, and reading missing identity returns null", async () => {
   await withTempDirectory(async (directory) => {
     const store = new MemoryStore(directory);
