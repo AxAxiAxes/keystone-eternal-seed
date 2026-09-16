@@ -72,3 +72,40 @@ test("records changed monitoring state and attention transitions", async (t) => 
   assert.equal(decisions.length, 6);
   assert.equal((await service.history()).length, 7);
 });
+
+test("status() and history() do not rewrite monitoring.json, but record() does", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-monitoring-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new MonitoringService({
+    directory,
+    memoryStore: { record: async () => {} },
+    now: () => new Date("2026-09-10T00:00:00.000Z")
+  });
+  const healthy = {
+    memoryAvailable: true,
+    scheduler: { enabled: true, lastError: null },
+    automation: { pendingTasks: 0, failedTasks: 0 },
+    usage: { totalTokens: 0 }
+  };
+
+  await service.record(healthy);
+  const statePath = path.join(directory, "monitoring.json");
+  const contentsBeforeReads = await fs.readFile(statePath, "utf8");
+  const mtimeBeforeReads = (await fs.stat(statePath)).mtimeMs;
+
+  await service.status();
+  await service.history();
+  await service.status();
+
+  const contentsAfterReads = await fs.readFile(statePath, "utf8");
+  const mtimeAfterReads = (await fs.stat(statePath)).mtimeMs;
+  assert.equal(contentsAfterReads, contentsBeforeReads);
+  assert.equal(mtimeAfterReads, mtimeBeforeReads);
+
+  await service.record({
+    ...healthy,
+    automation: { pendingTasks: 0, failedTasks: 1 }
+  });
+  const contentsAfterRecord = await fs.readFile(statePath, "utf8");
+  assert.notEqual(contentsAfterRecord, contentsBeforeReads);
+});

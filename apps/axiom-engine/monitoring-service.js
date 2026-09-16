@@ -52,21 +52,23 @@ class MonitoringService {
     return this.withState(async (state) => state.latest || {
       status: "not-yet-sampled",
       attention: []
-    });
+    }, { persist: false });
   }
 
   async history(limit = 20) {
     if (!Number.isInteger(limit) || limit < 1 || limit > 100) {
       throw new RangeError("limit must be an integer between 1 and 100");
     }
-    return this.withState(async (state) => state.history.slice(-limit).reverse());
+    return this.withState(async (state) => state.history.slice(-limit).reverse(), { persist: false });
   }
 
-  async withState(operation) {
+  async withState(operation, { persist = true } = {}) {
     const queuedOperation = this.operationQueue.then(async () => {
       const state = await this.readState();
       const result = await operation(state);
-      await this.writeState(state);
+      if (persist) {
+        await this.writeState(state);
+      }
       return result;
     });
     this.operationQueue = queuedOperation.catch(() => {});
