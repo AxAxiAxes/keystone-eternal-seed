@@ -27,6 +27,17 @@ const {
 } = require("./automation-service");
 const app = express();
 const ADMIN_PASSWORD = process.env.AXIOM_ENGINE_ADMIN_PASSWORD;
+// Raw source-file uploads are capped and admin-authenticated (see the
+// requireAdmin route below): 5 MB is a safe default for the intended use
+// (documents, small media, datasets) on a small Railway instance disk;
+// override via AXIOM_SOURCE_UPLOAD_MAX_BYTES if a larger cap is needed.
+const DEFAULT_SOURCE_UPLOAD_MAX_BYTES = 5 * 1024 * 1024;
+const SOURCE_UPLOAD_MAX_BYTES = (() => {
+  const configured = Number(process.env.AXIOM_SOURCE_UPLOAD_MAX_BYTES);
+  return Number.isInteger(configured) && configured > 0
+    ? configured
+    : DEFAULT_SOURCE_UPLOAD_MAX_BYTES;
+})();
 
 // All state-mutating AXIOM engine routes (automation profiles, checkpoints,
 // backups, coordinates, bead passports, memory writes, etc.) must require
@@ -109,7 +120,7 @@ app.get("/system/source-catalog/entries", async (req, res, next) => {
 // reverse-engineer the schema. sourceType is a metadata classification, not
 // a file-extension allowlist -- every kind of file is representable.
 app.get("/system/source-catalog/options", (req, res) => {
-  res.json(sourceCatalogDescribeOptions());
+  res.json(sourceCatalogDescribeOptions({ maxUploadBytes: SOURCE_UPLOAD_MAX_BYTES }));
 });
 app.get("/system/business-metrics", async (req, res, next) => {
   try {
@@ -715,6 +726,36 @@ app.post("/automation/tasks", requireAdmin, async (req, res, next) => {
   }
 });
 
+// Stores raw file bytes for later cataloging: admin-authenticated, size
+// capped (AXIOM_SOURCE_UPLOAD_MAX_BYTES, default 5 MB), and written only to
+// this instance's own local data directory -- never the git repository and
+// never an external/cloud store. This route only persists bytes and reports
+// their sha256; it does not create a source-catalog entry. Filing the
+// returned sourceReference still requires an approved source.catalog
+// automation task, preserving the existing operator-approval boundary while
+// adding real storage of the uploaded content.
+app.post(
+  "/system/source-catalog/uploads",
+  requireAdmin,
+  express.raw({ type: () => true, limit: SOURCE_UPLOAD_MAX_BYTES }),
+  async (req, res, next) => {
+    try {
+      if (!Buffer.isBuffer(req.body) || req.body.length === 0) {
+        res.status(400).json({ error: "request body must be a non-empty file upload" });
+        return;
+      }
+      const filenameHeader = req.headers["x-source-filename"];
+      const stored = await sourceCatalogService.storeUpload({
+        buffer: req.body,
+        filename: typeof filenameHeader === "string" ? filenameHeader : null
+      });
+      res.status(201).json(stored);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 app.post("/automation/tasks/:taskId/approval", requireAdmin, async (req, res, next) => {
   try {
     res.json(await automationService.reviewTaskApproval(
@@ -827,6 +868,12 @@ app.post("/axiom", requireAdmin, async (req, res, next) => {
 app.use((error, req, res, next) => {
   if (error instanceof SyntaxError) {
     res.status(400).json({ error: "Invalid JSON request" });
+    return;
+  }
+  if (error.type === "entity.too.large" || error.status === 413) {
+    res.status(413).json({
+      error: `uploaded file exceeds the maximum allowed size of ${SOURCE_UPLOAD_MAX_BYTES} bytes`
+    });
     return;
   }
   if (

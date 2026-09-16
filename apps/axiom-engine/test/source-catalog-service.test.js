@@ -104,10 +104,56 @@ test("rejects unsafe entries and preserves malformed catalog history", async (t)
 });
 
 test("describes every supported sourceType/classification option and field constraint", () => {
-  const options = describeOptions();
+  const options = describeOptions({ maxUploadBytes: 5 * 1024 * 1024 });
   assert.deepEqual(new Set(options.sourceTypes), SOURCE_TYPES);
   assert.deepEqual(new Set(options.classifications), CLASSIFICATIONS);
   assert.equal(options.reviewStatus, "operator-approved");
   assert.ok(options.fields.sourceReference.includes(".."));
-  assert.ok(options.notes.some((note) => note.includes("does not read, copy, upload")));
+  assert.equal(options.upload.route, "POST /system/source-catalog/uploads");
+  assert.equal(options.upload.auth, "admin (HTTP Basic)");
+  assert.equal(options.upload.maxBytes, 5 * 1024 * 1024);
+  assert.ok(options.notes.some((note) => note.includes("operator approval")));
+});
+
+test("stores uploaded file bytes locally and returns a computed sha256 sourceReference", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-source-catalog-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new SourceCatalogService({ directory });
+
+  const buffer = Buffer.from("hello uploaded world");
+  const stored = await service.storeUpload({ buffer, filename: "report.PDF" });
+
+  assert.match(stored.sourceReference, /^uploads\/[0-9a-f-]{36}\.pdf$/);
+  assert.equal(stored.size, buffer.length);
+  assert.equal(
+    stored.sha256,
+    require("node:crypto").createHash("sha256").update(buffer).digest("hex")
+  );
+  assert.equal(stored.originalFilename, "report.PDF");
+
+  const storedBytes = await fs.readFile(path.join(directory, stored.sourceReference));
+  assert.deepEqual(storedBytes, buffer);
+});
+
+test("sanitizes a malicious upload filename to only a safe extension", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-source-catalog-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new SourceCatalogService({ directory });
+
+  const stored = await service.storeUpload({
+    buffer: Buffer.from("payload"),
+    filename: "../../../etc/passwd.sh"
+  });
+  assert.match(stored.sourceReference, /^uploads\/[0-9a-f-]{36}\.sh$/);
+
+  const noExtension = await service.storeUpload({
+    buffer: Buffer.from("payload"),
+    filename: "no-extension-name"
+  });
+  assert.match(noExtension.sourceReference, /^uploads\/[0-9a-f-]{36}$/);
+
+  await assert.rejects(
+    () => service.storeUpload({ buffer: Buffer.alloc(0), filename: "empty.txt" }),
+    /uploaded file must be a non-empty buffer/
+  );
 });

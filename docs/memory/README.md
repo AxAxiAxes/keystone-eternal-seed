@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-15 Raw source-file upload capability (founder-authorized)](2026-09-15-raw-source-upload-capability.md)
 - [2026-09-15 AXI document filing + source-catalog/automation options discovery](2026-09-15-document-filing-and-intake-options-discovery.md)
 - [2026-09-15 AXI automation scheduler: readiness check ("can AXI be automated?")](2026-09-15-axi-automation-scheduler-readiness-check.md)
 - [2026-09-15 CI-gated auto-merge configured; all stale `main`-targeted PRs closed](2026-09-15-ci-gated-auto-merge-and-stale-pr-closure.md)
@@ -55,6 +56,11 @@ without re-deriving it:
   the approval-gated pipeline; two new read-only discovery endpoints ship
   every option over the API; raw file-byte upload intentionally NOT built —
   it would reverse a documented safety boundary and needs founder sign-off)
+  → [`2026-09-15-raw-source-upload-capability.md`](2026-09-15-raw-source-upload-capability.md)
+  (founder said "yes" — raw upload **shipped**: admin-authenticated,
+  5 MB-capped, local-disk-only; cataloging still requires operator approval;
+  uploaded bytes are NOT yet covered by backup/recovery — documented as a
+  known gap, not silently assumed safe)
 - **Why are there so many open PRs / duplicate "remove duplicate files"
   PRs / PRs that won't merge into the real branch / is the automation fixed
   yet / are merges automated now** →
@@ -76,6 +82,7 @@ on startup, not because any individual conversation is remembered.
 
 ## Full chronological index (newest first)
 
+- [2026-09-15 Raw source-file upload capability (founder-authorized)](2026-09-15-raw-source-upload-capability.md)
 - [2026-09-15 AXI document filing + source-catalog/automation options discovery](2026-09-15-document-filing-and-intake-options-discovery.md)
 - [2026-09-15 AXI automation scheduler: readiness check ("can AXI be automated?")](2026-09-15-axi-automation-scheduler-readiness-check.md)
 - [2026-09-15 CI-gated auto-merge configured; all stale `main`-targeted PRs closed](2026-09-15-ci-gated-auto-merge-and-stale-pr-closure.md)

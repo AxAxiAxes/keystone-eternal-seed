@@ -114,6 +114,59 @@ test("exposes source-catalog options as a read-only discovery route", async (t) 
   assert.ok(body.sourceTypes.includes("other"));
   assert.ok(body.classifications.includes("restricted"));
   assert.equal(body.reviewStatus, "operator-approved");
+  assert.equal(body.upload.route, "POST /system/source-catalog/uploads");
+  assert.equal(body.upload.maxBytes, 5 * 1024 * 1024);
+});
+
+test("stores an uploaded file's bytes locally and requires admin credentials", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const fileBytes = Buffer.from("a small uploaded test file");
+
+  const unauthenticated = await nativeFetch(`http://127.0.0.1:${port}/system/source-catalog/uploads`, {
+    method: "POST",
+    headers: { "Content-Type": "application/octet-stream" },
+    body: fileBytes
+  });
+  assert.equal(unauthenticated.status, 401);
+
+  const response = await fetch(`http://127.0.0.1:${port}/system/source-catalog/uploads`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/octet-stream",
+      "X-Source-Filename": "notes.txt"
+    },
+    body: fileBytes
+  });
+  assert.equal(response.status, 201);
+  const body = await response.json();
+  assert.match(body.sourceReference, /^uploads\/[0-9a-f-]{36}\.txt$/);
+  assert.equal(body.size, fileBytes.length);
+  assert.equal(
+    body.sha256,
+    require("node:crypto").createHash("sha256").update(fileBytes).digest("hex")
+  );
+
+  const storedBytes = await fs.readFile(path.join(memoryDirectory, body.sourceReference));
+  assert.deepEqual(storedBytes, fileBytes);
+});
+
+test("rejects uploads larger than the configured maximum size", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const oversized = Buffer.alloc(5 * 1024 * 1024 + 1, 1);
+  const response = await fetch(`http://127.0.0.1:${port}/system/source-catalog/uploads`, {
+    method: "POST",
+    headers: { "Content-Type": "application/octet-stream" },
+    body: oversized
+  });
+  assert.equal(response.status, 413);
+  const body = await response.json();
+  assert.match(body.error, /exceeds the maximum allowed size/);
 });
 
 test("processes an AXIOM command", async (t) => {
