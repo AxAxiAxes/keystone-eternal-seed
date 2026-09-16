@@ -114,6 +114,16 @@
             border-radius: 12px;
             overflow: hidden;
             backdrop-filter: blur(10px);
+            transition: flex 0.2s ease;
+        }
+
+        .chat-container.minimized {
+            flex: 0 0 auto;
+        }
+
+        .chat-container.minimized .messages,
+        .chat-container.minimized .input-area {
+            display: none;
         }
 
         .chat-header {
@@ -121,6 +131,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding: 1rem;
             text-align: center;
+            position: relative;
         }
 
         .chat-header h2 {
@@ -132,6 +143,21 @@
             font-size: 0.8rem;
             color: #7b2cbf;
             margin-top: 0.25rem;
+        }
+
+        #minimizeButton {
+            position: absolute;
+            top: 0.6rem;
+            right: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #00d4ff;
+            width: 1.75rem;
+            height: 1.75rem;
+            padding: 0;
+            line-height: 1;
+            border-radius: 6px;
+            font-size: 1rem;
         }
 
         .messages {
@@ -403,10 +429,11 @@
             <div class="status-badge">● LIVE</div>
         </div>
 
-        <div class="chat-container">
+        <div class="chat-container" id="chatContainer">
             <div class="chat-header">
                 <h2>Chat with AXIOM</h2>
                 <p>Constitutional Intelligence · Real-time Reasoning</p>
+                <button id="minimizeButton" type="button" title="Minimize the chat window">–</button>
             </div>
 
             <div class="messages" id="messages">
@@ -606,7 +633,24 @@
             if (file) uploadAttachment(file);
         });
 
-        // Load continuous conversation history, then focus input.
+        // Minimize/restore the chat window. State is remembered per-browser
+        // (not per-session) so a visitor's preference persists across visits;
+        // the messages panel keeps its own scrollbar either way.
+        const chatContainer = document.getElementById('chatContainer');
+        const minimizeButton = document.getElementById('minimizeButton');
+        function setMinimized(minimized) {
+            chatContainer.classList.toggle('minimized', minimized);
+            minimizeButton.textContent = minimized ? '+' : '–';
+            minimizeButton.title = minimized ? 'Restore the chat window' : 'Minimize the chat window';
+            try { localStorage.setItem('axiomChatMinimized', minimized ? '1' : '0'); } catch (error) { /* storage unavailable */ }
+        }
+        minimizeButton.addEventListener('click', () => {
+            setMinimized(!chatContainer.classList.contains('minimized'));
+        });
+        try {
+            if (localStorage.getItem('axiomChatMinimized') === '1') setMinimized(true);
+        } catch (error) { /* storage unavailable */ }
+
         loadHistory().finally(() => document.getElementById('messageInput').focus());
     </script>
 </body>

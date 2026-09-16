@@ -1168,7 +1168,7 @@ test("GET /api/axiom/history surfaces public chat entries and filters out agent 
     os.tmpdir(),
     `axiom-freedom-history-test-${process.pid}`
   );
-  t.after(() => fs.rm(localMemoryDirectory, { recursive: true, force: true }));
+  t.after(() => fs.rm(localMemoryDirectory, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }));
 
   let engineServer;
   let webServer;
@@ -1266,7 +1266,7 @@ test("POST /api/axiom/uploads requires admin credentials and forwards accepted u
     os.tmpdir(),
     `axiom-freedom-uploads-test-${process.pid}`
   );
-  t.after(() => fs.rm(localMemoryDirectory, { recursive: true, force: true }));
+  t.after(() => fs.rm(localMemoryDirectory, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }));
 
   let engineServer;
   let webServer;
@@ -1334,7 +1334,7 @@ test("POST /api/axiom/uploads rejects oversized files with 413 and passes throug
     os.tmpdir(),
     `axiom-freedom-uploads-oversize-test-${process.pid}`
   );
-  t.after(() => fs.rm(localMemoryDirectory, { recursive: true, force: true }));
+  t.after(() => fs.rm(localMemoryDirectory, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }));
 
   let engineServer;
   let webServer;
@@ -1390,5 +1390,38 @@ test("POST /api/axiom/uploads rejects oversized files with 413 and passes throug
     delete process.env.ADMIN_PASSWORD;
     delete process.env.AXIOM_MAX_UPLOAD_BODY_BYTES;
     process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
+  }
+});
+
+test("GET /workspace requires admin credentials and serves the workspace library page once authenticated", async () => {
+  let webServer;
+  try {
+    process.env.AXIOM_ENGINE_URL = "http://127.0.0.1:1";
+    process.env.ADMIN_PASSWORD = "test-admin-password";
+    delete require.cache[require.resolve("../server")];
+    const web = require("../server");
+    webServer = await startServer(web);
+    const { port: webPort } = webServer.address();
+
+    const unauthorized = await fetch(`http://127.0.0.1:${webPort}/workspace`);
+    assert.equal(unauthorized.status, 401);
+
+    const authorized = await fetch(`http://127.0.0.1:${webPort}/workspace`, {
+      headers: { Authorization: adminAuthorization() }
+    });
+    assert.equal(authorized.status, 200);
+    const body = await authorized.text();
+    assert.match(body, /AXI Workspace Library/);
+
+    const withTrailingSlash = await fetch(`http://127.0.0.1:${webPort}/workspace/`, {
+      headers: { Authorization: adminAuthorization() }
+    });
+    assert.equal(withTrailingSlash.status, 200);
+  } finally {
+    if (webServer) {
+      await stopServer(webServer);
+    }
+    delete process.env.AXIOM_ENGINE_URL;
+    delete process.env.ADMIN_PASSWORD;
   }
 });

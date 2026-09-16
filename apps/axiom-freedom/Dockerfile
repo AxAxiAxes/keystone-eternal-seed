@@ -15,6 +15,7 @@ COPY apps/axiom-freedom/automation.html ./
 COPY apps/axiom-freedom/command-center.html ./
 COPY apps/axiom-freedom/origin-continuity.html ./
 COPY apps/axiom-freedom/support.html ./
+COPY apps/axiom-freedom/workspace.html ./
 COPY apps/axiom-freedom/materials.html ./
 COPY apps/axiom-freedom/design-desk.html ./
 COPY apps/axiom-freedom/widget.js ./
