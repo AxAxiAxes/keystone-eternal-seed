@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-15 Public AXIOM chat: continuous history, day-timeline, and gated uploads](2026-09-15-public-chat-timeline-and-uploads.md)
 - [2026-09-15 Founder-approved GitHub write access (comment, open PR, merge PR)](2026-09-15-github-write-access-founder-approved.md)
 - [2026-09-15 AXI GitHub access: read-only visibility shipped, write access declined](2026-09-15-github-read-only-access-and-image-capability.md)
 - [2026-09-15 Raw source-file upload capability (founder-authorized)](2026-09-15-raw-source-upload-capability.md)
@@ -74,6 +75,13 @@ without re-deriving it:
   5 MB-capped, local-disk-only; cataloging still requires operator approval;
   uploaded bytes are NOT yet covered by backup/recovery — documented as a
   known gap, not silently assumed safe)
+- **Update the AXIOM chat interface with history/timeline/uploads /
+  "docs and images"** →
+  [`2026-09-15-public-chat-timeline-and-uploads.md`](2026-09-15-public-chat-timeline-and-uploads.md)
+  (**shipped**: continuous chat history restored on page load, day-grouped
+  timeline with a titled per-day summary and per-message timestamps, an
+  attach button for documents/images. Uploads remain admin-password-gated
+  even on the otherwise-public page — anonymous visitors cannot use it)
 - **Why are there so many open PRs / duplicate "remove duplicate files"
   PRs / PRs that won't merge into the real branch / is the automation fixed
   yet / are merges automated now** →
@@ -95,6 +103,7 @@ on startup, not because any individual conversation is remembered.
 
 ## Full chronological index (newest first)
 
+- [2026-09-15 Public AXIOM chat: continuous history, day-timeline, and gated uploads](2026-09-15-public-chat-timeline-and-uploads.md)
 - [2026-09-15 Founder-approved GitHub write access (comment, open PR, merge PR)](2026-09-15-github-write-access-founder-approved.md)
 - [2026-09-15 AXI GitHub access: read-only visibility shipped, write access declined](2026-09-15-github-read-only-access-and-image-capability.md)
 - [2026-09-15 Raw source-file upload capability (founder-authorized)](2026-09-15-raw-source-upload-capability.md)

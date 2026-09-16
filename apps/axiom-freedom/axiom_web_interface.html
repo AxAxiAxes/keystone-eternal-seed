@@ -143,6 +143,39 @@
             gap: 1rem;
         }
 
+        .day-divider {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0.5rem 0;
+        }
+
+        .day-divider::before,
+        .day-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .day-divider .day-label {
+            flex-shrink: 0;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #00d4ff;
+            letter-spacing: 0.05em;
+        }
+
+        .day-divider .day-label strong {
+            display: block;
+            font-size: 0.85rem;
+            color: #e0e0e0;
+        }
+
+        .day-divider .day-label span {
+            color: #7b2cbf;
+        }
+
         .message {
             animation: slideIn 0.3s ease-out;
         }
@@ -163,7 +196,8 @@
             max-width: 70%;
         }
 
-        .message.axiom {
+        .message.axiom,
+        .message.system {
             align-self: flex-start;
             max-width: 70%;
         }
@@ -173,6 +207,17 @@
             border-radius: 8px;
             font-size: 0.9rem;
             line-height: 1.5;
+        }
+
+        .message-timestamp {
+            font-size: 0.7rem;
+            color: #606060;
+            margin-top: 0.25rem;
+            padding: 0 0.25rem;
+        }
+
+        .message.user .message-timestamp {
+            text-align: right;
         }
 
         .message.user .message-content {
@@ -186,12 +231,27 @@
             color: #e0e0e0;
         }
 
+        .message.system .message-content {
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px dashed rgba(0, 212, 255, 0.3);
+            color: #a0d8ea;
+            font-size: 0.8rem;
+        }
+
+        .placeholder {
+            color: #606060;
+            font-size: 0.85rem;
+            text-align: center;
+            padding: 1rem;
+        }
+
         .input-area {
             background: rgba(10, 14, 39, 0.8);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding: 1rem;
             display: flex;
             gap: 0.5rem;
+            align-items: center;
         }
 
         input[type="text"] {
@@ -214,6 +274,22 @@
 
         input[type="text"]::placeholder {
             color: #606060;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        #attachButton {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #00d4ff;
+            padding: 0.75rem 0.9rem;
+        }
+
+        #attachButton:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0, 212, 255, 0.5);
         }
 
         button {
@@ -333,22 +409,20 @@
                 <p>Constitutional Intelligence · Real-time Reasoning</p>
             </div>
 
-            <div class="messages">
-                <div class="message axiom">
-                    <div class="message-content">
-                        I am AXIOM. I'm here to help you think through complex problems, generate creative solutions, and explore ideas with depth and authenticity. What's on your mind?
-                    </div>
-                </div>
+            <div class="messages" id="messages">
+                <div class="placeholder" id="historyStatus">Loading conversation history…</div>
             </div>
 
             <div class="input-area">
+                <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt,.md,.csv,.json,.png,.jpg,.jpeg,.gif,.webp">
+                <button id="attachButton" type="button" title="Attach a document or image (admin sign-in required)">📎</button>
                 <input 
                     type="text" 
                     id="messageInput" 
                     placeholder="Ask me anything... (Press Enter to send)"
                     onkeypress="if(event.key==='Enter') sendMessage()"
                 >
-                <button onclick="sendMessage()">Send</button>
+                <button id="sendButton" onclick="sendMessage()">Send</button>
             </div>
         </div>
     </div>
@@ -361,6 +435,93 @@
     </footer>
 
     <script>
+        const WELCOME_TEXT = "I am AXIOM. I'm here to help you think through complex problems, generate creative solutions, and explore ideas with depth and authenticity. What's on your mind?";
+        let lastRenderedDayKey = null;
+
+        function dayKey(date) {
+            return date.toISOString().slice(0, 10);
+        }
+
+        function formatDayLabel(date, entriesForDay) {
+            const weekday = date.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+            if (!entriesForDay) {
+                return { weekday, summary: 'Live conversation' };
+            }
+            const count = entriesForDay.length;
+            // "Titled summary": use the first user message of the day, truncated,
+            // as a lightweight at-a-glance topic label for that day's timeline
+            // section, alongside the message count.
+            const firstUserMessage = entriesForDay.find(entry => entry.role === 'user');
+            const topic = firstUserMessage
+                ? firstUserMessage.text.slice(0, 60) + (firstUserMessage.text.length > 60 ? '…' : '')
+                : null;
+            const summary = topic
+                ? `${topic} · ${count} message${count === 1 ? '' : 's'}`
+                : `${count} message${count === 1 ? '' : 's'}`;
+            return { weekday, summary };
+        }
+
+        function renderDayDividerIfNeeded(date, entriesForDay) {
+            const key = dayKey(date);
+            if (key === lastRenderedDayKey) return;
+            lastRenderedDayKey = key;
+            const { weekday, summary } = formatDayLabel(date, entriesForDay);
+            const messagesDiv = document.getElementById('messages');
+            const divider = document.createElement('div');
+            divider.className = 'day-divider';
+            divider.innerHTML = `<div class="day-label"><strong>${escapeHtml(weekday)}</strong><span>${escapeHtml(summary)}</span></div>`;
+            messagesDiv.appendChild(divider);
+        }
+
+        function formatTimestamp(date) {
+            return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+        }
+
+        function groupByDay(entries) {
+            const groups = new Map();
+            for (const entry of entries) {
+                const key = dayKey(entry.date);
+                if (!groups.has(key)) groups.set(key, []);
+                groups.get(key).push(entry);
+            }
+            return groups;
+        }
+
+        async function loadHistory() {
+            const messagesDiv = document.getElementById('messages');
+            try {
+                const response = await fetch('/api/axiom/history?limit=100');
+                const entries = response.ok ? await response.json() : [];
+                messagesDiv.innerHTML = '';
+                lastRenderedDayKey = null;
+
+                if (!Array.isArray(entries) || entries.length === 0) {
+                    addMessage(WELCOME_TEXT, 'axiom', new Date());
+                    return;
+                }
+
+                const chronological = entries
+                    .map(entry => ({
+                        text: entry.content,
+                        role: entry.metadata?.role === 'assistant' ? 'axiom' : 'user',
+                        date: new Date(entry.recordedAt)
+                    }))
+                    .filter(entry => typeof entry.text === 'string' && !Number.isNaN(entry.date.getTime()))
+                    .sort((a, b) => a.date - b.date);
+
+                const groups = groupByDay(chronological);
+                for (const entry of chronological) {
+                    renderDayDividerIfNeeded(entry.date, groups.get(dayKey(entry.date)));
+                    addMessage(entry.text, entry.role, entry.date, { skipDayDivider: true });
+                }
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            } catch (error) {
+                messagesDiv.innerHTML = '';
+                lastRenderedDayKey = null;
+                addMessage(WELCOME_TEXT, 'axiom', new Date());
+            }
+        }
+
         function sendMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
@@ -368,7 +529,7 @@
             if (!message) return;
 
             // Add user message to chat
-            addMessage(message, 'user');
+            addMessage(message, 'user', new Date());
             input.value = '';
 
             fetch('/api/axiom', {
@@ -383,15 +544,44 @@
                     }
                     return payload;
                 })
-                .then(response => addMessage(response.reply || 'AXIOM could not process your message.', 'axiom'))
-                .catch(error => addMessage(error.message, 'axiom'));
+                .then(response => addMessage(response.reply || 'AXIOM could not process your message.', 'axiom', new Date()))
+                .catch(error => addMessage(error.message, 'axiom', new Date()));
         }
 
-        function addMessage(text, sender) {
-            const messagesDiv = document.querySelector('.messages');
+        function uploadAttachment(file) {
+            addMessage(`Uploading ${file.name}…`, 'system', new Date());
+            return fetch('/api/axiom/uploads', {
+                method: 'POST',
+                headers: { 'X-Source-Filename': file.name },
+                body: file
+            })
+                .then(async response => {
+                    const payload = await response.json().catch(() => ({}));
+                    if (!response.ok) {
+                        throw new Error(payload.error || 'Upload failed');
+                    }
+                    return payload;
+                })
+                .then(result => {
+                    const sizeKb = (result.size ? (result.size / 1024).toFixed(1) : '?');
+                    addMessage(
+                        `📎 Stored "${file.name}" (${sizeKb} KB, sha256 ${String(result.sha256 || '').slice(0, 12)}…). Still requires a separate cataloging approval before AXIOM uses it as a memory source.`,
+                        'system',
+                        new Date()
+                    );
+                })
+                .catch(error => addMessage(`Could not upload "${file.name}": ${error.message}`, 'system', new Date()));
+        }
+
+        function addMessage(text, sender, date, options = {}) {
+            const messagesDiv = document.getElementById('messages');
+            const when = date instanceof Date ? date : new Date();
+            if (!options.skipDayDivider) {
+                renderDayDividerIfNeeded(when, null);
+            }
             const messageEl = document.createElement('div');
             messageEl.className = `message ${sender}`;
-            messageEl.innerHTML = `<div class="message-content">${escapeHtml(text)}</div>`;
+            messageEl.innerHTML = `<div class="message-content">${escapeHtml(text)}</div><div class="message-timestamp">${escapeHtml(formatTimestamp(when))}</div>`;
             messagesDiv.appendChild(messageEl);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
@@ -404,11 +594,21 @@
                 '"': '&quot;',
                 "'": '&#039;'
             };
-            return text.replace(/[&<>"']/g, m => map[m]);
+            return String(text).replace(/[&<>"']/g, m => map[m]);
         }
 
-        // Focus input on load
-        document.getElementById('messageInput').focus();
+        document.getElementById('attachButton').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+        document.getElementById('fileInput').addEventListener('change', (event) => {
+            const file = event.target.files && event.target.files[0];
+            event.target.value = '';
+            if (file) uploadAttachment(file);
+        });
+
+        // Load continuous conversation history, then focus input.
+        loadHistory().finally(() => document.getElementById('messageInput').focus());
     </script>
 </body>
 </html>
+
