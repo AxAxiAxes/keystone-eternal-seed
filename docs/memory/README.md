@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-15 CI-gated auto-merge configured; all stale `main`-targeted PRs closed](2026-09-15-ci-gated-auto-merge-and-stale-pr-closure.md)
 - [2026-09-15 AXIOM chat persistent memory: confirmed already implemented (PR #73)](2026-09-15-axiom-chat-memory-already-implemented.md)
 - [2026-09-15 Plan-mode guardrail verified working (PR #70)](2026-09-15-plan-mode-guardrail-verified-working.md)
 - [2026-09-15 Automation governance fix: plan-mode gate and base-branch guardrails](2026-09-15-automation-governance-plan-mode-fix.md)
@@ -43,14 +44,18 @@ without re-deriving it:
   [`2026-09-12-agent-timeline-and-transcript-review.md`](2026-09-12-agent-timeline-and-transcript-review.md))
 - **Why are there so many open PRs / duplicate "remove duplicate files"
   PRs / PRs that won't merge into the real branch / is the automation fixed
-  yet** →
+  yet / are merges automated now** →
   [`2026-09-14-duplicate-automation-and-stale-branch-prs.md`](2026-09-14-duplicate-automation-and-stale-branch-prs.md)
   (original finding) →
   [`2026-09-15-automation-governance-plan-mode-fix.md`](2026-09-15-automation-governance-plan-mode-fix.md)
   (mitigation applied) →
   [`2026-09-15-plan-mode-guardrail-verified-working.md`](2026-09-15-plan-mode-guardrail-verified-working.md)
-  (fix confirmed working; 17 legacy PRs + cached project setting still need
-  a founder decision)
+  (fix confirmed working) →
+  [`2026-09-15-ci-gated-auto-merge-and-stale-pr-closure.md`](2026-09-15-ci-gated-auto-merge-and-stale-pr-closure.md)
+  (**resolved**: branch protection + CI-gated auto-merge live on
+  `axaxiaxes-axiom-monorepo`; all 17 legacy stale PRs closed or merged;
+  0 open PRs remain; cached project `default_branch` setting still stale
+  but no longer load-bearing)
 
 This is a repository-based safeguard, not a claim of cross-session chat
 memory: it works because every session is already required to read this file
@@ -58,6 +63,7 @@ on startup, not because any individual conversation is remembered.
 
 ## Full chronological index (newest first)
 
+- [2026-09-15 CI-gated auto-merge configured; all stale `main`-targeted PRs closed](2026-09-15-ci-gated-auto-merge-and-stale-pr-closure.md)
 - [2026-09-15 Plan-mode guardrail verified working (PR #70)](2026-09-15-plan-mode-guardrail-verified-working.md)
 - [2026-09-15 Automation governance fix: plan-mode gate and base-branch guardrails](2026-09-15-automation-governance-plan-mode-fix.md)
 - [2026-09-15 Continuity check: remaining automation still targets stale `main`](2026-09-15-continuity-check-and-remaining-automation-still-targets-main.md)
