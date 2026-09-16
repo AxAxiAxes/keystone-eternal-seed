@@ -53,6 +53,30 @@ This confirms the scheduler's code path is functionally sound and safe to
 enable *when a founder decides to*. It does not change the current
 production or repository-template state.
 
+## Follow-up: live end-to-end task execution verified
+
+Founder asked "can we automate tasks now?" as a direct follow-up. Rather than
+answer from tests alone, ran a real local instance of `apps/axiom-engine`
+(isolated temp data directory, local-only admin password, not the production
+service) and drove the actual HTTP API:
+
+1. `POST /automation/tasks` with `action: "automation.noop"`,
+   `agentId: "automation-executor"` → created task, `status: "pending"`.
+2. `POST /automation/process` (the manual trigger documented as "always
+   available from the private network" regardless of the scheduler flag) →
+   returned `{"status": "completed", "runId": "..."}`.
+
+This confirms task creation, agent assignment, allowlist-gated execution,
+and audit-run recording all work end-to-end today, on demand, without
+needing `AXIOM_AUTOMATION_ENABLED=true`. The temp instance and its data
+directory were torn down immediately after; nothing was left running, and no
+production service, credential, or environment variable was touched.
+
+**Answer to "can we automate tasks now?":** Yes — on-demand, admin-triggered
+task automation works right now, verified live. What is *not* available yet
+is unattended/recurring automation (the scheduler polling on its own), which
+still needs the founder/Railway-side activation sequence described below.
+
 ## What was not done, and why
 
 - Did **not** flip `AXIOM_AUTOMATION_ENABLED` (or `AXIOM_MONITORING_ENABLED`)
