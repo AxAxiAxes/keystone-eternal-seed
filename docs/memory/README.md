@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-15 AXI document filing + source-catalog/automation options discovery](2026-09-15-document-filing-and-intake-options-discovery.md)
 - [2026-09-15 AXI automation scheduler: readiness check ("can AXI be automated?")](2026-09-15-axi-automation-scheduler-readiness-check.md)
 - [2026-09-15 CI-gated auto-merge configured; all stale `main`-targeted PRs closed](2026-09-15-ci-gated-auto-merge-and-stale-pr-closure.md)
 - [2026-09-15 AXIOM chat persistent memory: confirmed already implemented (PR #73)](2026-09-15-axiom-chat-memory-already-implemented.md)
@@ -47,6 +48,13 @@ without re-deriving it:
   [`2026-09-15-axi-automation-scheduler-readiness-check.md`](2026-09-15-axi-automation-scheduler-readiness-check.md)
   (code verified working, 26/26 tests; still off by design — enabling it is a
   founder/Railway decision, not a repository change)
+- **Can we send AXI documents to review and file in his memory / can intake
+  handle all file types** →
+  [`2026-09-15-document-filing-and-intake-options-discovery.md`](2026-09-15-document-filing-and-intake-options-discovery.md)
+  (live-verified: reference-by-path + hash + summary note works today via
+  the approval-gated pipeline; two new read-only discovery endpoints ship
+  every option over the API; raw file-byte upload intentionally NOT built —
+  it would reverse a documented safety boundary and needs founder sign-off)
 - **Why are there so many open PRs / duplicate "remove duplicate files"
   PRs / PRs that won't merge into the real branch / is the automation fixed
   yet / are merges automated now** →
@@ -68,6 +76,7 @@ on startup, not because any individual conversation is remembered.
 
 ## Full chronological index (newest first)
 
+- [2026-09-15 AXI document filing + source-catalog/automation options discovery](2026-09-15-document-filing-and-intake-options-discovery.md)
 - [2026-09-15 AXI automation scheduler: readiness check ("can AXI be automated?")](2026-09-15-axi-automation-scheduler-readiness-check.md)
 - [2026-09-15 CI-gated auto-merge configured; all stale `main`-targeted PRs closed](2026-09-15-ci-gated-auto-merge-and-stale-pr-closure.md)
 - [2026-09-15 Plan-mode guardrail verified working (PR #70)](2026-09-15-plan-mode-guardrail-verified-working.md)
