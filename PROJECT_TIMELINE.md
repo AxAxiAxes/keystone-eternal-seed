@@ -1,6 +1,6 @@
 # AXIOM / KEYSTONE project timeline
 
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-17
 **Current phase:** Tier 1 internal readiness controls and business-operations foundation complete; CI-gated auto-merge now live on the canonical branch; founder-controlled activation and external/production readiness remain pending
 
 Update this document when a milestone changes state. A checked item is complete;
@@ -13,6 +13,7 @@ second line is parsed as separate text and is dropped from the field.
 
 | Date | Status | Milestone | Evidence |
 | --- | --- | --- | --- |
+| 2026-09-17 | Complete | Analyzed a 560-line founder-relayed external AI conversation proposing an "AXIOM automation architecture" (Task Spine, Skill Library, Task Router, Site Builder Protocol, Memory Engine, Safety Constitution). Found most of it already built under different names (task/agent system, capability allowlist, governance docs, task history) and added all 10 items as monitored checkpoints on the live Command Center dashboard, flagging two (Site Builder Protocol, self-updating Growth Loop) as needing an explicit founder scoping decision before any build | `docs/memory/2026-09-17-external-automation-proposal-mapped-to-repo.md`, `PROJECT_TIMELINE.md` |
 | 2026-09-16 | Complete | Answered "which docs can I upload" (pdf/doc/docx/txt/md/csv/json/png/jpg/gif/webp, 5MB cap) and clarified uploads require admin sign-in; improved the chat widget's upload error message for a 401; added a visible ticking live clock to the chat header and expanded AXI's chat instructions to explain its continuous timestamped memory recording concept | `docs/memory/2026-09-16-upload-clarity-and-live-clock.md`, `apps/axiom-freedom/axiom_web_interface.html`, `apps/axiom-engine/chat-service.js` |
 | 2026-09-16 | Complete | Fixed a real privacy bug: the public AXI chat's memory log and history endpoint had no per-visitor scoping, so any visitor could read every other visitor's chat history. Added an anonymous, private per-browser session cookie; scoped chat context/recording/history to it. `apps/axiom-engine` 118/118, `apps/axiom-freedom` 14/14 passing | `docs/AXI_CHAT_PRIVACY.md`, `docs/memory/2026-09-16-chat-session-privacy-fix.md` |
 | 2026-09-16 | Complete | Fixed AXIOM public chat giving a hallucinated, stale date ("June 14, 2024") when asked "what's today's date" — root cause: `chat-service.js` never told the model the actual current date/time, so it guessed from training-data cutoff. Injected a live ISO timestamp plus explicit guidance not to guess into every chat request's instructions, via a testable `now` dependency. `apps/axiom-engine` suite: 115/115 passing (1 new test) | `docs/memory/2026-09-16-chat-date-hallucination-fix.md`, `apps/axiom-engine/chat-service.js` |
@@ -297,7 +298,54 @@ second line is parsed as separate text and is dropped from the field.
 - [ ] Connect the Railway `axiom-web` service to `axescontracting.com` through SiteGround DNS.
 - [ ] Obtain written legal guidance that defines URNUR's permitted first-release scope before any market data, financial simulation, exchange connectivity, token, custody, payment, or automated-trading implementation.
 
-## AXES OS migration track
+### AXIOM automation architecture roadmap (from founder-relayed external AI proposal, 2026-09-17)
+
+An external AI conversation the founder relayed proposed six pieces for
+"automating AXIOM": a Task Spine, a Skill Library, a Task Router, a Site
+Builder Protocol, a Memory Engine, and a Safety Constitution, plus two small
+runtime items (a named startup sequence and a friendly status report). This
+maps that proposal against what already exists in this repository. See
+`docs/memory/2026-09-17-external-automation-proposal-mapped-to-repo.md` for
+the full analysis.
+
+- [x] **Task Spine** — agent registration, capability-matched task creation,
+      approval workflow, retries, and an execution loop already exist in
+      `apps/axiom-engine/automation-service.js`.
+- [x] **Task Router** — request-to-capability matching, approval-rule
+      enforcement, and outcome recording already exist in the same service
+      (`createTask`, `reviewTaskApproval`, `processDueTasks`).
+- [x] **Safety Constitution** — an allowlisted, fixed set of task actions,
+      admin-gated mutating routes, and documented creator
+      ownership/accountability records already exist (`docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`,
+      `docs/AXES_AGENT_ORIGIN_REGISTRY.md`).
+- [x] **log_task_event / task memory** — automation task history and
+      `docs/memory/` continuity records already serve this role.
+- [ ] **Skill Library** — a capability allowlist exists, but it has no
+      site-content-generation skill yet; blocked on the Site Builder
+      Protocol decision below.
+- [ ] **Memory Engine "site memory"** — identity/decision/procedure/semantic
+      memory kinds already exist; a distinct "what AXI built on xiiom.com"
+      memory kind does not, and is moot until the Site Builder Protocol
+      exists.
+- [ ] **Site Builder Protocol (AXI generates/edits site content directly)** —
+      not built. This is a materially larger capability than the existing
+      metadata-only source cataloging and needs an explicit founder scoping
+      decision (what AXI may generate autonomously vs. what always needs
+      human review before publishing) before any implementation.
+- [ ] **Growth Loop (AXI updates its own internal model after tasks)** — not
+      built and not recommended as a routine change; this describes
+      self-modifying behavior and needs a dedicated safety/governance review
+      before any implementation is even scoped.
+- [ ] **Named `initialize_axiom_runtime` startup sequence** — small, low-risk
+      candidate: wire the already-existing readiness/identity checks into one
+      explicitly named startup sequence with a single pass/fail status. Not
+      yet built.
+- [ ] **Friendly AXIOM status report** (e.g. "I am AXIOM. Current year:
+      2026...") — small, low-risk candidate: the underlying data already
+      exists (live-date-aware chat, `/system/readiness`), just not rendered
+      in that first-person phrasing anywhere. Not yet built.
+
+
 
 This migration is phased. Do not move production workloads to AXES-owned
 hardware until the current phase's evidence and recovery criteria are complete.
