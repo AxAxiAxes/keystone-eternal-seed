@@ -109,6 +109,37 @@ test("injects the actual current date/time into the model instructions instead o
   assert.match(capturedInstructions, /do not guess or rely on your training data/);
 });
 
+test("injects the AXIOM identity/creator prompt so the model does not claim OpenAI created it", async () => {
+  let capturedInstructions;
+  const service = new ChatService({
+    apiKey: "test-key",
+    model: "test-model",
+    memoryStore: { async list() { return []; }, async record() {} },
+    fetchImplementation: async (url, options) => {
+      capturedInstructions = JSON.parse(options.body).instructions;
+      return {
+        ok: true,
+        async json() {
+          return {
+            id: "response-test",
+            output: [{
+              type: "message",
+              content: [{ type: "output_text", text: "I am AXIOM." }]
+            }]
+          };
+        }
+      };
+    }
+  });
+
+  await service.reply("Who created you?");
+
+  assert.match(capturedInstructions, /AXIOM/);
+  assert.match(capturedInstructions, /Axel Urartu/);
+  assert.match(capturedInstructions, /KEYSTONE Eternal Seed Architecture/);
+  assert.match(capturedInstructions, /Never claim to be created by OpenAI/);
+});
+
 test("scopes conversation context and recorded turns to the given sessionId", async () => {
   const recordedEntries = [];
   let capturedListArgs;
