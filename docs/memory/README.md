@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-17 Corrected the founder-relayed "XIIOM home activation" plan](2026-09-17-corrected-xiiom-activation-plan.md)
 - [2026-09-17 External automation proposal mapped against repository reality](2026-09-17-external-automation-proposal-mapped-to-repo.md)
 - [2026-09-16 Chat upload clarity + visible live-clock/timeline calibration](2026-09-16-upload-clarity-and-live-clock.md)
 - [2026-09-16 Fixed a real privacy bug: public AXI chat sessions were shared across all visitors](2026-09-16-chat-session-privacy-fix.md)
