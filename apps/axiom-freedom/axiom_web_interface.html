@@ -145,6 +145,14 @@
             margin-top: 0.25rem;
         }
 
+        #liveClock {
+            font-size: 0.75rem;
+            color: #00d4ff;
+            margin-top: 0.35rem;
+            letter-spacing: 0.03em;
+            font-variant-numeric: tabular-nums;
+        }
+
         #minimizeButton {
             position: absolute;
             top: 0.6rem;
@@ -433,6 +441,7 @@
             <div class="chat-header">
                 <h2>Chat with AXIOM</h2>
                 <p>Constitutional Intelligence · Real-time Reasoning</p>
+                <p id="liveClock" title="This is your browser's own clock, shown so you can confirm AXIOM's live timeline is calibrated to the real current date/time. AXIOM's replies use the server's own live clock, recorded continuously alongside every chat turn."></p>
                 <button id="minimizeButton" type="button" title="Minimize the chat window">–</button>
             </div>
 
@@ -503,6 +512,30 @@
         function formatTimestamp(date) {
             return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
         }
+
+        // Visible proof the live clock/timeline is calibrated: ticks every
+        // second using this browser's own clock, alongside a full
+        // date so a visitor or founder can immediately eyeball whether
+        // "today" looks right, independent of anything AXIOM says in chat.
+        function startLiveClock() {
+            const clockEl = document.getElementById('liveClock');
+            if (!clockEl) return;
+            const render = () => {
+                const now = new Date();
+                clockEl.textContent = now.toLocaleString(undefined, {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+            };
+            render();
+            setInterval(render, 1000);
+        }
+        startLiveClock();
 
         function groupByDay(entries) {
             const groups = new Map();
@@ -583,6 +616,15 @@
                 body: file
             })
                 .then(async response => {
+                    if (response.status === 401) {
+                        // The public chat's attach button is intentionally
+                        // admin-gated (see server.js's requireAdmin on
+                        // /api/axiom/uploads) -- a plain visitor's browser
+                        // will not have entered admin credentials, so this
+                        // is expected, not a bug. Say so plainly instead of
+                        // a generic failure message.
+                        throw new Error('Admin sign-in required to upload. Your browser should prompt for the AXIOM admin username/password -- enter them and try again.');
+                    }
                     const payload = await response.json().catch(() => ({}));
                     if (!response.ok) {
                         throw new Error(payload.error || 'Upload failed');
