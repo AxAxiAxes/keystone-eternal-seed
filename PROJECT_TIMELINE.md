@@ -13,6 +13,7 @@ second line is parsed as separate text and is dropped from the field.
 
 | Date | Status | Milestone | Evidence |
 | --- | --- | --- | --- |
+| 2026-09-17 | Complete | Corrected a founder-relayed "XIIOM home activation" plan from a different external AI that listed 5 environment variables (`AXIOM_RUNTIME_INIT_ENABLED`, `AXIOM_TASK_SPINE_ENABLED`, `AXIOM_CAPABILITY_ENGINE_ENABLED`, `AXIOM_SERVICE_REGISTRY_ENABLED`, `AXIOM_RESEQUENCER_ENABLED`) that do not exist in the codebase and a "resequencer" runtime module that is only a symbolic document, not code. Replaced it with a verified plan listing only the real toggles (`AXIOM_AUTOMATION_ENABLED`, `AXIOM_MONITORING_ENABLED`, admin password, OpenAI key) that actually drive the Support Desk's status fields | `docs/activation/2026-09-17-xiiom-home-activation-plan.md`, `docs/memory/2026-09-17-corrected-xiiom-activation-plan.md` |
 | 2026-09-17 | Complete | Analyzed a 560-line founder-relayed external AI conversation proposing an "AXIOM automation architecture" (Task Spine, Skill Library, Task Router, Site Builder Protocol, Memory Engine, Safety Constitution). Found most of it already built under different names (task/agent system, capability allowlist, governance docs, task history) and added all 10 items as monitored checkpoints on the live Command Center dashboard, flagging two (Site Builder Protocol, self-updating Growth Loop) as needing an explicit founder scoping decision before any build | `docs/memory/2026-09-17-external-automation-proposal-mapped-to-repo.md`, `PROJECT_TIMELINE.md` |
 | 2026-09-16 | Complete | Answered "which docs can I upload" (pdf/doc/docx/txt/md/csv/json/png/jpg/gif/webp, 5MB cap) and clarified uploads require admin sign-in; improved the chat widget's upload error message for a 401; added a visible ticking live clock to the chat header and expanded AXI's chat instructions to explain its continuous timestamped memory recording concept | `docs/memory/2026-09-16-upload-clarity-and-live-clock.md`, `apps/axiom-freedom/axiom_web_interface.html`, `apps/axiom-engine/chat-service.js` |
 | 2026-09-16 | Complete | Fixed a real privacy bug: the public AXI chat's memory log and history endpoint had no per-visitor scoping, so any visitor could read every other visitor's chat history. Added an anonymous, private per-browser session cookie; scoped chat context/recording/history to it. `apps/axiom-engine` 118/118, `apps/axiom-freedom` 14/14 passing | `docs/AXI_CHAT_PRIVACY.md`, `docs/memory/2026-09-16-chat-session-privacy-fix.md` |
@@ -345,7 +346,29 @@ the full analysis.
       exists (live-date-aware chat, `/system/readiness`), just not rendered
       in that first-person phrasing anywhere. Not yet built.
 
+### XIIOM home activation plan correction (from founder-relayed external AI proposal, 2026-09-17)
 
+A second external AI conversation proposed a "XIIOM home activation"
+sequence naming five environment variables and a "resequencer" module that
+do not exist in this codebase. See
+`docs/memory/2026-09-17-corrected-xiiom-activation-plan.md` and
+`docs/activation/2026-09-17-xiiom-home-activation-plan.md` for the
+verified replacement plan.
+
+- [x] Verified which proposed activation environment variables are real
+      (`AXIOM_AUTOMATION_ENABLED`, `AXIOM_MONITORING_ENABLED`) versus
+      fabricated (`AXIOM_RUNTIME_INIT_ENABLED`, `AXIOM_TASK_SPINE_ENABLED`,
+      `AXIOM_CAPABILITY_ENGINE_ENABLED`, `AXIOM_SERVICE_REGISTRY_ENABLED`,
+      `AXIOM_RESEQUENCER_ENABLED`) against `apps/axiom-engine/index.js` and
+      both apps' `.env.example` files.
+- [x] Documented that "the resequencer" is a symbolic certificate
+      (`docs/keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md`),
+      not a runtime component, so there is no code-level switch for it.
+- [ ] Founder sets the real environment variables on Railway
+      (`AXIOM_ENGINE_ADMIN_PASSWORD`, `OPENAI_API_KEY`,
+      `AXIOM_AUTOMATION_ENABLED`, `AXIOM_MONITORING_ENABLED`, and the
+      matching portal-side values) and confirms `/support` reports ready --
+      this is an external deployment action outside repository control.
 
 This migration is phased. Do not move production workloads to AXES-owned
 hardware until the current phase's evidence and recovery criteria are complete.
