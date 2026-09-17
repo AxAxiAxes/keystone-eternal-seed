@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-17 External automation proposal mapped against repository reality](2026-09-17-external-automation-proposal-mapped-to-repo.md)
 - [2026-09-16 Chat upload clarity + visible live-clock/timeline calibration](2026-09-16-upload-clarity-and-live-clock.md)
 - [2026-09-16 Fixed a real privacy bug: public AXI chat sessions were shared across all visitors](2026-09-16-chat-session-privacy-fix.md)
 - [2026-09-16 Bug fix: AXIOM public chat gave a stale/wrong date](2026-09-16-chat-date-hallucination-fix.md)
