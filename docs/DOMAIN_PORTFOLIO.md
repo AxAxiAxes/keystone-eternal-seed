@@ -149,6 +149,29 @@ Notes:
   cross-check for duplicates/typos once the founder confirms the full,
   uncut list.
 
+## 2026-09-18 update: GitHub repo reserved for every tracked domain
+
+Per founder request, a placeholder GitHub repository named after each of the
+31 domains tracked in this document (all rows above plus the "Newly
+reported domains" table) now exists under the `AxAxiAxes` account, matching
+the naming convention already used for `axaxar.com` and `urartuhi.com`.
+Each placeholder repo contains only a `README.md` stating its current role
+(copied from this file), that it is reserved/not yet built, and that no
+product work should start there without founder approval — no application
+code, no DNS, no hosting, and no account/payment setup was created.
+
+Two domains already had dedicated repos before this pass and were left
+untouched: `axaxar.com` (draft architecture, see
+`docs/keystone/AXAXAR_LAUNCH_PLAN.md`) and `urartuhi.com` (live gallery site
+on GitHub Pages, not yet DNS-connected). All other 29 domains now have a
+freshly created, empty-except-README repo at
+`https://github.com/AxAxiAxes/<domain>`.
+
+This is namespace reservation only. It does not change any domain's
+registration, DNS, hosting, or product status — see `PRODUCT_BRANCH_DOMAIN_MAP.md`
+for the current status of each branch, and follow the same section's
+"Maintenance" note to keep the map in sync as these repos gain real content.
+
 ## Immediate domain tasks
 
 1. Enable registrar privacy for every eligible registered domain.
