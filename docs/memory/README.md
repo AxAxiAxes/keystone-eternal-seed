@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (x) URNUR "evolving name = value" concept recorded, flagged against existing non-monetary/financial constitution](2026-09-18x-urnur-evolving-name-value-concept-flagged.md)
 - [2026-09-18 (w) creative-work images decoded (real C2PA provenance found for one); keystone equilibrium symbolism recorded](2026-09-18w-image-provenance-decoded-and-equilibrium-symbolism.md)
 - [2026-09-18 (v) inter-AI interaction / web-app-accessibility / upload gap addressed honestly](2026-09-18v-ai-interaction-web-access-upload-status.md)
 - [2026-09-18 (u) founder action queue created — profitability-ordered summary of founder-only next steps](2026-09-18u-founder-action-queue-created.md)
