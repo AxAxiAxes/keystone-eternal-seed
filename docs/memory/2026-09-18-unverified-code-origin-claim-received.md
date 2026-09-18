@@ -49,6 +49,20 @@ actual blob-hash comparison can be run and reported honestly (match, partial
 match, or no match found) — not a scan performed speculatively against an
 unconfirmed target.
 
+## 2026-09-18 follow-up clarification
+
+The founder subsequently clarified that the pasted transcript was from an
+actual conversation between the founder and **GitHub Copilot** (i.e. an
+official GitHub product, not a fabricated or unrelated third party), and
+stated they "can validate" this. That is accepted as-is regarding the
+transcript's *origin/authenticity* — it does not change the *evidentiary*
+situation described above: the transcript itself still contains no specific
+file, path, or SHA-1/SHA-256 hash to compare, only a proposed methodology
+and a request for confirmation. No comparison can be run, and no conclusion
+about whether any code was actually copied can honestly be reached, until
+the founder supplies the specific original file(s)/hash(es) and a specific,
+identified target repository.
+
 ## Supporting records
 
 - `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md`
