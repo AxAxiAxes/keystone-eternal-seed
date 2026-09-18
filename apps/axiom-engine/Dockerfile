@@ -22,6 +22,7 @@ COPY continuity-record-service.js ./
 COPY source-catalog-service.js ./
 COPY business-metrics-service.js ./
 COPY service-registry-service.js ./
+COPY creation-record-service.js ./
 COPY automation-profile-service.js ./
 COPY github-status-service.js ./
 COPY web-access-service.js ./

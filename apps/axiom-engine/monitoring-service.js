@@ -137,6 +137,9 @@ function getAttention(snapshot) {
   if (snapshot.serviceRegistry && snapshot.serviceRegistry.status !== "ready") {
     attention.push("service-registry-unavailable");
   }
+  if (snapshot.creationRecord && snapshot.creationRecord.status !== "ready") {
+    attention.push("creation-record-unavailable");
+  }
   if (snapshot.automationProfiles && snapshot.automationProfiles.status !== "ready") {
     attention.push("automation-profile-unavailable");
   }

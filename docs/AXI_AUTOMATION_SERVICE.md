@@ -27,6 +27,7 @@ operational process; protected access is not agent authority.
 | `source.catalog` | `source.catalog` | Appends approved repository-source metadata and SHA-256 evidence to the private source catalog. |
 | `business.metric` | `business.metric` | Appends one approved non-sensitive revenue or expense metric to the private hash-linked journal. |
 | `service.registry` | `service.registry` | Appends one founder-approved internal service-registry registration or revision without public or external claims. |
+| `creation.record` | `creation.record` | Appends one operator-approved AXI-assisted creation entry (title, kind, summary, source reference) to a private hash-linked journal, permanently attributed to the founder creator authority. Not a copyright, patent, or trademark registration. |
 
 The service rejects any unrecognized action. New external integrations must be
 implemented, reviewed, tested, and added to the allowlist before they can be
@@ -324,6 +325,8 @@ A missing, empty, unavailable, or invalid recovery backup produces the
 `recovery-not-ready` attention state.
 An invalid business-metrics journal produces `business-metrics-unavailable`;
 the journal's own attention state blocks automation.
+An invalid creation-record journal produces `creation-record-unavailable`; the
+journal's own attention state blocks automation.
 
 The protected console can capture a snapshot and display current signals and
 reevaluation history. The private API also provides `GET /monitoring/status`,
