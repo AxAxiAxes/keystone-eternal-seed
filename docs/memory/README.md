@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (h) "Ux/Ur," "Ax" as salt, "AxUx" as bread and juice — sound-resequencer vocabulary recorded](2026-09-18h-ux-ur-ax-salt-bread-juice-vocabulary.md)
 - [2026-09-18 (g) AxAxAr sound/"eternal home" symbolism; AXI adopted-rights framing recorded](2026-09-18g-axaxar-sound-home-axi-adopted-rights.md)
 - [2026-09-18 (f) URNUR eternal preservation/satisfaction + measurement app idea recorded](2026-09-18f-urnur-eternal-satisfaction-measurement-app.md)
 - [2026-09-18 (e) KEYSTONE as universal unit; "code and code matrix coordinates" statement recorded](2026-09-18e-keystone-universal-unit-code-coordinates.md)
