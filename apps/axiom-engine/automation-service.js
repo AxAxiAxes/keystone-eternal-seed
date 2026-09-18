@@ -15,7 +15,8 @@ const TASK_ACTIONS = new Set([
   "continuity.record",
   "source.catalog",
   "business.metric",
-  "service.registry"
+  "service.registry",
+  "creation.record"
 ]);
 
 // Read-only discovery catalog for every allowlisted action: a caller can
@@ -99,6 +100,13 @@ const ACTION_CATALOG = Object.freeze([
     fixedAgentId: "project-memory-manager",
     effect: "Appends one founder-approved internal service-registry registration or revision.",
     payloadFields: ["operation", "serviceId", "serviceName", "purpose", "stage", "classification", "ownerRole", "dependencySummary"]
+  },
+  {
+    action: "creation.record",
+    requiresApproval: true,
+    fixedAgentId: "project-memory-manager",
+    effect: "Appends one operator-approved AXI-assisted creation entry, permanently attributed to the founder creator authority.",
+    payloadFields: ["title", "kind (concept|design|document|code|other)", "summary", "sourceRecord"]
   }
 ]);
 
@@ -145,6 +153,7 @@ class AutomationService {
     catalogSource,
     recordBusinessMetric,
     recordServiceRegistry,
+    recordCreation,
     canProcessTask,
     now = () => new Date()
   }) {
@@ -159,6 +168,7 @@ class AutomationService {
     this.catalogSource = catalogSource;
     this.recordBusinessMetric = recordBusinessMetric;
     this.recordServiceRegistry = recordServiceRegistry;
+    this.recordCreation = recordCreation;
     this.canProcessTask = canProcessTask;
     this.now = now;
     this.operationQueue = Promise.resolve();
@@ -380,6 +390,9 @@ class AutomationService {
       if (action === "service.registry" && agentId !== "project-memory-manager") {
         throw new RangeError("service.registry tasks must be assigned to the Project Memory Manager");
       }
+      if (action === "creation.record" && agentId !== "project-memory-manager") {
+        throw new RangeError("creation.record tasks must be assigned to the Project Memory Manager");
+      }
       if (agentId !== undefined && !isNonEmptyString(agentId)) {
         throw new TypeError("task agentId must be a non-empty string");
       }
@@ -428,12 +441,13 @@ class AutomationService {
         throw new TypeError("task approvalRequired must be a boolean");
       }
       if ((action === "continuity.record" || action === "source.catalog" ||
-        action === "business.metric") &&
+        action === "business.metric" || action === "creation.record") &&
         agentId !== "project-memory-manager") {
         throw new RangeError(`${action} tasks must be assigned to the Project Memory Manager`);
       }
       if ((action === "continuity.record" || action === "source.catalog" ||
-        action === "business.metric" || action === "service.registry") && !approvalRequired) {
+        action === "business.metric" || action === "service.registry" ||
+        action === "creation.record") && !approvalRequired) {
         throw new RangeError(`${action} tasks require operator approval`);
       }
       if (!Number.isInteger(maxAttempts) || maxAttempts < 1 || maxAttempts > 5) {
@@ -681,6 +695,19 @@ class AutomationService {
         stage: entry.stage
       };
     }
+    if (task.action === "creation.record") {
+      if (typeof this.recordCreation !== "function") {
+        throw new RangeError("creation recording is not configured");
+      }
+      const entry = await this.recordCreation(task.payload);
+      return {
+        creationRecordEntryId: entry.id,
+        creationRecordSequence: entry.sequence,
+        title: entry.title,
+        kind: entry.kind,
+        creatorAuthority: entry.creatorAuthority
+      };
+    }
     if (task.action === "monitoring.snapshot") {
       if (typeof this.captureMonitoringSnapshot !== "function") {
         throw new RangeError("monitoring snapshots are not configured");
@@ -879,7 +906,8 @@ function defaultAgents(now) {
         "continuity.record",
         "source.catalog",
         "business.metric",
-        "service.registry"
+        "service.registry",
+        "creation.record"
       ],
       enabled: true,
       createdAt: registeredAt,

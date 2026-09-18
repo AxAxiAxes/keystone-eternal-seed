@@ -17,6 +17,7 @@ const { ContinuityRecordService } = require("./continuity-record-service");
 const { SourceCatalogService, describeOptions: sourceCatalogDescribeOptions } = require("./source-catalog-service");
 const { BusinessMetricsService } = require("./business-metrics-service");
 const { ServiceRegistryService } = require("./service-registry-service");
+const { CreationRecordService } = require("./creation-record-service");
 const { AutomationProfileService } = require("./automation-profile-service");
 const {
   AutomationService,
@@ -88,6 +89,8 @@ const businessMetricsService = new BusinessMetricsService({ directory: dataDirec
 const businessMetricsReady = businessMetricsService.initialize();
 const serviceRegistryService = new ServiceRegistryService({ directory: dataDirectory });
 const serviceRegistryReady = serviceRegistryService.initialize();
+const creationRecordService = new CreationRecordService({ directory: dataDirectory });
+const creationRecordReady = creationRecordService.initialize();
 // GitHub visibility and write actions, founder-approved 2026-09-15. Off by
 // default: reports "not configured" (and refuses every call) unless an
 // authorized operator has supplied both AXIOM_GITHUB_TOKEN and
@@ -284,6 +287,30 @@ app.get("/system/service-registry/projection", async (req, res, next) => {
     next(error);
   }
 });
+app.get("/system/creations", async (req, res, next) => {
+  try {
+    res.json(await creationRecordService.status());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/creations/entries", async (req, res, next) => {
+  try {
+    const limit = req.query.limit === undefined ? 20 : Number(req.query.limit);
+    res.json(await creationRecordService.list(limit));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/creations/summary", async (req, res, next) => {
+  try {
+    res.json(await creationRecordService.summary());
+  } catch (error) {
+    next(error);
+  }
+});
 const coordinateService = new CoordinateService({ directory: dataDirectory });
 const checkpointService = new CheckpointService({
   directory: dataDirectory,
@@ -297,6 +324,7 @@ const checkpointService = new CheckpointService({
     { id: "source-catalog", version: "1" },
     { id: "business-metrics", version: "1" },
     { id: "service-registry", version: "1" },
+    { id: "creation-record", version: "1" },
     { id: "automation-profiles", version: "1" }
   ]
 });
@@ -313,6 +341,7 @@ const automationService = new AutomationService({
   catalogSource: (entry) => sourceCatalogService.record(entry),
   recordBusinessMetric: (entry) => businessMetricsService.record(entry),
   recordServiceRegistry: (entry) => serviceRegistryService.record(entry),
+  recordCreation: (entry) => creationRecordService.record(entry),
   canProcessTask: (task, tasks) => automationProfileService
     ? automationProfileService.isTaskProcessingAllowed(task.id, tasks)
     : true
@@ -327,6 +356,7 @@ automationProfileService = new AutomationProfileService({
     sourceCatalog: await sourceCatalogService.status(),
     businessMetrics: await businessMetricsService.status(),
     serviceRegistry: await serviceRegistryService.status(),
+    creationRecord: await creationRecordService.status(),
     governance: await automationService.getGovernanceReadiness(),
     recovery: await recoveryBackupService.status()
   })
@@ -408,6 +438,7 @@ app.get("/system/readiness", async (req, res, next) => {
       sourceCatalog: await sourceCatalogService.status(),
       businessMetrics: await businessMetricsService.status(),
       serviceRegistry: await serviceRegistryService.status(),
+      creationRecord: await creationRecordService.status(),
       automationProfiles: await automationProfileService.status(),
       github: githubStatusService.status(),
       webAccess: webAccessService.status()
@@ -440,7 +471,7 @@ app.get("/usage", async (req, res, next) => {
 
 async function captureMonitoringSnapshot(automationState) {
   await memoryStore.list("decision", 1);
-  const [storage, automation, usage, governance, recovery, coordinates, beadPassports, startupContext, continuityRecord, sourceCatalog, businessMetrics, serviceRegistry, automationProfiles] = await Promise.all([
+  const [storage, automation, usage, governance, recovery, coordinates, beadPassports, startupContext, continuityRecord, sourceCatalog, businessMetrics, serviceRegistry, creationRecord, automationProfiles] = await Promise.all([
     storageUsageService.status(),
     automationState
       ? summarizeAutomationState(automationState)
@@ -457,6 +488,7 @@ async function captureMonitoringSnapshot(automationState) {
     sourceCatalogService.status(),
     businessMetricsService.status(),
     serviceRegistryService.status(),
+    creationRecordService.status(),
     automationProfileService.status()
   ]);
   const monitoringRecord = await monitoringService.record({
@@ -473,6 +505,7 @@ async function captureMonitoringSnapshot(automationState) {
     sourceCatalog,
     businessMetrics,
     serviceRegistry,
+    creationRecord,
     automationProfiles,
     usage
   });
@@ -525,6 +558,14 @@ async function requireReadyStartupContext() {
     );
     registryError.statusCode = 409;
     throw registryError;
+  }
+  const creationRecord = await creationRecordService.status();
+  if (creationRecord.status !== "ready") {
+    const creationError = new Error(
+      `Automation is blocked until the creation record is ready (${creationRecord.code}).`
+    );
+    creationError.statusCode = 409;
+    throw creationError;
   }
   const profiles = await automationProfileService.status();
   if (profiles.status !== "ready") {

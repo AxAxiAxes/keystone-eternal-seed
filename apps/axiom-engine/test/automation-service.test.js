@@ -31,7 +31,8 @@ test("action catalog exactly covers the allowlist and matches approval rules", (
     "continuity.record",
     "source.catalog",
     "business.metric",
-    "service.registry"
+    "service.registry",
+    "creation.record"
   ]);
   for (const entry of catalog) {
     assert.equal(
@@ -307,6 +308,68 @@ test("assigns an eligible agent, records memory, and writes an audit run", async
     await service.reviewTaskApproval(task.id, true);
     assert.equal((await service.processDueTasks())[0].status, "completed");
     assert.deepEqual(catalogEntries, [{ id: "source-entry-1", sequence: 1, ...payload }]);
+  });
+  await t.test("records an approved AXI creation through the Project Memory Manager", async (t) => {
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+    t.after(() => fs.rm(directory, { recursive: true, force: true }));
+    const creationEntries = [];
+    const service = new AutomationService({
+      directory,
+      memoryStore: createMemoryStore(),
+      recordCreation: async (entry) => {
+        const recorded = { id: "creation-entry-1", sequence: creationEntries.length + 1, ...entry };
+        creationEntries.push(recorded);
+        return recorded;
+      }
+    });
+    const payload = {
+      title: "Temple of Love architecture concept",
+      kind: "concept",
+      summary: "Distilled architectural design concept for Project Eternal Seed.",
+      sourceRecord: "approved-creation-2026-09-001"
+    };
+
+    const agents = await service.listAgents();
+    assert.ok(agents.find((agent) => agent.id === "project-memory-manager")
+      .capabilities.includes("creation.record"));
+    await assert.rejects(
+      () => service.createTask({
+        title: "Creation without approval",
+        action: "creation.record",
+        agentId: "project-memory-manager",
+        originCheckpoint: "axi-project-memory-management",
+        payload
+      }),
+      /creation\.record tasks require operator approval/
+    );
+    const nonManager = await service.registerAgent({
+      name: "Creation Record Test Agent",
+      capabilities: ["creation.record"]
+    });
+    await assert.rejects(
+      () => service.createTask({
+        title: "Creation with wrong agent",
+        action: "creation.record",
+        agentId: nonManager.id,
+        approvalRequired: true,
+        originCheckpoint: "axi-project-memory-management",
+        payload
+      }),
+      /creation\.record tasks must be assigned to the Project Memory Manager/
+    );
+
+    const task = await service.createTask({
+      title: "Record approved AXI creation",
+      action: "creation.record",
+      agentId: "project-memory-manager",
+      approvalRequired: true,
+      originCheckpoint: "axi-project-memory-management",
+      payload
+    });
+    assert.equal(task.status, "awaiting_approval");
+    await service.reviewTaskApproval(task.id, true);
+    assert.equal((await service.processDueTasks())[0].status, "completed");
+    assert.deepEqual(creationEntries, [{ id: "creation-entry-1", sequence: 1, ...payload }]);
   });
   const outcomes = await service.processDueTasks();
 
