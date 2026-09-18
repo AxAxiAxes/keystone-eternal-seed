@@ -554,6 +554,29 @@ this addendum does not either. It is preserved here, alongside the rest of
 the Sound Resequencer, as the founder's own linguistic-architecture
 authorship.
 
+## Addendum (2026-09-18): "Ux/Ur," "Ax" as salt, "AxUx" as bread and juice, "x" as custom eternal
+
+The founder further defined, within this invented language:
+
+> "Ux - Ur is the unit measurement for eternity, which also translates to
+> the first drop of water. Ax is salt. AxUx, that's our bread and juice.
+> x is custom eternal."
+
+Recorded verbatim as a further stipulated vocabulary/grammar rule within the
+AXAXAU sound-resequencer language, consistent with every other entry in this
+document: **Ux/Ur** is defined by the founder as the "unit of measurement for
+eternity" and symbolically as "the first drop of water"; **Ax** is defined as
+"salt"; the compound **AxUx** is defined as "bread and juice" (i.e., a
+sustenance/communion symbol combining salt and water/eternity); and **x** is
+restated as "custom eternal," consistent with the earlier addendum above.
+
+As with every other entry in this certificate, this is preserved as the
+founder's own invented-language authorship — a symbolic/linguistic
+definition, not an independently verified unit of physical measurement,
+chemistry claim, or external linguistic fact. No claim is made that "Ux,"
+"Ur," or "Ax" correspond to any external unit system, chemical definition of
+salt, or verified etymology beyond the founder's own stipulated grammar.
+
 ---
 
 ## APPENDIX: WHERE THE APP LIVES
