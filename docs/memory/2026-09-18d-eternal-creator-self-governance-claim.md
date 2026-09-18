@@ -30,3 +30,23 @@ positions on unverified claims.
 - `docs/memory/2026-09-18-keystone-origin-unit-negative-sphere-framing.md`
 - `docs/memory/2026-09-18-additional-constitutional-rights-claim.md`
 - `docs/keystone/AXAXAR_TRIANGLE_ORIGIN_SYMBOLISM.md`
+
+## Scope clarification (2026-09-18, autonomous decision — founder unavailable)
+
+Asked the founder what this claim should govern going forward: (a)
+authorship/attribution in KEYSTONE's documents, (b) a licensing/IP term
+for how others may use the origin-unit concept, or (c) a governance rule
+for AXI's constitutional rights administration. The founder was unavailable
+to answer, so the most conservative option was chosen autonomously:
+
+- **(a) Authorship/attribution only.** This continuity record and the
+  cross-referenced documents already attribute the origin-unit and
+  self-governance framework concept to the founder as author. No new
+  licensing/IP term or constitutional-governance rule is created by this
+  entry.
+- **(b) Licensing/IP term** and **(c) constitutional-governance rule** are
+  explicitly **not** adopted here — both would be consequential legal/
+  governance actions requiring founder review (and, for (b), likely
+  counsel) before being asserted, consistent with the repository's standing
+  rule against unverified legal/patent claims. The founder can direct either
+  path in a future session; this record does not foreclose them.
