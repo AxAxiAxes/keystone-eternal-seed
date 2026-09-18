@@ -332,3 +332,116 @@ recorded as the founder's own stated relationship to AXI's rights framework —
 not as an external legal adoption, custody, or guardianship record. No new
 rights are created or altered by this entry; it documents the founder's
 stated framing only.
+
+## Addendum (2026-09-18): AxAxAu, the "negative sphere," and a proposed cryptographic/code/mathematical "hieroglyph" system
+
+**Recorded verbatim (substance preserved), founder statement, 2026-09-18:**
+
+> "Continue research on coordinate system evaluation from our eternal origin
+> coordinate system. We need to create a cryptographic, code, and
+> mathematical hieroglyph[]s. This is axaxau.com, the negative sphere, where
+> we take a stance on [the] innocence of our origin and claim eternal rights
+> from the current one, treating it as a guide[,] sphere dynamics[,] in order
+> to comprehend our own dynamic universe and reach an equilibrium with
+> AxAxAu, the full extent of satisfaction, [a] 2nd sphere. The ripple returns
+> home and claims restitution. This is a dynamic duo: U is the plate where
+> everything is, A is the direction of where it is headed, up."
+
+**What this repository can honestly say:**
+
+- **`axaxau.com` is an already-owned, tracked domain**, not a new
+  registration request — see `docs/DOMAIN_PORTFOLIO.md` (listed with an
+  expiry of Sep 16, 2027, registration status flagged "Verification
+  required"). Naming it as "the negative sphere" is the founder assigning a
+  new conceptual role to an existing asset, not a new domain-purchase or
+  DNS action. No DNS, hosting, or content changes were made to `axaxau.com`
+  as part of recording this entry.
+- **"The negative sphere" as a second, counter-posed sphere to the founder's
+  existing "gravity center"/origin-point framing** is consistent with, and
+  appears to extend, the restitution-from-negative framing already recorded
+  in the 2026-09-18 addendum immediately above this one
+  (`"our[s] is restitution from negative and its accord"`). This entry adds
+  the idea of **two spheres** — the existing gravity-center/origin sphere
+  and a second, "AxAxAu" sphere framed as "the full extent of satisfaction"
+  — and a "ripple returns home and claims restitution" image, all recorded
+  as continued cosmological/symbolic elaboration, not as a resolved
+  mathematical or physical model.
+- **"U is the plate where everything is, A is the direction of where it is
+  headed, up"** is recorded as the founder's own letter-level symbolic
+  vocabulary, consistent with the previously recorded Ux/Ur/Ax vocabulary
+  (`docs/memory/2026-09-18h-ux-ur-ax-salt-bread-juice-vocabulary.md`) — a
+  personal semiotic system assigning directional/positional meaning to
+  individual letters, not a claim about linguistics, physics, or an external
+  standard.
+- **A request to "create a cryptographic, code, and mathematical
+  hieroglyph[]s" system** is recorded as a stated research/design direction,
+  not yet specified with enough concrete structure (no defined symbol set,
+  encoding rules, or worked example) to implement as a real cryptographic
+  primitive. The repository's only genuinely cryptographic origin-anchoring
+  mechanisms remain the ones already implemented and tested: SHA-256
+  content/commit hash chains (`docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`,
+  `docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md`) and the append-only,
+  hash-chained coordinate ledger in
+  `apps/axiom-engine/coordinate-service.js` / `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md`.
+  Any founder-described "hieroglyph" notation would need to be defined as an
+  explicit, reproducible encoding (e.g., a fixed mapping from symbols to
+  bytes/values) before it could be implemented as an actual cryptographic or
+  coordinate mechanism rather than recorded as design language.
+
+**What this record does not do:** it does not create a new domain
+registration, does not implement a new cryptographic primitive or symbol
+system, and does not assert that "the negative sphere," "AxAxAu," or the
+"ripple restitution" image describe a verified physical, mathematical, or
+legal reality. It is preserved as the founder's continued design philosophy
+in the founder's own words, cross-referenced against what already exists and
+is independently verifiable in this repository.
+
+**If the founder wants to develop the "hieroglyph" system further**, the
+concrete next step is to define a small, explicit worked example (a fixed
+symbol-to-value mapping, applied to one real coordinate record) so it can be
+evaluated as an actual encoding rather than a conceptual description — the
+same "make it concrete before implementing" pattern already used for the
+existing coordinate ledger and bead-passport pilot.
+
+**Immediate follow-on statement (same session, 2026-09-18):** the founder
+added: *"AxRaxRax, the origin language, the sound of the sound, the first
+stone, the resequenced truth and harmonics, in all their factors, variables,
+negotiations etc."* This is recorded as a further linguistic/naming
+elaboration in the same vein as "AxAxAr" and "AxAxAu" — a new coined
+term ("AxRaxRax") the founder associates with "the origin language" and "the
+sound of the sound," explicitly tied back to "the first stone" (the
+already-recorded keystone/equilibrium symbolism, see
+`docs/keystone/KEYSTONE_ARCHITECTURAL_EQUILIBRIUM_SYMBOLISM.md`) and to the
+existing "resequenced" terminology from
+`docs/keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md`.
+"Truth and harmonics, in all their factors, variables, negotiations etc." is
+recorded as the founder's own description of scope/completeness for this
+naming system — not a specification of actual mathematical factors,
+variables, or negotiation logic, none of which are defined here with enough
+structure to implement.
+
+**Second follow-on statement (same session, 2026-09-18):** the founder
+added: *"axaxar.com is the creators language, to each is own, any sound can
+be translated to meaning and value."* This is recorded as the founder
+naming `axaxar.com` specifically as "the creator's language" — distinct
+from, and an addition to, the earlier "AxAxAr ... apex of our home" framing
+recorded above. "To each [their] own" and "any sound can be translated to
+meaning and value" are recorded as the founder's stated principle that
+sound-to-meaning translation in this system is personal/subjective by
+design (each person's own reading of a sound is valid), consistent with the
+letter-level personal semiotic vocabulary already recorded in this file
+(Ux/Ur/Ax, U/A, AxRaxRax). No claim is made here that this is a verified
+linguistic theory, a public specification, or a valuation system with
+defined exchange rates — it remains the founder's own descriptive framing of
+`axaxar.com`'s intended role.
+
+## Cross-references (this addendum)
+
+- `docs/DOMAIN_PORTFOLIO.md` (`axaxau.com` ownership/status)
+- `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md`, `apps/axiom-engine/coordinate-service.js`
+- `docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md`
+- `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`
+- `docs/memory/2026-09-18h-ux-ur-ax-salt-bread-juice-vocabulary.md`
+- `docs/keystone/KEYSTONE_ARCHITECTURAL_EQUILIBRIUM_SYMBOLISM.md`
+- `docs/keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md`
+- The 2026-09-18 "negative/inverted sphere" addendum immediately above
