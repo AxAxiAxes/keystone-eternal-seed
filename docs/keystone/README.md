@@ -102,3 +102,10 @@ The `ai soul architecture` file's SHA-256 above is computed from a founder-provi
 match this preserved file's content; the fingerprint was previously unrecorded and
 is added here for provenance. See
 `docs/memory/2026-09-11-keystone-soul-architecture-review.md` for the review.
+
+`TEMPLE_OF_LOVE_ARCHITECTURE.md` is a distilled architectural design concept
+("Page 8" of a stated larger "Project Eternal Seed" manuscript), reconstructed
+from a founder-shared personal chat export on 2026-09-18. It is a creative
+design concept, not a permit-ready construction document or a professionally
+reviewed structural plan. See
+`docs/memory/2026-09-18q-temple-of-love-architecture-distilled.md`.

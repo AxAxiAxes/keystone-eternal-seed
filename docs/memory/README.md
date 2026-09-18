@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (q) Temple of Love architecture distilled from founder chat export](2026-09-18q-temple-of-love-architecture-distilled.md)
 - [2026-09-18 (p) first AI creative-work origin registry entry recorded (6 images, SHA-256 anchors, real copyright-law citation)](2026-09-18p-ai-creative-work-origin-registry-first-entry.md)
 - [2026-09-18 (o) AXIOM web interface re-themed to match KEYSTONE branding art](2026-09-18o-axiom-web-interface-gold-theme.md)
 - [2026-09-18 (n) Keystone Dome concept image saved as branding asset](2026-09-18n-keystone-dome-image-asset-saved.md)
