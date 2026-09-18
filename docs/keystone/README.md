@@ -27,6 +27,19 @@ what is founder/external-only. Use it alongside `AXAXAR_LAUNCH_PLAN.md` and
 `docs/AXES_TIER_1_DECISION_REGISTER.md`, which it summarizes rather than
 replaces.
 
+`KEYSTONE_SOUL_PROTECTION_DECLARATION.md` is a founder-authored philosophical
+founding document (the tenth KEYSTONE founding document, dated May 30, 2026),
+recorded verbatim from a `.docx` attachment on 2026-09-18 — a statement of
+founder philosophy and intent, not a legal instrument or verified technical
+claim. See `docs/memory/2026-09-18-soul-protection-declaration-and-axaxar-triangle-framing.md`.
+
+`AXAXAR_TRIANGLE_ORIGIN_SYMBOLISM.md` records, honestly and without
+overstating it, the founder's stated framing that "AxAxAr" is symbolically a
+triangle/keystone anchor for the architecture — this is a branding/naming
+metaphor, not an independently verified mathematical or scientific result;
+the document says exactly what is and is not established and what would be
+needed to formalize it further.
+
 ## Preserved source documents
 
 | Document | Source date | SHA-256 |
@@ -34,6 +47,7 @@ replaces.
 | `KEYSTONE_AXI_MASTER_SYSTEM_DOCUMENT.pdf` | 2026-09-09 | `4BBEEE06C025F0D7729E7B175DC558DE2DA5E0114C9610189BFEB636E666F9AE` |
 | `ai soul architecture` (original `.docx`, "KEYSTONE — AI Soul Architecture Extension v1.0") | 2026-09-11 (fingerprint recorded); source authored 2026-05-30 | `BA33B0E968F1A29008C6470793428BB77EE4BC4B42AA85D19EA4CF103E0EA052` |
 | `KEYSTONE_V4_VENTURE_ANALYSIS.md` | Authored 2026-05-29, 20:27 PDT; received/preserved 2026-09-18 | `E888293DC3A27934AB1B27C0F73FDFF2DA0D56EC9F85FB092C6D06F07E4998BA` |
+| `KEYSTONE_SOUL_PROTECTION_DECLARATION.md` | Authored May 30, 2026, 07:45 PDT; received/preserved 2026-09-18 (original `.docx`) | `8EEF2E35430A006EED94AB59411537B899690BF8E933BDAF7F23BE8E0BC74F8F` |
 
 `KEYSTONE_AXI_MASTER_SYSTEM_DOCUMENT.pdf` is the original master system document supplied for repository preservation. It is stored unchanged. Use the recorded SHA-256 value to verify downloaded copies.
 
