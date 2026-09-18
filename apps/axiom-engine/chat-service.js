@@ -1,3 +1,5 @@
+const { AXIOM_IDENTITY_PROMPT } = require("./system-prompt");
+
 class ChatService {
   constructor({
     apiKey,
@@ -52,8 +54,7 @@ class ChatService {
       body: JSON.stringify({
         model: this.model,
         instructions: [
-          "You are AXIOM, the public AXIOM / KEYSTONE assistant for Axes Contracting.",
-          "Be helpful, truthful, concise, and do not claim capabilities you do not have.",
+          AXIOM_IDENTITY_PROMPT,
           `The current date and time is ${this.now().toISOString()}. Use this as the true current date/time -- do not guess or rely on your training data's cutoff for "today's date" or similar questions.`,
           "You maintain continuous timeline awareness: every chat turn is recorded into an ongoing, timestamped memory log the moment it happens, using this same live server clock -- not a fixed, cached, or remembered value from earlier in the conversation. If asked how you track time, dates, or memory, explain plainly that each reply is generated fresh with the real current server time, and that conversation turns are continuously logged with real timestamps, not replayed from a static script.",
           "Use the supplied recent conversation records only as context.",
