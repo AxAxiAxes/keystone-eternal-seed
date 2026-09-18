@@ -78,6 +78,77 @@ costs. Evaluate it after the public pilot has measured storage, bandwidth,
 availability, privacy, and staffing needs. Keep an off-site encrypted backup
 regardless of where the primary hardware runs.
 
+## 2026-09-18 update: expanded SiteGround registrar list + Main Deck statement
+
+**Source:** Founder-provided SiteGround registrar screen, pasted directly
+(message appeared to be cut off mid-list at `axaxes.com`, whose expiry/status
+were not shown — treat the list below as partial pending confirmation of the
+remainder).
+
+The founder also stated that `axescontracting.com` is the main AXIOM chat and
+the "everything combined" hub — the "Main Deck" they operate from, with
+multiple branches (products/sites) being built simultaneously. This differs
+from this document's 2026-09-09 characterization of `axescontracting.com` as
+a **private, admin-only** command center (see the registry row above). That
+row is not corrected here because it has not been independently verified
+against the current deployment; see the live-check note below.
+
+**Live check performed 2026-09-18:** `https://xiiom.com/health` responded
+normally (`{"status":"ok","service":"AXIOM","version":"2.0.0"}`).
+`https://axescontracting.com/health` and `https://axescontracting.com/` both
+failed with a transport-level failure (DNS/connection/TLS) from this
+environment's fetch tool — no content served at all, not even an auth wall.
+This could mean DNS/hosting isn't live yet, or that it's blocked to this
+specific tool; it is not confirmed which. Recommend the founder verify
+`axescontracting.com`'s live status directly (browser or Railway dashboard)
+before any routing/DNS change is made based on the Main Deck statement.
+
+### Newly reported domains (SiteGround, 2026-09-18)
+
+None of these have a defined product purpose recorded yet. Per the portfolio
+principle above, they remain parked until a product brief exists.
+
+| Domain | Registrar status shown | Expires |
+| --- | --- | --- |
+| `uxruxu.com` | Verification required | Sep 16, 2027 |
+| `axtux.com` | Verification required | Sep 16, 2027 |
+| `nuxiux.com` | Verification required | Sep 16, 2027 |
+| `nuxuxun.com` | Verification required | Sep 16, 2027 |
+| `uxaxaxu.com` | Verification required | Sep 16, 2027 |
+| `xaxux.com` | Verification required | Sep 16, 2027 |
+| `uxrax.com` | Verification required | Sep 16, 2027 |
+| `haiuhi.com` | Verification required | Sep 16, 2027 |
+| `axrux.com` | Verification required | Sep 16, 2027 |
+| `axraxrax.com` | Verification required | Sep 16, 2027 |
+| `axtamar.com` | Verification required | Sep 16, 2027 |
+| `axaxox.com` | Verification required | Sep 16, 2027 |
+| `axaxau.com` | Verification required | Sep 16, 2027 |
+| `axescontracting.com` | Verified; privacy not yet added | Feb 3, 2029 |
+| `urartuhi.com` | Verified; privacy not yet added | Sep 16, 2027 |
+| `axarar.com` | Verified; privacy not yet added | Sep 16, 2027 |
+| `axaxar.com` | Verified; privacy not yet added | Sep 15, 2027 |
+| `axaxur.com` | Verified; privacy not yet added | Sep 15, 2027 |
+| `axelurartu.com` | Verified; privacy not yet added | Sep 13, 2027 |
+| `axaxes.com` | Reported, row cut off before status/expiry captured | Unknown — re-confirm |
+
+Notes:
+- `axaxar.com` is already registered by the founder at SiteGround. This
+  matches (by name only) the new GitHub repository
+  `AxAxiAxes/axaxar.com` created the same day for the Axaxar.com
+  architecture draft — the domain registration and the draft repo are not
+  yet connected (no DNS, no deployment).
+- `xiiom.com` (documented above as the live public AXIOM home) does not
+  appear in this newly reported SiteGround list; it may be registered under a
+  different registrar/account, or simply not included in the founder's
+  paste. Needs confirmation, not assumed.
+- "Verification required" and "Add privacy" are registrar-side actions
+  (SiteGround account) outside repository access; recorded here for
+  inventory purposes only, not actioned.
+- Several of these domains were already listed in the 2026-09-09 registry
+  above under different-looking names (e.g. `axaxaxu.com`, `axaxiaxes.com`);
+  cross-check for duplicates/typos once the founder confirms the full,
+  uncut list.
+
 ## Immediate domain tasks
 
 1. Enable registrar privacy for every eligible registered domain.
