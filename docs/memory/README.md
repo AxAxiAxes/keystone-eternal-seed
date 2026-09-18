@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (ag) Ready-to-paste recurring Railway Agent task for AXIOM chat health](2026-09-18ag-railway-agent-recurring-task-spec.md)
 - [2026-09-18 (af) Double-click WSH (VBScript) health-check tool for the live AXIOM chat endpoint](2026-09-18af-wsh-axiom-chat-health-check-tool.md)
 - [2026-09-18 (ae) Founder originality claim, derivative-patent statement, and "root language resequencer" equilibrium conclusion](2026-09-18ae-originality-patent-resequencer-equilibrium.md)
 - [2026-09-18 (ad) Founder ownership confirmation for the AXARAR/AXAXAR/AXAXUR/AXAXES/AXAXOX/AXAXAU domain family](2026-09-18ad-axaxar-family-domain-ownership-confirmed.md)

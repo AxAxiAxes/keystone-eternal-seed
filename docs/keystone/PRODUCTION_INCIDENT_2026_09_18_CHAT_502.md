@@ -96,6 +96,13 @@ read/diagnostic requests — it cannot redeploy, restart, or fix anything; it
 is a checker, not a repair tool. Run it any time after taking one of the
 steps above to confirm whether the chat reply check has turned green.
 
+For automated, recurring checking (rather than manually running the script
+or asking Railway Agent one-off questions), see the new "Automating AXIOM
+chat health checks with a recurring Railway Agent task" section in
+`docs/RAILWAY_DEPLOYMENT.md` — it gives an exact, ready-to-paste task
+specification for a scheduled Railway Agent task that checks the actual
+chat-reply path (the one that has been failing), not just the portal/DNS.
+
 ## Cross-references
 
 - `docs/RAILWAY_DEPLOYMENT.md` (existing low-credit warning, deployment

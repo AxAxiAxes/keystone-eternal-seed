@@ -261,6 +261,58 @@ Billing for Railway Agent usage is per-LLM-token at the underlying
 provider's published rate (no markup) — see Railway's own pricing page for
 current figures before relying on it for routine automation.
 
+## Automating AXIOM chat health checks with a recurring Railway Agent task
+
+Railway Agent supports scheduled/recurring **Tasks** (visible in the
+dashboard's Agent panel) in addition to one-off chat questions — the
+founder already has at least one such task configured (an "AXIOM DNS A
+Record Setup" health-check task that has run on a recurring basis). This
+section gives a ready-to-paste task specification that extends that
+existing pattern to catch the exact class of failure recorded in
+`docs/keystone/PRODUCTION_INCIDENT_2026_09_18_CHAT_502.md` — a 502 on the
+chat reply specifically, which a portal-only or DNS-only check would miss.
+
+**This must be created/scheduled directly in the Railway dashboard by the
+founder** — creating or modifying a Railway Task is an account-level
+action outside what this repository or a repository-side agent can do.
+What follows is the exact task text to paste into Railway Agent's "New
+Task" flow (adjust the schedule to taste, e.g. hourly or daily):
+
+> **Task name:** AXIOM chat end-to-end health check
+>
+> **Instructions to the agent:**
+> 1. `GET https://xiiom.com/axiom` and confirm HTTP 200 (portal page).
+> 2. `GET https://xiiom.com/api/axiom/history` and confirm HTTP 200
+>    (confirms `axiom-engine` is reachable).
+> 3. `POST https://xiiom.com/api/axiom` with body
+>    `{"action":"chat","message":"automated health check"}` and confirm
+>    HTTP 200 with a non-empty reply. **This is the step that has
+>    historically failed with HTTP 502** — a passing check on steps 1-2
+>    alone does not mean chat actually works.
+> 4. If step 3 fails, read the current `axiom-engine` deploy/runtime logs
+>    and report the specific error (OpenAI API error, timeout, missing/
+>    invalid `OPENAI_API_KEY`, rate limit, etc.) rather than only reporting
+>    "down."
+> 5. Report a pass/fail summary to Axel for all three steps, including the
+>    HTTP status codes and, on failure, the specific log-derived cause from
+>    step 4.
+> 6. Do not attempt to redeploy, restart, change environment variables, or
+>    modify billing/account settings automatically — surface findings for
+>    the founder to act on manually, consistent with the scheduler
+>    boundary already documented in `docs/AXI_AUTOMATION_SERVICE.md`.
+
+**Why step 3 matters:** the founder's existing recurring task (dated
+2026-09-14, before the incident) only checked the portal page, DNS, and web
+presence — all of which were, and still are, healthy even during the
+current outage. That is why it reported "xiiom.com is UP and healthy" while
+the chat itself was returning 502. The task above adds the one check
+(`action:"chat"` POST) that actually exercises the OpenAI-backed code path
+that has been failing.
+
+`scripts/axiom-chat-health-check.vbs` in this repository performs the same
+three checks locally (double-click, no Railway account needed) for a
+second, independent confirmation alongside the Railway Task above.
+
 ## Credential handling
 
 - Enter `OPENAI_API_KEY` only in Railway's encrypted service variables.
