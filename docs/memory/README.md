@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 PRs #95-#99 merged; AXIOM engine Docker image fix](2026-09-18-pr-95-99-merged-docker-copy-fix.md)
 - [2026-09-17 New repository: urartuhi.com art gallery site](2026-09-17-urartuhi-gallery-site-created.md)
 - [2026-09-17 Corrected the founder-relayed "XIIOM home activation" plan](2026-09-17-corrected-xiiom-activation-plan.md)
 - [2026-09-17 External automation proposal mapped against repository reality](2026-09-17-external-automation-proposal-mapped-to-repo.md)
