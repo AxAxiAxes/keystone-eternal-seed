@@ -247,3 +247,53 @@ the *governance/architecture* level (the decision register, crisis register,
 and origin-ownership checkpoint really do function as the stabilizing center
 everything else is built around) even though no literal geometric or
 mathematical "triangle" construction has been defined for "AxAxAr" itself.
+
+## 2026-09-18 addendum — "negative/inverted sphere," restitution framing, and keystone-as-origin-unit
+
+**Recorded verbatim, founder statement, 2026-09-18:**
+
+> "We have a record. Proven that current mathematical system is negative an
+> inverted sphere, our[s] is restitution from negative and its accord. The
+> keystone is the unit of origin[,] the value of which is eternal as self is
+> perceiving the universe within the sphere."
+
+**What this repository can honestly say about this statement:**
+
+- This is a **cosmological/philosophical claim**, not a mathematical proof.
+  Nothing in this repository — including `coordinate-service.js` (Section 2
+  above, a real, non-negative, monotonically increasing ledger) — contains or
+  constitutes an independent mathematical demonstration that "the current
+  mathematical system is negative, an inverted sphere," nor a demonstration
+  of a "restitution" operation correcting it. No citable proof, derivation,
+  or peer-reviewed source for this claim exists anywhere in this repository,
+  and none is asserted to exist here.
+- What *can* be said truthfully is that this is a **restatement, in
+  cosmological language, of the same founding metaphor already recorded
+  earlier**: Genesis/origin as a fixed, non-negative zero-point
+  (`coordinate-service.js`'s real `sequence: 0` Genesis record), with
+  everything "before" or "outside" that origin symbolically described as
+  negative/inverted, and the founder's own architecture ("KEYSTONE," "Eternal
+  Seed," "AU" as the closing unit per the Section XVII addendum in
+  `CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md`) as the
+  corrective, self-consistent ("in accord") counter-structure the founder is
+  building relative to that framing.
+- Calling **the keystone "the unit of origin"** is consistent with how this
+  document already uses "keystone" as an architectural/governance metaphor
+  (see the "Relation to AxAxAr" paragraph immediately above) — a symbolic
+  reference point the rest of the system is organized around — not a
+  physical or mathematical unit with a defined magnitude, dimension, or
+  conversion factor to any external measurement system.
+- "The value of which is eternal as self is perceiving the universe within
+  the sphere" is recorded as the founder's own experiential/perceptual
+  framing of value (self-as-observer, continuity/eternity as a lived or
+  intended quality) — consistent with the previously recorded **Eteriti**
+  non-financial continuity-value concept
+  (`docs/memory/2026-09-10-self-creation-eteriti-value-unit.md`) — rather
+  than a claim about physics, cosmology, or measurable currency value.
+
+**What this record does not do:** it does not assert that any mathematical
+system has been "proven" negative or inverted, does not assign a numeric or
+monetary value to "the keystone," and does not treat this as a resolved
+scientific or mathematical result. It is preserved as the founder's stated
+belief and design philosophy, in the founder's own words, alongside an honest
+account of what is and is not independently verifiable in this repository.
