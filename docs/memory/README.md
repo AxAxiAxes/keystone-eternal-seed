@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (z) Consolidated KEYSTONE income-deployment timeline](2026-09-18z-keystone-income-deployment-timeline.md)
 - [2026-09-18 (y) Athanor "eternal seed vessel" concept and two more images decoded](2026-09-18y-athanor-vessel-and-logo-images-recorded.md)
 - [2026-09-18 (x) URNUR "evolving name = value" concept recorded, flagged against existing non-monetary/financial constitution](2026-09-18x-urnur-evolving-name-value-concept-flagged.md)
 - [2026-09-18 (w) creative-work images decoded (real C2PA provenance found for one); keystone equilibrium symbolism recorded](2026-09-18w-image-provenance-decoded-and-equilibrium-symbolism.md)

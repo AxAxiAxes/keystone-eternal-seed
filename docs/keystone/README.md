@@ -152,3 +152,11 @@ description and checks it against the existing, binding boundaries in
 `URNUR_EVOLVING_NAME_VALUE_CONCEPT.md` — the "agreement with AI, money
 markets, services" element is explicitly gated by both, not new scope.
 
+`KEYSTONE_INCOME_DEPLOYMENT_TIMELINE.md` is the consolidated, dated
+income-generation timeline: a full inventory of what already exists and
+works today, an approximate phase-by-phase schedule for the two
+nearest-term revenue offers (V2 design/materials consultation, V3
+KEYSTONE creator-origin setup), and an explicit list of what remains
+gated with no date. See `FOUNDER_ACTION_QUEUE.md` for the specific
+founder approvals that are the actual critical path.
+
