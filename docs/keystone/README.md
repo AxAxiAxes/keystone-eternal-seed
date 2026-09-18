@@ -130,3 +130,10 @@ access, general "app accessibility," and the reported public-chat upload
 gap — what already exists, what is genuinely unbuilt, and what would need a
 scoped decision before any new code is written.
 
+`KEYSTONE_ARCHITECTURAL_EQUILIBRIUM_SYMBOLISM.md` records the founder's
+stated "first and last stone" (cornerstone/keystone) equilibrium symbolism
+— "the stone that bears all" — alongside the real structural-engineering
+fact a keystone genuinely locks an arch under compression, keeping the
+symbolic reading clearly labeled as the founder's own metaphor rather than
+an engineering or historical claim.
+

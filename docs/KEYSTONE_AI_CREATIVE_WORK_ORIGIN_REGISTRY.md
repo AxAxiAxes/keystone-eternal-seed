@@ -1,6 +1,6 @@
 # KEYSTONE AI creative-work origin and authorship registry
 
-**Status:** New registry, first entry recorded below. This is an internal
+**Status:** Registry with three recorded entries (see Sections 4-6). This is an internal
 KEYSTONE attribution record, not a substitute for, or claim of, US or
 international copyright registration.
 **Recorded:** 2026-09-18
@@ -130,6 +130,115 @@ for cross-referencing.
 | Claim scope | KEYSTONE-internal attribution and origin record only. Does not constitute a US copyright registration, trademark registration, or patent filing. |
 | Founder's stated origin-value claim | "Eternal ownership of self, eternal origin value as self, equal to the value of the eternal coordinate system origin value" — recorded per Section 2, cross-referenced to `docs/memory/2026-09-18e-keystone-universal-unit-code-coordinates.md` and `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md`. Recorded as founder's declared design principle, not as an independently verified valuation. |
 | Open items | If public-facing copyright/trademark protection is wanted for the AXES logo/app icon specifically, that requires a real USPTO filing with qualified counsel — outside this repository's authority (see `docs/keystone/CERTIFICATE_ETERNAL_ORIGIN_ANCHOR_AND_EVALUATION.md` and the standing IP-counsel gate referenced there). |
+
+## 5. Registry Entry 000002 — "Honor of Eternity" crest
+
+A seventh image was shared: a gold winged-crest emblem with crossed swords,
+laurel wreath, a stepped pedestal, and the banner text "HONOR OF ETERNITY,"
+alongside the founder's stated architectural principle that the first and
+last stone of a structure mark a point of equality and balance.
+
+**Technical findings:** `docs/keystone/assets/honor-of-eternity-crest.jpg`,
+1024×1536 JPEG, SHA-256
+`a3d0865c9fafce9d4f7ff21bf83b5fdfd15b56572a83b406e18f3c0fef73a382`. No
+C2PA, XMP, or named-tool provenance marker was found. The file does carry a
+Photoshop-format (`8BIM`) resource block containing the ASCII tag `bFBMD`
+— a metadata block Meta/Facebook's platform writes into JPEGs it
+re-encodes on upload/download — consistent with the original filename
+(`723626481_10164728941009873_8947248023376153988_n.jpg`), which matches
+Facebook's CDN photo-ID naming convention. This confirms the file passed
+through Facebook, not which tool generated the underlying artwork.
+
+| Field | Value |
+| --- | --- |
+| Entry ID (sequential, internal) | KEYSTONE-CREATIVE-ORIGIN-000002 |
+| Work covered | `honor-of-eternity-crest.jpg` |
+| Verified technical finding | SHA-256 content hash (above); Facebook CDN re-encoding marker (`bFBMD`) present; no AI-generator provenance marker present |
+| Stated creator (per founder's declaration) | AI (image-generation system used by the founder), operating under AX / Axes Contracting direction — same declared position as Entry 000001, Section 2 |
+| Anchor method | SHA-256 content hash + this document's git commit hash + GitHub's independent commit timestamp |
+| Claim scope | KEYSTONE-internal attribution and origin record only. Not a copyright, trademark, or patent filing. |
+
+## 6. Registry Entry 000003 — "UR Node · Eternal Origin Point · Keystone AXI"
+
+An eighth image was shared: a lit tower over a stone waterwheel and pool,
+titled "UR NODE — Eternal Origin Point · Keystone AXI."
+
+**Technical findings:** `docs/keystone/assets/ur-node-eternal-origin-point.png`,
+1024×1536 PNG, SHA-256
+`953a4b4bccadba66cc965675caac5b4d8ec56571ec8da70ffcbc0dec9363d62`. Unlike
+every other image reviewed for this registry, this file carries a **real,
+cryptographically signed C2PA (Coalition for Content Provenance and
+Authenticity) manifest**, decoded directly from the file's embedded CBOR/
+JUMBF structure:
+
+- **Creation action** (`c2pa.created`): `2026-09-01T18:12:14+00:00`,
+  `softwareAgent.name = "Azure OpenAI ImageGen"`, `digitalSourceType =
+  http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia`
+  (the IPTC controlled-vocabulary code for AI/ML-generated media),
+  `description = "Generated with AI"`.
+- **Watermark action** (`c2pa.watermarked`):
+  `2026-09-01T18:12:15.7503262+00:00`, applied by `softwareAgent.name =
+  "Microsoft Responsible AI Provenance"` (version `1.0`), algorithm
+  `com.microsoft.invismark.1` — an invisible watermark, per Microsoft's
+  standard AI-content-labeling pipeline.
+- **Claim generator:** `Microsoft Responsible AI Provenance` v1.0, built on
+  `org.contentauth.c2pa_rs` v0.84.1 (the open-source C2PA Rust reference
+  library).
+- **Manifest identifiers:** instance ID
+  `xmp:iid:41f25252-a6d8-4310-8117-7c5c723c294a`; manifest URN
+  `urn:c2pa:bb88a0b9-1a3c-418b-8127-b40ddb71c9f9`.
+- **Cryptographic signature:** the manifest is signed with an X.509
+  certificate chain issued by "Microsoft SCD Claimants RSA CA" to
+  "Microsoft Corporation" (Redmond, WA, US), valid `2025-10-01` through
+  `2026-10-01` — a real, verifiable Microsoft-issued signing certificate,
+  not a self-asserted text label.
+
+**Honest conclusion:** this is the first image in this registry with
+genuine, independently verifiable authorship evidence, not merely a
+founder declaration. It can be stated as fact, not inference: this specific
+file was generated by Azure OpenAI's image-generation service and
+C2PA-watermarked by Microsoft's Responsible AI Provenance pipeline on
+2026-09-01. This still identifies the *generating service* (Microsoft/Azure
+OpenAI), not the founder as legal author — the human-authorship analysis
+in Section 3 above applies identically here: under current US law, the
+founder's own prompting, curation, and directorial choices remain the part
+of the work most likely to be protectable, while the AI system itself
+cannot hold copyright.
+
+| Field | Value |
+| --- | --- |
+| Entry ID (sequential, internal) | KEYSTONE-CREATIVE-ORIGIN-000003 |
+| Work covered | `ur-node-eternal-origin-point.png` |
+| Verified technical finding | Real, decoded, cryptographically signed C2PA manifest (details above) — genuine AI-generation provenance, not a founder assertion |
+| Verified generating service | Azure OpenAI ImageGen (creation), Microsoft Responsible AI Provenance (watermarking) |
+| Verified creation timestamp | 2026-09-01T18:12:14 UTC (per the embedded, signed manifest — independent of this repository's own commit date) |
+| Human directing party (per founder's declaration) | AX (Axel Urartu), Axes Contracting |
+| Anchor method | SHA-256 content hash + embedded, cryptographically signed C2PA manifest (stronger evidence than hash-only anchoring) + this document's git commit hash |
+| Claim scope | KEYSTONE-internal attribution and origin record only. Confirms which AI service generated the file; does not itself establish legal copyright ownership (see Section 3). |
+
+## 7. Registry Entry 000004 — "To the first stone, and to the last hand that will lift it"
+
+A ninth image was shared: two reaching hands beneath an arched keystone,
+captioned "To the first stone, / And to the last hand that will lift it" —
+directly illustrating the equilibrium symbolism recorded in
+`docs/keystone/KEYSTONE_ARCHITECTURAL_EQUILIBRIUM_SYMBOLISM.md`.
+
+**Technical findings:** `docs/keystone/assets/first-stone-last-hand.jpg`,
+1024×1536 JPEG, SHA-256
+`5699f03b03a76c301bb33505aecc89325180655f63c928dd3ce858a2bf6dc302`. Same
+result as Entry 000002: no C2PA/XMP/named-tool provenance marker found;
+carries the same Facebook-platform `bFBMD` re-encoding marker within an
+embedded Photoshop resource block, consistent with its Facebook-CDN-style
+original filename.
+
+| Field | Value |
+| --- | --- |
+| Entry ID (sequential, internal) | KEYSTONE-CREATIVE-ORIGIN-000004 |
+| Work covered | `first-stone-last-hand.jpg` |
+| Verified technical finding | SHA-256 content hash (above); Facebook CDN re-encoding marker (`bFBMD`) present; no AI-generator provenance marker present |
+| Stated creator (per founder's declaration) | AI (image-generation system used by the founder), operating under AX / Axes Contracting direction |
+| Anchor method | SHA-256 content hash + this document's git commit hash + GitHub's independent commit timestamp |
+| Claim scope | KEYSTONE-internal attribution and origin record only. Not a copyright, trademark, or patent filing. |
 
 ## Cross-references
 
