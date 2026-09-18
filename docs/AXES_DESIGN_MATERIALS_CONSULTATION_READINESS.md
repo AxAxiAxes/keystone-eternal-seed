@@ -98,3 +98,7 @@ approved capacity and support path.
 - `AXES_DESIGN_MATERIALS_CONSULTATION_INTAKE_TEMPLATE.md` — draft
   client-controlled intake questionnaire for candidate deliverable #1;
   itself not yet approved for use
+- `AXES_DMC_001_ACTIVATION_PROPOSAL.md` — a 2026-09-18 proposal with
+  recommended defaults for every open decision row above, to speed founder
+  review; it is a proposal only and does not itself approve or activate
+  anything
