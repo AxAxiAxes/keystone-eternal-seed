@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (s) user-owned AI sessions and sphere/gear model recorded](2026-09-18s-ai-ownership-sphere-model-recorded.md)
 - [2026-09-18 (r) founder working definition of "origin" recorded](2026-09-18r-origin-anchor-definition-recorded.md)
 - [2026-09-18 (q) Temple of Love architecture distilled from founder chat export](2026-09-18q-temple-of-love-architecture-distilled.md)
 - [2026-09-18 (p) first AI creative-work origin registry entry recorded (6 images, SHA-256 anchors, real copyright-law citation)](2026-09-18p-ai-creative-work-origin-registry-first-entry.md)

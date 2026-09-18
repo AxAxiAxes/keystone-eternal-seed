@@ -109,3 +109,10 @@ from a founder-shared personal chat export on 2026-09-18. It is a creative
 design concept, not a permit-ready construction document or a professionally
 reviewed structural plan. See
 `docs/memory/2026-09-18q-temple-of-love-architecture-distilled.md`.
+
+`USER_OWNED_AI_SESSIONS_AND_SPHERE_MODEL.md` records a founder concept for
+timestamped, user-authored/owned AI sessions and a partially-recalled
+"seven-gear sphere" ownership-rights model, alongside an honest status check
+of what the current AXI automation layer can and cannot do. Design
+philosophy and a real status update, not an implemented feature. See
+`docs/memory/2026-09-18s-ai-ownership-sphere-model-recorded.md`.
