@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 unverified code-origin/IP claim received — no action taken](2026-09-18-unverified-code-origin-claim-received.md)
 - [2026-09-18 keystone-as-origin-unit / "negative sphere" restitution framing addendum](2026-09-18-keystone-origin-unit-negative-sphere-framing.md)
 - [2026-09-18 AU sound-resequencer unit-of-measurement addendum](2026-09-18-au-sound-resequencer-unit-of-measurement.md)
 - [2026-09-18 KEYSTONE patent draft and master hub preserved; two re-uploads confirmed duplicate](2026-09-18-patent-draft-and-master-hub-preserved.md)
