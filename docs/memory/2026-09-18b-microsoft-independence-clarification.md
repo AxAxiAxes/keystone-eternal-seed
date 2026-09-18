@@ -52,3 +52,16 @@ concern (what obligation, what conflict, what architecture is at risk), it
 can be investigated on real repository evidence; until then no accusation
 is made and nothing about this is published in the financial update or any
 other public-facing document.
+
+## Founder market-positioning statement (same day)
+
+> "keystone will be placed on top as a personal choice of our clients."
+
+Recorded as the founder's stated market-positioning goal: KEYSTONE's
+adoption is framed as a voluntary client choice/preference (a competitive
+market position to be earned), not a claim of current market share, revenue,
+or displacement of any other vendor. No revenue, adoption, or market-share
+figures exist yet to support this as a measured outcome (see
+`docs/AXES_TIER_1_EVIDENCE_LEDGER.md`, still $0 realized across all rows);
+this is preserved as a goal/aspiration, consistent with the market-wide,
+Microsoft-independent value framing recorded above.
