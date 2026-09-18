@@ -78,6 +78,16 @@ Kept strictly to what is real and buildable today:
 
 ## 4. Synopsis: how this could relate to Microsoft
 
+**Founder clarification (2026-09-18):** "KEYSTONE has nothing to do with
+Microsoft, nevertheless it uses its own value in the entire market." This is
+recorded as the founder's own position: KEYSTONE is independent of
+Microsoft — no partnership, dependency, or relationship is claimed or sought
+by default — and KEYSTONE's value proposition is framed as market-wide
+(applicable across any platform or customer), not specific to, dependent on,
+or derived from Microsoft. The section below is retained only as general,
+non-committal market context (Section 4 below existed before this
+clarification and is kept for completeness, not as a plan).
+
 - If AXES/KEYSTONE tools were ever built as Copilot Extensions, Copilot
   Studio agents, or otherwise distributed through Microsoft's partner
   ecosystem (some early exploratory artifacts already exist per the crisis
