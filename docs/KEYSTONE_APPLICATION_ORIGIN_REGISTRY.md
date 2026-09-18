@@ -5,6 +5,11 @@
 **Purpose:** Establish a governed internal record of origin and authorized
 operation for AXES applications.
 
+> **See also:** [`KEYSTONE_ORIGIN_REGISTRY_GENERALIZATION_PLAN.md`](KEYSTONE_ORIGIN_REGISTRY_GENERALIZATION_PLAN.md)
+> (2026-09-18) proposes extending this registry model beyond AXES
+> applications to a general origin/creator/owner-rights record, per founder
+> request. That plan is a proposal for review, not an active service.
+
 ## Service definition
 
 KEYSTONE is the proposed origin and authority registration service for AXES
