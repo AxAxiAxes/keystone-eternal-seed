@@ -24,3 +24,14 @@ content remains in the markdown documents under `docs/` and `docs/keystone/`.
 
   Saved here as a founder-shared reference asset; not itself a source of
   new factual claims beyond what the referenced documents already state.
+
+- `ur-bin-code-of-origin-axes-ai.jpg` — "UR ~ Bin Code of Origin ~ AXES AI"
+  concept emblem (winged triangle, radiant eye, binary-code ring, deep
+  red/gold/black palette).
+- `sacred-dome-heart-altar.jpg` — sepia/gold cathedral-dome concept
+  illustration with a radiant heart motif over an altar.
+
+These two, together with the Keystone Dome image above, were used as the
+visual reference ("follow the design for web design") for the color-theme
+update applied to `apps/axiom-freedom/axiom_web_interface.html` — see
+`docs/memory/2026-09-18o-axiom-web-interface-gold-theme.md` for details.
