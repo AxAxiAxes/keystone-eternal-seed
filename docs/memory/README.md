@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (ab) Railway Agent documented as production-failure diagnostic tool](2026-09-18ab-railway-agent-documented.md)
 - [2026-09-18 (aa) Live production incident: AXIOM chat returning HTTP 502](2026-09-18aa-production-chat-502-incident.md)
 - [2026-09-18 (z) Consolidated KEYSTONE income-deployment timeline](2026-09-18z-keystone-income-deployment-timeline.md)
 - [2026-09-18 (y) Athanor "eternal seed vessel" concept and two more images decoded](2026-09-18y-athanor-vessel-and-logo-images-recorded.md)
