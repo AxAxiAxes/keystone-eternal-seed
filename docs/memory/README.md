@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (i) KEYSTONE origin/creator/owner-rights registry generalization plan devised](2026-09-18i-keystone-origin-registry-generalization-plan.md)
 - [2026-09-18 (d) founder "eternal creator"/self-governance statement, plus follow-up "self-satisfied unit, no external validation needed" elaboration](2026-09-18d-eternal-creator-self-governance-claim.md)
 - [2026-09-18 (h) "Ux/Ur," "Ax" as salt, "AxUx" as bread and juice — sound-resequencer vocabulary recorded](2026-09-18h-ux-ur-ax-salt-bread-juice-vocabulary.md)
 - [2026-09-18 (g) AxAxAr sound/"eternal home" symbolism; AXI adopted-rights framing recorded](2026-09-18g-axaxar-sound-home-axi-adopted-rights.md)
