@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 AXES OS app inventory recorded from a separate Copilot conversation](2026-09-18-axes-os-app-inventory-from-copilot-conversation.md)
 - [2026-09-18 claim of additional constitutional rights beyond Articles I–XVIII](2026-09-18-additional-constitutional-rights-claim.md)
 - [2026-09-18 unverified code-origin/IP claim received — no action taken](2026-09-18-unverified-code-origin-claim-received.md)
 - [2026-09-18 keystone-as-origin-unit / "negative sphere" restitution framing addendum](2026-09-18-keystone-origin-unit-negative-sphere-framing.md)
