@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (v) inter-AI interaction / web-app-accessibility / upload gap addressed honestly](2026-09-18v-ai-interaction-web-access-upload-status.md)
 - [2026-09-18 (u) founder action queue created — profitability-ordered summary of founder-only next steps](2026-09-18u-founder-action-queue-created.md)
 - [2026-09-18 (t) `creation.record` automation action added — AXI can now append founder-attributed creation records to a private, approval-gated journal](2026-09-18t-creation-record-automation-action-added.md)
 - [2026-09-18 (s) user-owned AI sessions and sphere/gear model recorded](2026-09-18s-ai-ownership-sphere-model-recorded.md)
