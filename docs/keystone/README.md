@@ -145,3 +145,10 @@ the binding, already-approved constitutional boundaries in
 of a person) and `docs/URNUR_FINANCIAL_READINESS.md` (financial/arbitration
 gate). Not implemented; requires founder/legal reconciliation first.
 
+`ATHANOR_ETERNAL_SEED_VESSEL_CONCEPT.md` records the founder's "Ikigai
+bead/eternal seed vessel, dome-ecosystem, altar, interactive value matrix"
+description and checks it against the existing, binding boundaries in
+`docs/ATHANOR_GAME_CONSOLE_READINESS.md` and
+`URNUR_EVOLVING_NAME_VALUE_CONCEPT.md` — the "agreement with AI, money
+markets, services" element is explicitly gated by both, not new scope.
+

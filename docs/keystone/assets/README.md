@@ -77,3 +77,20 @@ All six images above are anchored (SHA-256 hash + repository commit) in
   `docs/keystone/KEYSTONE_ARCHITECTURAL_EQUILIBRIUM_SYMBOLISM.md`). Anchored
   in `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`, Entry
   `KEYSTONE-CREATIVE-ORIGIN-000004`.
+- `eternal-seed-vessel.png` — ornate gold chalice/reliquary illustration,
+  described by the founder as an "eternal seed vessel," part of the
+  "Athanor" concept described in
+  `docs/keystone/ATHANOR_ETERNAL_SEED_VESSEL_CONCEPT.md`. No AI-generator
+  provenance marker found in the file's metadata. Anchored in
+  `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`, Entry
+  `KEYSTONE-CREATIVE-ORIGIN-000005`.
+- `flame-pomegranate-crown-anchor-logo.jpg` — flame-above-pomegranate-crown
+  emblem, proposed by the founder as a candidate logo for "our keystone
+  cryptographic anchor name and meaning registration." This is a proposed
+  branding concept, not itself a cryptographic mechanism — the repository's
+  real cryptographic anchoring (SHA-256 hashes, commit hashes, and verified
+  provenance manifests) is separate from and unaffected by any chosen logo.
+  Carries a visible, in-pixel "Meta AI" watermark (weaker evidence than a
+  signed manifest — see Entry 000003). Anchored in
+  `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`, Entry
+  `KEYSTONE-CREATIVE-ORIGIN-000006`.
