@@ -116,3 +116,11 @@ timestamped, user-authored/owned AI sessions and a partially-recalled
 of what the current AXI automation layer can and cannot do. Design
 philosophy and a real status update, not an implemented feature. See
 `docs/memory/2026-09-18s-ai-ownership-sphere-model-recorded.md`.
+
+`FOUNDER_ACTION_QUEUE.md` is a short, profitability-ordered summary of the
+external/account/legal actions only the founder can take next (Railway
+billing, first paid-service approval, domain/DNS, repo visibility, and
+similar). It is a navigational summary over the full evidence-backed
+`docs/AXES_TIER_1_DECISION_REGISTER.md`, kept separate from AI-automatable
+repository work.
+
