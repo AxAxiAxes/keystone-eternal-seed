@@ -160,3 +160,12 @@ KEYSTONE creator-origin setup), and an explicit list of what remains
 gated with no date. See `FOUNDER_ACTION_QUEUE.md` for the specific
 founder approvals that are the actual critical path.
 
+`PRODUCTION_INCIDENT_2026_09_18_CHAT_502.md` records an **open, urgent
+production incident**: the live public AXIOM chat is returning HTTP 502
+on every request as of 2026-09-18. Confirmed not a code regression (full
+test suite passes, code correctly injects identity/date on every call);
+narrowed to the outbound OpenAI call specifically, since the engine's
+other endpoints respond normally. Requires founder-only Railway/OpenAI
+account access to diagnose further — tracked as urgent item 0 in
+`FOUNDER_ACTION_QUEUE.md`.
+
