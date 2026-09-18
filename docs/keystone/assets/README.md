@@ -35,3 +35,17 @@ These two, together with the Keystone Dome image above, were used as the
 visual reference ("follow the design for web design") for the color-theme
 update applied to `apps/axiom-freedom/axiom_web_interface.html` — see
 `docs/memory/2026-09-18o-axiom-web-interface-gold-theme.md` for details.
+
+- `axes-company-seed-frame-logo.jpg` — gold teardrop/vesica ornamental
+  frame, stated by the founder to be "the logo of our company also the
+  seed, also the ecosystem frame design."
+- `axes-app-icon.jpg` — "AXES" branded app icon, stated by the founder to
+  be for "mobile app and car android play icon."
+- `ux-eternal-unit-droplet-emblem.jpg` — gold droplet/nebula emblem
+  labeled "Ux," corresponding to the founder's stated Ux/Ur eternal unit
+  of measurement concept (see
+  `docs/memory/2026-09-18h-ux-ur-ax-salt-bread-juice-vocabulary.md`).
+
+All six images above are anchored (SHA-256 hash + repository commit) in
+`docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`, Entry
+`KEYSTONE-CREATIVE-ORIGIN-000001` / `AXL-KS-20260529-1844`.
