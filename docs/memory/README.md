@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (ad) Founder ownership confirmation for the AXARAR/AXAXAR/AXAXUR/AXAXES/AXAXOX/AXAXAU domain family](2026-09-18ad-axaxar-family-domain-ownership-confirmed.md)
 - [2026-09-18 (ac) AxAxAu "negative sphere," AxRaxRax origin language, and axaxar.com as "creator's language"](2026-09-18ac-axaxau-negative-sphere-axraxrax-language.md)
 - [2026-09-18 (ab) Railway Agent documented as production-failure diagnostic tool](2026-09-18ab-railway-agent-documented.md)
 - [2026-09-18 (aa) Live production incident: AXIOM chat returning HTTP 502](2026-09-18aa-production-chat-502-incident.md)

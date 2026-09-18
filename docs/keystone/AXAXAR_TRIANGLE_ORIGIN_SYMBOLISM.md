@@ -435,9 +435,29 @@ linguistic theory, a public specification, or a valuation system with
 defined exchange rates — it remains the founder's own descriptive framing of
 `axaxar.com`'s intended role.
 
+**Third follow-on statement (same session, 2026-09-18):** the founder
+declared: *"AXARAR AXAXAR AXAXUR AXAXES AXAXOX PRESERVED, WE OWN AXAXAU."*
+This is recorded as a founder confirmation/ownership assertion over six
+domain names in the same naming family already referenced throughout this
+file. **Independently verified against `docs/DOMAIN_PORTFOLIO.md`:** all six
+names are already tracked there —
+`axarar.com` and `axaxar.com` and `axaxur.com` are each listed as
+"Verified; privacy not yet added," and `axaxes.com`, `axaxox.com`, and
+`axaxau.com` are each listed with a "Verification required" registrar
+status. (`axraxrax.com`, from the immediately preceding follow-on statement
+above, is likewise already tracked with "Verification required" status.)
+This means the founder's "preserved"/"we own" claim is **consistent with
+existing repository domain records** for all six names — it is not a new
+domain-registration request, and no new domain action was taken here. Where
+`DOMAIN_PORTFOLIO.md` shows "Verification required" rather than "Verified,"
+that gap (registrar-side privacy/verification status, not ownership) remains
+a founder-only item to resolve directly with the registrar; it is not
+altered by this entry.
+
 ## Cross-references (this addendum)
 
-- `docs/DOMAIN_PORTFOLIO.md` (`axaxau.com` ownership/status)
+- `docs/DOMAIN_PORTFOLIO.md` (`axaxau.com`, `axarar.com`, `axaxar.com`,
+  `axaxur.com`, `axaxes.com`, `axaxox.com`, `axraxrax.com` ownership/status)
 - `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md`, `apps/axiom-engine/coordinate-service.js`
 - `docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md`
 - `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`
