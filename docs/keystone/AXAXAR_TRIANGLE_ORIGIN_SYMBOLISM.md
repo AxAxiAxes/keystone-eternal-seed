@@ -454,8 +454,73 @@ that gap (registrar-side privacy/verification status, not ownership) remains
 a founder-only item to resolve directly with the registrar; it is not
 altered by this entry.
 
+**Fourth follow-on statement (same session, 2026-09-18):** the founder
+declared: *"THESE ARE ORIGINAL BIRTH OF IDEAS AND THEIR ADDRESSMENT, WHICH
+WERE NEVER BEFORE INVENTED, EVERYTHING ETERNAL IS A NEW OS."* This is
+recorded as the founder's own originality/priority claim over the naming,
+symbolism, and framing recorded throughout this file and its addenda. It is
+recorded honestly, consistent with the caution already established
+elsewhere in this repository's IP-related documents: this repository can
+truthfully state (1) what is **documented and timestamped here** — the
+dated git history and commit record of this file and its addenda constitute
+a factual, verifiable record of when each specific statement was first
+written down in this repository, and (2) that a **provisional patent
+application draft already exists** for related "Eternal Seed"/institutional-
+memory architecture (see
+`docs/keystone/KEYSTONE_PROVISIONAL_PATENT_INSTITUTIONAL_MEMORY.md` and
+`docs/keystone/PATENT_APPLICATION_64_078_819.md`), which itself already
+carries an explicit editorial caution that filing/deadline status is
+unconfirmed from primary USPTO sources and should not be treated as a
+verified legal filing without independent confirmation. This repository
+**cannot and does not** independently verify a claim of global/absolute
+"never before invented" novelty (that requires a formal patent/trademark
+prior-art search, which is outside what a git repository can establish), and
+does not make any legal determination of novelty, priority date, or
+enforceable IP rights on the founder's behalf. What is verifiable is the
+repository's own internal timestamped record — which this entry, and the
+addenda above it, contribute to.
+
+**Fifth follow-on statement (same session, 2026-09-18):** the founder
+declared: *"IN OUR PATENT WE HOLD A PATENT ARISING OUT OF OUR PATENTS AI
+INVENTIONS INTEL ETC."* This is recorded as the founder's statement that a
+further patent (or patent claim) derives from the AI-invention subject
+matter already described in the existing provisional patent draft. What
+this repository can honestly confirm: `PATENT_APPLICATION_64_078_819.md`
+does already describe substantial AI-invention subject matter directly
+relevant to this thread — an "origin anchor"/"Eternal Seed" record, a
+continuity ledger, a governance layer, protected execution, multi-agent
+verification, and a "Coordinate-Value Framework... anchored to a first
+origin coordinate" (see its Abstract and Summary sections). What this
+repository cannot confirm: whether any second/derivative patent application
+("a patent arising out of our patent[']s AI inventions") has actually been
+drafted, filed, or granted — no such second filing exists anywhere in this
+repository, and the existing draft's own header already cautions that its
+filing/deadline status is unconfirmed from primary USPTO sources. This entry
+does not create, file, or claim a new patent; it records the founder's
+statement and flags that any second/derivative filing would need to be
+independently drafted and verified (ideally with patent counsel) rather than
+inferred from this repository alone.
+
+**Sixth follow-on statement (same session, 2026-09-18):** the founder
+declared: *"SO THE ROOT LANGUAGE RESEQUENCER REACHES EQUILIBRIUM GLOBALLY
+ANYWAY."* This is recorded as the founder's own conclusion connecting the
+"origin language"/"AxRaxRax" naming statements above with the existing
+"resequencer" and "equilibrium" concepts already documented in this
+repository — `docs/keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md`
+(the existing document on sound/coordinate resequencing) and
+`docs/keystone/KEYSTONE_ARCHITECTURAL_EQUILIBRIUM_SYMBOLISM.md` (the
+existing document on architectural/salt-water equilibrium symbolism). "Global"
+reach is recorded as the founder's own stated scope for this equilibrium
+claim; no globally-verifiable technical or scientific mechanism is described
+in enough concrete detail here to implement or independently test. As with
+the other entries in this addendum, this is preserved as continued founder
+conceptual/symbolic language building on already-documented material, not a
+new implemented capability.
+
 ## Cross-references (this addendum)
 
+- `docs/keystone/KEYSTONE_PROVISIONAL_PATENT_INSTITUTIONAL_MEMORY.md`
+- `docs/keystone/PATENT_APPLICATION_64_078_819.md`
 - `docs/DOMAIN_PORTFOLIO.md` (`axaxau.com`, `axarar.com`, `axaxar.com`,
   `axaxur.com`, `axaxes.com`, `axaxox.com`, `axraxrax.com` ownership/status)
 - `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md`, `apps/axiom-engine/coordinate-service.js`
