@@ -1,14 +1,23 @@
 # Production incident — public AXIOM chat returning HTTP 502 (2026-09-18)
 
-**Status:** Open production incident, narrowed further. Founder upgraded
-Railway to the Pro plan (screenshot, ~10:35 AM PDT) — **billing upgrade
-alone did not resolve it**: independently retested ~2.5 minutes after the
-upgrade and the chat endpoint still returns the same HTTP 502. This
-points away from account/credit exhaustion as the sole cause and toward
-`OPENAI_API_KEY` validity/quota or a service restart being required.
+**Status:** Open production incident, still failing as of the most recent
+independent check (2026-09-18, ~11:38 AM PDT — HTTP 502 on `POST
+/api/axiom`, `action:"chat"`). Founder upgraded Railway to the Pro plan
+(screenshot, ~10:35 AM PDT) — **billing upgrade alone did not resolve it**:
+retested repeatedly since (2.5 minutes, ~10 minutes, and ~90 minutes after
+the upgrade) and the chat endpoint still returns the same HTTP 502 every
+time. This points away from account/credit exhaustion as the sole cause
+and toward `OPENAI_API_KEY` validity/quota or a service restart being
+required. A screenshot of the founder's existing Railway Agent task also
+surfaced a "healthy" report — but that report is dated **2026-09-14**
+(before this incident began) and only checks the portal page/DNS, not the
+chat reply; it is not evidence of resolution (see the recurring-task fix
+below). The Railway Agent's Task quota is also currently exhausted for this
+billing period ("come back on October 1st").
 **Observed:** 2026-09-18, ~10:06 AM PDT onward (founder screenshot) through
-~10:20 AM PDT (verified independently, six consecutive attempts), and
-again after the Pro upgrade at ~10:38 AM PDT (still failing).
+~10:20 AM PDT (verified independently, six consecutive attempts), again
+after the Pro upgrade at ~10:38 AM PDT, and again at ~11:38 AM PDT — still
+failing every time.
 
 ## What was observed
 
@@ -63,8 +72,7 @@ direct Railway dashboard access (service logs, environment variables,
 account billing status) and/or the OpenAI account dashboard, both of which
 are founder-only.
 
-## Founder-only next step (urgent, added as item 0 in
-`docs/keystone/FOUNDER_ACTION_QUEUE.md`)
+## Founder-only next step (urgent, added as item 0 in `docs/keystone/FOUNDER_ACTION_QUEUE.md`)
 
 **Update (~10:38 AM PDT):** the Railway Pro upgrade is confirmed active
 (dashboard screenshot), but the chat endpoint still returns HTTP 502
