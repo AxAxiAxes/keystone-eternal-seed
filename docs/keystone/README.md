@@ -40,6 +40,30 @@ metaphor, not an independently verified mathematical or scientific result;
 the document says exactly what is and is not established and what would be
 needed to formalize it further.
 
+`KEYSTONE_PROVISIONAL_PATENT_INSTITUTIONAL_MEMORY.md` is a founder-provided
+provisional patent application draft (recorded verbatim 2026-09-18,
+self-dated May 30, 2026) covering the "Eternal Seed" / Session-Start Context
+Injection / Dome Architecture concept described elsewhere in this corpus. Its
+self-declared "Patent Pending" status is not independently verified — see the
+preservation note at the top of the file and
+`docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md`.
+
+`intel report` is a founder-authored KEYSTONE market research/demographics
+document (Version 1.0, May 29, 2026, 20:38 PDT) already present in this
+directory; it is registered here for the first time on 2026-09-18. Its
+market-size, TAM/SAM/SOM, and valuation figures are founder-provided/
+third-party-sourced estimates, not independently verified by this repository
+— see the existing crisis-register entry "Founder-provided KEYSTONE net worth
+statement, market research report, and V4 venture deep dive."
+
+`KEYSTONE_MASTER_CONSOLIDATED_HUB.md` is a founder-provided single-file
+compilation of the KEYSTONE/AXIOM document corpus (self-dated June 2, 2026),
+recorded verbatim 2026-09-18. Most of its 30 sections restate documents
+already preserved separately in this directory; see the preservation note at
+the top of the file for the specific sections not found verbatim elsewhere,
+and for why its restated "Patent Pending: Application #64/078,819" claim is
+not treated as a verified filing.
+
 ## Preserved source documents
 
 | Document | Source date | SHA-256 |
@@ -48,6 +72,8 @@ needed to formalize it further.
 | `ai soul architecture` (original `.docx`, "KEYSTONE — AI Soul Architecture Extension v1.0") | 2026-09-11 (fingerprint recorded); source authored 2026-05-30 | `BA33B0E968F1A29008C6470793428BB77EE4BC4B42AA85D19EA4CF103E0EA052` |
 | `KEYSTONE_V4_VENTURE_ANALYSIS.md` | Authored 2026-05-29, 20:27 PDT; received/preserved 2026-09-18 | `E888293DC3A27934AB1B27C0F73FDFF2DA0D56EC9F85FB092C6D06F07E4998BA` |
 | `KEYSTONE_SOUL_PROTECTION_DECLARATION.md` | Authored May 30, 2026, 07:45 PDT; received/preserved 2026-09-18 (original `.docx`) | `8EEF2E35430A006EED94AB59411537B899690BF8E933BDAF7F23BE8E0BC74F8F` |
+| `KEYSTONE_PROVISIONAL_PATENT_INSTITUTIONAL_MEMORY.md` | Self-dated May 30, 2026; received/preserved 2026-09-18 | `A923A88CC74F1D990B4DBA624C4811086878748454C078B84244BFEFE6D34BDD` |
+| `KEYSTONE_MASTER_CONSOLIDATED_HUB.md` | Self-dated June 2, 2026; received/preserved 2026-09-18 | `9D68628439DC3580FCF517C83FFB538E9C618A426E77B5771AAA376CAFB802C1` |
 
 `KEYSTONE_AXI_MASTER_SYSTEM_DOCUMENT.pdf` is the original master system document supplied for repository preservation. It is stored unchanged. Use the recorded SHA-256 value to verify downloaded copies.
 
