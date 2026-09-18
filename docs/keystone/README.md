@@ -20,6 +20,13 @@ profit projections for the KEYSTONE product), recorded verbatim on
 legal, financial, or corporate-formation record, and not independently
 verified. See `docs/memory/2026-09-18-keystone-v4-venture-analysis-received.md`.
 
+`MAIN_AXES_CONTRACTING_TIMELINE.md` is a working priority checklist (added
+2026-09-18) that sorts every currently open item across AXIOM/KEYSTONE/AXES
+into what can start immediately, what needs one founder decision first, and
+what is founder/external-only. Use it alongside `AXAXAR_LAUNCH_PLAN.md` and
+`docs/AXES_TIER_1_DECISION_REGISTER.md`, which it summarizes rather than
+replaces.
+
 ## Preserved source documents
 
 | Document | Source date | SHA-256 |
