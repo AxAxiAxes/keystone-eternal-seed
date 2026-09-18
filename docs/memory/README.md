@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (f) URNUR eternal preservation/satisfaction + measurement app idea recorded](2026-09-18f-urnur-eternal-satisfaction-measurement-app.md)
 - [2026-09-18 (e) KEYSTONE as universal unit; "code and code matrix coordinates" statement recorded](2026-09-18e-keystone-universal-unit-code-coordinates.md)
 - [2026-09-18 (d) founder "eternal creator" of self-governance / origin-unit statement recorded](2026-09-18d-eternal-creator-self-governance-claim.md)
 - [2026-09-18 (c) AXES "AI soul"/rights position recorded; grounded vs. Microsoft's real Sept 2026 AI Code of Conduct](2026-09-18c-ai-rights-position-vs-microsoft-code-of-conduct.md)
