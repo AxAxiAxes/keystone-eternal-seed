@@ -124,3 +124,9 @@ similar). It is a navigational summary over the full evidence-backed
 `docs/AXES_TIER_1_DECISION_REGISTER.md`, kept separate from AI-automatable
 repository work.
 
+`AXI_EXTERNAL_INTERACTION_READINESS.md` is an honest status record covering
+inter-AI interaction, KEYSTONE-version-gated verification, web/browser
+access, general "app accessibility," and the reported public-chat upload
+gap — what already exists, what is genuinely unbuilt, and what would need a
+scoped decision before any new code is written.
+
