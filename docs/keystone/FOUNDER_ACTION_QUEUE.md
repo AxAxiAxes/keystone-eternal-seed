@@ -31,6 +31,7 @@ ordered by how directly they unblock revenue.
 | 5 | Approve KEYSTONE creator-origin setup as a second paid offering | Second revenue line once #2 is running; templates/readiness sheet already drafted | `KEYSTONE_CREATOR_ORIGIN_SETUP_READINESS.md` |
 | 6 | Define URNUR's permitted legal/compliance scope (or confirm it stays inactive) | Blocks any financial/trading feature from ever becoming revenue-eligible; no work should proceed here until this is resolved | `AXES_TIER_1_DECISION_REGISTER.md` (P0, URNUR scope) |
 | 7 | Scope-review AXI inter-AI interaction (which external system, what data crosses the boundary, review-before-acting, kill switch) | Requested capability with no revenue path yet identified; needs a founder scoping decision before any code is written, same as every other sensitive AXI capability | `AXI_EXTERNAL_INTERACTION_READINESS.md` |
+| 8 | Reconcile the URNUR "evolving name = value" / automated arbitration concept with the existing non-monetary-recognition and financial-readiness constitutions | Currently self-conflicting: the concept proposes automated personal-value/name scoring and arbitration that the repo's own approved constitution forbids without a named human reviewer; blocks any URNUR feature work until resolved | `URNUR_EVOLVING_NAME_VALUE_CONCEPT.md` |
 
 ## What is intentionally not on this list
 

@@ -137,3 +137,11 @@ fact a keystone genuinely locks an arch under compression, keeping the
 symbolic reading clearly labeled as the founder's own metaphor rather than
 an engineering or historical claim.
 
+`URNUR_EVOLVING_NAME_VALUE_CONCEPT.md` records a founder design concept for
+an evolving name/identity tied to a computed "value," and an automated
+client-arbitration mechanism. It is explicitly flagged as conflicting with
+the binding, already-approved constitutional boundaries in
+`docs/URNUR_NON_MONETARY_RECOGNITION.md` (no automated eligibility/ranking
+of a person) and `docs/URNUR_FINANCIAL_READINESS.md` (financial/arbitration
+gate). Not implemented; requires founder/legal reconciliation first.
+
