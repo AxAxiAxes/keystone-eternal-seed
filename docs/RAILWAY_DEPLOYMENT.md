@@ -232,6 +232,35 @@ After both services are deployed and the domain is active:
    state survive using the mounted Railway Volume and independently verified
    recovery bundle.
 
+## Diagnosing production failures with Railway Agent
+
+Railway's dashboard includes a built-in chat-based AI assistant, **Railway
+Agent**, that can read real build/runtime logs and service configuration
+directly — something no repository-side agent can do, since Railway logs
+and account/billing state are outside this repository's reach.
+
+Use it whenever `/axiom` (or any other endpoint) fails in a way that isn't
+explained by the code itself (confirmed correct + tests passing), for
+example the HTTP 502 `"AXIOM chat is temporarily unavailable"` incident
+recorded in `docs/keystone/PRODUCTION_INCIDENT_2026_09_18_CHAT_502.md`:
+
+1. Open the Railway dashboard for the `lucid-flow` project (see "Current
+   deployment state" above for why this is the correct project).
+2. Open the built-in Agent chat panel and ask it directly, e.g.: *"Why is
+   axiom-engine's chat endpoint returning 502? Check recent deploy/runtime
+   logs and the OPENAI_API_KEY status."*
+3. The agent can inspect logs/metrics across projects, environments, and
+   deployments, and — if the root cause is a code fix rather than an
+   account/billing issue — open a pull request against this repository
+   with a proposed fix for review.
+4. It can also be extended via Agent Connectors (Notion, Linear, Sentry, a
+   custom MCP server, or Slack/Discord) if the founder wants failures
+   surfaced automatically outside the Railway dashboard.
+
+Billing for Railway Agent usage is per-LLM-token at the underlying
+provider's published rate (no markup) — see Railway's own pricing page for
+current figures before relying on it for routine automation.
+
 ## Credential handling
 
 - Enter `OPENAI_API_KEY` only in Railway's encrypted service variables.

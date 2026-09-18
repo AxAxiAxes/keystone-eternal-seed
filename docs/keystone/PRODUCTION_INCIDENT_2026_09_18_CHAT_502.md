@@ -58,7 +58,7 @@ direct Railway dashboard access (service logs, environment variables,
 account billing status) and/or the OpenAI account dashboard, both of which
 are founder-only.
 
-## Founder-only next step (urgent, added as item 10 in
+## Founder-only next step (urgent, added as item 0 in
 `docs/keystone/FOUNDER_ACTION_QUEUE.md`)
 
 1. Open the Railway dashboard for the `axiom-engine` service and check its
@@ -75,7 +75,9 @@ are founder-only.
 ## Cross-references
 
 - `docs/RAILWAY_DEPLOYMENT.md` (existing low-credit warning, deployment
-  process, troubleshooting checklist)
-- `docs/keystone/FOUNDER_ACTION_QUEUE.md` (item 10)
+  process, troubleshooting checklist, and the "Diagnosing production
+  failures with Railway Agent" section — the fastest path to real Railway
+  logs/account state, which this repository cannot see)
+- `docs/keystone/FOUNDER_ACTION_QUEUE.md` (item 0)
 - `apps/axiom-engine/chat-service.js`, `apps/axiom-engine/system-prompt.js`
 - PR #95 (identity/date fix, code confirmed correct and unaffected)
