@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 financial update prepared, Microsoft-loss claim handled honestly](2026-09-18-financial-update-and-microsoft-claim-handling.md)
 - [2026-09-18 AXES-DMC-001 activation proposal drafted](2026-09-18-axes-dmc-001-activation-proposal.md)
 - [2026-09-18 AXES OS app inventory recorded from a separate Copilot conversation](2026-09-18-axes-os-app-inventory-from-copilot-conversation.md)
 - [2026-09-18 claim of additional constitutional rights beyond Articles I–XVIII](2026-09-18-additional-constitutional-rights-claim.md)
