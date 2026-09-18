@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-19 Keystone/trinity research and business-value review](2026-09-19-keystone-trinity-research-and-business-value-review.md)
 - [2026-09-18 Soul Protection Declaration preserved; AxAxAr "triangle" framing recorded honestly](2026-09-18-soul-protection-declaration-and-axaxar-triangle-framing.md)
 - [2026-09-18 PRs #95-#99 merged; AXIOM engine Docker image fix](2026-09-18-pr-95-99-merged-docker-copy-fix.md)
 - [2026-09-17 New repository: urartuhi.com art gallery site](2026-09-17-urartuhi-gallery-site-created.md)
