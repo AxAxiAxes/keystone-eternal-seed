@@ -6,6 +6,14 @@ service, legal filing, or public claim is created by this document.
 **Requested by:** Founder — "devise plan for keystone and its development as
 an anchor for registering origin, creator and owner rights."
 
+> **2026-09-18 update:** the first concrete registry entry under this plan
+> has been recorded — see
+> `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md` (Entry
+> `KEYSTONE-CREATIVE-ORIGIN-000001` / founder reference code
+> `AXL-KS-20260529-1844`), covering six founder-shared images with real
+> SHA-256 anchors and an honest assessment against current US copyright
+> law.
+
 ## What already exists (do not rebuild — extend)
 
 This repository already has three real, working pieces of this idea. This
