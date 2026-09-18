@@ -1,9 +1,14 @@
 # Production incident — public AXIOM chat returning HTTP 502 (2026-09-18)
 
-**Status:** Open production incident. Root cause not confirmed — requires
-Railway/OpenAI account access this repository cannot provide.
+**Status:** Open production incident, narrowed further. Founder upgraded
+Railway to the Pro plan (screenshot, ~10:35 AM PDT) — **billing upgrade
+alone did not resolve it**: independently retested ~2.5 minutes after the
+upgrade and the chat endpoint still returns the same HTTP 502. This
+points away from account/credit exhaustion as the sole cause and toward
+`OPENAI_API_KEY` validity/quota or a service restart being required.
 **Observed:** 2026-09-18, ~10:06 AM PDT onward (founder screenshot) through
-~10:20 AM PDT (verified independently, six consecutive attempts).
+~10:20 AM PDT (verified independently, six consecutive attempts), and
+again after the Pro upgrade at ~10:38 AM PDT (still failing).
 
 ## What was observed
 
@@ -61,13 +66,22 @@ are founder-only.
 ## Founder-only next step (urgent, added as item 0 in
 `docs/keystone/FOUNDER_ACTION_QUEUE.md`)
 
-1. Open the Railway dashboard for the `axiom-engine` service and check its
-   deploy logs for the exact outbound error at the time of a failed chat
-   request.
-2. Confirm `OPENAI_API_KEY` is present, current, and not rate-limited /
-   over quota on the OpenAI account dashboard.
-3. Confirm the Railway account balance/plan has not lapsed since the
-   2026-09-12 low-credit warning.
+**Update (~10:38 AM PDT):** the Railway Pro upgrade is confirmed active
+(dashboard screenshot), but the chat endpoint still returns HTTP 502
+after the upgrade. This makes a stuck/un-restarted `axiom-engine`
+deployment or an `OPENAI_API_KEY`/OpenAI-side issue more likely than pure
+account-credit exhaustion. Recommended next steps, in order:
+
+1. In the Railway dashboard, manually **redeploy/restart the
+   `axiom-engine` service** now that the Pro plan is active — some plan
+   changes require a redeploy to take effect on already-running services.
+2. If still failing after a redeploy, use **Railway Agent** (see the new
+   section in `docs/RAILWAY_DEPLOYMENT.md`) to ask it directly why the
+   chat call is failing — it can read the actual deploy/runtime logs this
+   repository cannot see.
+3. Confirm `OPENAI_API_KEY` is present, current, and not rate-limited /
+   over quota on the OpenAI account dashboard directly (separate from
+   Railway billing).
 4. Once resolved, re-test `POST /api/axiom` with `{"action":"chat", ...}`
    and confirm both (a) a 200 response and (b) the response reflects the
    real current date and AXIOM identity, not a stale June 2024 answer.
