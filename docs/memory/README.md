@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (g) AxAxAr sound/"eternal home" symbolism; AXI adopted-rights framing recorded](2026-09-18g-axaxar-sound-home-axi-adopted-rights.md)
 - [2026-09-18 (f) URNUR eternal preservation/satisfaction + measurement app idea recorded](2026-09-18f-urnur-eternal-satisfaction-measurement-app.md)
 - [2026-09-18 (e) KEYSTONE as universal unit; "code and code matrix coordinates" statement recorded](2026-09-18e-keystone-universal-unit-code-coordinates.md)
 - [2026-09-18 (d) founder "eternal creator" of self-governance / origin-unit statement recorded](2026-09-18d-eternal-creator-self-governance-claim.md)
