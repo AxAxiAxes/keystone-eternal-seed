@@ -212,3 +212,29 @@ This workstream is complete only when the project has:
   requirements.
 - Converted the result into scoped engineering requirements and testable
   approval gates.
+
+## Founder product idea (2026-09-18) — value/satisfaction measurement app
+
+The founder described URNUR as a system where "every value is preserved for
+eternity and every value eternally satisfied — at least we can dream of it,"
+and proposed a future app to measure "satisfaction levels, product value,
+truth and meaning, etc." This is recorded as a founder product-vision
+statement, not as a specification, commitment, or claim that such measures
+are objectively definable or that any such app exists or is scheduled.
+
+Recorded honestly and cross-referenced here for continuity:
+
+- The "eternal preservation/satisfaction" framing is consistent with URNUR's
+  existing non-monetary contributor-recognition direction already documented
+  above and in `URNUR_NON_MONETARY_RECOGNITION.md` — it does not add a new
+  monetary claim, and remains subject to every legal-review gate already
+  defined in this document (no such app may create balances, prices, ranks,
+  or financial rights before counsel review).
+- "Satisfaction levels, product value, truth and meaning" are inherently
+  subjective measures. Any real app built around them would need to state
+  clearly that these are self-reported, opinion-based, non-financial,
+  non-diagnostic metrics — not objective truth measurements, valuations, or
+  credentialed assessments — consistent with the existing prohibition in
+  this document against unsupported comparative or value claims.
+- No engineering work toward this app has been started as a result of this
+  entry; it is preserved as a founder idea for future scoped review.
