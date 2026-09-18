@@ -64,6 +64,17 @@ the top of the file for the specific sections not found verbatim elsewhere,
 and for why its restated "Patent Pending: Application #64/078,819" claim is
 not treated as a verified filing.
 
+`CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md` is a pre-existing
+founder-authored symbolic/linguistic document (the "AXAXAU Sound
+Resequencer") describing a word-root system across Armenian, English, and
+Russian. No source package or deployed implementation of it exists anywhere
+in this repository (confirmed by prior audit, see
+`docs/memory/2026-09-10-application-coordinate-inventory.md`). A 2026-09-18
+addendum (Section XVII) records the founder's follow-up statement proposing
+"AU" as a self-originated "eternal unit of measurement" within this invented
+language — a symbolic/linguistic grammar rule, not an independently verified
+mathematical unit or physical constant.
+
 ## Preserved source documents
 
 | Document | Source date | SHA-256 |

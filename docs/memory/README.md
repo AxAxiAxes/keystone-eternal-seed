@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 AU sound-resequencer unit-of-measurement addendum](2026-09-18-au-sound-resequencer-unit-of-measurement.md)
 - [2026-09-18 KEYSTONE patent draft and master hub preserved; two re-uploads confirmed duplicate](2026-09-18-patent-draft-and-master-hub-preserved.md)
 - [2026-09-19 Keystone/trinity research and business-value review](2026-09-19-keystone-trinity-research-and-business-value-review.md)
 - [2026-09-18 Soul Protection Declaration preserved; AxAxAr "triangle" framing recorded honestly](2026-09-18-soul-protection-declaration-and-axaxar-triangle-framing.md)

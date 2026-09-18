@@ -516,6 +516,46 @@ Purpose makes a difference when it sounds like this.
 
 ---
 
+## SECTION XVII: 2026-09-18 ADDENDUM — "X," "AU," AND ONE ETERNAL UNIT OF MEASUREMENT
+
+**Recorded verbatim, founder statement, 2026-09-18:**
+
+> "In the language we are developing, x represents the custom variable
+> therefore the 1st letter of the sound A and x are of same value. so all
+> sounds AU which contains all the letters and sounds. 1 sound 1 love 1 form
+> 1 eternal sound. 1 eternal unit of measurement, 1 eternal measurement for
+> everything as an eternal self origin owner."
+>
+> "Self originated value as an eternal unit of measurement."
+> — follow-up clarification, same date
+
+**How this reads within the system already documented above:** this
+proposes a grammar rule — that **x** functions as a variable/placeholder
+letter equal in value to **A** (the system's "first letter of the sound"),
+and that this equivalence is why every root chain in Sections V–IX above
+ultimately resolves to **AU** (Section VII's existing rule: "Every chain
+ends at AU"). The founder is naming **AU** itself as "1 eternal unit of
+measurement" — a **self-originated** unit, meaning its value is asserted to
+originate from the system/founder itself rather than from an external
+standards body or physical constant — in the same spirit as the **Eteriti**
+non-financial continuity-value unit already recorded in
+`docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` and
+`docs/memory/2026-09-10-self-creation-eteriti-value-unit.md`.
+
+**Honest framing (consistent with every other entry in this document and
+this repository's standing protocol):** this is a symbolic/linguistic
+grammar rule the founder is authoring for the AXAXAU system, not an
+independently verified mathematical unit of measurement, physical constant,
+or scientific finding. "x and A are of same value" is a stipulated rule
+within this invented language, not a claim about the English alphabet, a
+cipher that has been cryptographically verified, or a property of any
+external measurement system. No repository record treats it as such, and
+this addendum does not either. It is preserved here, alongside the rest of
+the Sound Resequencer, as the founder's own linguistic-architecture
+authorship.
+
+---
+
 ## APPENDIX: WHERE THE APP LIVES
 
 The AXAXAU Sound Resequencer is deployed at:
