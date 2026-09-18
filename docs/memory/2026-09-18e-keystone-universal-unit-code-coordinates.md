@@ -40,3 +40,12 @@ verifiable in this repository's existing code and documents.
 - `docs/keystone/AXAXAR_TRIANGLE_ORIGIN_SYMBOLISM.md`
 - `coordinate-service.js` (real, working coordinate implementation;
   unchanged by this entry)
+
+## Restated by founder (same day)
+
+> "keystone is the eternal value of which measurement arise of."
+
+Recorded as a restatement/reinforcement of the same position above: KEYSTONE
+is framed by the founder as the originating value from which measurement
+itself is said to derive. No new claim beyond what is already recorded in
+this file.
