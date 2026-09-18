@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (o) AXIOM web interface re-themed to match KEYSTONE branding art](2026-09-18o-axiom-web-interface-gold-theme.md)
 - [2026-09-18 (n) Keystone Dome concept image saved as branding asset](2026-09-18n-keystone-dome-image-asset-saved.md)
 - [2026-09-18 (m) ~500GB local data loss reported; founder's rationale for eternal memory register](2026-09-18m-data-loss-eternal-register-rationale.md)
 - [2026-09-18 (l) local machine backup/continuity check confirmed intact (advise.docx flagged as script, not prose)](2026-09-18l-local-backup-continuity-check-confirmed.md)
