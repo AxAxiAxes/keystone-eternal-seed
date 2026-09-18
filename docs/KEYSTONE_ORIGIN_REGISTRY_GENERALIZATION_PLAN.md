@@ -65,6 +65,13 @@ For entries where the founder wants stronger proof than git+GitHub alone
   it touches an external service.
 - This phase is optional and reversible; nothing is broken if it is never
   done.
+- **See [`KEYSTONE_ORIGIN_ANCHOR_LEGAL_AND_ECOLOGICAL_EVALUATION.md`](KEYSTONE_ORIGIN_ANCHOR_LEGAL_AND_ECOLOGICAL_EVALUATION.md)**
+  (2026-09-18) for cited research on (a) the real legal evidentiary weight
+  of RFC 3161 / OpenTimestamps timestamps for establishing origin/priority,
+  and (b) the ecological cost of Bitcoin-anchored OpenTimestamps — that
+  research recommends git+GitHub content-hashing / RFC 3161 as the default,
+  low-ecological-cost tier, reserving Bitcoin anchoring for a small number
+  of especially significant records.
 
 ### Phase 3 — Naming/keying convention: "first letter + / last letter 0"
 
