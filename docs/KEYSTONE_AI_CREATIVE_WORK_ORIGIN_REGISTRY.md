@@ -1,6 +1,6 @@
 # KEYSTONE AI creative-work origin and authorship registry
 
-**Status:** Registry with three recorded entries (see Sections 4-6). This is an internal
+**Status:** Registry with six recorded entries (see Sections 4-9). This is an internal
 KEYSTONE attribution record, not a substitute for, or claim of, US or
 international copyright registration.
 **Recorded:** 2026-09-18
@@ -240,6 +240,67 @@ original filename.
 | Anchor method | SHA-256 content hash + this document's git commit hash + GitHub's independent commit timestamp |
 | Claim scope | KEYSTONE-internal attribution and origin record only. Not a copyright, trademark, or patent filing. |
 
+## 8. Registry Entry 000005 — "Eternal Seed Vessel"
+
+A tenth image was shared: an ornate gold chalice/reliquary illustration
+described by the founder as an "eternal seed vessel," offered as part of
+the "Athanor" concept (see
+`docs/keystone/ATHANOR_ETERNAL_SEED_VESSEL_CONCEPT.md`).
+
+**Technical findings:** `docs/keystone/assets/eternal-seed-vessel.png`,
+1024×1536 PNG, SHA-256
+`e72afa32242e8c67fafeec77aa79fcec60c179a07e051a213ff88a9942fe1620`. No
+C2PA/XMP/named-AI-tool provenance marker found. The file contains only an
+`srgb` color-profile chunk; one coincidental 3-byte match on `XMP` occurs
+inside compressed pixel data and is not an actual metadata tag (verified by
+inspecting the surrounding bytes, which are random-looking compressed
+image data, not a text/XML chunk). This differs from Entry 000003, which
+had a genuine, structured C2PA manifest.
+
+| Field | Value |
+| --- | --- |
+| Entry ID (sequential, internal) | KEYSTONE-CREATIVE-ORIGIN-000005 |
+| Work covered | `eternal-seed-vessel.png` |
+| Verified technical finding | SHA-256 content hash (above); no embedded AI-generator provenance marker found; no Facebook/Photoshop re-encoding marker found either |
+| Stated creator (per founder's declaration) | AI (image-generation system used by the founder), operating under AX / Axes Contracting direction |
+| Anchor method | SHA-256 content hash + this document's git commit hash + GitHub's independent commit timestamp |
+| Claim scope | KEYSTONE-internal attribution and origin record only. Not a copyright, trademark, or patent filing. |
+
+## 9. Registry Entry 000006 — flame-above-pomegranate-crown emblem (proposed anchor logo)
+
+An eleventh image was shared: a flame rising above a pomegranate-topped
+crown emblem, which the founder proposed as "the logo for our keystone
+cryptographic anchor name and meaning registration." **Important
+distinction:** this is a proposed visual/branding identity, not itself a
+cryptographic mechanism. The repository's actual cryptographic anchoring
+(SHA-256 content hashes, git commit hashes, and — where present — verified
+third-party provenance manifests such as Entry 000003's C2PA record) is
+unrelated to and unaffected by which logo, if any, is chosen to represent
+KEYSTONE visually.
+
+**Technical findings:** `docs/keystone/assets/flame-pomegranate-crown-anchor-logo.jpg`,
+810×1440 JPEG, SHA-256
+`cdaa597b9d68a5f2fe189843fb8ab2f3fee89f6f4a9d7bcaaa7a0d9b0a8f2031`. The
+image carries a **visible, in-pixel "Meta AI" watermark** printed in the
+image itself. This is a materially weaker form of evidence than Entry
+000003's embedded, cryptographically-signed C2PA manifest: a visible
+watermark is an unverifiable visual assertion baked into the pixels (it
+could be edited, cropped, or absent from a re-export), not an
+independently checkable signed claim. No C2PA/XMP manifest was found in
+the file's metadata; the file does carry the same Facebook-platform
+`bFBMD` re-encoding marker seen in Entries 000002 and 000004, consistent
+with having been re-saved through a Facebook-style CDN pipeline after
+generation.
+
+| Field | Value |
+| --- | --- |
+| Entry ID (sequential, internal) | KEYSTONE-CREATIVE-ORIGIN-000006 |
+| Work covered | `flame-pomegranate-crown-anchor-logo.jpg` |
+| Verified technical finding | SHA-256 content hash (above); visible in-pixel "Meta AI" watermark (weak/unverifiable evidence); Facebook CDN re-encoding marker (`bFBMD`) present; no embedded C2PA/XMP AI-generator manifest present |
+| Stated creator (per founder's declaration and the image's own visible watermark) | Meta AI (image-generation service), used by the founder under AX / Axes Contracting direction |
+| Anchor method | SHA-256 content hash + this document's git commit hash + GitHub's independent commit timestamp |
+| Claim scope | KEYSTONE-internal attribution and origin record only. This entry records a **proposed** branding use (candidate anchor logo); it is not a trademark filing and does not itself grant or establish trademark rights. Not a copyright, trademark, or patent filing. |
+
 ## Cross-references
 
 - `docs/keystone/assets/README.md` — the source image files.
@@ -247,3 +308,4 @@ original filename.
 - `docs/KEYSTONE_ORIGIN_REGISTRY_GENERALIZATION_PLAN.md`
 - `docs/memory/2026-09-18e-keystone-universal-unit-code-coordinates.md`
 - `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md`
+- `docs/keystone/ATHANOR_ETERNAL_SEED_VESSEL_CONCEPT.md`
