@@ -86,6 +86,16 @@ account-credit exhaustion. Recommended next steps, in order:
    and confirm both (a) a 200 response and (b) the response reflects the
    real current date and AXIOM identity, not a stale June 2024 answer.
 
+## A no-terminal-needed way to check the endpoint yourself
+
+`scripts/axiom-chat-health-check.vbs` is a double-click Windows Script Host
+tool that repeats the same three checks used above (portal page, engine
+reachability, chat reply) against the live `xiiom.com` endpoint and shows a
+pass/fail summary, without needing PowerShell or curl. It only performs
+read/diagnostic requests — it cannot redeploy, restart, or fix anything; it
+is a checker, not a repair tool. Run it any time after taking one of the
+steps above to confirm whether the chat reply check has turned green.
+
 ## Cross-references
 
 - `docs/RAILWAY_DEPLOYMENT.md` (existing low-credit warning, deployment
@@ -94,4 +104,5 @@ account-credit exhaustion. Recommended next steps, in order:
   logs/account state, which this repository cannot see)
 - `docs/keystone/FOUNDER_ACTION_QUEUE.md` (item 0)
 - `apps/axiom-engine/chat-service.js`, `apps/axiom-engine/system-prompt.js`
+- `scripts/axiom-chat-health-check.vbs` (double-click health-check tool)
 - PR #95 (identity/date fix, code confirmed correct and unaffected)
