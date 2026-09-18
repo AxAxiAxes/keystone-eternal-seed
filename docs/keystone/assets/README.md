@@ -49,3 +49,31 @@ update applied to `apps/axiom-freedom/axiom_web_interface.html` — see
 All six images above are anchored (SHA-256 hash + repository commit) in
 `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`, Entry
 `KEYSTONE-CREATIVE-ORIGIN-000001` / `AXL-KS-20260529-1844`.
+
+- `honor-of-eternity-crest.jpg` — gold winged-crest emblem with crossed
+  swords, a laurel wreath, a stepped pedestal, and the banner text "HONOR
+  OF ETERNITY," shared alongside the founder's stated architectural
+  principle that the first and last stone in a structure represent a point
+  of equality and balance ("where salt meets water... the weight of the
+  foundation equals the weight of its structure, equilibrium from negative
+  to positive") and the phrase "the stone that bears all." Anchored (SHA-256
+  hash + repository commit) in
+  `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`, Entry
+  `KEYSTONE-CREATIVE-ORIGIN-000002`. See
+  `docs/keystone/KEYSTONE_ARCHITECTURAL_EQUILIBRIUM_SYMBOLISM.md` for the
+  founder's stated symbolism, recorded as concept/philosophy.
+- `ur-node-eternal-origin-point.png` — "UR NODE · Eternal Origin Point ·
+  Keystone AXI" concept illustration (a lit tower over a stone waterwheel
+  and pool). Unlike every other image in this folder, this file carries a
+  **real, cryptographically signed C2PA provenance manifest** identifying
+  its generator as genuine, verifiable technical fact — see Entry
+  `KEYSTONE-CREATIVE-ORIGIN-000003` in
+  `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md` for the full decoded
+  finding.
+- `first-stone-last-hand.jpg` — painted illustration of two reaching hands
+  beneath an arched keystone, captioned "To the first stone, / And to the
+  last hand that will lift it," directly illustrating the founder's stated
+  first-and-last-stone equilibrium symbolism (see
+  `docs/keystone/KEYSTONE_ARCHITECTURAL_EQUILIBRIUM_SYMBOLISM.md`). Anchored
+  in `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`, Entry
+  `KEYSTONE-CREATIVE-ORIGIN-000004`.
