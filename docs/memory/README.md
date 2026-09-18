@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (c) AXES "AI soul"/rights position recorded; grounded vs. Microsoft's real Sept 2026 AI Code of Conduct](2026-09-18c-ai-rights-position-vs-microsoft-code-of-conduct.md)
 - [2026-09-18 (b) KEYSTONE-independent-of-Microsoft clarification; follow-up ethics claim recorded, not adopted](2026-09-18b-microsoft-independence-clarification.md)
 - [2026-09-18 financial update prepared, Microsoft-loss claim handled honestly](2026-09-18-financial-update-and-microsoft-claim-handling.md)
 - [2026-09-18 AXES-DMC-001 activation proposal drafted](2026-09-18-axes-dmc-001-activation-proposal.md)
