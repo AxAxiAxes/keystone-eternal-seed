@@ -9,7 +9,9 @@ now. This is a summary view over `AXES_TIER_1_DECISION_REGISTER.md` (the
 full evidence-backed record) and `FOUNDER_REVENUE_PRIORITY_OVERLAY.md` (the
 V1/V2/V3 revenue sequencing) — read those for full context and evidence;
 this file exists so the founder can see "what do I personally need to do
-next, in what order" without reading the full register.
+next, in what order" without reading the full register. See
+`PRODUCT_BRANCH_DOMAIN_MAP.md` for how each item below maps to a specific
+domain name, repo, and product branch.
 
 ## Why this list exists
 
@@ -34,6 +36,8 @@ ordered by how directly they unblock revenue.
 | 7 | Scope-review AXI inter-AI interaction (which external system, what data crosses the boundary, review-before-acting, kill switch) | Requested capability with no revenue path yet identified; needs a founder scoping decision before any code is written, same as every other sensitive AXI capability | `AXI_EXTERNAL_INTERACTION_READINESS.md` |
 | 8 | Reconcile the URNUR "evolving name = value" / automated arbitration concept with the existing non-monetary-recognition and financial-readiness constitutions | Currently self-conflicting: the concept proposes automated personal-value/name scoring and arbitration that the repo's own approved constitution forbids without a named human reviewer; blocks any URNUR feature work until resolved | `URNUR_EVOLVING_NAME_VALUE_CONCEPT.md` |
 | 9 | Same reconciliation as #8, applied to the Athanor "agreement with AI, money markets, services" concept | Same underlying conflict, different concept doc; resolving #8 resolves this one too — tracked separately only so the Athanor concept doc isn't silently unresolved | `ATHANOR_ETERNAL_SEED_VESSEL_CONCEPT.md`, `ATHANOR_GAME_CONSOLE_READINESS.md` |
+| 10 | Answer the 5 scoping questions in `AXAXAR_LAUNCH_PLAN.md` (what Axaxar.com does, target customer, pricing model, domain registrar status) so the draft plan in the separate `AxAxiAxes/axaxar.com` repo can move past phase 0 | A registered domain and a scaffold repo already exist for this with no confirmed product definition; no build/spend should proceed until the founder answers | `keystone/AXAXAR_LAUNCH_PLAN.md` |
+| 11 | Decide whether to point the real `urartuhi.com` domain at the already-live gallery site (`https://axaxiaxes.github.io/urartuhi.com/`) via DNS CNAME, or use a different hosting target; supply real artwork if proceeding | Site is built and deployed but invisible to the public until DNS is pointed at it — a low-effort, low-risk item that's currently just sitting idle | `docs/memory/2026-09-17-urartuhi-gallery-site-created.md` |
 
 ## What is intentionally not on this list
 
