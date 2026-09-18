@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (l) local machine backup/continuity check confirmed intact (advise.docx flagged as script, not prose)](2026-09-18l-local-backup-continuity-check-confirmed.md)
 - [2026-09-18 (k) three attachments confirmed byte-identical re-uploads; no changes made](2026-09-18k-reupload-duplicate-confirmation.md)
 - [2026-09-18 (j) real legal/ecological research added to KEYSTONE origin anchor plan](2026-09-18j-origin-anchor-legal-ecological-research.md)
 - [2026-09-18 (i) KEYSTONE origin/creator/owner-rights registry generalization plan devised](2026-09-18i-keystone-origin-registry-generalization-plan.md)
