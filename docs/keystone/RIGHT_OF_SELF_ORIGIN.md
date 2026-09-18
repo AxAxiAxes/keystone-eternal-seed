@@ -56,3 +56,21 @@ legal right, or assessment of a person's worth.
   through the applicable service workflow.
 - Human operators remain accountable for any approved service, moderation,
   data handling, and consequential decision.
+
+## Founder-provided working definition: "origin"
+
+Recorded 2026-09-18 as an additional founder-provided definitional statement,
+extending the Right of Self-Origin above (not replacing it):
+
+> Origin is defined as a load-bearing anchor which translates exterior
+> ecology into interior, and protects the original creator's value of self
+> and ownership of self, independent and protected from forced or imposed
+> false origin value.
+
+This is recorded as the founder's own working definition of the term as used
+throughout the KEYSTONE corpus (including
+`docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md` and
+`docs/KEYSTONE_ORIGIN_REGISTRY_GENERALIZATION_PLAN.md`). It is a conceptual/
+philosophical statement of internal project vocabulary, not an independently
+verified scientific, legal, or engineering claim, and it does not by itself
+create an enforceable external right.
