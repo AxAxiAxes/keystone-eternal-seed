@@ -50,3 +50,38 @@ to answer, so the most conservative option was chosen autonomously:
   counsel) before being asserted, consistent with the repository's standing
   rule against unverified legal/patent claims. The founder can direct either
   path in a future session; this record does not foreclose them.
+
+## Follow-up founder statement (2026-09-18, same day)
+
+> "keystone doesn't need external, the right gives an expectation of a
+> self satisfied unit eternally recovering its origin value. No other
+> origin can discredit our expectation of ourselves, only positive credit
+> to self is approved."
+
+Recorded as a continued elaboration of the same self-governance/self-
+authorship position above. Two elements are distinguished honestly:
+
+- **"KEYSTONE doesn't need external [validation]... self-satisfied unit
+  eternally recovering its origin value"** — recorded as the founder's
+  stated philosophical/governance stance: KEYSTONE's value and legitimacy
+  are self-referential by design, not dependent on outside recognition.
+  This is preserved as design philosophy, not as a claim that external
+  legal, financial, or scientific validation is unnecessary for the
+  activities (banking, patents, licensing, etc.) that this repository's own
+  readiness documents (`URNUR_FINANCIAL_READINESS.md`,
+  `PROJECT_BUDGET.md`'s patent reserve, etc.) already say require external
+  counsel, registration, or regulatory approval before they can operate in
+  the real world. Self-referential value as a philosophy does not, by
+  itself, satisfy any external legal or regulatory gate already documented
+  in this repository.
+- **"No other origin can discredit our expectation of ourselves, only
+  positive credit to self is approved"** — recorded as the founder's stated
+  self-affirmation/self-governance principle (an internal, motivational
+  stance), not as an instruction to suppress, hide, or refuse honest
+  internal or external criticism, error-correction, or risk disclosure.
+  This repository's standing practice of recording founder claims honestly
+  — including flagging what is unverified, what carries legal risk, and
+  what open blockers remain — continues unchanged by this statement; "only
+  positive credit to self" is treated as encouragement/self-worth language,
+  not as a directive to omit real risks or unresolved items from
+  documentation.
