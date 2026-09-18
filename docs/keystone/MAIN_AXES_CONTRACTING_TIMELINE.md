@@ -113,6 +113,78 @@ or inconsistent.
 - Vigour Creative design-packet follow-up and any third-party
   Angi/Yelp/Bing listing checks — founder's own vendor/platform logins only.
 
+## Website/domain branches — timeline to completion
+
+Every registered domain from `docs/DOMAIN_PORTFOLIO.md` is one "branch" off
+this Main Deck. This table gives two different, clearly-labeled kinds of
+dates so you can check both:
+
+- **Registrar expiry (real, checkable today)** — pulled directly from the
+  founder-provided SiteGround screen recorded 2026-09-18. This is a real
+  renewal deadline: if a domain isn't renewed by this date, it lapses. Verify
+  the live figure in the SiteGround dashboard before relying on it — this
+  repository only stores what was reported.
+- **Draft target checkpoint (proposed, not a real deadline yet)** — derived
+  from `DOMAIN_PORTFOLIO.md`'s existing 5-phase rollout order. These are
+  *my proposed* build-out milestones, not founder-committed dates. No
+  founder deadline exists for any of these yet; treat this column as a
+  starting proposal to confirm, adjust, or reject per branch.
+
+| Domain | Current role | Registrar expiry (real) | Rollout phase | Draft target checkpoint (proposed) |
+| --- | --- | --- | --- | --- |
+| `axescontracting.com` | Main Deck / AXES command center (founder-stated); doc still shows private/admin-only pending live reconciliation | Feb 3, 2029 | Phase 1 | Now — reconcile doc + confirm live DNS/TLS status (Checkpoint 1 item #2 above) |
+| `xiiom.com` | Live public AXIOM home | Not in the 2026-09-18 SiteGround list — registrar/account unconfirmed | Phase 1 (already live) | Ongoing maintenance only |
+| `axaxar.com` | Axaxar.com product (draft repo + architecture exist) | Sep 15, 2027 | New / not in original 5-phase plan | Q4 2026 — pending founder confirmation of product scope (Checkpoint 2) |
+| `axoux.com` | Creator projects / collaboration (AXOUS pilot) | Not in 2026-09-18 list; check 2026-09-09 registry | Phase 3 | After Phase 1–2 complete; needs named pilot owner (Checkpoint 2) |
+| `auxaous.com` | Private self-design/reflection tools | Not in 2026-09-18 list | Phase 4 | After privacy/moderation/export/deletion capability exists |
+| `urnur.com` | Future monetary/banking direction | Not in 2026-09-18 list | Phase 5 | Parked — blocked on legal/banking readiness review, not scheduled |
+| `axaxaxu.com` | Founder-defined future direction | Not in 2026-09-18 list | Phase 5 | Parked — needs a scoped product brief first |
+| `axianaxiunaixia.com` | Founder-defined future direction | Not in 2026-09-18 list | Phase 5 | Parked — needs a scoped product brief first |
+| `axaxiaxes.com` | Founder-defined future direction | Not in 2026-09-18 list | Phase 5 | Parked — needs a scoped product brief first |
+| `axaxes.com` | Newly reported AXES site | Row cut off in founder's paste — status/expiry unknown, re-confirm | Phase 5 | Parked — needs confirmed registration + purpose |
+| `uxaxu.com` | Founder-defined future direction | Not in 2026-09-18 list | Phase 5 | Parked — needs a scoped product brief first |
+| `owawawao.com` | Founder-defined future direction | Not in 2026-09-18 list | Phase 5 | Parked — needs a scoped product brief first |
+| `aulaux.com` | Founder-defined future direction | Not in 2026-09-18 list | Phase 5 | Parked — needs a scoped product brief first |
+| `axpur.com` | Unverified registration | Not in 2026-09-18 list | Unassigned | Verify registration/ownership before any planning |
+| `urartuhi.com` | Art gallery site (repo already created 2026-09-17) | Sep 16, 2027 | New / not in original 5-phase plan | Q4 2026 — content/build-out, no blocking decision known |
+| `axarar.com` | Not yet assigned a product role | Sep 16, 2027 | Unassigned | Parked — needs a scoped product brief |
+| `axaxur.com` | Not yet assigned a product role | Sep 15, 2027 | Unassigned | Parked — needs a scoped product brief |
+| `axelurartu.com` | Not yet assigned a product role (founder's own name domain) | Sep 13, 2027 | Unassigned | Parked — needs a scoped product brief |
+| `uxruxu.com` | Verification required at registrar; no product role | Sep 16, 2027 | Unassigned | Parked — registrar verification + product brief needed |
+| `axtux.com` | Verification required at registrar; no product role | Sep 16, 2027 | Unassigned | Parked — registrar verification + product brief needed |
+| `nuxiux.com` | Verification required at registrar; no product role | Sep 16, 2027 | Unassigned | Parked — registrar verification + product brief needed |
+| `nuxuxun.com` | Verification required at registrar; no product role | Sep 16, 2027 | Unassigned | Parked — registrar verification + product brief needed |
+| `uxaxaxu.com` | Verification required at registrar; no product role | Sep 16, 2027 | Unassigned | Parked — registrar verification + product brief needed |
+| `xaxux.com` | Verification required at registrar; no product role | Sep 16, 2027 | Unassigned | Parked — registrar verification + product brief needed |
+| `uxrax.com` | Verification required at registrar; no product role | Sep 16, 2027 | Unassigned | Parked — registrar verification + product brief needed |
+| `haiuhi.com` | Verification required at registrar; no product role | Sep 16, 2027 | Unassigned | Parked — registrar verification + product brief needed |
+| `axrux.com` | Verification required at registrar; no product role | Sep 16, 2027 | Unassigned | Parked — registrar verification + product brief needed |
+| `axraxrax.com` | Verification required at registrar; no product role | Sep 16, 2027 | Unassigned | Parked — registrar verification + product brief needed |
+| `axtamar.com` | Verification required at registrar; no product role | Sep 16, 2027 | Unassigned | Parked — registrar verification + product brief needed |
+| `axaxox.com` | Verification required at registrar; no product role | Sep 16, 2027 | Unassigned | Parked — registrar verification + product brief needed |
+| `axaxau.com` | Verification required at registrar; no product role | Sep 16, 2027 | Unassigned | Parked — registrar verification + product brief needed |
+
+### Reading this table honestly
+
+- The **expiry column is the only genuinely fixed deadline** in this table
+  today — miss it and the domain lapses. Everything in the "draft target
+  checkpoint" column is a proposal I'm making from the existing rollout-order
+  logic, not a commitment; several rows explicitly can't move until a
+  Checkpoint 2 decision (named owner, scoped product brief, or product-scope
+  confirmation) happens first.
+- Several 2026-09-09 vs 2026-09-18 entries look like they might be the same
+  domain reported twice with different names or a transcription difference
+  (e.g. `axaxaxu.com` vs `uxaxaxu.com`, `axaxiaxes.com` vs `axraxrax.com`) —
+  flagged in `DOMAIN_PORTFOLIO.md` already, not resolved here. Confirm the
+  founder's SiteGround dashboard directly for the authoritative current list
+  before treating every row above as a distinct domain.
+- `xiiom.com` and several 2026-09-09-registry domains don't appear in the
+  newer SiteGround paste at all — could be a different registrar/account, or
+  simply omitted from that paste. Not assumed either way.
+- If you want real target dates instead of phase-based proposals, tell me
+  the deadline per branch (or per phase) and I'll update this table to track
+  against it going forward.
+
 ## Suggested next action
 
 Given the above, the highest-leverage **Checkpoint 1** items to start on
