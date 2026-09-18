@@ -49,3 +49,23 @@ Recorded as a restatement/reinforcement of the same position above: KEYSTONE
 is framed by the founder as the originating value from which measurement
 itself is said to derive. No new claim beyond what is already recorded in
 this file.
+
+## Further elaboration by founder (same day)
+
+> "it effectively treats any other coordinate as negative and translates
+> to user understanding."
+
+Recorded as the founder's further elaboration of the KEYSTONE-origin-unit
+model: any coordinate other than the KEYSTONE origin is described as
+relative/negative to it, with a translation step for user-facing
+understanding. This is preserved as the founder's conceptual/architectural
+description, consistent with the standing "negative sphere" framing already
+logged in
+`docs/memory/2026-09-18-keystone-origin-unit-negative-sphere-framing.md`.
+It is **not** implemented as a change to `coordinate-service.js` or any
+other code in this repository — the real coordinate service continues to
+use ordinary (non-negative-by-convention) numeric coordinates, as confirmed
+in earlier repository audits. If the founder wants this translation
+actually implemented in code, that would be a separate, explicit
+engineering task requiring its own review and tests, not something adopted
+by recording this statement.
