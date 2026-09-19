@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (as) urartuhi.com scaled up: masonry grid, tag filtering, scalable slideshow counter](2026-09-18as-urartuhi-gallery-scaling.md)
 - [2026-09-18 (ar) First bulk image upload to urartuhi.com — 34 pieces added via manifest.json](2026-09-18ar-urartuhi-first-bulk-image-upload.md)
 - [2026-09-18 (aq) urartuhi.com gallery rebuilt as manifest-driven (bulk image uploads, no fixed limit)](2026-09-18aq-urartuhi-manifest-driven-gallery.md)
 - [2026-09-18 (ap) Legacy AXES Contracting home-inspection/hazard-remediation business recovered from Wayback Machine archive; founder confirmation needed before any public claim](2026-09-18ap-legacy-business-archive-discovery.md)
