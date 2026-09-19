@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-19 (i) Full cross-repo project inventory compiled — active projects, parked domains, cross-cutting recommendations](2026-09-19i-full-project-inventory.md)
 - [2026-09-19 (h) Cross-repo PR triage sweep (axiom-engine perf PRs cleaned up, PR #173 draft-blocked noted); outage reconfirmed still failing at 30+ hrs](2026-09-19h-pr-triage-sweep.md)
 - [2026-09-19 (g) AXES Contracting CSLB license 995577 confirmed ACTIVE via official CSLB source — corrects prior "suspended" aggregator-based finding, queue item #12 resolved](2026-09-19g-axes-contracting-license-confirmed-active.md)
 - [2026-09-19 (f) Origin registry health-check confirmed clean (32/32 tests); added practical "Guide: building and owning your own AI"](2026-09-19f-origin-registry-check-and-build-ai-guide.md)
