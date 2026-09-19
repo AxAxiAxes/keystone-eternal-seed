@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (at) AI-content-ownership + AXES OS hardware research; avatar-reanimation production readiness gate added (item #13)](2026-09-18at-ai-ownership-and-avatar-production-readiness.md)
 - [2026-09-18 (as) urartuhi.com scaled up: masonry grid, tag filtering, scalable slideshow counter](2026-09-18as-urartuhi-gallery-scaling.md)
 - [2026-09-18 (ar) First bulk image upload to urartuhi.com — 34 pieces added via manifest.json](2026-09-18ar-urartuhi-first-bulk-image-upload.md)
 - [2026-09-18 (aq) urartuhi.com gallery rebuilt as manifest-driven (bulk image uploads, no fixed limit)](2026-09-18aq-urartuhi-manifest-driven-gallery.md)

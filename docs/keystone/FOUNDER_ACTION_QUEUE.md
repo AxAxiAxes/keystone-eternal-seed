@@ -40,6 +40,8 @@ ordered by how directly they unblock revenue.
 | 11 | Decide whether to point the real `urartuhi.com` domain at the already-live gallery site (`https://axaxiaxes.github.io/urartuhi.com/`) via DNS CNAME, or use a different hosting target; supply real artwork if proceeding | Site is built and deployed but invisible to the public until DNS is pointed at it — a low-effort, low-risk item that's currently just sitting idle | `docs/memory/2026-09-17-urartuhi-gallery-site-created.md` |
 | 12 | Confirm whether AXES Contracting's real, decade-plus home-inspection / environmental-hazard-remediation / insurance-reporting service line (found via Wayback Machine archive of the pre-2026 GoDaddy site) is **still actively licensed and operating** today | If active, this is a far more revenue-ready offering than the from-scratch design-consultation plan — real 10+ year client history with banks/insurers. If inactive, public copy must not claim current licensing/certification. No public page has been changed based on this archive pending this confirmation | `AXES_CONTRACTING_LEGACY_BUSINESS_RECORD.md` |
 
+| 13 | Approve moderation approach (CSAM detection + reporting, abuse review), AI-vendor/budget choice, and hosting/entity plan for the proposed "free-to-all image upload + AI music-driven avatar reanimation" production line under AXES Contracting Inc, before any public upload form or AI-video pipeline is built | Public upload without an approved moderation pipeline is a legal requirement gap (18 U.S.C. § 2258A), not just a risk — nothing should be built here until this is resolved | `AXES_CONTRACTING_AI_AVATAR_PRODUCTION_READINESS.md` |
+
 ## What is intentionally not on this list
 
 Patent/filing history, the standalone `axiom-freedom`/Azure repo question,
