@@ -50,6 +50,13 @@ All six images above are anchored (SHA-256 hash + repository commit) in
 `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`, Entry
 `KEYSTONE-CREATIVE-ORIGIN-000001` / `AXL-KS-20260529-1844`.
 
+See also `docs/keystone/assets/interactive/README.md` for self-contained
+interactive HTML artifacts (a different, executable format from the
+static images above), starting with
+`keystone-dome-pomegranate-sound.html` — named for `axaxox.com`, Entry
+`KEYSTONE-CREATIVE-ORIGIN-000008`.
+
+
 - `honor-of-eternity-crest.jpg` — gold winged-crest emblem with crossed
   swords, a laurel wreath, a stepped pedestal, and the banner text "HONOR
   OF ETERNITY," shared alongside the founder's stated architectural
