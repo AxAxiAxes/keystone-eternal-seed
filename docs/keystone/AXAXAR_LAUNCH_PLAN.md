@@ -86,18 +86,31 @@ used in `PROJECT_TIMELINE.md`)
 | 5 — Staged deploy | Deploy to a non-production environment first (mirrors `PROJECT_TIMELINE.md`'s staging-before-cutover discipline) | Verified health checks, monitoring, and rollback path |
 | 6 — Launch | Founder approves go-live; DNS cutover and public announcement | Founder-approved launch checklist complete |
 
-## Open questions for the founder (blocking phase 0 → 1)
+## Proposed default scope (2026-09-19) — pending founder confirmation
 
-1. What does Axaxar.com actually do for a paying user? (e.g., a specialized
-   AI assistant, a tool/SaaS product, a marketplace, something else?)
-2. Who is the target customer — consumer, business, or both?
-3. Is this meant to reuse the AXIOM/KEYSTONE engine and brand voice, or be a
-   fully independent product with its own identity?
-4. What pricing model is intended (subscription, usage-based, one-time)?
-5. Is there already a domain registrar account for `axaxar.com`, or does one
-   need to be created?
+The founder asked for "the full scope" while unavailable to answer the 5
+open questions individually. Per this project's standing practice when the
+founder is unreachable, reasonable defaults are proposed below — clearly
+labeled as **proposed, not decided** — so Phase 0 can produce something
+concrete to confirm or correct, rather than staying indefinitely blocked on
+open-ended questions with no answer. Nothing here has been built, spent, or
+deployed; this is a written scope only.
+
+| Question | Proposed default | Reasoning |
+| --- | --- | --- |
+| **1. What does it do for a paying user?** | A premium AI-assisted companion service built on the proven AXIOM engine core (chat + persistent memory + automation from `apps/axiom-engine`), offering more than the free public chat: extended memory retention, priority response, and custom workflow automation. Its anchor early use case is as an AI-powered intake/concierge front-end for AXES Contracting's client-facing services (design/materials consultation, and home-inspection services once the CSLB license bond is renewed — see `AXES_CONTRACTING_INC_ENTITY_VERIFICATION.md`). | Reuses already-built, tested code rather than inventing a new product from scratch; ties Axaxar directly to the founder's own designated first-revenue track (V2 in `FOUNDER_REVENUE_PRIORITY_OVERLAY.md`) instead of competing with it. |
+| **2. Target customer?** | Individuals and small businesses — specifically AXES Contracting's own client base first (once its service line is confirmed active), then general self-serve signup for anyone wanting a paid-tier AXIOM assistant. | Gives the product a real, warm first customer segment instead of a cold launch with no audience. |
+| **3. Brand independence?** | A distinct product identity, UI, and domain (`axaxar.com`), openly described as "built on AXIOM/KEYSTONE technology" for credibility, but clearly separated from the free `xiiom.com` experience so the free/paid boundary stays unambiguous to users. | Keeps the existing free public chat's trust/positioning intact while letting Axaxar carry its own commercial identity — consistent with the AXAXAR triangle/brand symbolism already recorded in `AXAXAR_TRIANGLE_ORIGIN_SYMBOLISM.md`. |
+| **4. Pricing model?** | A simple two-tier monthly subscription (e.g., a free/trial tier, then one paid tier) rather than usage-based or one-time pricing — exact price points deferred until real per-user cost data exists from `apps/axiom-engine/usage-store.js`'s metering. | Subscription pricing is simplest to implement first and matches the billing pattern already sketched in `ARCHITECTURE.md`'s provider-agnostic `billing-service.js`; real numbers need real cost data, which doesn't exist yet. |
+| **5. Domain/registrar status?** | Already resolved — no new purchase needed. `axaxar.com` is already registered by the founder at SiteGround (verified, privacy not yet added, expires Sep 15, 2027 — see `DOMAIN_PORTFOLIO.md`). DNS simply isn't pointed at anything yet, which is correct for Phase 0-5; DNS cutover only happens at Phase 6 (launch). | Already-verified repository fact, not an assumption. |
+
+**This is a proposal, not a locked decision.** If any of the above is
+wrong, correct it directly — the phase gate below only requires
+confirming or editing this table, not answering from a blank page.
 
 ## Next step
 
-Awaiting founder answers to the open questions above, or explicit
-confirmation of the stated assumption, before moving past Phase 0.
+Founder reviews the table above: confirm as-is, or edit specific rows.
+Once confirmed (even informally, e.g. "yes, proceed" or specific
+corrections), Phase 0 is complete and Phase 1 (architecture review of
+`ARCHITECTURE.md`) can begin.
