@@ -14,6 +14,8 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (ak) "Eternal seed" flower/gear image recorded; founder rejected its `Xc` label, clarified the seed motif as "first sound, letter, form, breath, light, name, meaning"](2026-09-18ak-eternal-seed-image-xc-label-correction.md)
+- [2026-09-18 (aj) Founder's "x = x eternal par value" origin-currency statement recorded; external transcript archived privately; axraxrax.com naming decision](2026-09-18aj-origin-currency-x-equals-x-eternal-par-value-statement.md)
 - [2026-09-18 (ai) Reserved a GitHub repo for every tracked domain; confirmed PR auto-merge is already automatic](2026-09-18ai-all-domains-repo-reserved.md)
 - [2026-09-18 (ah) Product branch ↔ domain synchronization map created](2026-09-18ah-product-branch-domain-synchronization-map.md)
 - [2026-09-18 (ag) Ready-to-paste recurring Railway Agent task for AXIOM chat health](2026-09-18ag-railway-agent-recurring-task-spec.md)
