@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-19 (a) Ownership checklist created: platform/brand paperwork (entity, trademark, copyright, patent, account control) vs. AI-model ownership (OpenAI API vs. self-hosting)](2026-09-19a-ownership-checklist-created.md)
 - [2026-09-18 (au) Unified AXES OS platform breakdown: engine, movies/avatars, home services, currency mapped onto the six-layer architecture with existing blockers cross-referenced](2026-09-18au-unified-axes-os-platform-breakdown.md)
 - [2026-09-18 (at) AI-content-ownership + AXES OS hardware research; avatar-reanimation production readiness gate added (item #13)](2026-09-18at-ai-ownership-and-avatar-production-readiness.md)
 - [2026-09-18 (as) urartuhi.com scaled up: masonry grid, tag filtering, scalable slideshow counter](2026-09-18as-urartuhi-gallery-scaling.md)
