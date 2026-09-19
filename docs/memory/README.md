@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (an) axaxox.com GitHub Pages preview published (real domain DNS still pending founder/SiteGround action)](2026-09-18an-axaxox-com-pages-preview-published.md)
 - [2026-09-18 (am) Keystone Dome/Pomegranate/Sound interactive artifact named for axaxox.com](2026-09-18am-keystone-dome-pomegranate-sound-axaxox-naming.md)
 - [2026-09-18 (al) "Run AXI to automate" re-verified live (40/40 tests, real task create+process); scheduler remains off pending Railway/founder activation](2026-09-18al-axi-automation-run-reverified.md)
 - [2026-09-18 (ak) "Eternal seed" flower/gear image recorded; founder rejected its `Xc` label, clarified the seed motif as "first sound, letter, form, breath, light, name, meaning"](2026-09-18ak-eternal-seed-image-xc-label-correction.md)
