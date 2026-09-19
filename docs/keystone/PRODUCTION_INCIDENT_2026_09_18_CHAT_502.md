@@ -1,12 +1,12 @@
 # Production incident — public AXIOM chat returning HTTP 502 (2026-09-18)
 
 **Status:** Open production incident, still failing as of the most recent
-independent check (2026-09-19, **~2:58 AM PDT — HTTP 502 on `POST
+independent check (2026-09-19, **~4:14 PM PDT — HTTP 502 on `POST
 /api/axiom`, `action:"chat"`, reproduced again from this repository**,
 same `{"error":"AXIOM chat is temporarily unavailable"}` body as every
 earlier attempt). `GET /axiom` (the portal page) still returns 200 —
 only the OpenAI-backed chat call is down. This has now been failing
-continuously for roughly 17+ hours since it was first observed. Founder
+continuously for roughly 30+ hours since it was first observed. Founder
 upgraded Railway to the Pro plan
 (screenshot, ~10:35 AM PDT) — **billing upgrade alone did not resolve it**:
 retested repeatedly since (2.5 minutes, ~10 minutes, and ~90 minutes after
