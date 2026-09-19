@@ -83,6 +83,55 @@ reactivates.
    an active license until the bond is renewed and CSLB confirms
    reinstatement.**
 
+## CORRECTION (2026-09-19, official CSLB source) — license is active, not suspended
+
+**The founder provided a direct screenshot of the official CSLB license-detail
+page** (`cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=995577`)
+showing:
+
+- **License Status: "This license is current and active."**
+- Expire Date: **08/31/2028** (not 08/31/2026 as the aggregators reported)
+- Business name/address/entity type match exactly: AXES CONTRACTING INC,
+  1521 E WINDSOR #6, GLENDALE, CA 91205, Corporation, Issue Date 08/13/2014.
+
+**This corrects and supersedes every "Suspended — Contractor Bond" finding
+above and in the same-day re-confirmation section below.** The three
+third-party aggregators (contractorlicenseca.com, contractorlicensepro.com,
+bizprofile.net) were showing **stale/outdated data** — likely cached from
+a past suspension that has since been resolved, or simply not kept current.
+This is now the second time this session an aggregator site has been wrong
+(see the "Caution recorded" note below, originally about a search-summary
+tool, now also applicable to the underlying aggregator sites themselves).
+
+**Standing lesson reinforced:** for anything license/compliance-critical,
+only the *official* state source (CSLB, CA SOS) should be treated as
+authoritative. Third-party aggregators are a reasonable first signal when
+official sites block automated access, but their status field can be
+stale — always get the founder to pull the official page directly (as
+was just done here) before relying on a suspended/active determination.
+
+**Practical effect: the bond-lapse concern is resolved.** No bond renewal
+is needed. `AXES_CONTRACTING_BOND_RENEWAL_QUICKSTART.md` is retained for
+reference (the renewal steps are still valid general guidance if a real
+lapse ever happens) but is no longer an active action item.
+
+## Re-confirmation (2026-09-19, later same day) — superseded by the official
+source above, kept for the record
+
+Re-checked all three sources directly (fetched the actual pages, not an AI
+search summary) roughly 12 hours after the original finding above — **no
+change**: the corporation is still reported active, and CSLB license 995577
+is still shown as **"Suspended — Contractor Bond."**
+
+**Caution recorded for future sessions:** a general web-search-engine
+summary tool returned a false "active and clear, no suspensions" result for
+this same license during this re-check, citing the same
+`contractorlicenseca.com` page that, when fetched directly, still clearly
+shows "Suspended - Contractor Bond." That summarized-search result was
+**not** used or recorded as a finding — always fetch the actual source page
+directly for a status this consequential; do not trust a search-summary
+tool's paraphrase alone.
+
 ## What must still be founder-verified directly (cannot be done from this
 repository)
 
@@ -104,15 +153,26 @@ repository)
 Given this finding, **no new entity formation is needed.** The prior
 `AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md` guidance to "confirm/form the
 entity" is corrected here: the entity exists and is (per aggregator data)
-active. The founder's immediate action is narrower and cheaper than
-forming a new company:
+active. **Update 2026-09-19 (official CSLB confirmation):** the contractor
+license is also confirmed active by the official CSLB source (see
+correction section above) — it is not suspended, and no bond renewal is
+required.
 
-1. Verify the corporation's status directly at CA SOS bizfile (5 minutes).
-2. Contact a surety bond provider to renew the $25,000 CSLB contractor
-   bond, then confirm CSLB reinstates license 995577.
-3. Once both are confirmed current, the IP-assignment, trademark, and
-   copyright-registration steps (checklist items A2-A4) can proceed using
-   this existing entity — no new incorporation required.
+1. ~~Verify the corporation's status directly at CA SOS bizfile (5 minutes).~~
+   Contractor license status now confirmed via the official CSLB source
+   directly (screenshot provided by founder, 2026-09-19). CA SOS bizfile
+   confirmation of the corporation's Statement of Information filing is
+   still a separate, optional double-check if desired, but is no longer
+   blocking anything.
+2. ~~Contact a surety bond provider to renew the $25,000 CSLB contractor
+   bond, then confirm CSLB reinstates license 995577.~~ **Not needed** —
+   the license was never actually suspended per the official source; this
+   step is moot.
+3. **AXES Contracting Inc can now be treated as a licensed, active general
+   contractor** for revenue/business-planning purposes. The IP-assignment,
+   trademark, and copyright-registration steps (checklist items A2-A4) can
+   proceed using this existing entity — no new incorporation required, and
+   no licensing blocker remains.
 
 ## Related records
 
