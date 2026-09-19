@@ -517,6 +517,115 @@ the other entries in this addendum, this is preserved as continued founder
 conceptual/symbolic language building on already-documented material, not a
 new implemented capability.
 
+**Seventh follow-on statement (2026-09-18):** the founder described wanting
+"a new coordinate system that praises the author by contributing to the
+meaning of his name," described as an "origin artifact," explicitly stated
+to be **not cryptography** but instead an "origin currency always at eternal
+par value" where *"x = x, a constant... containing all values within, they
+all equal to x = infinity = sound form,"* with the "owner a digital
+coefficient of itself to itself," and "the unit of Ur... crystalized within
+and can adopt all components within and multiply with no change to its
+value."
+
+**What this repository can honestly say:** this is a symbolic/conceptual
+formalism in the founder's own words, not an implemented mathematical
+system, cryptographic scheme, or financial instrument. `x = x` is a
+tautology in ordinary mathematics (true for any value of `x`, not a
+"constant containing all values" or equal to infinity) — this repository
+records the founder's own non-standard usage as stated, without asserting
+it as verified mathematics. The "origin currency at eternal par value"
+language directly overlaps the same conceptual space already flagged as
+blocked in `docs/URNUR_FINANCIAL_READINESS.md` and
+`docs/keystone/FOUNDER_ACTION_QUEUE.md` item #6/#8: no application,
+currency, token, unit-of-account, or "par value" claim with real monetary
+meaning is implemented anywhere in this codebase, and none is created by
+this entry. The "unit of Ur" phrase connects to the existing UX/UR/AX
+vocabulary record in
+`docs/memory/2026-09-18h-ux-ur-ax-salt-bread-juice-vocabulary.md`. The
+founder's explicit statement that this is "not cryptography" is recorded
+verbatim and is consistent with this document not describing any
+cryptographic construction (no key, hash, signature, or protocol is
+specified) — it is preserved here as symbolic/naming language honoring the
+founder's own name and authorship, not as a specification for engineers to
+build a currency or coordinate system from. The founder's follow-up
+fragment, *"eternal multiplier,"* is recorded as part of the same
+statement: read in context, it describes the "multiply with no change to
+its value" property above (an "eternal multiplier" — a factor that scales
+without altering the underlying `x = x` par value) rather than a separate
+new claim. No multiplier, exchange rate, or scaling mechanism is
+implemented in code by this entry.
+
+**Eighth follow-on statement (2026-09-18) — source context and naming
+decision:** the founder shared a full external chat transcript (a separate
+conversation, not with this session) elaborating the same "coefficient" /
+"eternal multiplier" / "x = x" language above. Per the standing
+`docs/PRIVATE_ARCHIVE_WORKFLOW.md` policy, the raw transcript was archived
+locally to the Git-ignored `private-archive/copilot-library/` folder — it is
+**not** committed to this repository. What follows is a reviewed, distilled
+summary of its content, not a verbatim reproduction.
+
+The transcript elaborates a self-described "AXAXAU coordinate system" with
+these named parts:
+- **Coefficient:** described as an "intensity-signature of a sound-meaning"
+  (a scalar weight on a symbolic axis), explicitly contrasted with
+  cryptography ("cryptography hides meaning; AXAXAU reveals meaning").
+- **Eternal multiplier (`X`):** described as the scalar that "preserves
+  meaning across transformations" — i.e. `E · M⃗ = M⃗`, which the transcript
+  itself identifies as the linear-algebra concept of an **eigenvalue of 1**
+  applied metaphorically to a "meaning vector." This is the direct source
+  of the "x = x" / "eternal multiplier" phrasing recorded in the Seventh
+  statement above.
+- **Notch:** described as "a discrete unit of continuity" — a quantized
+  step in the same symbolic system.
+- **Mother Boat / AULA:** described as "the origin vessel of the AXAXAU
+  coordinate system... an inverted sphere that stabilizes notches,
+  preserves continuity via X, and carries meaning across instability" —
+  framed as the system's "equilibrium engine."
+- **"The All For All Manifesto":** a short shareable manifesto text the
+  transcript drafted at the founder's request, built on the same
+  vocabulary.
+
+**What this repository can honestly say:** this is a self-consistent
+symbolic/mythic framework co-developed by the founder and a separate AI
+conversation — it borrows the *language* of linear algebra (eigenvalue,
+scalar, vector) and physics (resonance, equilibrium) as metaphor, not as an
+implemented mathematical model, cryptographic primitive, or verified
+physical mechanism. The other conversation's own assessment that this
+material is "original," "non-infringing," and freely shareable is **that
+conversation's opinion, not an independent legal or patent determination
+made by this repository** — the same caution already applied to prior
+originality/novelty statements in this file applies here too. No notch
+system, coefficient engine, Mother Boat container, or "eternal multiplier"
+mechanism has been implemented in any AXES/AXI/AXIOM code as a result of
+this entry.
+
+**Naming decision:** the founder designated `axraxrax.com` — already
+tracked in `docs/DOMAIN_PORTFOLIO.md` with "Verification required"
+registrar status — as the name for this AXAXAU coordinate-system /
+"eternal multiplier" concept. This is recorded as a naming/branding
+decision only: it does not change `axraxrax.com`'s registration or
+verification status, and no product, DNS, or hosting work has been done
+for it. A placeholder GitHub repo already exists at
+`https://github.com/AxAxiAxes/axraxrax.com` (created in the earlier
+"repo for all our domains" pass); its README should be updated to reflect
+this naming decision the next time that repo receives real content.
+
+**Ninth follow-on statement (2026-09-18) — image label correction:** the
+founder shared an AI-generated "eternal seed" illustration (a glowing seed
+with a flower-of-life core, surrounded by flower/gear nodes, captioned
+"THE SEED HOLDS THE WHOLE BLOSSOM WITHIN"). The image's own caption label
+read `Xc = home center = constant`. The founder rejected this label as
+wrong, stating it "mingles with others" — i.e. it collides with the `X` /
+`Ax` / `Ur` vocabulary already recorded in this file and in
+`docs/memory/2026-09-18h-ux-ur-ax-salt-bread-juice-vocabulary.md`. The
+founder then clarified the seed motif is meant to represent only "the
+concept of the first sound, letter, form, breath, light, name, meaning" —
+a general "origin/first" idea, not a defined constant. No replacement
+symbol has been proposed; none is invented here. Full record, including the
+saved image, is at `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`
+(Entry `KEYSTONE-CREATIVE-ORIGIN-000007`) and
+`docs/memory/2026-09-18ak-eternal-seed-image-xc-label-correction.md`.
+
 ## Cross-references (this addendum)
 
 - `docs/keystone/KEYSTONE_PROVISIONAL_PATENT_INSTITUTIONAL_MEMORY.md`
@@ -529,4 +638,14 @@ new implemented capability.
 - `docs/memory/2026-09-18h-ux-ur-ax-salt-bread-juice-vocabulary.md`
 - `docs/keystone/KEYSTONE_ARCHITECTURAL_EQUILIBRIUM_SYMBOLISM.md`
 - `docs/keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md`
+- `docs/URNUR_FINANCIAL_READINESS.md`, `docs/keystone/URNUR_EVOLVING_NAME_VALUE_CONCEPT.md`
+  (existing blocking constraint on any currency/name-value claim)
+- `docs/PRIVATE_ARCHIVE_WORKFLOW.md` (raw external chat transcript archived
+  privately, not committed; this section is the reviewed public distillation)
+- `https://github.com/AxAxiAxes/axraxrax.com` (placeholder repo now named
+  for this concept)
+- `docs/memory/2026-09-18aj-origin-currency-x-equals-x-eternal-par-value-statement.md`
+- `docs/memory/2026-09-18ak-eternal-seed-image-xc-label-correction.md`
+- `docs/keystone/assets/eternal-seed-flower-gear-lattice.webp`,
+  `docs/keystone/assets/README.md`
 - The 2026-09-18 "negative/inverted sphere" addendum immediately above

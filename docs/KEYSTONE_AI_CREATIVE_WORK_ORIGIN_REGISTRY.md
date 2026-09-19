@@ -1,6 +1,6 @@
 # KEYSTONE AI creative-work origin and authorship registry
 
-**Status:** Registry with six recorded entries (see Sections 4-9). This is an internal
+**Status:** Registry with seven recorded entries (see Sections 4-10). This is an internal
 KEYSTONE attribution record, not a substitute for, or claim of, US or
 international copyright registration.
 **Recorded:** 2026-09-18
@@ -301,6 +301,43 @@ generation.
 | Anchor method | SHA-256 content hash + this document's git commit hash + GitHub's independent commit timestamp |
 | Claim scope | KEYSTONE-internal attribution and origin record only. This entry records a **proposed** branding use (candidate anchor logo); it is not a trademark filing and does not itself grant or establish trademark rights. Not a copyright, trademark, or patent filing. |
 
+**Technical findings:** `docs/keystone/assets/eternal-seed-flower-gear-lattice.webp`,
+SHA-256 `da961940b4977c47414dfd5b999f89c8809a94e10326160866c0693d38430180`. A
+watercolor-style illustration of a glowing central seed/geode (a
+flower-of-life pattern at its core) with root and branch tendrils
+connecting it to a ring of translucent flower/gear-hybrid nodes, captioned
+"PATIENT · SLOW · GROWTH — THE SEED HOLDS THE WHOLE BLOSSOM WITHIN." The
+image as originally generated included a caption label reading `Xc = home
+center = constant` next to a second, unlabeled note reading "= eternal
+origin first letter." No embedded C2PA/XMP AI-generator manifest was
+found in the file's metadata.
+
+**Founder correction (recorded verbatim, same date):** the founder stated
+the image's own `Xc` notation is wrong and should not be used, because it
+"mingles with others" — i.e. it collides with the `X` / `Ax` / `Ur`
+symbol vocabulary already in use elsewhere in this repository (see the
+Seventh/Eighth follow-on statements in
+`docs/keystone/AXAXAR_TRIANGLE_ORIGIN_SYMBOLISM.md` and the Ux/Ur/Ax
+vocabulary in `docs/memory/2026-09-18h-ux-ur-ax-salt-bread-juice-vocabulary.md`).
+The founder then clarified what the central seed motif is actually meant
+to represent: not a specific algebraic constant, but "just the concept of
+the first sound, letter, form, breath, light, name, meaning" — i.e. the
+image is recorded here as illustrating a general "origin/first" concept
+(first sound → first letter → first form → first breath → first light →
+name → meaning), not as defining any new named variable or unit. No
+replacement symbol has been decided; this entry deliberately does not
+invent one on the founder's behalf.
+
+| Field | Value |
+| --- | --- |
+| Entry ID (sequential, internal) | KEYSTONE-CREATIVE-ORIGIN-000007 |
+| Work covered | `eternal-seed-flower-gear-lattice.webp` |
+| Verified technical finding | SHA-256 content hash (above); no embedded C2PA/XMP AI-generator manifest present |
+| Stated creator | Not specified by the founder for this image; recorded as a founder-shared reference asset |
+| Founder correction on record | The image's own `Xc` label is rejected by the founder as mingling with other in-use symbols; no replacement decided. The seed motif represents the general concept of "first sound, letter, form, breath, light, name, meaning," not a defined constant. |
+| Anchor method | SHA-256 content hash + this document's git commit hash + GitHub's independent commit timestamp |
+| Claim scope | KEYSTONE-internal attribution and origin record only. Not a copyright, trademark, or patent filing. |
+
 ## Cross-references
 
 - `docs/keystone/assets/README.md` — the source image files.
@@ -309,3 +346,6 @@ generation.
 - `docs/memory/2026-09-18e-keystone-universal-unit-code-coordinates.md`
 - `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md`
 - `docs/keystone/ATHANOR_ETERNAL_SEED_VESSEL_CONCEPT.md`
+- `docs/keystone/AXAXAR_TRIANGLE_ORIGIN_SYMBOLISM.md` — Seventh/Eighth
+  follow-on statements (X / eternal multiplier vocabulary this entry's
+  founder correction refers to).

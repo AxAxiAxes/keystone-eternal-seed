@@ -77,6 +77,16 @@ All six images above are anchored (SHA-256 hash + repository commit) in
   `docs/keystone/KEYSTONE_ARCHITECTURAL_EQUILIBRIUM_SYMBOLISM.md`). Anchored
   in `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`, Entry
   `KEYSTONE-CREATIVE-ORIGIN-000004`.
+- `eternal-seed-flower-gear-lattice.webp` — watercolor illustration of a
+  glowing central seed with a flower-of-life core, connected by root/branch
+  tendrils to a ring of translucent flower/gear-hybrid nodes, captioned
+  "PATIENT · SLOW · GROWTH — THE SEED HOLDS THE WHOLE BLOSSOM WITHIN." The
+  image's own `Xc = home center = constant` caption label was rejected by
+  the founder as mingling with other in-use symbols; the founder clarified
+  the seed motif is meant to represent only the general concept of "the
+  first sound, letter, form, breath, light, name, meaning" — not a defined
+  constant. Anchored in `docs/KEYSTONE_AI_CREATIVE_WORK_ORIGIN_REGISTRY.md`,
+  Entry `KEYSTONE-CREATIVE-ORIGIN-000007`.
 - `eternal-seed-vessel.png` — ornate gold chalice/reliquary illustration,
   described by the founder as an "eternal seed vessel," part of the
   "Athanor" concept described in
