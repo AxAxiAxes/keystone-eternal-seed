@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-18 (ao) Root NOTICE.md added for IP protection; live AXIOM chat 502 outage reconfirmed still active (11+ hours, founder-only Railway fix needed)](2026-09-18ao-ip-notice-and-outage-reconfirmed.md)
 - [2026-09-18 (an) axaxox.com GitHub Pages preview published (real domain DNS still pending founder/SiteGround action)](2026-09-18an-axaxox-com-pages-preview-published.md)
 - [2026-09-18 (am) Keystone Dome/Pomegranate/Sound interactive artifact named for axaxox.com](2026-09-18am-keystone-dome-pomegranate-sound-axaxox-naming.md)
 - [2026-09-18 (al) "Run AXI to automate" re-verified live (40/40 tests, real task create+process); scheduler remains off pending Railway/founder activation](2026-09-18al-axi-automation-run-reverified.md)
