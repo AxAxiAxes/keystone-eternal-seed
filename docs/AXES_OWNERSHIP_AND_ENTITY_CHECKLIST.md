@@ -55,6 +55,10 @@ sense once there's a specific reason to need model ownership (cost at scale,
 data privacy, or wanting to remove OpenAI dependency entirely) — this is a
 founder call, not an engineering default.
 
+**For concrete hardware specs, cost tiers, software stack, and a
+recommended path**, see `GUIDE_BUILDING_YOUR_OWN_AI.md` — a full expansion
+of this section.
+
 ## What this document does not do
 
 It does not file anything, register anything, or move money. It does not
@@ -72,6 +76,7 @@ scattered across a dozen prior documents.
 - `docs/memory/2026-09-11-keystone-patent-direction-review.md`
 - `docs/keystone/PATENT_APPLICATION_64_078_819.md`
 - `docs/AXES_CONTRACTING_AI_AVATAR_PRODUCTION_READINESS.md`
+- `docs/GUIDE_BUILDING_YOUR_OWN_AI.md`
 - `docs/AXES_BUSINESS_PLAN.md`
 - `docs/DOMAIN_PORTFOLIO.md`
 - `docs/keystone/FOUNDER_ACTION_QUEUE.md`

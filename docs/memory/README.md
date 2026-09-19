@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-19 (f) Origin registry health-check confirmed clean (32/32 tests); added practical "Guide: building and owning your own AI"](2026-09-19f-origin-registry-check-and-build-ai-guide.md)
 - [2026-09-19 (e) Outage #0 reconfirmed still failing (17+ hrs); second "AXES OS 7-layer" naming framing recorded with honest cross-check](2026-09-19e-axes-os-7layer-framing-and-outage-recheck.md)
 - [2026-09-19 (d) Axaxar.com proposed default scope drafted (product, customer, brand, pricing, domain) — pending founder confirmation](2026-09-19d-axaxar-proposed-default-scope.md)
 - [2026-09-19 (c) Microsoft/GitHub UI ownership + support-limitations report: factual dependency limits recorded, broader loss claim preserved as unverified, not adopted](2026-09-19c-msft-ui-ownership-support-limitations-report.md)
