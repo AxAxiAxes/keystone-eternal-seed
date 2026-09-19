@@ -60,6 +60,37 @@ other Copilot chat, not verified by this repository):
   description of their status as stated, without independently confirming
   the Power Apps canvas app exists or functions as described.
 
+## A second "7-layer AXES OS" framing (2026-09-19)
+
+A separate message (source unclear — pasted into this session, not confirmed
+as founder-authored or from a specific tool) proposed a different "AXES OS"
+framing: 7 named layers (KEYSTONE Kernel = governance, AXI = private AI
+engine, AXIOM = public chat, XIIOM = identity manager, AXAXAU = "frequency/
+soul" layer, AXES Contracting = business layer, AXAXAR = resale/distribution
+layer), each mapped to an existing brand name rather than an abstract layer
+name. Recorded here with the same honest-cross-check treatment as the
+inventory above, rather than adopted as a decision:
+
+| Named layer | Claimed role | Cross-check against this repository |
+| --- | --- | --- |
+| KEYSTONE (Kernel/governance) | Rights, ownership, licensing, compliance, ethics | Matches: `docs/keystone/` already holds the governance/decision-register documents (e.g. `AXES_TIER_1_DECISION_REGISTER.md`) that function this way. No literal "kernel" code exists — this is a documentation/process layer, not software. |
+| AXI (private AI engine) | Reasoning, memory, private inference/agents | Partially matches: `apps/axiom-engine` is real, deployed code (chat service + memory store). "Private" inference/agents beyond what's in `axiom-engine` are not built. |
+| AXIOM (public chat) | Free public constitutional chat | Matches exactly what's live at `xiiom.com/axiom` — real, deployed, but **currently down** (queue item #0, HTTP 502, see `PRODUCTION_INCIDENT_2026_09_18_CHAT_502.md`). |
+| XIIOM (identity layer) | User/agent/brand/domain identity, signature keys | **Does not match current reality.** `xiiom.com` is the live *domain* hosting the AXIOM chat product (`apps/axiom-freedom`) — it is not a separate identity-management system in this repository. No signature-key or identity-manager service exists under this name. |
+| AXAXAU (frequency/"soul" layer) | Emotional-frequency logic, resonance, symbolic/cultural layer | **Does not match current reality.** This repository's own prior audit (`docs/memory/2026-09-10-application-coordinate-inventory.md`, corroborated by item 3 above) already found the AXAXAU Sound Resequencer to be a symbolic certificate document with no deployed implementation — no code, no service. |
+| AXES Contracting (business layer) | Client services, CRM, billing, contractor logic | Matches the real, existing corporation (`AXES_CONTRACTING_INC_ENTITY_VERIFICATION.md`) and its public studio page, but the contractor license is currently suspended (bond lapse, queue item #12) and no CRM/billing code exists in this repository. |
+| AXAXAR (resale/commerce layer) | Licensing, resale, marketplace, OS distribution | **Phase 0 only.** Per `docs/keystone/AXAXAR_LAUNCH_PLAN.md`, only a draft README/architecture exists in `AxAxiAxes/axaxar.com`; a proposed default scope was drafted 2026-09-19 (queue item #10) but not yet confirmed, and it describes an AI-companion service, not a resale/licensing marketplace as named here.
+
+**Net assessment:** this is a useful *brand-to-concept mapping* — it gives
+already-existing names a place in an architecture story — but three of its
+seven layers (XIIOM as identity manager, AXAXAU as a working frequency
+engine, AXAXAR as a resale/marketplace engine) describe capabilities that do
+not exist as code today. Recording this framing for continuity does not
+change any build status, does not approve any new work, and does not
+supersede the six-layer technical architecture in
+`docs/AXES_OS_VISION_AND_ARCHITECTURE.md` or the four-production-line
+breakdown in `docs/AXES_OS_UNIFIED_PLATFORM_BREAKDOWN.md`.
+
 ## What this document does not do
 
 It does not claim any of the "planned" apps have been built, does not treat
