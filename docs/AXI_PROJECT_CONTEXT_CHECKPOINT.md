@@ -114,7 +114,11 @@ determination, patent filing status, patentability, or a monetary loss amount.
 
 On startup, handoff, or lost context:
 
-1. Read this checkpoint with `AGENTS.md` and the required current records.
+1. Read this checkpoint with `AGENTS.md` and the required current records,
+   including `docs/keystone/AGENT_SERVICE_DELIVERY_PROTOCOL.md` (the
+   founder-directed standing workflow: research → best-template revision →
+   proofread → cost/time estimate → execute → self-rate → accountability
+   record, in effect for every founder-directed task since 2026-09-19).
 2. State the exact source basis used for the next task; never use a percentage
    or imply complete understanding without a complete, dated review.
 3. Read only the additional source necessary for the founder-selected task and
