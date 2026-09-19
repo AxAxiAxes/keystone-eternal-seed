@@ -1,6 +1,6 @@
 # KEYSTONE AI creative-work origin and authorship registry
 
-**Status:** Registry with seven recorded entries (see Sections 4-10). This is an internal
+**Status:** Registry with eight recorded entries (see Sections 4-11). This is an internal
 KEYSTONE attribution record, not a substitute for, or claim of, US or
 international copyright registration.
 **Recorded:** 2026-09-18
@@ -301,6 +301,8 @@ generation.
 | Anchor method | SHA-256 content hash + this document's git commit hash + GitHub's independent commit timestamp |
 | Claim scope | KEYSTONE-internal attribution and origin record only. This entry records a **proposed** branding use (candidate anchor logo); it is not a trademark filing and does not itself grant or establish trademark rights. Not a copyright, trademark, or patent filing. |
 
+## 10. Registry Entry 000007 — "eternal seed" flower/gear lattice image (`Xc` label rejected)
+
 **Technical findings:** `docs/keystone/assets/eternal-seed-flower-gear-lattice.webp`,
 SHA-256 `da961940b4977c47414dfd5b999f89c8809a94e10326160866c0693d38430180`. A
 watercolor-style illustration of a glowing central seed/geode (a
@@ -338,6 +340,36 @@ invent one on the founder's behalf.
 | Anchor method | SHA-256 content hash + this document's git commit hash + GitHub's independent commit timestamp |
 | Claim scope | KEYSTONE-internal attribution and origin record only. Not a copyright, trademark, or patent filing. |
 
+## 11. Registry Entry 000008 — Keystone Dome/Pomegranate/Sound interactive artifact (named for `axaxox.com`)
+
+The founder shared `keystone-dome-pomegranate-sound.html`, a self-contained
+React/Tailwind/SVG/Web-Audio artifact rendering a "KEYSTONE" dome and a
+"POMEGRANATE" seed cluster, with the interactive prompts "Touch the dome
+to wake mother," "Touch seeds to ring salt," and "Toggle Mother Drone."
+Before saving it, the file was scanned for outbound network calls
+(`fetch(`, `XMLHttpRequest`, `WebSocket`, `eval(`, `http(s)://` literals):
+the only `http(s)://` strings found are standard, inert namespace/license
+URLs from the bundled React and Tailwind libraries (e.g.
+`http://www.w3.org/2000/svg`, `https://tailwindcss.com`) — no live network
+requests, storage, or cookie access were found. It is a static, client-
+side-only prototype, not production application code, and is not wired
+into any deployed AXES/AXI/AXIOM service. Immediately after this artifact
+was shared, the founder said "axaxox.com," designating that
+already-tracked domain (`docs/DOMAIN_PORTFOLIO.md`, "Verification
+required" status) as the name for this concept — a naming/branding
+decision only, with no change to the domain's registrar/verification
+status or any hosting/DNS work done.
+
+| Field | Value |
+| --- | --- |
+| Entry ID (sequential, internal) | KEYSTONE-CREATIVE-ORIGIN-000008 |
+| Work covered | `docs/keystone/assets/interactive/keystone-dome-pomegranate-sound.html` |
+| Verified technical finding | SHA-256 `0148677a3ff6986f392e3718c40219ff78753d7441f836b180c559082676198a`; no outbound network calls found (see scan above); title metadata reads "React Artifact" |
+| Stated creator | Not specified by the founder for this artifact; recorded as a founder-shared reference asset |
+| Naming decision | Founder designated `axaxox.com` as the name for this concept. Naming/branding record only — no change to domain registration/verification status. |
+| Anchor method | SHA-256 content hash + this document's git commit hash + GitHub's independent commit timestamp |
+| Claim scope | KEYSTONE-internal attribution and origin record only. Not a copyright, trademark, or patent filing. |
+
 ## Cross-references
 
 - `docs/keystone/assets/README.md` — the source image files.
@@ -349,3 +381,6 @@ invent one on the founder's behalf.
 - `docs/keystone/AXAXAR_TRIANGLE_ORIGIN_SYMBOLISM.md` — Seventh/Eighth
   follow-on statements (X / eternal multiplier vocabulary this entry's
   founder correction refers to).
+- `docs/keystone/assets/interactive/README.md` — the source interactive
+  artifact (Entry 000008), `docs/DOMAIN_PORTFOLIO.md` (`axaxox.com`
+  ownership/status).
