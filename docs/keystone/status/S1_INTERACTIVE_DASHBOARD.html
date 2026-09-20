@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S1 — Interactive Status Dashboard | KEYSTONE / AXES / AXIOM</title>
+<style>
+  :root {
+    --bg: #0b0d12; --panel: #12151c; --border: #232838; --text: #e6e9f0;
+    --muted: #8a93a8; --live: #2ecc71; --down: #e74c3c; --parked: #f1c40f;
+    --scaffold: #9b59b6; --accent: #4da3ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg); color: var(--text); padding: 24px;
+  }
+  h1 { margin: 0 0 4px; font-size: 22px; }
+  .meta { color: var(--muted); font-size: 13px; margin-bottom: 4px; }
+  .disclaimer {
+    background: #1c1400; border: 1px solid #4a3a00; color: #f1c40f;
+    padding: 10px 14px; border-radius: 8px; font-size: 13px; margin: 14px 0 20px;
+  }
+  .figures {
+    display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0 20px;
+  }
+  .figure {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 16px; min-width: 120px;
+  }
+  .figure .num { font-size: 22px; font-weight: 700; }
+  .figure .lbl { color: var(--muted); font-size: 12px; }
+  input#filter {
+    width: 100%; max-width: 420px; padding: 10px 12px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--panel); color: var(--text);
+    font-size: 14px; margin-bottom: 16px;
+  }
+  .group-title { margin: 24px 0 8px; font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  th { color: var(--muted); font-weight: 600; }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px;
+    font-weight: 700; text-transform: uppercase;
+  }
+  .badge.live { background: rgba(46,204,113,0.15); color: var(--live); }
+  .badge.down { background: rgba(231,76,60,0.15); color: var(--down); }
+  .badge.parked { background: rgba(241,196,15,0.15); color: var(--parked); }
+  .badge.scaffold { background: rgba(155,89,182,0.15); color: var(--scaffold); }
+  a.action {
+    color: var(--accent); text-decoration: none; font-size: 12px; margin-right: 10px;
+  }
+  a.action:hover { text-decoration: underline; }
+  details { margin-top: 8px; }
+  summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+  .hidden-row { display: none; }
+</style>
+</head>
+<body>
+  <h1>S1 — Interactive Status Dashboard</h1>
+  <div class="meta">KEYSTONE / AXES / AXIOM domain &amp; page inventory — every live page has a View link and an Edit link (opens the exact source file on GitHub).</div>
+  <div class="disclaimer">
+    <strong>Honest limitation:</strong> this is a static snapshot generated from
+    <code>docs/keystone/PROJECT_INVENTORY_2026_09_19.md</code> and
+    <code>docs/keystone/STATUS_REPORT_S1_2026-09-19.md</code> at the timestamp below —
+    it does not poll live endpoints automatically (no backend/cron exists for that yet).
+    Regenerate this file whenever the inventory or status report changes, or ask for a
+    live-polling version to be scoped separately (added cost/time, needs approval).
+  </div>
+  <div class="figures" id="figures"></div>
+  <input id="filter" type="text" placeholder="Filter by domain, page, or status (active / down / parked / scaffold)…">
+  <div id="root"></div>
+
+<script>
+const GENERATED_AT = new Date().toISOString(); // set at file-open time; regenerate to refresh
+
+// ---- Data (kept in sync with PROJECT_INVENTORY_2026_09_19.md + STATUS_REPORT_S1_2026-09-19.md) ----
+const MONOREPO_EDIT = "https://github.com/AxAxiAxes/keystone-eternal-seed/edit/axaxiaxes-axiom-monorepo/apps/axiom-freedom/";
+
+const activeDomains = [
+  {
+    domain: "xiiom.com", status: "down",
+    note: "Portal pages live; chat endpoint (POST /api/axiom) HTTP 502, ongoing outage.",
+    repoEdit: "https://github.com/AxAxiAxes/xiiom.com",
+    pages: [
+      { label: "Home", url: "https://xiiom.com/", edit: MONOREPO_EDIT + "index.html", status: "live" },
+      { label: "AXIOM chat", url: "https://xiiom.com/axiom", edit: MONOREPO_EDIT + "axiom_web_interface.html", status: "down" },
+      { label: "Origin & Continuity", url: "https://xiiom.com/origin-continuity", edit: MONOREPO_EDIT + "origin-continuity.html", status: "live" },
+      { label: "Materials", url: "https://xiiom.com/materials", edit: MONOREPO_EDIT + "materials.html", status: "live" },
+      { label: "Design Desk", url: "https://xiiom.com/design-desk", edit: MONOREPO_EDIT + "design-desk.html", status: "live" },
+      { label: "AXES Contracting (portal)", url: "https://xiiom.com/axescontracting", edit: MONOREPO_EDIT + "axescontracting.html", status: "live" },
+      { label: "Library", url: "https://xiiom.com/library", edit: MONOREPO_EDIT + "library.html", status: "live" }
+    ]
+  },
+  {
+    domain: "axescontracting.com", status: "down",
+    note: "Real licensed business domain (CSLB #995577, active). Connection failure at transport level, unrelated to the xiiom.com portal page of the same name.",
+    repoEdit: "https://github.com/AxAxiAxes/axescontracting.com",
+    pages: []
+  },
+  {
+    domain: "urartuhi.com", status: "live",
+    note: "Art gallery, GitHub Pages-backed. Real domain now resolving.",
+    repoEdit: "https://github.com/AxAxiAxes/urartuhi.com",
+    pages: [ { label: "Gallery home", url: "https://urartuhi.com/", edit: "https://github.com/AxAxiAxes/urartuhi.com", status: "live" } ]
+  },
+  {
+    domain: "axaxar.com", status: "scaffold",
+    note: "Registered domain, architecture doc only — no deployed page yet.",
+    repoEdit: "https://github.com/AxAxiAxes/axaxar.com",
+    pages: []
+  }
+];
+
+const parkedDomains = [
+  "axoux.com","auxaous.com","urnur.com","axaxaxu.com","axianaxiunaixia.com","axaxiaxes.com",
+  "axaxes.com","uxaxu.com","owawawao.com","aulaux.com","axpur.com","uxruxu.com","axtux.com",
+  "nuxiux.com","nuxuxun.com","uxaxaxu.com","xaxux.com","uxrax.com","haiuhi.com","axrux.com",
+  "axraxrax.com","axtamar.com","axaxox.com","axaxau.com","axarar.com","axaxur.com","axelurartu.com"
+].map(d => ({
+  domain: d, status: "parked",
+  note: "README-only placeholder, no product code.",
+  repoEdit: "https://github.com/AxAxiAxes/" + d + "/edit/main/README.md"
+}));
+
+// ---- Figures ----
+const figures = [
+  { num: activeDomains.length + parkedDomains.length, lbl: "Total domains" },
+  { num: activeDomains.length, lbl: "Active" },
+  { num: parkedDomains.length, lbl: "Parked" },
+  { num: activeDomains.filter(d => d.status === "down").length, lbl: "Down / broken" },
+  { num: activeDomains.reduce((n, d) => n + d.pages.length, 0), lbl: "Live pages tracked" }
+];
+document.getElementById("figures").innerHTML = figures.map(f =>
+  `<div class="figure"><div class="num">${f.num}</div><div class="lbl">${f.lbl}</div></div>`
+).join("");
+
+function badge(status) {
+  return `<span class="badge ${status}">${status}</span>`;
+}
+
+function renderActive() {
+  let rows = "";
+  activeDomains.forEach(d => {
+    rows += `<tr data-search="${(d.domain + " " + d.status + " " + d.note).toLowerCase()}">
+      <td><strong>${d.domain}</strong><div style="color:var(--muted);font-size:12px">${d.note}</div></td>
+      <td>${badge(d.status)}</td>
+      <td><a class="action" href="${d.repoEdit}" target="_blank" rel="noopener">Edit repo</a></td>
+    </tr>`;
+    d.pages.forEach(p => {
+      rows += `<tr data-search="${(d.domain + " " + p.label + " " + p.status).toLowerCase()}">
+        <td style="padding-left:24px">↳ ${p.label}</td>
+        <td>${badge(p.status)}</td>
+        <td><a class="action" href="${p.url}" target="_blank" rel="noopener">View</a><a class="action" href="${p.edit}" target="_blank" rel="noopener">Edit source</a></td>
+      </tr>`;
+    });
+  });
+  return rows;
+}
+
+function renderParked() {
+  return parkedDomains.map(d => `<tr data-search="${(d.domain + " parked").toLowerCase()}">
+    <td>${d.domain}</td>
+    <td>${badge("parked")}</td>
+    <td><a class="action" href="${d.repoEdit}" target="_blank" rel="noopener">Edit README</a></td>
+  </tr>`).join("");
+}
+
+document.getElementById("root").innerHTML = `
+  <div class="group-title">Active domains &amp; pages (${activeDomains.length})</div>
+  <table><thead><tr><th>Domain / page</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody id="active-body">${renderActive()}</tbody></table>
+
+  <details>
+    <summary>Parked / reserved domains (${parkedDomains.length}) — click to expand</summary>
+    <table><thead><tr><th>Domain</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="parked-body">${renderParked()}</tbody></table>
+  </details>
+`;
+
+document.getElementById("filter").addEventListener("input", (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll("tr[data-search]").forEach(row => {
+    row.classList.toggle("hidden-row", q && !row.getAttribute("data-search").includes(q));
+  });
+});
+</script>
+</body>
+</html>
