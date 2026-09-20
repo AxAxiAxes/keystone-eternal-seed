@@ -147,7 +147,19 @@
   .sidebar {
     width: 240px; flex: 0 0 240px; background: #0d1018; border-right: 1px solid var(--border);
     padding: 22px 16px; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    transition: width 0.18s ease, padding 0.18s ease;
   }
+  .sidebar.collapsed { width: 64px; flex-basis: 64px; padding: 22px 10px; }
+  .sidebar .brand, .sidebar .brand-sub, .sidebar-foot, .nav-item .n-label { transition: opacity 0.12s ease; }
+  .sidebar.collapsed .brand, .sidebar.collapsed .brand-sub, .sidebar.collapsed .sidebar-foot, .sidebar.collapsed .nav-item .n-label {
+    display: none;
+  }
+  .sidebar-toggle {
+    display: flex; align-items: center; justify-content: center; width: 100%; padding: 8px;
+    margin-bottom: 16px; border-radius: 8px; border: 1px solid var(--border); background: rgba(255,255,255,0.03);
+    color: var(--muted); cursor: pointer; font-size: 13px;
+  }
+  .sidebar-toggle:hover { color: var(--text); }
   .sidebar .brand { font-weight: 800; font-size: 15px; letter-spacing: 0.02em; margin-bottom: 2px; }
   .sidebar .brand-sub { font-size: 11px; color: var(--muted); margin-bottom: 22px; }
   .nav-item {
@@ -162,18 +174,45 @@
   .main-panel { flex: 1; min-width: 0; }
   .app-section { display: none; }
   .app-section.active { display: block; }
+
+  /* ---- KPI alert cue (figures) ---- */
+  .figure.alert { border-color: rgba(255,93,93,0.5); background: linear-gradient(180deg, rgba(255,93,93,0.08), var(--panel)); }
+  .figure.alert .num { color: var(--down); }
+  .figure .trend { font-size: 11px; margin-top: 4px; }
+  .figure .trend.bad { color: var(--down); }
+  .figure .trend.good { color: var(--live); }
+
+  /* ---- Live-check in-progress feedback ---- */
+  .live-check.checking::before {
+    content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent); margin-right: 6px; animation: pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+  /* ---- Responsiveness ---- */
+  @media (max-width: 900px) {
+    .sidebar { width: 64px; flex-basis: 64px; padding: 22px 10px; }
+    .sidebar .brand, .sidebar .brand-sub, .sidebar-foot, .nav-item .n-label { display: none; }
+    .sidebar.expanded { width: 220px; flex-basis: 220px; padding: 22px 16px; }
+    .sidebar.expanded .brand, .sidebar.expanded .brand-sub, .sidebar.expanded .sidebar-foot, .sidebar.expanded .nav-item .n-label {
+      display: block;
+    }
+    .grid { grid-template-columns: 1fr; }
+    .hero { padding: 32px 18px 28px; }
+  }
 </style>
 </head>
 <body class="shell">
 
 <div class="app-shell">
-  <nav class="sidebar">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-toggle" id="sidebar-toggle" title="Collapse/expand sidebar">☰</div>
     <div class="brand">KEYSTONE Command Center</div>
     <div class="brand-sub">AXES · AXIOM · XIIOM portfolio</div>
-    <div class="nav-item active" data-section="overview"><span class="n-icon">◆</span> Overview</div>
-    <div class="nav-item" data-section="active"><span class="n-icon">▣</span> Active projects</div>
-    <div class="nav-item" data-section="parked"><span class="n-icon">▢</span> Parked domains</div>
-    <div class="nav-item" data-section="timeline"><span class="n-icon">◷</span> Schedule / timeline</div>
+    <div class="nav-item active" data-section="overview"><span class="n-icon">◆</span><span class="n-label">Overview</span></div>
+    <div class="nav-item" data-section="active"><span class="n-icon">▣</span><span class="n-label">Active projects</span></div>
+    <div class="nav-item" data-section="parked"><span class="n-icon">▢</span><span class="n-label">Parked domains</span></div>
+    <div class="nav-item" data-section="timeline"><span class="n-icon">◷</span><span class="n-label">Schedule / timeline</span></div>
     <div class="sidebar-foot">Static file · no backend · ratings saved to this browser only</div>
   </nav>
 
@@ -306,16 +345,17 @@ const parkedDomains = [
 }));
 
 // ---- Figures ----
+const downCount = activeDomains.filter(d => d.status === "down").length;
 const figures = [
   { num: activeDomains.length + parkedDomains.length, lbl: "Total domains" },
   { num: activeDomains.length, lbl: "Active" },
   { num: parkedDomains.length, lbl: "Parked" },
-  { num: activeDomains.filter(d => d.status === "down").length, lbl: "Down / broken" },
+  { num: downCount, lbl: "Down / broken", alert: downCount > 0, trend: downCount > 0 ? "▲ needs attention" : "✓ none" },
   { num: activeDomains.reduce((n, d) => n + d.pages.length, 0), lbl: "Live pages tracked" },
   { num: (activeDomains.reduce((s,d)=>s+d.myRating,0) / activeDomains.length).toFixed(1), lbl: "Avg. my rating /10" }
 ];
 document.getElementById("figures").innerHTML = figures.map(f =>
-  `<div class="figure"><div class="num">${f.num}</div><div class="lbl">${f.lbl}</div></div>`
+  `<div class="figure${f.alert ? ' alert' : ''}"><div class="num">${f.num}</div><div class="lbl">${f.lbl}</div>${f.trend ? `<div class="trend ${f.alert ? 'bad' : 'good'}">${f.trend}</div>` : ''}</div>`
 ).join("");
 
 function badge(cls, label) { return `<span class="badge ${cls}">${label || cls}</span>`; }
@@ -380,7 +420,7 @@ function rateProject(id, value) {
 function checkLive(id, url) {
   const el = document.getElementById("live-" + id);
   el.textContent = "Checking " + url + " …";
-  el.className = "live-check";
+  el.className = "live-check checking";
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 6000);
   fetch(url, { mode: "no-cors", signal: controller.signal, cache: "no-store" })
@@ -451,6 +491,13 @@ document.querySelectorAll(".nav-item").forEach(item => {
     item.classList.add("active");
     document.querySelector('.app-section[data-section="' + target + '"]').classList.add("active");
   });
+});
+
+// ---- Sidebar collapse/expand toggle (desktop: collapsed<->full; narrow viewports: icon-only<->expanded) ----
+document.getElementById("sidebar-toggle").addEventListener("click", () => {
+  const sidebar = document.getElementById("sidebar");
+  const isNarrow = window.matchMedia("(max-width: 900px)").matches;
+  sidebar.classList.toggle(isNarrow ? "expanded" : "collapsed");
 });
 </script>
 </body>
