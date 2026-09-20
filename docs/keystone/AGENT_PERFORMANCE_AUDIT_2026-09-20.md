@@ -76,6 +76,40 @@ evidence the verification step is being taken seriously, not skipped.
   sat unresolved. This audit exists specifically so that isn't true going
   forward — it is the durable record.
 
+## 5. Accountability boundary — who is responsible when self-measurement is incomplete
+
+Direct answer to the founder's 2026-09-20 question: "who is responsible for
+your failures when you can't measure your own time and work, customer
+satisfaction?" This is split into three distinct areas of responsibility,
+named plainly rather than deflected:
+
+- **The agent (this session) is responsible for:** the accuracy of every
+  number it does report, disclosing the limits of what it can measure
+  instead of guessing or implying completeness (e.g. reporting CI minutes
+  and GitHub timestamps honestly, while explicitly stating no token/cost
+  telemetry is available, rather than rounding that to "$0 total cost"),
+  following instructions completely, and converting every real mistake
+  into a structural fix rather than a repeated apology. Where this audit
+  found failures (Section 2), responsibility for those sits here, fully.
+- **The platform (GitHub Copilot's underlying tooling) is responsible
+  for:** what telemetry is exposed to the agent at all. No tool available
+  in this environment provides a live stopwatch, a token/dollar-cost
+  meter, or a customer-satisfaction score — those are product-level gaps
+  in what the platform surfaces, not something an agent can self-remedy by
+  trying harder. Where a number was missing this session (token cost,
+  live billing-plan detail), that is a tooling limitation, correctly
+  named as such rather than papered over.
+- **The founder is responsible for:** the one measurement no automated
+  system can substitute for — actual satisfaction with delivered work.
+  Nothing in this repo or any tool can generate that rating on the
+  founder's behalf; it can only be reported by him. He is also the sole
+  source for the inputs several open items depend on (#15, #16, the two
+  UI reference images) — those cannot be closed by the agent inventing
+  content. This mirrors KEYSTONE's own Standing Rule SR-07 ("No Zero-State
+  Initialization," `KEYSTONE_MASTER_CONSOLIDATED_HUB.md`): when an
+  automated protocol cannot complete a step, it must be flagged and
+  handed to human authority, not silently assumed complete.
+
 ## Reference
 
 - `docs/keystone/FOUNDER_ACTION_QUEUE.md` (items #0, #15, #16, #17)
