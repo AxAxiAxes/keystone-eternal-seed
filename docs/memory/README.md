@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-19 (q) S1 dashboard rebuilt after founder critique — card-grid layout, in-app My-rating/Your-rating per project, best-effort in-app live-status check](2026-09-19q-s1-dashboard-rebuild-competitive-ratings-livecheck.md)
 - [2026-09-19 (p) xiiom.com re-checked live: 502 outage resolved, but running deployment is stale (pre-identity/date-fix) — needs founder redeploy](2026-09-19p-xiiom-502-resolved-stale-deployment.md)
 - [2026-09-19 (o) S1 dashboard extended with full plan timeline (226 milestones) using a vertical connector-timeline layout](2026-09-19o-s1-dashboard-timeline-schedule.md)
 - [2026-09-19 (n) S1 interactive status dashboard built — static, portable HTML with view/edit links per domain and xiiom.com page](2026-09-19n-s1-interactive-dashboard.md)
