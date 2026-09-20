@@ -29,6 +29,28 @@ guarantee — stated plainly so it isn't oversold.
 
 ## The workflow (applies to every founder-directed task going forward)
 
+0. **Reference-asset intake (added 2026-09-20)** — added after a real
+   incident: the founder sent 2 reference images alongside the
+   "organize the command center" instruction specifically so the
+   dashboard UI would be rebuilt to match them, but no durable,
+   query-able link between those specific images and that specific
+   instruction was ever created. Session-state image storage is a flat,
+   unordered pool with no reliable turn-to-attachment mapping that
+   survives a session reset/compaction — so by the time the work was
+   revisited, the images could not be identified with confidence, and
+   the UI-matching half of the instruction was silently dropped while
+   only the document-copy half was completed. **Fix, effective
+   immediately:** any time an image is sent alongside a task, before
+   doing anything else, save a copy of it into the repository itself
+   (e.g. `docs/keystone/assets/reference-images/<dated-slug>.<ext>`,
+   or the most relevant existing assets folder) in the same commit/PR
+   as the resulting work, with a short written caption tying it
+   explicitly to the instruction it was sent for. A repo commit
+   survives session resets and compaction; transient session-state
+   files do not. If a task cannot be completed in the same turn the
+   image arrives, still commit the saved image + caption immediately,
+   even before the rest of the work is ready, so the reference is never
+   lost to time.
 1. **Market research** — before designing or building, check what
    comparable, proven implementations/templates already exist (open-source
    projects, established patterns, prior art in this repo) rather than
@@ -89,6 +111,23 @@ guarantee — stated plainly so it isn't oversold.
    evidence + explicit human confirmation" model this protocol calls for,
    and gates `verified_success` behind founder confirmation, not
    self-assessment alone.
+
+## Formal compliance acknowledgment (2026-09-20, second incident)
+
+Founder reported (2026-09-20): the "organize the command center"
+instruction (PR #195/#196) actually had **two parts** — organize the
+documents, **and** adjust the S1 dashboard UI to match 2 images already
+sent. Only the document-organization half was delivered; the UI-matching
+half was missed entirely, and by the time it was raised, the specific 2
+images could not be recovered from session state with confidence (no
+durable per-turn attachment record exists in the tools available to this
+agent). This is acknowledged as a real instruction-completeness failure,
+not a semantic disagreement — a compound instruction was only half
+executed, and no ambiguity was flagged at the time it should have been.
+The structural fix (step 0 above, reference-asset intake) is adopted so
+the *cause* — no durable image record — cannot repeat, and the founder
+has been asked to resend the 2 images so the UI-matching work can still
+be completed against the real originals rather than a guess.
 
 ## Formal compliance acknowledgment (2026-09-19)
 
