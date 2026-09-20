@@ -61,15 +61,22 @@ guarantee — stated plainly so it isn't oversold.
    immediately rather than discovered later at double the cost.
 6. **Execute** — build/ship the work, following this repo's existing PR/CI
    workflow (branch → tests green → PR → auto-merge → cleanup).
-7. **Self-rate after completion** — for each completed task, record:
-   - A quality self-rating (1-10) with justification.
-   - An honest estimate of likely founder satisfaction, clearly labeled as
-     an *estimate on the founder's behalf*, not a real founder rating,
-     until the founder actually confirms or corrects it.
+7. **Self-rate after completion — visibly, in chat, every time** — added
+   2026-09-19 after the founder had to repeatedly ask for a rating that
+   was only ever recorded in `docs/memory/` files, not shown to them. For
+   every completed task, the chat response itself (not only a memory file)
+   must end with:
+   - A direct link/path to the actual result (PR, file, doc).
+   - A quality self-rating (1-10) with a one-line justification.
+   - An explicit prompt asking the founder for their own rating — every
+     time, not only when asked.
    - Any deviation between the original cost/time estimate and the actual
      outcome, with the estimate revised for next time.
    - Explicit ownership of any mistake, gap, or shortcut taken, rather than
      omitting it.
+   The full detail (justification, cost/time analysis, accountability
+   notes) still goes in the memory record per step 8 — but the rating and
+   the request for the founder's rating must never be chat-invisible again.
 8. **Formal record** — write the above into a memory record
    (`docs/memory/`) so the directive-vs-delivery history is preserved, and
    link it from the founder-facing tracking surfaces
