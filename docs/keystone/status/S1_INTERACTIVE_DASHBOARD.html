@@ -256,6 +256,7 @@
     <div class="nav-item" data-section="active"><span class="n-icon">▣</span><span class="n-label">Active projects</span></div>
     <div class="nav-item" data-section="parked"><span class="n-icon">▢</span><span class="n-label">Parked domains</span></div>
     <div class="nav-item" data-section="timeline"><span class="n-icon">◷</span><span class="n-label">Schedule / timeline</span></div>
+    <div class="nav-item" data-section="paperwork"><span class="n-icon">▤</span><span class="n-label">Command Center paperwork</span></div>
     <div class="sidebar-foot">Static file · no backend · ratings saved to this browser only</div>
   </nav>
 
@@ -334,6 +335,16 @@
         pattern for long chronological status logs.
       </div>
       <div class="timeline" id="timeline-root"></div>
+    </div>
+
+    <div class="app-section" data-section="paperwork">
+      <div class="section-title">Command Center paperwork</div>
+      <div class="section-sub">
+        Copies (not moves) of every project document, organized into 13 categories at
+        <code>docs/axes-os-command-center/</code> — originals remain canonical and editable at their
+        real paths. Start at <code>INDEX.md</code>, then open any category folder below.
+      </div>
+      <div class="grid" id="paperwork-grid"></div>
     </div>
   </div>
   </div>
@@ -433,7 +444,8 @@ const quickNavItems = [
   { section: "overview", icon: "◆", label: "Overview", sub: "Figures & summary" },
   { section: "active", icon: "▣", label: "Active projects", sub: activeDomains.length + " domains, rated" },
   { section: "parked", icon: "▢", label: "Parked domains", sub: parkedDomains.length + " reserved" },
-  { section: "timeline", icon: "◷", label: "Schedule", sub: "Full plan timeline" }
+  { section: "timeline", icon: "◷", label: "Schedule", sub: "Full plan timeline" },
+  { section: "paperwork", icon: "▤", label: "Command Center paperwork", sub: "358 docs, 13 categories" }
 ];
 document.getElementById("quicknav-grid").innerHTML = quickNavItems.map(q => `
   <button class="quicknav-tile" data-section="${q.section}">
@@ -560,6 +572,30 @@ function renderTimeline() {
     </div>`).join("");
 }
 document.getElementById("timeline-root").innerHTML = renderTimeline();
+
+// ---- Command Center paperwork index (docs/axes-os-command-center/, copies only) ----
+const paperworkCategories = [
+  { folder: "00-orientation-and-timeline", label: "Orientation & timeline", count: 8 },
+  { folder: "01-identity-governance-and-rights", label: "Identity, governance & rights", count: 36 },
+  { folder: "02-legal-ip-and-patents", label: "Legal, IP & patents", count: 8 },
+  { folder: "03-business-strategy-and-finance", label: "Business strategy & finance", count: 19 },
+  { folder: "04-engineering-os-ai-web-app", label: "Engineering — OS, AI, web & app", count: 27 },
+  { folder: "05-products-and-applications", label: "Products & applications", count: 14 },
+  { folder: "06-status-readiness-and-incident-reports", label: "Status, readiness & incident reports", count: 12 },
+  { folder: "07-activation-and-intake", label: "Activation & intake", count: 1 },
+  { folder: "08-memory-and-continuity-records", label: "Memory & continuity records", count: 207 },
+  { folder: "09-patents-source-files", label: "Patents — source files", count: 2 },
+  { folder: "10-fixtures-and-data-schemas", label: "Fixtures & data schemas", count: 7 },
+  { folder: "11-assets-and-interactive", label: "Assets & interactive", count: 15 },
+  { folder: "12-live-status-dashboards", label: "Live status dashboards", count: 2 }
+];
+document.getElementById("paperwork-grid").innerHTML =
+  `<div class="page-row" style="margin-bottom:14px"><a href="../../axes-os-command-center/INDEX.md" target="_blank">📄 INDEX.md — start here (category map, counts, AXES OS framing)</a></div>` +
+  paperworkCategories.map(c => `
+    <div class="card">
+      <div class="card-head"><strong>${c.label}</strong></div>
+      <div class="page-row"><a href="../../axes-os-command-center/${c.folder}/" target="_blank">${c.folder}/</a> — ${c.count} docs</div>
+    </div>`).join("");
 
 document.getElementById("filter").addEventListener("input", (e) => {
   const q = e.target.value.trim().toLowerCase();
