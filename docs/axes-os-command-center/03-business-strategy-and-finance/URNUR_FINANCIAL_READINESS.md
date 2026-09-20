@@ -1,0 +1,240 @@
+# URNUR currency readiness and legal-review gate
+
+**Status:** Blocking pre-launch workstream  
+**Recorded:** 2026-09-09  
+**Scope:** Future bank or financial-institution registration, monetary
+currency, deposits, payments, transfers, custody, market data, charts, paper
+trading, exchange connectivity, automated trading, crypto assets, and
+digital-asset plans.
+
+## Founder direction
+
+The founder identifies URNUR as an intended monetary currency and future bank
+or financial institution. This statement records product direction only; it
+does not represent that URNUR is registered, licensed, chartered, approved,
+insured, operational, backed, or available. It does not authorize an
+application, issuance, promotion, sale, transfer, exchange, redemption,
+deposit-taking, payment use, custody, lending, market data, trading, wallet
+functionality, account creation, or any other financial activity.
+
+In the founder's terminology, **UR** means **Unit of Eternal Origin** and
+**NUR** is the proposed record-holder for an individual unit or gem. A future
+NUR record may link a gem to its documented creator-origin and provenance
+record. No NUR registry is currently active, and a registry entry is not
+automatic proof of legal ownership, authenticity, grade, scarcity, value,
+financial status, transferability, regulatory approval, or permission to
+trade.
+
+Every possible currency implementation remains blocked until qualified counsel
+for the primary launch jurisdiction, compliance, security, privacy, consumer
+protection, tax, and operational requirements define a written permitted
+scope. No public claim may imply that URNUR is issued, available, regulated,
+backed, valuable, transferable, or ready for use before those gates are met.
+
+## Proposed creator-economy direction
+
+The founder proposes that URNUR may eventually support a creator economy for
+original fashion, music, game, art, and related collectible work. Creators may
+make, buy, play with, and potentially exchange approved works under a lawful,
+reviewed product model. Documented creator origin and contribution lineage may
+help provide credit and provenance for a work.
+
+**Harmonics** is the proposed public name for future URNUR currency or
+creator-economy units. This is a naming and product-direction decision only:
+no Harmonics unit has been issued, priced, offered, transferred, traded,
+redeemed, backed, or made available. The name must not imply a financial
+return, exchange rate, value stability, regulatory approval, or readiness for
+use.
+
+Terms such as higher harmonics, resonance, alignment, intelligence lineage,
+and energy are creative or cultural descriptions only. They are not objective
+quality measures, price models, investment ratings, citizenship status,
+financial-credit scores, guarantees of demand, proof of value, or claims that
+a work has a measurable personal effect. AXES must not state that URNUR is
+"more than" another currency or otherwise make unsupported comparative,
+performance, or value claims.
+
+“Citizen” may be used only as optional fictional game-world or community
+language after a separate participant-policy review. It must not imply
+nationality, legal residency, identity verification, civic rights, membership
+eligibility, social ranking, or a requirement to disclose personal identity.
+
+The currency/creator-economy meaning of Harmonics is separate from the
+Chichetki/Athanor game meaning recorded in
+`ATHANOR_GAME_CONSOLE_READINESS.md`. Game Harmonics are fictional audiovisual
+states and interactions; they do not create currency, financial value,
+ownership, balances, prizes, or tradable rights.
+
+## Non-monetary contributor layer
+
+Alongside the future monetary-currency direction, the founder intends URNUR to
+include a non-monetary contributor layer for voluntary creative, origin, and
+stewardship acknowledgement within the long-term AXES community vision. This
+layer may preserve participant-approved contribution records, creator credit,
+provenance links, and project stewardship history.
+
+The non-monetary contributor layer is separate from currency issuance and
+trading. It cannot create or assign Harmonics units, balances, prices, prizes,
+financial rights, personal levels, social rank, citizenship status,
+eligibility, or access to essential services. It must remain opt-in,
+contribution-specific, human-reviewed, private by default, correctable, and
+subject to the creator-origin, privacy, accessibility, moderation, and
+participant-policy safeguards. See `URNUR_NON_MONETARY_RECOGNITION.md` for
+the detailed constitutional boundaries, prohibited mechanics, allowed forms,
+and review process this layer must follow.
+
+This is a long-term community aspiration, not a claim that the system creates
+an eternal civilization, permanent identity, or irreversible responsibility.
+Participants retain their rights to privacy, correction, withdrawal where
+appropriate, and fair review.
+
+## Required scope decision for creator trading
+
+Before enabling any purchase, sale, trade, prize, exchange, marketplace,
+creator payout, secondary resale, currency use, account balance, or
+participant-owned digital item, obtain a written permitted scope that covers:
+
+1. California and applicable U.S. federal financial-services, money-
+   transmission, digital-asset, securities, commodities, banking, consumer,
+   tax, advertising, and prize/contest implications.
+2. Creator rights, contributor agreements, license terms, provenance,
+   counterfeit/impersonation response, takedown/correction handling, and
+   rights-holder dispute process.
+3. Payment processing, custody, account/balance treatment, fraud prevention,
+   sanctions/anti-money-laundering requirements where applicable, security,
+   privacy, data retention, and customer support.
+4. Product disclosures that distinguish creative provenance from authenticity,
+   scarcity, resale value, financial value, investment potential, or
+   endorsement.
+
+Until that decision is approved, the permitted work is internal product
+research, creator-origin record design, original asset creation, and
+non-transactional prototypes using no accounts, payments, prizes, balances,
+trades, or publicly collected participant data.
+
+## Bank-registration prerequisite
+
+Bank or financial-institution registration is jurisdiction-specific and may
+require a charter, regulatory approvals, capital, governance, risk management,
+compliance staffing, anti-money-laundering and sanctions controls, consumer
+protection, prudential supervision, examinations, technology/security
+requirements, and possibly deposit-insurance eligibility. The required path
+cannot be selected or started in this repository.
+
+Before any application, the founder must identify the primary launch country
+and state/province, engage qualified banking and financial-services counsel,
+and receive a written classification and permitted next-step plan. No one may
+represent an intention, concept, domain registration, or project record as a
+banking license, regulatory approval, registration, or customer protection.
+
+## Immediate decision
+
+Contact qualified banking, financial-services, and digital-asset counsel
+**now**, before beginning bank-registration preparation, resuming any crypto
+registration, or beginning public-facing financial product work. Counsel
+should be licensed or able to advise in the primary launch jurisdiction, which
+is still to be identified.
+
+This is planning guidance, not legal, tax, investment, or regulatory advice.
+
+## Why counsel is needed now
+
+URNUR's proposed scope may include bank or financial-institution operation,
+currency, deposits, payments, transfers, market data, charts, automated
+trading, crypto assets, and financial-market functionality. The regulatory
+classification can change based on jurisdiction and exact product behavior.
+Building the wrong architecture first can create rework, cost, and
+unacceptable compliance risk.
+
+## Legal-review gates
+
+| Gate | Attorney required | Permitted work before the gate |
+| --- | --- | --- |
+| Bank-registration discovery | Yes, banking and financial-services counsel | Internal concept mapping and private counsel briefing only; no application, public banking claim, customer accounts, deposits, live financial data, recommendations, or transactions |
+| Read-only educational prototype | Review before public launch | Non-personalized educational content and mock/synthetic charts; do not imply investment advice |
+| Market-data integration | Review before contracting or publishing | Evaluate providers and document requirements; do not purchase, redistribute, or display data without a license review |
+| Paper trading or portfolio simulation | Review before public pilot | Internal prototypes using synthetic assets and synthetic data only |
+| Exchange connectivity or trade automation | Written legal and security approval required before implementation | Architecture diagrams and threat modeling only; no credentials, API keys, account linking, or orders |
+| Real assets, custody, transfers, payments, or token issuance | Written legal, compliance, security, and operating approval required before implementation or marketing | None beyond high-level product research |
+
+## Attorney briefing packet
+
+Prepare these items before the first consultation:
+
+1. Plain-language product description, including every planned user action.
+2. Intended launch country and state or province, target users, and any
+   cross-border availability.
+3. A feature matrix distinguishing educational charts, simulated portfolios,
+   market-data display, alerts, recommendations, exchange connectivity,
+   automated orders, custody, transfers, payments, and token issuance.
+4. Proposed bank or financial-institution model, chartering/registration
+   objective, fee model, capital plan, governance, partners, and revenue
+   sources.
+5. Proposed user data, identity verification, age restrictions, records,
+   security, fraud controls, complaints, and customer-support process.
+6. Current architecture: private XIIOM automation, planned AXES database, data
+   storage locations, access controls, audit records, and human approvals.
+7. Proposed public names and marketing language, including the use of
+   "currency," "market," "autotrade," and any claims about value or returns.
+8. Questions about entity formation, registrations, licenses, consumer
+   protection, securities, commodities, money-transmission, payments, tax,
+   sanctions, anti-money-laundering, privacy, data licensing, and insurance.
+
+Do not bring passwords, private keys, seed phrases, recovery codes, or customer
+financial information to project documentation or an AI system.
+
+## Engineering boundary until legal approval
+
+The repository must not add:
+
+- Exchange account linking or storage of exchange API keys.
+- Trade execution, order routing, portfolio recommendations, price alerts based
+  on user holdings, custody, wallet generation, transfers, deposits, payments,
+  or token issuance.
+- Claims that URNUR is a currency, investment, financial advisor, exchange,
+  bank, financial institution, broker, or regulated service.
+- Personal financial profiles, identity-verification documents, or financial
+  account information.
+
+The first possible engineering milestone, after counsel defines the permitted
+scope, is a read-only, clearly labeled educational prototype using licensed or
+synthetic data and no personalized financial output.
+
+## Completion evidence
+
+This workstream is complete only when the project has:
+
+- Identified a primary launch jurisdiction.
+- Retained appropriate banking, financial-services, and digital-asset counsel
+  or received documented qualified advice.
+- Approved a written product classification and permitted first-release scope.
+- Documented data licensing, privacy, security, user terms, and operational
+  requirements.
+- Converted the result into scoped engineering requirements and testable
+  approval gates.
+
+## Founder product idea (2026-09-18) — value/satisfaction measurement app
+
+The founder described URNUR as a system where "every value is preserved for
+eternity and every value eternally satisfied — at least we can dream of it,"
+and proposed a future app to measure "satisfaction levels, product value,
+truth and meaning, etc." This is recorded as a founder product-vision
+statement, not as a specification, commitment, or claim that such measures
+are objectively definable or that any such app exists or is scheduled.
+
+Recorded honestly and cross-referenced here for continuity:
+
+- The "eternal preservation/satisfaction" framing is consistent with URNUR's
+  existing non-monetary contributor-recognition direction already documented
+  above and in `URNUR_NON_MONETARY_RECOGNITION.md` — it does not add a new
+  monetary claim, and remains subject to every legal-review gate already
+  defined in this document (no such app may create balances, prices, ranks,
+  or financial rights before counsel review).
+- "Satisfaction levels, product value, truth and meaning" are inherently
+  subjective measures. Any real app built around them would need to state
+  clearly that these are self-reported, opinion-based, non-financial,
+  non-diagnostic metrics — not objective truth measurements, valuations, or
+  credentialed assessments — consistent with the existing prohibition in
+  this document against unsupported comparative or value claims.
+- No engineering work toward this app has been started as a result of this
+  entry; it is preserved as a founder idea for future scoped review.
