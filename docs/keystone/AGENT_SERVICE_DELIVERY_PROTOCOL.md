@@ -50,6 +50,15 @@ guarantee — stated plainly so it isn't oversold.
 5. **Estimate cost in money and time** — every task gets an explicit
    estimate before execution (even if the estimate is "$0 / repo-only work,
    ~X minutes" for doc/code-only tasks with no external spend).
+5a. **Verify literal scope match before marking anything done** — added
+   2026-09-19 after the founder reported receiving a different result than
+   what was asked for, requiring rework at added cost. Before calling a
+   task complete: re-read the founder's original wording verbatim, list
+   what was actually delivered, and confirm they match line-for-line — not
+   "close enough" or "the spirit of it." If any ambiguity exists about
+   scope, either ask before executing or state the interpretation taken
+   explicitly in the delivery, so a mismatch is caught and corrected
+   immediately rather than discovered later at double the cost.
 6. **Execute** — build/ship the work, following this repo's existing PR/CI
    workflow (branch → tests green → PR → auto-merge → cleanup).
 7. **Self-rate after completion** — for each completed task, record:

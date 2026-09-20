@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-19 (m) Founder-reported $40k loss + satisfaction rating — corrective scope-match step added to protocol; specific incident still needs identifying](2026-09-19m-founder-loss-report-and-rating.md)
 - [2026-09-19 (l) "Customer service prompt" referenced by founder but not found anywhere in repo — search documented, added as FOUNDER_ACTION_QUEUE item #15 pending re-supply](2026-09-19l-customer-service-prompt-not-found.md)
 - [2026-09-19 (k) Status Report S1 issued — first in the founder-directed numbered status-report series](2026-09-19k-status-report-s1.md)
 
