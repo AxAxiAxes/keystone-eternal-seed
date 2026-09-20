@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KEYSTONE Command Center — AXES / AXIOM / XIIOM</title>
+<style>
+  :root {
+    --bg: #0a0c12; --bg2: #10131b; --panel: #151925; --panel2: #1b2030; --border: #262c3d;
+    --text: #eef1f8; --muted: #93a0b8; --live: #35d488; --down: #ff5d5d; --parked: #f5c451;
+    --scaffold: #b98bf0; --accent: #5aa9ff; --accent2: #8b6bff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: radial-gradient(1200px 600px at 10% -10%, #1c2440 0%, var(--bg) 55%);
+    color: var(--text); padding: 0 0 60px;
+  }
+  a { color: inherit; }
+
+  /* ---- Hero ---- */
+  .hero {
+    padding: 48px 32px 40px; text-align: center;
+    background: linear-gradient(135deg, #17204a 0%, #0d1130 55%, #090b18 100%);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero .kicker {
+    display: inline-block; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); background: rgba(90,169,255,0.12); border: 1px solid rgba(90,169,255,0.3);
+    padding: 5px 14px; border-radius: 999px; margin-bottom: 18px;
+  }
+  .hero h1 {
+    margin: 0 0 12px; font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -0.02em;
+    background: linear-gradient(90deg, #ffffff, #aeb9ff 60%, var(--accent2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero p.tagline { max-width: 720px; margin: 0 auto; color: var(--muted); font-size: 16px; line-height: 1.6; }
+  .hero .stamp { margin-top: 18px; font-size: 12px; color: var(--muted); }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  .figures { display: flex; gap: 14px; flex-wrap: wrap; margin: -28px 0 32px; position: relative; z-index: 2; }
+  .figure {
+    flex: 1 1 150px; background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  }
+  .figure .num { font-size: 26px; font-weight: 800; }
+  .figure .lbl { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  input#filter {
+    width: 100%; padding: 13px 16px; border-radius: 12px; border: 1px solid var(--border);
+    background: var(--panel); color: var(--text); font-size: 14px; margin-bottom: 28px;
+  }
+  input#filter:focus { outline: none; border-color: var(--accent); }
+
+  .section-title { font-size: 20px; font-weight: 700; margin: 36px 0 6px; }
+  .section-sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+
+  /* ---- Project cards ---- */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
+  .card {
+    background: linear-gradient(180deg, var(--panel2), var(--panel));
+    border: 1px solid var(--border); border-radius: 16px; padding: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .card-head h3 { margin: 0; font-size: 17px; font-weight: 700; }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 10.5px;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
+  }
+  .badge.live { background: rgba(53,212,136,0.15); color: var(--live); }
+  .badge.down { background: rgba(255,93,93,0.15); color: var(--down); }
+  .badge.parked { background: rgba(245,196,81,0.15); color: var(--parked); }
+  .badge.scaffold { background: rgba(185,139,240,0.15); color: var(--scaffold); }
+  .badge.complete { background: rgba(53,212,136,0.15); color: var(--live); }
+  .badge.attention { background: rgba(243,156,18,0.15); color: #f39c12; }
+  .badge.recorded { background: rgba(90,169,255,0.15); color: var(--accent); }
+  .badge.other { background: rgba(147,160,184,0.15); color: var(--muted); }
+  .card-note { color: var(--muted); font-size: 13px; margin: 10px 0 14px; line-height: 1.5; }
+
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .btn {
+    font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 8px; text-decoration: none;
+    border: 1px solid var(--border); background: rgba(255,255,255,0.03); cursor: pointer; color: var(--text);
+  }
+  .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); border: none; color: #0a0c12; }
+  .btn:hover { filter: brightness(1.12); }
+  .btn.small { font-size: 11px; padding: 5px 9px; }
+
+  .live-check { font-size: 12px; margin: 4px 0 12px; min-height: 16px; color: var(--muted); }
+  .live-check.ok { color: var(--live); }
+  .live-check.fail { color: var(--down); }
+
+  .pages { border-top: 1px dashed var(--border); margin-top: 8px; padding-top: 10px; }
+  .page-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; font-size: 12.5px; }
+  .page-row .p-actions a { color: var(--accent); text-decoration: none; margin-left: 10px; }
+  .page-row .p-actions a:hover { text-decoration: underline; }
+
+  .ratings { border-top: 1px solid var(--border); margin-top: 14px; padding-top: 14px; }
+  .rating-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .rating-row .rlabel { font-size: 12px; color: var(--muted); }
+  .rating-row .rvalue { font-weight: 800; font-size: 15px; }
+  .my-rating-why { font-size: 11.5px; color: var(--muted); margin: -4px 0 10px; line-height: 1.4; }
+  .founder-rating input {
+    width: 56px; padding: 5px 6px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--bg2); color: var(--text); font-size: 13px; text-align: center;
+  }
+  .saved-tag { font-size: 11px; color: var(--live); margin-left: 6px; display: none; }
+
+  details { margin-top: 8px; }
+  summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  th { color: var(--muted); font-weight: 600; }
+  .action { color: var(--accent); text-decoration: none; font-size: 12px; margin-right: 10px; }
+  .action:hover { text-decoration: underline; }
+  .hidden-row { display: none; }
+
+  .disclaimer {
+    background: rgba(245,196,81,0.08); border: 1px solid rgba(245,196,81,0.3); color: var(--parked);
+    padding: 12px 16px; border-radius: 12px; font-size: 12.5px; margin: 18px 0 8px; line-height: 1.5;
+  }
+
+  /* ---- Timeline ---- */
+  .timeline { position: relative; margin-top: 14px; padding-left: 22px; }
+  .timeline::before { content: ""; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .t-item { position: relative; margin-bottom: 16px; }
+  .t-dot { position: absolute; left: -22px; top: 4px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--bg); }
+  .t-dot.complete { background: var(--live); }
+  .t-dot.attention { background: #f39c12; }
+  .t-dot.recorded { background: var(--accent); }
+  .t-dot.other { background: var(--muted); }
+  .t-date { font-size: 12px; color: var(--muted); font-weight: 700; }
+  .t-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin-top: 4px; }
+  .t-milestone { font-size: 13px; line-height: 1.5; }
+  .t-evidence { font-size: 11px; color: var(--muted); margin-top: 6px; }
+  .t-evidence code { color: var(--accent); }
+  .t-item.hidden-row { display: none; }
+
+  .copy-bar { display: flex; gap: 10px; align-items: center; margin: 24px 0; flex-wrap: wrap; }
+  #copy-status { font-size: 12px; color: var(--live); }
+
+  /* ---- App shell: sidebar + main panel ---- */
+  body.shell { padding: 0; }
+  .app-shell { display: flex; min-height: 100vh; align-items: stretch; }
+  .sidebar {
+    width: 240px; flex: 0 0 240px; background: #0d1018; border-right: 1px solid var(--border);
+    padding: 22px 16px; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    transition: width 0.18s ease, padding 0.18s ease;
+  }
+  .sidebar.collapsed { width: 64px; flex-basis: 64px; padding: 22px 10px; }
+  .sidebar .brand, .sidebar .brand-sub, .sidebar-foot, .nav-item .n-label { transition: opacity 0.12s ease; }
+  .sidebar.collapsed .brand, .sidebar.collapsed .brand-sub, .sidebar.collapsed .sidebar-foot, .sidebar.collapsed .nav-item .n-label {
+    display: none;
+  }
+  .sidebar-toggle {
+    display: flex; align-items: center; justify-content: center; width: 100%; padding: 8px;
+    margin-bottom: 16px; border-radius: 8px; border: 1px solid var(--border); background: rgba(255,255,255,0.03);
+    color: var(--muted); cursor: pointer; font-size: 13px;
+  }
+  .sidebar-toggle:hover { color: var(--text); }
+  .sidebar .brand { font-weight: 800; font-size: 15px; letter-spacing: 0.02em; margin-bottom: 2px; }
+  .sidebar .brand-sub { font-size: 11px; color: var(--muted); margin-bottom: 22px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px;
+    color: var(--muted); font-size: 13.5px; font-weight: 600; cursor: pointer; margin-bottom: 4px;
+    border: 1px solid transparent;
+  }
+  .nav-item .n-icon { font-size: 15px; }
+  .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+  .nav-item.active { background: rgba(90,169,255,0.12); border-color: rgba(90,169,255,0.35); color: var(--text); }
+  .sidebar-foot { margin-top: 20px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 12px; }
+  .main-panel { flex: 1; min-width: 0; }
+  .app-section { display: none; }
+  .app-section.active { display: block; }
+
+  /* ---- KPI alert cue (figures) ---- */
+  .figure.alert { border-color: rgba(255,93,93,0.5); background: linear-gradient(180deg, rgba(255,93,93,0.08), var(--panel)); }
+  .figure.alert .num { color: var(--down); }
+  .figure .trend { font-size: 11px; margin-top: 4px; }
+  .figure .trend.bad { color: var(--down); }
+  .figure .trend.good { color: var(--live); }
+
+  /* ---- Live-check in-progress feedback ---- */
+  .live-check.checking::before {
+    content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent); margin-right: 6px; animation: pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+  /* ---- Responsiveness ---- */
+  @media (max-width: 900px) {
+    .sidebar { width: 64px; flex-basis: 64px; padding: 22px 10px; }
+    .sidebar .brand, .sidebar .brand-sub, .sidebar-foot, .nav-item .n-label { display: none; }
+    .sidebar.expanded { width: 220px; flex-basis: 220px; padding: 22px 16px; }
+    .sidebar.expanded .brand, .sidebar.expanded .brand-sub, .sidebar.expanded .sidebar-foot, .sidebar.expanded .nav-item .n-label {
+      display: block;
+    }
+    .grid { grid-template-columns: 1fr; }
+    .hero { padding: 32px 18px 28px; }
+  }
+
+  /* ---- Top status bar (Venture-3-style) ---- */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    padding: 10px 24px; background: #0d1018; border-bottom: 1px solid var(--border);
+    font-size: 12.5px; color: var(--muted); position: sticky; top: 0; z-index: 5;
+  }
+  .topbar .tb-left { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text); }
+  .topbar .tb-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .topbar .tb-dot.live { background: var(--live); }
+  .topbar .tb-dot.down { background: var(--down); }
+  .topbar .tb-right { display: flex; align-items: center; gap: 16px; }
+
+  /* ---- Top status bar (Venture-3-style, consolidated: status + stage + ratings CTA in one slim strip) ---- */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+    padding: 10px 24px; background: #0d1018; border-bottom: 1px solid var(--border);
+    font-size: 12.5px; color: var(--muted); position: sticky; top: 0; z-index: 5;
+  }
+  .topbar .tb-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .topbar .tb-left > span:first-child { font-weight: 700; color: var(--text); }
+  .topbar .tb-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .topbar .tb-dot.live { background: var(--live); }
+  .topbar .tb-dot.down { background: var(--down); }
+  .topbar .tb-sep { opacity: 0.4; }
+  .topbar .tb-stage { color: var(--accent); font-weight: 600; }
+  .topbar .tb-right { display: flex; align-items: center; gap: 14px; }
+  .topbar .tb-copy {
+    padding: 5px 12px; font-size: 12px; border-radius: 7px; border: 1px solid var(--accent);
+    background: transparent; color: var(--accent); cursor: pointer;
+  }
+  .topbar .tb-copy:hover { background: var(--accent); color: #0a0c12; }
+
+  /* ---- Icon quick-nav grid ---- */
+  .quicknav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin: 18px 0 26px; }
+  .quicknav-tile {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+    cursor: pointer; text-align: left;
+  }
+  .quicknav-tile:hover { border-color: var(--accent); background: var(--panel2); }
+  .quicknav-tile .qn-icon { font-size: 20px; margin-bottom: 8px; display: block; }
+  .quicknav-tile .qn-label { font-weight: 700; font-size: 13.5px; }
+  .quicknav-tile .qn-sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+</style>
+</head>
+<body class="shell">
+
+<div class="app-shell">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-toggle" id="sidebar-toggle" title="Collapse/expand sidebar">☰</div>
+    <div class="brand">KEYSTONE Command Center</div>
+    <div class="brand-sub">AXES · AXIOM · XIIOM portfolio</div>
+    <div class="nav-item active" data-section="overview"><span class="n-icon">◆</span><span class="n-label">Overview</span></div>
+    <div class="nav-item" data-section="active"><span class="n-icon">▣</span><span class="n-label">Active projects</span></div>
+    <div class="nav-item" data-section="parked"><span class="n-icon">▢</span><span class="n-label">Parked domains</span></div>
+    <div class="nav-item" data-section="timeline"><span class="n-icon">◷</span><span class="n-label">Schedule / timeline</span></div>
+    <div class="sidebar-foot">Static file · no backend · ratings saved to this browser only</div>
+  </nav>
+
+  <div class="main-panel">
+  <div class="topbar">
+    <div class="tb-left">
+      <span><span class="tb-dot" id="tb-dot"></span> KEYSTONE PORTFOLIO</span>
+      <span id="tb-status-text"></span>
+      <span class="tb-sep">·</span>
+      <span class="tb-stage">Stage — Live Portfolio Rollout (2026)</span>
+    </div>
+    <div class="tb-right">
+      <span id="tb-timestamp"></span>
+      <span id="tb-ratings-count"></span>
+      <button class="btn tb-copy" id="banner-copy-btn">Copy ratings</button>
+    </div>
+  </div>
+  <div class="hero">
+    <span class="kicker">KEYSTONE Eternal Seed · Live Portfolio Command Center</span>
+    <h1>Every domain. Every page. Every rating. One command center.</h1>
+    <p class="tagline">
+      A single, competitive-grade control surface for the full AXES / AXIOM / KEYSTONE portfolio —
+      real domains, real pages, honest live-status checks, and side-by-side quality ratings
+      (agent self-rating and founder rating) on every active project. No build step, no server,
+      fully portable.
+    </p>
+    <p class="tagline" style="font-style: italic; opacity: 0.7; font-size: 12.5px; margin-top: 4px;">
+      "From Seed to Sanctuary — We Build With Meaning."
+    </p>
+    <div class="stamp" id="generated-stamp"></div>
+  </div>
+
+  <div class="wrap">
+    <div class="app-section active" data-section="overview">
+      <div class="figures" id="figures"></div>
+
+      <div class="section-title" style="margin-top:28px">Quick navigation</div>
+      <div class="section-sub">Tap any tile to jump straight to that section.</div>
+      <div class="quicknav-grid" id="quicknav-grid"></div>
+
+      <div class="disclaimer">
+        <strong>Honest limitations, stated plainly:</strong> (1) this file has no backend, so ratings
+        you enter below are saved in <em>this browser's local storage only</em> — use "Copy all ratings"
+        to paste them back into chat so they become a permanent, repo-tracked record. (2) "Check live now"
+        performs a best-effort network reachability check from your browser; cross-origin responses are
+        opaque by browser security policy, so it can report "reachable" even when a site returns an error
+        page — it cannot fully replace a server-side check like the ones already recorded in
+        <code>STATUS_REPORT_S1_2026-09-19.md</code>.
+      </div>
+
+      <input id="filter" type="text" placeholder="Filter by domain, page, status, or timeline text…">
+    </div>
+
+    <div class="app-section" data-section="active">
+      <div class="section-title">Active projects</div>
+      <div class="section-sub">Every real, deployed domain in the portfolio — rated, linked, and checkable.</div>
+      <div class="grid" id="active-grid"></div>
+
+      <div class="copy-bar">
+        <button class="btn primary" id="copy-btn">Copy all ratings to clipboard</button>
+        <span id="copy-status"></span>
+      </div>
+    </div>
+
+    <div class="app-section" data-section="parked">
+      <div class="section-title">Parked domains</div>
+      <div class="section-sub">Reserved namespace only — no product work started.</div>
+      <table><thead><tr><th>Domain</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="parked-body"></tbody></table>
+    </div>
+
+    <div class="app-section" data-section="timeline">
+      <div class="section-title">Schedule — full plan timeline (<span id="timeline-count"></span> milestones)</div>
+      <div class="section-sub">
+        Source: <code>PROJECT_TIMELINE.md</code>. Vertical connector-timeline layout — the standard
+        pattern for long chronological status logs.
+      </div>
+      <div class="timeline" id="timeline-root"></div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<script src="timeline-data.js"></script>
+<script>
+document.getElementById("generated-stamp").textContent =
+  "Snapshot generated: " + new Date().toISOString() + " — regenerate when inventory/status docs change.";
+
+const MONOREPO_EDIT = "https://github.com/AxAxiAxes/keystone-eternal-seed/edit/axaxiaxes-axiom-monorepo/apps/axiom-freedom/";
+
+// My rating = an honest assessment of the current LIVE visitor experience for each project,
+// drawn from the verified checks in docs/keystone/PRODUCTION_INCIDENT_2026_09_18_CHAT_502.md,
+// STATUS_REPORT_S1_2026-09-19.md, and this session's 2026-09-19 re-check -- not a rating of
+// effort or code quality alone.
+const activeDomains = [
+  {
+    id: "xiiom", domain: "xiiom.com", status: "down",
+    note: "Portal pages load correctly. Chat now responds (the 30+hr HTTP 502 outage is resolved), but replies with a stale 2024 date and generic identity -- the deployed build predates the merged identity/date fix (PR #95). Needs a founder redeploy from the current branch head.",
+    repoEdit: "https://github.com/AxAxiAxes/xiiom.com",
+    liveUrl: "https://xiiom.com/",
+    myRating: 5,
+    myRatingWhy: "Code is correct and tested, but every real visitor right now gets a wrong date and generic identity -- a live product failure, not a hypothetical one.",
+    pages: [
+      { label: "Home", url: "https://xiiom.com/", edit: MONOREPO_EDIT + "index.html", status: "live" },
+      { label: "AXIOM chat", url: "https://xiiom.com/axiom", edit: MONOREPO_EDIT + "axiom_web_interface.html", status: "down" },
+      { label: "Origin & Continuity", url: "https://xiiom.com/origin-continuity", edit: MONOREPO_EDIT + "origin-continuity.html", status: "live" },
+      { label: "Materials", url: "https://xiiom.com/materials", edit: MONOREPO_EDIT + "materials.html", status: "live" },
+      { label: "Design Desk", url: "https://xiiom.com/design-desk", edit: MONOREPO_EDIT + "design-desk.html", status: "live" },
+      { label: "AXES Contracting (portal)", url: "https://xiiom.com/axescontracting", edit: MONOREPO_EDIT + "axescontracting.html", status: "live" },
+      { label: "Library", url: "https://xiiom.com/library", edit: MONOREPO_EDIT + "library.html", status: "live" }
+    ]
+  },
+  {
+    id: "axescontracting", domain: "axescontracting.com", status: "down",
+    note: "Real, licensed business domain (CSLB #995577, active license). Fails at the connection level -- unrelated to the working xiiom.com/axescontracting portal page of the same name. Likely a DNS/hosting issue outside repository control.",
+    repoEdit: "https://github.com/AxAxiAxes/axescontracting.com",
+    liveUrl: "https://axescontracting.com/",
+    myRating: 2,
+    myRatingWhy: "The readiest real revenue asset in the portfolio is currently unreachable to the public -- a serious, unresolved problem regardless of root cause.",
+    pages: []
+  },
+  {
+    id: "urartuhi", domain: "urartuhi.com", status: "live",
+    note: "Art gallery, GitHub Pages-backed. Real domain now resolving correctly.",
+    repoEdit: "https://github.com/AxAxiAxes/urartuhi.com",
+    liveUrl: "https://urartuhi.com/",
+    myRating: 8,
+    myRatingWhy: "Live, loads correctly, no known open issues. Docked slightly for 26 pieces still uncaptioned pending founder-supplied artwork/text.",
+    pages: [ { label: "Gallery home", url: "https://urartuhi.com/", edit: "https://github.com/AxAxiAxes/urartuhi.com", status: "live" } ]
+  },
+  {
+    id: "axaxar", domain: "axaxar.com", status: "scaffold",
+    note: "Registered domain, architecture doc only -- no deployed page yet. Waiting on founder sign-off of the proposed scope table before Phase 1 begins.",
+    repoEdit: "https://github.com/AxAxiAxes/axaxar.com",
+    liveUrl: null,
+    myRating: 0,
+    myRatingWhy: "Nothing is live for a visitor to experience yet -- this reflects project phase, not a quality problem.",
+    pages: []
+  }
+];
+
+const parkedDomains = [
+  "axoux.com","auxaous.com","urnur.com","axaxaxu.com","axianaxiunaixia.com","axaxiaxes.com",
+  "axaxes.com","uxaxu.com","owawawao.com","aulaux.com","axpur.com","uxruxu.com","axtux.com",
+  "nuxiux.com","nuxuxun.com","uxaxaxu.com","xaxux.com","uxrax.com","haiuhi.com","axrux.com",
+  "axraxrax.com","axtamar.com","axaxox.com","axaxau.com","axarar.com","axaxur.com","axelurartu.com"
+].map(d => ({
+  domain: d, status: "parked",
+  repoEdit: "https://github.com/AxAxiAxes/" + d + "/edit/main/README.md"
+}));
+
+// ---- Figures ----
+const downCount = activeDomains.filter(d => d.status === "down").length;
+const figures = [
+  { num: activeDomains.length + parkedDomains.length, lbl: "Total domains" },
+  { num: activeDomains.length, lbl: "Active" },
+  { num: parkedDomains.length, lbl: "Parked" },
+  { num: downCount, lbl: "Down / broken", alert: downCount > 0, trend: downCount > 0 ? "▲ needs attention" : "✓ none" },
+  { num: activeDomains.reduce((n, d) => n + d.pages.length, 0), lbl: "Live pages tracked" },
+  { num: (activeDomains.reduce((s,d)=>s+d.myRating,0) / activeDomains.length).toFixed(1), lbl: "Avg. my rating /10" }
+];
+document.getElementById("figures").innerHTML = figures.map(f =>
+  `<div class="figure${f.alert ? ' alert' : ''}"><div class="num">${f.num}</div><div class="lbl">${f.lbl}</div>${f.trend ? `<div class="trend ${f.alert ? 'bad' : 'good'}">${f.trend}</div>` : ''}</div>`
+).join("");
+
+// ---- Top status bar ----
+document.getElementById("tb-dot").className = "tb-dot " + (downCount > 0 ? "down" : "live");
+document.getElementById("tb-status-text").textContent = downCount > 0
+  ? downCount + " of " + activeDomains.length + " active domains reporting a known issue"
+  : "All active domains reporting healthy";
+document.getElementById("tb-timestamp").textContent = new Date().toLocaleString();
+
+// ---- Quick navigation tiles (Venture-3-style icon grid, mirrors sidebar) ----
+const quickNavItems = [
+  { section: "overview", icon: "◆", label: "Overview", sub: "Figures & summary" },
+  { section: "active", icon: "▣", label: "Active projects", sub: activeDomains.length + " domains, rated" },
+  { section: "parked", icon: "▢", label: "Parked domains", sub: parkedDomains.length + " reserved" },
+  { section: "timeline", icon: "◷", label: "Schedule", sub: "Full plan timeline" }
+];
+document.getElementById("quicknav-grid").innerHTML = quickNavItems.map(q => `
+  <button class="quicknav-tile" data-section="${q.section}">
+    <span class="qn-icon">${q.icon}</span>
+    <div class="qn-label">${q.label}</div>
+    <div class="qn-sub">${q.sub}</div>
+  </button>`).join("");
+
+function badge(cls, label) { return `<span class="badge ${cls}">${label || cls}</span>`; }
+
+// ---- localStorage-backed founder ratings ----
+const STORAGE_KEY = "keystone_founder_ratings_v1";
+function loadRatings() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { return {}; } }
+function saveRating(id, value) {
+  const all = loadRatings(); all[id] = value; localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+}
+const founderRatings = loadRatings();
+document.getElementById("tb-ratings-count").textContent =
+  Object.keys(founderRatings).length + " of " + activeDomains.length + " projects rated by you";
+
+function renderActiveCard(d) {
+  const savedRating = founderRatings[d.id] != null ? founderRatings[d.id] : "";
+  const pagesHtml = d.pages.length ? `<div class="pages">${d.pages.map(p => `
+    <div class="page-row">
+      <span>${badge(p.status)} ${p.label}</span>
+      <span class="p-actions"><a href="${p.url}" target="_blank" rel="noopener">View</a><a href="${p.edit}" target="_blank" rel="noopener">Edit</a></span>
+    </div>`).join("")}</div>` : "";
+
+  return `
+  <div class="card" data-search="${(d.domain + ' ' + d.status + ' ' + d.note).toLowerCase().replace(/"/g,'&quot;')}">
+    <div class="card-head"><h3>${d.domain}</h3>${badge(d.status)}</div>
+    <div class="card-note">${d.note}</div>
+    <div class="btn-row">
+      ${d.liveUrl ? `<a class="btn primary" href="${d.liveUrl}" target="_blank" rel="noopener">View live</a>` : ""}
+      <a class="btn" href="${d.repoEdit}" target="_blank" rel="noopener">Edit repo</a>
+      ${d.liveUrl ? `<button class="btn small" onclick="checkLive('${d.id}','${d.liveUrl}')">Check live now</button>` : ""}
+    </div>
+    <div class="live-check" id="live-${d.id}"></div>
+    ${pagesHtml}
+    <div class="ratings">
+      <div class="rating-row"><span class="rlabel">My rating (live-experience honest assessment)</span><span class="rvalue">${d.myRating}/10</span></div>
+      <div class="my-rating-why">${d.myRatingWhy}</div>
+      <div class="rating-row founder-rating">
+        <span class="rlabel">Your rating</span>
+        <span>
+          <input type="number" min="0" max="10" id="rate-${d.id}" value="${savedRating}" placeholder="0-10"
+            onchange="rateProject('${d.id}', this.value)">
+          <span class="saved-tag" id="saved-${d.id}">saved ✓</span>
+        </span>
+      </div>
+    </div>
+  </div>`;
+}
+
+document.getElementById("active-grid").innerHTML = activeDomains.map(renderActiveCard).join("");
+
+document.getElementById("parked-body").innerHTML = parkedDomains.map(d => `
+  <tr data-search="${(d.domain + ' parked').toLowerCase()}">
+    <td>${d.domain}</td><td>${badge('parked')}</td>
+    <td><a class="action" href="${d.repoEdit}" target="_blank" rel="noopener">Edit README</a></td>
+  </tr>`).join("");
+
+function rateProject(id, value) {
+  saveRating(id, value);
+  const tag = document.getElementById("saved-" + id);
+  tag.style.display = "inline";
+  setTimeout(() => { tag.style.display = "none"; }, 1500);
+}
+
+function checkLive(id, url) {
+  const el = document.getElementById("live-" + id);
+  el.textContent = "Checking " + url + " …";
+  el.className = "live-check checking";
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 6000);
+  fetch(url, { mode: "no-cors", signal: controller.signal, cache: "no-store" })
+    .then(() => {
+      clearTimeout(timeout);
+      el.textContent = "Reachable just now (opaque cross-origin response -- cannot confirm it isn't an error page).";
+      el.className = "live-check ok";
+    })
+    .catch(() => {
+      clearTimeout(timeout);
+      el.textContent = "Unreachable / blocked just now from this browser.";
+      el.className = "live-check fail";
+    });
+}
+
+document.getElementById("copy-btn").addEventListener("click", () => {
+  const ratings = loadRatings();
+  const lines = ["KEYSTONE Command Center -- founder ratings (" + new Date().toISOString() + ")"];
+  activeDomains.forEach(d => {
+    lines.push(`${d.domain}: my rating ${d.myRating}/10; your rating ${ratings[d.id] != null ? ratings[d.id] + "/10" : "(not set)"}`);
+  });
+  const text = lines.join("\n");
+  navigator.clipboard.writeText(text).then(() => {
+    document.getElementById("copy-status").textContent = "Copied — paste it into chat.";
+  }).catch(() => {
+    document.getElementById("copy-status").textContent = "Clipboard blocked — select and copy manually: " + text;
+  });
+});
+
+// ---- Full plan timeline ----
+function statusClass(status) {
+  const s = (status || "").toLowerCase();
+  if (s === "complete") return "complete";
+  if (s === "attention") return "attention";
+  if (s === "recorded") return "recorded";
+  return "other";
+}
+function renderTimeline() {
+  if (typeof timelineData === "undefined") {
+    return "<p style='color:var(--muted)'>timeline-data.js failed to load.</p>";
+  }
+  document.getElementById("timeline-count").textContent = timelineData.length;
+  return timelineData.map(t => `
+    <div class="t-item" data-search="${(t.date + " " + t.status + " " + t.milestone + " " + t.evidence).toLowerCase().replace(/"/g, "&quot;")}">
+      <div class="t-dot ${statusClass(t.status)}"></div>
+      <div class="t-date">${t.date} · ${badge(statusClass(t.status), t.status)}</div>
+      <div class="t-card">
+        <div class="t-milestone">${t.milestone}</div>
+        <div class="t-evidence">${t.evidence}</div>
+      </div>
+    </div>`).join("");
+}
+document.getElementById("timeline-root").innerHTML = renderTimeline();
+
+document.getElementById("filter").addEventListener("input", (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll(".card[data-search], tr[data-search], .t-item[data-search]").forEach(el => {
+    el.classList.toggle("hidden-row", q && !el.getAttribute("data-search").includes(q));
+  });
+});
+
+// ---- Sidebar navigation (Venture-3-style section switching) ----
+function switchSection(target) {
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  document.querySelectorAll(".app-section").forEach(s => s.classList.remove("active"));
+  const navItem = document.querySelector('.nav-item[data-section="' + target + '"]');
+  if (navItem) navItem.classList.add("active");
+  document.querySelector('.app-section[data-section="' + target + '"]').classList.add("active");
+}
+document.querySelectorAll(".nav-item").forEach(item => {
+  item.addEventListener("click", () => switchSection(item.getAttribute("data-section")));
+});
+document.querySelectorAll(".quicknav-tile").forEach(tile => {
+  tile.addEventListener("click", () => switchSection(tile.getAttribute("data-section")));
+});
+
+// ---- Sidebar collapse/expand toggle (desktop: collapsed<->full; narrow viewports: icon-only<->expanded) ----
+document.getElementById("sidebar-toggle").addEventListener("click", () => {
+  const sidebar = document.getElementById("sidebar");
+  const isNarrow = window.matchMedia("(max-width: 900px)").matches;
+  sidebar.classList.toggle(isNarrow ? "expanded" : "collapsed");
+});
+
+// ---- Banner copy button mirrors the main copy-ratings action ----
+document.getElementById("banner-copy-btn").addEventListener("click", () => {
+  document.getElementById("copy-btn").click();
+  switchSection("active");
+});
+</script>
+</body>
+</html>
