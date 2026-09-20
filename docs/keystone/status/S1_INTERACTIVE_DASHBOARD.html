@@ -140,10 +140,44 @@
 
   .copy-bar { display: flex; gap: 10px; align-items: center; margin: 24px 0; flex-wrap: wrap; }
   #copy-status { font-size: 12px; color: var(--live); }
+
+  /* ---- App shell: sidebar + main panel ---- */
+  body.shell { padding: 0; }
+  .app-shell { display: flex; min-height: 100vh; align-items: stretch; }
+  .sidebar {
+    width: 240px; flex: 0 0 240px; background: #0d1018; border-right: 1px solid var(--border);
+    padding: 22px 16px; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  .sidebar .brand { font-weight: 800; font-size: 15px; letter-spacing: 0.02em; margin-bottom: 2px; }
+  .sidebar .brand-sub { font-size: 11px; color: var(--muted); margin-bottom: 22px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px;
+    color: var(--muted); font-size: 13.5px; font-weight: 600; cursor: pointer; margin-bottom: 4px;
+    border: 1px solid transparent;
+  }
+  .nav-item .n-icon { font-size: 15px; }
+  .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+  .nav-item.active { background: rgba(90,169,255,0.12); border-color: rgba(90,169,255,0.35); color: var(--text); }
+  .sidebar-foot { margin-top: 20px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 12px; }
+  .main-panel { flex: 1; min-width: 0; }
+  .app-section { display: none; }
+  .app-section.active { display: block; }
 </style>
 </head>
-<body>
+<body class="shell">
 
+<div class="app-shell">
+  <nav class="sidebar">
+    <div class="brand">KEYSTONE Command Center</div>
+    <div class="brand-sub">AXES · AXIOM · XIIOM portfolio</div>
+    <div class="nav-item active" data-section="overview"><span class="n-icon">◆</span> Overview</div>
+    <div class="nav-item" data-section="active"><span class="n-icon">▣</span> Active projects</div>
+    <div class="nav-item" data-section="parked"><span class="n-icon">▢</span> Parked domains</div>
+    <div class="nav-item" data-section="timeline"><span class="n-icon">◷</span> Schedule / timeline</div>
+    <div class="sidebar-foot">Static file · no backend · ratings saved to this browser only</div>
+  </nav>
+
+  <div class="main-panel">
   <div class="hero">
     <span class="kicker">KEYSTONE Eternal Seed · Live Portfolio Command Center</span>
     <h1>Every domain. Every page. Every rating. One command center.</h1>
@@ -157,47 +191,51 @@
   </div>
 
   <div class="wrap">
-    <div class="figures" id="figures"></div>
+    <div class="app-section active" data-section="overview">
+      <div class="figures" id="figures"></div>
 
-    <div class="disclaimer">
-      <strong>Honest limitations, stated plainly:</strong> (1) this file has no backend, so ratings
-      you enter below are saved in <em>this browser's local storage only</em> — use "Copy all ratings"
-      to paste them back into chat so they become a permanent, repo-tracked record. (2) "Check live now"
-      performs a best-effort network reachability check from your browser; cross-origin responses are
-      opaque by browser security policy, so it can report "reachable" even when a site returns an error
-      page — it cannot fully replace a server-side check like the ones already recorded in
-      <code>STATUS_REPORT_S1_2026-09-19.md</code>.
+      <div class="disclaimer">
+        <strong>Honest limitations, stated plainly:</strong> (1) this file has no backend, so ratings
+        you enter below are saved in <em>this browser's local storage only</em> — use "Copy all ratings"
+        to paste them back into chat so they become a permanent, repo-tracked record. (2) "Check live now"
+        performs a best-effort network reachability check from your browser; cross-origin responses are
+        opaque by browser security policy, so it can report "reachable" even when a site returns an error
+        page — it cannot fully replace a server-side check like the ones already recorded in
+        <code>STATUS_REPORT_S1_2026-09-19.md</code>.
+      </div>
+
+      <input id="filter" type="text" placeholder="Filter by domain, page, status, or timeline text…">
     </div>
 
-    <input id="filter" type="text" placeholder="Filter by domain, page, status, or timeline text…">
+    <div class="app-section" data-section="active">
+      <div class="section-title">Active projects</div>
+      <div class="section-sub">Every real, deployed domain in the portfolio — rated, linked, and checkable.</div>
+      <div class="grid" id="active-grid"></div>
 
-    <div class="section-title">Active projects</div>
-    <div class="section-sub">Every real, deployed domain in the portfolio — rated, linked, and checkable.</div>
-    <div class="grid" id="active-grid"></div>
+      <div class="copy-bar">
+        <button class="btn primary" id="copy-btn">Copy all ratings to clipboard</button>
+        <span id="copy-status"></span>
+      </div>
+    </div>
 
-    <div class="section-title" style="margin-top:40px">Parked domains</div>
-    <div class="section-sub">Reserved namespace only — no product work started.</div>
-    <details>
-      <summary id="parked-summary">Expand parked domains</summary>
+    <div class="app-section" data-section="parked">
+      <div class="section-title">Parked domains</div>
+      <div class="section-sub">Reserved namespace only — no product work started.</div>
       <table><thead><tr><th>Domain</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody id="parked-body"></tbody></table>
-    </details>
-
-    <div class="copy-bar">
-      <button class="btn primary" id="copy-btn">Copy all ratings to clipboard</button>
-      <span id="copy-status"></span>
     </div>
 
-    <div class="section-title" style="margin-top:40px">Schedule — full plan timeline (<span id="timeline-count"></span> milestones)</div>
-    <div class="section-sub">
-      Source: <code>PROJECT_TIMELINE.md</code>. Vertical connector-timeline layout — the standard
-      pattern for long chronological status logs.
-    </div>
-    <details>
-      <summary>Expand full timeline</summary>
+    <div class="app-section" data-section="timeline">
+      <div class="section-title">Schedule — full plan timeline (<span id="timeline-count"></span> milestones)</div>
+      <div class="section-sub">
+        Source: <code>PROJECT_TIMELINE.md</code>. Vertical connector-timeline layout — the standard
+        pattern for long chronological status logs.
+      </div>
       <div class="timeline" id="timeline-root"></div>
-    </details>
+    </div>
   </div>
+  </div>
+</div>
 
 <script src="timeline-data.js"></script>
 <script>
@@ -403,6 +441,17 @@ document.getElementById("filter").addEventListener("input", (e) => {
   const q = e.target.value.trim().toLowerCase();
   document.querySelectorAll(".card[data-search], tr[data-search], .t-item[data-search]").forEach(el => {
     el.classList.toggle("hidden-row", q && !el.getAttribute("data-search").includes(q));
+  });
+});
+
+// ---- Sidebar navigation (Venture-3-style section switching) ----
+document.querySelectorAll(".nav-item").forEach(item => {
+  item.addEventListener("click", () => {
+    const target = item.getAttribute("data-section");
+    document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+    document.querySelectorAll(".app-section").forEach(s => s.classList.remove("active"));
+    item.classList.add("active");
+    document.querySelector('.app-section[data-section="' + target + '"]').classList.add("active");
   });
 });
 </script>
