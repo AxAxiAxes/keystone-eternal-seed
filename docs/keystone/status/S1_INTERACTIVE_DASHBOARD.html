@@ -47,6 +47,10 @@
   .badge.down { background: rgba(231,76,60,0.15); color: var(--down); }
   .badge.parked { background: rgba(241,196,15,0.15); color: var(--parked); }
   .badge.scaffold { background: rgba(155,89,182,0.15); color: var(--scaffold); }
+  .badge.complete { background: rgba(46,204,113,0.15); color: var(--live); }
+  .badge.attention { background: rgba(243,156,18,0.15); color: #f39c12; }
+  .badge.recorded { background: rgba(77,163,255,0.15); color: var(--accent); }
+  .badge.other { background: rgba(138,147,168,0.15); color: var(--muted); }
   a.action {
     color: var(--accent); text-decoration: none; font-size: 12px; margin-right: 10px;
   }
@@ -54,6 +58,29 @@
   details { margin-top: 8px; }
   summary { cursor: pointer; color: var(--muted); font-size: 13px; }
   .hidden-row { display: none; }
+
+  .timeline { position: relative; margin-top: 12px; padding-left: 20px; }
+  .timeline::before {
+    content: ""; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: var(--border);
+  }
+  .t-item { position: relative; margin-bottom: 18px; }
+  .t-dot {
+    position: absolute; left: -20px; top: 4px; width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid var(--bg);
+  }
+  .t-dot.complete { background: var(--live); }
+  .t-dot.attention { background: #f39c12; }
+  .t-dot.recorded { background: var(--accent); }
+  .t-dot.other { background: var(--muted); }
+  .t-date { font-size: 12px; color: var(--muted); font-weight: 700; }
+  .t-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 14px; margin-top: 4px;
+  }
+  .t-milestone { font-size: 13px; line-height: 1.5; }
+  .t-evidence { font-size: 11px; color: var(--muted); margin-top: 6px; }
+  .t-evidence code { color: var(--accent); }
+  .t-item.hidden-row { display: none; }
 </style>
 </head>
 <body>
@@ -68,9 +95,23 @@
     live-polling version to be scoped separately (added cost/time, needs approval).
   </div>
   <div class="figures" id="figures"></div>
-  <input id="filter" type="text" placeholder="Filter by domain, page, or status (active / down / parked / scaffold)…">
+  <input id="filter" type="text" placeholder="Filter by domain, page, status, or timeline milestone text…">
   <div id="root"></div>
 
+  <div class="group-title" style="margin-top:32px">Schedule — full plan timeline (<span id="timeline-count"></span> milestones)</div>
+  <div class="meta" style="margin-bottom:12px">
+    Source: <code>PROJECT_TIMELINE.md</code> (repo root). Layout spec chosen: a
+    vertical connector timeline (date badge + status-colored dot + card), the
+    standard pattern for long chronological status logs — scannable top-to-bottom,
+    filterable by the same search box above, and collapsed by default since it is
+    226 entries long.
+  </div>
+  <details id="timeline-details">
+    <summary>Expand full timeline</summary>
+    <div class="timeline" id="timeline-root"></div>
+  </details>
+
+<script src="timeline-data.js"></script>
 <script>
 const GENERATED_AT = new Date().toISOString(); // set at file-open time; regenerate to refresh
 
@@ -135,8 +176,8 @@ document.getElementById("figures").innerHTML = figures.map(f =>
   `<div class="figure"><div class="num">${f.num}</div><div class="lbl">${f.lbl}</div></div>`
 ).join("");
 
-function badge(status) {
-  return `<span class="badge ${status}">${status}</span>`;
+function badge(status, label) {
+  return `<span class="badge ${status}">${label || status}</span>`;
 }
 
 function renderActive() {
@@ -178,9 +219,35 @@ document.getElementById("root").innerHTML = `
   </details>
 `;
 
+// ---- Full plan timeline (from PROJECT_TIMELINE.md, loaded via timeline-data.js) ----
+function statusClass(status) {
+  const s = (status || "").toLowerCase();
+  if (s === "complete") return "complete";
+  if (s === "attention") return "attention";
+  if (s === "recorded") return "recorded";
+  return "other";
+}
+
+function renderTimeline() {
+  if (typeof timelineData === "undefined") {
+    return "<p class='meta'>timeline-data.js failed to load — open this file via a local web server rather than file:// if your browser blocks local script includes.</p>";
+  }
+  document.getElementById("timeline-count").textContent = timelineData.length;
+  return timelineData.map(t => `
+    <div class="t-item" data-search="${(t.date + " " + t.status + " " + t.milestone + " " + t.evidence).toLowerCase().replace(/"/g, "&quot;")}">
+      <div class="t-dot ${statusClass(t.status)}"></div>
+      <div class="t-date">${t.date} · ${badge(statusClass(t.status), t.status)}</div>
+      <div class="t-card">
+        <div class="t-milestone">${t.milestone}</div>
+        <div class="t-evidence">${t.evidence}</div>
+      </div>
+    </div>`).join("");
+}
+document.getElementById("timeline-root").innerHTML = renderTimeline();
+
 document.getElementById("filter").addEventListener("input", (e) => {
   const q = e.target.value.trim().toLowerCase();
-  document.querySelectorAll("tr[data-search]").forEach(row => {
+  document.querySelectorAll("tr[data-search], .t-item[data-search]").forEach(row => {
     row.classList.toggle("hidden-row", q && !row.getAttribute("data-search").includes(q));
   });
 });
