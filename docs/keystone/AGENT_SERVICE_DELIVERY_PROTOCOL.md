@@ -81,8 +81,20 @@ guarantee — stated plainly so it isn't oversold.
    scope, either ask before executing or state the interpretation taken
    explicitly in the delivery, so a mismatch is caught and corrected
    immediately rather than discovered later at double the cost.
+5b. **Account for the founder's time, not only the agent's — added
+   2026-09-20** after the founder pointed out that resource/time reports
+   covered only agent-side activity (PR timestamps, CI minutes) while
+   omitting the founder's own hours spent supervising, re-explaining, and
+   reviewing. Every completion report must state, where determinable from
+   message timestamps, the span of founder-side time the task/conversation
+   occupied, distinct from agent-side execution time.
 6. **Execute** — build/ship the work, following this repo's existing PR/CI
-   workflow (branch → tests green → PR → auto-merge → cleanup).
+   workflow (branch → tests green → PR → auto-merge → cleanup). **Added
+   2026-09-20:** `.github/PULL_REQUEST_TEMPLATE.md` now makes steps 4, 5,
+   5a, 5b, and 7 mandatory, fillable fields on every PR — a structural
+   enforcement mechanism, not only a memory/discipline requirement, so a
+   skipped step is visible in the PR body itself rather than easy to
+   silently omit.
 7. **Self-rate after completion — visibly, in chat, every time** — added
    2026-09-19 after the founder had to repeatedly ask for a rating that
    was only ever recorded in `docs/memory/` files, not shown to them. For
