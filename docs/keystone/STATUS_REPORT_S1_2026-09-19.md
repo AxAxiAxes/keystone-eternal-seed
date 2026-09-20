@@ -9,6 +9,12 @@ S1 - stand for status report 1"
 **Scope:** Live, re-verified status of every active workstream and the
 current PR/repo queue — not a re-derivation of the full inventory (see
 `PROJECT_INVENTORY_2026_09_19.md` for the complete per-domain breakdown).
+**Interactive companion:** `docs/keystone/status/S1_INTERACTIVE_DASHBOARD.html`
+(added 2026-09-19) — a standalone, dependency-free HTML page listing every
+domain and `xiiom.com` sub-page with a client-side filter, a View link
+(live page) and an Edit link (opens the exact GitHub source file) per row.
+It is a static snapshot, not a live-polling feed — regenerate its embedded
+data when this report or the inventory doc changes.
 
 ## 1. Live production status (re-verified this report, not carried over)
 
