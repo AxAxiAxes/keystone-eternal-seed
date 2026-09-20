@@ -1,28 +1,17 @@
 # Production incident — public AXIOM chat returning HTTP 502 (2026-09-18)
 
-**Status:** Open production incident, still failing as of the most recent
-independent check (2026-09-19, **~4:14 PM PDT — HTTP 502 on `POST
-/api/axiom`, `action:"chat"`, reproduced again from this repository**,
-same `{"error":"AXIOM chat is temporarily unavailable"}` body as every
-earlier attempt). `GET /axiom` (the portal page) still returns 200 —
-only the OpenAI-backed chat call is down. This has now been failing
-continuously for roughly 30+ hours since it was first observed. Founder
-upgraded Railway to the Pro plan
-(screenshot, ~10:35 AM PDT) — **billing upgrade alone did not resolve it**:
-retested repeatedly since (2.5 minutes, ~10 minutes, and ~90 minutes after
-the upgrade) and the chat endpoint still returns the same HTTP 502 every
-time. This points away from account/credit exhaustion as the sole cause
-and toward `OPENAI_API_KEY` validity/quota or a service restart being
-required. A screenshot of the founder's existing Railway Agent task also
-surfaced a "healthy" report — but that report is dated **2026-09-14**
-(before this incident began) and only checks the portal page/DNS, not the
-chat reply; it is not evidence of resolution (see the recurring-task fix
-below). The Railway Agent's Task quota is also currently exhausted for this
-billing period ("come back on October 1st").
-**Observed:** 2026-09-18, ~10:06 AM PDT onward (founder screenshot) through
-~10:20 AM PDT (verified independently, six consecutive attempts), again
-after the Pro upgrade at ~10:38 AM PDT, and again at ~11:38 AM PDT — still
-failing every time.
+**Status:** **502 outage resolved as of 2026-09-19 ~5:33 PM PDT** (re-verified
+just now) — `POST /api/axiom` now returns **HTTP 200**, not 502. However,
+a **separate, still-open problem is confirmed**: the live reply reflects
+**stale, pre-fix behavior** (wrong date — "June 8/14, 2024" instead of the
+real current date, and generic "the team at Axes Contracting" identity
+instead of the full AXIOM/Axel Urartu/KEYSTONE identity from PR #95/#70),
+even though those fixes were merged to `axaxiaxes-axiom-monorepo` on
+2026-09-18 (PR #95) and earlier. This strongly indicates **the running
+Railway deployment is serving an older build that predates those merged
+commits** — a redeploy issue, not a code issue (see "2026-09-19 re-check"
+below for the exact verification).
+
 
 ## What was observed
 
@@ -116,7 +105,37 @@ chat health checks with a recurring Railway Agent task" section in
 specification for a scheduled Railway Agent task that checks the actual
 chat-reply path (the one that has been failing), not just the portal/DNS.
 
-## Cross-references
+## 2026-09-19 re-check (~5:33 PM PDT) — 502 resolved, stale deployment confirmed instead
+
+Re-tested `POST https://xiiom.com/api/axiom` directly:
+
+- `{"action":"chat","payload":{"message":"what is todays date"}}` →
+  **HTTP 200** `{"reply":"Today's date is June 8, 2024."}`
+- `{"action":"chat","payload":{"message":"who created you and what year is it"}}` →
+  **HTTP 200** `{"reply":"I was created by the team at Axes Contracting as
+  the AXIOM / KEYSTONE assistant. The current year is 2024. ..."}`
+
+The 502 is gone — the service is reachable and OpenAI is responding. But
+the reply content is exactly the pre-fix behavior PR #95/#70 were meant to
+eliminate (stale training-cutoff date, generic identity with no Axel
+Urartu / KEYSTONE Eternal Seed / birth-date content). `git log` confirms
+PR #95 (`a6a5eef`, "Fix AXIOM chat missing identity system prompt") is
+merged into `axaxiaxes-axiom-monorepo` as of 2026-09-18T09:23:59Z, and the
+current `chat-service.js`/`system-prompt.js` on that branch are correct
+(dynamic `new Date().toISOString()` injection, full identity prompt) —
+this repository's code is not the problem. This is the same conclusion the
+incident already reached from the founder's screenshot before the 502
+started: **the deployed Railway build predates these merges and needs a
+fresh redeploy from the current branch head**, independent of whatever
+caused the intervening 502.
+
+**Founder-only next step, updated:** redeploy `axiom-engine` (and
+`axiom-freedom` if it also serves a cached build) from the latest
+`axaxiaxes-axiom-monorepo` commit in the Railway dashboard, then re-test
+with the two messages above and confirm the reply gives the real current
+date and full AXIOM identity, not a repeat of this stale response.
+
+
 
 - `docs/RAILWAY_DEPLOYMENT.md` (existing low-credit warning, deployment
   process, troubleshooting checklist, and the "Diagnosing production
