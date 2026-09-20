@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-19 (s) S1 design iteration followed the full research→plan→proofread→estimate→execute protocol after founder called out that it had been skipped](2026-09-19s-s1-design-plan-protocol-followed.md)
 - [2026-09-19 (r) S1 dashboard was completely non-functional after PR #186 (orphaned null-element reference silently halted all script execution) — found via direct page-driving, fixed and verified in PR #187](2026-09-19r-s1-dashboard-broken-by-186-fixed-by-187.md)
 - [2026-09-19 (q) S1 dashboard rebuilt after founder critique — card-grid layout, in-app My-rating/Your-rating per project, best-effort in-app live-status check](2026-09-19q-s1-dashboard-rebuild-competitive-ratings-livecheck.md)
 - [2026-09-19 (p) xiiom.com re-checked live: 502 outage resolved, but running deployment is stale (pre-identity/date-fix) — needs founder redeploy](2026-09-19p-xiiom-502-resolved-stale-deployment.md)
