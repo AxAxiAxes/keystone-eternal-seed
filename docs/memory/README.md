@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-19 (p) xiiom.com re-checked live: 502 outage resolved, but running deployment is stale (pre-identity/date-fix) — needs founder redeploy](2026-09-19p-xiiom-502-resolved-stale-deployment.md)
 - [2026-09-19 (o) S1 dashboard extended with full plan timeline (226 milestones) using a vertical connector-timeline layout](2026-09-19o-s1-dashboard-timeline-schedule.md)
 - [2026-09-19 (n) S1 interactive status dashboard built — static, portable HTML with view/edit links per domain and xiiom.com page](2026-09-19n-s1-interactive-dashboard.md)
 - [2026-09-19 (m) Founder-reported $40k loss + satisfaction rating — corrective scope-match step added to protocol; specific incident still needs identifying](2026-09-19m-founder-loss-report-and-rating.md)
