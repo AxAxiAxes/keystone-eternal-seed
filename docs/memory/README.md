@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-19 (v) AXES OS Command Center document index built — 358 documents copied (originals untouched) into 13 categories, framed explicitly around AXES OS as an OS + AI + Web + App production company](2026-09-19v-axes-os-command-center-document-index.md)
 - [2026-09-19 (u) S1 dashboard UI researched against Linear/Vercel/Stripe/Notion 2026 patterns — found and fixed a same-session banner-stacking regression that violated the "calm design" principle](2026-09-19u-s1-ui-research-calm-design-fix.md)
 - [2026-09-19 (t) S1 dashboard closed the remaining Venture-3-style gaps: top status bar, icon-based quick-nav grid, stage banner (real project slogan)](2026-09-19t-s1-dashboard-topbar-quicknav-stage-banner.md)
 - [2026-09-19 (s) S1 design iteration followed the full research→plan→proofread→estimate→execute protocol after founder called out that it had been skipped](2026-09-19s-s1-design-plan-protocol-followed.md)
