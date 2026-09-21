@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copilot Accountability Ledger</title>
+  <style>
+    body { background:#10131a; color:#edf2f7; font:16px system-ui,sans-serif; margin:0; }
+    main { max-width:1280px; margin:0 auto; padding:32px 20px 64px; }
+    h1,h2,h3 { margin:0; }
+    p, li { line-height:1.5; }
+    .note { color:#aab7c7; }
+    section { background:#1a202b; border:1px solid #313b4d; border-radius:10px; margin-top:20px; padding:20px; }
+    .grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
+    .metric { background:#111722; border-radius:8px; padding:12px; }
+    label { display:grid; gap:6px; color:#cbd5e1; }
+    input, select, textarea, button { border-radius:6px; border:1px solid #46536a; padding:9px; font:inherit; }
+    input, select, textarea { background:#0e1420; color:#fff; }
+    textarea { min-height:100px; }
+    button { background:#d5a94d; color:#18130a; border:0; cursor:pointer; font-weight:700; }
+    button.secondary { background:#334155; color:#fff; }
+    .actions { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    form { display:grid; gap:12px; }
+    .two-col { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+    table { border-collapse:collapse; width:100%; }
+    th, td { border-bottom:1px solid #313b4d; padding:9px; text-align:left; vertical-align:top; }
+    .status-verified_success, .status-delivered { color:#b8e6c2; }
+    .status-verified_partial, .status-in_progress, .status-accepted, .status-planned, .status-partially_met { color:#fde68a; }
+    .status-blocked, .status-failed, .status-superseded, .status-archived, .status-not_met { color:#fca5a5; }
+    .status-not_evaluated { color:#bfdbfe; }
+    pre { background:#0e1420; border:1px solid #313b4d; border-radius:8px; overflow:auto; padding:12px; white-space:pre-wrap; }
+    .directive-body { white-space:pre-wrap; background:#111722; border-radius:8px; padding:12px; }
+    details { border:1px solid #313b4d; border-radius:8px; padding:12px; }
+    summary { cursor:pointer; font-weight:700; }
+    .small { font-size:.9rem; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Copilot Accountability Ledger</h1>
+  <p class="note">Private founder-facing task-record and directive-vs-delivery audit view. Exact directives stay prominent, Task-IDs stay stable, repository artifacts stay separate from verified outcomes, and verified success requires evidence plus explicit human confirmation.</p>
+  <p><a href="/command-center" style="color:#66d9ef;">Back to AXES Command Center</a></p>
+
+  <section>
+    <div class="actions">
+      <button id="refresh" class="secondary">Refresh</button>
+      <span id="updated" class="note" aria-live="polite"></span>
+    </div>
+    <div id="dashboard" class="grid" style="margin-top:16px;"></div>
+  </section>
+
+  <section>
+    <h2>Filters</h2>
+    <form id="filter-form" class="two-col">
+      <label>Project <input id="filter-project" placeholder="AXIOM"></label>
+      <label>Repository <input id="filter-repository" placeholder="AxAxiAxes/keystone-eternal-seed"></label>
+      <label>Search exact directive text <input id="filter-search" placeholder="verbatim directive text"></label>
+      <label>Outcome <select id="filter-outcome"><option value="">Any</option><option value="planned">planned</option><option value="accepted">accepted</option><option value="in_progress">in_progress</option><option value="blocked">blocked</option><option value="delivered">delivered</option><option value="verified_success">verified_success</option><option value="verified_partial">verified_partial</option><option value="failed">failed</option><option value="superseded">superseded</option><option value="archived">archived</option></select></label>
+      <label>Status <select id="filter-status"><option value="">Any</option><option value="planned">planned</option><option value="accepted">accepted</option><option value="in_progress">in_progress</option><option value="blocked">blocked</option><option value="delivered">delivered</option><option value="verified_success">verified_success</option><option value="verified_partial">verified_partial</option><option value="failed">failed</option><option value="superseded">superseded</option><option value="archived">archived</option></select></label>
+      <label>Founder rating minimum <input id="filter-rating" type="number" min="-10" max="10" step="1"></label>
+      <label>From <input id="filter-from" type="datetime-local"></label>
+      <label>To <input id="filter-to" type="datetime-local"></label>
+      <div class="actions">
+        <button type="submit">Apply filters</button>
+        <button type="button" id="clear-filters" class="secondary">Clear</button>
+      </div>
+    </form>
+  </section>
+
+  <section>
+    <h2>Create directive record</h2>
+    <p class="note">Paste the founder’s exact directive verbatim. Use one subrequirement per line as <code>id | text</code> or just <code>text</code>.</p>
+    <form id="directive-form">
+      <div class="two-col">
+        <label>Directive ID (optional UUID for reconstruction) <input id="directive-id" placeholder="generated if empty"></label>
+        <label>Task ID (optional; autogenerated if empty) <input id="directive-task-id" placeholder="TASK-20260921-0001"></label>
+        <label>Title <input id="directive-title" maxlength="160" placeholder="Build Copilot accountability tracker"></label>
+        <label>Project <input id="directive-project" required value="AXIOM"></label>
+        <label>Repository <input id="directive-repository" required value="AxAxiAxes/keystone-eternal-seed"></label>
+        <label>Branch <input id="directive-branch" value="axaxiaxes-axiom-monorepo"></label>
+        <label>Task / session identifier <input id="directive-session" placeholder="session-123"></label>
+        <label>Requested deliverable <input id="directive-deliverable" placeholder="Audit ledger MVP"></label>
+        <label>Deadline <input id="directive-deadline" placeholder="2026-09-20"></label>
+        <label>Budget / time cap <input id="directive-budget" placeholder="Founder approval before exceeding 4 hours"></label>
+        <label>Directive author <input id="directive-author" placeholder="Axel Urartu (AX) · Axes Contracting"></label>
+        <label>Task owner <input id="directive-owner" placeholder="Axel Urartu (AX) · Axes Contracting"></label>
+        <label>Implementer(s) (one per line) <textarea id="directive-implementers"></textarea></label>
+        <label>Reviewer(s) (one per line) <textarea id="directive-reviewers"></textarea></label>
+        <label>AI / tool attribution (one per line) <textarea id="directive-ai-attribution"></textarea></label>
+        <label>Review due at <input id="directive-review-due" type="datetime-local"></label>
+        <label>Source references (one per line) <textarea id="directive-sources"></textarea></label>
+        <label>Continuity links (one per line) <textarea id="directive-continuity-links"></textarea></label>
+      </div>
+      <label>Definition of done <textarea id="directive-done" placeholder="What must be true before this counts as done?"></textarea></label>
+      <label>Planned deliverables (one per line) <textarea id="directive-planned-deliverables"></textarea></label>
+      <label>Constraints (one per line) <textarea id="directive-constraints"></textarea></label>
+      <label>Assumptions (one per line) <textarea id="directive-assumptions"></textarea></label>
+      <label>Dependencies (one per line) <textarea id="directive-dependencies"></textarea></label>
+      <label>Risks (one per line) <textarea id="directive-risks"></textarea></label>
+      <label>Acceptance criteria (one per line) <textarea id="directive-acceptance-criteria"></textarea></label>
+      <label>Detailed subrequirements (one per line) <textarea id="directive-subrequirements"></textarea></label>
+      <label>Exact original directive (verbatim) <textarea id="directive-verbatim" required></textarea></label>
+      <div class="actions">
+        <label><input id="directive-reconstructed" type="checkbox"> Reconstructed historical entry</label>
+        <label><input id="directive-incomplete" type="checkbox"> Incomplete / missing source detail</label>
+        <button type="submit">Record directive</button>
+      </div>
+    </form>
+  </section>
+
+  <section>
+    <h2>Append accountability events</h2>
+    <div class="two-col">
+      <details open>
+        <summary>Interpretation</summary>
+        <form id="interpretation-form">
+          <label>Directive <select id="interpretation-directive" required></select></label>
+          <label>Agent interpretation <textarea id="interpretation-text" required></textarea></label>
+          <label>Checklist mapping (one per line: <code>requirement-id | interpretation</code>) <textarea id="interpretation-mapping"></textarea></label>
+          <button type="submit">Record interpretation</button>
+        </form>
+      </details>
+      <details open>
+        <summary>Delivery claim</summary>
+        <form id="delivery-form">
+          <label>Directive <select id="delivery-directive" required></select></label>
+          <label>Summary <textarea id="delivery-summary" required></textarea></label>
+          <label>Delivery items (one per line: <code>type | class | label | locator</code>) <textarea id="delivery-items" required></textarea></label>
+          <label>Evidence (one per line: <code>type | locator | verificationState | verifier(optional)</code>) <textarea id="delivery-evidence"></textarea></label>
+          <label>Source reference <input id="delivery-source" placeholder="local-test-run"></label>
+          <label><input id="delivery-claimed-completion" type="checkbox"> This delivery claimed completion</label>
+          <button type="submit">Record delivery claim</button>
+        </form>
+      </details>
+      <details>
+        <summary>Requirement assessment and deviation</summary>
+        <form id="assessment-form">
+          <label>Directive <select id="assessment-directive" required></select></label>
+          <label>Requirement ID <input id="assessment-requirement" required placeholder="capture-exact-direction"></label>
+          <label>Status <select id="assessment-status"><option value="met">met</option><option value="partially_met">partially_met</option><option value="not_met">not_met</option><option value="blocked">blocked</option><option value="not_applicable">not_applicable</option><option value="not_evaluated">not_evaluated</option></select></label>
+          <label>Explanation <textarea id="assessment-explanation"></textarea></label>
+          <label>Evidence IDs (one UUID per line) <textarea id="assessment-evidence"></textarea></label>
+          <label>Deviations (one per line: <code>type | description</code>) <textarea id="assessment-deviations"></textarea></label>
+          <button type="submit">Record assessment</button>
+        </form>
+      </details>
+      <details>
+        <summary>Outcome</summary>
+        <form id="outcome-form">
+          <label>Directive <select id="outcome-directive" required></select></label>
+          <label>Outcome state <select id="outcome-state"><option value="planned">planned</option><option value="accepted">accepted</option><option value="in_progress">in_progress</option><option value="blocked">blocked</option><option value="delivered">delivered</option><option value="verified_success">verified_success</option><option value="verified_partial">verified_partial</option><option value="failed">failed</option><option value="superseded">superseded</option><option value="archived">archived</option></select></label>
+          <label>Explanation <textarea id="outcome-explanation" required></textarea></label>
+          <label>Evidence IDs for this outcome (one UUID per line) <textarea id="outcome-evidence"></textarea></label>
+          <label>Confirmed by human <input id="outcome-confirmed-by" placeholder="Axel Urartu (AX) · Axes Contracting"></label>
+          <label><input id="outcome-human-confirmed" type="checkbox"> Human confirmed</label>
+          <button type="submit">Record outcome</button>
+        </form>
+      </details>
+      <details>
+        <summary>Rating</summary>
+        <form id="rating-form">
+          <label>Directive <select id="rating-directive" required></select></label>
+          <label>Rating kind <select id="rating-kind"><option value="founder">founder</option><option value="assistant">assistant</option></select></label>
+          <label>Overall rating (-10 to 10) <input id="rating-overall" type="number" min="-10" max="10" step="1" value="-10" required></label>
+          <div class="two-col">
+            <label>Instruction adherence <input id="rating-instructionAdherence" type="number" min="-10" max="10" step="1" value="-10" required></label>
+            <label>Accuracy <input id="rating-accuracy" type="number" min="-10" max="10" step="1" value="-10" required></label>
+            <label>Scope control <input id="rating-scopeControl" type="number" min="-10" max="10" step="1" value="-10" required></label>
+            <label>Verification <input id="rating-verification" type="number" min="-10" max="10" step="1" value="-10" required></label>
+            <label>Rework <input id="rating-rework" type="number" min="-10" max="10" step="1" value="-10" required></label>
+            <label>Outcome focus <input id="rating-outcomeFocus" type="number" min="-10" max="10" step="1" value="-10" required></label>
+          </div>
+          <label>Notes <textarea id="rating-notes"></textarea></label>
+          <button type="submit">Record rating</button>
+        </form>
+      </details>
+      <details>
+        <summary>Loss / resource ledger entry</summary>
+        <form id="resource-form">
+          <label>Directive <select id="resource-directive" required></select></label>
+          <label>Entry type <select id="resource-type"><option value="confirmed">confirmed</option><option value="estimated">estimated</option><option value="unknown">unknown</option></select></label>
+          <div class="two-col">
+            <label>Founder-confirmed hours <input id="resource-founder-hours" type="number" min="0" step="0.25"></label>
+            <label>Assistant/session elapsed hours <input id="resource-session-hours" type="number" min="0" step="0.25"></label>
+            <label>Hourly value cents <input id="resource-hourly-value" type="number" min="0" step="1"></label>
+            <label>Measured cost cents <input id="resource-measured-cost" type="number" min="0" step="1"></label>
+            <label>Confirmed cost cents <input id="resource-confirmed-cost" type="number" min="0" step="1"></label>
+            <label>External spend cents <input id="resource-external-spend" type="number" min="0" step="1"></label>
+            <label>Rework cost cents <input id="resource-rework-cost" type="number" min="0" step="1"></label>
+            <label>Validated loss cents <input id="resource-validated-loss" type="number" min="0" step="1"></label>
+            <label>Estimated low cents <input id="resource-estimated-low" type="number" min="0" step="1"></label>
+            <label>Estimated high cents <input id="resource-estimated-high" type="number" min="0" step="1"></label>
+            <label>Opportunity-cost estimate cents <input id="resource-opportunity-estimate" type="number" min="0" step="1"></label>
+            <label>Claimed loss cents <input id="resource-claimed-loss" type="number" min="0" step="1"></label>
+            <label>Currency <input id="resource-currency" value="USD"></label>
+            <label>Confidence / evidence grade <select id="resource-confidence"><option value="">none</option><option value="reported">reported</option><option value="low">low</option><option value="medium">medium</option><option value="high">high</option><option value="audited">audited</option></select></label>
+            <label>Reviewer <input id="resource-reviewer" placeholder="Founder or reviewer name"></label>
+          </div>
+          <label>Financial assumptions (one per line) <textarea id="resource-assumptions"></textarea></label>
+          <label>Notes <textarea id="resource-notes"></textarea></label>
+          <button type="submit">Record resource entry</button>
+        </form>
+      </details>
+    </div>
+    <p id="form-result" class="note" aria-live="polite"></p>
+  </section>
+
+  <section>
+    <h2>Directives</h2>
+    <div id="missing-report" class="note"></div>
+    <div id="directive-list"></div>
+  </section>
+
+  <section>
+    <h2>Direction versus delivery comparison</h2>
+    <p class="note">Selecting a directive shows the exact founder direction, agent interpretation, delivered artifacts/outcomes, evidence, deviations, ratings, cost tracking, and append-only history.</p>
+    <div id="directive-detail" class="note">Select a directive below.</div>
+  </section>
+
+  <section>
+    <h2>Recent event history</h2>
+    <div id="event-history"></div>
+  </section>
+</main>
+<script>
+const state = {
+  filters: {},
+  directives: [],
+  selectedDirectiveId: null
+};
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[character]);
+}
+
+function formatCurrency(cents) {
+  return Number.isFinite(cents) ? `$${(cents / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "n/a";
+}
+
+function parseLines(value) {
+  return value.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+}
+
+function localDateTimeToUtcIso(value) {
+  if (!value) return null;
+  const normalized = value.length === 16 ? `${value}:00` : value;
+  const date = new Date(normalized);
+  if (Number.isNaN(date.getTime())) {
+    throw new Error("Invalid local date/time filter value.");
+  }
+  return date.toISOString();
+}
+
+function parsePipeRows(value, requiredParts) {
+  const lines = parseLines(value);
+  if (!lines.length) return [];
+  return lines.map(line => {
+    const parts = line.split("|").map(part => part.trim());
+    if (parts.length < requiredParts) {
+      throw new Error(`Expected at least ${requiredParts} pipe-delimited values per line.`);
+    }
+    return parts;
+  });
+}
+
+async function request(path, options = {}) {
+  const response = await fetch(path, {
+    credentials: "same-origin",
+    headers: { "Content-Type": "application/json" },
+    cache: "no-store",
+    ...options
+  });
+  const contentType = response.headers.get("content-type") || "";
+  const payload = contentType.includes("application/json")
+    ? await response.json().catch(() => ({}))
+    : await response.text();
+  if (!response.ok) {
+    const message = typeof payload === "string" ? payload : payload.error;
+    throw new Error(message || `Request failed (${response.status})`);
+  }
+  return payload;
+}
+
+function optionMarkup(directives) {
+  return directives.map(directive =>
+    `<option value="${escapeHtml(directive.directiveId)}">${escapeHtml(directive.taskId || directive.directiveId)} — ${escapeHtml(directive.title)} (${escapeHtml(directive.currentStatus)})</option>`
+  ).join("");
+}
+
+function updateDirectiveSelectors() {
+  const options = `<option value="">Select a directive</option>${optionMarkup(state.directives)}`;
+  [
+    "#interpretation-directive",
+    "#delivery-directive",
+    "#assessment-directive",
+    "#outcome-directive",
+    "#rating-directive",
+    "#resource-directive"
+  ].forEach(selector => {
+    document.querySelector(selector).innerHTML = options;
+  });
+}
+
+function renderDashboard(summary) {
+  document.querySelector("#dashboard").innerHTML = [
+    metric("Total directives", summary.totalDirectives),
+    metric("Open tasks", summary.openTaskCount),
+    metric("Overdue reviews", summary.overdueReviewCount),
+    metric("Verified successes", summary.verifiedSuccesses),
+    metric("Verified partial", summary.verifiedPartialCount),
+    metric("Failed", summary.failedCount),
+    metric("Adherence rate", summary.adherenceRate === null ? "n/a" : `${summary.adherenceRate}%`),
+    metric("Evidence-backed completion", summary.evidenceBackedCompletionRate === null ? "n/a" : `${summary.evidenceBackedCompletionRate}%`),
+    metric("Rework count", summary.reworkCount),
+    metric("Missing evidence", summary.missingEvidenceCount),
+    metric("Authorship gaps", summary.authorshipGapCount),
+    metric("Confirmed cost", formatCurrency(summary.confirmedCostCents)),
+    metric("Estimated exposure", `${formatCurrency(summary.estimatedExposureLowCents)} – ${formatCurrency(summary.estimatedExposureHighCents)}`),
+    metric("Claimed loss", formatCurrency(summary.claimedLossCents)),
+    metric("Validated loss", formatCurrency(summary.validatedLossCents))
+  ].join("");
+}
+
+function metric(label, value) {
+  return `<div class="metric"><strong>${escapeHtml(value)}</strong><br>${escapeHtml(label)}</div>`;
+}
+
+function renderDirectiveList(directives) {
+  if (!directives.length) {
+    document.querySelector("#directive-list").innerHTML = "<p class='note'>No directives match the current filters.</p>";
+    return;
+  }
+  document.querySelector("#directive-list").innerHTML = `<table><thead><tr><th>Task</th><th>Project / repo</th><th>Status</th><th>Review</th><th>Founder rating</th><th>Financials</th></tr></thead><tbody>${directives.map(directive => `
+    <tr>
+      <td><button type="button" class="secondary small" data-directive="${escapeHtml(directive.directiveId)}">${escapeHtml(directive.taskId || directive.directiveId)}</button><div>${escapeHtml(directive.title)}</div><div class="note small">${escapeHtml(directive.verbatimExcerpt || "Reconstructed / missing exact directive text")}</div></td>
+      <td>${escapeHtml(directive.project)}<br><span class="note small">${escapeHtml(directive.repository)}</span></td>
+      <td class="status-${escapeHtml(directive.currentStatus)}">${escapeHtml(directive.currentStatus)}</td>
+      <td>${escapeHtml(directive.reviewStatus || "not scheduled")}<div class="note small">${escapeHtml(directive.reviewDueAt || "n/a")}</div></td>
+      <td>${escapeHtml(directive.founderRating ?? "n/a")}</td>
+      <td>${escapeHtml(formatCurrency(directive.confirmedCostCents))}<br><span class="note small">Claimed ${escapeHtml(formatCurrency(directive.claimedLossCents))} · Validated ${escapeHtml(formatCurrency(directive.validatedLossCents))}</span></td>
+    </tr>
+  `).join("")}</tbody></table>`;
+  document.querySelectorAll("[data-directive]").forEach(button => {
+    button.addEventListener("click", () => {
+      state.selectedDirectiveId = button.dataset.directive;
+      loadDirectiveDetail().catch(showError);
+    });
+  });
+}
+
+function renderMissingReport(report) {
+  document.querySelector("#missing-report").innerHTML = `Missing direction: <strong>${report.missingDirectionCount}</strong> · Missing evidence: <strong>${report.missingEvidenceCount}</strong>`;
+}
+
+function requirementTable(requirements) {
+  if (!requirements.length) return "<p class='note'>No subrequirements recorded.</p>";
+  return `<table><thead><tr><th>Requirement</th><th>Status</th><th>Evidence</th><th>Deviation</th></tr></thead><tbody>${requirements.map(requirement => `
+    <tr>
+      <td><strong>${escapeHtml(requirement.id)}</strong><br>${escapeHtml(requirement.text)}</td>
+      <td class="status-${escapeHtml(requirement.currentStatus)}">${escapeHtml(requirement.currentStatus)}${requirement.latestExplanation ? `<div class="note small">${escapeHtml(requirement.latestExplanation)}</div>` : ""}</td>
+      <td>${requirement.evidenceIds.length ? requirement.evidenceIds.map(id => `<code>${escapeHtml(id)}</code>`).join("<br>") : "<span class='note'>None</span>"}</td>
+      <td>${requirement.deviations.length ? requirement.deviations.map(item => `${escapeHtml(item.type)} — ${escapeHtml(item.description)}`).join("<br>") : "<span class='note'>None</span>"}</td>
+    </tr>
+  `).join("")}</tbody></table>`;
+}
+
+function deliveryMarkup(deliveries) {
+  if (!deliveries.length) return "<p class='note'>No delivery claims recorded.</p>";
+  return deliveries.map(delivery => `
+    <details open>
+      <summary>${escapeHtml(delivery.summary)}${delivery.claimedCompletion ? " — claimed completion" : ""}</summary>
+      <p class="note small">Recorded ${escapeHtml(delivery.recordedAt)} by ${escapeHtml(delivery.actor)}</p>
+      <table><thead><tr><th>Item</th><th>Class</th><th>Locator</th></tr></thead><tbody>${delivery.items.map(item => `
+        <tr><td>${escapeHtml(item.type)} — ${escapeHtml(item.label)}</td><td>${escapeHtml(item.deliveryClass)}</td><td>${escapeHtml(item.locator || "n/a")}</td></tr>
+      `).join("")}</tbody></table>
+      <h4>Evidence</h4>
+      ${delivery.evidence.length ? `<table><thead><tr><th>Type</th><th>Locator</th><th>Verification</th></tr></thead><tbody>${delivery.evidence.map(item => `
+        <tr><td>${escapeHtml(item.type)}</td><td>${escapeHtml(item.locator)}</td><td>${escapeHtml(item.verificationState)}${item.verifier ? `<div class="note small">${escapeHtml(item.verifier)}</div>` : ""}</td></tr>
+      `).join("")}</tbody></table>` : "<p class='note'>No evidence attached.</p>"}
+    </details>
+  `).join("");
+}
+
+function ratingMarkup(label, rating) {
+  if (!rating) return `<p class="note">${label}: not recorded.</p>`;
+  return `<div class="metric"><strong>${escapeHtml(rating.overall)}</strong><br>${escapeHtml(label)}</div><pre>${escapeHtml(JSON.stringify(rating.categories, null, 2))}${rating.notes ? `\n\n${rating.notes}` : ""}</pre>`;
+}
+
+function resourceMarkup(directive) {
+  if (!directive.resources.length) return "<p class='note'>No loss/resource entries recorded.</p>";
+  return `
+    <div class="grid">
+      <div class="metric"><strong>${escapeHtml(String(directive.metrics.founderConfirmedHours))}</strong><br>Founder-confirmed hours</div>
+      <div class="metric"><strong>${escapeHtml(String(directive.metrics.assistantSessionElapsedHours))}</strong><br>Assistant/session elapsed hours</div>
+      <div class="metric"><strong>${escapeHtml(formatCurrency(directive.metrics.confirmedCostCents))}</strong><br>Confirmed cost</div>
+      <div class="metric"><strong>${escapeHtml(formatCurrency(directive.metrics.estimatedExposureLowCents))} – ${escapeHtml(formatCurrency(directive.metrics.estimatedExposureHighCents))}</strong><br>Estimated exposure</div>
+      <div class="metric"><strong>${escapeHtml(formatCurrency(directive.metrics.claimedLossCents))}</strong><br>Claimed loss</div>
+      <div class="metric"><strong>${escapeHtml(formatCurrency(directive.metrics.validatedLossCents))}</strong><br>Validated loss</div>
+    </div>
+    <pre>${escapeHtml(JSON.stringify(directive.resources, null, 2))}</pre>
+  `;
+}
+
+function historyMarkup(history) {
+  return `<table><thead><tr><th>#</th><th>When</th><th>Event</th><th>Actor</th></tr></thead><tbody>${history.map(event => `
+    <tr><td>${event.sequence}</td><td>${escapeHtml(event.recordedAt)}</td><td>${escapeHtml(event.eventType)}</td><td>${escapeHtml(event.actor)}</td></tr>
+  `).join("")}</tbody></table>`;
+}
+
+async function loadMarkdownReport(directiveId) {
+  const markdown = await request(`/api/accountability/directives/${encodeURIComponent(directiveId)}/report?format=markdown`, {
+    headers: {},
+    cache: "no-store"
+  });
+  document.querySelector("#markdown-export").textContent = markdown;
+}
+
+async function loadDirectiveDetail() {
+  if (!state.selectedDirectiveId) return;
+  const directive = await request(`/api/accountability/directives/${encodeURIComponent(state.selectedDirectiveId)}`);
+  document.querySelector("#directive-detail").innerHTML = `
+    <div class="grid">
+      <div class="metric"><strong>${escapeHtml(directive.taskId || directive.directiveId)}</strong><br>Task ID</div>
+      <div class="metric"><strong>${escapeHtml(directive.currentStatus)}</strong><br>Current status</div>
+      <div class="metric"><strong>${escapeHtml(directive.currentOutcome ? directive.currentOutcome.state : "not recorded")}</strong><br>Outcome</div>
+      <div class="metric"><strong>${escapeHtml(String(directive.founderRating ? directive.founderRating.overall : "n/a"))}</strong><br>Founder rating</div>
+      <div class="metric"><strong>${escapeHtml(String(directive.unsupportedCompletionClaims))}</strong><br>Unsupported completion claims</div>
+      <div class="metric"><strong>${escapeHtml(String(directive.reworkCycles))}</strong><br>Rework cycles</div>
+      <div class="metric"><strong>${escapeHtml(directive.timeToVerifiableOutcomeHours === null ? "n/a" : `${directive.timeToVerifiableOutcomeHours}h`)}</strong><br>Time to verifiable outcome</div>
+    </div>
+    <h3 style="margin-top:16px;">Exact founder directive</h3>
+    <div class="directive-body">${escapeHtml(directive.directive.verbatimOriginalDirective || "Missing exact directive text; reconstructed/incomplete record.")}</div>
+    <p class="note small">Requested deliverable: ${escapeHtml(directive.directive.requestedDeliverable || "Not recorded")}<br>Definition of done: ${escapeHtml(directive.directive.definitionOfDone || "Not recorded")}<br>Review due: ${escapeHtml(directive.directive.reviewDueAt || "Not scheduled")} (${escapeHtml(directive.reviewStatus)})<br>Source references: ${escapeHtml((directive.directive.sourceReferences || []).join("; ") || "none")}<br>Continuity links: ${escapeHtml((directive.directive.continuityLinks || []).join("; ") || "none")}</p>
+    <h3>Planning and ownership</h3>
+    <pre>${escapeHtml(JSON.stringify({
+      plannedDeliverables: directive.directive.plannedDeliverables,
+      assumptions: directive.directive.assumptions,
+      dependencies: directive.directive.dependencies,
+      risks: directive.directive.risks,
+      acceptanceCriteria: directive.directive.acceptanceCriteria,
+      attribution: directive.directive.attribution,
+      statusReport: directive.statusReport,
+      authorshipGaps: directive.authorshipGaps
+    }, null, 2))}</pre>
+    <h3>Subrequirements</h3>
+    ${requirementTable(directive.directive.subrequirements)}
+    <h3>Interpretation</h3>
+    ${directive.interpretations.length ? `<pre>${escapeHtml(JSON.stringify(directive.interpretations, null, 2))}</pre>` : "<p class='note'>No interpretation recorded.</p>"}
+    <h3>Actual delivery and evidence</h3>
+    ${deliveryMarkup(directive.deliveries)}
+    <h3>Ratings</h3>
+    <div class="grid">${ratingMarkup("Founder rating", directive.founderRating)}${ratingMarkup("Assistant self-assessment", directive.assistantSelfAssessment)}</div>
+    <h3>Loss / resource ledger</h3>
+    ${resourceMarkup(directive)}
+    <h3>Append-only audit history</h3>
+    ${historyMarkup(directive.history)}
+    <h3>Markdown export</h3>
+    <div class="actions"><button type="button" id="load-markdown-export" class="secondary">Load Markdown export</button></div>
+    <pre id="markdown-export">Markdown export not loaded yet.</pre>
+  `;
+  document.querySelector("#load-markdown-export").addEventListener("click", () => {
+    loadMarkdownReport(state.selectedDirectiveId).catch(showError);
+  });
+}
+
+function parseDirectiveId(value) {
+  if (value && value.trim()) return value.trim();
+  return crypto.randomUUID();
+}
+
+async function postEvent(body) {
+  await request("/api/accountability/events", {
+    method: "POST",
+    body: JSON.stringify(body)
+  });
+}
+
+function buildDirectivePayload() {
+  const reconstructed = document.querySelector("#directive-reconstructed").checked;
+  return {
+    directiveId: parseDirectiveId(document.querySelector("#directive-id").value),
+    eventType: "directive.created",
+    actor: "founder",
+    reconstructed,
+    incomplete: document.querySelector("#directive-incomplete").checked,
+    payload: {
+      taskId: document.querySelector("#directive-task-id").value.trim() || null,
+      title: document.querySelector("#directive-title").value,
+      project: document.querySelector("#directive-project").value,
+      repository: document.querySelector("#directive-repository").value,
+      branch: document.querySelector("#directive-branch").value,
+      taskSessionIdentifier: document.querySelector("#directive-session").value,
+      requestedDeliverable: reconstructed && !document.querySelector("#directive-deliverable").value.trim()
+        ? null
+        : document.querySelector("#directive-deliverable").value,
+      plannedDeliverables: parseLines(document.querySelector("#directive-planned-deliverables").value),
+      constraints: parseLines(document.querySelector("#directive-constraints").value),
+      assumptions: parseLines(document.querySelector("#directive-assumptions").value),
+      deadline: document.querySelector("#directive-deadline").value,
+      budgetTimeCap: document.querySelector("#directive-budget").value,
+      dependencies: parseLines(document.querySelector("#directive-dependencies").value),
+      risks: parseLines(document.querySelector("#directive-risks").value),
+      acceptanceCriteria: parseLines(document.querySelector("#directive-acceptance-criteria").value),
+      definitionOfDone: reconstructed && !document.querySelector("#directive-done").value.trim()
+        ? null
+        : document.querySelector("#directive-done").value,
+      attribution: {
+        directiveAuthor: document.querySelector("#directive-author").value || null,
+        taskOwner: document.querySelector("#directive-owner").value || null,
+        implementers: parseLines(document.querySelector("#directive-implementers").value),
+        reviewers: parseLines(document.querySelector("#directive-reviewers").value),
+        aiAttribution: parseLines(document.querySelector("#directive-ai-attribution").value)
+      },
+      reviewDueAt: localDateTimeToUtcIso(document.querySelector("#directive-review-due").value),
+      subrequirements: parseLines(document.querySelector("#directive-subrequirements").value).map(line => {
+        const [id, ...rest] = line.split("|").map(part => part.trim());
+        return rest.length ? { id, text: rest.join(" | ") } : { text: id };
+      }),
+      verbatimOriginalDirective: reconstructed && !document.querySelector("#directive-verbatim").value.length
+        ? null
+        : document.querySelector("#directive-verbatim").value,
+      sourceReferences: parseLines(document.querySelector("#directive-sources").value),
+      continuityLinks: parseLines(document.querySelector("#directive-continuity-links").value)
+    }
+  };
+}
+
+async function refresh() {
+  const search = new URLSearchParams(state.filters).toString();
+  const suffix = search ? `?${search}` : "";
+  const [summary, directives, missing, events] = await Promise.all([
+    request(`/api/accountability/summary${suffix}`),
+    request(`/api/accountability/directives${suffix}`),
+    request(`/api/accountability/missing${suffix}`),
+    request("/api/accountability/events?limit=20")
+  ]);
+  state.directives = directives.directives;
+  if (!state.selectedDirectiveId && state.directives.length) {
+    state.selectedDirectiveId = state.directives[0].directiveId;
+  }
+  if (state.selectedDirectiveId && !state.directives.some(item => item.directiveId === state.selectedDirectiveId)) {
+    state.selectedDirectiveId = state.directives[0]?.directiveId || null;
+  }
+  renderDashboard(summary);
+  renderDirectiveList(state.directives);
+  renderMissingReport(missing);
+  document.querySelector("#event-history").innerHTML = historyMarkup(events.events);
+  updateDirectiveSelectors();
+  document.querySelector("#updated").textContent = `Last refreshed: ${new Date().toLocaleString()}`;
+  if (state.selectedDirectiveId) {
+    await loadDirectiveDetail();
+  } else {
+    document.querySelector("#directive-detail").textContent = "No directive selected.";
+  }
+}
+
+function collectFilters() {
+  const filters = {};
+  const mappings = [
+    ["project", "#filter-project"],
+    ["repository", "#filter-repository"],
+    ["search", "#filter-search"],
+    ["outcome", "#filter-outcome"],
+    ["status", "#filter-status"],
+    ["ratingMin", "#filter-rating"]
+  ];
+  for (const [key, selector] of mappings) {
+    const value = document.querySelector(selector).value.trim();
+    if (value) filters[key] = value;
+  }
+  if (document.querySelector("#filter-from").value) {
+    filters.from = localDateTimeToUtcIso(document.querySelector("#filter-from").value);
+  }
+  if (document.querySelector("#filter-to").value) {
+    filters.to = localDateTimeToUtcIso(document.querySelector("#filter-to").value);
+  }
+  return filters;
+}
+
+function showError(error) {
+  document.querySelector("#form-result").textContent = error.message;
+  document.querySelector("#updated").textContent = error.message;
+}
+
+document.querySelector("#refresh").addEventListener("click", () => refresh().catch(showError));
+document.querySelector("#clear-filters").addEventListener("click", () => {
+  document.querySelector("#filter-form").reset();
+  state.filters = {};
+  refresh().catch(showError);
+});
+document.querySelector("#filter-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  state.filters = collectFilters();
+  refresh().catch(showError);
+});
+
+document.querySelector("#directive-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  try {
+    await postEvent(buildDirectivePayload());
+    document.querySelector("#directive-form").reset();
+    document.querySelector("#directive-project").value = "AXIOM";
+    document.querySelector("#directive-repository").value = "AxAxiAxes/keystone-eternal-seed";
+    document.querySelector("#directive-branch").value = "axaxiaxes-axiom-monorepo";
+    document.querySelector("#form-result").textContent = "Directive recorded.";
+    await refresh();
+  } catch (error) {
+    showError(error);
+  }
+});
+
+document.querySelector("#interpretation-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  try {
+    await postEvent({
+      directiveId: document.querySelector("#interpretation-directive").value,
+      eventType: "interpretation.recorded",
+      actor: "assistant",
+      payload: {
+        interpretation: document.querySelector("#interpretation-text").value,
+        checklistMapping: parsePipeRows(document.querySelector("#interpretation-mapping").value, 2).map(([requirementId, interpretation]) => ({ requirementId, interpretation }))
+      }
+    });
+    document.querySelector("#interpretation-form").reset();
+    document.querySelector("#form-result").textContent = "Interpretation recorded.";
+    await refresh();
+  } catch (error) {
+    showError(error);
+  }
+});
+
+document.querySelector("#delivery-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  try {
+    await postEvent({
+      directiveId: document.querySelector("#delivery-directive").value,
+      eventType: "delivery.claimed",
+      actor: "assistant",
+      payload: {
+        summary: document.querySelector("#delivery-summary").value,
+        claimedCompletion: document.querySelector("#delivery-claimed-completion").checked,
+        items: parsePipeRows(document.querySelector("#delivery-items").value, 4).map(([type, deliveryClass, label, locator]) => ({ type, deliveryClass, label, locator })),
+        evidence: parsePipeRows(document.querySelector("#delivery-evidence").value, 3).map(([type, locator, verificationState, verifier]) => ({ type, locator, verificationState, verifier })),
+        sourceReference: document.querySelector("#delivery-source").value
+      }
+    });
+    document.querySelector("#delivery-form").reset();
+    document.querySelector("#form-result").textContent = "Delivery claim recorded.";
+    await refresh();
+  } catch (error) {
+    showError(error);
+  }
+});
+
+document.querySelector("#assessment-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  try {
+    await postEvent({
+      directiveId: document.querySelector("#assessment-directive").value,
+      eventType: "requirement.assessed",
+      actor: "operator",
+      payload: {
+        requirementId: document.querySelector("#assessment-requirement").value,
+        status: document.querySelector("#assessment-status").value,
+        explanation: document.querySelector("#assessment-explanation").value,
+        evidenceIds: parseLines(document.querySelector("#assessment-evidence").value),
+        deviations: parsePipeRows(document.querySelector("#assessment-deviations").value, 2).map(([type, description]) => ({ type, description }))
+      }
+    });
+    document.querySelector("#assessment-form").reset();
+    document.querySelector("#form-result").textContent = "Requirement assessment recorded.";
+    await refresh();
+  } catch (error) {
+    showError(error);
+  }
+});
+
+document.querySelector("#outcome-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  try {
+    await postEvent({
+      directiveId: document.querySelector("#outcome-directive").value,
+      eventType: "outcome.recorded",
+      actor: "operator",
+      payload: {
+        state: document.querySelector("#outcome-state").value,
+        explanation: document.querySelector("#outcome-explanation").value,
+        humanConfirmed: document.querySelector("#outcome-human-confirmed").checked,
+        confirmedBy: document.querySelector("#outcome-confirmed-by").value,
+        evidenceIds: parseLines(document.querySelector("#outcome-evidence").value)
+      }
+    });
+    document.querySelector("#outcome-form").reset();
+    document.querySelector("#form-result").textContent = "Outcome recorded.";
+    await refresh();
+  } catch (error) {
+    showError(error);
+  }
+});
+
+document.querySelector("#rating-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  try {
+    const categories = {};
+    ["instructionAdherence", "accuracy", "scopeControl", "verification", "rework", "outcomeFocus"].forEach((name) => {
+      categories[name] = Number(document.querySelector(`#rating-${name}`).value);
+    });
+    await postEvent({
+      directiveId: document.querySelector("#rating-directive").value,
+      eventType: "rating.recorded",
+      actor: document.querySelector("#rating-kind").value === "founder" ? "founder" : "assistant",
+      payload: {
+        kind: document.querySelector("#rating-kind").value,
+        overall: Number(document.querySelector("#rating-overall").value),
+        categories,
+        notes: document.querySelector("#rating-notes").value
+      }
+    });
+    document.querySelector("#rating-form").reset();
+    document.querySelector("#form-result").textContent = "Rating recorded.";
+    await refresh();
+  } catch (error) {
+    showError(error);
+  }
+});
+
+document.querySelector("#resource-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  try {
+    const payload = { entryType: document.querySelector("#resource-type").value };
+    [
+      ["founderConfirmedHours", "#resource-founder-hours"],
+      ["assistantSessionElapsedHours", "#resource-session-hours"],
+      ["hourlyValueCents", "#resource-hourly-value"],
+      ["measuredCostCents", "#resource-measured-cost"],
+      ["confirmedCostCents", "#resource-confirmed-cost"],
+      ["externalSpendCents", "#resource-external-spend"],
+      ["reworkCostCents", "#resource-rework-cost"],
+      ["validatedLossCents", "#resource-validated-loss"],
+      ["estimatedCostLowCents", "#resource-estimated-low"],
+      ["estimatedCostHighCents", "#resource-estimated-high"],
+      ["opportunityCostEstimateCents", "#resource-opportunity-estimate"],
+      ["claimedLossCents", "#resource-claimed-loss"]
+    ].forEach(([field, selector]) => {
+      const value = document.querySelector(selector).value;
+      if (value !== "") payload[field] = Number(value);
+    });
+    if (document.querySelector("#resource-currency").value.trim()) {
+      payload.currency = document.querySelector("#resource-currency").value.trim();
+    }
+    if (document.querySelector("#resource-confidence").value) {
+      payload.confidenceGrade = document.querySelector("#resource-confidence").value;
+    }
+    const financialAssumptions = parseLines(document.querySelector("#resource-assumptions").value);
+    if (financialAssumptions.length) {
+      payload.assumptions = financialAssumptions;
+    }
+    if (document.querySelector("#resource-reviewer").value.trim()) {
+      payload.reviewer = document.querySelector("#resource-reviewer").value.trim();
+    }
+    if (document.querySelector("#resource-notes").value.trim()) {
+      payload.notes = document.querySelector("#resource-notes").value;
+    }
+    await postEvent({
+      directiveId: document.querySelector("#resource-directive").value,
+      eventType: "resource.recorded",
+      actor: "founder",
+      payload
+    });
+    document.querySelector("#resource-form").reset();
+    document.querySelector("#form-result").textContent = "Resource entry recorded.";
+    await refresh();
+  } catch (error) {
+    showError(error);
+  }
+});
+
+refresh().catch(showError);
+</script>
+</body>
+</html>

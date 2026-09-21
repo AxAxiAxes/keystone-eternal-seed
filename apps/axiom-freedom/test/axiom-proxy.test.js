@@ -301,6 +301,62 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     );
     assert.equal(commandCenterWithTrailingSlash.status, 200);
 
+    const unauthorizedAccountability = await fetch(
+      `http://127.0.0.1:${webPort}/accountability`
+    );
+    assert.equal(unauthorizedAccountability.status, 401);
+
+    const accountabilityPage = await fetch(
+      `http://127.0.0.1:${webPort}/accountability`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(accountabilityPage.status, 200);
+    const accountabilityMarkup = await accountabilityPage.text();
+    assert.match(accountabilityMarkup, /Copilot Accountability Ledger/);
+    assert.match(accountabilityMarkup, /Exact founder directive/);
+
+    const createdAccountabilityEvent = await fetch(
+      `http://127.0.0.1:${webPort}/api/accountability/events`,
+      {
+        method: "POST",
+        headers: { Authorization: authorization, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          directiveId: "66666666-6666-4666-8666-666666666666",
+          eventType: "directive.created",
+          actor: "founder",
+          payload: {
+            title: "Proxy accountability directive",
+            verbatimOriginalDirective:
+              "Track the exact directive and compare it against delivered evidence.",
+            project: "AXIOM",
+            repository: "AxAxiAxes/keystone-eternal-seed",
+            branch: "axaxiaxes-axiom-monorepo",
+            requestedDeliverable: "Web-connected accountability tracker",
+            definitionOfDone: "The web app can create and read accountability directives.",
+            subrequirements: [
+              { id: "proxy-read", text: "Expose the ledger through the web proxy." }
+            ]
+          }
+        })
+      }
+    );
+    assert.equal(createdAccountabilityEvent.status, 201);
+    assert.equal((await createdAccountabilityEvent.json()).eventType, "directive.created");
+
+    const accountabilitySummary = await fetch(
+      `http://127.0.0.1:${webPort}/api/accountability/summary`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(accountabilitySummary.status, 200);
+    assert.equal((await accountabilitySummary.json()).totalDirectives, 1);
+
+    const accountabilityReport = await fetch(
+      `http://127.0.0.1:${webPort}/api/accountability/directives/66666666-6666-4666-8666-666666666666/report?format=markdown`,
+      { headers: { Authorization: authorization } }
+    );
+    assert.equal(accountabilityReport.status, 200);
+    assert.match(await accountabilityReport.text(), /Founder direction \(verbatim\)/);
+
     const unauthorizedCheckpoints = await fetch(
       `http://127.0.0.1:${webPort}/api/command-center/checkpoints`
     );

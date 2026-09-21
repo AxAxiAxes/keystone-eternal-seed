@@ -18,6 +18,7 @@ const { SourceCatalogService, describeOptions: sourceCatalogDescribeOptions } = 
 const { BusinessMetricsService } = require("./business-metrics-service");
 const { ServiceRegistryService } = require("./service-registry-service");
 const { CreationRecordService } = require("./creation-record-service");
+const { AccountabilityLedgerService } = require("./accountability-ledger-service");
 const { AutomationProfileService } = require("./automation-profile-service");
 const {
   AutomationService,
@@ -91,6 +92,8 @@ const serviceRegistryService = new ServiceRegistryService({ directory: dataDirec
 const serviceRegistryReady = serviceRegistryService.initialize();
 const creationRecordService = new CreationRecordService({ directory: dataDirectory });
 const creationRecordReady = creationRecordService.initialize();
+const accountabilityLedgerService = new AccountabilityLedgerService({ directory: dataDirectory });
+const accountabilityLedgerReady = accountabilityLedgerService.initialize();
 // GitHub visibility and write actions, founder-approved 2026-09-15. Off by
 // default: reports "not configured" (and refuses every call) unless an
 // authorized operator has supplied both AXIOM_GITHUB_TOKEN and
@@ -116,7 +119,8 @@ const runtimeContextReady = Promise.all([
   continuityRecordReady,
   sourceCatalogReady,
   businessMetricsReady,
-  serviceRegistryReady
+  serviceRegistryReady,
+  accountabilityLedgerReady
 ]);
 const recoveryBackupService = new RecoveryBackupService({
   sourceDirectory: dataDirectory,
@@ -311,6 +315,76 @@ app.get("/system/creations/summary", async (req, res, next) => {
     next(error);
   }
 });
+app.get("/system/accountability", async (req, res, next) => {
+  try {
+    res.json(await accountabilityLedgerService.status());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/accountability/events", async (req, res, next) => {
+  try {
+    const limit = req.query.limit === undefined ? 50 : Number(req.query.limit);
+    res.json(await accountabilityLedgerService.listEvents(limit));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/accountability/directives", async (req, res, next) => {
+  try {
+    res.json(await accountabilityLedgerService.listDirectives(req.query));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/accountability/summary", async (req, res, next) => {
+  try {
+    res.json(await accountabilityLedgerService.summary(req.query));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/accountability/missing", async (req, res, next) => {
+  try {
+    res.json(await accountabilityLedgerService.missingReport(req.query));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/accountability/directives/:directiveId", async (req, res, next) => {
+  try {
+    res.json(await accountabilityLedgerService.getDirective(req.params.directiveId));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/accountability/directives/:directiveId/report", async (req, res, next) => {
+  try {
+    const format = req.query.format === "markdown" ? "markdown" : "json";
+    const report = await accountabilityLedgerService.report(req.params.directiveId, format);
+    if (format === "markdown") {
+      res.type("text/markdown").send(report);
+      return;
+    }
+    res.json(report);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/system/accountability/events", requireAdmin, async (req, res, next) => {
+  try {
+    res.status(201).json(await accountabilityLedgerService.record(req.body));
+  } catch (error) {
+    next(error);
+  }
+});
 const coordinateService = new CoordinateService({ directory: dataDirectory });
 const checkpointService = new CheckpointService({
   directory: dataDirectory,
@@ -325,6 +399,7 @@ const checkpointService = new CheckpointService({
     { id: "business-metrics", version: "1" },
     { id: "service-registry", version: "1" },
     { id: "creation-record", version: "1" },
+    { id: "accountability-ledger", version: "1" },
     { id: "automation-profiles", version: "1" }
   ]
 });
@@ -439,6 +514,7 @@ app.get("/system/readiness", async (req, res, next) => {
       businessMetrics: await businessMetricsService.status(),
       serviceRegistry: await serviceRegistryService.status(),
       creationRecord: await creationRecordService.status(),
+      accountability: await accountabilityLedgerService.status(),
       automationProfiles: await automationProfileService.status(),
       github: githubStatusService.status(),
       webAccess: webAccessService.status()
@@ -471,7 +547,7 @@ app.get("/usage", async (req, res, next) => {
 
 async function captureMonitoringSnapshot(automationState) {
   await memoryStore.list("decision", 1);
-  const [storage, automation, usage, governance, recovery, coordinates, beadPassports, startupContext, continuityRecord, sourceCatalog, businessMetrics, serviceRegistry, creationRecord, automationProfiles] = await Promise.all([
+  const [storage, automation, usage, governance, recovery, coordinates, beadPassports, startupContext, continuityRecord, sourceCatalog, businessMetrics, serviceRegistry, creationRecord, accountability, automationProfiles] = await Promise.all([
     storageUsageService.status(),
     automationState
       ? summarizeAutomationState(automationState)
@@ -489,6 +565,7 @@ async function captureMonitoringSnapshot(automationState) {
     businessMetricsService.status(),
     serviceRegistryService.status(),
     creationRecordService.status(),
+    accountabilityLedgerService.status(),
     automationProfileService.status()
   ]);
   const monitoringRecord = await monitoringService.record({
@@ -506,6 +583,7 @@ async function captureMonitoringSnapshot(automationState) {
     businessMetrics,
     serviceRegistry,
     creationRecord,
+    accountability,
     automationProfiles,
     usage
   });
@@ -566,6 +644,14 @@ async function requireReadyStartupContext() {
     );
     creationError.statusCode = 409;
     throw creationError;
+  }
+  const accountabilityLedger = await accountabilityLedgerService.status();
+  if (accountabilityLedger.status !== "ready") {
+    const accountabilityError = new Error(
+      `Automation is blocked until the accountability ledger is ready (${accountabilityLedger.code}).`
+    );
+    accountabilityError.statusCode = 409;
+    throw accountabilityError;
   }
   const profiles = await automationProfileService.status();
   if (profiles.status !== "ready") {

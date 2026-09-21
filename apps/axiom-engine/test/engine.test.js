@@ -915,3 +915,49 @@ test("fails closed when retained business metrics are tampered", async (t) => {
   assert.equal(response.status, 409);
   assert.match((await response.json()).error, /business metrics are ready \(business-metrics-invalid\)/);
 });
+
+test("persists accountability events and exports directive reports", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const createdDirective = await fetch(`http://127.0.0.1:${port}/system/accountability/events`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      directiveId: "55555555-5555-4555-8555-555555555555",
+      eventType: "directive.created",
+      actor: "founder",
+      payload: {
+        title: "Track Copilot directives",
+        verbatimOriginalDirective:
+          "Capture my exact direction and compare it against what was actually delivered.",
+        project: "AXIOM",
+        repository: "AxAxiAxes/keystone-eternal-seed",
+        branch: "axaxiaxes-axiom-monorepo",
+        requestedDeliverable: "Accountability tracker MVP",
+        definitionOfDone: "Exact direction, evidence, comparison, and verified-success gate exist.",
+        subrequirements: [
+          { id: "verbatim", text: "Store the exact directive verbatim." }
+        ]
+      }
+    })
+  });
+  assert.equal(createdDirective.status, 201);
+  assert.equal((await createdDirective.json()).eventType, "directive.created");
+
+  const listResponse = await fetch(`http://127.0.0.1:${port}/system/accountability/directives`);
+  assert.equal(listResponse.status, 200);
+  const list = await listResponse.json();
+  assert.equal(list.directives[0].title, "Track Copilot directives");
+
+  const summaryResponse = await fetch(`http://127.0.0.1:${port}/system/accountability/summary`);
+  assert.equal(summaryResponse.status, 200);
+  assert.equal((await summaryResponse.json()).totalDirectives, 1);
+
+  const reportResponse = await fetch(
+    `http://127.0.0.1:${port}/system/accountability/directives/55555555-5555-4555-8555-555555555555/report?format=markdown`
+  );
+  assert.equal(reportResponse.status, 200);
+  assert.match(await reportResponse.text(), /Founder direction \(verbatim\)/);
+});

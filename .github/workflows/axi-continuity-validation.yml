@@ -78,6 +78,19 @@ jobs:
           node-version: 20
       - run: node --test
 
+  pr-accountability-validation:
+    name: PR accountability validation
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+      - run: node .github/scripts/validate-pr-body.js "$GITHUB_EVENT_PATH"
+      - run: node --test .github/scripts/validate-pr-body.test.js
+
   engine-image:
     name: AXIOM engine image
     if: ${{ github.event_name != 'workflow_run' }}

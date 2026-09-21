@@ -7,6 +7,23 @@ field on every PR, not an easy-to-forget mental checklist. Fill in every
 section below before requesting merge; do not delete sections.
 -->
 
+## Task accountability
+
+- Task-ID: <!-- Required format: TASK-YYYYMMDD-0001 unless using the exception path below -->
+- Exception path: <!-- none | historical | administrative -->
+- Exception reason: <!-- Required for historical/administrative exceptions; otherwise write "none" -->
+- Directive author: <!-- Human who originated the direction -->
+- Task owner: <!-- Human owner/accountable reviewer -->
+- Implementer(s): <!-- Human and/or AI implementers -->
+- Reviewer: <!-- Human reviewer or "pending founder review" -->
+- Merger / acceptor: <!-- "pending merge" until known -->
+- AI / tool attribution: <!-- e.g. Copilot App, local edits, manual review -->
+- Continuity / memory record: <!-- docs/memory/... path or "pending in follow-up" -->
+- Next review date: <!-- ISO date, "not scheduled", or archived rationale -->
+- Repository artifact status: <!-- planned | in_progress | delivered | verified_partial | verified_success | blocked | failed | superseded | archived -->
+- Real-world / production outcome status: <!-- not started | reported | verified_partial | verified_success | blocked | failed | not applicable -->
+- Founder confirmation state: <!-- pending | confirmed | not required -->
+
 ## What founder instruction does this PR deliver?
 
 <!-- Quote the originating instruction verbatim, or reference the exact
