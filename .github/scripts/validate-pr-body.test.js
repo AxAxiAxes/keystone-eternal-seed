@@ -60,6 +60,14 @@ test("accepts documented historical exceptions without a Task-ID", () => {
   assert.deepEqual(validatePullRequestBody(body), []);
 });
 
+test("accepts documented administrative exceptions when the Task-ID line is omitted entirely", () => {
+  const body = VALID_BODY
+    .replace("- Task-ID: TASK-20260921-0001\n", "")
+    .replace("Exception path: none", "Exception path: administrative")
+    .replace("Exception reason: none", "Exception reason: Repository-maintenance PR with no founder task record.");
+  assert.deepEqual(validatePullRequestBody(body), []);
+});
+
 test("rejects placeholder exception reasons for documented exceptions", () => {
   const failures = validatePullRequestBody(
     VALID_BODY

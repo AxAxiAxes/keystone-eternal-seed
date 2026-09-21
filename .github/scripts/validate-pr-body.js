@@ -86,15 +86,16 @@ function validatePullRequestBody(body) {
   const accountabilitySection = getSection(normalizedBody, "## Task accountability");
   if (accountabilitySection !== null) {
     const bullets = parseBullets(accountabilitySection);
+    const exceptionPath = (bullets.get("Exception path") || "").toLowerCase();
+    const taskId = bullets.get("Task-ID") || "";
+    const exceptionReason = bullets.get("Exception reason") || "";
+
     for (const field of REQUIRED_ACCOUNTABILITY_FIELDS) {
+      if (field === "Task-ID" && exceptionPath !== "none") continue;
       if (!bullets.has(field)) {
         failures.push(`Missing required accountability field: ${field}`);
       }
     }
-
-    const exceptionPath = (bullets.get("Exception path") || "").toLowerCase();
-    const taskId = bullets.get("Task-ID") || "";
-    const exceptionReason = bullets.get("Exception reason") || "";
 
     if (!["none", "historical", "administrative"].includes(exceptionPath)) {
       failures.push("Exception path must be one of: none, historical, administrative");

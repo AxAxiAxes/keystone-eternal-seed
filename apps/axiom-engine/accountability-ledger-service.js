@@ -1805,18 +1805,15 @@ function generateTaskId(recordedAt, events) {
   const m = String(parsed.getUTCMonth() + 1).padStart(2, "0");
   const d = String(parsed.getUTCDate()).padStart(2, "0");
   const dayPrefix = `${y}${m}${d}`;
-  const sameDayDirectiveCount = events.filter((event) =>
-    event.eventType === "directive.created" &&
-    isSameUtcDate(event.recordedAt, parsed)
-  ).length;
-  const highestExistingSequence = events.reduce((highest, event) => {
-    if (event.eventType !== "directive.created") return highest;
-    const sequence = parseTaskIdSequence(event.payload?.taskId, dayPrefix);
-    return sequence === null ? highest : Math.max(highest, sequence);
-  }, 0);
-  const sequence = String(
-    Math.max(sameDayDirectiveCount, highestExistingSequence) + 1
-  ).padStart(4, "0");
+  let highestExistingSequence = 0;
+  for (const event of events) {
+    if (event.eventType !== "directive.created" || !isSameUtcDate(event.recordedAt, parsed)) continue;
+    const explicitSequence = parseTaskIdSequence(event.payload?.taskId, dayPrefix);
+    highestExistingSequence = explicitSequence === null
+      ? highestExistingSequence + 1
+      : Math.max(highestExistingSequence, explicitSequence);
+  }
+  const sequence = String(highestExistingSequence + 1).padStart(4, "0");
   return `TASK-${y}${m}${d}-${sequence}`;
 }
 

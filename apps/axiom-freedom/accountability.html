@@ -269,6 +269,16 @@ function syncDirectiveFieldRequirements() {
   document.querySelector("#directive-verbatim").required = !reconstructed;
 }
 
+function normalizeOptionalDateTime(value) {
+  const normalized = value.trim();
+  if (!normalized) return "";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(normalized)) {
+    return `${normalized}T00:00:00.000Z`;
+  }
+  const parsed = new Date(normalized);
+  return Number.isNaN(parsed.getTime()) ? normalized : parsed.toISOString();
+}
+
 async function request(path, options = {}) {
   const response = await fetch(path, {
     credentials: "same-origin",
@@ -346,7 +356,7 @@ function renderDirectiveList(directives) {
       <td>${escapeHtml(formatCurrency(directive.confirmedCostCents))}<br><span class="note small">Claimed ${escapeHtml(formatCurrency(directive.claimedLossCents))} · Validated ${escapeHtml(formatCurrency(directive.validatedLossCents))}</span></td>
     </tr>
   `).join("")}</tbody></table>`;
-  document.querySelectorAll("[data-directive]").forEach(button => {
+  document.querySelectorAll("button[data-directive]").forEach(button => {
     button.addEventListener("click", () => {
       state.selectedDirectiveId = button.dataset.directive;
       loadDirectiveDetail().catch(showError);
@@ -502,7 +512,7 @@ function buildDirectivePayload() {
       plannedDeliverables: parseLines(document.querySelector("#directive-planned-deliverables").value),
       constraints: parseLines(document.querySelector("#directive-constraints").value),
       assumptions: parseLines(document.querySelector("#directive-assumptions").value),
-      deadline: document.querySelector("#directive-deadline").value,
+      deadline: normalizeOptionalDateTime(document.querySelector("#directive-deadline").value),
       budgetTimeCap: document.querySelector("#directive-budget").value,
       dependencies: parseLines(document.querySelector("#directive-dependencies").value),
       risks: parseLines(document.querySelector("#directive-risks").value),

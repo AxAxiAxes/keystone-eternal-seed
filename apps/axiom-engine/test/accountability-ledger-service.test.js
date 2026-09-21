@@ -358,6 +358,41 @@ test("autogenerates per-day Task-IDs from directive-created events only", async 
   );
 });
 
+test("autogeneration advances past the highest same-day explicit Task-ID", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const timestamps = [
+    "2026-09-21T08:00:00.000Z",
+    "2026-09-21T08:05:00.000Z",
+    "2026-09-21T08:10:00.000Z"
+  ];
+  const service = new AccountabilityLedgerService({
+    directory,
+    now: () => new Date(timestamps.shift() || "2026-09-21T08:15:00.000Z")
+  });
+
+  await service.record(directiveCreated());
+  await service.record(directiveCreated({
+    directiveId: SECOND_DIRECTIVE_ID,
+    payload: {
+      ...directiveCreated().payload,
+      taskId: "TASK-20260921-0173",
+      title: "Backfilled explicit task"
+    }
+  }));
+  await service.record(directiveCreated({
+    directiveId: "33333333-3333-4333-8333-333333333333",
+    payload: {
+      ...directiveCreated().payload,
+      title: "Next generated task"
+    }
+  }));
+
+  const directives = (await service.listDirectives()).directives;
+  const generated = directives.find((directive) => directive.title === "Next generated task");
+  assert.equal(generated.taskId, "TASK-20260921-0174");
+});
+
 test("flags overdue review and missing authorship without deleting evidence", async (t) => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));
