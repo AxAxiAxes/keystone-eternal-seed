@@ -1,4 +1,5 @@
 const express = require("express");
+const rateLimit = require("express-rate-limit");
 const crypto = require("crypto");
 const fs = require("fs/promises");
 const { constants: fsConstants } = require("fs");
@@ -75,6 +76,15 @@ function requireAdmin(req, res, next) {
   res.set("WWW-Authenticate", 'Basic realm="AXIOM Engine Admin"');
   res.status(401).json({ error: "admin credentials required" });
 }
+
+const limitAccountabilityWrites = rateLimit({
+  windowMs: 60_000,
+  limit: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => !checkAdminAuth(req),
+  message: { error: "too many accountability write requests" }
+});
 
 const dataDirectory = process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data");
 const memoryStore = new MemoryStore(dataDirectory);
@@ -378,7 +388,7 @@ app.get("/system/accountability/directives/:directiveId/report", async (req, res
   }
 });
 
-app.post("/system/accountability/events", requireAdmin, async (req, res, next) => {
+app.post("/system/accountability/events", limitAccountabilityWrites, requireAdmin, async (req, res, next) => {
   try {
     res.status(201).json(await accountabilityLedgerService.record(req.body));
   } catch (error) {

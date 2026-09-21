@@ -56,7 +56,6 @@
       <label>Repository <input id="filter-repository" placeholder="AxAxiAxes/keystone-eternal-seed"></label>
       <label>Search exact directive text <input id="filter-search" placeholder="verbatim directive text"></label>
       <label>Outcome <select id="filter-outcome"><option value="">Any</option><option value="planned">planned</option><option value="accepted">accepted</option><option value="in_progress">in_progress</option><option value="blocked">blocked</option><option value="delivered">delivered</option><option value="verified_success">verified_success</option><option value="verified_partial">verified_partial</option><option value="failed">failed</option><option value="superseded">superseded</option><option value="archived">archived</option></select></label>
-      <label>Status <select id="filter-status"><option value="">Any</option><option value="planned">planned</option><option value="accepted">accepted</option><option value="in_progress">in_progress</option><option value="blocked">blocked</option><option value="delivered">delivered</option><option value="verified_success">verified_success</option><option value="verified_partial">verified_partial</option><option value="failed">failed</option><option value="superseded">superseded</option><option value="archived">archived</option></select></label>
       <label>Founder rating minimum <input id="filter-rating" type="number" min="-10" max="10" step="1"></label>
       <label>From <input id="filter-from" type="datetime-local"></label>
       <label>To <input id="filter-to" type="datetime-local"></label>
@@ -563,7 +562,6 @@ function collectFilters() {
     ["repository", "#filter-repository"],
     ["search", "#filter-search"],
     ["outcome", "#filter-outcome"],
-    ["status", "#filter-status"],
     ["ratingMin", "#filter-rating"]
   ];
   for (const [key, selector] of mappings) {

@@ -28,7 +28,11 @@ const REQUIRED_ACCOUNTABILITY_FIELDS = [
 ];
 
 function stripComments(value) {
-  return String(value || "").replace(/<!--[\s\S]*?-->/g, "").trim();
+  return String(value || "")
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replaceAll("<!--", "")
+    .replaceAll("-->", "")
+    .trim();
 }
 
 function isPlaceholder(value) {
@@ -102,7 +106,6 @@ function validatePullRequestBody(body) {
       const value = bullets.get(field);
       if (value === undefined) continue;
       if (field === "Task-ID" && exceptionPath !== "none") continue;
-      if (field === "Exception reason" && exceptionPath !== "none") continue;
       if (isPlaceholder(value)) {
         failures.push(`Accountability field cannot be left blank or placeholder-only: ${field}`);
       }

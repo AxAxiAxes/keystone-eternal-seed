@@ -60,6 +60,16 @@ test("accepts documented historical exceptions without a Task-ID", () => {
   assert.deepEqual(validatePullRequestBody(body), []);
 });
 
+test("rejects placeholder exception reasons for documented exceptions", () => {
+  const failures = validatePullRequestBody(
+    VALID_BODY
+      .replace("Task-ID: TASK-20260921-0001", "Task-ID: not applicable")
+      .replace("Exception path: none", "Exception path: administrative")
+      .replace("Exception reason: none", "Exception reason: TODO")
+  );
+  assert.match(failures.join("\n"), /Exception reason/);
+});
+
 test("rejects missing Task-ID when no exception path is used", () => {
   const failures = validatePullRequestBody(VALID_BODY.replace("Task-ID: TASK-20260921-0001", "Task-ID: "));
   assert.match(failures.join("\n"), /Task-ID is required/);

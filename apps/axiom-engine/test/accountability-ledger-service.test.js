@@ -326,10 +326,45 @@ test("rejects invalid Task-IDs and unverified verified_success transitions", asy
   );
 });
 
+test("autogenerates per-day Task-IDs from directive-created events only", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const timestamps = [
+    "2026-09-21T08:00:00.000Z",
+    "2026-09-21T08:15:00.000Z",
+    "2026-09-21T08:30:00.000Z"
+  ];
+  const service = new AccountabilityLedgerService({
+    directory,
+    now: () => new Date(timestamps.shift() || "2026-09-21T08:45:00.000Z")
+  });
+
+  await service.record(directiveCreated());
+  await service.record(sampleDelivery());
+  await service.record(directiveCreated({
+    directiveId: SECOND_DIRECTIVE_ID,
+    payload: {
+      ...directiveCreated().payload,
+      title: "Second accountability policy task"
+    }
+  }));
+
+  const directives = (await service.listDirectives()).directives.sort((left, right) =>
+    left.taskId.localeCompare(right.taskId)
+  );
+  assert.deepEqual(
+    directives.map((directive) => directive.taskId),
+    ["TASK-20260921-0001", "TASK-20260921-0002"]
+  );
+});
+
 test("flags overdue review and missing authorship without deleting evidence", async (t) => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));
-  const service = new AccountabilityLedgerService({ directory });
+  const service = new AccountabilityLedgerService({
+    directory,
+    now: () => new Date("2026-09-21T12:00:00.000Z")
+  });
 
   await service.record({
     directiveId: SECOND_DIRECTIVE_ID,

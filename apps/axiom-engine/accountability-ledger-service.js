@@ -147,7 +147,7 @@ class AccountabilityLedgerService {
       const directiveMap = projectDirectiveMap(events);
       validateEventAgainstProjection(input, directiveMap);
       const previousEvent = events.at(-1);
-      const event = createStoredEvent(input, previousEvent, this.now);
+      const event = createStoredEvent(input, events, previousEvent, this.now);
       await fs.mkdir(this.directory, { recursive: true });
       await fs.appendFile(this.statePath(), `${JSON.stringify(event)}\n`, "utf8");
       return summarizeEvent(event);
@@ -157,7 +157,7 @@ class AccountabilityLedgerService {
   async listDirectives(filters = {}) {
     assertFilters(filters);
     const directives = filterProjectedDirectives(
-      projectDirectives(await this.readValidatedEvents()),
+      projectDirectives(await this.readValidatedEvents(), this.now()),
       normalizeFilters(filters)
     );
     return {
@@ -169,7 +169,7 @@ class AccountabilityLedgerService {
   async summary(filters = {}) {
     assertFilters(filters);
     const directives = filterProjectedDirectives(
-      projectDirectives(await this.readValidatedEvents()),
+      projectDirectives(await this.readValidatedEvents(), this.now()),
       normalizeFilters(filters)
     );
     return summarizeDirectives(directives);
@@ -179,7 +179,7 @@ class AccountabilityLedgerService {
     if (!isDirectiveId(directiveId)) {
       throw new TypeError("directiveId must be a UUID");
     }
-    const directives = projectDirectives(await this.readValidatedEvents());
+    const directives = projectDirectives(await this.readValidatedEvents(), this.now());
     const directive = directives.find((entry) => entry.id === directiveId);
     if (!directive) {
       throw new RangeError(`directive does not exist: ${directiveId}`);
@@ -201,7 +201,7 @@ class AccountabilityLedgerService {
   async missingReport(filters = {}) {
     assertFilters(filters);
     const directives = filterProjectedDirectives(
-      projectDirectives(await this.readValidatedEvents()),
+      projectDirectives(await this.readValidatedEvents(), this.now()),
       normalizeFilters(filters)
     );
     const missingDirection = directives
@@ -407,13 +407,13 @@ function validateEventAgainstProjection(input, directiveMap) {
   }
 }
 
-function createStoredEvent(input, previousEvent, now) {
+function createStoredEvent(input, events, previousEvent, now) {
   const recordedAt = now().toISOString();
   const payload = normalizePayload(
     input.eventType,
     input.payload,
     () => new Date(recordedAt),
-    { previousEvent, recordedAt }
+    { events, previousEvent, recordedAt }
   );
   const event = {
     schemaVersion: ACCOUNTABILITY_LEDGER_SCHEMA_VERSION,
@@ -435,7 +435,9 @@ function createStoredEvent(input, previousEvent, now) {
 function normalizePayload(eventType, payload, now, context = {}) {
   if (eventType === "directive.created") {
     return {
-      taskId: normalizeOptionalTaskId(payload.taskId) || generateTaskId(context.recordedAt, context.previousEvent),
+      taskId:
+        normalizeOptionalTaskId(payload.taskId) ||
+        generateTaskId(context.recordedAt, context.events || []),
       title: normalizeBoundedText(payload.title, 160),
       directiveTimestamp: normalizeOptionalIso(payload.directiveTimestamp),
       verbatimOriginalDirective:
@@ -625,12 +627,12 @@ function assertDirectiveCreatedPayload(payload, reconstructed) {
   }
 }
 
-function projectDirectiveMap(events) {
-  const directives = projectDirectives(events);
+function projectDirectiveMap(events, now = null) {
+  const directives = projectDirectives(events, now);
   return new Map(directives.map((directive) => [directive.id, directive]));
 }
 
-function projectDirectives(events) {
+function projectDirectives(events, now = null) {
   const directives = new Map();
   for (const event of events) {
     if (event.eventType === "directive.created") {
@@ -642,7 +644,7 @@ function projectDirectives(events) {
     applyEventToDirective(directive, event);
   }
   return [...directives.values()]
-    .map(finalizeDirective)
+    .map((directive) => finalizeDirective(directive, now))
     .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
 }
 
@@ -807,7 +809,7 @@ function applyEventToDirective(directive, event) {
   }
 }
 
-function finalizeDirective(directive) {
+function finalizeDirective(directive, now = null) {
   const projected = {
     ...directive,
     directive: {
@@ -831,7 +833,7 @@ function finalizeDirective(directive) {
   projected.deliveryCounts = summarizeDeliveryCounts(projected.deliveries);
   projected.lastVerifiedAt = latestVerifiedAt(projected);
   projected.archivalState = deriveArchivalState(projected);
-  projected.reviewStatus = deriveReviewStatus(projected);
+  projected.reviewStatus = deriveReviewStatus(projected, now);
   projected.authorshipGaps = deriveAuthorshipGaps(projected);
   projected.statusReport = deriveStatusReport(projected);
   projected.reworkCycles = Math.max(0, projected.deliveries.length - 1);
@@ -1106,10 +1108,11 @@ function deriveArchivalState(directive) {
   return directive.directive.archivalState || "active";
 }
 
-function deriveReviewStatus(directive) {
+function deriveReviewStatus(directive, now = null) {
   if (directive.archivalState === "archived") return "archived";
   if (!directive.directive.reviewDueAt) return "not_scheduled";
-  return Date.parse(directive.directive.reviewDueAt) < Date.now() ? "overdue" : "scheduled";
+  const currentTimeMs = now instanceof Date ? now.getTime() : Date.now();
+  return Date.parse(directive.directive.reviewDueAt) < currentTimeMs ? "overdue" : "scheduled";
 }
 
 function deriveAuthorshipGaps(directive) {
@@ -1796,12 +1799,19 @@ function defaultDirectiveTitle(verbatim) {
   return verbatim.split(/\r?\n/, 1)[0].slice(0, 120) || "Directive";
 }
 
-function generateTaskId(recordedAt, previousEvent) {
+function generateTaskId(recordedAt, events) {
   const parsed = recordedAt ? new Date(recordedAt) : new Date();
   const y = parsed.getUTCFullYear();
   const m = String(parsed.getUTCMonth() + 1).padStart(2, "0");
   const d = String(parsed.getUTCDate()).padStart(2, "0");
-  const sequence = String((previousEvent?.sequence || 0) + 1).padStart(4, "0");
+  const dayPrefix = `${y}${m}${d}`;
+  const sequence = String(
+    events.filter((event) =>
+      event.eventType === "directive.created" &&
+      typeof event.payload?.taskId === "string" &&
+      event.payload.taskId.startsWith(`TASK-${dayPrefix}-`)
+    ).length + 1
+  ).padStart(4, "0");
   return `TASK-${y}${m}${d}-${sequence}`;
 }
 
