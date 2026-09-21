@@ -264,6 +264,11 @@ function parsePipeRows(value, requiredParts) {
   });
 }
 
+function syncDirectiveFieldRequirements() {
+  const reconstructed = document.querySelector("#directive-reconstructed").checked;
+  document.querySelector("#directive-verbatim").required = !reconstructed;
+}
+
 async function request(path, options = {}) {
   const response = await fetch(path, {
     credentials: "same-origin",
@@ -602,12 +607,14 @@ document.querySelector("#directive-form").addEventListener("submit", async (even
     document.querySelector("#directive-project").value = "AXIOM";
     document.querySelector("#directive-repository").value = "AxAxiAxes/keystone-eternal-seed";
     document.querySelector("#directive-branch").value = "axaxiaxes-axiom-monorepo";
+    syncDirectiveFieldRequirements();
     document.querySelector("#form-result").textContent = "Directive recorded.";
     await refresh();
   } catch (error) {
     showError(error);
   }
 });
+document.querySelector("#directive-reconstructed").addEventListener("change", syncDirectiveFieldRequirements);
 
 document.querySelector("#interpretation-form").addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -775,6 +782,7 @@ document.querySelector("#resource-form").addEventListener("submit", async (event
   }
 });
 
+syncDirectiveFieldRequirements();
 refresh().catch(showError);
 </script>
 </body>

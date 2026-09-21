@@ -54,7 +54,7 @@ test("accepts a complete Task-ID based PR body", () => {
 
 test("accepts documented historical exceptions without a Task-ID", () => {
   const body = VALID_BODY
-    .replace("Task-ID: TASK-20260921-0001", "Task-ID: not applicable")
+    .replace("Task-ID: TASK-20260921-0001", "Task-ID:")
     .replace("Exception path: none", "Exception path: historical")
     .replace("Exception reason: none", "Exception reason: Historical PR created before the Task-ID policy existed.");
   assert.deepEqual(validatePullRequestBody(body), []);

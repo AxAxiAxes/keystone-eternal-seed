@@ -28,11 +28,21 @@ const REQUIRED_ACCOUNTABILITY_FIELDS = [
 ];
 
 function stripComments(value) {
-  return String(value || "")
-    .replace(/<!--[\s\S]*?-->/g, "")
-    .replaceAll("<!--", "")
-    .replaceAll("-->", "")
-    .trim();
+  const input = String(value || "");
+  let output = "";
+  let cursor = 0;
+  while (cursor < input.length) {
+    const commentStart = input.indexOf("<!--", cursor);
+    if (commentStart === -1) {
+      output += input.slice(cursor);
+      break;
+    }
+    output += input.slice(cursor, commentStart);
+    const commentEnd = input.indexOf("-->", commentStart + 4);
+    if (commentEnd === -1) break;
+    cursor = commentEnd + 3;
+  }
+  return output.trim();
 }
 
 function isPlaceholder(value) {
@@ -53,7 +63,7 @@ function getSection(body, heading) {
 function parseBullets(section) {
   const values = new Map();
   for (const line of stripComments(section).split(/\r?\n/)) {
-    const match = /^\s*-\s*([^:]+):\s*(.+?)\s*$/.exec(line);
+    const match = /^\s*-\s*([^:]+):\s*(.*?)\s*$/.exec(line);
     if (match) values.set(match[1].trim(), match[2].trim());
   }
   return values;

@@ -1805,14 +1805,35 @@ function generateTaskId(recordedAt, events) {
   const m = String(parsed.getUTCMonth() + 1).padStart(2, "0");
   const d = String(parsed.getUTCDate()).padStart(2, "0");
   const dayPrefix = `${y}${m}${d}`;
+  const sameDayDirectiveCount = events.filter((event) =>
+    event.eventType === "directive.created" &&
+    isSameUtcDate(event.recordedAt, parsed)
+  ).length;
+  const highestExistingSequence = events.reduce((highest, event) => {
+    if (event.eventType !== "directive.created") return highest;
+    const sequence = parseTaskIdSequence(event.payload?.taskId, dayPrefix);
+    return sequence === null ? highest : Math.max(highest, sequence);
+  }, 0);
   const sequence = String(
-    events.filter((event) =>
-      event.eventType === "directive.created" &&
-      typeof event.payload?.taskId === "string" &&
-      event.payload.taskId.startsWith(`TASK-${dayPrefix}-`)
-    ).length + 1
+    Math.max(sameDayDirectiveCount, highestExistingSequence) + 1
   ).padStart(4, "0");
   return `TASK-${y}${m}${d}-${sequence}`;
+}
+
+function isSameUtcDate(isoTimestamp, expectedDate) {
+  if (!isoTimestamp) return false;
+  const actual = new Date(isoTimestamp);
+  return (
+    actual.getUTCFullYear() === expectedDate.getUTCFullYear() &&
+    actual.getUTCMonth() === expectedDate.getUTCMonth() &&
+    actual.getUTCDate() === expectedDate.getUTCDate()
+  );
+}
+
+function parseTaskIdSequence(taskId, dayPrefix) {
+  if (typeof taskId !== "string") return null;
+  const match = new RegExp(`^TASK-${dayPrefix}-(\\d{4})$`).exec(taskId);
+  return match ? Number(match[1]) : null;
 }
 
 function slugifyRequirement(text) {
