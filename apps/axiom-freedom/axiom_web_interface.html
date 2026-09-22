@@ -617,13 +617,12 @@
             })
                 .then(async response => {
                     if (response.status === 401) {
-                        // The public chat's attach button is intentionally
-                        // admin-gated (see server.js's requireAdmin on
-                        // /api/axiom/uploads) -- a plain visitor's browser
-                        // will not have entered admin credentials, so this
-                        // is expected, not a bug. Say so plainly instead of
-                        // a generic failure message.
-                        throw new Error('Admin sign-in required to upload. Your browser should prompt for the AXIOM admin username/password -- enter them and try again.');
+                        // /api/axiom/uploads is public (no admin credentials
+                        // required from the visitor's browser) -- a 401 here
+                        // means the server's own upstream engine
+                        // authentication is misconfigured, not that the
+                        // visitor needs to sign in.
+                        throw new Error('AXIOM upload service is temporarily unavailable. Please try again later.');
                     }
                     const payload = await response.json().catch(() => ({}));
                     if (!response.ok) {

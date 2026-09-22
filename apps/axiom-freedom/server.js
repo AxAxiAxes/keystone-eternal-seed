@@ -40,6 +40,20 @@ const MAX_UPLOAD_BODY_BYTES = getPositiveInteger(
     process.env.AXIOM_MAX_UPLOAD_BODY_BYTES,
     5 * 1024 * 1024
 );
+// Server-side mirror of the public chat widget's own `accept` allow-list
+// (axiom_web_interface.html's #fileInput). Enforced here too, not just in
+// the browser, because /api/axiom/uploads is reachable by any anonymous
+// visitor -- a client-side `accept` attribute alone is not a real
+// restriction.
+const ALLOWED_UPLOAD_EXTENSIONS = new Set([
+    '.pdf', '.doc', '.docx', '.txt', '.md', '.csv', '.json',
+    '.png', '.jpg', '.jpeg', '.gif', '.webp'
+]);
+
+function isAllowedUploadExtension(filename) {
+    if (typeof filename !== 'string' || filename.trim() === '') return false;
+    return ALLOWED_UPLOAD_EXTENSIONS.has(path.extname(filename).toLowerCase());
+}
 const MAX_LEAD_FIELD_LENGTH = 500;
 const REQUIRED_LEAD_FIELDS = ['name', 'phone'];
 
@@ -609,14 +623,22 @@ const server = http.createServer(async (req, res) => {
           return;
     }
     if (pathname === '/api/axiom/uploads' && req.method === 'POST') {
-          // Admin-gated (this proxy's own ADMIN_PASSWORD, via the browser's
-          // native Basic-Auth prompt -- the same mechanism command-center.html
-          // and the other private pages already rely on). Forwarded to the
-          // engine's own admin-gated upload route with the engine's separate
-          // admin password; nothing here bypasses either gate. Anonymous
-          // visitors to the public chat page cannot complete this request
-          // without the admin password.
-          if (!requireAdmin(req, res)) return;
+          // Public: this is the endpoint the chat widget's attach button
+          // already calls, for any visitor to the public chat page -- it is
+          // not gated behind this proxy's own admin credentials. This proxy
+          // still authenticates to the engine's admin-gated upload route
+          // using its own server-held AXIOM_ENGINE_ADMIN_PASSWORD secret
+          // (see invokeEngineUpload()), the same way the public /api/axiom
+          // chat route already authenticates to the engine's /axiom route.
+          // Safety for anonymous callers is enforced here instead via a
+          // file-type allow-list and the existing size cap.
+          const filenameHeader = req.headers['x-source-filename'];
+          const filename = typeof filenameHeader === 'string' ? filenameHeader : null;
+          if (!isAllowedUploadExtension(filename)) {
+              res.writeHead(400, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: 'unsupported file type for upload' }));
+              return;
+          }
           const buffer = await parseRawBody(req, MAX_UPLOAD_BODY_BYTES);
           if (buffer === null) {
               rejectOversizedRequest(res);
@@ -628,11 +650,7 @@ const server = http.createServer(async (req, res) => {
               return;
           }
           try {
-                  const filenameHeader = req.headers['x-source-filename'];
-                  const stored = await invokeEngineUpload(
-                      buffer,
-                      typeof filenameHeader === 'string' ? filenameHeader : null
-                  );
+                  const stored = await invokeEngineUpload(buffer, filename);
                   res.writeHead(201, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify(stored));
           } catch (error) {
