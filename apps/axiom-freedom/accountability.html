@@ -55,7 +55,7 @@
       <label>Project <input id="filter-project" placeholder="AXIOM"></label>
       <label>Repository <input id="filter-repository" placeholder="AxAxiAxes/keystone-eternal-seed"></label>
       <label>Search exact directive text <input id="filter-search" placeholder="verbatim directive text"></label>
-      <label>Outcome <select id="filter-outcome"><option value="">Any</option><option value="verified_success">verified_success</option><option value="artifact_only">artifact_only</option><option value="partial">partial</option><option value="blocked">blocked</option><option value="failed">failed</option><option value="abandoned">abandoned</option><option value="superseded">superseded</option></select></label>
+      <label>Latest recorded outcome <select id="filter-outcome"><option value="">Any</option><option value="verified_success">verified_success</option><option value="artifact_only">artifact_only</option><option value="partial">partial</option><option value="blocked">blocked</option><option value="failed">failed</option><option value="abandoned">abandoned</option><option value="superseded">superseded</option></select></label>
       <label>Status <select id="filter-status"><option value="">Any</option><option value="verified_success">verified_success</option><option value="artifact_only">artifact_only</option><option value="partial">partial</option><option value="blocked">blocked</option><option value="failed">failed</option><option value="abandoned">abandoned</option><option value="superseded">superseded</option><option value="met">met</option><option value="partially_met">partially_met</option><option value="not_met">not_met</option><option value="not_applicable">not_applicable</option><option value="not_evaluated">not_evaluated</option></select></label>
       <label>Founder rating minimum <input id="filter-rating" type="number" min="-10" max="10" step="1"></label>
       <label>From <input id="filter-from" type="datetime-local"></label>
@@ -307,12 +307,12 @@ function renderDirectiveList(directives) {
     document.querySelector("#directive-list").innerHTML = "<p class='note'>No directives match the current filters.</p>";
     return;
   }
-  document.querySelector("#directive-list").innerHTML = `<table><thead><tr><th>Directive</th><th>Project / repo</th><th>Status</th><th>Outcome</th><th>Founder rating</th><th>Cost</th></tr></thead><tbody>${directives.map(directive => `
+  document.querySelector("#directive-list").innerHTML = `<table><thead><tr><th>Directive</th><th>Project / repo</th><th>Current status</th><th>Latest recorded outcome</th><th>Founder rating</th><th>Cost</th></tr></thead><tbody>${directives.map(directive => `
     <tr>
       <td><button type="button" class="secondary small" data-directive="${escapeHtml(directive.directiveId)}">${escapeHtml(directive.title)}</button><div class="note small">${escapeHtml(directive.verbatimExcerpt || "Reconstructed / missing exact directive text")}</div></td>
       <td>${escapeHtml(directive.project)}<br><span class="note small">${escapeHtml(directive.repository)}</span></td>
       <td class="status-${escapeHtml(directive.currentStatus)}">${escapeHtml(directive.currentStatus)}</td>
-      <td class="status-${escapeHtml(directive.outcomeState || "not_evaluated")}">${escapeHtml(directive.outcomeState || "not recorded")}</td>
+      <td>${escapeHtml(directive.outcomeState || "not recorded")}</td>
       <td>${escapeHtml(directive.founderRating ?? "n/a")}</td>
       <td>${escapeHtml(formatCurrency(directive.provenCostCents))}<br><span class="note small">${escapeHtml(formatCurrency(directive.estimatedExposureLowCents))} – ${escapeHtml(formatCurrency(directive.estimatedExposureHighCents))}</span></td>
     </tr>
@@ -360,7 +360,7 @@ function deliveryMarkup(deliveries) {
 
 function ratingMarkup(label, rating) {
   if (!rating) return `<p class="note">${label}: not recorded.</p>`;
-  return `<div class="metric"><strong>${escapeHtml(rating.overall)}</strong><br>${escapeHtml(label)}</div><pre>${escapeHtml(JSON.stringify(rating.categories, null, 2))}${rating.notes ? `\n\n${rating.notes}` : ""}</pre>`;
+  return `<div class="metric"><strong>${escapeHtml(rating.overall)}</strong><br>${escapeHtml(label)}</div><pre>${escapeHtml(JSON.stringify(rating.categories, null, 2))}${rating.notes ? `\n\n${escapeHtml(rating.notes)}` : ""}</pre>`;
 }
 
 function resourceMarkup(directive) {
@@ -396,12 +396,16 @@ async function loadDirectiveDetail() {
   document.querySelector("#directive-detail").innerHTML = `
     <div class="grid">
       <div class="metric"><strong>${escapeHtml(directive.currentStatus)}</strong><br>Current status</div>
-      <div class="metric"><strong>${escapeHtml(directive.currentOutcome ? directive.currentOutcome.state : "not recorded")}</strong><br>Outcome</div>
+      <div class="metric"><strong>${escapeHtml(directive.currentOutcome ? directive.currentOutcome.state : "not recorded")}</strong><br>Latest recorded outcome</div>
+      <div class="metric"><strong>${directive.evidenceBackedCompletion ? "yes" : "no"}</strong><br>Current evidence-backed completion</div>
       <div class="metric"><strong>${escapeHtml(String(directive.founderRating ? directive.founderRating.overall : "n/a"))}</strong><br>Founder rating</div>
       <div class="metric"><strong>${escapeHtml(String(directive.unsupportedCompletionClaims))}</strong><br>Unsupported completion claims</div>
       <div class="metric"><strong>${escapeHtml(String(directive.reworkCycles))}</strong><br>Rework cycles</div>
       <div class="metric"><strong>${escapeHtml(directive.timeToVerifiableOutcomeHours === null ? "n/a" : `${directive.timeToVerifiableOutcomeHours}h`)}</strong><br>Time to verifiable outcome</div>
     </div>
+    ${directive.currentOutcome?.state === "verified_success" && !directive.evidenceBackedCompletion
+      ? "<p class='note'>The recorded success no longer has verified supporting evidence. Current verification is blocked; the recorded outcome and its history are unchanged.</p>"
+      : ""}
     <h3 style="margin-top:16px;">Exact founder directive</h3>
     <div class="directive-body">${escapeHtml(directive.directive.verbatimOriginalDirective || "Missing exact directive text; reconstructed/incomplete record.")}</div>
     <p class="note small">Requested deliverable: ${escapeHtml(directive.directive.requestedDeliverable || "Not recorded")}<br>Definition of done: ${escapeHtml(directive.directive.definitionOfDone || "Not recorded")}</p>
@@ -434,6 +438,7 @@ function parseDirectiveId(value) {
 async function postEvent(body) {
   await request("/api/accountability/events", {
     method: "POST",
+    headers: { "Content-Type": "application/json", "X-AXIOM-Accountability": "write" },
     body: JSON.stringify(body)
   });
 }

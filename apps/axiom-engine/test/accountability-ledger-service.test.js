@@ -83,6 +83,22 @@ function sampleDelivery(overrides = {}) {
   };
 }
 
+function sampleOutcome(payload = {}) {
+  return {
+    directiveId: DIRECTIVE_ID,
+    eventType: "outcome.recorded",
+    actor: "operator",
+    payload: {
+      state: "verified_success",
+      explanation: "Synthetic confirmation for regression coverage only.",
+      humanConfirmed: true,
+      confirmedBy: "test-reviewer",
+      evidenceIds: ["33333333-3333-4333-8333-333333333333"],
+      ...payload
+    }
+  };
+}
+
 test("stores append-only directive, delivery, outcome, rating, and loss history", async (t) => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));
@@ -430,5 +446,145 @@ test("accepts bounded integer rating query strings without coercing invalid filt
       () => service.listDirectives({ ratingMin }),
       /ratingMin must be an integer between -10 and 10/
     );
+  }
+});
+
+test("rejects non-boolean human confirmation without appending an event", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AccountabilityLedgerService({ directory });
+  await service.record(directiveCreated());
+  const delivery = sampleDelivery();
+  delivery.payload.evidence[0].verificationState = "verified";
+  delivery.payload.evidence[0].verifier = "test-reviewer";
+  await service.record(delivery);
+  const statePath = path.join(directory, "accountability-ledger.jsonl");
+  const original = await fs.readFile(statePath, "utf8");
+
+  for (const state of ["verified_success", "blocked"]) {
+    await t.test(state, async () => {
+      for (const humanConfirmed of ["false", "true", "", 0, 1, null, [], {}]) {
+        await assert.rejects(
+          () => service.record(sampleOutcome({ state, humanConfirmed })),
+          { name: "TypeError", message: "humanConfirmed must be a boolean when provided" }
+        );
+        assert.equal(await fs.readFile(statePath, "utf8"), original);
+      }
+    });
+  }
+
+  for (const humanConfirmed of [false, undefined]) {
+    await assert.rejects(
+      () => service.record(sampleOutcome({ humanConfirmed })),
+      /verified_success requires/
+    );
+    const recorded = await service.record(sampleOutcome({ state: "blocked", humanConfirmed }));
+    assert.equal(recorded.payload.humanConfirmed, false);
+  }
+  const confirmed = await service.record(sampleOutcome());
+  assert.equal(confirmed.payload.humanConfirmed, true);
+  const reopened = new AccountabilityLedgerService({ directory });
+  assert.equal((await reopened.getDirective(DIRECTIVE_ID)).evidenceBackedCompletion, true);
+});
+
+test("recomputes current verification while preserving recorded success and its history", async (t) => {
+  for (const verificationState of ["disputed", "unverified", "not_applicable"]) {
+    await t.test(verificationState, async (t) => {
+      const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+      t.after(() => fs.rm(directory, { recursive: true, force: true }));
+      const service = new AccountabilityLedgerService({
+        directory,
+        now: () => new Date("2026-09-22T12:00:00.000Z")
+      });
+      await service.record(directiveCreated());
+      const delivery = sampleDelivery();
+      const secondEvidenceId = "77777777-7777-4777-8777-777777777777";
+      const unrelatedEvidenceId = "88888888-8888-4888-8888-888888888888";
+      delivery.payload.evidence[0].verificationState = "verified";
+      delivery.payload.evidence[0].verifier = "test-reviewer";
+      delivery.payload.evidence.push(
+        { ...delivery.payload.evidence[0], id: secondEvidenceId },
+        { ...delivery.payload.evidence[0], id: unrelatedEvidenceId }
+      );
+      await service.record(delivery);
+      const outcome = sampleOutcome({
+        evidenceIds: [delivery.payload.evidence[0].id, secondEvidenceId]
+      });
+      const success = await service.record(outcome);
+      const statePath = path.join(directory, "accountability-ledger.jsonl");
+      const original = await fs.readFile(statePath, "utf8");
+      const before = await service.getDirective(DIRECTIVE_ID);
+      assert.equal(before.evidenceBackedCompletion, true);
+      assert.equal(before.currentStatus, "verified_success");
+
+      const evidenceReview = {
+        directiveId: DIRECTIVE_ID,
+        eventType: "evidence.verified",
+        actor: "operator",
+        payload: {
+          deliveryId: delivery.payload.deliveryId,
+          evidenceId: secondEvidenceId,
+          verificationState,
+          verifier: "test-reviewer"
+        }
+      };
+      await service.record(evidenceReview);
+      assert.ok((await fs.readFile(statePath, "utf8")).startsWith(original));
+      const reopened = new AccountabilityLedgerService({ directory });
+      assert.equal((await reopened.status()).status, "ready");
+      const current = await reopened.getDirective(DIRECTIVE_ID);
+      assert.equal(current.currentStatus, "blocked");
+      assert.equal(current.evidenceBackedCompletion, false);
+      assert.equal(current.missingEvidence, true);
+      assert.equal(current.timeToVerifiableOutcomeHours, null);
+      assert.deepEqual(current.currentOutcome, before.currentOutcome);
+      assert.deepEqual(current.outcomes, before.outcomes);
+      assert.deepEqual(current.history.slice(0, -1), before.history);
+      assert.deepEqual(current.history.find((event) => event.id === success.id), success);
+
+      const summary = await reopened.summary();
+      assert.equal(summary.verifiedSuccesses, 0);
+      assert.equal(summary.evidenceBackedCompletionRate, 0);
+      assert.equal(summary.partialBlockedFailedCount, 1);
+      const list = await reopened.listDirectives({ status: "blocked" });
+      assert.equal(list.directives.length, 1);
+      assert.equal(list.directives[0].outcomeState, "verified_success");
+      assert.equal((await reopened.listDirectives({ status: "verified_success" })).directives.length, 0);
+      assert.equal((await reopened.listDirectives({ outcome: "verified_success" })).directives.length, 1);
+      const missing = await reopened.missingReport();
+      assert.equal(missing.missingEvidenceCount, 1);
+      assert.equal(missing.missingEvidence[0].currentStatus, "blocked");
+      assert.deepEqual(await reopened.report(DIRECTIVE_ID, "json"), current);
+      const markdown = await reopened.report(DIRECTIVE_ID, "markdown");
+      assert.match(markdown, /Current status: blocked/);
+      assert.match(markdown, /Latest recorded outcome: verified_success/);
+      assert.match(markdown, /Current evidence-backed completion: no/);
+      assert.match(markdown, /Recorded outcome history/);
+      await assert.rejects(
+        () => reopened.record(outcome),
+        /verified_success evidence must already be marked verified/
+      );
+
+      evidenceReview.payload.verificationState = "verified";
+      await reopened.record(evidenceReview);
+      const restored = await reopened.getDirective(DIRECTIVE_ID);
+      assert.equal(restored.evidenceBackedCompletion, true);
+      assert.equal(restored.currentStatus, "verified_success");
+      assert.equal(restored.missingEvidence, false);
+      assert.equal(restored.timeToVerifiableOutcomeHours, before.timeToVerifiableOutcomeHours);
+      assert.deepEqual(restored.outcomes, before.outcomes);
+      assert.equal((await reopened.summary()).verifiedSuccesses, 1);
+      assert.equal((await reopened.summary()).partialBlockedFailedCount, 0);
+      assert.equal((await reopened.missingReport()).missingEvidenceCount, 0);
+
+      evidenceReview.payload.evidenceId = unrelatedEvidenceId;
+      evidenceReview.payload.verificationState = verificationState;
+      await reopened.record(evidenceReview);
+      assert.equal((await reopened.getDirective(DIRECTIVE_ID)).evidenceBackedCompletion, true);
+      await reopened.record(sampleOutcome({ state: "blocked", humanConfirmed: false }));
+      assert.equal((await reopened.getDirective(DIRECTIVE_ID)).evidenceBackedCompletion, false);
+      assert.equal((await reopened.summary()).verifiedSuccesses, 0);
+      assert.equal((await reopened.getDirective(DIRECTIVE_ID)).outcomes[0].state, "verified_success");
+    });
   }
 });

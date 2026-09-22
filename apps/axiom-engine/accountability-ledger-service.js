@@ -382,21 +382,12 @@ function validateEventAgainstProjection(input, directiveMap) {
   }
 
   if (input.eventType === "outcome.recorded" && input.payload.state === "verified_success") {
-    if (!input.payload.humanConfirmed) {
+    if (input.payload.humanConfirmed !== true) {
       throw new RangeError("verified_success requires explicit human confirmation");
     }
-    if (!Array.isArray(input.payload.evidenceIds) || input.payload.evidenceIds.length === 0) {
-      throw new RangeError("verified_success requires explicit evidence");
-    }
-    const evidenceIndex = buildEvidenceIndex(directive);
-    for (const evidenceId of input.payload.evidenceIds) {
-      const evidence = evidenceIndex.get(evidenceId);
-      if (!evidence) {
-        throw new RangeError(`verified_success evidence does not exist: ${evidenceId}`);
-      }
-      if (evidence.verificationState !== "verified") {
-        throw new RangeError("verified_success evidence must already be marked verified");
-      }
+    const evidenceError = verifiedOutcomeEvidenceError(directive, input.payload.evidenceIds);
+    if (evidenceError) {
+      throw new RangeError(evidenceError);
     }
   }
 }
@@ -498,10 +489,13 @@ function normalizePayload(eventType, payload, now) {
     };
   }
   if (eventType === "outcome.recorded") {
+    if (payload.humanConfirmed !== undefined && typeof payload.humanConfirmed !== "boolean") {
+      throw new TypeError("humanConfirmed must be a boolean when provided");
+    }
     return {
       state: normalizeEnum(payload.state, OUTCOME_STATES, "state"),
       explanation: normalizeLongText(payload.explanation, 4_000),
-      humanConfirmed: Boolean(payload.humanConfirmed),
+      humanConfirmed: payload.humanConfirmed === true,
       confirmedBy: normalizeOptionalText(payload.confirmedBy, 200),
       evidenceIds: normalizeUuidArray(payload.evidenceIds || [], "evidenceIds")
     };
@@ -769,16 +763,17 @@ function finalizeDirective(directive) {
   projected.unsupportedCompletionClaims = projected.deliveries.filter((delivery) =>
     delivery.claimedCompletion && !delivery.evidence.some((item) => item.verificationState === "verified")
   ).length;
+  projected.evidenceBackedCompletion = Boolean(
+    projected.currentOutcome &&
+    projected.currentOutcome.state === "verified_success" &&
+    projected.currentOutcome.humanConfirmed === true &&
+    projected.currentOutcome.confirmedBy &&
+    verifiedOutcomeEvidenceError(projected, projected.currentOutcome.evidenceIds) === null
+  );
   projected.timeToVerifiableOutcomeHours = computeTimeToVerifiableOutcomeHours(projected);
   projected.currentStatus = deriveDirectiveStatus(projected);
   projected.missingDirection = !projected.directive.verbatimOriginalDirective;
   projected.missingEvidence = hasMissingEvidence(projected);
-  projected.evidenceBackedCompletion = Boolean(
-    projected.currentOutcome &&
-    projected.currentOutcome.state === "verified_success" &&
-    projected.currentOutcome.humanConfirmed &&
-    projected.currentOutcome.evidenceIds.length > 0
-  );
   return projected;
 }
 
@@ -830,10 +825,10 @@ function summarizeDirectives(directives) {
   return {
     label: ACCOUNTABILITY_LEDGER_NOTICE,
     totalDirectives: directives.length,
-    verifiedSuccesses: directives.filter((directive) => directive.currentOutcome?.state === "verified_success").length,
-    artifactOnlyCount: directives.filter((directive) => directive.currentOutcome?.state === "artifact_only").length,
+    verifiedSuccesses: directives.filter((directive) => directive.evidenceBackedCompletion).length,
+    artifactOnlyCount: directives.filter((directive) => directive.currentStatus === "artifact_only").length,
     partialBlockedFailedCount: directives.filter((directive) =>
-      ["partial", "blocked", "failed"].includes(directive.currentOutcome?.state)
+      ["partial", "blocked", "failed"].includes(directive.currentStatus)
     ).length,
     adherenceRate: evaluatedCount ? Math.round((metCount / evaluatedCount) * 100) : null,
     evidenceBackedCompletionRate: directives.length
@@ -942,15 +937,16 @@ function latestRating(ratings, kind) {
 }
 
 function computeTimeToVerifiableOutcomeHours(directive) {
-  const success = directive.currentOutcome?.state === "verified_success" && directive.currentOutcome.humanConfirmed
-    ? directive.currentOutcome
-    : null;
-  if (!success) return null;
+  if (!directive.evidenceBackedCompletion) return null;
+  const success = directive.currentOutcome;
   const milliseconds = Date.parse(success.recordedAt) - Date.parse(directive.createdAt);
   return Number.isFinite(milliseconds) ? Number((milliseconds / 3_600_000).toFixed(2)) : null;
 }
 
 function deriveDirectiveStatus(directive) {
+  if (directive.currentOutcome?.state === "verified_success" && !directive.evidenceBackedCompletion) {
+    return "blocked";
+  }
   if (directive.currentOutcome) return directive.currentOutcome.state;
   const statuses = directive.directive.subrequirements.map((entry) => entry.currentStatus);
   if (statuses.includes("blocked")) return "blocked";
@@ -965,15 +961,28 @@ function hasMissingEvidence(directive) {
     (delivery) => delivery.claimedCompletion && delivery.evidence.length === 0
   );
   if (directive.currentOutcome?.state === "verified_success") {
-    const evidenceIndex = buildEvidenceIndex(directive);
-    const outcomeEvidenceMissing = directive.currentOutcome.evidenceIds.length === 0 ||
-      directive.currentOutcome.evidenceIds.some((evidenceId) => {
-        const evidence = evidenceIndex.get(evidenceId);
-        return !evidence || evidence.verificationState !== "verified";
-      });
+    const outcomeEvidenceMissing =
+      verifiedOutcomeEvidenceError(directive, directive.currentOutcome.evidenceIds) !== null;
     return claimedCompletionMissingEvidence || outcomeEvidenceMissing;
   }
   return claimedCompletionMissingEvidence;
+}
+
+function verifiedOutcomeEvidenceError(directive, evidenceIds) {
+  if (!Array.isArray(evidenceIds) || evidenceIds.length === 0) {
+    return "verified_success requires explicit evidence";
+  }
+  const evidenceIndex = buildEvidenceIndex(directive);
+  for (const evidenceId of evidenceIds) {
+    const evidence = evidenceIndex.get(evidenceId);
+    if (!evidence) {
+      return `verified_success evidence does not exist: ${evidenceId}`;
+    }
+    if (evidence.verificationState !== "verified") {
+      return "verified_success evidence must already be marked verified";
+    }
+  }
+  return null;
 }
 
 function countVerifiedEvidence(directive) {
@@ -1045,7 +1054,8 @@ function renderDirectiveReportMarkdown(directive) {
     `- Repository: ${directive.directive.repository}`,
     `- Branch: ${directive.directive.branch || "Not recorded"}`,
     `- Current status: ${directive.currentStatus}`,
-    `- Outcome: ${directive.currentOutcome ? directive.currentOutcome.state : "Not recorded"}`,
+    `- Latest recorded outcome: ${directive.currentOutcome ? directive.currentOutcome.state : "Not recorded"}`,
+    `- Current evidence-backed completion: ${directive.evidenceBackedCompletion ? "yes" : "no"}`,
     `- Founder rating: ${founderRating}`,
     `- Assistant self-assessment: ${assistantRating}`,
     `- Proven cost (cents): ${directive.metrics.provenCostCents}`,
@@ -1078,10 +1088,12 @@ function renderDirectiveReportMarkdown(directive) {
     "",
     deviations.length ? deviations.join("\n") : "- None recorded",
     "",
-    "## Outcome and performance",
+    "## Recorded outcome history",
     "",
-    directive.currentOutcome
-      ? `- ${directive.currentOutcome.recordedAt}: ${directive.currentOutcome.state} — ${directive.currentOutcome.explanation}`
+    directive.outcomes.length
+      ? directive.outcomes.map((outcome) =>
+        `- ${outcome.recordedAt}: ${outcome.state} — ${outcome.explanation}`
+      ).join("\n")
       : "- No outcome recorded",
     "",
     "## Loss / resource ledger",

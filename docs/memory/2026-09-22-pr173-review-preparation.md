@@ -1,5 +1,9 @@
 # 2026-09-22: PR #173 review preparation, local fixes, and approval hold
 
+Subsequent authorization and remediation are recorded in the
+[2026-09-22 follow-up](2026-09-22b-pr173-authorized-remediation.md).
+The hold and verification details below describe this earlier checkpoint.
+
 ## Reviewed source basis and scope
 
 Prepared [PR #173](https://github.com/AxAxiAxes/keystone-eternal-seed/pull/173)

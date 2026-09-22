@@ -464,13 +464,42 @@ function requireAdmin(req, res) {
     return false;
 }
 
+function requireAccountabilityWrite(req, res) {
+    const contentType = req.headers['content-type'];
+    const site = req.headers['sec-fetch-site'];
+    let error;
+    let statusCode = 403;
+    if (typeof contentType !== 'string' || contentType.split(';', 1)[0].trim().toLowerCase() !== 'application/json') {
+        statusCode = 415;
+        error = 'accountability writes require Content-Type: application/json';
+    } else if (req.headers['x-axiom-accountability'] !== 'write') {
+        // Cross-origin browsers cannot send this header without the preflight rejected below.
+        error = 'accountability writes require X-AXIOM-Accountability: write';
+    } else if (site !== undefined && site !== 'same-origin') {
+        error = 'accountability writes require a same-origin browser request';
+    }
+    if (!error) return true;
+    res.writeHead(statusCode, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error }));
+    return false;
+}
+
 const server = http.createServer(async (req, res) => {
     const parsed = new URL(req.url, 'http://' + (req.headers.host || 'localhost'));
     const pathname = parsed.pathname;
 
-                                   res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (pathname === '/api/accountability/events' && (req.method === 'POST' || req.method === 'OPTIONS')) {
+        res.setHeader('Cache-Control', 'no-store');
+        if (req.method === 'OPTIONS') {
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'cross-origin accountability writes are not allowed' }));
+            return;
+        }
+    } else {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    }
     if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
 
                                    if (pathname === '/health') {
@@ -1119,6 +1148,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (pathname === '/api/accountability/events' && req.method === 'POST') {
              if (!requireAdmin(req, res)) return;
+             if (!requireAccountabilityWrite(req, res)) return;
              try {
                      const body = await parseBody(req);
                      if (body === null) {
