@@ -16,6 +16,29 @@ on:
     types:
       - completed
   workflow_dispatch:
+    inputs:
+      upstream_run_id:
+        description: Successful upstream Running Copilot cloud agent run ID
+        required: true
+        type: string
+      upstream_head_branch:
+        description: Head branch of the successful upstream run
+        required: true
+        type: string
+      upstream_head_sha:
+        description: Full commit SHA of the successful upstream run
+        required: true
+        type: string
+      upstream_workflow_name:
+        description: Upstream workflow name
+        required: false
+        default: Running Copilot cloud agent
+        type: string
+      continuity_contract_path:
+        description: Repository-relative path to the explicit origin-coordinate contract JSON
+        required: false
+        default: .github/axi/origin-coordinate.json
+        type: string
 
 permissions:
   contents: read
@@ -121,12 +144,21 @@ jobs:
         run: docker rm --force axiom-freedom-validation || true
 
   copilot-workflow-run-continuity:
-    name: Copilot workflow continuity signal
-    if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Running Copilot cloud agent' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch && startsWith(github.event.workflow_run.head_branch, 'copilot') && github.event.workflow_run.head_repository && github.event.workflow_run.head_repository.full_name == github.repository }}
+    name: Copilot workflow continuity automation
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Running Copilot cloud agent' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch && startsWith(github.event.workflow_run.head_branch, 'copilot') && github.event.workflow_run.head_repository && github.event.workflow_run.head_repository.full_name == github.repository) }}
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
-      - run: |
-          echo "Copilot workflow completed for branch: ${{ github.event.workflow_run.head_branch }}"
-          echo "Result: ${{ github.event.workflow_run.conclusion }}"
-          echo "If CI push/pull_request runs remain action_required, this is controlled by repository/org approval policy."
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || inputs.upstream_head_sha }}
+          fetch-depth: 1
+      - run: node .github/scripts/record-workflow-run-continuity.js
+        env:
+          AXI_CONTINUITY_PROXY_URL: ${{ secrets.AXI_CONTINUITY_PROXY_URL }}
+          AXI_CONTINUITY_ADMIN_PASSWORD: ${{ secrets.AXI_CONTINUITY_ADMIN_PASSWORD }}
+          AXI_CONTINUITY_CONTRACT_PATH: ${{ inputs.continuity_contract_path }}
+          AXI_CONTINUITY_UPSTREAM_RUN_ID: ${{ inputs.upstream_run_id }}
+          AXI_CONTINUITY_UPSTREAM_HEAD_BRANCH: ${{ inputs.upstream_head_branch }}
+          AXI_CONTINUITY_UPSTREAM_HEAD_SHA: ${{ inputs.upstream_head_sha }}
+          AXI_CONTINUITY_UPSTREAM_WORKFLOW_NAME: ${{ inputs.upstream_workflow_name }}

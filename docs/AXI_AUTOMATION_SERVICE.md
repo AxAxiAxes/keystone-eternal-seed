@@ -151,6 +151,7 @@ by the public portal.
 | `POST` | `/automation/tasks` | Creates a pending, scheduled task. |
 | `POST` | `/automation/tasks/:taskId/approval` | Approves or rejects a task awaiting approval. |
 | `POST` | `/automation/process` | Processes due tasks, up to `maxTasks` (default 5; maximum 20). |
+| `POST` | `/automation/workflow-run-continuity` | Validates an explicit repository-relative continuity contract from a successful upstream workflow run, creates/reuses one `coordinate.record` task, and processes only that task. |
 | `GET` | `/automation/runs` | Lists recent execution records; use `?limit=50`. |
 | `GET` | `/system/source-catalog/options` | Read-only discovery: lists valid `sourceType`/`classification` values and field constraints for `source.catalog` tasks, plus the upload endpoint's route, auth, and size cap. |
 | `POST` | `/system/source-catalog/uploads` | Admin-authenticated: stores raw file bytes (request body) to this instance's own local data directory and returns a `sourceReference`/`sha256` computed from the stored bytes. Size-capped via `AXIOM_SOURCE_UPLOAD_MAX_BYTES` (default 5 MB). Storing bytes does not create a catalog entry. |
@@ -203,6 +204,21 @@ Queue a `coordinate.record` task to record an approved, source-linked
 continuity transition. The Operations Observer uses the task title and origin
 checkpoint to create the next coordinate in the private hash chain. See
 `AXI_ORIGIN_COORDINATE_SYSTEM.md`.
+
+For GitHub Actions continuity automation, the engine also accepts a bounded
+`POST /automation/workflow-run-continuity` request. It requires:
+
+- a successful upstream workflow run context (`id`, `name`, `headBranch`,
+  `headSha`, `htmlUrl`);
+- an explicit continuity contract carrying `label`, `sourceRecord`,
+  `originCheckpoint`, and a repository-relative `sourceReference`; and
+- the SHA-256 of the referenced repository file as checked out by the caller.
+
+The route is admin-authenticated, uses the same startup/governance/readiness
+gates as task processing, computes a deterministic idempotency key from the
+upstream run plus the coordinate/source reference, and records nothing if the
+contract is missing or invalid. It does **not** enable the recurring scheduler:
+`AXIOM_AUTOMATION_ENABLED=true` is still required only for background polling.
 
 Queue a `continuity.checkpoint` task to create a checksum manifest of the
 current persisted runtime files. It can be scheduled only by an authenticated

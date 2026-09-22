@@ -577,6 +577,152 @@ async function requireReadyStartupContext() {
   }
 }
 
+async function requireReadyWorkflowRunContinuity() {
+  await requireReadyStartupContext();
+  const governance = await automationService.getGovernanceReadiness();
+  if (governance.status !== "ready") {
+    const error = new Error("Automation is blocked until governance readiness is ready.");
+    error.statusCode = 409;
+    throw error;
+  }
+  try {
+    await coordinateService.verify();
+  } catch (cause) {
+    const error = new Error("Automation is blocked until the coordinate ledger is ready.");
+    error.statusCode = 409;
+    error.cause = cause;
+    throw error;
+  }
+}
+
+function normalizeWorkflowRunContinuityRequest(body) {
+  if (!isRecord(body)) {
+    throw new TypeError("workflow continuity request must be an object");
+  }
+  const allowedFields = new Set(["repository", "workflowRun", "coordinate"]);
+  if (Object.keys(body).some((field) => !allowedFields.has(field))) {
+    throw new TypeError("workflow continuity request contains unsupported fields");
+  }
+  if (!isRepositoryName(body.repository)) {
+    throw new TypeError("repository must be an owner/name string");
+  }
+  if (!isRecord(body.workflowRun)) {
+    throw new TypeError("workflowRun must be an object");
+  }
+  if (!isRecord(body.coordinate)) {
+    throw new TypeError("coordinate must be an object");
+  }
+  const workflowAllowedFields = new Set([
+    "id",
+    "name",
+    "htmlUrl",
+    "headBranch",
+    "headSha",
+    "conclusion"
+  ]);
+  if (Object.keys(body.workflowRun).some((field) => !workflowAllowedFields.has(field))) {
+    throw new TypeError("workflowRun contains unsupported fields");
+  }
+  const coordinateAllowedFields = new Set([
+    "label",
+    "sourceRecord",
+    "originCheckpoint",
+    "sourceReference",
+    "sourceSha256",
+    "contractPath"
+  ]);
+  if (Object.keys(body.coordinate).some((field) => !coordinateAllowedFields.has(field))) {
+    throw new TypeError("coordinate contains unsupported fields");
+  }
+  if (!isBoundedString(body.workflowRun.name, 200)) {
+    throw new TypeError("workflowRun.name must be a non-empty string up to 200 characters");
+  }
+  if (!isPositiveIntegerLike(body.workflowRun.id)) {
+    throw new TypeError("workflowRun.id must be a positive integer");
+  }
+  if (!isBoundedString(body.workflowRun.headBranch, 200)) {
+    throw new TypeError("workflowRun.headBranch must be a non-empty string up to 200 characters");
+  }
+  if (typeof body.workflowRun.headSha !== "string" || !/^[0-9a-f]{40}$/i.test(body.workflowRun.headSha)) {
+    throw new TypeError("workflowRun.headSha must be a 40-character hexadecimal commit SHA");
+  }
+  if (body.workflowRun.conclusion !== "success") {
+    throw new RangeError("workflowRun.conclusion must be success");
+  }
+  if (!isHttpsUrl(body.workflowRun.htmlUrl)) {
+    throw new TypeError("workflowRun.htmlUrl must be an https URL");
+  }
+  if (!isBoundedString(body.coordinate.label, 120)) {
+    throw new TypeError("coordinate.label must be a non-empty string up to 120 characters");
+  }
+  if (typeof body.coordinate.sourceRecord !== "string" ||
+    !/^[A-Z][A-Z0-9-]{2,119}$/.test(body.coordinate.sourceRecord)) {
+    throw new TypeError("coordinate.sourceRecord must be an uppercase identifier");
+  }
+  if (typeof body.coordinate.originCheckpoint !== "string" ||
+    !/^[a-z][a-z0-9-]{2,119}$/.test(body.coordinate.originCheckpoint)) {
+    throw new TypeError("coordinate.originCheckpoint must be a lowercase kebab-case identifier");
+  }
+  if (typeof body.coordinate.sourceSha256 !== "string" ||
+    !/^[a-f0-9]{64}$/i.test(body.coordinate.sourceSha256)) {
+    throw new TypeError("coordinate.sourceSha256 must be a 64-character hexadecimal hash");
+  }
+  return {
+    repository: body.repository.trim(),
+    workflowRun: {
+      id: String(body.workflowRun.id).trim(),
+      name: body.workflowRun.name.trim(),
+      htmlUrl: body.workflowRun.htmlUrl.trim(),
+      headBranch: body.workflowRun.headBranch.trim(),
+      headSha: body.workflowRun.headSha.toLowerCase(),
+      conclusion: body.workflowRun.conclusion
+    },
+    coordinate: {
+      label: body.coordinate.label.trim(),
+      sourceRecord: body.coordinate.sourceRecord.trim(),
+      originCheckpoint: body.coordinate.originCheckpoint.trim(),
+      sourceReference: normalizeRepositoryRelativePath(
+        body.coordinate.sourceReference,
+        "coordinate.sourceReference"
+      ),
+      sourceSha256: body.coordinate.sourceSha256.toLowerCase(),
+      contractPath: normalizeRepositoryRelativePath(
+        body.coordinate.contractPath,
+        "coordinate.contractPath"
+      )
+    }
+  };
+}
+
+function calculateWorkflowRunContinuityIdempotencyKey(request) {
+  return crypto.createHash("sha256").update(JSON.stringify({
+    repository: request.repository,
+    workflowRun: {
+      id: request.workflowRun.id,
+      name: request.workflowRun.name
+    },
+    coordinate: {
+      sourceRecord: request.coordinate.sourceRecord,
+      originCheckpoint: request.coordinate.originCheckpoint,
+      sourceReference: request.coordinate.sourceReference,
+      sourceSha256: request.coordinate.sourceSha256,
+      contractPath: request.coordinate.contractPath
+    }
+  })).digest("hex");
+}
+
+function normalizeRepositoryRelativePath(value, label) {
+  if (!isBoundedString(value, 200)) {
+    throw new TypeError(`${label} must be a repository-relative path up to 200 characters`);
+  }
+  const normalized = value.trim().replaceAll("\\", "/");
+  const segments = normalized.split("/");
+  if (normalized.startsWith("/") || segments.some((segment) => segment === "" || segment === "." || segment === "..")) {
+    throw new TypeError(`${label} must be a repository-relative path up to 200 characters`);
+  }
+  return normalized;
+}
+
 app.get("/automation/profiles", async (req, res, next) => {
   try {
     res.json(await automationProfileService.list());
@@ -933,6 +1079,48 @@ app.post("/automation/process", requireAdmin, async (req, res, next) => {
   }
 });
 
+app.post("/automation/workflow-run-continuity", requireAdmin, async (req, res, next) => {
+  try {
+    await requireReadyWorkflowRunContinuity();
+    const request = normalizeWorkflowRunContinuityRequest(req.body);
+    const idempotencyKey = calculateWorkflowRunContinuityIdempotencyKey(request);
+    const createdTask = await automationService.createTask({
+      title: request.coordinate.label,
+      action: "coordinate.record",
+      agentId: "operations-observer",
+      originCheckpoint: request.coordinate.originCheckpoint,
+      priority: 5,
+      idempotencyKey,
+      payload: {
+        label: request.coordinate.label,
+        sourceRecord: request.coordinate.sourceRecord,
+        originCheckpoint: request.coordinate.originCheckpoint,
+        sourceReference: request.coordinate.sourceReference,
+        sourceSha256: request.coordinate.sourceSha256,
+        contractPath: request.coordinate.contractPath,
+        workflowRun: request.workflowRun
+      }
+    });
+    if (createdTask.status === "pending") {
+      await automationService.processTaskById(createdTask.id);
+    }
+    const task = await automationService.getTask(createdTask.id);
+    const run = await automationService.getLatestRunForTask(task.id);
+    const status = task.status === "completed"
+      ? createdTask.idempotencyReused ? "already-recorded" : "recorded"
+      : task.status;
+    res.status(createdTask.idempotencyReused ? 200 : 201).json({
+      status,
+      idempotencyKey,
+      repository: request.repository,
+      task,
+      run
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/automation/chat", requireAdmin, async (req, res, next) => {
   try {
     const agent = await automationService.getAgent(req.body.agentId);
@@ -1004,6 +1192,39 @@ app.post("/memory/:kind", requireAdmin, async (req, res, next) => {
     next(error);
   }
 });
+
+function isRecord(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function isBoundedString(value, maximumLength) {
+  return typeof value === "string" &&
+    value.trim().length > 0 &&
+    value.trim().length <= maximumLength;
+}
+
+function isRepositoryName(value) {
+  return typeof value === "string" &&
+    /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(value.trim());
+}
+
+function isPositiveIntegerLike(value) {
+  if (typeof value === "number") {
+    return Number.isSafeInteger(value) && value > 0;
+  }
+  return typeof value === "string" && /^[1-9][0-9]{0,19}$/.test(value.trim());
+}
+
+function isHttpsUrl(value) {
+  if (!isBoundedString(value, 500)) {
+    return false;
+  }
+  try {
+    return new URL(value).protocol === "https:";
+  } catch (error) {
+    return false;
+  }
+}
 
 // Core automation route
 app.post("/axiom", requireAdmin, async (req, res, next) => {

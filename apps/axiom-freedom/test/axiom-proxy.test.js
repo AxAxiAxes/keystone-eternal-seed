@@ -178,6 +178,70 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
       error: "request body is too large"
     });
 
+    const workflowContinuity = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/workflow-run-continuity`,
+      {
+       method: "POST",
+       headers: {
+         Authorization: authorization,
+         "Content-Type": "application/json"
+       },
+       body: JSON.stringify({
+         repository: "AxAxiAxes/keystone-eternal-seed",
+         workflowRun: {
+           id: "35666546593",
+           name: "Running Copilot cloud agent",
+           htmlUrl: "https://github.com/AxAxiAxes/keystone-eternal-seed/actions/runs/35666546593",
+           headBranch: "copilot/fix-axi-continuity-workflow",
+           headSha: "a5792173331db2cb7421a126af11a0ac66c6f208",
+           conclusion: "success"
+         },
+         coordinate: {
+           label: "Record workflow-run origin continuity",
+           sourceRecord: "KEYSTONE-ORIGIN-000001",
+           originCheckpoint: "axi-coordinate-foundation",
+           sourceReference: "docs/AXI_ORIGIN_COORDINATE_SYSTEM.md",
+           sourceSha256: "a".repeat(64),
+           contractPath: ".github/axi/origin-coordinate.json"
+         }
+       })
+      }
+    );
+    assert.equal(workflowContinuity.status, 201);
+    assert.equal((await workflowContinuity.json()).status, "recorded");
+
+    const duplicateWorkflowContinuity = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/workflow-run-continuity`,
+      {
+       method: "POST",
+       headers: {
+         Authorization: authorization,
+         "Content-Type": "application/json"
+       },
+       body: JSON.stringify({
+         repository: "AxAxiAxes/keystone-eternal-seed",
+         workflowRun: {
+           id: "35666546593",
+           name: "Running Copilot cloud agent",
+           htmlUrl: "https://github.com/AxAxiAxes/keystone-eternal-seed/actions/runs/35666546593",
+           headBranch: "copilot/fix-axi-continuity-workflow",
+           headSha: "a5792173331db2cb7421a126af11a0ac66c6f208",
+           conclusion: "success"
+         },
+         coordinate: {
+           label: "Record workflow-run origin continuity",
+           sourceRecord: "KEYSTONE-ORIGIN-000001",
+           originCheckpoint: "axi-coordinate-foundation",
+           sourceReference: "docs/AXI_ORIGIN_COORDINATE_SYSTEM.md",
+           sourceSha256: "a".repeat(64),
+           contractPath: ".github/axi/origin-coordinate.json"
+         }
+       })
+      }
+    );
+    assert.equal(duplicateWorkflowContinuity.status, 200);
+    assert.equal((await duplicateWorkflowContinuity.json()).status, "already-recorded");
+
     const axesPortal = await request(webPort, {
       Host: "axescontracting.com",
       Authorization: authorization
@@ -693,7 +757,10 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
       { headers: { Authorization: authorization } }
     );
     assert.equal(runHistory.status, 200);
-    assert.deepEqual(await runHistory.json(), []);
+    const runs = await runHistory.json();
+    assert.equal(runs.length, 1);
+    assert.equal(runs[0].action, "coordinate.record");
+    assert.equal(runs[0].result.sourceReference, "docs/AXI_ORIGIN_COORDINATE_SYSTEM.md");
 
     const unavailableAgentChat = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/chat`,

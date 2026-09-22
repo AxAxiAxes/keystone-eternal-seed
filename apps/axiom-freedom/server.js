@@ -797,6 +797,28 @@ const server = http.createServer(async (req, res) => {
           }
           return;
     }
+    if (pathname === '/api/automation/workflow-run-continuity' && req.method === 'POST') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                 const body = await parseBody(req);
+                 if (body === null) {
+                     rejectOversizedRequest(res);
+                     return;
+                 }
+                 const result = await invokeEngine('/automation/workflow-run-continuity', 'POST', body);
+                 res.writeHead(result && result.status === 'already-recorded' ? 200 : 201, {
+                   'Content-Type': 'application/json'
+                 });
+                 res.end(JSON.stringify(result));
+          } catch (error) {
+                 console.error('AXIOM workflow continuity request failed:', error.message);
+                 res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                 res.end(JSON.stringify({
+                   error: error.statusCode ? error.message : 'AXIOM automation service is unavailable'
+                 }));
+          }
+          return;
+    }
     if (pathname === '/api/automation/runs' && req.method === 'GET') {
               if (!requireAdmin(req, res)) return;
               try {

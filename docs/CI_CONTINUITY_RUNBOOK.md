@@ -12,6 +12,7 @@ Use this runbook to keep Copilot branch delivery fluent when GitHub Actions may 
 - `AXI continuity validation` runs on pull requests targeting `axaxiaxes-axiom-monorepo`.
 - `AXI continuity validation` also receives a safe `workflow_run` continuity signal after `Running Copilot cloud agent` completes successfully on same-repository `copilot/` branches.
 - Code-executing jobs are skipped for `workflow_run` events by design (security boundary).
+- When a Copilot branch commit contains an explicit continuity contract at `.github/axi/origin-coordinate.json` (or a manually supplied alternate path), the `workflow_run`/`workflow_dispatch` continuity job validates that contract, hashes the referenced repository file, and asks the deployed AXI runtime to record exactly one idempotent `coordinate.record` automation result.
 
 Source: `.github/workflows/axi-continuity-validation.yml`.
 
@@ -20,6 +21,58 @@ Source: `.github/workflows/axi-continuity-validation.yml`.
 1. Open **Repository Settings → Actions → General**.
 2. Confirm trusted internal Copilot runs do not get repeatedly blocked by manual approval policy.
 3. If organization policy overrides repository policy, repeat in **Organization Settings → Actions**.
+4. Add these repository secrets for the continuity automation call path:
+   - `AXI_CONTINUITY_PROXY_URL` — the public/admin-gated AXIOM web base URL that can reach the private engine, for example `https://xiiom.com`
+   - `AXI_CONTINUITY_ADMIN_PASSWORD` — the same secret value configured as `ADMIN_PASSWORD` on `axiom-web`
+
+The workflow does **not** require a GitHub PAT and does **not** need direct
+network reachability to the private `axiom-engine` service. The public
+`axiom-web` route remains admin-gated and forwards to the private engine using
+its already-configured `AXIOM_ENGINE_ADMIN_PASSWORD`.
+
+## Explicit continuity contract
+
+The workflow never infers coordinates from commit messages, PR prose, or chat
+text. It reads only a bounded JSON contract checked into the same repository
+commit that the upstream workflow completed on:
+
+```json
+{
+  "schemaVersion": 1,
+  "label": "Record workflow-run origin continuity",
+  "sourceRecord": "KEYSTONE-ORIGIN-000001",
+  "originCheckpoint": "axi-coordinate-foundation",
+  "sourceReference": "docs/AXI_ORIGIN_COORDINATE_SYSTEM.md"
+}
+```
+
+Rules:
+
+- The file path must be repository-relative (default:
+  `.github/axi/origin-coordinate.json`).
+- `sourceReference` must also be repository-relative and must exist in the
+  checked-out commit.
+- If the contract is missing on a `workflow_run`, the job exits with a clear
+  "skipped-no-contract" status and records nothing.
+- If the contract is present but the workflow secrets or runtime readiness are
+  missing, the job fails closed and records nothing.
+- Re-running the same upstream workflow run with the same contract is
+  idempotent and reuses the previously recorded coordinate transition.
+
+## Manual replay path
+
+If the upstream `workflow_run` payload cannot be used directly, run
+`AXI continuity validation` manually with `workflow_dispatch` and provide:
+
+- `upstream_run_id`
+- `upstream_head_branch`
+- `upstream_head_sha`
+- optional `continuity_contract_path` (defaults to
+  `.github/axi/origin-coordinate.json`)
+
+The manual path checks out the supplied upstream commit, reads the same
+explicit contract, and sends the same idempotent request. It does not invent a
+coordinate when the contract is absent or invalid.
 
 ## Per-PR monitored operating loop
 

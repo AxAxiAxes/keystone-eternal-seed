@@ -892,9 +892,44 @@ test("records a coordinate transition through the Operations Observer", async (t
     coordinate: {
       id: "coordinate-1",
       label: "Record Genesis continuity",
-      originCheckpoint: "axi-coordinate-foundation"
-    }
+      originCheckpoint: "axi-coordinate-foundation",
+      idempotencyKey: null
+    },
+    idempotencyKey: null,
+    sourceReference: null,
+    sourceSha256: null,
+    contractPath: null,
+    workflowRun: null
   });
+});
+
+test("reuses an existing task for the same idempotency key", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AutomationService({
+    directory,
+    memoryStore: createMemoryStore()
+  });
+  const idempotencyKey = "b".repeat(64);
+
+  const first = await service.createTask({
+    title: "Record workflow continuity",
+    action: "coordinate.record",
+    agentId: "operations-observer",
+    originCheckpoint: "axi-coordinate-foundation",
+    idempotencyKey
+  });
+  const second = await service.createTask({
+    title: "Record workflow continuity again",
+    action: "coordinate.record",
+    agentId: "operations-observer",
+    originCheckpoint: "axi-coordinate-foundation",
+    idempotencyKey
+  });
+
+  assert.equal(first.id, second.id);
+  assert.equal(second.idempotencyReused, true);
+  assert.equal((await service.listTasks()).length, 1);
 });
 
 test("creates a private continuity checkpoint through the Operations Observer", async (t) => {

@@ -370,6 +370,7 @@ class AutomationService {
     maxAttempts = 1,
     retryDelayMinutes = 5,
     originCheckpoint,
+    idempotencyKey,
     automationProfileId,
     automationProfileKey,
     [PROFILE_TASK]: profileTask
@@ -409,11 +410,24 @@ class AutomationService {
       assertOriginCheckpoint(originCheckpoint, "task originCheckpoint");
       assertOriginCheckpoint(automationProfileId, "task automationProfileId");
       assertOriginCheckpoint(automationProfileKey, "task automationProfileKey");
+      assertOptionalIdempotencyKey(idempotencyKey, "task idempotencyKey");
       if (automationProfileId !== undefined && profileTask !== true) {
         throw new RangeError("automationProfileId is reserved for Automation Profiles");
       }
       if (automationProfileKey !== undefined && profileTask !== true) {
         throw new RangeError("automationProfileKey is reserved for Automation Profiles");
+      }
+      if (idempotencyKey) {
+        const existingTask = [...state.tasks].reverse()
+          .find((task) => task.idempotencyKey === idempotencyKey);
+        if (existingTask) {
+          if (existingTask.action !== action) {
+            throw new RangeError("task idempotencyKey already exists for a different action");
+          }
+          if (existingTask.status !== "failed" && existingTask.status !== "cancelled") {
+            return { ...existingTask, idempotencyReused: true };
+          }
+        }
       }
 
       const scheduledAt = runAt === undefined ? this.now() : new Date(runAt);
@@ -475,6 +489,7 @@ class AutomationService {
         maxAttempts,
         retryDelayMinutes,
         originCheckpoint: normalizeOptionalString(originCheckpoint),
+        idempotencyKey: normalizeOptionalString(idempotencyKey),
         automationProfileId: normalizeOptionalString(automationProfileId),
         automationProfileKey: normalizeOptionalString(automationProfileKey),
         attemptCount: 0,
@@ -508,6 +523,21 @@ class AutomationService {
     return this.withState(async (state) => state.runs.slice(-limit).reverse());
   }
 
+  async getTask(taskId) {
+    if (!isNonEmptyString(taskId)) {
+      throw new TypeError("taskId must be a non-empty string");
+    }
+    return this.withState(async (state) => findTask(state.tasks, taskId));
+  }
+
+  async getLatestRunForTask(taskId) {
+    if (!isNonEmptyString(taskId)) {
+      throw new TypeError("taskId must be a non-empty string");
+    }
+    return this.withState(async (state) =>
+      [...state.runs].reverse().find((run) => run.taskId === taskId) || null);
+  }
+
   async reviewTaskApproval(taskId, approved) {
     if (!isNonEmptyString(taskId)) {
       throw new TypeError("taskId must be a non-empty string");
@@ -530,6 +560,23 @@ class AutomationService {
     });
   }
 
+  async processTaskById(taskId) {
+    if (!isNonEmptyString(taskId)) {
+      throw new TypeError("taskId must be a non-empty string");
+    }
+    return this.withState(async (state) => {
+      unblockReadyTasks(state.tasks, this.now);
+      const task = findTask(state.tasks, taskId);
+      if (task.status !== "pending") {
+        throw new RangeError("task is not pending");
+      }
+      if (new Date(task.runAt) > this.now()) {
+        throw new RangeError("task is not due");
+      }
+      return this.processTaskInState(state, task);
+    });
+  }
+
   async processDueTasks(maxTasks = 5) {
     if (!Number.isInteger(maxTasks) || maxTasks < 1 || maxTasks > 20) {
       throw new RangeError("maxTasks must be an integer between 1 and 20");
@@ -545,79 +592,7 @@ class AutomationService {
       const outcomes = [];
 
       for (const task of dueTasks) {
-        if (typeof this.canProcessTask === "function" &&
-          !await this.canProcessTask(task, state.tasks)) {
-          outcomes.push({ taskId: task.id, status: "profile-paused" });
-          continue;
-        }
-        const agent = selectAgent(state.agents, task);
-        if (!agent) {
-          const assignedAgent = task.agentId
-            ? state.agents.find((entry) => entry.id === task.agentId)
-            : null;
-          if (assignedAgent && isRegisteredAgent(assignedAgent) &&
-            !isAccountableAgent(assignedAgent)) {
-            task.status = "blocked";
-            task.lastError = "Assigned agent accountability is suspended.";
-            task.updatedAt = this.now().toISOString();
-            outcomes.push({ taskId: task.id, status: "blocked" });
-            continue;
-          }
-          outcomes.push({ taskId: task.id, status: "unassigned" });
-          continue;
-        }
-
-        task.status = "running";
-        task.attemptCount += 1;
-        task.updatedAt = this.now().toISOString();
-        try {
-          const result = await this.executeTask(task, agent, state);
-          task.runCount += 1;
-          task.lastRunAt = this.now().toISOString();
-          task.lastResult = result;
-          task.attemptCount = 0;
-          task.lastError = null;
-          task.lastAuditError = null;
-          if (task.recurrenceMinutes) {
-            task.status = "pending";
-            task.runAt = new Date(
-              this.now().valueOf() + task.recurrenceMinutes * 60_000
-            ).toISOString();
-          } else {
-            task.status = "completed";
-          }
-          task.updatedAt = this.now().toISOString();
-          const run = await this.recordRun(state, task, agent, "completed", result);
-          outcomes.push({
-            taskId: task.id,
-            status: task.status,
-            runId: run.id,
-            ...(run.auditError ? { auditError: run.auditError } : {})
-          });
-        } catch (error) {
-          task.updatedAt = this.now().toISOString();
-          task.lastError = error.message;
-          const retrying = task.attemptCount < task.maxAttempts;
-          task.status = retrying ? "pending" : "failed";
-          if (retrying) {
-            task.runAt = new Date(
-              this.now().valueOf() + task.retryDelayMinutes * 60_000
-            ).toISOString();
-          }
-          const run = await this.recordRun(
-            state,
-            task,
-            agent,
-            retrying ? "retrying" : "failed",
-            { error: error.message }
-          );
-          outcomes.push({
-            taskId: task.id,
-            status: task.status,
-            runId: run.id,
-            ...(run.auditError ? { auditError: run.auditError } : {})
-          });
-        }
+        outcomes.push(await this.processTaskInState(state, task));
       }
 
       return outcomes;
@@ -630,6 +605,79 @@ class AutomationService {
 
   async getGovernanceReadiness() {
     return this.withState(async (state) => evaluateGovernanceReadiness(state));
+  }
+
+  async processTaskInState(state, task) {
+    if (typeof this.canProcessTask === "function" &&
+      !await this.canProcessTask(task, state.tasks)) {
+      return { taskId: task.id, status: "profile-paused" };
+    }
+    const agent = selectAgent(state.agents, task);
+    if (!agent) {
+      const assignedAgent = task.agentId
+        ? state.agents.find((entry) => entry.id === task.agentId)
+        : null;
+      if (assignedAgent && isRegisteredAgent(assignedAgent) &&
+        !isAccountableAgent(assignedAgent)) {
+        task.status = "blocked";
+        task.lastError = "Assigned agent accountability is suspended.";
+        task.updatedAt = this.now().toISOString();
+        return { taskId: task.id, status: "blocked" };
+      }
+      return { taskId: task.id, status: "unassigned" };
+    }
+
+    task.status = "running";
+    task.attemptCount += 1;
+    task.updatedAt = this.now().toISOString();
+    try {
+      const result = await this.executeTask(task, agent, state);
+      task.runCount += 1;
+      task.lastRunAt = this.now().toISOString();
+      task.lastResult = result;
+      task.attemptCount = 0;
+      task.lastError = null;
+      task.lastAuditError = null;
+      if (task.recurrenceMinutes) {
+        task.status = "pending";
+        task.runAt = new Date(
+          this.now().valueOf() + task.recurrenceMinutes * 60_000
+        ).toISOString();
+      } else {
+        task.status = "completed";
+      }
+      task.updatedAt = this.now().toISOString();
+      const run = await this.recordRun(state, task, agent, "completed", result);
+      return {
+        taskId: task.id,
+        status: task.status,
+        runId: run.id,
+        ...(run.auditError ? { auditError: run.auditError } : {})
+      };
+    } catch (error) {
+      task.updatedAt = this.now().toISOString();
+      task.lastError = error.message;
+      const retrying = task.attemptCount < task.maxAttempts;
+      task.status = retrying ? "pending" : "failed";
+      if (retrying) {
+        task.runAt = new Date(
+          this.now().valueOf() + task.retryDelayMinutes * 60_000
+        ).toISOString();
+      }
+      const run = await this.recordRun(
+        state,
+        task,
+        agent,
+        retrying ? "retrying" : "failed",
+        { error: error.message }
+      );
+      return {
+        taskId: task.id,
+        status: task.status,
+        runId: run.id,
+        ...(run.auditError ? { auditError: run.auditError } : {})
+      };
+    }
   }
 
   async executeTask(task, agent, state) {
@@ -737,13 +785,22 @@ class AutomationService {
       if (typeof this.createCoordinate !== "function") {
         throw new RangeError("coordinate recording is not configured");
       }
+      const workflowRun = isRecord(task.payload.workflowRun)
+        ? { ...task.payload.workflowRun }
+        : null;
       return {
         coordinate: await this.createCoordinate({
           label: task.payload.label || task.title,
           occurredAt: task.payload.occurredAt,
           sourceRecord: task.payload.sourceRecord,
-          originCheckpoint: task.payload.originCheckpoint || task.originCheckpoint
-        })
+          originCheckpoint: task.payload.originCheckpoint || task.originCheckpoint,
+          idempotencyKey: task.idempotencyKey
+        }),
+        idempotencyKey: task.idempotencyKey || null,
+        sourceReference: normalizeOptionalString(task.payload.sourceReference),
+        sourceSha256: normalizeOptionalString(task.payload.sourceSha256),
+        contractPath: normalizeOptionalString(task.payload.contractPath),
+        workflowRun
       };
     }
     if (task.action === "continuity.checkpoint") {
@@ -1308,6 +1365,13 @@ function assertOriginCheckpoint(value, label) {
   if (value === undefined) return;
   if (typeof value !== "string" || !/^[a-z][a-z0-9-]{2,119}$/.test(value)) {
     throw new TypeError(`${label} must be a lowercase kebab-case identifier`);
+  }
+}
+
+function assertOptionalIdempotencyKey(value, label) {
+  if (value !== undefined &&
+    (typeof value !== "string" || !/^[a-f0-9]{64}$/.test(value.trim()))) {
+    throw new TypeError(`${label} must be a 64-character hexadecimal hash`);
   }
 }
 

@@ -68,6 +68,14 @@ origin checkpoint becomes the coordinate's governance relation. This action
 does not determine origin, ownership, identity, rights, value, or an external
 patent scope; it records a source-linked internal transition for review.
 
+When a coordinate is created through the workflow-run continuity automation, the
+request also carries a deterministic idempotency key derived from the upstream
+workflow run and the explicit repository-relative source reference. Replaying
+the same successful workflow run with the same coordinate/source contract
+reuses the existing transition instead of appending a duplicate coordinate.
+Coordinate creation also fails closed if the retained chain is already invalid;
+it never appends onto a tampered ledger.
+
 ## Reset and recovery
 
 `coordinates.jsonl` is included in both standard checkpoint manifests and
