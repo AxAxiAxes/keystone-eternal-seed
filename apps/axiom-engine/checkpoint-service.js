@@ -10,6 +10,7 @@ const PERSISTED_FILE_NAMES = [
   "business-metrics.jsonl",
   "service-registry.jsonl",
   "creation-record.jsonl",
+  "accountability-ledger.jsonl",
   "automation-profiles.jsonl",
   "episodic.jsonl",
   "semantic.jsonl",

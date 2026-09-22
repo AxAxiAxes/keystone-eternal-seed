@@ -327,6 +327,8 @@ An invalid business-metrics journal produces `business-metrics-unavailable`;
 the journal's own attention state blocks automation.
 An invalid creation-record journal produces `creation-record-unavailable`; the
 journal's own attention state blocks automation.
+An invalid accountability ledger produces `accountability-ledger-unavailable`;
+the ledger's own attention state blocks automation.
 
 The protected console can capture a snapshot and display current signals and
 reevaluation history. The private API also provides `GET /monitoring/status`,

@@ -1,0 +1,224 @@
+{
+  "description": "Reconstructed and incomplete sample accountability bundle based on repository records. Not an audited financial claim.",
+  "importInstructions": "POST each event in order to /api/accountability/events or /system/accountability/events.",
+  "events": [
+    {
+      "directiveId": "77777777-7777-4777-8777-777777777777",
+      "eventType": "directive.created",
+      "actor": "founder",
+      "reconstructed": true,
+      "incomplete": true,
+      "payload": {
+        "title": "Reconstructed Copilot accountability example",
+        "verbatimOriginalDirective": "Build a first-class Copilot/accountability tracking app inside AxAxiAxes/keystone-eternal-seed.",
+        "project": "AXIOM",
+        "repository": "AxAxiAxes/keystone-eternal-seed",
+        "branch": "axaxiaxes-axiom-monorepo",
+        "taskSessionIdentifier": "reconstructed-example-2026-09-19",
+        "requestedDeliverable": "A directive-vs-delivery audit ledger with evidence, deviation, ratings, and loss tracking.",
+        "constraints": [
+          "Do not treat planning, documentation, a commit, or a pull request as successful completion.",
+          "Use human-confirmed fields for money and hours."
+        ],
+        "deadline": null,
+        "budgetTimeCap": null,
+        "dependencies": [
+          "Existing AXIOM engine and AXES web UI",
+          "Repository-controlled evidence only unless a human confirms more"
+        ],
+        "definitionOfDone": "A founder can preserve a detailed directive verbatim, compare it against delivery, and prevent unsupported verified success claims.",
+        "subrequirements": [
+          {
+            "id": "exact-directive",
+            "text": "Store the founder's exact original directive verbatim."
+          },
+          {
+            "id": "comparison-ui",
+            "text": "Show founder direction, interpretation, actual delivery, evidence, deviation, and outcome together."
+          },
+          {
+            "id": "verified-success-gate",
+            "text": "Never allow verified success without explicit evidence and human confirmation."
+          },
+          {
+            "id": "loss-ledger",
+            "text": "Keep founder-confirmed hours separate from assistant/session elapsed time."
+          }
+        ],
+        "sourceReference": "docs/memory/2026-09-12-default-branch-correction-and-truth-audit.md"
+      }
+    },
+    {
+      "directiveId": "77777777-7777-4777-8777-777777777777",
+      "eventType": "directive.amended",
+      "actor": "founder",
+      "reconstructed": true,
+      "incomplete": true,
+      "payload": {
+        "amendmentText": "Capture detailed directions instead of flattening them, and preserve superseded instructions with timestamps.",
+        "sourceReference": "problem-statement-2026-09-19",
+        "supersedesInstructions": [
+          "earlier-summary-only-approach"
+        ],
+        "subrequirementsAdded": [
+          {
+            "id": "preserve-amendments",
+            "text": "Preserve amendments and superseded instructions with timestamps and source references."
+          }
+        ],
+        "constraintsAdded": [
+          "Do not invent invoices, cloud bills, domain costs, or hours."
+        ]
+      }
+    },
+    {
+      "directiveId": "77777777-7777-4777-8777-777777777777",
+      "eventType": "interpretation.recorded",
+      "actor": "assistant",
+      "reconstructed": true,
+      "incomplete": true,
+      "payload": {
+        "interpretation": "Build an append-only ledger plus a dedicated admin-gated comparison UI inside the existing AXIOM/AXES experience.",
+        "checklistMapping": [
+          {
+            "requirementId": "comparison-ui",
+            "interpretation": "Expose dedicated routes, filters, dashboard metrics, and Markdown/JSON reports."
+          }
+        ]
+      }
+    },
+    {
+      "directiveId": "77777777-7777-4777-8777-777777777777",
+      "eventType": "delivery.claimed",
+      "actor": "assistant",
+      "reconstructed": true,
+      "incomplete": true,
+      "payload": {
+        "deliveryId": "88888888-8888-4888-8888-888888888888",
+        "summary": "Repository changes added a new accountability ledger service, web UI, tests, and documentation.",
+        "claimedCompletion": true,
+        "items": [
+          {
+            "id": "99999999-9999-4999-8999-999999999991",
+            "type": "file",
+            "deliveryClass": "repository_artifact",
+            "label": "Ledger service module",
+            "locator": "apps/axiom-engine/accountability-ledger-service.js"
+          },
+          {
+            "id": "99999999-9999-4999-8999-999999999992",
+            "type": "test_run",
+            "deliveryClass": "working_outcome",
+            "label": "Targeted local tests",
+            "locator": "node --test apps/axiom-engine/test/accountability-ledger-service.test.js"
+          },
+          {
+            "id": "99999999-9999-4999-8999-999999999993",
+            "type": "unverified_claim",
+            "deliveryClass": "unverified_claim",
+            "label": "Deployment/integration path fully complete",
+            "locator": "unverified"
+          }
+        ],
+        "evidence": [
+          {
+            "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1",
+            "type": "test_run",
+            "locator": "Local targeted engine/web tests",
+            "verificationState": "verified",
+            "verifier": "Axel Urartu (AX) · Axes Contracting",
+            "timestamp": "2026-09-19T00:00:00.000Z",
+            "notes": "Locally validated."
+          },
+          {
+            "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2",
+            "type": "log",
+            "locator": "docs/memory/2026-09-18aa-production-chat-502-incident.md",
+            "verificationState": "verified",
+            "verifier": "Axel Urartu (AX) · Axes Contracting",
+            "timestamp": "2026-09-19T00:00:00.000Z",
+            "notes": "Confirms deployment/integration path remained incomplete."
+          }
+        ],
+        "sourceReference": "reconstructed-from-repository-records"
+      }
+    },
+    {
+      "directiveId": "77777777-7777-4777-8777-777777777777",
+      "eventType": "requirement.assessed",
+      "actor": "operator",
+      "reconstructed": true,
+      "incomplete": true,
+      "payload": {
+        "requirementId": "comparison-ui",
+        "status": "partially_met",
+        "explanation": "The accountability app was built locally in the repository, but the broader deployment/integration path remained incomplete.",
+        "evidenceIds": [
+          "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1",
+          "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2"
+        ],
+        "deviations": [
+          {
+            "type": "changed_repository_branch",
+            "description": "Historical work previously used stale default-branch assumptions before the repository default branch was corrected."
+          },
+          {
+            "type": "unsupported_assumption",
+            "description": "Some earlier work treated documentation, PR activity, or repository artifacts as stronger outcome proof than the evidence supported."
+          }
+        ]
+      }
+    },
+    {
+      "directiveId": "77777777-7777-4777-8777-777777777777",
+      "eventType": "outcome.recorded",
+      "actor": "operator",
+      "reconstructed": true,
+      "incomplete": true,
+      "payload": {
+        "state": "partial",
+        "explanation": "The Docker teardown fix was locally validated, but the deployment/integration path remained incomplete and the chat outage/502 remained unresolved in production.",
+        "humanConfirmed": true,
+        "confirmedBy": "Axel Urartu (AX) · Axes Contracting",
+        "evidenceIds": [
+          "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1",
+          "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2"
+        ]
+      }
+    },
+    {
+      "directiveId": "77777777-7777-4777-8777-777777777777",
+      "eventType": "rating.recorded",
+      "actor": "founder",
+      "reconstructed": true,
+      "incomplete": true,
+      "payload": {
+        "kind": "founder",
+        "overall": -10,
+        "categories": {
+          "instructionAdherence": -10,
+          "accuracy": -10,
+          "scopeControl": -10,
+          "verification": -10,
+          "rework": -10,
+          "outcomeFocus": -10
+        },
+        "notes": "Founder-provided negative rating preserved exactly as a rating, not as a legal or financial conclusion."
+      }
+    },
+    {
+      "directiveId": "77777777-7777-4777-8777-777777777777",
+      "eventType": "resource.recorded",
+      "actor": "founder",
+      "reconstructed": true,
+      "incomplete": true,
+      "payload": {
+        "entryType": "estimated",
+        "assistantSessionElapsedHours": 249.25,
+        "estimatedCostLowCents": 623125,
+        "estimatedCostHighCents": 3738750,
+        "notes": "Estimated exposure based on recorded assistant/session elapsed time examples only. This is explicitly not a claim that all of that time equals confirmed founder labor."
+      }
+    }
+  ]
+}

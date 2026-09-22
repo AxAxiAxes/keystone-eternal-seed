@@ -14,6 +14,8 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-22 (b) PR #173 authorized security/integrity remediation: escaped rating notes, protected ledger POST/preflight, strict confirmation types, and current evidence eligibility without rewriting history](2026-09-22b-pr173-authorized-remediation.md)
+- [2026-09-22 PR #173 local review preparation: actual-base merge, rating-filter/recovery/monitoring fixes, verification evidence, and outstanding security/integrity approval hold](2026-09-22-pr173-review-preparation.md)
 - [2026-09-20 (b) S1 dashboard: Command Center paperwork section added — sidebar nav item, quicknav tile, and full section linking all 13 `docs/axes-os-command-center/` categories, in response to "and command center where is the paperwork?"](2026-09-20b-s1-dashboard-paperwork-section.md)
 - [2026-09-20 (a) AXES Contracting revenue-launch plan drafted — synthesizes the confirmed-active CSLB license and real 10+ year business history into a phased, lower-risk launch proposal; flags an unresolved home-inspection-certification question rather than reasserting it](2026-09-20a-axes-contracting-revenue-launch-plan.md)
 - [2026-09-19 (v) AXES OS Command Center document index built — 358 documents copied (originals untouched) into 13 categories, framed explicitly around AXES OS as an OS + AI + Web + App production company](2026-09-19v-axes-os-command-center-document-index.md)
@@ -32,6 +34,7 @@ This directory preserves concise, versioned project conclusions so future work c
 - [2026-09-19 (j) Founder-directed service-delivery protocol adopted (research→template→proofread→estimate→execute→self-rate→accountability); live pages opened; urartuhi.com now resolves via real domain](2026-09-19j-service-protocol-adopted.md)
 - [2026-09-19 (i) Full cross-repo project inventory compiled — active projects, parked domains, cross-cutting recommendations](2026-09-19i-full-project-inventory.md)
 - [2026-09-19 (h) Cross-repo PR triage sweep (axiom-engine perf PRs cleaned up, PR #173 draft-blocked noted); outage reconfirmed still failing at 30+ hrs](2026-09-19h-pr-triage-sweep.md)
+- [2026-09-19 (h) Copilot accountability ledger MVP added: append-only directive-vs-delivery engine ledger, private `/accountability` UI, export/report support, reconstructed sample import/report](2026-09-19h-copilot-accountability-ledger-mvp.md)
 - [2026-09-19 (g) AXES Contracting CSLB license 995577 confirmed ACTIVE via official CSLB source — corrects prior "suspended" aggregator-based finding, queue item #12 resolved](2026-09-19g-axes-contracting-license-confirmed-active.md)
 - [2026-09-19 (f) Origin registry health-check confirmed clean (32/32 tests); added practical "Guide: building and owning your own AI"](2026-09-19f-origin-registry-check-and-build-ai-guide.md)
 - [2026-09-19 (e) Outage #0 reconfirmed still failing (17+ hrs); second "AXES OS 7-layer" naming framing recorded with honest cross-check](2026-09-19e-axes-os-7layer-framing-and-outage-recheck.md)
