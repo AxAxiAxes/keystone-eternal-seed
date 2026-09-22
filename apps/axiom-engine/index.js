@@ -1,4 +1,5 @@
 const express = require("express");
+const { rateLimit } = require("express-rate-limit");
 const crypto = require("crypto");
 const fs = require("fs/promises");
 const { constants: fsConstants } = require("fs");
@@ -38,7 +39,6 @@ const ADMIN_PASSWORD = process.env.AXIOM_ENGINE_ADMIN_PASSWORD;
 const DEFAULT_SOURCE_UPLOAD_MAX_BYTES = 5 * 1024 * 1024;
 const WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_WINDOW_MS = 60_000;
 const WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_MAX_REQUESTS = 10;
-const workflowRunContinuityRequests = new Map();
 const SOURCE_UPLOAD_MAX_BYTES = (() => {
   const configured = Number(process.env.AXIOM_SOURCE_UPLOAD_MAX_BYTES);
   return Number.isInteger(configured) && configured > 0
@@ -78,19 +78,15 @@ function requireAdmin(req, res, next) {
   res.status(401).json({ error: "admin credentials required" });
 }
 
-function requireWorkflowRunContinuityRateLimit(req, res, next) {
-  const now = Date.now();
-  const key = req.ip || req.socket?.remoteAddress || "unknown";
-  const recent = (workflowRunContinuityRequests.get(key) || [])
-    .filter((timestamp) => now - timestamp < WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_WINDOW_MS);
-  if (recent.length >= WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_MAX_REQUESTS) {
+const requireWorkflowRunContinuityRateLimit = rateLimit({
+  windowMs: WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_WINDOW_MS,
+  limit: WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_MAX_REQUESTS,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler(req, res) {
     res.status(429).json({ error: "workflow continuity rate limit exceeded" });
-    return;
   }
-  recent.push(now);
-  workflowRunContinuityRequests.set(key, recent);
-  next();
-}
+});
 
 const dataDirectory = process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data");
 const memoryStore = new MemoryStore(dataDirectory);
@@ -1098,8 +1094,8 @@ app.post("/automation/process", requireAdmin, async (req, res, next) => {
 
 app.post("/automation/workflow-run-continuity", requireAdmin, requireWorkflowRunContinuityRateLimit, async (req, res, next) => {
   try {
-    await requireReadyWorkflowRunContinuity();
     const request = normalizeWorkflowRunContinuityRequest(req.body);
+    await requireReadyWorkflowRunContinuity();
     const idempotencyKey = calculateWorkflowRunContinuityIdempotencyKey(request);
     const createdTask = await automationService.createTask({
       title: request.coordinate.label,
