@@ -14,6 +14,24 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-20 (b) S1 dashboard: Command Center paperwork section added — sidebar nav item, quicknav tile, and full section linking all 13 `docs/axes-os-command-center/` categories, in response to "and command center where is the paperwork?"](2026-09-20b-s1-dashboard-paperwork-section.md)
+- [2026-09-20 (a) AXES Contracting revenue-launch plan drafted — synthesizes the confirmed-active CSLB license and real 10+ year business history into a phased, lower-risk launch proposal; flags an unresolved home-inspection-certification question rather than reasserting it](2026-09-20a-axes-contracting-revenue-launch-plan.md)
+- [2026-09-19 (v) AXES OS Command Center document index built — 358 documents copied (originals untouched) into 13 categories, framed explicitly around AXES OS as an OS + AI + Web + App production company](2026-09-19v-axes-os-command-center-document-index.md)
+- [2026-09-19 (u) S1 dashboard UI researched against Linear/Vercel/Stripe/Notion 2026 patterns — found and fixed a same-session banner-stacking regression that violated the "calm design" principle](2026-09-19u-s1-ui-research-calm-design-fix.md)
+- [2026-09-19 (t) S1 dashboard closed the remaining Venture-3-style gaps: top status bar, icon-based quick-nav grid, stage banner (real project slogan)](2026-09-19t-s1-dashboard-topbar-quicknav-stage-banner.md)
+- [2026-09-19 (s) S1 design iteration followed the full research→plan→proofread→estimate→execute protocol after founder called out that it had been skipped](2026-09-19s-s1-design-plan-protocol-followed.md)
+- [2026-09-19 (r) S1 dashboard was completely non-functional after PR #186 (orphaned null-element reference silently halted all script execution) — found via direct page-driving, fixed and verified in PR #187](2026-09-19r-s1-dashboard-broken-by-186-fixed-by-187.md)
+- [2026-09-19 (q) S1 dashboard rebuilt after founder critique — card-grid layout, in-app My-rating/Your-rating per project, best-effort in-app live-status check](2026-09-19q-s1-dashboard-rebuild-competitive-ratings-livecheck.md)
+- [2026-09-19 (p) xiiom.com re-checked live: 502 outage resolved, but running deployment is stale (pre-identity/date-fix) — needs founder redeploy](2026-09-19p-xiiom-502-resolved-stale-deployment.md)
+- [2026-09-19 (o) S1 dashboard extended with full plan timeline (226 milestones) using a vertical connector-timeline layout](2026-09-19o-s1-dashboard-timeline-schedule.md)
+- [2026-09-19 (n) S1 interactive status dashboard built — static, portable HTML with view/edit links per domain and xiiom.com page](2026-09-19n-s1-interactive-dashboard.md)
+- [2026-09-19 (m) Founder-reported $40k loss + satisfaction rating — corrective scope-match step added to protocol; specific incident still needs identifying](2026-09-19m-founder-loss-report-and-rating.md)
+- [2026-09-19 (l) "Customer service prompt" referenced by founder but not found anywhere in repo — search documented, added as FOUNDER_ACTION_QUEUE item #15 pending re-supply](2026-09-19l-customer-service-prompt-not-found.md)
+- [2026-09-19 (k) Status Report S1 issued — first in the founder-directed numbered status-report series](2026-09-19k-status-report-s1.md)
+
+- [2026-09-19 (j) Founder-directed service-delivery protocol adopted (research→template→proofread→estimate→execute→self-rate→accountability); live pages opened; urartuhi.com now resolves via real domain](2026-09-19j-service-protocol-adopted.md)
+- [2026-09-19 (i) Full cross-repo project inventory compiled — active projects, parked domains, cross-cutting recommendations](2026-09-19i-full-project-inventory.md)
+- [2026-09-19 (h) Cross-repo PR triage sweep (axiom-engine perf PRs cleaned up, PR #173 draft-blocked noted); outage reconfirmed still failing at 30+ hrs](2026-09-19h-pr-triage-sweep.md)
 - [2026-09-19 (h) Copilot accountability ledger MVP added: append-only directive-vs-delivery engine ledger, private `/accountability` UI, export/report support, reconstructed sample import/report](2026-09-19h-copilot-accountability-ledger-mvp.md)
 - [2026-09-19 (g) AXES Contracting CSLB license 995577 confirmed ACTIVE via official CSLB source — corrects prior "suspended" aggregator-based finding, queue item #12 resolved](2026-09-19g-axes-contracting-license-confirmed-active.md)
 - [2026-09-19 (f) Origin registry health-check confirmed clean (32/32 tests); added practical "Guide: building and owning your own AI"](2026-09-19f-origin-registry-check-and-build-ai-guide.md)
