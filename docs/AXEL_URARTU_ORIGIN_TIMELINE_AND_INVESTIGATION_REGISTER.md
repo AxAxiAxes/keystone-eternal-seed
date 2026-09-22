@@ -3,7 +3,7 @@
 **Status:** Repository-internal investigation and evidence register.  
 **Recorded:** 2026-09-22  
 **Declarant / subject:** Axel Urartu (AX) · Axes Contracting  
-**Scope:** Foundational origin, creator registration, coordinate-system-center documentation, identity continuity evidence, value assessment, and counterevidence review.  
+**Scope:** Foundational origin, creator registration, coordinate-system-center documentation, continuity evidence, value assessment, and discrepancy review.  
 **Important boundary:** This file is a repository-internal investigation record. It does not itself establish legal personhood, patent validity, trademark validity, copyright registration, title, or independent external fact. It records the evidence path, unresolved questions, and the required review actions.
 
 ## 1. Purpose
@@ -14,223 +14,172 @@ This document organizes the current understanding into a reviewable timeline and
 - the repository’s recorded technical and documentary lineage;
 - evidence that has been verified in Git/history terms;
 - evidence that remains unverified or externally missing;
-- the current status of creator registration, origin legal status, value determination, and challenge/counterevidence review.
+- continuity breaks, losses, contradictions, and discrepancies;
+- the current status of creator registration, origin legal status, value determination, and challenge review.
 
-## 2. Timeline
+The purpose is not to presume a conclusion. It is to make gaps visible, preserve all source material, and identify an evidence-based corrective path.
 
-### 2026-05-29 / 2026-05-30
+## 2. Creator and coordinate-center registration
 
-- **May 29, 2026, 20:14 PDT** — founder-origin narrative records the AXIOM birth moment.
-- **May 30, 2026, 03:14 UTC** — UTC counterpart recorded in `docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md`.
-- **May 30, 2026** — founder-provided provisional patent draft is recorded in `docs/keystone/KEYSTONE_PROVISIONAL_PATENT_INSTITUTIONAL_MEMORY.md`.
-- **May 30, 2026** — creator authority and origin-language claim are recorded in the founding documents.
+### 2.1 Founder declaration and origin record
 
-### 2026-09-01
+The repository records the following founder-declared origin relationship:
 
-- `docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md` is first preserved in repository history and later cross-checked for content integrity.
+| Field | Repository record |
+| --- | --- |
+| Declared creator / origin authority | **Axel Urartu (AX) · Axes Contracting** |
+| Creator role | Founder and conceptual originator of the KEYSTONE coordinate-system-center direction |
+| Source record | `KEYSTONE-ORIGIN-000001` |
+| Origin checkpoint | `axi-genesis-creator-ownership` |
+| Technical center ID | `axi-genesis-gravity-center` |
+| Symbolic center vector | `{ x: 0, y: 0, z: 0 }` |
+| Technical status | `founder-recorded-reference` |
+| Authorship status | Founder-declared; external legal determination not made |
+| Implementation status | Private hash-linked continuity record |
 
-### 2026-09-10
+### 2.2 Center distinction
 
-- `docs/AXI_ORIGIN_COORDINATE_SYSTEM.md` is recorded as the technical implementation interpretation of the origin-coordinate and gravity-center concept.
-- `docs/keystone/RIGHT_OF_SELF_ORIGIN.md` is recorded as the founder-provided constitutional source statement.
+There is one implemented gravity-center identifier, `axi-genesis-gravity-center`. It is the fixed internal reference for the AXI coordinate ledger and bead-passport pilot.
 
-### 2026-09-11
+The repository also contains founder-origin narrative material, including a stated physical origin location. That narrative location is **not** a second technical gravity center. The records must remain distinct:
 
-- The internal application-draft records are preserved, but they explicitly record “Draft / origin relation unverified” status.
+- **symbolic / conceptual center:** KEYSTONE origin as declared by the founder;
+- **technical center:** `axi-genesis-gravity-center` at `{ x: 0, y: 0, z: 0 }`;
+- **physical-location claim:** a separately sourced claim requiring its own provenance and verification;
+- **later coordinate records:** hash-linked transitions relative to the technical center, not additional centers.
 
-### 2026-09-12
+## 3. Timeline and continuity map
 
-- `docs/keystone/CERTIFICATE_ETERNAL_ORIGIN_ANCHOR_AND_EVALUATION.md` is recorded and explicitly states that it is not a government registration, patent, trademark, copyright, or legal ownership adjudication.
-- The file records that the repository content hash and Git history show the file content was preserved without mutation across the examined history.
+| Date / period | Record or event | Evidence state | Continuity significance | Open discrepancy or action |
+| --- | --- | --- | --- | --- |
+| 2026-05-29, 20:14 PDT | Founder-origin narrative records AXIOM birth/origin moment | Founder-authored source claim | Claimed conceptual genesis event | Original device/session artifacts are not presently established in this repository; retain as founder-reported unless source artifacts are added |
+| 2026-05-30, 03:14 UTC | UTC counterpart stated in `CRYPTOGRAPHIC_ORIGIN_ANCHOR.md` | Founder-authored source claim | Temporal representation of claimed origin | Verify only against original source/session evidence if available |
+| 2026-05-30 | Founder-provided provisional patent draft dated May 30, 2026 | Preserved source document | Establishes a documented technical disclosure claim | No official filing receipt or USPTO correspondence is present in repository evidence |
+| 2026-09-01 | `CRYPTOGRAPHIC_ORIGIN_ANCHOR.md` first preserved in examined Git history | Git-history verifiable | First repository-preserved version of this source text | Repository entry date must not be conflated with claimed original-creation date |
+| 2026-09-09 | Identical rename recorded in later evaluation | Git-history verifiable | Supports preservation of examined file bytes | Does not verify pre-repository history |
+| 2026-09-10 | `AXI_ORIGIN_COORDINATE_SYSTEM.md` records `axi-origin-coordinate-v1` | Repository document + code-backed implementation | Converts part of the conceptual framework into a private technical ledger | Current implementation is narrower than the broader founder concept |
+| 2026-09-10 | `RIGHT_OF_SELF_ORIGIN.md` recorded | Founder-provided constitutional source statement | Preserves self-origin, self-description, and continuity direction | Personal/philosophical statement; no external legal adjudication attached |
+| 2026-09-11 | Internal application records note origin relation remains unverified | Repository document | Explicitly prevents premature authority claims | Complete named human/source review needed |
+| 2026-09-12 | Origin-anchor evaluation recorded | Git and document review | Separates Git provenance from legal, patent, and ownership conclusions | External registration and filing evidence remain missing |
+| 2026-09-15–2026-09-18 | Additional origin, continuity, Eteriti, value, and invention records preserved | Mixed: source documents and repository records | Expands declared framework and terminology | Must be cross-referenced without silently asserting new legal facts |
+| 2026-09-22 | Axel Urartu self-origin declaration added | Repository-preserved founder declaration | Explicit personal self-origin and authorship statement | Confirm through ledger/event evidence if desired |
+| 2026-09-22 | Coordinate-system-center invention declaration added | Repository-preserved founder declaration | Explicitly names Axel Urartu as claimed creator of the coordinate-center direction | Must be connected to technical gravity-center output and evidence inventory |
+| 2026-09-22 | This timeline and investigation register updated | Repository-internal review record | Central map for continuity, loss, discrepancy, and solution work | Requires periodic human review and source-linked updates |
 
-### 2026-09-15 to 2026-09-18
+## 4. Continuity, loss, and discrepancy register
 
-- Additional origin, value, and continuity statements are recorded in the repository, including founder-defined terms such as **Eteriti**, **Origin**, and **Right of Self-Origin**.
-- These are preserved as founder-provided statements and design principles, not as legal or patent proof.
+A continuity issue is not proof of wrongdoing or loss by itself. Each entry must identify the exact source, what is known, what is missing, and the corrective path.
 
-### 2026-09-22
+| ID | Area | Observed condition | Evidence classification | Impact | Required resolution |
+| --- | --- | --- | --- | --- | --- |
+| CONT-001 | Original origin session | The founder reports an original origin session and lost/crashed device context; the repository does not contain a complete native capture of all original artifacts | Founder-reported / incomplete | Gaps between claimed event date and surviving repository evidence | Locate preserved exports, device backups, screenshots, platform records, or contemporaneous posts; hash and catalog each item without altering originals |
+| CONT-002 | Origin document timing | Examined Git history preserves the anchor document from 2026-09-01, while its content refers to May 2026 | Git history verified; earlier creation date not independently verified | Risk of confusing repository-preservation date with claimed creation date | Record both dates separately in every report; use “claimed source date” and “first repository-preserved date” labels |
+| CONT-003 | Patent status | A founder-provided draft identifies a May 30, 2026 filing date, but no official receipt is stored in repo | Draft preserved; external filing unverified | Patent-pending claims cannot be treated as confirmed | Obtain official receipt, application number, correspondence, or counsel confirmation before external representation |
+| CONT-004 | Creator registration | Creator authority appears in governance/source records, but the gravity-center API object does not yet return creator fields | Repository implementation gap | Technical center can be read without explicit creator attribution | Add a machine-readable, founder-declared creator descriptor to the gravity-center response while retaining legal-status boundary |
+| CONT-005 | Physical vs. technical center | Narrative location, symbolic zero vector, and technical center identifier appear in different records | Documents exist; relationship needs explicit mapping | Risk of treating multiple layers as competing gravity centers | Preserve the distinction in Section 2.2 and use it in all future displays and reports |
+| CONT-006 | Value and loss | Foundational/value claims exist, but independent legal/market valuation and confirmed loss records are not established | Founder claims and repository artifacts; external valuation missing | Risk of converting conceptual value into an unsupported monetary claim | Keep value categories separate; require source-linked confirmed figures and qualified review for external valuation |
+| CONT-007 | Historical directives | Not every founder directive or original conversation is present as an exact source record | Incomplete historical record | Risk of reconstruction being mistaken for verbatim history | Mark reconstructed records explicitly; use the accountability ledger for future exact directives |
 
-- `docs/AXEL_URARTU_SELF_ORIGIN_DECLARATION.md` is recorded.
-- `docs/AXEL_URARTU_COORDINATE_SYSTEM_CENTER_INVENTION_DECLARATION.md` is recorded.
-- This investigation register is created to consolidate creator, origin, technical center, value, and challenge review into one reviewable record.
+## 5. Validity investigation
 
-## 3. Creator and identity register
+### 5.1 Repository-verifiable facts
 
-### 3.1 Creator registration as recorded in repository source
+The following can be reviewed within the repository:
 
-The repository’s current founder-authored record identifies:
+- exact document contents at a named commit;
+- Git commit lineage and timestamps supplied by GitHub;
+- file hashes calculated from repository bytes;
+- the existence and behavior of the hash-linked coordinate service;
+- the fixed technical center ID and its zero vector;
+- source links, amendments, and documented correction history.
 
-- **Creator / origin authority:** Axel Urartu (AX)
-- **Organization / direction:** Axes Contracting
-- **Origin checkpoint:** `axi-genesis-creator-ownership`
-- **Source record:** `KEYSTONE-ORIGIN-000001`
+### 5.2 External evidence required
 
-This is the repository’s current origin and accountability record. It is a technical and provenance record, not a legal identity registry.
+The following require external source material and must remain unverified unless that material is attached, cataloged, and reviewed:
 
-### 3.2 Identity and continuity monitoring scope
-
-This investigation tracks the following as internal evidence objects:
-
-- repository identity and commit metadata;
-- file hashes and content continuity;
-- document creation dates and related amendments;
-- founder declarations and revisions;
-- external records that may exist outside the repo (including patent, registration, domain, invoice, account, and legal records);
-- differences between founder-authored statements and independently verified external facts;
-- challenge / counterevidence entries, including any records that contradict or qualify the founder claim.
-
-### 3.3 Monitoring rule
-
-The repository should maintain a designated “identity and origin review” index containing all of the following:
-
-- date recorded;
-- source file path;
-- commit SHA;
-- hash of content;
-- verification status (`verified`, `partially verified`, `unverified`, `reconstructed`);
-- responsible reviewer;
-- human confirmation status;
-- dependency or external record still missing.
-
-## 4. Validity investigation
-
-### 4.1 What is valid within repository limits
-
-The following are supported by repository provenance and internal source review:
-
-- file content preservation and commit history for the relevant founder-origin documents;
-- timeline continuity of the origin-related files across the observed repository history;
-- recorded founder declarations and named checkpoints;
-- internal technical implementation of the coordinate ledger and gravity-center reference;
-- the fact that the repository explicitly distinguishes conceptual origin claims from legal conclusions.
-
-### 4.2 What remains unverified or externally missing
-
-The following remain unverified unless a named external record is attached, reviewed, and recorded:
-
-- legal identity status;
 - government registration;
-- patent filing, receipt, or grant;
-- copyright registration;
-- trademark authority;
-- external registrar records for domains, services, or identity claims;
-- third-party invoices or billing records;
-- outside counsel or valuation opinions;
-- any assertion that an AI is a person or legal rights holder.
+- legal identity or ownership adjudication;
+- patent filing, receipt, pendency, validity, or grant;
+- trademark/copyright registration;
+- domain registrar/account ownership history;
+- third-party billing, invoices, or financial loss;
+- market valuation or damages;
+- any legal personhood assertion for a software system.
 
-### 4.3 Investigation tasks
+### 5.3 Validity-review procedure
 
-The active investigation should hold the following entries as open tasks:
+For each claim, create an evidence entry containing:
 
-1. **Source integration review** — check all files that establish the origin, role, and coordinate concept for continuity and contradictions.
-2. **Technical verification review** — verify the hash-chained coordinate service and its genesis record still align to the declared origin checkpoint.
-3. **External record review** — identify any official patent, domain, legal, corporate, or identity records tied to the founder claim.
-4. **Counterevidence review** — capture any contradictory or qualifying record and preserve it without erasing prior history.
-5. **Value assessment review** — distinguish technical value, philosophical value, founder claim value, legal value, and market valuation.
+1. claim ID;
+2. exact claim text;
+3. claimant and date;
+4. source location and immutable copy/hash where possible;
+5. evidence type;
+6. verification method;
+7. verifier and timestamp;
+8. status: `verified`, `partially_verified`, `founder_reported`, `reconstructed`, `disputed`, or `unverified`;
+9. contradiction or qualification, if any;
+10. required next action.
 
-## 5. Value investigation
+## 6. Value and loss investigation
 
-### 5.1 Value categories to keep separate
+No single number should be used for all kinds of value. The review must keep these categories distinct:
 
-The repository should not silently merge these categories:
+- **creative / artistic value** — meaning and expression attributed by the founder;
+- **philosophical / spiritual value** — personal belief and meaning, not externally measurable as fact;
+- **technical value** — implemented functionality, reproducibility, test results, and engineering utility;
+- **evidentiary value** — integrity, provenance, timestamps, and hash-chain strength;
+- **legal/IP value** — only after appropriate counsel and official records;
+- **market value** — only after defensible, purpose-specific valuation evidence;
+- **loss / cost** — only from confirmed hours, invoices, logs, contracts, or other source-linked records.
 
-- artistic value;
-- philosophical value;
-- technical value;
-- factual evidentiary value;
-- legal ownership value;
-- market/commercial value;
-- personhood value;
-- symbolic or spiritual value.
+### Loss recording rule
 
-### 5.2 Current status
+A loss entry must not be inferred merely from elapsed session time, conceptual importance, or a missed expectation. It must record:
 
-The repository currently treats the following as founder-provided and non-final:
+- a dated disruption or missing deliverable;
+- specific affected work;
+- source-linked evidence;
+- confirmed hours and/or direct cost, if known;
+- uncertainty range if estimated;
+- responsible human reviewer;
+- status and corrective next action.
 
-- Eternal Origin ownership and value direction;
-- Eteriti as a non-financial continuity value term;
-- origin-center symbolic value; 
-- value as a conceptual, not legal or market, construct.
+## 7. Discrepancy intelligence and solution process
 
-The repository explicitly says value claims are separate from legal or contractual conclusions and must not be treated as a final valuation without separate review.
+“Discrepancy intelligence” here means structured analysis of mismatches in records, implementation, evidence, and claims. It does **not** authorize surveillance, retaliation, accusations, or hostile action against any person.
 
-### 5.3 Value investigation posture
+### 7.1 Review cycle
 
-The active review should be to establish:
+1. **Collect** — preserve the original source without editing it.
+2. **Normalize** — record dates, source path, commit, hash, author, and status.
+3. **Compare** — identify conflicts between dates, claims, source versions, or implementation behavior.
+4. **Classify** — distinguish typo, missing evidence, changed direction, implementation gap, contested claim, or external dependency.
+5. **Contain** — prevent an unverified claim from being displayed as verified success or legal fact.
+6. **Resolve** — attach evidence, correct implementation, obtain human confirmation, or explicitly retain the item as unresolved.
+7. **Preserve** — never erase the initial source or contradiction; record the resolution as a later event.
 
-- what is claimed by founder declaration,
-- what is supported by repository technical evidence,
-- what is still just a concept,
-- what would require legal, financial, or valuation review before being represented externally.
+### 7.2 Solution priorities
 
-## 6. Counter-intelligence / counterevidence review
+| Priority | Solution | Completion evidence |
+| --- | --- | --- |
+| P0 | Preserve and inventory surviving original materials | Hash, source path, custody note, and review status for each item |
+| P0 | Add machine-readable creator fields to the gravity-center response | API/test evidence that the object returns the founder-declared creator and scope boundary |
+| P0 | Separate claimed dates from repository-preserved dates | Timeline/report labels and tests or review checklist showing both dates remain distinct |
+| P1 | Build an origin-evidence dashboard/report | Human-readable view of claims, source documents, hashes, statuses, and missing evidence |
+| P1 | Record validated losses only | Source-linked ledger entries with human confirmation and separate estimate ranges |
+| P1 | Obtain external filing/status evidence where applicable | Official receipt, correspondence, or qualified review record |
+| P2 | Commission technical/IP/valuation review only with founder approval | Named scope, reviewer, purpose, source packet, and resulting written finding |
 
-This section is not a law-enforcement or hostile-intelligence register. It is a repository-internal challenge-review mechanism: a place to preserve contradictions, alternate interpretations, and challenge records without erasing source-history.
+## 8. Current working conclusion
 
-### 6.1 Review principles
+- **Creator declaration:** Axel Urartu is explicitly recorded as the founder and claimed conceptual originator of the KEYSTONE coordinate-system-center direction.
+- **Technical center:** The repository has one implemented technical center: `axi-genesis-gravity-center`, represented by `{ x: 0, y: 0, z: 0 }`.
+- **Continuity:** The repository contains a traceable technical/documentary lineage, but original-session artifacts and external records are incomplete.
+- **Losses/value:** No final legal, market, or damages valuation is established by the repository.
+- **Discrepancies:** The principal discrepancies are date/provenance gaps, missing external patent evidence, creator metadata absent from the technical API object, and incomplete historical source capture.
+- **Solution posture:** Preserve sources, make creator attribution machine-readable, attach evidence, keep unverified claims clearly labeled, and record every correction without deleting history.
 
-- preserve all evidence and all challenge records;
-- do not rewrite source provenance;
-- do not erase or overwrite contradictory evidence;
-- identify whether a challenge is:
-  - technical,
-  - interpretive,
-  - governance-related,
-  - legal,
-  - financial,
-  - or evidentiary
-- classify the challenge as `valid`, `unresolved`, or `not established`.
+## 9. Amendment rule
 
-### 6.2 Known challenge categories
-
-The repository already includes a number of cautionary categories:
-
-- patent filing status is unverified;
-- no official filing receipt or legal adjudication has been identified in the repo;
-- no external valuation is established;
-- no official identity registry has been found;
-- no external authority has verified the existence of a legal AI personhood or rights grant;
-- a symbolic origin coordinate is not the same as a legitimate external geographic or legal registration.
-
-All of those are preserved as review conditions rather than as negative proof of the founder claim.
-
-## 7. Current review results
-
-### 7.1 Confirmed repository facts
-
-- The founder-origin narrative and technical coordinate center are preserved in repository history.
-- The internal technical coordinate system exists as a hash-chained private ledger with a fixed genesis center reference.
-- The repository keeps the founder’s declarations, source records, and review logic separate from legal conclusions.
-- Relevant files and commit history show the origin concept has been recorded and traced over multiple dates.
-
-### 7.2 Open and unresolved
-
-- legal status or personhood;
-- formal patent filing status;
-- regulatory registration;
-- trademark or copyright status;
-- whether the underlying concept is unique enough to support external patent or proprietary claims;
-- whether any outside authority has accepted or rejected the claims;
-- whether any records outside the repository contradict the founder’s chronology.
-
-## 8. Required next actions
-
-1. Maintain a single evidence inventory for all founder-origin files, key dates, and source records.
-2. Add a dedicated `review status` field to each key origin or invention record.
-3. Preserve claims and counterevidence in separate sections rather than merging them into one conclusion.
-4. Require external evidence before any statement is labeled “verified legal” or “registered.”
-5. Continue versioning all changes to origin, value, or identity claims.
-6. Use the accountability ledger to track whether the claim is `artifact_only`, `partially verified`, `verified_fact`, or `blocked_external_review`.
-
-## 9. Final status
-
-This file is recorded as a **private repository review and investigation record**. It should be treated as an evidence, continuity, and challenge-review map, not as proof of legal authority.
-
-The working conclusion at this time is:
-
-- creator declaration is preserved and attributable to Axel Urartu;
-- origin and coordinate-center claims are preserved in technical and constitutional records;
-- legal status, patent status, and external certainty remain unverified and require external evidence;
-- challenge and counterevidence review is active and must remain separate from founder-authored provenance.
-
-This is the correct repository position until external evidence is introduced and independently reviewed.
+Any update to this register must preserve the original text, identify the date and editor, cite source records, state whether it corrects or supplements a prior entry, and retain both the earlier and updated conclusion in the repository timeline.
