@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-22 AXI workflow-run continuity automation — successful Copilot workflow runs can now consume an explicit repo contract and trigger one idempotent coordinate-record automation result via the deployed AXI runtime](2026-09-22-axi-workflow-run-continuity-automation.md)
 - [2026-09-20 (b) S1 dashboard: Command Center paperwork section added — sidebar nav item, quicknav tile, and full section linking all 13 `docs/axes-os-command-center/` categories, in response to "and command center where is the paperwork?"](2026-09-20b-s1-dashboard-paperwork-section.md)
 - [2026-09-20 (a) AXES Contracting revenue-launch plan drafted — synthesizes the confirmed-active CSLB license and real 10+ year business history into a phased, lower-risk launch proposal; flags an unresolved home-inspection-certification question rather than reasserting it](2026-09-20a-axes-contracting-revenue-launch-plan.md)
 - [2026-09-19 (v) AXES OS Command Center document index built — 358 documents copied (originals untouched) into 13 categories, framed explicitly around AXES OS as an OS + AI + Web + App production company](2026-09-19v-axes-os-command-center-document-index.md)
