@@ -140,6 +140,9 @@ function getAttention(snapshot) {
   if (snapshot.creationRecord && snapshot.creationRecord.status !== "ready") {
     attention.push("creation-record-unavailable");
   }
+  if (snapshot.accountability && snapshot.accountability.status !== "ready") {
+    attention.push("accountability-ledger-unavailable");
+  }
   if (snapshot.automationProfiles && snapshot.automationProfiles.status !== "ready") {
     attention.push("automation-profile-unavailable");
   }

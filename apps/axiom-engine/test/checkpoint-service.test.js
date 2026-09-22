@@ -30,6 +30,10 @@ test("creates a checksummed portable checkpoint without secrets", async (t) => {
     "{\"sequence\":1,\"serviceId\":\"axes-control-center\",\"stage\":\"planned\"}\n"
   );
   await fs.writeFile(
+    path.join(directory, "accountability-ledger.jsonl"),
+    "{\"sequence\":1,\"eventType\":\"directive.created\"}\n"
+  );
+  await fs.writeFile(
     path.join(directory, "automation-profiles.jsonl"),
     "{\"sequence\":1,\"event\":\"draft-created\",\"profileId\":\"private-observation\"}\n"
   );
@@ -53,6 +57,7 @@ test("creates a checksummed portable checkpoint without secrets", async (t) => {
       "source-catalog.jsonl",
       "business-metrics.jsonl",
       "service-registry.jsonl",
+      "accountability-ledger.jsonl",
       "automation-profiles.jsonl",
       "automation.json"
     ]

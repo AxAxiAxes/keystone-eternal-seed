@@ -1360,6 +1360,9 @@ function assertFilters(filters) {
 }
 
 function normalizeFilters(filters) {
+  const ratingMin = typeof filters.ratingMin === "string" && /^-?\d+$/.test(filters.ratingMin)
+    ? Number(filters.ratingMin)
+    : filters.ratingMin;
   return {
     project: normalizeOptionalText(filters.project, 120),
     repository: normalizeOptionalText(filters.repository, 200),
@@ -1371,9 +1374,9 @@ function normalizeFilters(filters) {
     status: filters.status === undefined || filters.status === null
       ? null
       : normalizeOptionalText(filters.status, 120),
-    ratingMin: filters.ratingMin === undefined || filters.ratingMin === null
+    ratingMin: ratingMin === undefined || ratingMin === null
       ? null
-      : normalizeRating(filters.ratingMin, "ratingMin"),
+      : normalizeRating(ratingMin, "ratingMin"),
     search: normalizeOptionalText(filters.search, 2_000)
   };
 }

@@ -109,3 +109,30 @@ test("status() and history() do not rewrite monitoring.json, but record() does",
   const contentsAfterRecord = await fs.readFile(statePath, "utf8");
   assert.notEqual(contentsAfterRecord, contentsBeforeReads);
 });
+
+test("surfaces invalid accountability ledgers without repeating attention notifications", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-monitoring-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const decisions = [];
+  const service = new MonitoringService({
+    directory,
+    memoryStore: { record: async (entry) => decisions.push(entry) }
+  });
+  const healthy = {
+    memoryAvailable: true,
+    scheduler: { enabled: false, lastError: null },
+    automation: { pendingTasks: 0, failedTasks: 0 },
+    accountability: { status: "ready" }
+  };
+  const invalid = {
+    ...healthy,
+    accountability: { status: "attention", code: "accountability-ledger-invalid" }
+  };
+
+  assert.deepEqual((await service.record(healthy)).attention, []);
+  assert.deepEqual((await service.record(invalid)).attention, ["accountability-ledger-unavailable"]);
+  assert.deepEqual((await service.status()).attention, ["accountability-ledger-unavailable"]);
+  assert.equal((await service.record(invalid)).recorded, false);
+  assert.equal(decisions.length, 1);
+  assert.deepEqual((await service.record(healthy)).attention, []);
+});

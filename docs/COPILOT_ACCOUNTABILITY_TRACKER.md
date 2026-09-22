@@ -72,6 +72,21 @@ Private engine endpoints:
 - `GET /system/accountability/directives/:directiveId/report?format=json|markdown`
 - `POST /system/accountability/events`
 
+The directive, summary, and missing-report queries accept `ratingMin` as a
+decimal integer from `-10` through `10`, including URL query strings. Unrated
+directives do not match a minimum-rating filter; invalid values are rejected.
+
+## Durability and readiness
+
+The private `accountability-ledger.jsonl` file is included in continuity
+checkpoint checksums and runtime recovery bundles. Restore remains limited
+to the separately configured, isolated recovery directory; a local bundle
+does not prove independent storage durability or authorize a live restore.
+
+An invalid retained ledger blocks automation processing and produces
+`accountability-ledger-unavailable` in private monitoring attention. Monitoring
+reports the condition without rewriting ledger history or enabling the scheduler.
+
 ## Manual reconstructed sample
 
 `docs/COPILOT_ACCOUNTABILITY_RECONSTRUCTED_SAMPLE.json` contains a manually

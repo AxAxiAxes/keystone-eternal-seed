@@ -955,6 +955,43 @@ test("persists accountability events and exports directive reports", async (t) =
   assert.equal(summaryResponse.status, 200);
   assert.equal((await summaryResponse.json()).totalDirectives, 1);
 
+  const ratingResponse = await fetch(`http://127.0.0.1:${port}/system/accountability/events`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      directiveId: "55555555-5555-4555-8555-555555555555",
+      eventType: "rating.recorded",
+      actor: "founder",
+      payload: {
+        kind: "founder",
+        overall: -10,
+        categories: {
+          instructionAdherence: -10,
+          accuracy: -10,
+          scopeControl: -10,
+          verification: -10,
+          rework: -10,
+          outcomeFocus: -10
+        }
+      }
+    })
+  });
+  assert.equal(ratingResponse.status, 201);
+  for (const endpoint of ["directives", "summary", "missing"]) {
+    for (const [ratingMin, expectedCount] of [["-10", 1], ["0", 0]]) {
+      const filtered = await fetch(
+        `http://127.0.0.1:${port}/system/accountability/${endpoint}?ratingMin=${ratingMin}`
+      );
+      assert.equal(filtered.status, 200);
+      const body = await filtered.json();
+      assert.equal(endpoint === "directives" ? body.directives.length : body.totalDirectives, expectedCount);
+    }
+    const invalidRating = await fetch(
+      `http://127.0.0.1:${port}/system/accountability/${endpoint}?ratingMin=1.5`
+    );
+    assert.equal(invalidRating.status, 400);
+  }
+
   const reportResponse = await fetch(
     `http://127.0.0.1:${port}/system/accountability/directives/55555555-5555-4555-8555-555555555555/report?format=markdown`
   );

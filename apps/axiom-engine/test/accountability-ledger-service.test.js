@@ -6,7 +6,8 @@ const test = require("node:test");
 const {
   ACCOUNTABILITY_LEDGER_ID,
   ACCOUNTABILITY_LEDGER_NOTICE,
-  AccountabilityLedgerService
+  AccountabilityLedgerService,
+  RATING_CATEGORIES
 } = require("../accountability-ledger-service");
 
 const DIRECTIVE_ID = "11111111-1111-4111-8111-111111111111";
@@ -398,4 +399,36 @@ test("filters directives and keeps estimated exposure separate from proven cost"
   assert.equal(fullSummary.provenCostCents, 0);
   assert.equal(fullSummary.estimatedExposureLowCents, 623125);
   assert.equal(fullSummary.estimatedExposureHighCents, 3738750);
+});
+
+test("accepts bounded integer rating query strings without coercing invalid filters", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AccountabilityLedgerService({ directory });
+  await service.record(directiveCreated());
+  await service.record({
+    directiveId: DIRECTIVE_ID,
+    eventType: "rating.recorded",
+    actor: "founder",
+    payload: {
+      kind: "founder",
+      overall: -10,
+      categories: Object.fromEntries(RATING_CATEGORIES.map((category) => [category, -10]))
+    }
+  });
+
+  for (const ratingMin of [-10, "-10"]) {
+    assert.equal((await service.listDirectives({ ratingMin })).directives.length, 1);
+    assert.equal((await service.summary({ ratingMin })).totalDirectives, 1);
+    assert.equal((await service.missingReport({ ratingMin })).totalDirectives, 1);
+  }
+  for (const ratingMin of [0, "0", 10, "10"]) {
+    assert.equal((await service.listDirectives({ ratingMin })).directives.length, 0);
+  }
+  for (const ratingMin of ["", " ", "1.5", "11", "-11", "invalid", "0x0", [], ["0"], {}, false]) {
+    await assert.rejects(
+      () => service.listDirectives({ ratingMin }),
+      /ratingMin must be an integer between -10 and 10/
+    );
+  }
 });

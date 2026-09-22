@@ -34,6 +34,10 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
     "{\"sequence\":1,\"serviceId\":\"axes-control-center\",\"stage\":\"planned\"}\n"
   );
   await fs.writeFile(
+    path.join(sourceDirectory, "accountability-ledger.jsonl"),
+    "{\"sequence\":1,\"eventType\":\"directive.created\"}\n"
+  );
+  await fs.writeFile(
     path.join(sourceDirectory, "automation-profiles.jsonl"),
     "{\"sequence\":1,\"event\":\"draft-created\",\"profileId\":\"private-observation\"}\n"
   );
@@ -65,7 +69,7 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
 
   const backup = await service.create();
   assert.equal(backup.createdAt, "2026-09-10T00:00:00.000Z");
-  assert.equal(backup.fileCount, 11);
+  assert.equal(backup.fileCount, 12);
   assert.ok(backup.totalBytes > 0);
   assert.deepEqual(await service.status(), {
     status: "ready",
@@ -103,6 +107,10 @@ test("creates, verifies, and restores a private runtime timeline bundle", async 
   assert.equal(
     await fs.readFile(path.join(restoreDirectory, backup.id, "service-registry.jsonl"), "utf8"),
     "{\"sequence\":1,\"serviceId\":\"axes-control-center\",\"stage\":\"planned\"}\n"
+  );
+  assert.equal(
+    await fs.readFile(path.join(restoreDirectory, backup.id, "accountability-ledger.jsonl"), "utf8"),
+    "{\"sequence\":1,\"eventType\":\"directive.created\"}\n"
   );
   assert.equal(
     await fs.readFile(path.join(restoreDirectory, backup.id, "automation-profiles.jsonl"), "utf8"),
