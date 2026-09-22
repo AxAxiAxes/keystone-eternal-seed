@@ -36,6 +36,9 @@ const ADMIN_PASSWORD = process.env.AXIOM_ENGINE_ADMIN_PASSWORD;
 // (documents, small media, datasets) on a small Railway instance disk;
 // override via AXIOM_SOURCE_UPLOAD_MAX_BYTES if a larger cap is needed.
 const DEFAULT_SOURCE_UPLOAD_MAX_BYTES = 5 * 1024 * 1024;
+const WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_WINDOW_MS = 60_000;
+const WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_MAX_REQUESTS = 10;
+const workflowRunContinuityRequests = new Map();
 const SOURCE_UPLOAD_MAX_BYTES = (() => {
   const configured = Number(process.env.AXIOM_SOURCE_UPLOAD_MAX_BYTES);
   return Number.isInteger(configured) && configured > 0
@@ -73,6 +76,20 @@ function requireAdmin(req, res, next) {
   if (checkAdminAuth(req)) return next();
   res.set("WWW-Authenticate", 'Basic realm="AXIOM Engine Admin"');
   res.status(401).json({ error: "admin credentials required" });
+}
+
+function requireWorkflowRunContinuityRateLimit(req, res, next) {
+  const now = Date.now();
+  const key = req.ip || req.socket?.remoteAddress || "unknown";
+  const recent = (workflowRunContinuityRequests.get(key) || [])
+    .filter((timestamp) => now - timestamp < WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_WINDOW_MS);
+  if (recent.length >= WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_MAX_REQUESTS) {
+    res.status(429).json({ error: "workflow continuity rate limit exceeded" });
+    return;
+  }
+  recent.push(now);
+  workflowRunContinuityRequests.set(key, recent);
+  next();
 }
 
 const dataDirectory = process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data");
@@ -1079,7 +1096,7 @@ app.post("/automation/process", requireAdmin, async (req, res, next) => {
   }
 });
 
-app.post("/automation/workflow-run-continuity", requireAdmin, async (req, res, next) => {
+app.post("/automation/workflow-run-continuity", requireAdmin, requireWorkflowRunContinuityRateLimit, async (req, res, next) => {
   try {
     await requireReadyWorkflowRunContinuity();
     const request = normalizeWorkflowRunContinuityRequest(req.body);
