@@ -78,7 +78,7 @@ function requireAdmin(req, res, next) {
   res.status(401).json({ error: "admin credentials required" });
 }
 
-const requireWorkflowRunContinuityRateLimit = rateLimit({
+const workflowRunContinuityRateLimit = rateLimit({
   windowMs: WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_WINDOW_MS,
   limit: WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_MAX_REQUESTS,
   standardHeaders: true,
@@ -712,7 +712,8 @@ function calculateWorkflowRunContinuityIdempotencyKey(request) {
     repository: request.repository,
     workflowRun: {
       id: request.workflowRun.id,
-      name: request.workflowRun.name
+      name: request.workflowRun.name,
+      headSha: request.workflowRun.headSha
     },
     coordinate: {
       sourceRecord: request.coordinate.sourceRecord,
@@ -1092,7 +1093,7 @@ app.post("/automation/process", requireAdmin, async (req, res, next) => {
   }
 });
 
-app.post("/automation/workflow-run-continuity", requireAdmin, requireWorkflowRunContinuityRateLimit, async (req, res, next) => {
+app.post("/automation/workflow-run-continuity", requireAdmin, workflowRunContinuityRateLimit, async (req, res, next) => {
   try {
     const request = normalizeWorkflowRunContinuityRequest(req.body);
     await requireReadyWorkflowRunContinuity();
