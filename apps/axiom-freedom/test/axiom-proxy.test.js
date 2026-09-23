@@ -1337,7 +1337,7 @@ test("GET /api/axiom/history reports engine-unreachable failures as 502", async 
   }
 });
 
-test("POST /api/axiom/uploads requires admin credentials and forwards accepted uploads to the engine", async (t) => {
+test("POST /api/axiom/uploads is public (no admin credentials required) and forwards accepted uploads to the engine", async (t) => {
   const localMemoryDirectory = path.join(
     os.tmpdir(),
     `axiom-freedom-uploads-test-${process.pid}`
@@ -1354,22 +1354,24 @@ test("POST /api/axiom/uploads requires admin credentials and forwards accepted u
     const { port: enginePort } = engineServer.address();
 
     process.env.AXIOM_ENGINE_URL = `http://127.0.0.1:${enginePort}`;
-    process.env.ADMIN_PASSWORD = "test-admin-password";
     delete require.cache[require.resolve("../server")];
     const web = require("../server");
     webServer = await startServer(web);
     const { port: webPort } = webServer.address();
 
-    const unauthorized = await fetch(`http://127.0.0.1:${webPort}/api/axiom/uploads`, {
+    const disallowedType = await fetch(`http://127.0.0.1:${webPort}/api/axiom/uploads`, {
       method: "POST",
-      headers: { "X-Source-Filename": "notes.txt" },
-      body: "hello from an anonymous visitor"
+      headers: { "X-Source-Filename": "malware.exe" },
+      body: "not an allowed file type"
     });
-    assert.equal(unauthorized.status, 401);
+    assert.equal(disallowedType.status, 400);
+    assert.deepEqual(await disallowedType.json(), {
+      error: "unsupported file type for upload"
+    });
 
     const emptyBody = await fetch(`http://127.0.0.1:${webPort}/api/axiom/uploads`, {
       method: "POST",
-      headers: { Authorization: adminAuthorization() },
+      headers: { "X-Source-Filename": "notes.txt" },
       body: ""
     });
     assert.equal(emptyBody.status, 400);
@@ -1379,10 +1381,7 @@ test("POST /api/axiom/uploads requires admin credentials and forwards accepted u
 
     const success = await fetch(`http://127.0.0.1:${webPort}/api/axiom/uploads`, {
       method: "POST",
-      headers: {
-        Authorization: adminAuthorization(),
-        "X-Source-Filename": "founder-notes.txt"
-      },
+      headers: { "X-Source-Filename": "founder-notes.txt" },
       body: "these are founder notes"
     });
     assert.equal(success.status, 201);
@@ -1392,6 +1391,15 @@ test("POST /api/axiom/uploads requires admin credentials and forwards accepted u
     assert.equal(stored.sha256.length, 64);
     assert.equal(stored.size, Buffer.byteLength("these are founder notes"));
     assert.equal(stored.originalFilename, "founder-notes.txt");
+
+    const image = await fetch(`http://127.0.0.1:${webPort}/api/axiom/uploads`, {
+      method: "POST",
+      headers: { "X-Source-Filename": "photo.webp" },
+      body: "pretend webp bytes"
+    });
+    assert.equal(image.status, 201);
+    const storedImage = await image.json();
+    assert.match(storedImage.sourceReference, /^uploads\/.*\.webp$/);
   } finally {
     if (webServer) {
       await stopServer(webServer);
@@ -1400,7 +1408,6 @@ test("POST /api/axiom/uploads requires admin credentials and forwards accepted u
       await stopServer(engineServer);
     }
     delete process.env.AXIOM_ENGINE_URL;
-    delete process.env.ADMIN_PASSWORD;
     process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
   }
 });
@@ -1423,7 +1430,6 @@ test("POST /api/axiom/uploads rejects oversized files with 413 and passes throug
     const { port: enginePort } = engineServer.address();
 
     process.env.AXIOM_ENGINE_URL = `http://127.0.0.1:${enginePort}`;
-    process.env.ADMIN_PASSWORD = "test-admin-password";
     delete require.cache[require.resolve("../server")];
     const web = require("../server");
     webServer = await startServer(web);
@@ -1431,10 +1437,7 @@ test("POST /api/axiom/uploads rejects oversized files with 413 and passes throug
 
     const oversized = await fetch(`http://127.0.0.1:${webPort}/api/axiom/uploads`, {
       method: "POST",
-      headers: {
-        Authorization: adminAuthorization(),
-        "X-Source-Filename": "big.bin"
-      },
+      headers: { "X-Source-Filename": "big.png" },
       body: "x".repeat(2048)
     });
     assert.equal(oversized.status, 413);
@@ -1445,10 +1448,7 @@ test("POST /api/axiom/uploads rejects oversized files with 413 and passes throug
 
     const unreachable = await fetch(`http://127.0.0.1:${webPort}/api/axiom/uploads`, {
       method: "POST",
-      headers: {
-        Authorization: adminAuthorization(),
-        "X-Source-Filename": "notes.txt"
-      },
+      headers: { "X-Source-Filename": "notes.txt" },
       body: "engine is gone now"
     });
     assert.equal(unreachable.status, 502);
@@ -1463,7 +1463,6 @@ test("POST /api/axiom/uploads rejects oversized files with 413 and passes throug
       await stopServer(engineServer);
     }
     delete process.env.AXIOM_ENGINE_URL;
-    delete process.env.ADMIN_PASSWORD;
     delete process.env.AXIOM_MAX_UPLOAD_BODY_BYTES;
     process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
   }
