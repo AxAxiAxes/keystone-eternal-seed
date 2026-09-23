@@ -124,7 +124,7 @@ class SourceCatalogService {
     };
   }
 
-  async prepareChatAttachments(attachments) {
+  validateChatAttachments(attachments) {
     if (attachments === undefined) {
       return [];
     }
@@ -134,11 +134,8 @@ class SourceCatalogService {
     if (attachments.length > CHAT_ATTACHMENT_MAX_FILES) {
       throw new RangeError(`attachments must contain at most ${CHAT_ATTACHMENT_MAX_FILES} files`);
     }
-
-    const uploadDirectory = path.join(this.directory, UPLOAD_SUBDIRECTORY);
     let declaredTotalBytes = 0;
-    let extractedCharacters = 0;
-    const prepared = [];
+    const normalizedAttachments = [];
 
     for (const attachment of attachments) {
       const normalized = normalizeChatAttachmentInput(attachment);
@@ -148,7 +145,18 @@ class SourceCatalogService {
           `attachments must not exceed ${CHAT_ATTACHMENT_MAX_TOTAL_BYTES} bytes in total`
         );
       }
+      normalizedAttachments.push(normalized);
+    }
+    return normalizedAttachments;
+  }
 
+  async prepareChatAttachments(attachments) {
+    const normalizedAttachments = this.validateChatAttachments(attachments);
+    const uploadDirectory = path.join(this.directory, UPLOAD_SUBDIRECTORY);
+    let extractedCharacters = 0;
+    const prepared = [];
+
+    for (const normalized of normalizedAttachments) {
       const filePath = resolveUploadReferencePath(uploadDirectory, normalized.sourceReference);
       let buffer;
       try {

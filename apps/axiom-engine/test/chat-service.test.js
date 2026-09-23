@@ -186,6 +186,9 @@ test("includes verified attachment context in the provider request and returns h
     model: "test-model",
     memoryStore: { async list() { return []; }, async record() {} },
     sourceCatalogService: {
+      validateChatAttachments(attachments) {
+        return attachments;
+      },
       async prepareChatAttachments() {
         return [
           {

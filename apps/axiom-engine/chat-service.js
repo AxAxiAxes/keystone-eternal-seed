@@ -32,8 +32,8 @@ class ChatService {
         `message must not exceed ${this.maxMessageCharacters} characters`
       );
     }
-    const preparedAttachments = this.sourceCatalogService
-      ? await this.sourceCatalogService.prepareChatAttachments(attachments)
+    const validatedAttachments = this.sourceCatalogService
+      ? this.sourceCatalogService.validateChatAttachments(attachments)
       : [];
     if (!this.apiKey) {
       const error = new Error("OPENAI_API_KEY is not configured");
@@ -50,6 +50,9 @@ class ChatService {
       10,
       sessionId ? { metadataFilter: { sessionId } } : undefined
     );
+    const preparedAttachments = this.sourceCatalogService
+      ? await this.sourceCatalogService.prepareChatAttachments(validatedAttachments)
+      : [];
     const attachmentContext = formatAttachmentContext(preparedAttachments);
     const response = await this.fetchImplementation("https://api.openai.com/v1/responses", {
       method: "POST",
