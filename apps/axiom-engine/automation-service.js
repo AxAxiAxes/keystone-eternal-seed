@@ -417,19 +417,6 @@ class AutomationService {
       if (automationProfileKey !== undefined && profileTask !== true) {
         throw new RangeError("automationProfileKey is reserved for Automation Profiles");
       }
-      if (idempotencyKey) {
-        const existingTask = [...state.tasks].reverse()
-          .find((task) => task.idempotencyKey === idempotencyKey);
-        if (existingTask) {
-          if (existingTask.action !== action) {
-            throw new RangeError("task idempotencyKey already exists for a different action");
-          }
-          if (existingTask.status !== "failed" && existingTask.status !== "cancelled") {
-            return { ...existingTask, idempotencyReused: true };
-          }
-        }
-      }
-
       const scheduledAt = runAt === undefined ? this.now() : new Date(runAt);
       if (Number.isNaN(scheduledAt.valueOf())) {
         throw new TypeError("task runAt must be an ISO-8601 date");
@@ -471,6 +458,19 @@ class AutomationService {
         retryDelayMinutes > 1440) {
         throw new RangeError("task retryDelayMinutes must be an integer from 1 to 1440");
       }
+      const normalizedIdempotencyKey = normalizeOptionalString(idempotencyKey);
+      if (normalizedIdempotencyKey) {
+        const existingTask = [...state.tasks].reverse()
+          .find((task) => task.idempotencyKey === normalizedIdempotencyKey);
+        if (existingTask) {
+          if (existingTask.action !== action) {
+            throw new RangeError("task idempotencyKey already exists for a different action");
+          }
+          if (existingTask.status !== "failed" && existingTask.status !== "cancelled") {
+            return { ...existingTask, idempotencyReused: true };
+          }
+        }
+      }
 
       const task = {
         id: randomUUID(),
@@ -489,7 +489,7 @@ class AutomationService {
         maxAttempts,
         retryDelayMinutes,
         originCheckpoint: normalizeOptionalString(originCheckpoint),
-        idempotencyKey: normalizeOptionalString(idempotencyKey),
+        idempotencyKey: normalizedIdempotencyKey,
         automationProfileId: normalizeOptionalString(automationProfileId),
         automationProfileKey: normalizeOptionalString(automationProfileKey),
         attemptCount: 0,
@@ -567,6 +567,19 @@ class AutomationService {
     return this.withState(async (state) => {
       unblockReadyTasks(state.tasks, this.now);
       const task = findTask(state.tasks, taskId);
+      if (task.status === "completed") {
+        const run = [...state.runs].reverse().find((entry) =>
+          entry.taskId === task.id && entry.status === "completed");
+        if (!run) {
+          throw new RangeError("completed task has no retained successful run");
+        }
+        return {
+          taskId: task.id,
+          status: task.status,
+          runId: run.id,
+          ...(run.auditError ? { auditError: run.auditError } : {})
+        };
+      }
       if (task.status !== "pending") {
         throw new RangeError("task is not pending");
       }
@@ -788,18 +801,21 @@ class AutomationService {
       const workflowRun = isRecord(task.payload.workflowRun)
         ? { ...task.payload.workflowRun }
         : null;
+      const source = {
+        sourceReference: normalizeOptionalString(task.payload.sourceReference),
+        sourceSha256: normalizeOptionalString(task.payload.sourceSha256),
+        contractPath: normalizeOptionalString(task.payload.contractPath)
+      };
       return {
         coordinate: await this.createCoordinate({
           label: task.payload.label || task.title,
           occurredAt: task.payload.occurredAt,
           sourceRecord: task.payload.sourceRecord,
           originCheckpoint: task.payload.originCheckpoint || task.originCheckpoint,
-          idempotencyKey: task.idempotencyKey
+          ...(task.idempotencyKey ? { idempotencyKey: task.idempotencyKey } : {})
         }),
         idempotencyKey: task.idempotencyKey || null,
-        sourceReference: normalizeOptionalString(task.payload.sourceReference),
-        sourceSha256: normalizeOptionalString(task.payload.sourceSha256),
-        contractPath: normalizeOptionalString(task.payload.contractPath),
+        ...source,
         workflowRun
       };
     }

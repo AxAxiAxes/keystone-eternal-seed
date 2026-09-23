@@ -19,6 +19,7 @@ const { SourceCatalogService, describeOptions: sourceCatalogDescribeOptions } = 
 const { BusinessMetricsService } = require("./business-metrics-service");
 const { ServiceRegistryService } = require("./service-registry-service");
 const { CreationRecordService } = require("./creation-record-service");
+const { AccountabilityLedgerService } = require("./accountability-ledger-service");
 const { AutomationProfileService } = require("./automation-profile-service");
 const {
   AutomationService,
@@ -39,6 +40,7 @@ const ADMIN_PASSWORD = process.env.AXIOM_ENGINE_ADMIN_PASSWORD;
 const DEFAULT_SOURCE_UPLOAD_MAX_BYTES = 5 * 1024 * 1024;
 const WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_WINDOW_MS = 60_000;
 const WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_MAX_REQUESTS = 10;
+const WORKFLOW_RUN_CONTINUITY_REPOSITORY = process.env.AXIOM_WORKFLOW_RUN_CONTINUITY_REPOSITORY;
 const SOURCE_UPLOAD_MAX_BYTES = (() => {
   const configured = Number(process.env.AXIOM_SOURCE_UPLOAD_MAX_BYTES);
   return Number.isInteger(configured) && configured > 0
@@ -88,6 +90,15 @@ const workflowRunContinuityRateLimit = rateLimit({
   }
 });
 
+const limitAccountabilityWrites = rateLimit({
+  windowMs: 60_000,
+  limit: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => !checkAdminAuth(req),
+  message: { error: "too many accountability write requests" }
+});
+
 const dataDirectory = process.env.AXIOM_MEMORY_DIRECTORY || path.join(__dirname, "data");
 const memoryStore = new MemoryStore(dataDirectory);
 const storageUsageService = new StorageUsageService({ directory: dataDirectory });
@@ -104,6 +115,8 @@ const serviceRegistryService = new ServiceRegistryService({ directory: dataDirec
 const serviceRegistryReady = serviceRegistryService.initialize();
 const creationRecordService = new CreationRecordService({ directory: dataDirectory });
 const creationRecordReady = creationRecordService.initialize();
+const accountabilityLedgerService = new AccountabilityLedgerService({ directory: dataDirectory });
+const accountabilityLedgerReady = accountabilityLedgerService.initialize();
 // GitHub visibility and write actions, founder-approved 2026-09-15. Off by
 // default: reports "not configured" (and refuses every call) unless an
 // authorized operator has supplied both AXIOM_GITHUB_TOKEN and
@@ -129,7 +142,8 @@ const runtimeContextReady = Promise.all([
   continuityRecordReady,
   sourceCatalogReady,
   businessMetricsReady,
-  serviceRegistryReady
+  serviceRegistryReady,
+  accountabilityLedgerReady
 ]);
 const recoveryBackupService = new RecoveryBackupService({
   sourceDirectory: dataDirectory,
@@ -324,6 +338,76 @@ app.get("/system/creations/summary", async (req, res, next) => {
     next(error);
   }
 });
+app.get("/system/accountability", async (req, res, next) => {
+  try {
+    res.json(await accountabilityLedgerService.status());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/accountability/events", async (req, res, next) => {
+  try {
+    const limit = req.query.limit === undefined ? 50 : Number(req.query.limit);
+    res.json(await accountabilityLedgerService.listEvents(limit));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/accountability/directives", async (req, res, next) => {
+  try {
+    res.json(await accountabilityLedgerService.listDirectives(req.query));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/accountability/summary", async (req, res, next) => {
+  try {
+    res.json(await accountabilityLedgerService.summary(req.query));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/accountability/missing", async (req, res, next) => {
+  try {
+    res.json(await accountabilityLedgerService.missingReport(req.query));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/accountability/directives/:directiveId", async (req, res, next) => {
+  try {
+    res.json(await accountabilityLedgerService.getDirective(req.params.directiveId));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/system/accountability/directives/:directiveId/report", async (req, res, next) => {
+  try {
+    const format = req.query.format === "markdown" ? "markdown" : "json";
+    const report = await accountabilityLedgerService.report(req.params.directiveId, format);
+    if (format === "markdown") {
+      res.type("text/markdown").send(report);
+      return;
+    }
+    res.json(report);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/system/accountability/events", limitAccountabilityWrites, requireAdmin, async (req, res, next) => {
+  try {
+    res.status(201).json(await accountabilityLedgerService.record(req.body));
+  } catch (error) {
+    next(error);
+  }
+});
 const coordinateService = new CoordinateService({ directory: dataDirectory });
 const checkpointService = new CheckpointService({
   directory: dataDirectory,
@@ -338,6 +422,7 @@ const checkpointService = new CheckpointService({
     { id: "business-metrics", version: "1" },
     { id: "service-registry", version: "1" },
     { id: "creation-record", version: "1" },
+    { id: "accountability-ledger", version: "1" },
     { id: "automation-profiles", version: "1" }
   ]
 });
@@ -452,6 +537,7 @@ app.get("/system/readiness", async (req, res, next) => {
       businessMetrics: await businessMetricsService.status(),
       serviceRegistry: await serviceRegistryService.status(),
       creationRecord: await creationRecordService.status(),
+      accountability: await accountabilityLedgerService.status(),
       automationProfiles: await automationProfileService.status(),
       github: githubStatusService.status(),
       webAccess: webAccessService.status()
@@ -484,7 +570,7 @@ app.get("/usage", async (req, res, next) => {
 
 async function captureMonitoringSnapshot(automationState) {
   await memoryStore.list("decision", 1);
-  const [storage, automation, usage, governance, recovery, coordinates, beadPassports, startupContext, continuityRecord, sourceCatalog, businessMetrics, serviceRegistry, creationRecord, automationProfiles] = await Promise.all([
+  const [storage, automation, usage, governance, recovery, coordinates, beadPassports, startupContext, continuityRecord, sourceCatalog, businessMetrics, serviceRegistry, creationRecord, accountability, automationProfiles] = await Promise.all([
     storageUsageService.status(),
     automationState
       ? summarizeAutomationState(automationState)
@@ -502,6 +588,7 @@ async function captureMonitoringSnapshot(automationState) {
     businessMetricsService.status(),
     serviceRegistryService.status(),
     creationRecordService.status(),
+    accountabilityLedgerService.status(),
     automationProfileService.status()
   ]);
   const monitoringRecord = await monitoringService.record({
@@ -519,6 +606,7 @@ async function captureMonitoringSnapshot(automationState) {
     businessMetrics,
     serviceRegistry,
     creationRecord,
+    accountability,
     automationProfiles,
     usage
   });
@@ -580,6 +668,14 @@ async function requireReadyStartupContext() {
     creationError.statusCode = 409;
     throw creationError;
   }
+  const accountabilityLedger = await accountabilityLedgerService.status();
+  if (accountabilityLedger.status !== "ready") {
+    const accountabilityError = new Error(
+      `Automation is blocked until the accountability ledger is ready (${accountabilityLedger.code}).`
+    );
+    accountabilityError.statusCode = 409;
+    throw accountabilityError;
+  }
   const profiles = await automationProfileService.status();
   if (profiles.status !== "ready") {
     const profileError = new Error(
@@ -631,7 +727,8 @@ function normalizeWorkflowRunContinuityRequest(body) {
     "htmlUrl",
     "headBranch",
     "headSha",
-    "conclusion"
+    "conclusion",
+    "runAttempt"
   ]);
   if (Object.keys(body.workflowRun).some((field) => !workflowAllowedFields.has(field))) {
     throw new TypeError("workflowRun contains unsupported fields");
@@ -647,14 +744,15 @@ function normalizeWorkflowRunContinuityRequest(body) {
   if (Object.keys(body.coordinate).some((field) => !coordinateAllowedFields.has(field))) {
     throw new TypeError("coordinate contains unsupported fields");
   }
-  if (!isBoundedString(body.workflowRun.name, 200)) {
-    throw new TypeError("workflowRun.name must be a non-empty string up to 200 characters");
+  if (body.workflowRun.name !== "Running Copilot cloud agent") {
+    throw new RangeError("workflowRun.name is not allowlisted");
   }
   if (!isPositiveIntegerLike(body.workflowRun.id)) {
     throw new TypeError("workflowRun.id must be a positive integer");
   }
-  if (!isBoundedString(body.workflowRun.headBranch, 200)) {
-    throw new TypeError("workflowRun.headBranch must be a non-empty string up to 200 characters");
+  if (!isBoundedString(body.workflowRun.headBranch, 200) ||
+    !/^copilot\/\S+$/.test(body.workflowRun.headBranch)) {
+    throw new RangeError("workflowRun.headBranch must be a copilot/ branch");
   }
   if (typeof body.workflowRun.headSha !== "string" || !/^[0-9a-f]{40}$/i.test(body.workflowRun.headSha)) {
     throw new TypeError("workflowRun.headSha must be a 40-character hexadecimal commit SHA");
@@ -662,8 +760,12 @@ function normalizeWorkflowRunContinuityRequest(body) {
   if (body.workflowRun.conclusion !== "success") {
     throw new RangeError("workflowRun.conclusion must be success");
   }
-  if (!isHttpsUrl(body.workflowRun.htmlUrl)) {
-    throw new TypeError("workflowRun.htmlUrl must be an https URL");
+  if (body.workflowRun.htmlUrl !==
+    `https://github.com/${body.repository.trim()}/actions/runs/${String(body.workflowRun.id).trim()}`) {
+    throw new TypeError("workflowRun.htmlUrl must identify the supplied repository and run");
+  }
+  if (body.workflowRun.runAttempt !== undefined && !isPositiveIntegerLike(body.workflowRun.runAttempt)) {
+    throw new TypeError("workflowRun.runAttempt must be a positive integer");
   }
   if (!isBoundedString(body.coordinate.label, 120)) {
     throw new TypeError("coordinate.label must be a non-empty string up to 120 characters");
@@ -688,7 +790,9 @@ function normalizeWorkflowRunContinuityRequest(body) {
       htmlUrl: body.workflowRun.htmlUrl.trim(),
       headBranch: body.workflowRun.headBranch.trim(),
       headSha: body.workflowRun.headSha.toLowerCase(),
-      conclusion: body.workflowRun.conclusion
+      conclusion: body.workflowRun.conclusion,
+      ...(body.workflowRun.runAttempt === undefined
+        ? {} : { runAttempt: String(body.workflowRun.runAttempt).trim() })
     },
     coordinate: {
       label: body.coordinate.label.trim(),
@@ -731,7 +835,9 @@ function normalizeRepositoryRelativePath(value, label) {
   }
   const normalized = value.trim().replaceAll("\\", "/");
   const segments = normalized.split("/");
-  if (normalized.startsWith("/") || segments.some((segment) => segment === "" || segment === "." || segment === "..")) {
+  if (normalized.startsWith("/") || /[:\x00-\x1f\x7f]/.test(normalized) ||
+    segments.some((segment) => segment === "" || segment === "." || segment === ".." ||
+      segment.toLowerCase() === ".git")) {
     throw new TypeError(`${label} must be a repository-relative path up to 200 characters`);
   }
   return normalized;
@@ -1095,7 +1201,13 @@ app.post("/automation/process", requireAdmin, async (req, res, next) => {
 
 app.post("/automation/workflow-run-continuity", requireAdmin, workflowRunContinuityRateLimit, async (req, res, next) => {
   try {
+    if (!isRepositoryName(WORKFLOW_RUN_CONTINUITY_REPOSITORY)) {
+      return res.status(503).json({ error: "workflow continuity is not configured" });
+    }
     const request = normalizeWorkflowRunContinuityRequest(req.body);
+    if (request.repository !== WORKFLOW_RUN_CONTINUITY_REPOSITORY) {
+      return res.status(403).json({ error: "workflow continuity repository is not allowlisted" });
+    }
     await requireReadyWorkflowRunContinuity();
     const idempotencyKey = calculateWorkflowRunContinuityIdempotencyKey(request);
     const createdTask = await automationService.createTask({
@@ -1120,9 +1232,16 @@ app.post("/automation/workflow-run-continuity", requireAdmin, workflowRunContinu
     }
     const task = await automationService.getTask(createdTask.id);
     const run = await automationService.getLatestRunForTask(task.id);
-    const status = task.status === "completed"
-      ? createdTask.idempotencyReused ? "already-recorded" : "recorded"
-      : task.status;
+    if (task.status !== "completed" || !run || run.status !== "completed") {
+      return res.status(409).json({
+        error: `Workflow continuity task did not complete (${task.status}).`,
+        status: task.status,
+        idempotencyKey,
+        task,
+        run
+      });
+    }
+    const status = createdTask.idempotencyReused ? "already-recorded" : "recorded";
     res.status(createdTask.idempotencyReused ? 200 : 201).json({
       status,
       idempotencyKey,
@@ -1227,17 +1346,6 @@ function isPositiveIntegerLike(value) {
     return Number.isSafeInteger(value) && value > 0;
   }
   return typeof value === "string" && /^[1-9][0-9]{0,19}$/.test(value.trim());
-}
-
-function isHttpsUrl(value) {
-  if (!isBoundedString(value, 500)) {
-    return false;
-  }
-  try {
-    return new URL(value).protocol === "https:";
-  } catch (error) {
-    return false;
-  }
 }
 
 // Core automation route

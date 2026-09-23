@@ -70,11 +70,21 @@ patent scope; it records a source-linked internal transition for review.
 
 When a coordinate is created through the workflow-run continuity automation, the
 request also carries a deterministic idempotency key derived from the upstream
-workflow run and the explicit repository-relative source reference. Replaying
+workflow run, upstream commit SHA, and explicit repository-relative source
+reference. Replaying
 the same successful workflow run with the same coordinate/source contract
 reuses the existing transition instead of appending a duplicate coordinate.
 Coordinate creation also fails closed if the retained chain is already invalid;
 it never appends onto a tampered ledger.
+
+The off-by-default workflow verifies the real GitHub run/attempt and hashes
+the source's raw committed blob. Its trusted execution SHA is separate from
+the upstream SHA used as coordinate evidence. Replays of different attempts
+at the same run/SHA reuse the original coordinate and recorded attempt; a new
+SHA creates distinct evidence. Ordinary operator-created coordinate tasks
+remain supported without an idempotency key. No run result constitutes human
+confirmation, external ownership verification, or permission to activate a
+scheduler. See `CI_CONTINUITY_RUNBOOK.md` for the explicit activation boundary.
 
 ## Reset and recovery
 

@@ -9,6 +9,7 @@ const memoryDirectory = path.join(os.tmpdir(), `axiom-engine-test-${process.pid}
 process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
 const TEST_ADMIN_PASSWORD = "engine-test-admin-password";
 process.env.AXIOM_ENGINE_ADMIN_PASSWORD = TEST_ADMIN_PASSWORD;
+process.env.AXIOM_WORKFLOW_RUN_CONTINUITY_REPOSITORY = "AxAxiAxes/keystone-eternal-seed";
 const app = require("../index");
 
 const ADMIN_AUTH_HEADER = `Basic ${Buffer.from(`admin:${TEST_ADMIN_PASSWORD}`).toString("base64")}`;
@@ -1004,4 +1005,168 @@ test("fails closed when retained business metrics are tampered", async (t) => {
   });
   assert.equal(response.status, 409);
   assert.match((await response.json()).error, /business metrics are ready \(business-metrics-invalid\)/);
+});
+
+test("persists accountability events and exports directive reports", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const createdDirective = await fetch(`http://127.0.0.1:${port}/system/accountability/events`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      directiveId: "55555555-5555-4555-8555-555555555555",
+      eventType: "directive.created",
+      actor: "founder",
+      payload: {
+        title: "Track Copilot directives",
+        verbatimOriginalDirective:
+          "Capture my exact direction and compare it against what was actually delivered.",
+        project: "AXIOM",
+        repository: "AxAxiAxes/keystone-eternal-seed",
+        branch: "axaxiaxes-axiom-monorepo",
+        requestedDeliverable: "Accountability tracker MVP",
+        definitionOfDone: "Exact direction, evidence, comparison, and verified-success gate exist.",
+        subrequirements: [
+          { id: "verbatim", text: "Store the exact directive verbatim." }
+        ]
+      }
+    })
+  });
+  assert.equal(createdDirective.status, 201);
+  assert.equal((await createdDirective.json()).eventType, "directive.created");
+
+  const listResponse = await fetch(`http://127.0.0.1:${port}/system/accountability/directives`);
+  assert.equal(listResponse.status, 200);
+  const list = await listResponse.json();
+  assert.equal(list.directives[0].title, "Track Copilot directives");
+
+  const summaryResponse = await fetch(`http://127.0.0.1:${port}/system/accountability/summary`);
+  assert.equal(summaryResponse.status, 200);
+  assert.equal((await summaryResponse.json()).totalDirectives, 1);
+
+  const ratingResponse = await fetch(`http://127.0.0.1:${port}/system/accountability/events`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      directiveId: "55555555-5555-4555-8555-555555555555",
+      eventType: "rating.recorded",
+      actor: "founder",
+      payload: {
+        kind: "founder",
+        overall: -10,
+        categories: {
+          instructionAdherence: -10,
+          accuracy: -10,
+          scopeControl: -10,
+          verification: -10,
+          rework: -10,
+          outcomeFocus: -10
+        }
+      }
+    })
+  });
+  assert.equal(ratingResponse.status, 201);
+  for (const endpoint of ["directives", "summary", "missing"]) {
+    for (const [ratingMin, expectedCount] of [["-10", 1], ["0", 0]]) {
+      const filtered = await fetch(
+        `http://127.0.0.1:${port}/system/accountability/${endpoint}?ratingMin=${ratingMin}`
+      );
+      assert.equal(filtered.status, 200);
+      const body = await filtered.json();
+      assert.equal(endpoint === "directives" ? body.directives.length : body.totalDirectives, expectedCount);
+    }
+    const invalidRating = await fetch(
+      `http://127.0.0.1:${port}/system/accountability/${endpoint}?ratingMin=1.5`
+    );
+    assert.equal(invalidRating.status, 400);
+  }
+
+  const reportResponse = await fetch(
+    `http://127.0.0.1:${port}/system/accountability/directives/55555555-5555-4555-8555-555555555555/report?format=markdown`
+  );
+  assert.equal(reportResponse.status, 200);
+  assert.match(await reportResponse.text(), /Founder direction \(verbatim\)/);
+
+  const outcome = {
+    directiveId: "55555555-5555-4555-8555-555555555555",
+    eventType: "outcome.recorded",
+    actor: "operator",
+    payload: {
+      state: "blocked",
+      explanation: "Synthetic boolean-validation regression.",
+      humanConfirmed: "false"
+    }
+  };
+  const invalidConfirmation = await fetch(`http://127.0.0.1:${port}/system/accountability/events`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(outcome)
+  });
+  assert.equal(invalidConfirmation.status, 400);
+  assert.deepEqual(await invalidConfirmation.json(), {
+    error: "humanConfirmed must be a boolean when provided"
+  });
+  const unchangedEvents = await fetch(`http://127.0.0.1:${port}/system/accountability/events`);
+  assert.equal((await unchangedEvents.json()).events.length, 2);
+
+  const deliveryId = "44444444-4444-4444-8444-444444444444";
+  const evidenceId = "33333333-3333-4333-8333-333333333333";
+  async function appendEvent(eventType, payload) {
+    const response = await fetch(`http://127.0.0.1:${port}/system/accountability/events`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ directiveId: outcome.directiveId, actor: "operator", eventType, payload })
+    });
+    assert.equal(response.status, 201);
+    return response.json();
+  }
+  await appendEvent("delivery.claimed", {
+    deliveryId,
+    summary: "Synthetic evidence for HTTP projection regression.",
+    items: [{
+      type: "test_run",
+      deliveryClass: "repository_artifact",
+      label: "Synthetic local test",
+      locator: "test/engine.test.js"
+    }],
+    evidence: [{
+      id: evidenceId,
+      type: "test_run",
+      locator: "synthetic-local-test",
+      verificationState: "verified",
+      verifier: "test-reviewer"
+    }]
+  });
+  const recordedOutcome = await appendEvent("outcome.recorded", {
+    state: "verified_success",
+    explanation: "Synthetic confirmation for HTTP projection regression.",
+    humanConfirmed: true,
+    confirmedBy: "test-reviewer",
+    evidenceIds: [evidenceId]
+  });
+  for (const [verificationState, expectedStatus, expectedSuccesses] of [
+    ["disputed", "blocked", 0],
+    ["verified", "verified_success", 1]
+  ]) {
+    await appendEvent("evidence.verified", {
+      deliveryId, evidenceId, verificationState, verifier: "test-reviewer"
+    });
+    const detailResponse = await fetch(
+      `http://127.0.0.1:${port}/system/accountability/directives/${outcome.directiveId}`
+    );
+    assert.equal(detailResponse.status, 200);
+    const detail = await detailResponse.json();
+    assert.equal(detail.currentStatus, expectedStatus);
+    assert.equal(detail.evidenceBackedCompletion, expectedSuccesses === 1);
+    assert.equal(detail.outcomes.length, 1);
+    assert.deepEqual(detail.history.find((event) => event.id === recordedOutcome.id), recordedOutcome);
+    const liveSummary = await fetch(`http://127.0.0.1:${port}/system/accountability/summary`);
+    assert.equal((await liveSummary.json()).verifiedSuccesses, expectedSuccesses);
+    const liveReport = await fetch(
+      `http://127.0.0.1:${port}/system/accountability/directives/${outcome.directiveId}/report?format=markdown`
+    );
+    assert.match(await liveReport.text(), new RegExp(`Current status: ${expectedStatus}`));
+  }
 });

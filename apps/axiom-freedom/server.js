@@ -310,6 +310,32 @@ async function invokeEngine(endpoint, method = 'GET', body) {
     }
 }
 
+async function invokeEngineText(endpoint) {
+    const headers = {};
+    if (AXIOM_ENGINE_ADMIN_PASSWORD) {
+        headers.Authorization = 'Basic ' + Buffer.from('admin:' + AXIOM_ENGINE_ADMIN_PASSWORD).toString('base64');
+    }
+    let response;
+    try {
+        response = await fetch(new URL(endpoint, AXIOM_ENGINE_URL), {
+            method: 'GET',
+            headers,
+            signal: AbortSignal.timeout(60000)
+        });
+    } catch (error) {
+        throw recordEngineFailure(ENGINE_FAILURE_CATEGORY.UNREACHABLE);
+    }
+    if (!response.ok) {
+        const payload = await response.text().catch(() => '');
+        throw recordEngineFailure(
+            ENGINE_FAILURE_CATEGORY.NON_SUCCESS,
+            response.status,
+            payload || ('AXIOM engine returned HTTP ' + response.status)
+        );
+    }
+    return await response.text();
+}
+
 function invokeAxiomEngine(command) {
     return invokeEngine('/axiom', 'POST', command);
 }
@@ -438,13 +464,48 @@ function requireAdmin(req, res) {
     return false;
 }
 
+function requireAccountabilityWrite(req, res) {
+    return requireExplicitJsonWrite(req, res, 'accountability', 'X-AXIOM-Accountability', 'write');
+}
+
+function requireExplicitJsonWrite(req, res, scope, header, value) {
+    const contentType = req.headers['content-type'];
+    const site = req.headers['sec-fetch-site'];
+    let error;
+    let statusCode = 403;
+    if (typeof contentType !== 'string' || contentType.split(';', 1)[0].trim().toLowerCase() !== 'application/json') {
+        statusCode = 415;
+        error = `${scope} writes require Content-Type: application/json`;
+    } else if (req.headers[header.toLowerCase()] !== value) {
+        // Cross-origin browsers cannot send this header without the preflight rejected below.
+        error = `${scope} writes require ${header}: ${value}`;
+    } else if (site !== undefined && site !== 'same-origin') {
+        error = `${scope} writes require a same-origin browser request`;
+    }
+    if (!error) return true;
+    res.writeHead(statusCode, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error }));
+    return false;
+}
+
 const server = http.createServer(async (req, res) => {
     const parsed = new URL(req.url, 'http://' + (req.headers.host || 'localhost'));
     const pathname = parsed.pathname;
 
-                                   res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    const protectedWrite = pathname === '/api/accountability/events' ? 'accountability'
+        : pathname === '/api/automation/workflow-run-continuity' ? 'workflow continuity' : null;
+    if (protectedWrite && (req.method === 'POST' || req.method === 'OPTIONS')) {
+        res.setHeader('Cache-Control', 'no-store');
+        if (req.method === 'OPTIONS') {
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: `cross-origin ${protectedWrite} writes are not allowed` }));
+            return;
+        }
+    } else {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    }
     if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
 
                                    if (pathname === '/health') {
@@ -489,6 +550,11 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/command-center' || pathname === '/command-center/') {
           if (!requireAdmin(req, res)) return;
           serveFile(res, path.join(__dirname, 'command-center.html'), 'text/html; charset=utf-8');
+          return;
+    }
+    if (pathname === '/accountability' || pathname === '/accountability/') {
+          if (!requireAdmin(req, res)) return;
+          serveFile(res, path.join(__dirname, 'accountability.html'), 'text/html; charset=utf-8');
           return;
     }
     if (pathname === '/support' || pathname === '/support/') {
@@ -799,6 +865,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (pathname === '/api/automation/workflow-run-continuity' && req.method === 'POST') {
           if (!requireAdmin(req, res)) return;
+          if (!requireExplicitJsonWrite(req, res, 'workflow continuity', 'X-AXIOM-Workflow-Continuity', 'record')) return;
           try {
                  const body = await parseBody(req);
                  if (body === null) {
@@ -806,7 +873,11 @@ const server = http.createServer(async (req, res) => {
                      return;
                  }
                  const result = await invokeEngine('/automation/workflow-run-continuity', 'POST', body);
-                 res.writeHead(result && result.status === 'already-recorded' ? 200 : 201, {
+                 if (!result || !['recorded', 'already-recorded'].includes(result.status)) {
+                     throw recordEngineFailure(ENGINE_FAILURE_CATEGORY.NON_SUCCESS, 502,
+                         'AXIOM workflow continuity did not record a coordinate transition');
+                 }
+                 res.writeHead(result.status === 'already-recorded' ? 200 : 201, {
                    'Content-Type': 'application/json'
                  });
                  res.end(JSON.stringify(result));
@@ -997,6 +1068,135 @@ const server = http.createServer(async (req, res) => {
                       res.end(JSON.stringify({ error: error.message }));
               }
               return;
+    }
+    if (pathname === '/api/accountability' && req.method === 'GET') {
+             if (!requireAdmin(req, res)) return;
+             try {
+                     const result = await invokeEngine('/system/accountability');
+                     res.writeHead(200, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify(result));
+             } catch (error) {
+                     console.error('AXIOM accountability status request failed:', error.message);
+                     res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify({ error: error.message }));
+             }
+             return;
+    }
+    if (pathname === '/api/accountability/events' && req.method === 'GET') {
+             if (!requireAdmin(req, res)) return;
+             try {
+                     const result = await invokeEngine('/system/accountability/events' + parsed.search);
+                     res.writeHead(200, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify(result));
+             } catch (error) {
+                     console.error('AXIOM accountability events request failed:', error.message);
+                     res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify({ error: error.message }));
+             }
+             return;
+    }
+    if (pathname === '/api/accountability/summary' && req.method === 'GET') {
+             if (!requireAdmin(req, res)) return;
+             try {
+                     const result = await invokeEngine('/system/accountability/summary' + parsed.search);
+                     res.writeHead(200, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify(result));
+             } catch (error) {
+                     console.error('AXIOM accountability summary request failed:', error.message);
+                     res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify({ error: error.message }));
+             }
+             return;
+    }
+    if (pathname === '/api/accountability/missing' && req.method === 'GET') {
+             if (!requireAdmin(req, res)) return;
+             try {
+                     const result = await invokeEngine('/system/accountability/missing' + parsed.search);
+                     res.writeHead(200, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify(result));
+             } catch (error) {
+                     console.error('AXIOM accountability missing-report request failed:', error.message);
+                     res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify({ error: error.message }));
+             }
+             return;
+    }
+    if (pathname === '/api/accountability/directives' && req.method === 'GET') {
+             if (!requireAdmin(req, res)) return;
+             try {
+                     const result = await invokeEngine('/system/accountability/directives' + parsed.search);
+                     res.writeHead(200, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify(result));
+             } catch (error) {
+                     console.error('AXIOM accountability directives request failed:', error.message);
+                     res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify({ error: error.message }));
+             }
+             return;
+    }
+    const accountabilityDirectiveRoute = pathname.match(/^\/api\/accountability\/directives\/([^/]+)$/);
+    if (accountabilityDirectiveRoute && req.method === 'GET') {
+             if (!requireAdmin(req, res)) return;
+             try {
+                     const result = await invokeEngine(
+                       '/system/accountability/directives/' + encodeURIComponent(accountabilityDirectiveRoute[1])
+                     );
+                     res.writeHead(200, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify(result));
+             } catch (error) {
+                     console.error('AXIOM accountability directive request failed:', error.message);
+                     res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify({ error: error.message }));
+             }
+             return;
+    }
+    const accountabilityReportRoute = pathname.match(/^\/api\/accountability\/directives\/([^/]+)\/report$/);
+    if (accountabilityReportRoute && req.method === 'GET') {
+             if (!requireAdmin(req, res)) return;
+             try {
+                     const format = parsed.searchParams.get('format') === 'markdown' ? 'markdown' : 'json';
+                     if (format === 'markdown') {
+                         const report = await invokeEngineText(
+                           '/system/accountability/directives/' +
+                             encodeURIComponent(accountabilityReportRoute[1]) +
+                             '/report?format=markdown'
+                         );
+                         res.writeHead(200, { 'Content-Type': 'text/markdown; charset=utf-8' });
+                         res.end(report);
+                         return;
+                     }
+                     const result = await invokeEngine(
+                       '/system/accountability/directives/' +
+                         encodeURIComponent(accountabilityReportRoute[1]) +
+                         '/report?format=json'
+                     );
+                     res.writeHead(200, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify(result));
+             } catch (error) {
+                     console.error('AXIOM accountability report request failed:', error.message);
+                     res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify({ error: error.message }));
+             }
+             return;
+    }
+    if (pathname === '/api/accountability/events' && req.method === 'POST') {
+             if (!requireAdmin(req, res)) return;
+             if (!requireAccountabilityWrite(req, res)) return;
+             try {
+                     const body = await parseBody(req);
+                     if (body === null) {
+                         rejectOversizedRequest(res);
+                         return;
+                     }
+                     const result = await invokeEngine('/system/accountability/events', 'POST', body);
+                     res.writeHead(201, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify(result));
+             } catch (error) {
+                     console.error('AXIOM accountability event creation failed:', error.message);
+                     res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                     res.end(JSON.stringify({ error: error.message }));
+             }
+             return;
     }
     if (pathname === '/api/automation/service-registry' && req.method === 'GET') {
                   if (!requireAdmin(req, res)) return;

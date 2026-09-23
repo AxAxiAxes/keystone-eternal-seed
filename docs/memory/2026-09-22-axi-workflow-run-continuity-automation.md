@@ -1,5 +1,12 @@
 # 2026-09-22 AXI workflow-run continuity automation
 
+**2026-09-23 clarification:** This records the initial repository
+implementation in PR #207, not a deployment or activation verification.
+The bounded repair separates trusted workflow execution from upstream data,
+verifies actual run attempts, and adds explicit disabled-by-default recording
+configuration. Current behavior and operator boundaries are in
+[`CI_CONTINUITY_RUNBOOK.md`](../CI_CONTINUITY_RUNBOOK.md).
+
 ## Summary
 
 Implemented a real, fail-closed continuity path for successful Copilot

@@ -21,6 +21,7 @@ boundaries.
 | `automation profiles` | Founder-controlled operations-observation, continuity-protection, and configured schedules with audit | `automation-profiles.jsonl` |
 | `business metrics` | Private hash-linked submitted revenue/expense metric journal | `business-metrics.jsonl` |
 | `service registry` | Founder-approved internal service planning/operating metadata journal | `service-registry.jsonl` |
+| `accountability ledger` | Private append-only directive, delivery, evidence, rating, and resource records | `accountability-ledger.jsonl` |
 | `chat` | Private provider request orchestration and contextual retrieval | Uses memory and usage modules; does not own a separate data file |
 | `monitoring` | Private operational snapshots and attention history | `monitoring.json` |
 | `checkpoint` | Portable state inventory and integrity hashes | `checkpoints/*.json` |
@@ -60,6 +61,9 @@ journal; the journal remains a record of submitted metrics, not a financial
 statement or advice.
 It also preserves `service-registry.jsonl`; this retained internal metadata is
 not public availability, legal status, or deployment proof.
+It also preserves `accountability-ledger.jsonl`, including its existing event
+hash chain. Recovery copies recorded claims and evidence metadata; it does not
+verify their external truth or create human confirmation.
 
 | Method | Path | Purpose |
 | --- | --- | --- |

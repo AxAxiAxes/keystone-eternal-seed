@@ -9,6 +9,8 @@ Repository-controlled automated validation is defined in
 [AXI_CONTINUOUS_VALIDATION.md](docs/AXI_CONTINUOUS_VALIDATION.md).
 Copilot-branch CI monitoring and approval-gate operations are in
 [CI_CONTINUITY_RUNBOOK.md](docs/CI_CONTINUITY_RUNBOOK.md).
+Copilot directive-vs-delivery tracking is documented in
+[COPILOT_ACCOUNTABILITY_TRACKER.md](docs/COPILOT_ACCOUNTABILITY_TRACKER.md).
 
 AXES's top-level governing principles, and an index of its more detailed
 constitutional and governance records, are in
