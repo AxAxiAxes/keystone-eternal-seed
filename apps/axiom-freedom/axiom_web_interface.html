@@ -798,7 +798,7 @@
                     </div>
                     <div class="attachment-detail">${escapeHtml(attachment.detail || '')}</div>
                     <div class="attachment-actions">
-                        <button class="attachment-remove" type="button" data-remove-attachment="${escapeHtml(String(attachment.id))}">Remove</button>
+                        <button class="attachment-remove" type="button" data-remove-attachment="${escapeHtml(String(attachment.id))}" ${attachment.status === 'attached' ? 'disabled aria-disabled="true"' : ''}>Remove</button>
                     </div>
                 </div>
             `).join('');
@@ -811,6 +811,10 @@
         function removeAttachment(id) {
             const index = pendingAttachments.findIndex(attachment => String(attachment.id) === String(id));
             if (index < 0) return;
+            if (pendingAttachments[index].status === 'attached') {
+                announceAttachmentStatus(`Wait for AXIOM to finish processing ${pendingAttachments[index].originalFilename} before removing it.`);
+                return;
+            }
             const [removed] = pendingAttachments.splice(index, 1);
             renderPendingAttachments();
             announceAttachmentStatus(`Removed attachment ${removed.originalFilename}.`);
