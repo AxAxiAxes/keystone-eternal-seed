@@ -9,6 +9,7 @@ const memoryDirectory = path.join(os.tmpdir(), `axiom-engine-test-${process.pid}
 process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
 const TEST_ADMIN_PASSWORD = "engine-test-admin-password";
 process.env.AXIOM_ENGINE_ADMIN_PASSWORD = TEST_ADMIN_PASSWORD;
+process.env.AXIOM_WORKFLOW_RUN_CONTINUITY_REPOSITORY = "AxAxiAxes/keystone-eternal-seed";
 const app = require("../index");
 
 const ADMIN_AUTH_HEADER = `Basic ${Buffer.from(`admin:${TEST_ADMIN_PASSWORD}`).toString("base64")}`;
@@ -712,6 +713,42 @@ test("blocks automation when retained startup context is invalid", async (t) => 
   );
 });
 
+test("validates workflow-run continuity requests before recording anything", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const response = await fetch(`http://127.0.0.1:${port}/automation/workflow-run-continuity`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      repository: "AxAxiAxes/keystone-eternal-seed",
+      workflowRun: {
+        id: "35666546593",
+        name: "Running Copilot cloud agent",
+        htmlUrl: "https://github.com/AxAxiAxes/keystone-eternal-seed/actions/runs/35666546593",
+        headBranch: "copilot/fix-axi-continuity-workflow",
+        headSha: "a5792173331db2cb7421a126af11a0ac66c6f208",
+        conclusion: "success"
+      },
+      coordinate: {
+        label: "Bad source path",
+        sourceRecord: "KEYSTONE-ORIGIN-000001",
+        originCheckpoint: "axi-coordinate-foundation",
+        sourceReference: "../outside.md",
+        sourceSha256: "a".repeat(64),
+        contractPath: ".github/axi/origin-coordinate.json"
+      }
+    })
+  });
+
+  assert.equal(response.status, 400);
+  assert.match(
+    (await response.json()).error,
+    /coordinate\.sourceReference must be a repository-relative path/
+  );
+});
+
 test("reports an unavailable chat provider when no key is configured", async (t) => {
   const server = await startServer();
   t.after(() => stopServer(server));
@@ -837,6 +874,60 @@ test("persists and retrieves AXI memory layers", async (t) => {
   );
   assert.equal(coordinateVerification.status, 200);
   assert.equal((await coordinateVerification.json()).coordinateCount, 2);
+
+  const workflowContinuityRequest = {
+    repository: "AxAxiAxes/keystone-eternal-seed",
+    workflowRun: {
+      id: "35666546593",
+      name: "Running Copilot cloud agent",
+      htmlUrl: "https://github.com/AxAxiAxes/keystone-eternal-seed/actions/runs/35666546593",
+      headBranch: "copilot/fix-axi-continuity-workflow",
+      headSha: "a5792173331db2cb7421a126af11a0ac66c6f208",
+      conclusion: "success"
+    },
+    coordinate: {
+      label: "Record workflow-run origin continuity",
+      sourceRecord: "KEYSTONE-ORIGIN-000001",
+      originCheckpoint: "axi-coordinate-foundation",
+      sourceReference: "docs/AXI_ORIGIN_COORDINATE_SYSTEM.md",
+      sourceSha256: "a".repeat(64),
+      contractPath: ".github/axi/origin-coordinate.json"
+    }
+  };
+  const workflowContinuity = await fetch(
+    `http://127.0.0.1:${port}/automation/workflow-run-continuity`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(workflowContinuityRequest)
+    }
+  );
+  assert.equal(workflowContinuity.status, 201);
+  const workflowContinuityBody = await workflowContinuity.json();
+  assert.equal(workflowContinuityBody.status, "recorded");
+  assert.equal(workflowContinuityBody.task.action, "coordinate.record");
+  assert.equal(workflowContinuityBody.run.result.sourceReference, "docs/AXI_ORIGIN_COORDINATE_SYSTEM.md");
+  assert.equal(workflowContinuityBody.run.result.contractPath, ".github/axi/origin-coordinate.json");
+  assert.equal(workflowContinuityBody.run.result.workflowRun.id, "35666546593");
+
+  const duplicateWorkflowContinuity = await fetch(
+    `http://127.0.0.1:${port}/automation/workflow-run-continuity`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(workflowContinuityRequest)
+    }
+  );
+  assert.equal(duplicateWorkflowContinuity.status, 200);
+  const duplicateWorkflowContinuityBody = await duplicateWorkflowContinuity.json();
+  assert.equal(duplicateWorkflowContinuityBody.status, "already-recorded");
+  assert.equal(duplicateWorkflowContinuityBody.task.id, workflowContinuityBody.task.id);
+
+  const coordinatesAfterWorkflowContinuity = await fetch(
+    `http://127.0.0.1:${port}/system/coordinates?limit=10`
+  );
+  assert.equal(coordinatesAfterWorkflowContinuity.status, 200);
+  assert.equal((await coordinatesAfterWorkflowContinuity.json()).length, 3);
 
   const continuityTaskResponse = await fetch(`http://127.0.0.1:${port}/automation/tasks`, {
     method: "POST",

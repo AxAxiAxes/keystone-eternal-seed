@@ -28,7 +28,8 @@ class CoordinateService {
     label,
     occurredAt,
     sourceRecord = GENESIS_SOURCE_RECORD,
-    originCheckpoint = GENESIS_CHECKPOINT
+    originCheckpoint = GENESIS_CHECKPOINT,
+    idempotencyKey
   }) {
     if (!isNonEmptyString(label) || label.trim().length > 200) {
       throw new TypeError("coordinate label must be a non-empty string up to 200 characters");
@@ -40,12 +41,24 @@ class CoordinateService {
       !/^[a-z][a-z0-9-]{2,119}$/.test(originCheckpoint)) {
       throw new TypeError("coordinate originCheckpoint must be a lowercase kebab-case identifier");
     }
+    if (idempotencyKey !== undefined &&
+      (typeof idempotencyKey !== "string" || !/^[a-f0-9]{64}$/.test(idempotencyKey))) {
+      throw new TypeError("coordinate idempotencyKey must be a 64-character hexadecimal hash");
+    }
     const coordinateTime = occurredAt === undefined ? this.now() : new Date(occurredAt);
     if (Number.isNaN(coordinateTime.valueOf())) {
       throw new TypeError("coordinate occurredAt must be an ISO-8601 date");
     }
 
     return this.withCoordinates(async (coordinates) => {
+      validateCoordinates(coordinates);
+      if (idempotencyKey) {
+        const existingCoordinate = coordinates.find((coordinate) =>
+          coordinate.idempotencyKey === idempotencyKey);
+        if (existingCoordinate) {
+          return existingCoordinate;
+        }
+      }
       const parent = coordinates.at(-1);
       const coordinate = {
         scheme: COORDINATE_SCHEME,
@@ -58,6 +71,9 @@ class CoordinateService {
         originCheckpoint,
         parentCoordinateHash: parent.coordinateHash
       };
+      if (idempotencyKey) {
+        coordinate.idempotencyKey = idempotencyKey;
+      }
       coordinate.coordinateHash = calculateCoordinateHash(coordinate);
       coordinates.push(coordinate);
       return coordinate;
@@ -169,6 +185,10 @@ function validateCoordinates(coordinates) {
       !isValidDate(coordinate.recordedAt) ||
       !isNonEmptyString(coordinate.sourceRecord) ||
       !isNonEmptyString(coordinate.originCheckpoint) ||
+      (coordinate.idempotencyKey !== undefined &&
+        coordinate.idempotencyKey !== null &&
+        (typeof coordinate.idempotencyKey !== "string" ||
+          !/^[a-f0-9]{64}$/.test(coordinate.idempotencyKey))) ||
       !/^[a-f0-9]{64}$/.test(coordinate.coordinateHash)) {
       throw new TypeError("coordinate ledger contains an invalid record");
     }
@@ -188,7 +208,7 @@ function validateCoordinates(coordinates) {
 }
 
 function calculateCoordinateHash(coordinate) {
-  return createHash("sha256").update(JSON.stringify({
+  const payload = {
     scheme: coordinate.scheme,
     id: coordinate.id,
     sequence: coordinate.sequence,
@@ -198,7 +218,11 @@ function calculateCoordinateHash(coordinate) {
     sourceRecord: coordinate.sourceRecord,
     originCheckpoint: coordinate.originCheckpoint,
     parentCoordinateHash: coordinate.parentCoordinateHash
-  })).digest("hex");
+  };
+  if (coordinate.idempotencyKey !== undefined && coordinate.idempotencyKey !== null) {
+    payload.idempotencyKey = coordinate.idempotencyKey;
+  }
+  return createHash("sha256").update(JSON.stringify(payload)).digest("hex");
 }
 
 function isNonEmptyString(value) {

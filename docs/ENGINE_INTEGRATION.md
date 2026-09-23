@@ -14,6 +14,7 @@
 | `AXIOM_AUTOMATION_ENABLED` | `axiom-engine` | `false` | Enables the private, allowlisted task scheduler. |
 | `AXIOM_AUTOMATION_POLL_INTERVAL_MS` | `axiom-engine` | `60000` | Scheduler interval, from 1,000 to 3,600,000 milliseconds. |
 | `AXIOM_AUTOMATION_MAX_TASKS_PER_CYCLE` | `axiom-engine` | `5` | Maximum due tasks processed each scheduler cycle, from 1 to 20. |
+| `AXIOM_WORKFLOW_RUN_CONTINUITY_REPOSITORY` | `axiom-engine` | Unset | Opt-in exact `owner/repo` allowlist for authenticated workflow continuity ingestion. Blank disables this route; does not enable the scheduler. |
 | `AXIOM_MONITORING_ENABLED` | `axiom-engine` | `false` | Enables private operational monitoring snapshots. |
 | `AXIOM_MONITORING_POLL_INTERVAL_MS` | `axiom-engine` | `60000` | Monitoring interval, from 1,000 to 3,600,000 milliseconds. |
 | `AXIOM_MEMORY_WARNING_BYTES` | `axiom-engine` | Unset | Optional positive-integer early-warning point for AXI data-directory growth; it does not cap or delete memory. |

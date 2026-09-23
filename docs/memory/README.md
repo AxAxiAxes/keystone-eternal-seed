@@ -14,6 +14,8 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-09-23 PR #207 bounded continuity repair: actual-base merge, trusted workflow execution, verified run attempts, explicit opt-in, and synthetic regression evidence](2026-09-23-pr207-continuity-repair.md)
+- [2026-09-22 AXI workflow-run continuity automation — repository implementation and subsequent safety clarification; not deployment or activation evidence](2026-09-22-axi-workflow-run-continuity-automation.md)
 - [2026-09-22 (b) PR #173 authorized security/integrity remediation: escaped rating notes, protected ledger POST/preflight, strict confirmation types, and current evidence eligibility without rewriting history](2026-09-22b-pr173-authorized-remediation.md)
 - [2026-09-22 PR #173 local review preparation: actual-base merge, rating-filter/recovery/monitoring fixes, verification evidence, and outstanding security/integrity approval hold](2026-09-22-pr173-review-preparation.md)
 - [2026-09-20 (b) S1 dashboard: Command Center paperwork section added — sidebar nav item, quicknav tile, and full section linking all 13 `docs/axes-os-command-center/` categories, in response to "and command center where is the paperwork?"](2026-09-20b-s1-dashboard-paperwork-section.md)

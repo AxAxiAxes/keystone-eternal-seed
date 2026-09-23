@@ -151,6 +151,7 @@ by the public portal.
 | `POST` | `/automation/tasks` | Creates a pending, scheduled task. |
 | `POST` | `/automation/tasks/:taskId/approval` | Approves or rejects a task awaiting approval. |
 | `POST` | `/automation/process` | Processes due tasks, up to `maxTasks` (default 5; maximum 20). |
+| `POST` | `/automation/workflow-run-continuity` | Validates an explicit repository-relative continuity contract from a successful upstream workflow run, creates/reuses one `coordinate.record` task, and processes only that task. |
 | `GET` | `/automation/runs` | Lists recent execution records; use `?limit=50`. |
 | `GET` | `/system/source-catalog/options` | Read-only discovery: lists valid `sourceType`/`classification` values and field constraints for `source.catalog` tasks, plus the upload endpoint's route, auth, and size cap. |
 | `POST` | `/system/source-catalog/uploads` | Admin-authenticated: stores raw file bytes (request body) to this instance's own local data directory and returns a `sourceReference`/`sha256` computed from the stored bytes. Size-capped via `AXIOM_SOURCE_UPLOAD_MAX_BYTES` (default 5 MB). Storing bytes does not create a catalog entry. |
@@ -203,6 +204,41 @@ Queue a `coordinate.record` task to record an approved, source-linked
 continuity transition. The Operations Observer uses the task title and origin
 checkpoint to create the next coordinate in the private hash chain. See
 `AXI_ORIGIN_COORDINATE_SYSTEM.md`.
+
+For GitHub Actions continuity automation, the engine also accepts a bounded
+`POST /automation/workflow-run-continuity` request. It is disabled unless an
+authorized operator sets `AXIOM_WORKFLOW_RUN_CONTINUITY_REPOSITORY` to the
+exact permitted `owner/repo`. It requires:
+
+- a successful upstream workflow run context (`id`, `name`, `headBranch`,
+  `headSha`, `htmlUrl`, and optional `runAttempt` for legacy-client
+  compatibility), restricted to `Running Copilot cloud agent`, a `copilot/`
+  branch, and the matching GitHub repository/run URL;
+- an explicit continuity contract carrying `label`, `sourceRecord`,
+  `originCheckpoint`, and a repository-relative `sourceReference`; and
+- the SHA-256 of the referenced repository file as checked out by the caller.
+
+The route is admin-authenticated, uses the same startup/governance/readiness
+gates as task processing, including the accountability-ledger gate, and
+retains its ten-request-per-minute limiter. It computes a deterministic
+idempotency key from the repository, upstream run/name/SHA, and explicit
+coordinate/source reference. Concurrent replays and later attempts of the same
+run/SHA reuse the retained task/run/coordinate; unrelated pending work is not
+processed. Invalid input is rejected before task creation, and a task that
+does not complete returns HTTP 409, not a successful recording response.
+
+The authenticated caller supplies the upstream evidence; the engine does
+not fetch GitHub metadata or establish human confirmation. The trusted
+workflow verifies the actual successful run/attempt through GitHub's read-only
+API and reads source bytes from the upstream commit, never executing that
+commit's code with runtime credentials. The portal requires JSON and
+`X-AXIOM-Workflow-Continuity: record` and refuses cross-origin preflight.
+GitHub recording additionally requires the off-by-default
+`AXI_CONTINUITY_ENABLED` repository variable and separately configured
+credentials; see `CI_CONTINUITY_RUNBOOK.md`.
+
+It does **not** enable the recurring scheduler:
+`AXIOM_AUTOMATION_ENABLED=true` is still required only for background polling.
 
 Queue a `continuity.checkpoint` task to create a checksum manifest of the
 current persisted runtime files. It can be scheduled only by an authenticated

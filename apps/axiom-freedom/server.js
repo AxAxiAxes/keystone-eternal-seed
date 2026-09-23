@@ -465,18 +465,22 @@ function requireAdmin(req, res) {
 }
 
 function requireAccountabilityWrite(req, res) {
+    return requireExplicitJsonWrite(req, res, 'accountability', 'X-AXIOM-Accountability', 'write');
+}
+
+function requireExplicitJsonWrite(req, res, scope, header, value) {
     const contentType = req.headers['content-type'];
     const site = req.headers['sec-fetch-site'];
     let error;
     let statusCode = 403;
     if (typeof contentType !== 'string' || contentType.split(';', 1)[0].trim().toLowerCase() !== 'application/json') {
         statusCode = 415;
-        error = 'accountability writes require Content-Type: application/json';
-    } else if (req.headers['x-axiom-accountability'] !== 'write') {
+        error = `${scope} writes require Content-Type: application/json`;
+    } else if (req.headers[header.toLowerCase()] !== value) {
         // Cross-origin browsers cannot send this header without the preflight rejected below.
-        error = 'accountability writes require X-AXIOM-Accountability: write';
+        error = `${scope} writes require ${header}: ${value}`;
     } else if (site !== undefined && site !== 'same-origin') {
-        error = 'accountability writes require a same-origin browser request';
+        error = `${scope} writes require a same-origin browser request`;
     }
     if (!error) return true;
     res.writeHead(statusCode, { 'Content-Type': 'application/json' });
@@ -488,11 +492,13 @@ const server = http.createServer(async (req, res) => {
     const parsed = new URL(req.url, 'http://' + (req.headers.host || 'localhost'));
     const pathname = parsed.pathname;
 
-    if (pathname === '/api/accountability/events' && (req.method === 'POST' || req.method === 'OPTIONS')) {
+    const protectedWrite = pathname === '/api/accountability/events' ? 'accountability'
+        : pathname === '/api/automation/workflow-run-continuity' ? 'workflow continuity' : null;
+    if (protectedWrite && (req.method === 'POST' || req.method === 'OPTIONS')) {
         res.setHeader('Cache-Control', 'no-store');
         if (req.method === 'OPTIONS') {
             res.writeHead(403, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'cross-origin accountability writes are not allowed' }));
+            res.end(JSON.stringify({ error: `cross-origin ${protectedWrite} writes are not allowed` }));
             return;
         }
     } else {
@@ -854,6 +860,33 @@ const server = http.createServer(async (req, res) => {
                   console.error('AXIOM automation processing failed:', error.message);
                   res.writeHead(502, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
+          }
+          return;
+    }
+    if (pathname === '/api/automation/workflow-run-continuity' && req.method === 'POST') {
+          if (!requireAdmin(req, res)) return;
+          if (!requireExplicitJsonWrite(req, res, 'workflow continuity', 'X-AXIOM-Workflow-Continuity', 'record')) return;
+          try {
+                 const body = await parseBody(req);
+                 if (body === null) {
+                     rejectOversizedRequest(res);
+                     return;
+                 }
+                 const result = await invokeEngine('/automation/workflow-run-continuity', 'POST', body);
+                 if (!result || !['recorded', 'already-recorded'].includes(result.status)) {
+                     throw recordEngineFailure(ENGINE_FAILURE_CATEGORY.NON_SUCCESS, 502,
+                         'AXIOM workflow continuity did not record a coordinate transition');
+                 }
+                 res.writeHead(result.status === 'already-recorded' ? 200 : 201, {
+                   'Content-Type': 'application/json'
+                 });
+                 res.end(JSON.stringify(result));
+          } catch (error) {
+                 console.error('AXIOM workflow continuity request failed:', error.message);
+                 res.writeHead(error.statusCode || 502, { 'Content-Type': 'application/json' });
+                 res.end(JSON.stringify({
+                   error: error.statusCode ? error.message : 'AXIOM automation service is unavailable'
+                 }));
           }
           return;
     }

@@ -12,6 +12,7 @@ const originalMemoryDirectory = process.env.AXIOM_MEMORY_DIRECTORY;
 process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
 const ENGINE_ADMIN_PASSWORD = "engine-test-admin-password";
 process.env.AXIOM_ENGINE_ADMIN_PASSWORD = ENGINE_ADMIN_PASSWORD;
+process.env.AXIOM_WORKFLOW_RUN_CONTINUITY_REPOSITORY = "AxAxiAxes/keystone-eternal-seed";
 const engine = require("../../axiom-engine");
 
 async function startServer(server) {
@@ -177,6 +178,72 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.deepEqual(await oversizedProtectedRequest.json(), {
       error: "request body is too large"
     });
+
+    const workflowContinuity = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/workflow-run-continuity`,
+      {
+       method: "POST",
+       headers: {
+         Authorization: authorization,
+         "Content-Type": "application/json",
+         "X-AXIOM-Workflow-Continuity": "record"
+       },
+       body: JSON.stringify({
+         repository: "AxAxiAxes/keystone-eternal-seed",
+         workflowRun: {
+           id: "35666546593",
+           name: "Running Copilot cloud agent",
+           htmlUrl: "https://github.com/AxAxiAxes/keystone-eternal-seed/actions/runs/35666546593",
+           headBranch: "copilot/fix-axi-continuity-workflow",
+           headSha: "a5792173331db2cb7421a126af11a0ac66c6f208",
+           conclusion: "success"
+         },
+         coordinate: {
+           label: "Record workflow-run origin continuity",
+           sourceRecord: "KEYSTONE-ORIGIN-000001",
+           originCheckpoint: "axi-coordinate-foundation",
+           sourceReference: "docs/AXI_ORIGIN_COORDINATE_SYSTEM.md",
+           sourceSha256: "a".repeat(64),
+           contractPath: ".github/axi/origin-coordinate.json"
+         }
+       })
+      }
+    );
+    assert.equal(workflowContinuity.status, 201);
+    assert.equal((await workflowContinuity.json()).status, "recorded");
+
+    const duplicateWorkflowContinuity = await fetch(
+      `http://127.0.0.1:${webPort}/api/automation/workflow-run-continuity`,
+      {
+       method: "POST",
+       headers: {
+         Authorization: authorization,
+         "Content-Type": "application/json",
+         "X-AXIOM-Workflow-Continuity": "record"
+       },
+       body: JSON.stringify({
+         repository: "AxAxiAxes/keystone-eternal-seed",
+         workflowRun: {
+           id: "35666546593",
+           name: "Running Copilot cloud agent",
+           htmlUrl: "https://github.com/AxAxiAxes/keystone-eternal-seed/actions/runs/35666546593",
+           headBranch: "copilot/fix-axi-continuity-workflow",
+           headSha: "a5792173331db2cb7421a126af11a0ac66c6f208",
+           conclusion: "success"
+         },
+         coordinate: {
+           label: "Record workflow-run origin continuity",
+           sourceRecord: "KEYSTONE-ORIGIN-000001",
+           originCheckpoint: "axi-coordinate-foundation",
+           sourceReference: "docs/AXI_ORIGIN_COORDINATE_SYSTEM.md",
+           sourceSha256: "a".repeat(64),
+           contractPath: ".github/axi/origin-coordinate.json"
+         }
+       })
+      }
+    );
+    assert.equal(duplicateWorkflowContinuity.status, 200);
+    assert.equal((await duplicateWorkflowContinuity.json()).status, "already-recorded");
 
     const axesPortal = await request(webPort, {
       Host: "axescontracting.com",
@@ -753,7 +820,10 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
       { headers: { Authorization: authorization } }
     );
     assert.equal(runHistory.status, 200);
-    assert.deepEqual(await runHistory.json(), []);
+    const runs = await runHistory.json();
+    assert.equal(runs.length, 1);
+    assert.equal(runs[0].action, "coordinate.record");
+    assert.equal(runs[0].result.sourceReference, "docs/AXI_ORIGIN_COORDINATE_SYSTEM.md");
 
     const unavailableAgentChat = await fetch(
       `http://127.0.0.1:${webPort}/api/automation/chat`,
@@ -1497,6 +1567,77 @@ test("GET /workspace requires admin credentials and serves the workspace library
     if (webServer) {
       await stopServer(webServer);
     }
+    delete process.env.AXIOM_ENGINE_URL;
+    delete process.env.ADMIN_PASSWORD;
+  }
+});
+
+test("protects workflow continuity writes and preflight without granting browser or failure-shaped success", async (t) => {
+  const forwarded = [];
+  let upstreamStatus = "recorded";
+  const upstream = await startServer(http.createServer((req, res) => {
+    let body = "";
+    req.setEncoding("utf8");
+    req.on("data", (chunk) => { body += chunk; });
+    req.on("end", () => {
+      forwarded.push({ path: req.url, body, authorization: req.headers.authorization });
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ status: upstreamStatus }));
+    });
+  }));
+  let web;
+  try {
+    process.env.AXIOM_ENGINE_URL = `http://127.0.0.1:${upstream.address().port}`;
+    process.env.ADMIN_PASSWORD = "test-admin-password";
+    delete require.cache[require.resolve("../server")];
+    web = await startServer(require("../server"));
+    const base = `http://127.0.0.1:${web.address().port}`;
+    const endpoint = "/api/automation/workflow-run-continuity";
+    const headers = {
+      Authorization: adminAuthorization(),
+      "Content-Type": "application/json",
+      "X-AXIOM-Workflow-Continuity": "record"
+    };
+    const cases = [
+      ["authentication", "POST", endpoint, { ...headers, Authorization: "" }, 401],
+      ["simple content", "POST", endpoint, { ...headers, "Content-Type": "text/plain" }, 415],
+      ["missing marker", "POST", endpoint, { ...headers, "X-AXIOM-Workflow-Continuity": "" }, 403],
+      ["wrong marker", "POST", endpoint, { ...headers, "X-AXIOM-Workflow-Continuity": "write" }, 403],
+      ["cross-site", "POST", endpoint, { ...headers, "Sec-Fetch-Site": "cross-site" }, 403],
+      ["same-site", "POST", endpoint, { ...headers, "Sec-Fetch-Site": "same-site" }, 403],
+      ["preflight", "OPTIONS", endpoint, { Origin: "https://cross-origin.invalid" }, 403],
+      ["query preflight", "OPTIONS", `${endpoint}?record=1`, {}, 403],
+      ["normalized path", "POST", "/api/./automation/workflow-run-continuity",
+        { ...headers, "Content-Type": "text/plain" }, 415]
+    ];
+    for (const [label, method, route, requestHeaders, status] of cases) {
+      await t.test(label, async () => {
+        const response = await fetch(`${base}${route}`, {
+          method, headers: requestHeaders, ...(method === "POST" ? { body: "{}" } : {})
+        });
+        assert.equal(response.status, status);
+        for (const header of [
+          "access-control-allow-origin", "access-control-allow-headers", "access-control-allow-methods"
+        ]) assert.equal(response.headers.get(header), null);
+        assert.equal(forwarded.length, 0);
+      });
+    }
+    const recorded = await fetch(`${base}${endpoint}`, { method: "POST", headers, body: "{}" });
+    assert.equal(recorded.status, 201);
+    assert.equal(recorded.headers.get("cache-control"), "no-store");
+    assert.equal(recorded.headers.get("access-control-allow-origin"), null);
+    assert.equal(forwarded[0].path, "/automation/workflow-run-continuity");
+    assert.equal(forwarded[0].authorization,
+      `Basic ${Buffer.from(`admin:${ENGINE_ADMIN_PASSWORD}`).toString("base64")}`);
+    upstreamStatus = "already-recorded";
+    assert.equal((await fetch(`${base}${endpoint}`, { method: "POST", headers, body: "{}" })).status, 200);
+    upstreamStatus = "failed";
+    const failed = await fetch(`${base}${endpoint}`, { method: "POST", headers, body: "{}" });
+    assert.equal(failed.status, 502);
+    assert.match((await failed.json()).error, /did not record a coordinate transition/);
+  } finally {
+    if (web) await stopServer(web);
+    await stopServer(upstream);
     delete process.env.AXIOM_ENGINE_URL;
     delete process.env.ADMIN_PASSWORD;
   }

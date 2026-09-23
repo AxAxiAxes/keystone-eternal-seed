@@ -9,6 +9,7 @@ const {
   listActionCatalog
 } = require("../automation-service");
 const { MemoryStore } = require("../memory-store");
+const { CoordinateService } = require("../coordinate-service");
 
 function createMemoryStore() {
   const entries = [];
@@ -893,8 +894,97 @@ test("records a coordinate transition through the Operations Observer", async (t
       id: "coordinate-1",
       label: "Record Genesis continuity",
       originCheckpoint: "axi-coordinate-foundation"
-    }
+    },
+    idempotencyKey: null,
+    sourceReference: null,
+    sourceSha256: null,
+    contractPath: null,
+    workflowRun: null
   });
+});
+
+test("reuses an existing task for the same idempotency key", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AutomationService({
+    directory,
+    memoryStore: createMemoryStore()
+  });
+  const idempotencyKey = "b".repeat(64);
+
+  const first = await service.createTask({
+    title: "Record workflow continuity",
+    action: "coordinate.record",
+    agentId: "operations-observer",
+    originCheckpoint: "axi-coordinate-foundation",
+    idempotencyKey
+  });
+  const second = await service.createTask({
+    title: "Record workflow continuity again",
+    action: "coordinate.record",
+    agentId: "operations-observer",
+    originCheckpoint: "axi-coordinate-foundation",
+    idempotencyKey
+  });
+
+  assert.equal(first.id, second.id);
+  assert.equal(second.idempotencyReused, true);
+  assert.equal((await service.listTasks()).length, 1);
+});
+
+test("ordinary coordinate tasks still use the real coordinate service without an idempotency key", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const coordinates = new CoordinateService({ directory });
+  const service = new AutomationService({
+    directory,
+    memoryStore: createMemoryStore(),
+    createCoordinate: (input) => coordinates.create(input)
+  });
+  const task = await service.createTask({
+    title: "Synthetic ordinary coordinate",
+    action: "coordinate.record",
+    agentId: "operations-observer",
+    originCheckpoint: "axi-coordinate-foundation"
+  });
+
+  const outcome = await service.processTaskById(task.id);
+  assert.equal(outcome.status, "completed");
+  assert.equal((await coordinates.verify()).coordinateCount, 2);
+});
+
+test("concurrent processing of the same completed task returns one retained run", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AutomationService({ directory, memoryStore: createMemoryStore() });
+  const unrelated = await service.createTask({ title: "Leave queued", action: "automation.noop" });
+  const task = await service.createTask({ title: "Process once", action: "automation.noop" });
+
+  const outcomes = await Promise.all([
+    service.processTaskById(task.id),
+    service.processTaskById(task.id)
+  ]);
+  assert.ok(outcomes.every((outcome) => outcome.status === "completed"));
+  assert.equal(outcomes[0].runId, outcomes[1].runId);
+  assert.equal((await service.listRuns()).length, 1);
+  assert.equal((await service.getTask(unrelated.id)).status, "pending");
+});
+
+test("normalizes idempotency keys before lookup and still validates reused requests", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AutomationService({ directory, memoryStore: createMemoryStore() });
+  const input = { title: "Synthetic replay", action: "automation.noop", idempotencyKey: "c".repeat(64) };
+  const first = await service.createTask(input);
+  const replay = await service.createTask({ ...input, idempotencyKey: ` ${input.idempotencyKey} ` });
+  assert.equal(replay.id, first.id);
+  assert.equal((await service.listTasks()).length, 1);
+  await assert.rejects(
+    service.createTask({ ...input, approvalRequired: "false" }),
+    /approvalRequired must be a boolean/
+  );
+  const resumed = new AutomationService({ directory, memoryStore: createMemoryStore() });
+  assert.equal((await resumed.createTask(input)).id, first.id);
 });
 
 test("creates a private continuity checkpoint through the Operations Observer", async (t) => {

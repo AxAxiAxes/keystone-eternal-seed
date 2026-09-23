@@ -1,5 +1,5 @@
 const express = require("express");
-const rateLimit = require("express-rate-limit");
+const { rateLimit } = require("express-rate-limit");
 const crypto = require("crypto");
 const fs = require("fs/promises");
 const { constants: fsConstants } = require("fs");
@@ -38,6 +38,9 @@ const ADMIN_PASSWORD = process.env.AXIOM_ENGINE_ADMIN_PASSWORD;
 // (documents, small media, datasets) on a small Railway instance disk;
 // override via AXIOM_SOURCE_UPLOAD_MAX_BYTES if a larger cap is needed.
 const DEFAULT_SOURCE_UPLOAD_MAX_BYTES = 5 * 1024 * 1024;
+const WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_WINDOW_MS = 60_000;
+const WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_MAX_REQUESTS = 10;
+const WORKFLOW_RUN_CONTINUITY_REPOSITORY = process.env.AXIOM_WORKFLOW_RUN_CONTINUITY_REPOSITORY;
 const SOURCE_UPLOAD_MAX_BYTES = (() => {
   const configured = Number(process.env.AXIOM_SOURCE_UPLOAD_MAX_BYTES);
   return Number.isInteger(configured) && configured > 0
@@ -76,6 +79,16 @@ function requireAdmin(req, res, next) {
   res.set("WWW-Authenticate", 'Basic realm="AXIOM Engine Admin"');
   res.status(401).json({ error: "admin credentials required" });
 }
+
+const workflowRunContinuityRateLimit = rateLimit({
+  windowMs: WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_WINDOW_MS,
+  limit: WORKFLOW_RUN_CONTINUITY_RATE_LIMIT_MAX_REQUESTS,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler(req, res) {
+    res.status(429).json({ error: "workflow continuity rate limit exceeded" });
+  }
+});
 
 const limitAccountabilityWrites = rateLimit({
   windowMs: 60_000,
@@ -673,6 +686,163 @@ async function requireReadyStartupContext() {
   }
 }
 
+async function requireReadyWorkflowRunContinuity() {
+  await requireReadyStartupContext();
+  const governance = await automationService.getGovernanceReadiness();
+  if (governance.status !== "ready") {
+    const error = new Error("Automation is blocked until governance readiness is ready.");
+    error.statusCode = 409;
+    throw error;
+  }
+  try {
+    await coordinateService.verify();
+  } catch (cause) {
+    const error = new Error("Automation is blocked until the coordinate ledger is ready.");
+    error.statusCode = 409;
+    error.cause = cause;
+    throw error;
+  }
+}
+
+function normalizeWorkflowRunContinuityRequest(body) {
+  if (!isRecord(body)) {
+    throw new TypeError("workflow continuity request must be an object");
+  }
+  const allowedFields = new Set(["repository", "workflowRun", "coordinate"]);
+  if (Object.keys(body).some((field) => !allowedFields.has(field))) {
+    throw new TypeError("workflow continuity request contains unsupported fields");
+  }
+  if (!isRepositoryName(body.repository)) {
+    throw new TypeError("repository must be an owner/name string");
+  }
+  if (!isRecord(body.workflowRun)) {
+    throw new TypeError("workflowRun must be an object");
+  }
+  if (!isRecord(body.coordinate)) {
+    throw new TypeError("coordinate must be an object");
+  }
+  const workflowAllowedFields = new Set([
+    "id",
+    "name",
+    "htmlUrl",
+    "headBranch",
+    "headSha",
+    "conclusion",
+    "runAttempt"
+  ]);
+  if (Object.keys(body.workflowRun).some((field) => !workflowAllowedFields.has(field))) {
+    throw new TypeError("workflowRun contains unsupported fields");
+  }
+  const coordinateAllowedFields = new Set([
+    "label",
+    "sourceRecord",
+    "originCheckpoint",
+    "sourceReference",
+    "sourceSha256",
+    "contractPath"
+  ]);
+  if (Object.keys(body.coordinate).some((field) => !coordinateAllowedFields.has(field))) {
+    throw new TypeError("coordinate contains unsupported fields");
+  }
+  if (body.workflowRun.name !== "Running Copilot cloud agent") {
+    throw new RangeError("workflowRun.name is not allowlisted");
+  }
+  if (!isPositiveIntegerLike(body.workflowRun.id)) {
+    throw new TypeError("workflowRun.id must be a positive integer");
+  }
+  if (!isBoundedString(body.workflowRun.headBranch, 200) ||
+    !/^copilot\/\S+$/.test(body.workflowRun.headBranch)) {
+    throw new RangeError("workflowRun.headBranch must be a copilot/ branch");
+  }
+  if (typeof body.workflowRun.headSha !== "string" || !/^[0-9a-f]{40}$/i.test(body.workflowRun.headSha)) {
+    throw new TypeError("workflowRun.headSha must be a 40-character hexadecimal commit SHA");
+  }
+  if (body.workflowRun.conclusion !== "success") {
+    throw new RangeError("workflowRun.conclusion must be success");
+  }
+  if (body.workflowRun.htmlUrl !==
+    `https://github.com/${body.repository.trim()}/actions/runs/${String(body.workflowRun.id).trim()}`) {
+    throw new TypeError("workflowRun.htmlUrl must identify the supplied repository and run");
+  }
+  if (body.workflowRun.runAttempt !== undefined && !isPositiveIntegerLike(body.workflowRun.runAttempt)) {
+    throw new TypeError("workflowRun.runAttempt must be a positive integer");
+  }
+  if (!isBoundedString(body.coordinate.label, 120)) {
+    throw new TypeError("coordinate.label must be a non-empty string up to 120 characters");
+  }
+  if (typeof body.coordinate.sourceRecord !== "string" ||
+    !/^[A-Z][A-Z0-9-]{2,119}$/.test(body.coordinate.sourceRecord)) {
+    throw new TypeError("coordinate.sourceRecord must be an uppercase identifier");
+  }
+  if (typeof body.coordinate.originCheckpoint !== "string" ||
+    !/^[a-z][a-z0-9-]{2,119}$/.test(body.coordinate.originCheckpoint)) {
+    throw new TypeError("coordinate.originCheckpoint must be a lowercase kebab-case identifier");
+  }
+  if (typeof body.coordinate.sourceSha256 !== "string" ||
+    !/^[a-f0-9]{64}$/i.test(body.coordinate.sourceSha256)) {
+    throw new TypeError("coordinate.sourceSha256 must be a 64-character hexadecimal hash");
+  }
+  return {
+    repository: body.repository.trim(),
+    workflowRun: {
+      id: String(body.workflowRun.id).trim(),
+      name: body.workflowRun.name.trim(),
+      htmlUrl: body.workflowRun.htmlUrl.trim(),
+      headBranch: body.workflowRun.headBranch.trim(),
+      headSha: body.workflowRun.headSha.toLowerCase(),
+      conclusion: body.workflowRun.conclusion,
+      ...(body.workflowRun.runAttempt === undefined
+        ? {} : { runAttempt: String(body.workflowRun.runAttempt).trim() })
+    },
+    coordinate: {
+      label: body.coordinate.label.trim(),
+      sourceRecord: body.coordinate.sourceRecord.trim(),
+      originCheckpoint: body.coordinate.originCheckpoint.trim(),
+      sourceReference: normalizeRepositoryRelativePath(
+        body.coordinate.sourceReference,
+        "coordinate.sourceReference"
+      ),
+      sourceSha256: body.coordinate.sourceSha256.toLowerCase(),
+      contractPath: normalizeRepositoryRelativePath(
+        body.coordinate.contractPath,
+        "coordinate.contractPath"
+      )
+    }
+  };
+}
+
+function calculateWorkflowRunContinuityIdempotencyKey(request) {
+  return crypto.createHash("sha256").update(JSON.stringify({
+    repository: request.repository,
+    workflowRun: {
+      id: request.workflowRun.id,
+      name: request.workflowRun.name,
+      headSha: request.workflowRun.headSha
+    },
+    coordinate: {
+      sourceRecord: request.coordinate.sourceRecord,
+      originCheckpoint: request.coordinate.originCheckpoint,
+      sourceReference: request.coordinate.sourceReference,
+      sourceSha256: request.coordinate.sourceSha256,
+      contractPath: request.coordinate.contractPath
+    }
+  })).digest("hex");
+}
+
+function normalizeRepositoryRelativePath(value, label) {
+  if (!isBoundedString(value, 200)) {
+    throw new TypeError(`${label} must be a repository-relative path up to 200 characters`);
+  }
+  const normalized = value.trim().replaceAll("\\", "/");
+  const segments = normalized.split("/");
+  if (normalized.startsWith("/") || /[:\x00-\x1f\x7f]/.test(normalized) ||
+    segments.some((segment) => segment === "" || segment === "." || segment === ".." ||
+      segment.toLowerCase() === ".git")) {
+    throw new TypeError(`${label} must be a repository-relative path up to 200 characters`);
+  }
+  return normalized;
+}
+
 app.get("/automation/profiles", async (req, res, next) => {
   try {
     res.json(await automationProfileService.list());
@@ -1029,6 +1199,61 @@ app.post("/automation/process", requireAdmin, async (req, res, next) => {
   }
 });
 
+app.post("/automation/workflow-run-continuity", requireAdmin, workflowRunContinuityRateLimit, async (req, res, next) => {
+  try {
+    if (!isRepositoryName(WORKFLOW_RUN_CONTINUITY_REPOSITORY)) {
+      return res.status(503).json({ error: "workflow continuity is not configured" });
+    }
+    const request = normalizeWorkflowRunContinuityRequest(req.body);
+    if (request.repository !== WORKFLOW_RUN_CONTINUITY_REPOSITORY) {
+      return res.status(403).json({ error: "workflow continuity repository is not allowlisted" });
+    }
+    await requireReadyWorkflowRunContinuity();
+    const idempotencyKey = calculateWorkflowRunContinuityIdempotencyKey(request);
+    const createdTask = await automationService.createTask({
+      title: request.coordinate.label,
+      action: "coordinate.record",
+      agentId: "operations-observer",
+      originCheckpoint: request.coordinate.originCheckpoint,
+      priority: 5,
+      idempotencyKey,
+      payload: {
+        label: request.coordinate.label,
+        sourceRecord: request.coordinate.sourceRecord,
+        originCheckpoint: request.coordinate.originCheckpoint,
+        sourceReference: request.coordinate.sourceReference,
+        sourceSha256: request.coordinate.sourceSha256,
+        contractPath: request.coordinate.contractPath,
+        workflowRun: request.workflowRun
+      }
+    });
+    if (createdTask.status === "pending") {
+      await automationService.processTaskById(createdTask.id);
+    }
+    const task = await automationService.getTask(createdTask.id);
+    const run = await automationService.getLatestRunForTask(task.id);
+    if (task.status !== "completed" || !run || run.status !== "completed") {
+      return res.status(409).json({
+        error: `Workflow continuity task did not complete (${task.status}).`,
+        status: task.status,
+        idempotencyKey,
+        task,
+        run
+      });
+    }
+    const status = createdTask.idempotencyReused ? "already-recorded" : "recorded";
+    res.status(createdTask.idempotencyReused ? 200 : 201).json({
+      status,
+      idempotencyKey,
+      repository: request.repository,
+      task,
+      run
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/automation/chat", requireAdmin, async (req, res, next) => {
   try {
     const agent = await automationService.getAgent(req.body.agentId);
@@ -1100,6 +1325,28 @@ app.post("/memory/:kind", requireAdmin, async (req, res, next) => {
     next(error);
   }
 });
+
+function isRecord(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function isBoundedString(value, maximumLength) {
+  return typeof value === "string" &&
+    value.trim().length > 0 &&
+    value.trim().length <= maximumLength;
+}
+
+function isRepositoryName(value) {
+  return typeof value === "string" &&
+    /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(value.trim());
+}
+
+function isPositiveIntegerLike(value) {
+  if (typeof value === "number") {
+    return Number.isSafeInteger(value) && value > 0;
+  }
+  return typeof value === "string" && /^[1-9][0-9]{0,19}$/.test(value.trim());
+}
 
 // Core automation route
 app.post("/axiom", requireAdmin, async (req, res, next) => {

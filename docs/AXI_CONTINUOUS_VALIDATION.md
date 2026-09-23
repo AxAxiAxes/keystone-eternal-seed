@@ -14,14 +14,26 @@ It runs automatically for pushes to `axaxiaxes-axes-directory-data-model` and
 
 | Job | Check | Scope |
 | --- | --- | --- |
-| Node tests | `npm ci` and `npm test` | `apps/axiom-engine` and `apps/axiom-freedom` |
+| Node tests | `npm ci` and `npm test`; the engine job also runs `node --test ../../.github/scripts/test/record-workflow-run-continuity.test.js` | Both apps and synthetic workflow-continuity regressions |
 | AXI.Core tests | `dotnet test AXIOM.sln --configuration Release` | AXI.Core library and tests |
+| Directory fixture validation | `node --test` in `docs/fixtures/axes-directory` | Public-safe synthetic Directory fixtures |
 | Engine image | Build and start `apps/axiom-engine/Dockerfile`; query private `/health` | Production engine image and imported runtime modules |
 | Portal image | Build and start `apps/axiom-freedom/Dockerfile`; query `/health` and `/origin-continuity` | Production portal image, including required public and protected-view assets |
 
-The workflow has `contents: read` permission only. It does not receive
-deployment credentials, access production data, contact third parties, enable
-the scheduler, create tasks, publish, deploy, spend, or change any account.
+These validation jobs have `contents: read` permission only and never receive
+continuity/deployment credentials or call a live private engine. Workflow
+regressions mock GitHub and runtime requests and use disposable local Git
+fixtures/state. Validation does not enable a scheduler, create live tasks,
+publish, deploy, spend, or change an account.
+
+The separate `Copilot workflow continuity automation` job is not a validation
+job or a required check. It is off by default, runs only for eligible
+`workflow_run` events or canonical-branch manual replay, and adds read-only
+Actions permission to verify an actual upstream run/attempt. After explicit
+owner configuration it can submit one bounded coordinate record to the
+private runtime through its authenticated portal. Push/PR validation cannot
+select that job. Its authority and opt-in are in `CI_CONTINUITY_RUNBOOK.md`;
+merging code alone is not runtime activation.
 
 ## Promotion boundary
 
