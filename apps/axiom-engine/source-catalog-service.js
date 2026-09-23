@@ -24,6 +24,11 @@ const REVIEW_STATUS = "operator-approved";
 // them -- filing a catalog entry for an upload still goes through the
 // existing operator-approved source.catalog automation task.
 const UPLOAD_SUBDIRECTORY = "uploads";
+const CHAT_ATTACHMENT_ALLOWED_EXTENSIONS = new Set([".txt", ".md", ".csv", ".json"]);
+const CHAT_ATTACHMENT_MAX_FILES = 4;
+const CHAT_ATTACHMENT_MAX_TOTAL_BYTES = 1024 * 1024;
+const CHAT_ATTACHMENT_MAX_TEXT_BYTES_PER_FILE = 64 * 1024;
+const CHAT_ATTACHMENT_MAX_TEXT_CHARACTERS = 24000;
 
 class SourceCatalogService {
   constructor({ directory, now = () => new Date() }) {
@@ -117,6 +122,92 @@ class SourceCatalogService {
       size: buffer.length,
       originalFilename: typeof filename === "string" && filename.trim() ? filename.trim().slice(0, 200) : null
     };
+  }
+
+  async prepareChatAttachments(attachments) {
+    if (attachments === undefined) {
+      return [];
+    }
+    if (!Array.isArray(attachments)) {
+      throw new TypeError("attachments must be an array");
+    }
+    if (attachments.length > CHAT_ATTACHMENT_MAX_FILES) {
+      throw new RangeError(`attachments must contain at most ${CHAT_ATTACHMENT_MAX_FILES} files`);
+    }
+
+    const uploadDirectory = path.join(this.directory, UPLOAD_SUBDIRECTORY);
+    let declaredTotalBytes = 0;
+    let extractedCharacters = 0;
+    const prepared = [];
+
+    for (const attachment of attachments) {
+      const normalized = normalizeChatAttachmentInput(attachment);
+      declaredTotalBytes += normalized.size;
+      if (declaredTotalBytes > CHAT_ATTACHMENT_MAX_TOTAL_BYTES) {
+        throw new RangeError(
+          `attachments must not exceed ${CHAT_ATTACHMENT_MAX_TOTAL_BYTES} bytes in total`
+        );
+      }
+
+      const filePath = resolveUploadReferencePath(uploadDirectory, normalized.sourceReference);
+      let buffer;
+      try {
+        buffer = await fs.readFile(filePath);
+      } catch (error) {
+        if (error.code === "ENOENT") {
+          throw new RangeError(`attachment file was not found: ${normalized.originalFilename}`);
+        }
+        throw error;
+      }
+      if (buffer.length !== normalized.size) {
+        throw new RangeError(`attachment size mismatch: ${normalized.originalFilename}`);
+      }
+
+      const actualHash = createHash("sha256").update(buffer).digest("hex");
+      if (actualHash !== normalized.sha256) {
+        throw new RangeError(`attachment integrity check failed: ${normalized.originalFilename}`);
+      }
+
+      const extension = path.extname(normalized.sourceReference).toLowerCase();
+      if (!CHAT_ATTACHMENT_ALLOWED_EXTENSIONS.has(extension)) {
+        prepared.push({
+          ...normalized,
+          status: "failed",
+          detail: unsupportedAttachmentDetail(extension)
+        });
+        continue;
+      }
+
+      const remainingCharacters = CHAT_ATTACHMENT_MAX_TEXT_CHARACTERS - extractedCharacters;
+      if (remainingCharacters <= 0) {
+        prepared.push({
+          ...normalized,
+          status: "failed",
+          detail: "Attachment was stored, but AXI skipped it for this reply because the chat attachment context budget was already exhausted."
+        });
+        continue;
+      }
+
+      const maxReadableBytes = Math.min(buffer.length, CHAT_ATTACHMENT_MAX_TEXT_BYTES_PER_FILE);
+      let text = buffer.subarray(0, maxReadableBytes).toString("utf8");
+      let truncated = buffer.length > maxReadableBytes;
+      if (text.length > remainingCharacters) {
+        text = text.slice(0, remainingCharacters);
+        truncated = true;
+      }
+      extractedCharacters += text.length;
+
+      prepared.push({
+        ...normalized,
+        status: "processed",
+        text,
+        detail: truncated
+          ? `Read the first ${Math.min(buffer.length, CHAT_ATTACHMENT_MAX_TEXT_BYTES_PER_FILE)} bytes for this reply.`
+          : "Read this attachment for the current reply."
+      });
+    }
+
+    return prepared;
   }
 
   statusFromEntries(entries) {
@@ -257,6 +348,84 @@ function sanitizeUploadExtension(filename) {
   return match ? match[0].toLowerCase() : "";
 }
 
+function normalizeChatAttachmentInput(input) {
+  if (!isRecord(input)) {
+    throw new TypeError("attachment metadata must be an object");
+  }
+  const allowedFields = new Set([
+    "sourceReference",
+    "sha256",
+    "size",
+    "originalFilename",
+    "mimeType"
+  ]);
+  if (Object.keys(input).some((field) => !allowedFields.has(field))) {
+    throw new TypeError("attachment metadata contains unsupported fields");
+  }
+
+  const normalizedSourceReference = normalizeUploadReference(input.sourceReference);
+  if (!normalizedSourceReference) {
+    throw new TypeError("attachment sourceReference must be an uploads/<uuid> path created by this system");
+  }
+  if (!isHash(input.sha256)) {
+    throw new TypeError("attachment sha256 must be a 64-character hexadecimal hash");
+  }
+  if (!Number.isInteger(input.size) || input.size < 1) {
+    throw new TypeError("attachment size must be a positive integer");
+  }
+  if (!isBoundedString(input.originalFilename, 200)) {
+    throw new TypeError("attachment originalFilename must be a non-empty string up to 200 characters");
+  }
+  if (!(input.mimeType === "" || input.mimeType === null || isBoundedString(input.mimeType, 120))) {
+    throw new TypeError("attachment mimeType must be an empty string or a bounded string up to 120 characters");
+  }
+
+  return {
+    sourceReference: normalizedSourceReference,
+    sha256: input.sha256.toLowerCase(),
+    size: input.size,
+    originalFilename: input.originalFilename.trim(),
+    mimeType: typeof input.mimeType === "string" ? input.mimeType.trim() : ""
+  };
+}
+
+function normalizeUploadReference(value) {
+  if (!isBoundedString(value, 500)) {
+    return null;
+  }
+  const normalized = normalizeSourceReference(value);
+  return /^uploads\/[0-9a-f-]{36}(?:\.[A-Za-z0-9]{1,10})?$/.test(normalized)
+    ? normalized
+    : null;
+}
+
+function resolveUploadReferencePath(uploadDirectory, sourceReference) {
+  const relativeName = sourceReference.slice(`${UPLOAD_SUBDIRECTORY}/`.length);
+  const resolvedPath = path.resolve(uploadDirectory, relativeName);
+  const expectedPrefix = `${path.resolve(uploadDirectory)}${path.sep}`;
+  if (!resolvedPath.startsWith(expectedPrefix)) {
+    throw new TypeError("attachment sourceReference must stay within the upload directory");
+  }
+  return resolvedPath;
+}
+
+function unsupportedAttachmentDetail(extension) {
+  switch (extension) {
+    case ".pdf":
+    case ".doc":
+    case ".docx":
+      return "Attachment was stored, but AXI cannot read this document format in chat yet. Text extraction is currently limited to .txt, .md, .csv, and .json.";
+    case ".png":
+    case ".jpg":
+    case ".jpeg":
+    case ".gif":
+    case ".webp":
+      return "Attachment was stored, but AXI does not have a tested vision path in chat yet, so this image was not interpreted.";
+    default:
+      return "Attachment was stored, but AXI could not read this file type in chat.";
+  }
+}
+
 function summarizeEntry(entry) {
   return {
     sourceId: entry.sourceId,
@@ -338,6 +507,11 @@ function describeOptions({ maxUploadBytes } = {}) {
 }
 
 module.exports = {
+  CHAT_ATTACHMENT_ALLOWED_EXTENSIONS,
+  CHAT_ATTACHMENT_MAX_FILES,
+  CHAT_ATTACHMENT_MAX_TOTAL_BYTES,
+  CHAT_ATTACHMENT_MAX_TEXT_BYTES_PER_FILE,
+  CHAT_ATTACHMENT_MAX_TEXT_CHARACTERS,
   SOURCE_CATALOG_FILE_NAME,
   SOURCE_CATALOG_ID,
   SOURCE_CATALOG_SCHEMA_VERSION,

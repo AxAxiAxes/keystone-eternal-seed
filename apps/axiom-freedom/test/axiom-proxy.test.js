@@ -140,6 +140,9 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
 
     const axiomChatPage = await fetch(`http://127.0.0.1:${webPort}/axiom`);
     assert.equal(axiomChatPage.status, 200);
+    const axiomChatBody = await axiomChatPage.text();
+    assert.match(axiomChatBody, /Attach a document or image to your next message/);
+    assert.doesNotMatch(axiomChatBody, /admin sign-in required/i);
 
     const axiomChatPageWithTrailingSlash = await fetch(
       `http://127.0.0.1:${webPort}/axiom/`
@@ -1337,6 +1340,74 @@ test("GET /api/axiom/history reports engine-unreachable failures as 502", async 
   }
 });
 
+test("POST /api/axiom forwards chat attachments and the proxy-owned sessionId inside payload", async () => {
+  const forwarded = [];
+  const upstream = http.createServer((req, res) => {
+    let body = "";
+    req.setEncoding("utf8");
+    req.on("data", (chunk) => {
+      body += chunk;
+    });
+    req.on("end", () => {
+      forwarded.push(JSON.parse(body));
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({
+        engine: "AXIOM",
+        actionReceived: "chat",
+        reply: "Attachment-aware reply",
+        attachments: [],
+        status: "processed"
+      }));
+    });
+  });
+  const upstreamServer = await startServer(upstream);
+  const { port: upstreamPort } = upstreamServer.address();
+
+  let webServer;
+  try {
+    process.env.AXIOM_ENGINE_URL = `http://127.0.0.1:${upstreamPort}`;
+    delete require.cache[require.resolve("../server")];
+    const web = require("../server");
+    webServer = await startServer(web);
+    const { port: webPort } = webServer.address();
+
+    const response = await fetch(`http://127.0.0.1:${webPort}/api/axiom`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "chat",
+        payload: {
+          message: "Review the attached note",
+          attachments: [{
+            sourceReference: "uploads/11111111-1111-1111-1111-111111111111.txt",
+            sha256: "a".repeat(64),
+            size: 12,
+            originalFilename: "note.txt",
+            mimeType: "text/plain"
+          }]
+        }
+      })
+    });
+    assert.equal(response.status, 200);
+    assert.equal(forwarded.length, 1);
+    assert.equal(typeof forwarded[0].payload.sessionId, "string");
+    assert.equal(forwarded[0].sessionId, undefined);
+    assert.deepEqual(forwarded[0].payload.attachments, [{
+      sourceReference: "uploads/11111111-1111-1111-1111-111111111111.txt",
+      sha256: "a".repeat(64),
+      size: 12,
+      originalFilename: "note.txt",
+      mimeType: "text/plain"
+    }]);
+  } finally {
+    if (webServer) {
+      await stopServer(webServer);
+    }
+    await stopServer(upstreamServer);
+    delete process.env.AXIOM_ENGINE_URL;
+  }
+});
+
 test("POST /api/axiom/uploads is public (no admin credentials required) and forwards accepted uploads to the engine", async (t) => {
   const localMemoryDirectory = path.join(
     os.tmpdir(),
@@ -1453,7 +1524,8 @@ test("POST /api/axiom/uploads rejects oversized files with 413 and passes throug
     });
     assert.equal(unreachable.status, 502);
     assert.deepEqual(await unreachable.json(), {
-      error: "AXIOM document/image upload is temporarily unavailable"
+      error: "AXIOM upload is temporarily unavailable because the private engine could not be reached.",
+      diagnostic: { category: "unreachable-private-engine" }
     });
   } finally {
     if (webServer) {
@@ -1465,6 +1537,79 @@ test("POST /api/axiom/uploads rejects oversized files with 413 and passes throug
     delete process.env.AXIOM_ENGINE_URL;
     delete process.env.AXIOM_MAX_UPLOAD_BODY_BYTES;
     process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
+  }
+});
+
+test("GET /api/axiom/upload-readiness and upload failures distinguish missing routes and auth mismatches", async () => {
+  for (const scenario of ["missing-route", "auth-mismatch"]) {
+    const upstream = http.createServer((req, res) => {
+      if (req.url === "/health") {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ status: "ok", service: "AXIOM engine" }));
+        return;
+      }
+      if (req.url === "/system/source-catalog/options") {
+        if (scenario === "missing-route") {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "missing route" }));
+          return;
+        }
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ upload: { route: "POST /system/source-catalog/uploads" } }));
+        return;
+      }
+      if (req.url === "/system/source-catalog/uploads") {
+        if (scenario === "missing-route") {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "missing route" }));
+          return;
+        }
+        res.writeHead(401, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "admin credentials required" }));
+        return;
+      }
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "not found" }));
+    });
+    const upstreamServer = await startServer(upstream);
+    const { port: upstreamPort } = upstreamServer.address();
+
+    let webServer;
+    try {
+      process.env.AXIOM_ENGINE_URL = `http://127.0.0.1:${upstreamPort}`;
+      delete require.cache[require.resolve("../server")];
+      const web = require("../server");
+      webServer = await startServer(web);
+      const { port: webPort } = webServer.address();
+
+      const readiness = await fetch(`http://127.0.0.1:${webPort}/api/axiom/upload-readiness`);
+      assert.equal(readiness.status, 200);
+      const readinessBody = await readiness.json();
+
+      const upload = await fetch(`http://127.0.0.1:${webPort}/api/axiom/uploads`, {
+        method: "POST",
+        headers: { "X-Source-Filename": "notes.txt" },
+        body: "notes"
+      });
+      assert.equal(upload.status, 502);
+      const uploadBody = await upload.json();
+
+      if (scenario === "missing-route") {
+        assert.equal(readinessBody.category, "missing-upload-route");
+        assert.match(uploadBody.error, /missing the upload route/i);
+        assert.deepEqual(uploadBody.diagnostic, { category: "missing-upload-route" });
+      } else {
+        assert.equal(readinessBody.category, "ready");
+        assert.match(uploadBody.error, /shared admin password was rejected/i);
+        assert.deepEqual(uploadBody.diagnostic, { category: "engine-auth-mismatch" });
+      }
+    } finally {
+      if (webServer) {
+        await stopServer(webServer);
+      }
+      await stopServer(upstreamServer);
+      delete process.env.AXIOM_ENGINE_URL;
+    }
   }
 });
 

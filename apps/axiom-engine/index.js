@@ -468,6 +468,7 @@ const chatService = new ChatService({
   apiKey: process.env.OPENAI_API_KEY,
   model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
   memoryStore,
+  sourceCatalogService,
   usageStore,
   maxMessageCharacters: Number(
     process.env.AXIOM_CHAT_MAX_MESSAGE_CHARACTERS || 4000
@@ -1032,8 +1033,8 @@ app.post("/automation/process", requireAdmin, async (req, res, next) => {
 app.post("/automation/chat", requireAdmin, async (req, res, next) => {
   try {
     const agent = await automationService.getAgent(req.body.agentId);
-    const reply = await chatService.reply(req.body.message, { agent });
-    res.json({ agent: { id: agent.id, name: agent.name }, reply });
+    const result = await chatService.reply(req.body.message, { agent });
+    res.json({ agent: { id: agent.id, name: agent.name }, reply: result.reply });
   } catch (error) {
     next(error);
   }
@@ -1115,11 +1116,15 @@ app.post("/axiom", requireAdmin, async (req, res, next) => {
       const sessionId = typeof payload?.sessionId === "string" && payload.sessionId.trim().length > 0
         ? payload.sessionId.trim()
         : crypto.randomUUID();
-      const reply = await chatService.reply(payload?.message, { sessionId });
+      const result = await chatService.reply(payload?.message, {
+        sessionId,
+        attachments: payload?.attachments
+      });
       res.json({
         engine: "AXIOM",
         actionReceived: action,
-        reply,
+        reply: result.reply,
+        attachments: result.attachments,
         sessionId,
         status: "processed"
       });

@@ -4,6 +4,8 @@ const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
 const {
+  CHAT_ATTACHMENT_MAX_FILES,
+  CHAT_ATTACHMENT_MAX_TOTAL_BYTES,
   SOURCE_CATALOG_ID,
   SOURCE_TYPES,
   CLASSIFICATIONS,
@@ -155,5 +157,91 @@ test("sanitizes a malicious upload filename to only a safe extension", async (t)
   await assert.rejects(
     () => service.storeUpload({ buffer: Buffer.alloc(0), filename: "empty.txt" }),
     /uploaded file must be a non-empty buffer/
+  );
+});
+
+test("prepares supported chat attachments and reports unsupported files honestly", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-source-catalog-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new SourceCatalogService({ directory });
+
+  const textBuffer = Buffer.from("first line\nsecond line");
+  const imageBuffer = Buffer.from("not really an image");
+  const textUpload = await service.storeUpload({ buffer: textBuffer, filename: "notes.txt" });
+  const imageUpload = await service.storeUpload({ buffer: imageBuffer, filename: "photo.png" });
+
+  const prepared = await service.prepareChatAttachments([
+    {
+      sourceReference: textUpload.sourceReference,
+      sha256: textUpload.sha256,
+      size: textUpload.size,
+      originalFilename: "notes.txt",
+      mimeType: "text/plain"
+    },
+    {
+      sourceReference: imageUpload.sourceReference,
+      sha256: imageUpload.sha256,
+      size: imageUpload.size,
+      originalFilename: "photo.png",
+      mimeType: "image/png"
+    }
+  ]);
+
+  assert.equal(prepared[0].status, "processed");
+  assert.equal(prepared[0].text, "first line\nsecond line");
+  assert.match(prepared[0].detail, /Read/);
+  assert.equal(prepared[1].status, "failed");
+  assert.match(prepared[1].detail, /tested vision path/);
+});
+
+test("rejects chat attachment metadata that escapes uploads, mismatches hashes, or exceeds limits", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-source-catalog-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new SourceCatalogService({ directory });
+  const upload = await service.storeUpload({ buffer: Buffer.from("hello"), filename: "notes.txt" });
+
+  await assert.rejects(
+    () => service.prepareChatAttachments([{
+      sourceReference: "../outside.txt",
+      sha256: upload.sha256,
+      size: upload.size,
+      originalFilename: "notes.txt",
+      mimeType: "text/plain"
+    }]),
+    /sourceReference must be an uploads/
+  );
+
+  await assert.rejects(
+    () => service.prepareChatAttachments([{
+      sourceReference: upload.sourceReference,
+      sha256: "b".repeat(64),
+      size: upload.size,
+      originalFilename: "notes.txt",
+      mimeType: "text/plain"
+    }]),
+    /integrity check failed/
+  );
+
+  const tooManyAttachments = Array.from({ length: CHAT_ATTACHMENT_MAX_FILES + 1 }, (_, index) => ({
+    sourceReference: upload.sourceReference,
+    sha256: upload.sha256,
+    size: upload.size,
+    originalFilename: `notes-${index}.txt`,
+    mimeType: "text/plain"
+  }));
+  await assert.rejects(
+    () => service.prepareChatAttachments(tooManyAttachments),
+    new RegExp(`at most ${CHAT_ATTACHMENT_MAX_FILES}`)
+  );
+
+  await assert.rejects(
+    () => service.prepareChatAttachments([{
+      sourceReference: upload.sourceReference,
+      sha256: upload.sha256,
+      size: CHAT_ATTACHMENT_MAX_TOTAL_BYTES + 1,
+      originalFilename: "notes.txt",
+      mimeType: "text/plain"
+    }]),
+    /must not exceed/
   );
 });

@@ -56,6 +56,41 @@ Send a `POST` request to `axiom-freedom` at `/api/axiom`.
 
 The public web service returns `400` for an invalid action and `502` when the engine is unreachable or fails to respond within 60 seconds.
 
+### Chat attachments
+
+The browser chat uses `action: "chat"` with `payload.message` and may include a
+small attachment metadata array for files previously uploaded through
+`POST /api/axiom/uploads`:
+
+```json
+{
+  "action": "chat",
+  "payload": {
+    "message": "Please review the attached notes.",
+    "attachments": [
+      {
+        "sourceReference": "uploads/12345678-1234-1234-1234-123456789abc.txt",
+        "sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+        "size": 1234,
+        "originalFilename": "notes.txt",
+        "mimeType": "text/plain"
+      }
+    ]
+  }
+}
+```
+
+The engine accepts only `uploads/<uuid>[.<ext>]` references created by its own
+upload route, rejects malformed hashes/paths or excessive attachment batches,
+verifies each file's SHA-256 against the stored bytes, and currently extracts
+bounded text only for `.txt`, `.md`, `.csv`, and `.json`. Unsupported
+document/image formats are reported honestly in the response rather than being
+silently claimed as processed.
+
+Successful chat responses include an `attachments` array showing which attached
+files were `processed` for that reply and which `failed` with an explanatory
+detail string.
+
 ## OpenAI chat provider
 
 Set these values only in the local `apps/axiom-freedom/.env` file or a deployment secret store:
@@ -65,7 +100,14 @@ OPENAI_API_KEY=your-api-key
 OPENAI_MODEL=gpt-4.1-mini
 ```
 
-The browser chat uses `action: "chat"` with `payload.message`. The engine sends the message and up to ten recent episodic records to OpenAI's Responses API, then appends the user message and provider reply to its private episodic memory store. Without `OPENAI_API_KEY`, chat returns `503` and no provider request is made.
+The browser chat uses `action: "chat"` with `payload.message`. When
+attachments are supplied, the engine verifies and reads only the currently
+supported text formats listed above, then sends that bounded attachment context
+plus up to ten recent episodic records to OpenAI's Responses API. It appends
+only the user message text and provider reply to its private episodic memory
+store; temporary chat attachment use does **not** automatically create a
+`source.catalog` entry or a separate protected memory write. Without
+`OPENAI_API_KEY`, chat returns `503` and no provider request is made.
 
 ## Provider usage monitoring
 
@@ -202,6 +244,22 @@ values. An invalid retained journal is an attention state and blocks manual
 and scheduled automation. Its output is a record of submitted metrics only,
 not a financial statement, accounting or tax treatment, cash balance,
 valuation, profitability guarantee, or legal or financial advice.
+
+## Upload readiness diagnostics
+
+The public portal exposes `GET /api/axiom/upload-readiness` as a secret-safe
+diagnostic check for the anonymous chat upload flow. It distinguishes:
+
+- `ready`
+- `wrong-engine-url`
+- `missing-upload-route`
+- `engine-auth-mismatch`
+- `unreachable-private-engine`
+
+This route never exposes passwords or private URLs. When a live upload fails
+with the previously generic `AXIOM engine returned HTTP 404`, the proxy now
+uses the same diagnostic logic to return a non-sensitive actionable message
+instead of assuming repository code alone can repair Railway configuration.
 
 ## Private recovery endpoints
 

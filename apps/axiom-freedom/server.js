@@ -28,6 +28,13 @@ const ENGINE_FAILURE_CATEGORY = Object.freeze({
     UNREACHABLE: 'unreachable-private-engine',
     NON_SUCCESS: 'engine-non-success-response'
 });
+const UPLOAD_READINESS_CATEGORY = Object.freeze({
+    READY: 'ready',
+    UNREACHABLE: 'unreachable-private-engine',
+    WRONG_ENGINE_URL: 'wrong-engine-url',
+    MISSING_UPLOAD_ROUTE: 'missing-upload-route',
+    AUTH_MISMATCH: 'engine-auth-mismatch'
+});
 let lastEngineFailure = null;
 const MAX_REQUEST_BODY_BYTES = getPositiveInteger(
     process.env.AXIOM_MAX_REQUEST_BODY_BYTES,
@@ -60,6 +67,11 @@ const REQUIRED_LEAD_FIELDS = ['name', 'phone'];
 function getPositiveInteger(value, fallback) {
     const parsed = Number.parseInt(value, 10);
     return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function getEngineAuthorizationHeader() {
+    if (!AXIOM_ENGINE_ADMIN_PASSWORD) return null;
+    return 'Basic ' + Buffer.from('admin:' + AXIOM_ENGINE_ADMIN_PASSWORD).toString('base64');
 }
 
 // axescontracting.com is the private, admin-only AXES command center, not a
@@ -294,9 +306,8 @@ function getCommandCenterCheckpoints(timelineFilePath = PROJECT_TIMELINE_FILE) {
 async function invokeEngine(endpoint, method = 'GET', body) {
     let response;
     const headers = { 'Content-Type': 'application/json' };
-    if (AXIOM_ENGINE_ADMIN_PASSWORD) {
-        headers.Authorization = 'Basic ' + Buffer.from('admin:' + AXIOM_ENGINE_ADMIN_PASSWORD).toString('base64');
-    }
+    const authorization = getEngineAuthorizationHeader();
+    if (authorization) headers.Authorization = authorization;
     try {
         response = await fetch(new URL(endpoint, AXIOM_ENGINE_URL), {
             method,
@@ -326,9 +337,8 @@ async function invokeEngine(endpoint, method = 'GET', body) {
 
 async function invokeEngineText(endpoint) {
     const headers = {};
-    if (AXIOM_ENGINE_ADMIN_PASSWORD) {
-        headers.Authorization = 'Basic ' + Buffer.from('admin:' + AXIOM_ENGINE_ADMIN_PASSWORD).toString('base64');
-    }
+    const authorization = getEngineAuthorizationHeader();
+    if (authorization) headers.Authorization = authorization;
     let response;
     try {
         response = await fetch(new URL(endpoint, AXIOM_ENGINE_URL), {
@@ -361,9 +371,8 @@ function invokeAxiomEngine(command) {
 async function invokeEngineUpload(buffer, filename) {
     let response;
     const headers = {};
-    if (AXIOM_ENGINE_ADMIN_PASSWORD) {
-        headers.Authorization = 'Basic ' + Buffer.from('admin:' + AXIOM_ENGINE_ADMIN_PASSWORD).toString('base64');
-    }
+    const authorization = getEngineAuthorizationHeader();
+    if (authorization) headers.Authorization = authorization;
     if (typeof filename === 'string' && filename.length > 0) {
         headers['X-Source-Filename'] = filename;
     }
@@ -387,6 +396,168 @@ async function invokeEngineUpload(buffer, filename) {
         );
     }
     return payload;
+}
+
+function parseJson(text) {
+    try {
+        return JSON.parse(text);
+    } catch (error) {
+        return null;
+    }
+}
+
+async function getUploadReadiness() {
+    const headers = {};
+    const authorization = getEngineAuthorizationHeader();
+    if (authorization) headers.Authorization = authorization;
+
+    let healthResponse;
+    try {
+        healthResponse = await fetch(new URL('/health', AXIOM_ENGINE_URL), {
+            method: 'GET',
+            headers,
+            signal: AbortSignal.timeout(10000)
+        });
+    } catch (error) {
+        return {
+            status: 'attention',
+            category: UPLOAD_READINESS_CATEGORY.UNREACHABLE,
+            checkedAt: new Date().toISOString(),
+            message: 'The private AXIOM engine could not be reached from this proxy.'
+        };
+    }
+
+    const healthPayload = parseJson(await healthResponse.text().catch(() => ''));
+    if (healthResponse.status === 401 || healthResponse.status === 403) {
+        return {
+            status: 'attention',
+            category: UPLOAD_READINESS_CATEGORY.AUTH_MISMATCH,
+            checkedAt: new Date().toISOString(),
+            message: 'The proxy reached an upstream service, but the shared AXIOM engine credentials were rejected.'
+        };
+    }
+    if (!healthResponse.ok || healthPayload?.service !== 'AXIOM engine') {
+        return {
+            status: 'attention',
+            category: UPLOAD_READINESS_CATEGORY.WRONG_ENGINE_URL,
+            checkedAt: new Date().toISOString(),
+            message: 'AXIOM_ENGINE_URL is not pointing at the expected private AXIOM engine service.'
+        };
+    }
+
+    let optionsResponse;
+    try {
+        optionsResponse = await fetch(new URL('/system/source-catalog/options', AXIOM_ENGINE_URL), {
+            method: 'GET',
+            headers,
+            signal: AbortSignal.timeout(10000)
+        });
+    } catch (error) {
+        return {
+            status: 'attention',
+            category: UPLOAD_READINESS_CATEGORY.UNREACHABLE,
+            checkedAt: new Date().toISOString(),
+            message: 'The private AXIOM engine became unreachable during the upload readiness check.'
+        };
+    }
+
+    if (optionsResponse.status === 401 || optionsResponse.status === 403) {
+        return {
+            status: 'attention',
+            category: UPLOAD_READINESS_CATEGORY.AUTH_MISMATCH,
+            checkedAt: new Date().toISOString(),
+            message: 'The proxy reached the AXIOM engine, but its shared admin password does not match the engine configuration.'
+        };
+    }
+    if (optionsResponse.status === 404 || optionsResponse.status === 405) {
+        return {
+            status: 'attention',
+            category: UPLOAD_READINESS_CATEGORY.MISSING_UPLOAD_ROUTE,
+            checkedAt: new Date().toISOString(),
+            message: 'The configured AXIOM engine is running, but this deployment does not expose the upload route yet.'
+        };
+    }
+
+    const optionsPayload = parseJson(await optionsResponse.text().catch(() => ''));
+    if (!optionsResponse.ok || optionsPayload?.upload?.route !== 'POST /system/source-catalog/uploads') {
+        return {
+            status: 'attention',
+            category: UPLOAD_READINESS_CATEGORY.MISSING_UPLOAD_ROUTE,
+            checkedAt: new Date().toISOString(),
+            message: 'The configured AXIOM engine did not report the expected upload capability.'
+        };
+    }
+
+    return {
+        status: 'ready',
+        category: UPLOAD_READINESS_CATEGORY.READY,
+        checkedAt: new Date().toISOString(),
+        message: 'The private AXIOM engine reports the expected upload capability.'
+    };
+}
+
+async function buildUploadFailureResponse(error) {
+    if (error.statusCode === 401 || error.statusCode === 403) {
+        return {
+            statusCode: 502,
+            body: {
+                error: 'AXIOM upload is not ready: the proxy reached the private engine, but its shared admin password was rejected. Check AXIOM_ENGINE_ADMIN_PASSWORD on both services.',
+                diagnostic: {
+                    category: UPLOAD_READINESS_CATEGORY.AUTH_MISMATCH
+                }
+            }
+        };
+    }
+
+    if (error.statusCode === 404 || error.statusCode === 405 || getEngineFailureCategory(error) === ENGINE_FAILURE_CATEGORY.UNREACHABLE) {
+        const readiness = await getUploadReadiness();
+        if (readiness.category === UPLOAD_READINESS_CATEGORY.WRONG_ENGINE_URL) {
+            return {
+                statusCode: 502,
+                body: {
+                    error: 'AXIOM upload is not ready: AXIOM_ENGINE_URL is not pointing at the expected private AXIOM engine service.',
+                    diagnostic: { category: readiness.category }
+                }
+            };
+        }
+        if (readiness.category === UPLOAD_READINESS_CATEGORY.MISSING_UPLOAD_ROUTE) {
+            return {
+                statusCode: 502,
+                body: {
+                    error: 'AXIOM upload is not ready: the private engine is reachable, but this deployment is missing the upload route. Redeploy axiom-engine and confirm /system/source-catalog/uploads exists.',
+                    diagnostic: { category: readiness.category }
+                }
+            };
+        }
+        if (readiness.category === UPLOAD_READINESS_CATEGORY.AUTH_MISMATCH) {
+            return {
+                statusCode: 502,
+                body: {
+                    error: 'AXIOM upload is not ready: the proxy reached the private engine, but its shared admin password was rejected. Check AXIOM_ENGINE_ADMIN_PASSWORD on both services.',
+                    diagnostic: { category: readiness.category }
+                }
+            };
+        }
+        if (readiness.category === UPLOAD_READINESS_CATEGORY.UNREACHABLE) {
+            return {
+                statusCode: 502,
+                body: {
+                    error: 'AXIOM upload is temporarily unavailable because the private engine could not be reached.',
+                    diagnostic: { category: readiness.category }
+                }
+            };
+        }
+    }
+
+    const statusCode = Number.isInteger(error.statusCode) ? error.statusCode : 502;
+    return {
+        statusCode,
+        body: {
+            error: statusCode === 502
+                ? 'AXIOM document/image upload is temporarily unavailable'
+                : error.message
+        }
+    };
 }
 
 function recordEngineFailure(category, statusCode, message) {
@@ -631,7 +802,11 @@ const server = http.createServer(async (req, res) => {
           // a visitor cannot spoof or read another visitor's session by
           // supplying their own value in the request body.
           if (command.action === 'chat') {
-              command.sessionId = ensureSessionId(req, res);
+              const sessionId = ensureSessionId(req, res);
+              if (command.payload === null || typeof command.payload !== 'object' || Array.isArray(command.payload)) {
+                  command.payload = {};
+              }
+              command.payload.sessionId = sessionId;
           }
 
           try {
@@ -645,6 +820,11 @@ const server = http.createServer(async (req, res) => {
                           res.end(JSON.stringify({ error: 'AXIOM chat is not configured' }));
                           return;
                   }
+                  if (command.action === 'chat' && Number.isInteger(error.statusCode) && error.statusCode >= 400 && error.statusCode < 500) {
+                          res.writeHead(error.statusCode, { 'Content-Type': 'application/json' });
+                          res.end(JSON.stringify({ error: error.message }));
+                          return;
+                  }
                   res.writeHead(502, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify({
                     error: command.action === 'chat'
@@ -652,6 +832,12 @@ const server = http.createServer(async (req, res) => {
                       : 'AXIOM engine is unavailable'
                   }));
           }
+          return;
+    }
+    if (pathname === '/api/axiom/upload-readiness' && req.method === 'GET') {
+          const readiness = await getUploadReadiness();
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(readiness));
           return;
     }
     if (pathname === '/api/axiom/history' && req.method === 'GET') {
@@ -715,12 +901,9 @@ const server = http.createServer(async (req, res) => {
                   res.end(JSON.stringify(stored));
           } catch (error) {
                   console.error('AXIOM upload request failed:', getEngineFailureCategory(error), error.message);
-                  const statusCode = Number.isInteger(error.statusCode) ? error.statusCode : 502;
-                  const message = statusCode === 502
-                      ? 'AXIOM document/image upload is temporarily unavailable'
-                      : error.message;
-                  res.writeHead(statusCode, { 'Content-Type': 'application/json' });
-                  res.end(JSON.stringify({ error: message }));
+                  const failure = await buildUploadFailureResponse(error);
+                  res.writeHead(failure.statusCode, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify(failure.body));
           }
           return;
     }
