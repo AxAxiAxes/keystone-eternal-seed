@@ -885,14 +885,35 @@
                 .then(response => {
                     addMessage(response.reply || 'AXIOM could not process your message.', 'axiom', new Date());
                     const processedAttachments = Array.isArray(response.attachments) ? response.attachments : [];
-                    processedAttachments.forEach((result) => {
-                        const attachment = pendingAttachments.find((candidate) => candidate.sourceReference === result.sourceReference);
-                        if (!attachment) return;
+                    const processedBySourceReference = new Map(
+                        processedAttachments.map((result) => [result.sourceReference, result])
+                    );
+                    const explicitResults = [];
+                    for (const attachment of attachmentsForMessage) {
+                        const result = processedBySourceReference.get(attachment.sourceReference);
+                        if (!result) {
+                            attachment.status = 'failed';
+                            attachment.detail = 'AXIOM replied without an explicit attachment result. The file remains uploaded so you can retry or remove it.';
+                            explicitResults.push({
+                                sourceReference: attachment.sourceReference,
+                                originalFilename: attachment.originalFilename,
+                                status: attachment.status,
+                                detail: attachment.detail
+                            });
+                            continue;
+                        }
                         attachment.status = result.status === 'processed' ? 'processed' : 'failed';
                         attachment.detail = result.detail || attachment.detail;
-                    });
-                    summarizeProcessedAttachments(processedAttachments);
+                        explicitResults.push({
+                            sourceReference: attachment.sourceReference,
+                            originalFilename: attachment.originalFilename,
+                            status: attachment.status,
+                            detail: attachment.detail
+                        });
+                    }
+                    summarizeProcessedAttachments(explicitResults);
                     for (const attachment of attachmentsForMessage) {
+                        if (!processedBySourceReference.has(attachment.sourceReference)) continue;
                         const index = pendingAttachments.findIndex((candidate) => candidate.id === attachment.id);
                         if (index >= 0) pendingAttachments.splice(index, 1);
                     }

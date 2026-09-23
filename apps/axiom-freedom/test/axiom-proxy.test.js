@@ -1408,6 +1408,56 @@ test("POST /api/axiom forwards chat attachments and the proxy-owned sessionId in
   }
 });
 
+test("POST /api/axiom only relays allowlisted public chat validation errors from the engine", async () => {
+  for (const scenario of ["allowlisted", "internal"]) {
+    const upstream = http.createServer((req, res) => {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({
+        error: scenario === "allowlisted"
+          ? "attachment integrity check failed: notes.txt"
+          : "internal validation exploded in attachment resolver"
+      }));
+    });
+    const upstreamServer = await startServer(upstream);
+    const { port: upstreamPort } = upstreamServer.address();
+
+    let webServer;
+    try {
+      process.env.AXIOM_ENGINE_URL = `http://127.0.0.1:${upstreamPort}`;
+      delete require.cache[require.resolve("../server")];
+      const web = require("../server");
+      webServer = await startServer(web);
+      const { port: webPort } = webServer.address();
+
+      const response = await fetch(`http://127.0.0.1:${webPort}/api/axiom`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "chat",
+          payload: { message: "Review this attachment" }
+        })
+      });
+      assert.equal(response.status, 400);
+      const body = await response.json();
+      if (scenario === "allowlisted") {
+        assert.deepEqual(body, {
+          error: "attachment integrity check failed: notes.txt"
+        });
+      } else {
+        assert.deepEqual(body, {
+          error: "AXIOM rejected this chat request. Check the message text and any attached file metadata, then try again."
+        });
+      }
+    } finally {
+      if (webServer) {
+        await stopServer(webServer);
+      }
+      await stopServer(upstreamServer);
+      delete process.env.AXIOM_ENGINE_URL;
+    }
+  }
+});
+
 test("POST /api/axiom/uploads is public (no admin credentials required) and forwards accepted uploads to the engine", async (t) => {
   const localMemoryDirectory = path.join(
     os.tmpdir(),

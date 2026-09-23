@@ -584,6 +584,31 @@ function unavailableEngineStatus(error) {
     };
 }
 
+function getPublicChatValidationMessage(error) {
+    if (!Number.isInteger(error?.statusCode) || error.statusCode < 400 || error.statusCode >= 500) {
+        return null;
+    }
+    const message = String(error.message || '');
+    const allowlistedPatterns = [
+        /^message must be a non-empty string$/,
+        /^message must not exceed \d+ characters$/,
+        /^attachments must be an array$/,
+        /^attachments must contain at most \d+ files$/,
+        /^attachments must not exceed \d+ bytes in total$/,
+        /^attachment sourceReference must be an uploads\/<uuid> path created by this system$/,
+        /^attachment sha256 must be a 64-character hexadecimal hash$/,
+        /^attachment size must be a positive integer$/,
+        /^attachment originalFilename must be a non-empty string up to 200 characters$/,
+        /^attachment mimeType must be an empty string or a bounded string up to 120 characters$/,
+        /^attachment file was not found: /,
+        /^attachment size mismatch: /,
+        /^attachment integrity check failed: /
+    ];
+    return allowlistedPatterns.some((pattern) => pattern.test(message))
+        ? message
+        : 'AXIOM rejected this chat request. Check the message text and any attached file metadata, then try again.';
+}
+
 async function getSupportStatus() {
     const checks = await Promise.allSettled([
         invokeEngine('/health'),
@@ -820,9 +845,12 @@ const server = http.createServer(async (req, res) => {
                           res.end(JSON.stringify({ error: 'AXIOM chat is not configured' }));
                           return;
                   }
-                  if (command.action === 'chat' && Number.isInteger(error.statusCode) && error.statusCode >= 400 && error.statusCode < 500) {
+                  const publicValidationMessage = command.action === 'chat'
+                      ? getPublicChatValidationMessage(error)
+                      : null;
+                  if (publicValidationMessage) {
                           res.writeHead(error.statusCode, { 'Content-Type': 'application/json' });
-                          res.end(JSON.stringify({ error: error.message }));
+                          res.end(JSON.stringify({ error: publicValidationMessage }));
                           return;
                   }
                   res.writeHead(502, { 'Content-Type': 'application/json' });
