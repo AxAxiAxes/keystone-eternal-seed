@@ -12,6 +12,11 @@ It defines a **controlled vocabulary**: versioned, reviewable, machine-mappable 
 
 It is **not** free-form narrative language. Creative/symbolic language may exist in other records, but operational engineering documents and implementations must map to this standard.
 
+Enforcement boundary:
+
+- The normative \"must\" rules below are active authoring/governance requirements for repository contributors now.
+- Full automated CI/schema enforcement is planned and not yet fully active (see Section 11).
+
 ## 2) Terminology lifecycle states
 
 Every term record must carry one lifecycle state:
