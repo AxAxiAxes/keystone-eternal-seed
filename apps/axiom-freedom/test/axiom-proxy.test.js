@@ -244,6 +244,11 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.match(designSystemStylesheetBody, /theme-axiom-navy/);
     assert.match(designSystemStylesheetBody, /Migration recommendation/);
 
+    const designSystemStylesheetWithTrailingSlash = await fetch(
+      `http://127.0.0.1:${webPort}/axes-design-system.css/`
+    );
+    assert.equal(designSystemStylesheetWithTrailingSlash.status, 404);
+
     const axesContractingStudio = await fetch(`http://127.0.0.1:${webPort}/axescontracting`);
     assert.equal(axesContractingStudio.status, 200);
     const axesContractingStudioBody = await axesContractingStudio.text();
