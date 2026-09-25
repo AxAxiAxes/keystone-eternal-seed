@@ -270,6 +270,8 @@ A token must map to one and only one engineering meaning per schema version.
 - Meaning changes require either:
   - new token name, or
   - major schema version bump.
+- Minor/patch version increments are allowed only for non-semantic changes
+  (editorial clarifications, metadata additions that do not alter token meaning).
 
 ### 6.3 Baseline token groups
 
@@ -295,13 +297,16 @@ These controls are mandatory for terms with runtime effects:
 7. **Audit hooks** for read/transform/replay/correction decisions.
 8. **Platform enforcement** required; documentation text alone is not enforcement.
 
-Canonical governance sources for these controls:
+Canonical control-policy sources for these controls (not the full terminology
+reference set):
 
 - `docs/AXI_AUTOMATION_SERVICE.md`
 - `docs/AXES_GOVERNANCE_AND_SAFEGUARDING.md`
 - `docs/AXES_PLATFORM_PLAN.md`
 - `docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`
 - `docs/AXES_AGENT_ORIGIN_REGISTRY.md`
+- `docs/AXES_OS_SCIENCE_ENGINEERING_LIGHT_SENSING_CHECKPOINT.md`
+- `docs/AXES_OS_TERMINOLOGY_TOKEN_GLOSSARY.md`
 
 Encoding rule:
 
