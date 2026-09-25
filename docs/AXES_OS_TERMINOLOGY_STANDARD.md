@@ -339,6 +339,17 @@ A token must map to one and only one engineering meaning per schema version.
 - `calibration.{uncalibrated|factory|field|invalid}`
 - `temporal.{before|during|after|coincident}`
 
+Normative baseline token meanings:
+
+| Token pattern | Meaning |
+| --- | --- |
+| `light-semantic-v1/lux.band.*` | Ambient-light band classification from normalized lux values. |
+| `light-semantic-v1/spectrum.band.*` | Spectral-channel classification from normalized band vectors. |
+| `light-semantic-v1/transition.*` | Time-windowed directionality/state-change classification. |
+| `light-semantic-v1/confidence.*` | Confidence class for normalized event quality. |
+| `light-semantic-v1/calibration.*` | Calibration provenance/validity class bound to the event. |
+| `light-semantic-v1/temporal.*` | Relative temporal relation class to an anchor event/window. |
+
 See compact glossary: `docs/AXES_OS_TERMINOLOGY_TOKEN_GLOSSARY.md`.
 Authority rule: this standard is normative; the glossary is a convenience
 appendix and must not override this file.
@@ -474,14 +485,14 @@ Encoding rule:
 
 Current state note: repository automation does not yet enforce this full terminology contract in CI. These checks are documented as implementation guidance for the next validation phase and must not be represented as already-active automated gates.
 
-Planned validation target and location:
+Validation target and location:
 
-- Primary machine-readable records location (planned): `docs/terminology/records/*.term.json`
-- Primary schema location (planned extraction from this standard): `docs/terminology/schema/term-record-v1.schema.json`
+- Primary machine-readable records location: `docs/terminology/records/*.term.json`
+- Primary schema location: `docs/terminology/schema/term-record-v1.schema.json`
 - Validation scope when implemented: every `*.term.json` file must conform to the schema and lifecycle/evidence rules in this standard.
 
-These paths are planned targets and are not created in this documentation-only
-change set.
+Current state: schema path and records directory scaffolding exist; CI
+enforcement for these files is still future work.
 
 ## 12) Technical appendix
 
