@@ -66,6 +66,7 @@ Each term must conform to this normalized contract.
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "AXES OS Terminology Term Record v1",
   "type": "object",
+  "additionalProperties": false,
   "required": [
     "termId",
     "label",
@@ -119,6 +120,7 @@ Each term must conform to this normalized contract.
     },
     "dataMapping": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["eventFields", "tokenNamespaces"],
       "properties": {
         "eventFields": {
@@ -133,6 +135,7 @@ Each term must conform to this normalized contract.
     },
     "governanceImplication": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["authorization", "consent", "retention", "audit"],
       "properties": {
         "authorization": {"type": "string"},
@@ -147,6 +150,7 @@ Each term must conform to this normalized contract.
     },
     "requiredControls": {
       "type": "array",
+      "minItems": 0,
       "items": {
         "type": "string",
         "enum": [
@@ -184,7 +188,26 @@ Each term must conform to this normalized contract.
     "supersededBy": {"type": "string"},
     "changeRationale": {"type": "string"},
     "lastReviewedAt": {"type": "string", "format": "date-time"}
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "runtimeEffectClass": {"const": "none"}
+        }
+      },
+      "then": {
+        "properties": {
+          "requiredControls": {"maxItems": 0}
+        }
+      },
+      "else": {
+        "properties": {
+          "requiredControls": {"minItems": 1}
+        }
+      }
+    }
+  ]
 }
 ```
 
