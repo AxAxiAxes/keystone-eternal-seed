@@ -40,9 +40,14 @@ Rules:
 
 ## 4) Domain model and hierarchy
 
-Term hierarchy is fixed:
+Term hierarchy shape is fixed:
 
 `Domain -> Category -> Term -> Token`
+
+`category` values are controlled vocabulary entries managed by this standard, but
+they are intentionally extensible over time (with lifecycle controls), so the
+schema validates category structure while category enumerations are maintained
+in versioned terminology records.
 
 Required engineering domains:
 
@@ -180,7 +185,7 @@ Each term must conform to this normalized contract.
       "minItems": 0
     },
     "verificationRequired": {"type": "boolean"},
-    "version": {"type": "string", "pattern": "^v[0-9]+(\\.[0-9]+)?$"},
+    "version": {"type": "string", "pattern": "^v[0-9]+(\\.[0-9]+){0,2}$"},
     "status": {
       "type": "string",
       "enum": ["proposed", "reviewed", "adopted", "deprecated", "superseded"]
