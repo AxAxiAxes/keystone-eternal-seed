@@ -176,7 +176,8 @@ Each term must conform to this normalized contract.
     },
     "evidenceRefs": {
       "type": "array",
-      "items": {"type": "string"}
+      "items": {"type": "string"},
+      "minItems": 0
     },
     "verificationRequired": {"type": "boolean"},
     "version": {"type": "string", "pattern": "^v[0-9]+(\\.[0-9]+)?$"},
@@ -189,10 +190,7 @@ Each term must conform to this normalized contract.
     "changeRationale": {"type": "string"},
     "lastReviewedAt": {
       "type": "string",
-      "anyOf": [
-        {"format": "date-time"},
-        {"format": "date"}
-      ]
+      "pattern": "^(\\\\d{4}-\\\\d{2}-\\\\d{2}|\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}Z)$"
     }
   },
   "allOf": [
@@ -210,6 +208,20 @@ Each term must conform to this normalized contract.
       "else": {
         "properties": {
           "requiredControls": {"minItems": 1}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evidenceClass": {
+            "enum": ["repository-implemented-fact", "external-research-evidence"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "evidenceRefs": {"minItems": 1}
         }
       }
     }
@@ -260,6 +272,14 @@ These controls are mandatory for terms with runtime effects:
 6. **Revocation support** for capabilities and grants.
 7. **Audit hooks** for read/transform/replay/correction decisions.
 8. **Platform enforcement** required; documentation text alone is not enforcement.
+
+Canonical governance sources for these controls:
+
+- `docs/AXI_AUTOMATION_SERVICE.md`
+- `docs/AXES_GOVERNANCE_AND_SAFEGUARDING.md`
+- `docs/AXES_PLATFORM_PLAN.md`
+- `docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md`
+- `docs/AXES_AGENT_ORIGIN_REGISTRY.md`
 
 Encoding rule:
 
