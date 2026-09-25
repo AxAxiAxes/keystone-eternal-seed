@@ -204,12 +204,12 @@ function buildOutputPath(repoRoot, dateValue) {
   const draftsDirectory = path.resolve(repoRoot, DRAFTS_DIRECTORY);
   const fileName = `${dateValue}${DRAFT_SUFFIX}`;
   const outputPath = path.resolve(draftsDirectory, fileName);
-  const safePrefix = draftsDirectory + path.sep;
+  const relativeToDrafts = path.relative(draftsDirectory, outputPath);
 
   if (!fileName.match(/^\d{4}-\d{2}-\d{2}-daily-reconciliation-draft\.md$/)) {
     throw new Error(`Unsafe draft filename generated: ${fileName}`);
   }
-  if (!outputPath.startsWith(safePrefix)) {
+  if (relativeToDrafts.startsWith("..") || path.isAbsolute(relativeToDrafts)) {
     throw new Error(`Unsafe output path: ${outputPath}`);
   }
 

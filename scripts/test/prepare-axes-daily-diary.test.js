@@ -187,6 +187,11 @@ test("recent commit parser preserves tab characters in commit subject", () => {
   assert.equal(parsed[0].subject, "subject\twith\ttabs");
 });
 
+test("output-path safety allows filesystem-root repository path", () => {
+  const output = scriptModule.buildOutputPath(path.parse(process.cwd()).root, "2026-09-25");
+  assert.match(output.outputPath, /daily-reconciliation-draft\.md$/);
+});
+
 test("output includes explicit unverified external/runtime disclaimer section", async (t) => {
   const repoRoot = await createTempRepository();
   t.after(() => fsp.rm(repoRoot, { recursive: true, force: true }));
