@@ -124,7 +124,7 @@ function renderTree(reports, tasks, runs, governance) {
     const run = latestRun ? `latest agent run: ${latestRun.status}` : "no agent runs";
     const attention = (observation.attention || []).join(", ") || "none";
     const assignedLabel = agentTasks.length ? `${agentTasks.length} task assigned${agentTasks.length === 1 ? "" : "s"}` : "No tasks assigned";
-    const runLabel = latestRun ? (latestRun.status === "completed" ? "Report approved" : "Run attention") : "Awaiting run";
+    const runLabel = latestRun ? (["complete", "completed"].includes(String(latestRun.status).toLowerCase()) ? "Report approved" : "Run attention") : "Awaiting run";
     return `<article class="ax-card ax-card--compact"><div class="ax-card__header"><div class="ax-card__icon" aria-hidden="true">${escapeHtml(agent.name.slice(0, 1).toUpperCase())}</div><div><p class="ax-card__eyebrow">Registered agent</p><h3 class="ax-card__title">${escapeHtml(agent.name)}</h3></div></div><div class="ax-chip-row">${chip(agentStatus, agentStatus)}${chip(assignedLabel, agentTasks.length ? "ready" : "attention")}${chip(runLabel, latestRun ? latestRun.status : "attention")}</div><p class="note">Created ${escapeHtml(observation.createdAt || "invalid")} · ${escapeHtml(event)} · ${escapeHtml(run)}</p><ul class="ax-list">${taskNodes}</ul><div class="ax-card__footer">Attention: ${escapeHtml(attention)}</div></article>`;
   }).join("");
   const unassigned = tasks.filter(task => !assigned.has(task.id));
