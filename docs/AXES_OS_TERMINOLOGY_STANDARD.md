@@ -255,7 +255,7 @@ Each term must conform to this normalized contract.
 Timestamp normalization rule:
 
 - `lastReviewedAt` accepts either `YYYY-MM-DD` (date-only review record) or UTC
-  timestamp `YYYY-MM-DDTHH:MM:SSZ`.
+  timestamp `YYYY-MM-DDTHH:MM:SSZ` (whole seconds, trailing `Z`).
 - Offset timestamps (for example `+02:00`) are not used in this standard; convert
   to UTC `Z` before recording.
 
@@ -320,7 +320,8 @@ Encoding rule:
 
 - `runtimeEffectClass: none` must keep `requiredControls` empty.
 - Any other `runtimeEffectClass` must explicitly list applicable `requiredControls`.
-- `access-controlling` terms should include all controls unless a documented exception is reviewed and recorded.
+- `access-controlling` terms should include all controls; if an exception is needed,
+  track it in continuity/governance records outside this term schema contract.
 
 ## 8) Standardized term set (v1 baseline)
 
