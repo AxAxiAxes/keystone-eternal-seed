@@ -251,6 +251,51 @@ Each term must conform to this normalized contract.
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {"const": "superseded"}
+        }
+      },
+      "then": {
+        "required": ["supersededBy"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {"enum": ["proposed", "reviewed"]}
+        }
+      },
+      "then": {
+        "not": {
+          "anyOf": [
+            {"required": ["supersedes"]},
+            {"required": ["supersededBy"]}
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["supersedes"]
+      },
+      "then": {
+        "properties": {
+          "status": {"enum": ["adopted", "superseded"]}
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["supersededBy"]
+      },
+      "then": {
+        "properties": {
+          "status": {"enum": ["deprecated", "superseded"]}
+        }
+      }
     }
   ]
 }
@@ -331,7 +376,7 @@ Encoding rule:
 
 ## 8) Standardized term set (v1 baseline)
 
-> Note: This baseline sets the canonical term IDs and meanings. Most are `keystone-proposal` unless explicitly tied to repository-implemented controls.
+> Note: This baseline sets canonical term IDs and meanings across three evidence classes: `keystone-proposal`, `repository-implemented-fact`, and selected `external-research-evidence`.
 
 ### 8.1 UX/UI interaction terms
 
