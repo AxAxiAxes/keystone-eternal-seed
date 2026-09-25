@@ -40,6 +40,12 @@ The rollback-safe Microsoft 365 migration plan for the AXES business mailbox is
 in [EMAIL_MIGRATION_PLAN.md](docs/EMAIL_MIGRATION_PLAN.md).
 The module boundaries and portable AXES OS checkpoint process are in
 [AXES_OS_PORTABILITY.md](docs/AXES_OS_PORTABILITY.md).
+The AXES OS science-and-engineering checkpoint for agentic-web research and
+light-sensing architecture proposals is in
+[AXES_OS_SCIENCE_ENGINEERING_LIGHT_SENSING_CHECKPOINT.md](docs/AXES_OS_SCIENCE_ENGINEERING_LIGHT_SENSING_CHECKPOINT.md).
+The canonical AXES OS controlled terminology standard and compact token glossary are in
+[AXES_OS_TERMINOLOGY_STANDARD.md](docs/AXES_OS_TERMINOLOGY_STANDARD.md) and
+[AXES_OS_TERMINOLOGY_TOKEN_GLOSSARY.md](docs/AXES_OS_TERMINOLOGY_TOKEN_GLOSSARY.md).
 The private founder-controlled operations-observation schedule contract is in
 [AXI_AUTOMATION_PROFILES.md](docs/AXI_AUTOMATION_PROFILES.md).
 The private founder-approved service-planning journal is in
