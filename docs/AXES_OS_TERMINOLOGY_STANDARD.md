@@ -187,7 +187,13 @@ Each term must conform to this normalized contract.
     "supersedes": {"type": "string"},
     "supersededBy": {"type": "string"},
     "changeRationale": {"type": "string"},
-    "lastReviewedAt": {"type": "string", "format": "date-time"}
+    "lastReviewedAt": {
+      "type": "string",
+      "anyOf": [
+        {"format": "date-time"},
+        {"format": "date"}
+      ]
+    }
   },
   "allOf": [
     {
@@ -257,7 +263,7 @@ These controls are mandatory for terms with runtime effects:
 
 Encoding rule:
 
-- `runtimeEffectClass: none` may leave `requiredControls` empty.
+- `runtimeEffectClass: none` must keep `requiredControls` empty.
 - Any other `runtimeEffectClass` must explicitly list applicable `requiredControls`.
 - `access-controlling` terms should include all controls unless a documented exception is reviewed and recorded.
 
