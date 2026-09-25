@@ -67,11 +67,18 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      backdrop-filter: blur(16px);
-      background: rgba(16, 12, 17, 0.88);
+      background: rgba(16, 12, 17, 0.96);
       border-bottom: 1px solid var(--line);
       margin: 0 -20px;
       padding: 14px 20px;
+    }
+
+    @supports ((backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px))) {
+      .topbar {
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        background: rgba(16, 12, 17, 0.88);
+      }
     }
 
     .topbar-inner {
@@ -239,6 +246,15 @@
       transform: translateY(-1px);
       background: var(--gold-light);
       color: var(--ink);
+    }
+
+    .button:focus-visible,
+    button:focus-visible,
+    .nav-card:focus-visible,
+    .wordmark:focus-visible,
+    .link-card a:focus-visible {
+      outline: 2px solid var(--gold-light);
+      outline-offset: 3px;
     }
 
     .platform-stack {
