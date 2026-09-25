@@ -78,6 +78,10 @@ function chip(label, status) {
   return `<span class="ax-chip ax-chip--${escapeHtml(tone(status))}">${escapeHtml(label)}</span>`;
 }
 
+function ready(status) {
+  return tone(status) === "ready";
+}
+
 async function request(path) {
   const response = await fetch(path, { credentials:"same-origin", cache:"no-store" });
   const payload = await response.json().catch(() => ({}));
@@ -97,7 +101,7 @@ function updateClock() {
 function renderCheckpoints(timeline) {
   const phaseCard = `<article class="ax-card ax-card--compact ax-card--plain"><p class="ax-card__eyebrow">Current phase</p><h3 class="ax-card__title">${escapeHtml(timeline.currentPhase)}</h3><p class="note">Directly from the versioned project timeline.</p></article>`;
   const checkpointCards = timeline.checkpoints.map(checkpoint => {
-    const completed = checkpoint.status === "complete";
+    const completed = ready(checkpoint.status);
     return `<article class="ax-card ax-card--compact ax-card--plain"><div class="ax-chip-row">${chip(completed ? "Report approved" : "Needs review", completed ? "ready" : "attention")}${chip(checkpoint.status, checkpoint.status)}</div><h3 class="ax-card__title">${escapeHtml(checkpoint.title)}</h3><p class="note">Tracked continuity checkpoint.</p></article>`;
   }).join("");
   document.querySelector("#checkpoints").innerHTML = `<div class="ax-card-grid ax-card-grid--nested">${phaseCard}${checkpointCards || '<article class="ax-card ax-card--compact ax-card--plain"><h3 class="ax-card__title">No current checkpoints found.</h3><p class="note">The versioned record currently exposes no open items in this section.</p></article>'}</div>`;
@@ -124,7 +128,7 @@ function renderTree(reports, tasks, runs, governance) {
     const run = latestRun ? `latest agent run: ${latestRun.status}` : "no agent runs";
     const attention = (observation.attention || []).join(", ") || "none";
     const assignedLabel = agentTasks.length ? `${agentTasks.length} task assigned${agentTasks.length === 1 ? "" : "s"}` : "No tasks assigned";
-    const runLabel = latestRun ? (["complete", "completed"].includes(String(latestRun.status).toLowerCase()) ? "Report approved" : "Run attention") : "Awaiting run";
+    const runLabel = latestRun ? (ready(latestRun.status) ? "Report approved" : "Run attention") : "Awaiting run";
     return `<article class="ax-card ax-card--compact"><div class="ax-card__header"><div class="ax-card__icon" aria-hidden="true">${escapeHtml(agent.name.slice(0, 1).toUpperCase())}</div><div><p class="ax-card__eyebrow">Registered agent</p><h3 class="ax-card__title">${escapeHtml(agent.name)}</h3></div></div><div class="ax-chip-row">${chip(agentStatus, agentStatus)}${chip(assignedLabel, agentTasks.length ? "ready" : "attention")}${chip(runLabel, latestRun ? latestRun.status : "attention")}</div><p class="note">Created ${escapeHtml(observation.createdAt || "invalid")} · ${escapeHtml(event)} · ${escapeHtml(run)}</p><ul class="ax-list">${taskNodes}</ul><div class="ax-card__footer">Attention: ${escapeHtml(attention)}</div></article>`;
   }).join("");
   const unassigned = tasks.filter(task => !assigned.has(task.id));
