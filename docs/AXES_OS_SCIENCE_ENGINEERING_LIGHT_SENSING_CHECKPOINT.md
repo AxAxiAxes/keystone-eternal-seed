@@ -259,10 +259,10 @@ For any future implementation derived from this checkpoint:
 - `core/config/agentic-browsing-config.js` (v13.3.0 and `main`)
 - `core/gather/gatherers/agentic/ard.js` (`main`)
 - `core/audits/agentic/ard-schema.js` (`main`)
-- `core/audits/agentic/llms-txt.js`
+- `core/audits/agentic/llms-txt.js` (v13.3.0 and `main`)
 - `core/audits/webmcp-registered-tools.js` (v13.3.0 and `main`)
-- `core/audits/webmcp-form-coverage.js`
-- `core/audits/webmcp-schema-validity.js`
+- `core/audits/webmcp-form-coverage.js` (v13.3.0 and `main`)
+- `core/audits/webmcp-schema-validity.js` (v13.3.0 and `main`)
 - `core/gather/driver/navigation.js` (v13.3.0 and `main`)
 
 ### Sensor/kernel references (external research)

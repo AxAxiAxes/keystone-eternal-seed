@@ -94,7 +94,8 @@ Each term must conform to this normalized contract.
     "evidenceClass",
     "version",
     "status",
-    "verificationRequired"
+    "verificationRequired",
+    "lastReviewedAt"
   ],
   "properties": {
     "termId": {"type": "string", "pattern": "^[a-z0-9.-]+$"},
