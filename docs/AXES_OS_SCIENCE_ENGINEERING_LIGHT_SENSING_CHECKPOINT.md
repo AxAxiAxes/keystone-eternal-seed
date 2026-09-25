@@ -3,6 +3,7 @@
 **Status:** Mixed checkpoint. Contains (1) repository evidence, (2) external research notes, and (3) Keystone design proposals that are not yet implemented.
 **Recorded:** 2026-09-25
 **Scope:** Documentation-only checkpoint for AXES OS engineering planning. No source-code, driver, workflow, or deployment changes are introduced by this record.
+**Controlled vocabulary:** Terminology in this checkpoint is governed by `docs/AXES_OS_TERMINOLOGY_STANDARD.md` and `docs/AXES_OS_TERMINOLOGY_TOKEN_GLOSSARY.md`.
 
 ## 1) Evidence boundary and classification
 
