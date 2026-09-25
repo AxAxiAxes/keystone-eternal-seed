@@ -201,19 +201,9 @@ Each term must conform to this normalized contract.
     "changeRationale": {"type": "string"},
     "lastReviewedAt": {
       "type": "string",
-      "anyOf": [
-        {
-          "allOf": [
-            {"format": "date"},
-            {"pattern": "^\\d{4}-\\d{2}-\\d{2}$"}
-          ]
-        },
-        {
-          "allOf": [
-            {"format": "date-time"},
-            {"pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$"}
-          ]
-        }
+      "oneOf": [
+        {"pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+        {"pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$"}
       ]
     }
   },
@@ -272,6 +262,8 @@ Timestamp normalization rule:
   timestamp `YYYY-MM-DDTHH:MM:SSZ` or `YYYY-MM-DDTHH:MM:SS.sssZ` (trailing `Z`).
 - Offset timestamps (for example `+02:00`) are not used in this standard; convert
   to UTC `Z` before recording.
+- Calendar-realism checks (for impossible dates) should be enforced by the
+  planned terminology validator when CI automation is added.
 
 ## 6) Versioned meaning-anchor token system
 
