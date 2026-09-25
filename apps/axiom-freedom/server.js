@@ -538,6 +538,10 @@ const server = http.createServer(async (req, res) => {
           serveFile(res, path.join(__dirname, 'origin-continuity.html'), 'text/html; charset=utf-8');
           return;
     }
+    if (pathname === '/axes-design-system.css') {
+          serveFile(res, path.join(__dirname, 'axes-design-system.css'), 'text/css; charset=utf-8');
+          return;
+    }
     if (pathname === '/materials' || pathname === '/materials/') {
           serveFile(res, path.join(__dirname, 'materials.html'), 'text/html; charset=utf-8');
           return;

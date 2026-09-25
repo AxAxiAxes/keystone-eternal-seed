@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="AXES Contracting Architectural Design Desk: general, non-professional design tips and material education.">
   <title>Architectural Design Desk | AXES Contracting</title>
+  <link rel="stylesheet" href="/axes-design-system.css">
   <style>
     :root { color-scheme: dark; --ink:#100c11; --wine:#571b2b; --gold:#ddb65c; --cream:#f5ead4; --muted:#d1bfa7; --line:rgba(221,182,92,.3); }
     * { box-sizing:border-box; } body { background:radial-gradient(circle at 50% 0, #4a1827, var(--ink) 58rem); color:var(--cream); font:16px/1.6 Georgia,serif; margin:0; }
@@ -16,10 +17,16 @@
     article::before { background:var(--gold); content:""; display:block; height:1px; width:54px; } h2 { font-size:1.6rem; font-weight:400; line-height:1.15; margin:20px 0 10px; } p { color:var(--muted); }
     .label { color:var(--gold); font:800 .72rem/1 system-ui,sans-serif; letter-spacing:.13em; text-transform:uppercase; }
     ul.questions { color:var(--muted); margin:0; padding-left:1.1em; } ul.questions li { margin:6px 0; }
+    .palette-reference { margin-top:56px; }
+    .palette-reference .ax-card { min-height:0; }
+    .palette-reference .ax-card__title { color:var(--cream); font-size:1.4rem; font-weight:400; }
+    .palette-reference .ax-card .note { color:var(--muted); }
+    .palette-reference code { color:var(--gold); font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    .palette-reference .notice { margin:0; max-width:none; }
     footer { border-top:1px solid var(--line); color:var(--muted); font: .82rem system-ui,sans-serif; margin-top:72px; padding-top:22px; }
   </style>
 </head>
-<body>
+<body class="theme-axes-contracting">
 <main>
   <a class="back" href="/">← AXES Contracting</a>
   <p class="eyebrow">AXES Contracting · Architectural Design Desk</p>
@@ -40,6 +47,74 @@
     <li>What is a realistic phased timeline, and what would change it?</li>
     <li>What ongoing maintenance or lifecycle cost should I plan for with these materials?</li>
   </ul>
+  <section class="palette-reference" aria-labelledby="palette-reference-title">
+    <p class="eyebrow">Documented AXES surface palette</p>
+    <h2 id="palette-reference-title">Two labeled palettes, one migration path.</h2>
+    <p class="lede">This reference records the current visual tokens already present across AXES Contracting and earlier AXIOM surfaces. It documents the reusable cubic-card module for Command Center, Support Desk, Design Desk, and future AXES OS surfaces without forcing a rewrite of every page in this task.</p>
+    <div class="ax-card-grid" style="margin-top:24px;">
+      <article class="ax-card ax-card--compact">
+        <div class="ax-card__header">
+          <div class="ax-card__icon" aria-hidden="true">◆</div>
+          <div>
+            <p class="ax-card__eyebrow">Dark AXES Contracting</p>
+            <h3 class="ax-card__title">Primary palette for AXES-facing surfaces</h3>
+          </div>
+        </div>
+        <div class="ax-chip-row">
+          <span class="ax-chip ax-chip--ready">Recommended default</span>
+          <span class="ax-chip">Command Center + Contracting</span>
+        </div>
+        <p class="note">Use this ink / wine / garnet / gold / cream / muted-tan palette for AXES Contracting pages and the newer Command Center family.</p>
+        <div class="ax-token-list">
+          <div class="ax-token"><span class="ax-token__swatch" style="background:#100c11;"></span><span><span class="ax-token__name">Ink</span><span class="ax-token__value">#100c11</span></span></div>
+          <div class="ax-token"><span class="ax-token__swatch" style="background:#571b2b;"></span><span><span class="ax-token__name">Wine</span><span class="ax-token__value">#571b2b</span></span></div>
+          <div class="ax-token"><span class="ax-token__swatch" style="background:#8a2538;"></span><span><span class="ax-token__name">Garnet</span><span class="ax-token__value">#8a2538</span></span></div>
+          <div class="ax-token"><span class="ax-token__swatch" style="background:#ddb65c;"></span><span><span class="ax-token__name">Gold</span><span class="ax-token__value">#ddb65c</span></span></div>
+          <div class="ax-token"><span class="ax-token__swatch" style="background:#f5ead4;"></span><span><span class="ax-token__name">Cream / paper</span><span class="ax-token__value">#f5ead4</span></span></div>
+          <div class="ax-token"><span class="ax-token__swatch" style="background:#d1bfa7;"></span><span><span class="ax-token__name">Muted tan</span><span class="ax-token__value">#d1bfa7</span></span></div>
+        </div>
+      </article>
+      <article class="ax-card ax-card--compact theme-axiom-navy">
+        <div class="ax-card__header">
+          <div class="ax-card__icon" aria-hidden="true">◫</div>
+          <div>
+            <p class="ax-card__eyebrow">Legacy navy AXIOM</p>
+            <h3 class="ax-card__title">Retained for earlier XIIOM / AXIOM surfaces</h3>
+          </div>
+        </div>
+        <div class="ax-chip-row">
+          <span class="ax-chip ax-chip--attention">Keep labeled</span>
+          <span class="ax-chip">Earlier private surfaces</span>
+        </div>
+        <p class="note">Keep the navy AXIOM palette on earlier private AXIOM/XIIOM surfaces until a separate founder-reviewed consolidation pass decides if and how they should visually converge.</p>
+        <div class="ax-token-list">
+          <div class="ax-token"><span class="ax-token__swatch" style="background:#080f1d;"></span><span><span class="ax-token__name">Navy ink</span><span class="ax-token__value">#080f1d</span></span></div>
+          <div class="ax-token"><span class="ax-token__swatch" style="background:#121f35;"></span><span><span class="ax-token__name">Surface navy</span><span class="ax-token__value">#121f35</span></span></div>
+          <div class="ax-token"><span class="ax-token__swatch" style="background:#344b70;"></span><span><span class="ax-token__name">Border line</span><span class="ax-token__value">#344b70</span></span></div>
+          <div class="ax-token"><span class="ax-token__swatch" style="background:#d9af55;"></span><span><span class="ax-token__name">Gold accent</span><span class="ax-token__value">#d9af55</span></span></div>
+          <div class="ax-token"><span class="ax-token__swatch" style="background:#e8eef9;"></span><span><span class="ax-token__name">Cool light text</span><span class="ax-token__value">#e8eef9</span></span></div>
+          <div class="ax-token"><span class="ax-token__swatch" style="background:#a9bad4;"></span><span><span class="ax-token__name">Muted blue text</span><span class="ax-token__value">#a9bad4</span></span></div>
+        </div>
+      </article>
+      <article class="ax-card ax-card--compact">
+        <div class="ax-card__header">
+          <div class="ax-card__icon" aria-hidden="true">▣</div>
+          <div>
+            <p class="ax-card__eyebrow">Cubic card module</p>
+            <h3 class="ax-card__title">Reusable, reorderable, and build-free</h3>
+          </div>
+        </div>
+        <div class="ax-chip-row">
+          <span class="ax-chip ax-chip--ready">Title + glyph</span>
+          <span class="ax-chip ax-chip--ready">Metric / content</span>
+          <span class="ax-chip ax-chip--ready">Status chips</span>
+          <span class="ax-chip ax-chip--ready">Footer action</span>
+        </div>
+        <p class="note">Each cubic card is a self-contained panel with consistent padding, border, accent strip, circular glyph slot, optional chip row, and optional footer. Reorganize a grid without JavaScript by changing <code>--card-order</code> and <code>--card-span</code> on the card itself.</p>
+        <p class="notice">Migration recommendation: new AXES Command Center and AXES Contracting interfaces should start from the dark AXES Contracting palette; legacy navy AXIOM surfaces can remain until a separate review aligns product language and access boundaries.</p>
+      </article>
+    </div>
+  </section>
   <p class="notice">A private, founder-reviewed design consultation offer is under internal review and is not yet approved for publication or requests. This page does not collect project submissions, quotes, or personal information, and no request made here is reviewed or fulfilled.</p>
   <footer>AXES Contracting · Architectural Design Desk is an educational and creative reference, not a professional service. It does not verify, endorse, license, insure, or guarantee any outcome, provider, or property.</footer>
 </main>
