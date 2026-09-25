@@ -201,7 +201,7 @@ Each term must conform to this normalized contract.
     "changeRationale": {"type": "string"},
     "lastReviewedAt": {
       "type": "string",
-      "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z)$"
+      "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z)$"
     }
   },
   "allOf": [
@@ -255,7 +255,7 @@ Each term must conform to this normalized contract.
 Timestamp normalization rule:
 
 - `lastReviewedAt` accepts either `YYYY-MM-DD` (date-only review record) or UTC
-  timestamp `YYYY-MM-DDTHH:MM:SSZ` (whole seconds, trailing `Z`).
+  timestamp `YYYY-MM-DDTHH:MM:SSZ` or `YYYY-MM-DDTHH:MM:SS.sssZ` (trailing `Z`).
 - Offset timestamps (for example `+02:00`) are not used in this standard; convert
   to UTC `Z` before recording.
 
