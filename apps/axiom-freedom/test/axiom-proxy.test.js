@@ -295,7 +295,11 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(commandCenter.status, 200);
     const commandCenterMarkup = await commandCenter.text();
     assert.match(commandCenterMarkup, /AXES Command Center/);
+    assert.match(commandCenterMarkup, /AXES Contracting is the private operating surface for the AXES OS portfolio/);
+    assert.match(commandCenterMarkup, /AXIOM remains the bounded AI and automation layer/);
     assert.match(commandCenterMarkup, /Live continuity clock and checkpoints/);
+    assert.match(commandCenterMarkup, /Paperwork, workspace, and accountability/);
+    assert.match(commandCenterMarkup, /\/library\/docs\/axes-os-command-center\/INDEX\.md/);
     assert.match(commandCenterMarkup, /api\/command-center\/checkpoints/);
 
     const commandCenterWithTrailingSlash = await fetch(
