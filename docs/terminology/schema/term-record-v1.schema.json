@@ -136,6 +136,7 @@
   "allOf": [
     {
       "if": {
+        "required": ["runtimeEffectClass"],
         "properties": {
           "runtimeEffectClass": {"const": "none"}
         }
@@ -180,6 +181,7 @@
     },
     {
       "if": {
+        "required": ["status"],
         "properties": {
           "status": {"const": "superseded"}
         }
@@ -190,6 +192,7 @@
     },
     {
       "if": {
+        "required": ["status"],
         "properties": {
           "status": {"enum": ["proposed", "reviewed"]}
         }

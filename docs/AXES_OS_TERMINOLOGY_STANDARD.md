@@ -210,6 +210,7 @@ Each term must conform to this normalized contract.
   "allOf": [
     {
       "if": {
+        "required": ["runtimeEffectClass"],
         "properties": {
           "runtimeEffectClass": {"const": "none"}
         }
@@ -254,6 +255,7 @@ Each term must conform to this normalized contract.
     },
     {
       "if": {
+        "required": ["status"],
         "properties": {
           "status": {"const": "superseded"}
         }
@@ -264,6 +266,7 @@ Each term must conform to this normalized contract.
     },
     {
       "if": {
+        "required": ["status"],
         "properties": {
           "status": {"enum": ["proposed", "reviewed"]}
         }
