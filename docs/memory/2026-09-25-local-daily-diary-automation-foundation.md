@@ -29,6 +29,7 @@ Startup and governance basis reviewed for this task:
 - `docs/ENGINE_INTEGRATION.md`
 - `docs/RAILWAY_DEPLOYMENT.md`
 - `docs/COPILOT_ACCOUNTABILITY_TRACKER.md`
+- `docs/AXES_LOCAL_DAILY_AUTOMATION.md` (new in this implementation)
 - Latest relevant continuity entries:
   - `docs/memory/2026-09-22-pr173-review-preparation.md`
   - `docs/memory/2026-09-22b-pr173-authorized-remediation.md`

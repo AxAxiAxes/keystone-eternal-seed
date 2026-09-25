@@ -178,6 +178,15 @@ test("help output uses provided stdout stream in main()", () => {
   assert.match(output, /Usage:/);
 });
 
+test("recent commit parser preserves tab characters in commit subject", () => {
+  const parsed = scriptModule.parseRecentCommits("abc1234\t2026-09-25\tAXES Test\tsubject\twith\ttabs");
+  assert.equal(parsed.length, 1);
+  assert.equal(parsed[0].sha, "abc1234");
+  assert.equal(parsed[0].date, "2026-09-25");
+  assert.equal(parsed[0].author, "AXES Test");
+  assert.equal(parsed[0].subject, "subject\twith\ttabs");
+});
+
 test("output includes explicit unverified external/runtime disclaimer section", async (t) => {
   const repoRoot = await createTempRepository();
   t.after(() => fsp.rm(repoRoot, { recursive: true, force: true }));

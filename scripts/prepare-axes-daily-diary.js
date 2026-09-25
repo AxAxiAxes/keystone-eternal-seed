@@ -101,7 +101,7 @@ function resolveRepositoryRoot(cwd = process.cwd(), runner = execFileSync) {
     }
     return root;
   } catch (error) {
-    throw new Error(`Unable to determine repository root from "${cwd}"`);
+    throw new Error(`Unable to determine repository root from "${cwd}": ${error.message}`);
   }
 }
 
@@ -148,7 +148,13 @@ function parseRecentCommits(logOutput) {
     .filter(Boolean)
     .slice(0, RECENT_COMMIT_LIMIT)
     .map((line) => {
-      const [sha, date, author, subject] = line.split("\t");
+      const firstTab = line.indexOf("\t");
+      const secondTab = line.indexOf("\t", firstTab + 1);
+      const thirdTab = line.indexOf("\t", secondTab + 1);
+      const sha = firstTab === -1 ? line : line.slice(0, firstTab);
+      const date = secondTab === -1 ? "" : line.slice(firstTab + 1, secondTab);
+      const author = thirdTab === -1 ? "" : line.slice(secondTab + 1, thirdTab);
+      const subject = thirdTab === -1 ? "" : line.slice(thirdTab + 1);
       return { sha, date, author, subject };
     });
 }
@@ -375,6 +381,7 @@ module.exports = {
   main,
   parseArgs,
   parseChangedPaths,
+  parseRecentCommits,
   parseUncheckedTimelineCheckpoints,
   printUsage,
   toMarkdown,
