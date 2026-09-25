@@ -421,9 +421,6 @@ Current state note: repository automation does not yet enforce this full termino
     "platform-enforcement"
   ],
   "evidenceClass": "keystone-proposal",
-  "evidenceRefs": [
-    "docs/AXES_OS_SCIENCE_ENGINEERING_LIGHT_SENSING_CHECKPOINT.md"
-  ],
   "verificationRequired": true,
   "version": "v1",
   "status": "proposed",
