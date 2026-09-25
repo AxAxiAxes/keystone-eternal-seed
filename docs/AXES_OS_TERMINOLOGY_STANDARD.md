@@ -206,13 +206,21 @@ Each term must conform to this normalized contract.
         }
       },
       "then": {
+        "required": ["requiredControls"],
         "properties": {
-          "requiredControls": {"maxItems": 0}
+          "requiredControls": {
+            "type": "array",
+            "maxItems": 0
+          }
         }
       },
       "else": {
+        "required": ["requiredControls"],
         "properties": {
-          "requiredControls": {"minItems": 1}
+          "requiredControls": {
+            "type": "array",
+            "minItems": 1
+          }
         }
       }
     },
@@ -225,8 +233,12 @@ Each term must conform to this normalized contract.
         }
       },
       "then": {
+        "required": ["evidenceRefs"],
         "properties": {
-          "evidenceRefs": {"minItems": 1}
+          "evidenceRefs": {
+            "type": "array",
+            "minItems": 1
+          }
         }
       }
     }
@@ -391,6 +403,12 @@ Encoding rule:
 - **Change-control checks:** every definition change requires version, rationale, and date.
 
 Current state note: repository automation does not yet enforce this full terminology contract in CI. These checks are documented as implementation guidance for the next validation phase and must not be represented as already-active automated gates.
+
+Planned validation target and location:
+
+- Primary machine-readable records location (planned): `docs/terminology/records/*.term.json`
+- Primary schema location (planned extraction from this standard): `docs/terminology/schema/term-record-v1.schema.json`
+- Validation scope when implemented: every `*.term.json` file must conform to the schema and lifecycle/evidence rules in this standard.
 
 ## 12) Technical appendix
 
