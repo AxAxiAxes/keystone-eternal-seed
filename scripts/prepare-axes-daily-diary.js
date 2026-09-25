@@ -144,8 +144,7 @@ function parseRecentCommits(logOutput) {
 
   return logOutput
     .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean)
+    .filter((line) => line.length > 0)
     .slice(0, RECENT_COMMIT_LIMIT)
     .map((line) => {
       const firstTab = line.indexOf("\t");

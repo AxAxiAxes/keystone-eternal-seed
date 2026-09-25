@@ -187,6 +187,12 @@ test("recent commit parser preserves tab characters in commit subject", () => {
   assert.equal(parsed[0].subject, "subject\twith\ttabs");
 });
 
+test("recent commit parser preserves leading and trailing subject spaces", () => {
+  const parsed = scriptModule.parseRecentCommits("abc1234\t2026-09-25\tAXES Test\t  spaced subject  ");
+  assert.equal(parsed.length, 1);
+  assert.equal(parsed[0].subject, "  spaced subject  ");
+});
+
 test("output-path safety allows filesystem-root repository path", () => {
   const output = scriptModule.buildOutputPath(path.parse(process.cwd()).root, "2026-09-25");
   assert.match(output.outputPath, /daily-reconciliation-draft\.md$/);
