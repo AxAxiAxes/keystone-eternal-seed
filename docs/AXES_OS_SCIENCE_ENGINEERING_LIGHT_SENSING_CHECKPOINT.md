@@ -225,7 +225,7 @@ For any future implementation derived from this checkpoint:
 ### Current status
 
 - **Implemented today:** governance and accountability framework; bounded automation controls; terminology boundaries.
-- **External validated research:** Lighthouse comparison evidence listed above.
+- **External research evidence:** Lighthouse comparison findings listed above.
 - **Not implemented:** light-sensor ingestion, sequencer/resequencer signal runtime, semantic alphabet execution path.
 
 ### Decisions recorded in this checkpoint
