@@ -226,12 +226,28 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(designDesk.status, 200);
     const designDeskBody = await designDesk.text();
     assert.match(designDeskBody, /Architectural Design Desk/);
+    assert.match(designDeskBody, /Documented AXES surface palette/);
+    assert.match(designDeskBody, /--card-order/);
     assert.match(designDeskBody, /under internal review/);
 
     const designDeskWithTrailingSlash = await fetch(
       `http://127.0.0.1:${webPort}/design-desk/`
     );
     assert.equal(designDeskWithTrailingSlash.status, 200);
+
+    const designSystemStylesheet = await fetch(
+      `http://127.0.0.1:${webPort}/axes-design-system.css`
+    );
+    assert.equal(designSystemStylesheet.status, 200);
+    const designSystemStylesheetBody = await designSystemStylesheet.text();
+    assert.match(designSystemStylesheetBody, /theme-axes-contracting/);
+    assert.match(designSystemStylesheetBody, /theme-axiom-navy/);
+    assert.match(designSystemStylesheetBody, /Migration recommendation/);
+
+    const designSystemStylesheetWithTrailingSlash = await fetch(
+      `http://127.0.0.1:${webPort}/axes-design-system.css/`
+    );
+    assert.equal(designSystemStylesheetWithTrailingSlash.status, 404);
 
     const axesContractingStudio = await fetch(`http://127.0.0.1:${webPort}/axescontracting`);
     assert.equal(axesContractingStudio.status, 200);
@@ -292,8 +308,11 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(commandCenter.status, 200);
     const commandCenterMarkup = await commandCenter.text();
     assert.match(commandCenterMarkup, /AXES Command Center/);
-    assert.match(commandCenterMarkup, /Live continuity clock and checkpoints/);
+    assert.match(commandCenterMarkup, /Clock and checkpoints/);
     assert.match(commandCenterMarkup, /api\/command-center\/checkpoints/);
+    assert.match(commandCenterMarkup, /axes-design-system\.css/);
+    assert.match(commandCenterMarkup, /ax-card-grid/);
+    assert.match(commandCenterMarkup, /Central continuity map/);
 
     const commandCenterWithTrailingSlash = await fetch(
       `http://127.0.0.1:${webPort}/command-center/`,
