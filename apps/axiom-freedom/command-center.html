@@ -5,40 +5,590 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AXES Command Center</title>
   <style>
-    body { background:#10131a; color:#edf2f7; font:16px system-ui,sans-serif; margin:0; }
-    main { max-width:1200px; margin:0 auto; padding:32px 20px 64px; }
-    h1,h2 { margin:0; } .note { color:#aab7c7; } section { background:#1a202b; border:1px solid #313b4d; border-radius:10px; margin-top:20px; padding:20px; }
-    .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; } .metric { background:#111722; border-radius:8px; padding:12px; }
-    button { background:#d5a94d; color:#18130a; border:0; border-radius:6px; cursor:pointer; font:inherit; font-weight:700; padding:9px; }
-    table { border-collapse:collapse; width:100%; } th,td { border-bottom:1px solid #313b4d; padding:9px; text-align:left; vertical-align:top; }
-    .tree, .tree ul { list-style:none; margin:0; padding-left:22px; } .tree { padding-left:0; } .tree ul { border-left:1px solid #46536a; margin-left:8px; }
-    .tree li { margin:9px 0; } .node { display:inline-block; background:#111722; border-radius:6px; padding:7px 10px; }
-    .ready { color:#b8e6c2; } .attention { color:#fca5a5; } .muted { color:#aab7c7; }
-    .clock { color:#d5a94d; font-size:1.25rem; font-variant-numeric:tabular-nums; font-weight:700; }
+    :root {
+      color-scheme: dark;
+      --ink: #100c11;
+      --ink-soft: #1b1219;
+      --wine: #571b2b;
+      --garnet: #8a2538;
+      --panel: rgba(43, 18, 29, 0.9);
+      --panel-strong: rgba(60, 22, 36, 0.95);
+      --panel-alt: rgba(24, 15, 20, 0.92);
+      --gold: #ddb65c;
+      --gold-light: #f7db92;
+      --cream: #f5ead4;
+      --muted: #d1bfa7;
+      --line: rgba(221, 182, 92, 0.22);
+      --line-strong: rgba(221, 182, 92, 0.38);
+      --ready: #c5ddb9;
+      --attention: #f2b4aa;
+      --node: rgba(16, 12, 17, 0.72);
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(115deg, rgba(221, 182, 92, 0.05) 1px, transparent 1px) 0 0 / 48px 48px,
+        linear-gradient(25deg, rgba(221, 182, 92, 0.04) 1px, transparent 1px) 0 0 / 48px 48px,
+        radial-gradient(circle at 50% 0, #5a1c2b 0, var(--ink) 54rem);
+      color: var(--cream);
+      font: 16px/1.6 system-ui, sans-serif;
+    }
+
+    a {
+      color: var(--gold-light);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.22em;
+    }
+
+    a:hover { color: #fff1c7; }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 72px;
+    }
+
+    h1, h2, h3 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin: 0;
+    }
+
+    p { margin: 0; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(16px);
+      background: rgba(16, 12, 17, 0.88);
+      border-bottom: 1px solid var(--line);
+      margin: 0 -20px;
+      padding: 14px 20px;
+    }
+
+    .topbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px 20px;
+    }
+
+    .wordmark,
+    .eyebrow,
+    .label,
+    .quicknav a,
+    .button,
+    .chip,
+    th {
+      font-family: system-ui, sans-serif;
+    }
+
+    .wordmark {
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.24em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .topbar-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 12px;
+      background: rgba(87, 27, 43, 0.24);
+    }
+
+    .chip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 4px rgba(221, 182, 92, 0.12);
+    }
+
+    .hero {
+      padding: 52px 0 28px;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 5.6rem);
+      line-height: 0.9;
+      margin-top: 20px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 span {
+      display: block;
+      color: var(--gold-light);
+      font-size: 0.34em;
+      letter-spacing: 0.26em;
+      margin-top: 18px;
+    }
+
+    .lede {
+      max-width: 780px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      margin-top: 24px;
+    }
+
+    .hero-grid,
+    .quicknav,
+    .metrics,
+    .links-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1.4fr 1fr;
+      align-items: start;
+      margin-top: 28px;
+    }
+
+    .hero-panel,
+    section,
+    .nav-card,
+    .link-card {
+      background: linear-gradient(145deg, var(--panel-strong), var(--panel-alt));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-panel {
+      padding: 24px;
+    }
+
+    .hero-panel h2 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .hero-panel p + p { margin-top: 14px; }
+
+    .hero-panel p,
+    .note,
+    .card-copy,
+    td {
+      color: var(--muted);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .button,
+    button {
+      appearance: none;
+      border: 1px solid var(--gold);
+      border-radius: 999px;
+      background: var(--gold);
+      color: var(--ink);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+      padding: 10px 16px;
+      text-decoration: none;
+      transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+    }
+
+    .button.secondary {
+      background: rgba(16, 12, 17, 0.45);
+      color: var(--gold-light);
+    }
+
+    .button:hover,
+    button:hover {
+      transform: translateY(-1px);
+      background: var(--gold-light);
+      color: var(--ink);
+    }
+
+    .platform-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .stack-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(16, 12, 17, 0.48);
+      padding: 16px 18px;
+    }
+
+    .label {
+      color: var(--gold);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .stack-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .quicknav {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      margin: 28px 0;
+    }
+
+    .nav-card {
+      padding: 18px;
+      text-decoration: none;
+    }
+
+    .nav-card strong {
+      display: block;
+      color: var(--cream);
+      font-size: 0.98rem;
+      margin-bottom: 6px;
+    }
+
+    .nav-card span {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .notice {
+      border-left: 3px solid var(--gold);
+      color: var(--muted);
+      margin-top: 18px;
+      max-width: 920px;
+      padding: 14px 18px;
+      background: rgba(16, 12, 17, 0.34);
+    }
+
+    section {
+      margin-top: 20px;
+      padding: 24px;
+    }
+
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      line-height: 1.02;
+    }
+
+    .section-head .subhead {
+      color: var(--gold-light);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .clock {
+      color: var(--gold-light);
+      font-size: 1.16rem;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(16, 12, 17, 0.3);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      padding: 12px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    tbody tr:last-child td { border-bottom: 0; }
+
+    .metrics {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .metric {
+      background: linear-gradient(145deg, rgba(87, 27, 43, 0.62), rgba(16, 12, 17, 0.86));
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 15px 16px;
+      min-height: 112px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .tree,
+    .tree ul {
+      list-style: none;
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .tree { padding-left: 0; }
+
+    .tree ul {
+      border-left: 1px solid var(--line-strong);
+      margin-left: 8px;
+    }
+
+    .tree li { margin: 10px 0; }
+
+    .node {
+      display: inline-block;
+      background: var(--node);
+      border: 1px solid rgba(221, 182, 92, 0.15);
+      border-radius: 12px;
+      padding: 8px 12px;
+    }
+
+    .links-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .link-card {
+      padding: 20px;
+    }
+
+    .link-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .link-card p {
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .link-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .link-card li + li { margin-top: 6px; }
+
+    .ready { color: var(--ready); }
+    .attention { color: var(--attention); }
+    .muted { color: var(--muted); }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 860px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .section-head { align-items: start; }
+    }
+
+    @media (max-width: 620px) {
+      main { padding-left: 16px; padding-right: 16px; }
+      .topbar { margin-left: -16px; margin-right: -16px; padding-left: 16px; padding-right: 16px; }
+      h1 { font-size: clamp(2.6rem, 14vw, 4.2rem); }
+      .button, button { width: 100%; justify-content: center; text-align: center; }
+      .button-row { display: grid; grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .button,
+      button { transition: none; }
+    }
   </style>
 </head>
 <body>
 <main>
-  <h1>AXES Command Center</h1>
-  <p class="note">Private build-management view. It observes protected AXI data only; it does not create work, enable automation, probe public endpoints, deploy, publish, or change accounts.</p>
-  <p><a href="/workspace" style="color:#66d9ef;">Open the Workspace Library</a> — a searchable index of registered apps/services, filed documents, automations, and chat history.</p>
-  <p><a href="/accountability" style="color:#66d9ef;">Open the Copilot Accountability Ledger</a> — directive-vs-delivery audit, evidence, ratings, and loss tracking.</p>
-  <p><button id="refresh">Refresh now</button> <span id="updated" class="note"></span></p>
-  <section>
-    <h2>Live continuity clock and checkpoints</h2>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="wordmark" href="#top">AXES Contracting</a>
+      <div class="topbar-meta">
+        <span class="chip"><span class="chip-dot" aria-hidden="true"></span>Private operator surface</span>
+        <span>AXES OS portfolio framing</span>
+        <span>Routes, auth, and engine calls unchanged</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" id="top">
+    <p class="eyebrow">AXES OS · Command Center</p>
+    <h1>AXES<span>Command Center</span></h1>
+    <p class="lede">AXES Contracting is the private operating surface for the AXES OS portfolio. AXIOM remains the bounded AI and automation layer, and KEYSTONE remains the governance and documentation layer. This page organizes those roles inside one calm control surface without changing deployment state, account authority, or external infrastructure.</p>
+    <div class="hero-grid">
+      <div class="hero-panel">
+        <h2>Private control surface</h2>
+        <p class="note">Private build-management view. It observes protected AXI data only; it does not create work, enable automation, probe public endpoints, deploy, publish, or change accounts.</p>
+        <div class="button-row">
+          <button id="refresh">Refresh now</button>
+          <a class="button secondary" href="/workspace">Open the Workspace Library</a>
+          <a class="button secondary" href="/accountability">Open the Copilot Accountability Ledger</a>
+        </div>
+        <p id="updated" class="footer-note" aria-live="polite"></p>
+      </div>
+      <div class="platform-stack" aria-label="Portfolio framing">
+        <article class="stack-card">
+          <p class="label">Operating entity</p>
+          <h3>AXES Contracting</h3>
+          <p class="card-copy">Private command, navigation, service framing, and founder-controlled operational review for the portfolio.</p>
+        </article>
+        <article class="stack-card">
+          <p class="label">Bounded AI layer</p>
+          <h3>AXIOM / XIIOM</h3>
+          <p class="card-copy">Protected memory, continuity, accountability, monitoring, and allowlisted automation — never unrestricted deployment or account control.</p>
+        </article>
+        <article class="stack-card">
+          <p class="label">Governance layer</p>
+          <h3>KEYSTONE</h3>
+          <p class="card-copy">Versioned source basis, documentation, constitutional framing, continuity records, and review anchors for founder-directed work.</p>
+        </article>
+      </div>
+    </div>
+
+    <nav class="quicknav" aria-label="Command Center quick navigation">
+      <a class="nav-card" href="#continuity"><strong>Continuity</strong><span>Clock, current phase, and timeline checkpoints.</span></a>
+      <a class="nav-card" href="#signals"><strong>Signals</strong><span>Recorded metrics for agents, tasks, runs, and governance.</span></a>
+      <a class="nav-card" href="#tree-section"><strong>Continuity tree</strong><span>AXI root, governance, agents, tasks, and latest runs.</span></a>
+      <a class="nav-card" href="#records"><strong>Paperwork & links</strong><span>Workspace, accountability, support, and document index access.</span></a>
+    </nav>
+
+    <p class="notice">The protected Command Center is intended to serve at the root of <code>axescontracting.com</code> once authorized Railway and DNS work is completed. This page is repository-controlled UI work only; it does not prove that external domain connection is live.</p>
+  </section>
+
+  <section id="continuity">
+    <div class="section-head">
+      <div>
+        <p class="subhead">Top status and phase</p>
+        <h2>Live continuity clock and checkpoints</h2>
+      </div>
+    </div>
     <p id="clock" class="clock" aria-live="polite"></p>
     <p class="note">Browser-local time updates every second. Timeline checkpoints are read from the versioned project record; the clock is not service uptime or an external deployment claim.</p>
     <div id="checkpoints"></div>
   </section>
-  <section>
-    <h2>Build and efficiency signals</h2>
+
+  <section id="signals">
+    <div class="section-head">
+      <div>
+        <p class="subhead">Recorded build posture</p>
+        <h2>Build and efficiency signals</h2>
+      </div>
+    </div>
     <p class="note">Efficiency describes recorded task/run flow only. It is not a measure of people, identity, value, or project worth.</p>
     <div id="metrics" class="metrics"></div>
   </section>
-  <section>
-    <h2>Continuity tree</h2>
+
+  <section id="tree-section">
+    <div class="section-head">
+      <div>
+        <p class="subhead">Registered operational lineage</p>
+        <h2>Continuity tree</h2>
+      </div>
+    </div>
     <p class="note">AXI root → governance → registered agents → assigned tasks → latest runs. Unassigned work remains visible.</p>
     <div id="tree" aria-live="polite"></div>
+  </section>
+
+  <section id="records">
+    <div class="section-head">
+      <div>
+        <p class="subhead">Paperwork, workspace, and accountability</p>
+        <h2>Records and operating links</h2>
+      </div>
+    </div>
+    <div class="links-grid">
+      <article class="link-card">
+        <p class="label">Protected workspace</p>
+        <h3>Immediate operator surfaces</h3>
+        <p>Use the existing protected tools without changing their route or behavior.</p>
+        <ul>
+          <li><a href="/workspace">Workspace Library</a> — searchable registered apps, services, documents, automations, and chat history.</li>
+          <li><a href="/accountability">Copilot Accountability Ledger</a> — directive-vs-delivery evidence, ratings, and audit reporting.</li>
+          <li><a href="/support">Support Desk</a> — read-only runtime, engine, email, automation-profile, and service-registry status.</li>
+        </ul>
+      </article>
+      <article class="link-card">
+        <p class="label">Paperwork</p>
+        <h3>AXES OS document index</h3>
+        <p>The document index is a read-only copy collection for review and navigation. Original sources remain authoritative and editable at their original repository paths.</p>
+        <ul>
+          <li><a href="/library/docs/axes-os-command-center/INDEX.md">AXES OS Command Center index</a></li>
+          <li><a href="/library/PROJECT_TIMELINE.md">Project timeline</a></li>
+          <li><a href="/library/docs/AXES_PLATFORM_PLAN.md">AXES platform plan</a></li>
+          <li><a href="/library/docs/RAILWAY_DEPLOYMENT.md">Railway deployment record</a></li>
+        </ul>
+      </article>
+      <article class="link-card">
+        <p class="label">Founder review</p>
+        <h3>What remains outside this page</h3>
+        <p>This interface improves the repository-controlled Command Center presentation only.</p>
+        <ul>
+          <li>External Railway, DNS, and domain cutover still require authorized human action.</li>
+          <li>Missing original design-reference images remain unavailable in the repository.</li>
+          <li>Founder review is still needed for any refinements tied to those unrecovered reference assets.</li>
+        </ul>
+      </article>
+    </div>
   </section>
 </main>
 <script>
