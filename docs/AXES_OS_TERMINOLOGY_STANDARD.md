@@ -435,6 +435,9 @@ Planned validation target and location:
 - Primary schema location (planned extraction from this standard): `docs/terminology/schema/term-record-v1.schema.json`
 - Validation scope when implemented: every `*.term.json` file must conform to the schema and lifecycle/evidence rules in this standard.
 
+These paths are planned targets and are not created in this documentation-only
+change set.
+
 ## 12) Technical appendix
 
 ### 12.1 Example term record
