@@ -201,7 +201,20 @@ Each term must conform to this normalized contract.
     "changeRationale": {"type": "string"},
     "lastReviewedAt": {
       "type": "string",
-      "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z)$"
+      "anyOf": [
+        {
+          "allOf": [
+            {"format": "date"},
+            {"pattern": "^\\d{4}-\\d{2}-\\d{2}$"}
+          ]
+        },
+        {
+          "allOf": [
+            {"format": "date-time"},
+            {"pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$"}
+          ]
+        }
+      ]
     }
   },
   "allOf": [
@@ -232,6 +245,7 @@ Each term must conform to this normalized contract.
     },
     {
       "if": {
+        "required": ["evidenceClass"],
         "properties": {
           "evidenceClass": {
             "enum": ["repository-implemented-fact", "external-research-evidence"]
