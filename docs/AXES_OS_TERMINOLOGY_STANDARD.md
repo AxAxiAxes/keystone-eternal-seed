@@ -190,7 +190,7 @@ Each term must conform to this normalized contract.
     "changeRationale": {"type": "string"},
     "lastReviewedAt": {
       "type": "string",
-      "pattern": "^(\\\\d{4}-\\\\d{2}-\\\\d{2}|\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}Z)$"
+      "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z)$"
     }
   },
   "allOf": [
@@ -378,12 +378,14 @@ Encoding rule:
 8. Do not represent `keystone-proposal` as deployed implementation.
 9. Record lifecycle transition with rationale/date in continuity records.
 
-## 11) Terminology quality validation plan
+## 11) Terminology quality validation plan (future enforcement guidance)
 
 - **Consistency checks:** detect duplicates/conflicting definitions across domains.
 - **Boundary checks:** reject prohibited scientific/medical/diagnostic interpretations in symbolic domains.
 - **Traceability checks:** require policy/audit implication for critical terms.
 - **Change-control checks:** every definition change requires version, rationale, and date.
+
+Current state note: repository automation does not yet enforce this full terminology contract in CI. These checks are documented as implementation guidance for the next validation phase and must not be represented as already-active automated gates.
 
 ## 12) Technical appendix
 
