@@ -729,6 +729,35 @@ test("reports an unavailable chat provider when no key is configured", async (t)
   });
 });
 
+test("rejects malformed chat attachment metadata before contacting the provider", async (t) => {
+  const server = await startServer();
+  t.after(() => stopServer(server));
+  const { port } = server.address();
+
+  const response = await fetch(`http://127.0.0.1:${port}/axiom`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "chat",
+      payload: {
+        message: "Review this",
+        attachments: [{
+          sourceReference: "../outside.txt",
+          sha256: "a".repeat(64),
+          size: 10,
+          originalFilename: "outside.txt",
+          mimeType: "text/plain"
+        }]
+      }
+    })
+  });
+
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), {
+    error: "attachment sourceReference must be an uploads/<uuid> path created by this system"
+  });
+});
+
 test("does not expose parser details for malformed engine requests", async (t) => {
   const server = await startServer();
   t.after(() => stopServer(server));

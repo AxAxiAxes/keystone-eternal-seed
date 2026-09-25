@@ -241,6 +241,7 @@
             border-radius: 8px;
             font-size: 0.9rem;
             line-height: 1.5;
+            white-space: pre-wrap;
         }
 
         .message-timestamp {
@@ -326,6 +327,143 @@
             border-color: rgba(232, 182, 76, 0.5);
         }
 
+        .attachment-panel {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(20, 11, 6, 0.55);
+            padding: 0.9rem 1rem 0.35rem;
+        }
+
+        .attachment-panel[hidden] {
+            display: none;
+        }
+
+        .attachment-panel-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: baseline;
+            margin-bottom: 0.75rem;
+            font-size: 0.78rem;
+            color: #b0b0b0;
+        }
+
+        .attachment-panel-header strong {
+            color: #e8b64c;
+            font-size: 0.82rem;
+        }
+
+        .attachment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .attachment-card {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .attachment-card.uploading,
+        .attachment-card.attached {
+            border-color: rgba(232, 182, 76, 0.35);
+        }
+
+        .attachment-card.processed {
+            border-color: rgba(92, 184, 92, 0.35);
+        }
+
+        .attachment-card.failed {
+            border-color: rgba(184, 69, 31, 0.45);
+        }
+
+        .attachment-card-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .attachment-name {
+            font-size: 0.85rem;
+            color: #f1e0b2;
+            word-break: break-word;
+        }
+
+        .attachment-meta {
+            font-size: 0.72rem;
+            color: #9f9f9f;
+            margin-top: 0.2rem;
+        }
+
+        .attachment-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            border-radius: 999px;
+            padding: 0.18rem 0.55rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e8b64c;
+            white-space: nowrap;
+        }
+
+        .attachment-card.failed .attachment-status {
+            color: #ff9c79;
+        }
+
+        .attachment-card.processed .attachment-status {
+            color: #8fe38f;
+        }
+
+        .attachment-detail {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            color: #c7c7c7;
+        }
+
+        .attachment-actions {
+            margin-top: 0.55rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .attachment-remove {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #d8d8d8;
+            padding: 0.35rem 0.7rem;
+            font-size: 0.72rem;
+            box-shadow: none;
+        }
+
+        .attachment-remove:hover {
+            border-color: rgba(232, 182, 76, 0.5);
+            color: #ffffff;
+        }
+
+        .composer-hint {
+            padding: 0 1rem 0.9rem;
+            font-size: 0.74rem;
+            color: #b0b0b0;
+            background: rgba(10, 14, 39, 0.8);
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
         button {
             background: linear-gradient(135deg, #e8b64c, #b8451f);
             border: none;
@@ -345,6 +483,13 @@
 
         button:active {
             transform: translateY(0);
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+            transform: none;
+            box-shadow: none;
         }
 
         .placeholder {
@@ -449,9 +594,17 @@
                 <div class="placeholder" id="historyStatus">Loading conversation history…</div>
             </div>
 
+            <div class="attachment-panel" id="attachmentPanel" hidden>
+                <div class="attachment-panel-header">
+                    <strong>Pending attachments</strong>
+                    <span id="attachmentPanelSummary">0 files</span>
+                </div>
+                <div class="attachment-list" id="attachmentList"></div>
+            </div>
+
             <div class="input-area">
                 <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt,.md,.csv,.json,.png,.jpg,.jpeg,.gif,.webp">
-                <button id="attachButton" type="button" title="Attach a document or image (admin sign-in required)">📎</button>
+                <button id="attachButton" type="button" title="Attach a document or image to your next message">📎</button>
                 <input 
                     type="text" 
                     id="messageInput" 
@@ -460,6 +613,7 @@
                 >
                 <button id="sendButton" onclick="sendMessage()">Send</button>
             </div>
+            <div class="composer-hint">Text extraction in chat currently supports .txt, .md, .csv, and .json. Other stored files will be reported honestly if AXI cannot read them yet.</div>
         </div>
     </div>
 
@@ -469,10 +623,14 @@
         <p><a href="/" class="footer-link">Axes Contracting portal</a> · <a href="/library/" class="footer-link">AXIOM / KEYSTONE library</a></p>
         <p style="margin-top: 0.5rem; color: #b8451f;"><em>One seed. Every mind. One soul.</em></p>
     </footer>
+    <div id="attachmentAnnouncer" class="sr-only" aria-live="polite"></div>
 
     <script>
         const WELCOME_TEXT = "I am AXIOM. I'm here to help you think through complex problems, generate creative solutions, and explore ideas with depth and authenticity. What's on your mind?";
         let lastRenderedDayKey = null;
+        const pendingAttachments = [];
+        let attachmentSequence = 0;
+        let sendInFlight = false;
 
         function dayKey(date) {
             return date.toISOString().slice(0, 10);
@@ -582,11 +740,123 @@
             }
         }
 
+        function statusLabel(status) {
+            if (status === 'uploading') return 'Uploading';
+            if (status === 'uploaded') return 'Uploaded';
+            if (status === 'attached') return 'Attached to this message';
+            if (status === 'processed') return 'Processed';
+            return 'Failed';
+        }
+
+        function formatBytes(bytes) {
+            if (!Number.isFinite(bytes) || bytes < 0) return '? bytes';
+            if (bytes < 1024) return `${bytes} bytes`;
+            const kb = bytes / 1024;
+            if (kb < 1024) return `${kb.toFixed(1)} KB`;
+            return `${(kb / 1024).toFixed(1)} MB`;
+        }
+
+        function announceAttachmentStatus(message) {
+            const announcer = document.getElementById('attachmentAnnouncer');
+            announcer.textContent = '';
+            window.setTimeout(() => {
+                announcer.textContent = message;
+            }, 0);
+        }
+
+        function updateComposerState() {
+            const input = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            const attachButton = document.getElementById('attachButton');
+            const hasUploadingAttachment = pendingAttachments.some(attachment => attachment.status === 'uploading');
+            sendButton.disabled = sendInFlight || hasUploadingAttachment || input.value.trim().length === 0;
+            attachButton.disabled = sendInFlight;
+        }
+
+        function renderPendingAttachments() {
+            const panel = document.getElementById('attachmentPanel');
+            const list = document.getElementById('attachmentList');
+            const summary = document.getElementById('attachmentPanelSummary');
+            if (pendingAttachments.length === 0) {
+                panel.hidden = true;
+                list.innerHTML = '';
+                summary.textContent = '0 files';
+                updateComposerState();
+                return;
+            }
+
+            panel.hidden = false;
+            summary.textContent = `${pendingAttachments.length} file${pendingAttachments.length === 1 ? '' : 's'}`;
+            list.innerHTML = pendingAttachments.map((attachment) => `
+                <div class="attachment-card ${escapeHtml(attachment.status)}">
+                    <div class="attachment-card-header">
+                        <div>
+                            <div class="attachment-name">${escapeHtml(attachment.originalFilename)}</div>
+                            <div class="attachment-meta">${escapeHtml(attachment.mimeType || 'Unknown type')} · ${escapeHtml(formatBytes(attachment.size))}</div>
+                        </div>
+                        <span class="attachment-status">${escapeHtml(statusLabel(attachment.status))}</span>
+                    </div>
+                    <div class="attachment-detail">${escapeHtml(attachment.detail || '')}</div>
+                    <div class="attachment-actions">
+                        <button class="attachment-remove" type="button" data-remove-attachment="${escapeHtml(String(attachment.id))}" ${attachment.status === 'attached' ? 'disabled aria-disabled="true"' : ''}>Remove</button>
+                    </div>
+                </div>
+            `).join('');
+            list.querySelectorAll('[data-remove-attachment]').forEach((button) => {
+                button.addEventListener('click', () => removeAttachment(button.getAttribute('data-remove-attachment')));
+            });
+            updateComposerState();
+        }
+
+        function removeAttachment(id) {
+            const index = pendingAttachments.findIndex(attachment => String(attachment.id) === String(id));
+            if (index < 0) return;
+            if (pendingAttachments[index].status === 'attached') {
+                announceAttachmentStatus(`Wait for AXIOM to finish processing ${pendingAttachments[index].originalFilename} before removing it.`);
+                return;
+            }
+            const [removed] = pendingAttachments.splice(index, 1);
+            renderPendingAttachments();
+            announceAttachmentStatus(`Removed attachment ${removed.originalFilename}.`);
+        }
+
+        function createPendingAttachment(file) {
+            const attachment = {
+                id: ++attachmentSequence,
+                originalFilename: file.name,
+                mimeType: file.type || '',
+                size: file.size,
+                status: 'uploading',
+                detail: 'Uploading to AXIOM…'
+            };
+            pendingAttachments.push(attachment);
+            renderPendingAttachments();
+            return attachment;
+        }
+
+        function summarizeProcessedAttachments(attachments) {
+            if (!Array.isArray(attachments) || attachments.length === 0) return;
+            const lines = attachments.map((attachment) => `• ${attachment.originalFilename}: ${statusLabel(attachment.status)} — ${attachment.detail || 'No detail provided.'}`);
+            addMessage(`Attachment results for this message:\n${lines.join('\n')}`, 'system', new Date());
+        }
+
         function sendMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
-            
-            if (!message) return;
+            if (sendInFlight || !message) return;
+            if (pendingAttachments.some(attachment => attachment.status === 'uploading')) {
+                addMessage('Please wait until the current upload finishes before sending your message.', 'system', new Date());
+                return;
+            }
+
+            const attachmentsForMessage = pendingAttachments.filter(attachment => attachment.status === 'uploaded');
+            sendInFlight = true;
+            attachmentsForMessage.forEach((attachment) => {
+                attachment.status = 'attached';
+                attachment.detail = 'Queued for this message. AXI will only claim to have used it if processing succeeds.';
+            });
+            renderPendingAttachments();
+            updateComposerState();
 
             // Add user message to chat
             addMessage(message, 'user', new Date());
@@ -595,7 +865,19 @@
             fetch('/api/axiom', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'chat', payload: { message } })
+                body: JSON.stringify({
+                    action: 'chat',
+                    payload: {
+                        message,
+                        attachments: attachmentsForMessage.map((attachment) => ({
+                            sourceReference: attachment.sourceReference,
+                            sha256: attachment.sha256,
+                            size: attachment.size,
+                            originalFilename: attachment.originalFilename,
+                            mimeType: attachment.mimeType || ''
+                        }))
+                    }
+                })
             })
                 .then(async response => {
                     const payload = await response.json().catch(() => ({}));
@@ -604,26 +886,71 @@
                     }
                     return payload;
                 })
-                .then(response => addMessage(response.reply || 'AXIOM could not process your message.', 'axiom', new Date()))
-                .catch(error => addMessage(error.message, 'axiom', new Date()));
+                .then(response => {
+                    addMessage(response.reply || 'AXIOM could not process your message.', 'axiom', new Date());
+                    const processedAttachments = Array.isArray(response.attachments) ? response.attachments : [];
+                    const processedBySourceReference = new Map(
+                        processedAttachments.map((result) => [result.sourceReference, result])
+                    );
+                    const explicitResults = [];
+                    for (const attachment of attachmentsForMessage) {
+                        const result = processedBySourceReference.get(attachment.sourceReference);
+                        if (!result) {
+                            attachment.status = 'failed';
+                            attachment.detail = 'AXIOM replied without an explicit attachment result. The file remains uploaded so you can retry or remove it.';
+                            explicitResults.push({
+                                sourceReference: attachment.sourceReference,
+                                originalFilename: attachment.originalFilename,
+                                status: attachment.status,
+                                detail: attachment.detail
+                            });
+                            continue;
+                        }
+                        attachment.status = result.status === 'processed' ? 'processed' : 'failed';
+                        attachment.detail = result.detail || attachment.detail;
+                        explicitResults.push({
+                            sourceReference: attachment.sourceReference,
+                            originalFilename: attachment.originalFilename,
+                            status: attachment.status,
+                            detail: attachment.detail
+                        });
+                    }
+                    summarizeProcessedAttachments(explicitResults);
+                    for (const attachment of attachmentsForMessage) {
+                        if (!processedBySourceReference.has(attachment.sourceReference)) continue;
+                        const index = pendingAttachments.findIndex((candidate) => candidate.id === attachment.id);
+                        if (index >= 0) pendingAttachments.splice(index, 1);
+                    }
+                    renderPendingAttachments();
+                    announceAttachmentStatus(
+                        attachmentsForMessage.length
+                            ? 'Message sent. Attached file processing results are shown in the chat.'
+                            : 'Message sent.'
+                    );
+                })
+                .catch(error => {
+                    attachmentsForMessage.forEach((attachment) => {
+                        attachment.status = 'uploaded';
+                        attachment.detail = 'Still uploaded and ready to retry. The chat request did not complete successfully.';
+                    });
+                    renderPendingAttachments();
+                    addMessage(error.message, 'axiom', new Date());
+                    announceAttachmentStatus(`Message failed. ${attachmentsForMessage.length ? 'Your uploaded attachments remain available to retry.' : ''}`.trim());
+                })
+                .finally(() => {
+                    sendInFlight = false;
+                    updateComposerState();
+                });
         }
 
         function uploadAttachment(file) {
-            addMessage(`Uploading ${file.name}…`, 'system', new Date());
+            const pendingAttachment = createPendingAttachment(file);
             return fetch('/api/axiom/uploads', {
                 method: 'POST',
                 headers: { 'X-Source-Filename': file.name },
                 body: file
             })
                 .then(async response => {
-                    if (response.status === 401) {
-                        // /api/axiom/uploads is public (no admin credentials
-                        // required from the visitor's browser) -- a 401 here
-                        // means the server's own upstream engine
-                        // authentication is misconfigured, not that the
-                        // visitor needs to sign in.
-                        throw new Error('AXIOM upload service is temporarily unavailable. Please try again later.');
-                    }
                     const payload = await response.json().catch(() => ({}));
                     if (!response.ok) {
                         throw new Error(payload.error || 'Upload failed');
@@ -631,14 +958,21 @@
                     return payload;
                 })
                 .then(result => {
-                    const sizeKb = (result.size ? (result.size / 1024).toFixed(1) : '?');
-                    addMessage(
-                        `📎 Stored "${file.name}" (${sizeKb} KB, sha256 ${String(result.sha256 || '').slice(0, 12)}…). Still requires a separate cataloging approval before AXIOM uses it as a memory source.`,
-                        'system',
-                        new Date()
-                    );
+                    pendingAttachment.sourceReference = result.sourceReference;
+                    pendingAttachment.sha256 = result.sha256;
+                    pendingAttachment.size = Number.isFinite(result.size) ? result.size : file.size;
+                    pendingAttachment.originalFilename = result.originalFilename || file.name;
+                    pendingAttachment.status = 'uploaded';
+                    pendingAttachment.detail = 'Stored on the AXIOM engine and ready to attach to your next message.';
+                    renderPendingAttachments();
+                    announceAttachmentStatus(`Uploaded ${pendingAttachment.originalFilename}. Ready to attach to your next message.`);
                 })
-                .catch(error => addMessage(`Could not upload "${file.name}": ${error.message}`, 'system', new Date()));
+                .catch(error => {
+                    pendingAttachment.status = 'failed';
+                    pendingAttachment.detail = error.message;
+                    renderPendingAttachments();
+                    announceAttachmentStatus(`Upload failed for ${pendingAttachment.originalFilename}.`);
+                });
         }
 
         function addMessage(text, sender, date, options = {}) {
@@ -673,6 +1007,7 @@
             event.target.value = '';
             if (file) uploadAttachment(file);
         });
+        document.getElementById('messageInput').addEventListener('input', updateComposerState);
 
         // Minimize/restore the chat window. State is remembered per-browser
         // (not per-session) so a visitor's preference persists across visits;
@@ -692,8 +1027,10 @@
             if (localStorage.getItem('axiomChatMinimized') === '1') setMinimized(true);
         } catch (error) { /* storage unavailable */ }
 
-        loadHistory().finally(() => document.getElementById('messageInput').focus());
+        loadHistory().finally(() => {
+            updateComposerState();
+            document.getElementById('messageInput').focus();
+        });
     </script>
 </body>
 </html>
-

@@ -52,9 +52,10 @@ test("generates a reply and records both chat turns", async () => {
     }
   });
 
-  const reply = await service.reply("  Hello AXIOM  ");
+  const result = await service.reply("  Hello AXIOM  ");
 
-  assert.equal(reply, "Hello from AXIOM.");
+  assert.equal(result.reply, "Hello from AXIOM.");
+  assert.deepEqual(result.attachments, []);
   assert.deepEqual(usageEntries, [{
     model: "test-model",
     usage: {
@@ -176,6 +177,89 @@ test("scopes conversation context and recorded turns to the given sessionId", as
   assert.equal(recordedEntries.length, 2);
   assert.equal(recordedEntries[0].metadata.sessionId, "visitor-42");
   assert.equal(recordedEntries[1].metadata.sessionId, "visitor-42");
+});
+
+test("includes verified attachment context in the provider request and returns honest attachment statuses", async () => {
+  let capturedInput;
+  const service = new ChatService({
+    apiKey: "test-key",
+    model: "test-model",
+    memoryStore: { async list() { return []; }, async record() {} },
+    sourceCatalogService: {
+      validateChatAttachments(attachments) {
+        return attachments;
+      },
+      async prepareChatAttachments() {
+        return [
+          {
+            sourceReference: "uploads/a.txt",
+            sha256: "a".repeat(64),
+            size: 12,
+            originalFilename: "notes.txt",
+            mimeType: "text/plain",
+            status: "processed",
+            text: "hello world",
+            detail: "Read this attachment for the current reply."
+          },
+          {
+            sourceReference: "uploads/b.png",
+            sha256: "b".repeat(64),
+            size: 34,
+            originalFilename: "photo.png",
+            mimeType: "image/png",
+            status: "failed",
+            detail: "Attachment was stored, but AXI does not have a tested vision path in chat yet, so this image was not interpreted."
+          }
+        ];
+      }
+    },
+    fetchImplementation: async (url, options) => {
+      capturedInput = JSON.parse(options.body).input.at(-1).content;
+      return {
+        ok: true,
+        async json() {
+          return {
+            id: "response-test",
+            output: [{
+              type: "message",
+              content: [{ type: "output_text", text: "Attachment-aware reply" }]
+            }]
+          };
+        }
+      };
+    }
+  });
+
+  const result = await service.reply("Please review these files", {
+    attachments: [{ sourceReference: "uploads/a.txt" }, { sourceReference: "uploads/b.png" }]
+  });
+
+  assert.match(capturedInput, /Attachments for this message:/);
+  assert.match(capturedInput, /notes\.txt/);
+  assert.match(capturedInput, /hello world/);
+  assert.match(capturedInput, /photo\.png/);
+  assert.match(capturedInput, /not processed/);
+  assert.equal(result.reply, "Attachment-aware reply");
+  assert.deepEqual(result.attachments, [
+    {
+      sourceReference: "uploads/a.txt",
+      sha256: "a".repeat(64),
+      size: 12,
+      originalFilename: "notes.txt",
+      mimeType: "text/plain",
+      status: "processed",
+      detail: "Read this attachment for the current reply."
+    },
+    {
+      sourceReference: "uploads/b.png",
+      sha256: "b".repeat(64),
+      size: 34,
+      originalFilename: "photo.png",
+      mimeType: "image/png",
+      status: "failed",
+      detail: "Attachment was stored, but AXI does not have a tested vision path in chat yet, so this image was not interpreted."
+    }
+  ]);
 });
 
 test("rejects oversized chat messages before contacting the provider", async () => {

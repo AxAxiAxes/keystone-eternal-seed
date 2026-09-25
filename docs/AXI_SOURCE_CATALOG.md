@@ -64,6 +64,23 @@ returned `sourceReference` and `sha256`, exactly as with a repository path.
 This preserves the existing operator-approval boundary while allowing the
 underlying file content to actually be stored, not just referenced by path.
 
+### Temporary chat use of uploaded files
+
+Uploaded files may now be referenced temporarily from the public chat request
+contract (`/api/axiom` → `/axiom`) without first becoming catalog entries. That
+temporary use is deliberately bounded:
+
+- only `uploads/<uuid>[.<ext>]` references created by this upload route are
+  accepted;
+- the chat path re-verifies the stored bytes against the supplied SHA-256
+  before use;
+- bounded extraction currently supports only `.txt`, `.md`, `.csv`, and
+  `.json`;
+- unsupported document/image formats are reported honestly as stored-but-not-
+  interpreted for chat;
+- temporary chat use does **not** auto-create a `source.catalog` entry, write a
+  protected memory record, or bypass operator approval for durable promotion.
+
 ## Boundaries
 
 - The `source.catalog` action itself does not read, summarize, publish, or

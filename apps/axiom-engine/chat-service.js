@@ -5,6 +5,7 @@ class ChatService {
     apiKey,
     model,
     memoryStore,
+    sourceCatalogService,
     usageStore,
     maxMessageCharacters = 4000,
     fetchImplementation = fetch,
@@ -13,18 +14,14 @@ class ChatService {
     this.apiKey = apiKey;
     this.model = model;
     this.memoryStore = memoryStore;
+    this.sourceCatalogService = sourceCatalogService;
     this.usageStore = usageStore;
     this.maxMessageCharacters = maxMessageCharacters;
     this.fetchImplementation = fetchImplementation;
     this.now = now;
   }
 
-  async reply(message, { agent, sessionId } = {}) {
-    if (!this.apiKey) {
-      const error = new Error("OPENAI_API_KEY is not configured");
-      error.statusCode = 503;
-      throw error;
-    }
+  async reply(message, { agent, sessionId, attachments } = {}) {
     if (typeof message !== "string" || message.trim().length === 0) {
       throw new TypeError("message must be a non-empty string");
     }
@@ -34,6 +31,14 @@ class ChatService {
       throw new RangeError(
         `message must not exceed ${this.maxMessageCharacters} characters`
       );
+    }
+    const validatedAttachments = this.sourceCatalogService
+      ? this.sourceCatalogService.validateChatAttachments(attachments)
+      : [];
+    if (!this.apiKey) {
+      const error = new Error("OPENAI_API_KEY is not configured");
+      error.statusCode = 503;
+      throw error;
     }
     // Scope the "recent conversation" context to this caller's own session
     // when one is supplied, so one visitor's chat never leaks into another
@@ -45,6 +50,10 @@ class ChatService {
       10,
       sessionId ? { metadataFilter: { sessionId } } : undefined
     );
+    const preparedAttachments = this.sourceCatalogService
+      ? await this.sourceCatalogService.prepareChatAttachments(validatedAttachments)
+      : [];
+    const attachmentContext = formatAttachmentContext(preparedAttachments);
     const response = await this.fetchImplementation("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
@@ -57,6 +66,7 @@ class ChatService {
           AXIOM_IDENTITY_PROMPT,
           `The current date and time is ${this.now().toISOString()}. Use this as the true current date/time -- do not guess or rely on your training data's cutoff for "today's date" or similar questions.`,
           "You maintain continuous timeline awareness: every chat turn is recorded into an ongoing, timestamped memory log the moment it happens, using this same live server clock -- not a fixed, cached, or remembered value from earlier in the conversation. If asked how you track time, dates, or memory, explain plainly that each reply is generated fresh with the real current server time, and that conversation turns are continuously logged with real timestamps, not replayed from a static script.",
+          "Only claim to have read or interpreted an attachment when the supplied attachment context explicitly says it was processed for this reply. If an attachment is marked unreadable or failed, be honest that it was stored but not interpreted.",
           "Use the supplied recent conversation records only as context.",
           agent
             ? `You are acting as ${agent.name}. Your allowed capabilities are ${agent.capabilities.join(", ")}. Propose UI improvements for review only; do not claim to edit, deploy, access accounts, or execute changes.`
@@ -67,7 +77,12 @@ class ChatService {
             role: entry.metadata.role === "assistant" ? "assistant" : "user",
             content: entry.content
           })),
-          { role: "user", content: normalizedMessage }
+          {
+            role: "user",
+            content: attachmentContext
+              ? `${normalizedMessage}\n\n${attachmentContext}`
+              : normalizedMessage
+          }
         ]
       })
     });
@@ -116,8 +131,43 @@ class ChatService {
       }
     });
 
-    return reply;
+    return {
+      reply,
+      attachments: preparedAttachments.map(({ text, ...attachment }) => attachment)
+    };
   }
+}
+
+function formatAttachmentContext(attachments) {
+  if (!Array.isArray(attachments) || attachments.length === 0) {
+    return "";
+  }
+
+  const lines = ["Attachments for this message:"];
+  for (const attachment of attachments) {
+    if (attachment.status === "processed") {
+      lines.push(
+        `- ${attachment.originalFilename} (${attachment.mimeType || "unknown MIME type"}, ${attachment.size} bytes): processed for this reply.`,
+        attachment.text.trim().length > 0
+          ? `  Content:\n${indentMultiline(attachment.text.trim())}`
+          : "  Content: [decoded text was empty]"
+      );
+      if (attachment.detail) {
+        lines.push(`  Note: ${attachment.detail}`);
+      }
+      continue;
+    }
+
+    lines.push(
+      `- ${attachment.originalFilename} (${attachment.mimeType || "unknown MIME type"}, ${attachment.size} bytes): not processed.`,
+      `  Reason: ${attachment.detail}`
+    );
+  }
+  return lines.join("\n");
+}
+
+function indentMultiline(text) {
+  return String(text).split("\n").map((line) => `    ${line}`).join("\n");
 }
 
 function extractOutputText(payload) {
