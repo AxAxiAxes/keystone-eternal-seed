@@ -78,6 +78,8 @@ Each term must conform to this normalized contract.
     "nonAllowedContexts",
     "dataMapping",
     "governanceImplication",
+    "runtimeEffectClass",
+    "requiredControls",
     "evidenceClass",
     "version",
     "status",
@@ -138,6 +140,27 @@ Each term must conform to this normalized contract.
         "retention": {"type": "string"},
         "audit": {"type": "string"}
       }
+    },
+    "runtimeEffectClass": {
+      "type": "string",
+      "enum": ["none", "informational", "decision-support", "policy-affecting", "access-controlling"]
+    },
+    "requiredControls": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "discovery-not-authorization",
+          "deny-by-default",
+          "least-privilege",
+          "explicit-consent",
+          "signed-manifest",
+          "revocation",
+          "audit-hook",
+          "platform-enforcement"
+        ]
+      },
+      "uniqueItems": true
     },
     "evidenceClass": {
       "type": "string",
@@ -208,6 +231,12 @@ These controls are mandatory for terms with runtime effects:
 6. **Revocation support** for capabilities and grants.
 7. **Audit hooks** for read/transform/replay/correction decisions.
 8. **Platform enforcement** required; documentation text alone is not enforcement.
+
+Encoding rule:
+
+- `runtimeEffectClass: none` may leave `requiredControls` empty.
+- Any other `runtimeEffectClass` must explicitly list applicable `requiredControls`.
+- `access-controlling` terms should include all controls unless a documented exception is reviewed and recorded.
 
 ## 8) Standardized term set (v1 baseline)
 
@@ -333,6 +362,13 @@ These controls are mandatory for terms with runtime effects:
     "retention": "Retained with event history policy tier.",
     "audit": "Store confidence transitions in audit-visible event metadata."
   },
+  "runtimeEffectClass": "decision-support",
+  "requiredControls": [
+    "discovery-not-authorization",
+    "least-privilege",
+    "audit-hook",
+    "platform-enforcement"
+  ],
   "evidenceClass": "keystone-proposal",
   "evidenceRefs": [
     "docs/AXES_OS_SCIENCE_ENGINEERING_LIGHT_SENSING_CHECKPOINT.md"

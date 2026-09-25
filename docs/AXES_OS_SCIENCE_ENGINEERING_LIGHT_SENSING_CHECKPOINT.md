@@ -179,10 +179,10 @@ Example normalized event envelope (proposal):
   "eventId": "evt-2026-09-25T22:00:00.000Z-0001",
   "observedAt": "2026-09-25T22:00:00.000Z",
   "tokens": [
-    "lux.band.mid",
-    "transition.rise",
-    "confidence.medium",
-    "calibration.factory"
+    "light-semantic-v1/lux.band.mid",
+    "light-semantic-v1/transition.rise",
+    "light-semantic-v1/confidence.medium",
+    "light-semantic-v1/calibration.factory"
   ],
   "numeric": {
     "lux": 135.2,
