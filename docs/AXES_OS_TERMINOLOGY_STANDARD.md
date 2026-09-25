@@ -191,7 +191,7 @@ Each term must conform to this normalized contract.
       "minItems": 0
     },
     "verificationRequired": {"type": "boolean"},
-    "version": {"type": "string", "pattern": "^v[0-9]+(\\.[0-9]+){0,2}$"},
+    "version": {"type": "string", "pattern": "^v[0-9]+$"},
     "status": {
       "type": "string",
       "enum": ["proposed", "reviewed", "adopted", "deprecated", "superseded"]
@@ -284,8 +284,6 @@ A token must map to one and only one engineering meaning per schema version.
 - Meaning changes require either:
   - new token name, or
   - major schema version bump.
-- Minor/patch version increments are allowed only for non-semantic changes
-  (editorial clarifications, metadata additions that do not alter token meaning).
 
 ### 6.3 Baseline token groups
 
@@ -297,6 +295,8 @@ A token must map to one and only one engineering meaning per schema version.
 - `temporal.{before|during|after|coincident}`
 
 See compact glossary: `docs/AXES_OS_TERMINOLOGY_TOKEN_GLOSSARY.md`.
+Authority rule: this standard is normative; the glossary is a convenience
+appendix and must not override this file.
 
 ## 7) Policy and constitutional bindings
 

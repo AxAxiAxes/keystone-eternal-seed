@@ -3,6 +3,7 @@
 **Status:** Appendix to `AXES_OS_TERMINOLOGY_STANDARD.md`
 **Recorded:** 2026-09-25
 **Scope:** Compact quick-reference token map for deterministic UX/UI and light-observation semantics.
+**Normative boundary:** `AXES_OS_TERMINOLOGY_STANDARD.md` is authoritative. This glossary is non-normative quick reference only.
 
 ## 1) Namespace contract
 
