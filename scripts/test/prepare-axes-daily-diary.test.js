@@ -158,6 +158,26 @@ test("unchecked checkpoints are extracted with wrapped lines", () => {
   ]);
 });
 
+test("changed-path parser handles porcelain -z rename/copy format without counting old path", () => {
+  const parsed = scriptModule.parseChangedPaths("R  old-name.txt\0new-name.txt\0M  changed.txt\0");
+  assert.equal(parsed.isClean, false);
+  assert.equal(parsed.totalChangedPaths, 2);
+  assert.deepEqual(parsed.changedPaths, ["new-name.txt", "changed.txt"]);
+});
+
+test("help output uses provided stdout stream in main()", () => {
+  let output = "";
+  const stdout = {
+    write(text) {
+      output += text;
+    }
+  };
+
+  const result = scriptModule.main(["--help"], { stdout });
+  assert.equal(result.mode, "help");
+  assert.match(output, /Usage:/);
+});
+
 test("output includes explicit unverified external/runtime disclaimer section", async (t) => {
   const repoRoot = await createTempRepository();
   t.after(() => fsp.rm(repoRoot, { recursive: true, force: true }));

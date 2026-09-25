@@ -108,15 +108,24 @@ function resolveRepositoryRoot(cwd = process.cwd(), runner = execFileSync) {
 function parseChangedPaths(statusOutput) {
   const entries = statusOutput.split("\0").filter(Boolean);
   const paths = [];
-  for (const entry of entries) {
+  for (let i = 0; i < entries.length; i += 1) {
+    const entry = entries[i];
+    const statusCode = entry.slice(0, 2);
     const pathField = entry.slice(3).trim();
     if (!pathField) {
       continue;
     }
 
-    const normalized = pathField.includes(" -> ")
+    let normalized = pathField.includes(" -> ")
       ? pathField.split(" -> ").pop().trim()
       : pathField;
+
+    const isRenameOrCopy = statusCode.includes("R") || statusCode.includes("C");
+    if (isRenameOrCopy && i + 1 < entries.length) {
+      normalized = entries[i + 1].trim();
+      i += 1;
+    }
+
     paths.push(normalized);
   }
 
@@ -313,7 +322,7 @@ function toMarkdown(facts) {
   return lines.join("\n");
 }
 
-function printUsage() {
+function printUsage(stdout = process.stdout) {
   const message = [
     "Usage:",
     "  node scripts/prepare-axes-daily-diary.js [--date YYYY-MM-DD] [--write]",
@@ -321,14 +330,14 @@ function printUsage() {
     "Default behavior prints the draft markdown to stdout (preview mode).",
     "--write creates a new file at docs/memory/drafts/YYYY-MM-DD-daily-reconciliation-draft.md and refuses overwrite."
   ].join("\n");
-  process.stdout.write(message + "\n");
+  stdout.write(message + "\n");
 }
 
 function main(argv = process.argv.slice(2), options = {}) {
   const stdout = options.stdout || process.stdout;
   const args = parseArgs(argv);
   if (args.help) {
-    printUsage();
+    printUsage(stdout);
     return { mode: "help" };
   }
 
@@ -365,7 +374,9 @@ module.exports = {
   collectFacts,
   main,
   parseArgs,
+  parseChangedPaths,
   parseUncheckedTimelineCheckpoints,
+  printUsage,
   toMarkdown,
   validateDateInput
 };
