@@ -251,6 +251,13 @@ Each term must conform to this normalized contract.
 }
 ```
 
+Timestamp normalization rule:
+
+- `lastReviewedAt` accepts either `YYYY-MM-DD` (date-only review record) or UTC
+  timestamp `YYYY-MM-DDTHH:MM:SSZ`.
+- Offset timestamps (for example `+02:00`) are not used in this standard; convert
+  to UTC `Z` before recording.
+
 ## 6) Versioned meaning-anchor token system
 
 ### 6.1 Token system
