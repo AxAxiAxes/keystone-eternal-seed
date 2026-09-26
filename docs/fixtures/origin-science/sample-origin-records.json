@@ -1,0 +1,166 @@
+{
+  "records": [
+    {
+      "schemaVersion": "origin-property-record-v1",
+      "recordId": "origin-center-block",
+      "propertyKey": "origin-center-block",
+      "originReference": "KEYSTONE-ORIGIN-000001",
+      "centerStatus": "value-bearing-center-block",
+      "variableProperties": {
+        "xIdentity": "Founder-defined proposal: X is a variable property of origin identity.",
+        "uxMeaning": "Founder-defined proposal pending verification.",
+        "urMeaning": "Founder-defined proposal pending verification.",
+        "auMeaning": "Founder-defined proposal pending verification."
+      },
+      "transformationMultiplier": {
+        "statement": "The multiplier describes transformation while preserving origin relation.",
+        "preservesOriginRelation": "yes"
+      },
+      "equilibriumRule": {
+        "statement": "Equilibrium describes relation and return consistency to origin.",
+        "statusSignal": "proposed"
+      },
+      "vertexContactRelation": {
+        "statement": "Vertex is the point of contact between origin and a derived relation.",
+        "contactMode": "origin-contact"
+      },
+      "evidenceClass": "founder-defined-proposal",
+      "sourceRefs": {
+        "primary": "docs/AXES_OS_ORIGIN_SCIENCE_AND_DISCOVERY_CHECKPOINT.md",
+        "coordinateSystem": "docs/AXI_ORIGIN_COORDINATE_SYSTEM.md",
+        "genesisCheckpoint": "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md",
+        "resequencerProposal": "docs/keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md",
+        "accountabilityEvidence": "docs/COPILOT_ACCOUNTABILITY_TRACKER.md"
+      },
+      "attribution": {
+        "founderClaim": "Axel Urartu (AX) · Axes Contracting",
+        "implementedBy": "Repository technical checkpoint",
+        "toolAttribution": "GitHub Copilot coding agent assistance recorded separately from founder authorship."
+      },
+      "verificationState": "proposed",
+      "boundary": "symbolic-axiom-only",
+      "lineage": {
+        "parentRecordId": null,
+        "correctionOfRecordId": null
+      },
+      "evaluationSystems": {
+        "proposedSystems": [
+          {
+            "systemKey": "origin-reference-evaluation",
+            "label": "Origin reference evaluation",
+            "status": "technical-checkpoint",
+            "boundary": "repository-technical-checkpoint",
+            "statement": "The repository records a bounded originReference tied to existing coordinate and Genesis sources."
+          },
+          {
+            "systemKey": "center-block-evaluation",
+            "label": "Center block evaluation",
+            "status": "technical-checkpoint",
+            "boundary": "repository-technical-checkpoint",
+            "statement": "The founder-defined origin is preserved as a value-bearing center block rather than an empty void."
+          },
+          {
+            "systemKey": "variable-property-evaluation",
+            "label": "Variable property evaluation",
+            "status": "founder-proposed",
+            "boundary": "symbolic-axiom-only",
+            "statement": "X, Ux, Ur, and AU remain founder-defined origin-property proposals unless later narrowed by reviewed evidence."
+          },
+          {
+            "systemKey": "vertex-contact-evaluation",
+            "label": "Vertex contact evaluation",
+            "status": "founder-proposed",
+            "boundary": "symbolic-axiom-only",
+            "statement": "Vertex remains a proposal-level contact relation between origin and a derived relation."
+          }
+        ],
+        "unknownReserve": {
+          "status": "not-yet-discovered",
+          "statement": "Unknown, unaccounted, or not-yet-discovered origin properties remain reserved as origin-related proposal space until separately named.",
+          "boundary": "proposal-reserve-only"
+        }
+      }
+    },
+    {
+      "schemaVersion": "origin-property-record-v1",
+      "recordId": "origin-equilibrium-checkpoint",
+      "propertyKey": "origin-equilibrium-checkpoint",
+      "originReference": "KEYSTONE-ORIGIN-000001",
+      "centerStatus": "derived-relation",
+      "variableProperties": {
+        "xIdentity": "Founder-defined proposal: X remains linked to origin identity.",
+        "uxMeaning": "Founder-defined proposal pending verification.",
+        "urMeaning": "Founder-defined proposal pending verification.",
+        "auMeaning": "Founder-defined proposal pending verification."
+      },
+      "transformationMultiplier": {
+        "statement": "Repository validator checks whether a declared transformation still preserves origin relation.",
+        "preservesOriginRelation": "yes"
+      },
+      "equilibriumRule": {
+        "statement": "A repository record is technically verified only when origin reference, lineage, and relation-preservation checks pass.",
+        "statusSignal": "preserved"
+      },
+      "vertexContactRelation": {
+        "statement": "The validator treats vertex/contact as a recorded relation, not a physical measurement.",
+        "contactMode": "derived-contact"
+      },
+      "evidenceClass": "verified-test-evidence",
+      "sourceRefs": {
+        "primary": "docs/fixtures/origin-science/validate.test.js",
+        "coordinateSystem": "docs/AXI_ORIGIN_COORDINATE_SYSTEM.md",
+        "genesisCheckpoint": "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md",
+        "resequencerProposal": "docs/keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md",
+        "accountabilityEvidence": "apps/axiom-engine/accountability-ledger-service.js"
+      },
+      "attribution": {
+        "founderClaim": "Axel Urartu (AX) · Axes Contracting",
+        "implementedBy": "Repository offline validator",
+        "toolAttribution": "GitHub Copilot coding agent assistance recorded separately from founder authorship."
+      },
+      "verificationState": "verified",
+      "boundary": "repository-technical-checkpoint",
+      "lineage": {
+        "parentRecordId": "origin-center-block",
+        "correctionOfRecordId": null
+      },
+      "evaluationSystems": {
+        "proposedSystems": [
+          {
+            "systemKey": "transformation-multiplier-evaluation",
+            "label": "Transformation / multiplier evaluation",
+            "status": "validator-backed",
+            "boundary": "repository-validation-only",
+            "statement": "The validator checks whether a declared transformation still claims preserved relation to origin."
+          },
+          {
+            "systemKey": "equilibrium-evaluation",
+            "label": "Equilibrium evaluation",
+            "status": "validator-backed",
+            "boundary": "repository-validation-only",
+            "statement": "The validator classifies equilibrium conservatively as proposed, verified, failed, or unknown."
+          },
+          {
+            "systemKey": "resequencing-lineage-evaluation",
+            "label": "Resequencing / lineage evaluation",
+            "status": "validator-backed",
+            "boundary": "repository-validation-only",
+            "statement": "Append-only lineage and explicit correction chaining are enforced as repository validation rules."
+          },
+          {
+            "systemKey": "attribution-accountability-evaluation",
+            "label": "Attribution / accountability evaluation",
+            "status": "technical-checkpoint",
+            "boundary": "repository-technical-checkpoint",
+            "statement": "Founder claim, implementation role, and tool attribution remain separated in repository records."
+          }
+        ],
+        "unknownReserve": {
+          "status": "unknown",
+          "statement": "The validator may preserve an unknown remainder without converting it into legal, identity, or external scientific authority.",
+          "boundary": "proposal-reserve-only"
+        }
+      }
+    }
+  ]
+}

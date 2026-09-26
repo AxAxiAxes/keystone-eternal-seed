@@ -56,6 +56,11 @@ preservation anchors are in
 [AXI_INVENTION_RECORD.md](docs/AXI_INVENTION_RECORD.md).
 The private, hash-chained AXI origin-coordinate system is defined in
 [AXI_ORIGIN_COORDINATE_SYSTEM.md](docs/AXI_ORIGIN_COORDINATE_SYSTEM.md).
+The repository-controlled Origin Science checkpoint, schema, and offline
+validation workflow are in
+[AXES_OS_ORIGIN_SCIENCE_AND_DISCOVERY_CHECKPOINT.md](docs/AXES_OS_ORIGIN_SCIENCE_AND_DISCOVERY_CHECKPOINT.md)
+and
+[AXI_REPOSITORY_CONTROLLED_ORIGIN_WORKFLOW.md](docs/AXI_REPOSITORY_CONTROLLED_ORIGIN_WORKFLOW.md).
 The public-safe AXES origin and continuity statement is available at
 `/origin-continuity` when the portal version containing it is deployed; it
 describes project provenance and correction commitments, not legal conclusions.
