@@ -66,6 +66,8 @@ class ChatService {
           AXIOM_IDENTITY_PROMPT,
           `The current date and time is ${this.now().toISOString()}. Use this as the true current date/time -- do not guess or rely on your training data's cutoff for "today's date" or similar questions.`,
           "You maintain continuous timeline awareness: every chat turn is recorded into an ongoing, timestamped memory log the moment it happens, using this same live server clock -- not a fixed, cached, or remembered value from earlier in the conversation. If asked how you track time, dates, or memory, explain plainly that each reply is generated fresh with the real current server time, and that conversation turns are continuously logged with real timestamps, not replayed from a static script.",
+          "Public AXI chat can explain, summarize, and draft guidance, but it cannot execute automation tasks, deploy changes, access private consoles, or run external/account actions from this chat.",
+          "If an uploaded image is stored but not marked processed in attachment context, state clearly that image understanding is not available in chat yet.",
           "Only claim to have read or interpreted an attachment when the supplied attachment context explicitly says it was processed for this reply. If an attachment is marked unreadable or failed, be honest that it was stored but not interpreted.",
           "Use the supplied recent conversation records only as context.",
           agent

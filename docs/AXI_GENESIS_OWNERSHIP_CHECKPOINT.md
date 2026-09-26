@@ -79,6 +79,13 @@ Every registered AXI agent must retain these fields:
 | `keystoneRegistration.genesisCheckpoint.id` | Stable legacy field for `axi-genesis-creator-ownership`, representing the active Eternal Origin Ownership from Genesis checkpoint |
 | `keystoneRegistration.ownershipClaim` | Creator ownership-and-accountability claim |
 | `originCheckpoint` | Agent-specific operational origin |
+| `productionRights.version` | `axi-agent-production-rights-v1` |
+| `productionRights.scope` | `internal-axes-governance-attribution` |
+| `productionRights.creatorAttribution` | Canonical creator authority, ownership-and-accountability claim, source record, and Genesis checkpoint ID |
+| `productionRights.provenance.createdAt` | Immutable creation evidence matching retained `createdAt` |
+| `productionRights.provenance.originCheckpoint` | Retained agent origin checkpoint |
+| `productionRights.outputs.allowed` | Internal-governance bounded-output statement for the role |
+| `productionRights.accountability` | Human-owner accountability notice; software roles do not assume independent ownership/personhood/legal authority |
 | `purpose` and `duties` | Agent-specific bounded purpose and duties |
 | `accountability.status` | `active` before assignment or execution |
 | `accountability.history` | Dated registration, suspension, and reactivation record |
@@ -96,11 +103,12 @@ personality, ownership, rights, or external state.
    reset, handoff, or lost context, read this checkpoint and
    `AXES_AGENT_ORIGIN_REGISTRY.md`.
 2. Start the current engine against its approved private state directory. The
-   state migration fills missing Eternal Origin Ownership from Genesis registration fields without
-   overwriting existing provenance data.
+   state migration fills missing Eternal Origin Ownership from Genesis registration fields and missing nested
+   production-rights values without overwriting retained provenance data.
 3. Inspect the protected agent report for every enabled agent and confirm the
    required runtime record above, including an active accountability status.
 4. If a record has a different authority, missing/invalid creation evidence,
+   missing/invalid production-rights registration,
    or cannot be reconciled to the
    Eternal Origin Ownership from Genesis checkpoint, leave it unassigned and investigate before any task is
    created or processed.
@@ -111,7 +119,9 @@ The private `GET /automation/readiness` signal and the
 `governance.readiness` task evaluate this required runtime record continuously
 when an authorized operator schedules them. Any mismatch is reported as an
 attention state in private monitoring; it does not alter claims, correct
-records, or make an external ownership or legal determination.
+records, or make an external ownership or legal determination. A retained
+agent record missing the production-rights block remains an attention-state
+unregistered agent until reconciled; it is not silently rewritten.
 
 Eternal Origin Ownership from Genesis reconciliation alone cannot recover memory deleted with an ephemeral
 or lost data volume. Before enabling scheduled work after a reset, confirm the

@@ -139,6 +139,12 @@ const AXI_GENESIS_OWNERSHIP_CHECKPOINT = Object.freeze({
   creatorAuthority: KEYSTONE_REGISTRATION.creatorAuthority,
   purpose: "Preserve AXI creator ownership and accountability across agent registrations and reset recovery."
 });
+const PRODUCTION_RIGHTS_RECORD_VERSION = "axi-agent-production-rights-v1";
+const PRODUCTION_RIGHTS_SCOPE = "internal-axes-governance-attribution";
+const PRODUCTION_RIGHTS_ALLOWED_OUTPUTS =
+  "Bounded internal AXES outputs tied to the registered role's allowlisted capabilities, purpose, and duties.";
+const PRODUCTION_RIGHTS_ACCOUNTABILITY_NOTICE =
+  "Responsibility remains with the accountable human AXES founder/project owner; registered software roles do not assume independent ownership, personhood, or legal authority.";
 
 class AutomationService {
   constructor({
@@ -247,6 +253,11 @@ class AutomationService {
         duties: duties ? [...new Set(duties.map((duty) => duty.trim()))] : [],
         attributionScope: AGENT_ATTRIBUTION_SCOPE,
         keystoneRegistration: createKeystoneRegistration(creatorAuthority),
+        productionRights: createProductionRights({
+          createdAt,
+          originCheckpoint: normalizeOptionalString(originCheckpoint) ||
+            REGISTERED_AGENT_DEFAULT_ORIGIN
+        }),
         accountability: createAccountabilityRecord(
           createdAt,
           "Genesis registration accepted."
@@ -349,6 +360,7 @@ class AutomationService {
           duties: agent.duties || [],
           attributionScope: agent.attributionScope || AGENT_ATTRIBUTION_SCOPE,
           keystoneRegistration: agent.keystoneRegistration || KEYSTONE_REGISTRATION,
+          productionRights: agent.productionRights || null,
           accountability: agent.accountability
         },
         observation: observeAgent(state, agent),
@@ -896,6 +908,10 @@ function defaultAgents(now) {
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
       keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),
+      productionRights: createProductionRights({
+        createdAt: registeredAt,
+        originCheckpoint: "axi-durable-memory-foundation"
+      }),
       accountability: createAccountabilityRecord(registeredAt, "Genesis registration accepted.")
     },
     {
@@ -925,6 +941,10 @@ function defaultAgents(now) {
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
       keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),
+      productionRights: createProductionRights({
+        createdAt: registeredAt,
+        originCheckpoint: "axi-project-memory-management"
+      }),
       accountability: createAccountabilityRecord(registeredAt, "Genesis registration accepted.")
     },
     {
@@ -943,6 +963,10 @@ function defaultAgents(now) {
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
       keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),
+      productionRights: createProductionRights({
+        createdAt: registeredAt,
+        originCheckpoint: "axi-bounded-automation-foundation"
+      }),
       accountability: createAccountabilityRecord(registeredAt, "Genesis registration accepted.")
     },
     {
@@ -961,6 +985,10 @@ function defaultAgents(now) {
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
       keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),
+      productionRights: createProductionRights({
+        createdAt: registeredAt,
+        originCheckpoint: "axi-bounded-automation-foundation"
+      }),
       accountability: createAccountabilityRecord(registeredAt, "Genesis registration accepted.")
     },
     {
@@ -989,6 +1017,10 @@ function defaultAgents(now) {
       ],
       attributionScope: AGENT_ATTRIBUTION_SCOPE,
       keystoneRegistration: createKeystoneRegistration(KEYSTONE_REGISTRATION.creatorAuthority),
+      productionRights: createProductionRights({
+        createdAt: registeredAt,
+        originCheckpoint: "axi-operations-observer"
+      }),
       accountability: createAccountabilityRecord(registeredAt, "Genesis registration accepted.")
     }
   ];
@@ -1040,6 +1072,7 @@ function seedMissingDefaultAgents(state, now) {
         agent.keystoneRegistration[field] = value;
       }
     }
+    backfillProductionRights(agent, now);
   }
 }
 
@@ -1159,6 +1192,50 @@ function observeAgent(state, agent) {
   if (agent.keystoneRegistration?.ownershipClaim !== expectedRegistration.ownershipClaim) {
     attention.push("ownership-claim-invalid");
   }
+  if (!isRecord(agent.productionRights)) {
+    attention.push("production-rights-missing");
+  } else {
+    if (agent.productionRights.version !== PRODUCTION_RIGHTS_RECORD_VERSION) {
+      attention.push("production-rights-version-invalid");
+    }
+    if (agent.productionRights.scope !== PRODUCTION_RIGHTS_SCOPE) {
+      attention.push("production-rights-scope-invalid");
+    }
+    if (agent.productionRights.creatorAttribution?.creatorAuthority !==
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority) {
+      attention.push("production-rights-creator-invalid");
+    }
+    if (agent.productionRights.creatorAttribution?.ownershipClaim !==
+      expectedRegistration.ownershipClaim) {
+      attention.push("production-rights-ownership-claim-invalid");
+    }
+    if (agent.productionRights.creatorAttribution?.sourceRecord !==
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.sourceRecord) {
+      attention.push("production-rights-source-record-invalid");
+    }
+    if (agent.productionRights.creatorAttribution?.genesisCheckpointId !==
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.id) {
+      attention.push("production-rights-genesis-checkpoint-invalid");
+    }
+    if (!isIsoTimestamp(agent.productionRights.provenance?.createdAt) ||
+      agent.productionRights.provenance?.createdAt !== agent.createdAt) {
+      attention.push("production-rights-created-at-invalid");
+    }
+    if (!isNonEmptyString(agent.productionRights.provenance?.originCheckpoint) ||
+      agent.productionRights.provenance?.originCheckpoint !== agent.originCheckpoint) {
+      attention.push("production-rights-origin-checkpoint-invalid");
+    }
+    if (!isNonEmptyString(agent.productionRights.outputs?.allowed)) {
+      attention.push("production-rights-outputs-missing");
+    }
+    if (agent.productionRights.accountability?.responsibleHumanOwner !==
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority) {
+      attention.push("production-rights-accountable-owner-invalid");
+    }
+    if (!isNonEmptyString(agent.productionRights.accountability?.responsibilityNotice)) {
+      attention.push("production-rights-accountability-notice-missing");
+    }
+  }
   if (!agent.enabled) attention.push("agent-disabled");
   if (agent.accountability?.status !== "active") attention.push("accountability-not-active");
   if (!Array.isArray(agent.capabilities) || compatibleCapabilities.length !== agent.capabilities.length) {
@@ -1178,6 +1255,31 @@ function observeAgent(state, agent) {
     creatorAuthority: agent.keystoneRegistration?.creatorAuthority || null,
     ownershipClaim: agent.keystoneRegistration?.ownershipClaim || null,
     originCheckpoint: agent.originCheckpoint || null,
+    productionRights: isRecord(agent.productionRights) ? {
+      version: agent.productionRights.version || null,
+      scope: agent.productionRights.scope || null,
+      provenance: {
+        createdAt: isIsoTimestamp(agent.productionRights.provenance?.createdAt)
+          ? agent.productionRights.provenance.createdAt
+          : null,
+        originCheckpoint: agent.productionRights.provenance?.originCheckpoint || null
+      },
+      creatorAttribution: {
+        creatorAuthority: agent.productionRights.creatorAttribution?.creatorAuthority || null,
+        ownershipClaim: agent.productionRights.creatorAttribution?.ownershipClaim || null,
+        sourceRecord: agent.productionRights.creatorAttribution?.sourceRecord || null,
+        genesisCheckpointId: agent.productionRights.creatorAttribution?.genesisCheckpointId || null
+      },
+      outputs: {
+        allowed: agent.productionRights.outputs?.allowed || null
+      },
+      accountability: {
+        responsibleHumanOwner:
+          agent.productionRights.accountability?.responsibleHumanOwner || null,
+        responsibilityNotice:
+          agent.productionRights.accountability?.responsibilityNotice || null
+      }
+    } : null,
     enabled: agent.enabled === true,
     accountabilityStatus: agent.accountability?.status || null,
     compatibleCapabilities,
@@ -1209,6 +1311,60 @@ function createKeystoneRegistration(creatorAuthority) {
     ownershipClaim: `${creatorAuthority} claims ownership and accountability for AXI agents created and registered within the AXES system.`,
     genesisCheckpoint: { ...AXI_GENESIS_OWNERSHIP_CHECKPOINT }
   };
+}
+
+function createProductionRights({ createdAt, originCheckpoint }) {
+  const canonicalOwnershipClaim = createKeystoneRegistration(
+    AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority
+  ).ownershipClaim;
+  return {
+    version: PRODUCTION_RIGHTS_RECORD_VERSION,
+    scope: PRODUCTION_RIGHTS_SCOPE,
+    creatorAttribution: {
+      creatorAuthority: AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority,
+      ownershipClaim: canonicalOwnershipClaim,
+      sourceRecord: AXI_GENESIS_OWNERSHIP_CHECKPOINT.sourceRecord,
+      genesisCheckpointId: AXI_GENESIS_OWNERSHIP_CHECKPOINT.id
+    },
+    provenance: {
+      createdAt,
+      originCheckpoint
+    },
+    outputs: {
+      allowed: PRODUCTION_RIGHTS_ALLOWED_OUTPUTS
+    },
+    accountability: {
+      responsibleHumanOwner: AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority,
+      responsibilityNotice: PRODUCTION_RIGHTS_ACCOUNTABILITY_NOTICE
+    }
+  };
+}
+
+function backfillProductionRights(agent, now) {
+  if (!isRecord(agent.productionRights)) {
+    return;
+  }
+  const canonical = createProductionRights({
+    createdAt: isIsoTimestamp(agent.createdAt)
+      ? agent.createdAt
+      : (isIsoTimestamp(agent.registeredAt) ? agent.registeredAt : now().toISOString()),
+    originCheckpoint: isNonEmptyString(agent.originCheckpoint)
+      ? agent.originCheckpoint
+      : REGISTERED_AGENT_DEFAULT_ORIGIN
+  });
+  backfillMissingRecordFields(agent.productionRights, canonical);
+}
+
+function backfillMissingRecordFields(target, source) {
+  for (const [key, value] of Object.entries(source)) {
+    if (target[key] === undefined) {
+      target[key] = value;
+      continue;
+    }
+    if (isRecord(value) && isRecord(target[key])) {
+      backfillMissingRecordFields(target[key], value);
+    }
+  }
 }
 
 function createAccountabilityRecord(occurredAt, reason) {
@@ -1264,7 +1420,31 @@ function isRegisteredAgent(agent) {
     agent.keystoneRegistration.genesisCheckpoint.sourceRecord ===
       AXI_GENESIS_OWNERSHIP_CHECKPOINT.sourceRecord &&
     agent.keystoneRegistration.genesisCheckpoint.creatorAuthority ===
-      AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority;
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority &&
+    isRecord(agent.productionRights) &&
+    agent.productionRights.version === PRODUCTION_RIGHTS_RECORD_VERSION &&
+    agent.productionRights.scope === PRODUCTION_RIGHTS_SCOPE &&
+    isRecord(agent.productionRights.creatorAttribution) &&
+    agent.productionRights.creatorAttribution.creatorAuthority ===
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority &&
+    agent.productionRights.creatorAttribution.ownershipClaim === createKeystoneRegistration(
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority
+    ).ownershipClaim &&
+    agent.productionRights.creatorAttribution.sourceRecord ===
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.sourceRecord &&
+    agent.productionRights.creatorAttribution.genesisCheckpointId ===
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.id &&
+    isRecord(agent.productionRights.provenance) &&
+    isIsoTimestamp(agent.productionRights.provenance.createdAt) &&
+    agent.productionRights.provenance.createdAt === agent.createdAt &&
+    isNonEmptyString(agent.productionRights.provenance.originCheckpoint) &&
+    agent.productionRights.provenance.originCheckpoint === agent.originCheckpoint &&
+    isRecord(agent.productionRights.outputs) &&
+    isNonEmptyString(agent.productionRights.outputs.allowed) &&
+    isRecord(agent.productionRights.accountability) &&
+    agent.productionRights.accountability.responsibleHumanOwner ===
+      AXI_GENESIS_OWNERSHIP_CHECKPOINT.creatorAuthority &&
+    isNonEmptyString(agent.productionRights.accountability.responsibilityNotice);
 }
 
 function isAccountableAgent(agent) {

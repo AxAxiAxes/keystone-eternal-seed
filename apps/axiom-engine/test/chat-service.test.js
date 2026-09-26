@@ -139,6 +139,8 @@ test("injects the AXIOM identity/creator prompt so the model does not claim Open
   assert.match(capturedInstructions, /Axel Urartu/);
   assert.match(capturedInstructions, /KEYSTONE Eternal Seed Architecture/);
   assert.match(capturedInstructions, /Never claim to be created by OpenAI/);
+  assert.match(capturedInstructions, /cannot execute automation tasks/i);
+  assert.match(capturedInstructions, /image understanding is not available/i);
 });
 
 test("scopes conversation context and recorded turns to the given sessionId", async () => {

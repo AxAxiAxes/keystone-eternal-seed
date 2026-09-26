@@ -142,6 +142,7 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.equal(axiomChatPage.status, 200);
     const axiomChatBody = await axiomChatPage.text();
     assert.match(axiomChatBody, /Attach a document or image to your next message/);
+    assert.match(axiomChatBody, /cannot run admin automation tasks/i);
     assert.doesNotMatch(axiomChatBody, /admin sign-in required/i);
 
     const axiomChatPageWithTrailingSlash = await fetch(
@@ -1565,6 +1566,7 @@ test("POST /api/axiom/uploads rejects oversized files with 413 and passes throug
       headers: { "X-Source-Filename": "big.png" },
       body: "x".repeat(2048)
     });
+
     assert.equal(oversized.status, 413);
     assert.deepEqual(await oversized.json(), { error: "request body is too large" });
 
@@ -1591,6 +1593,43 @@ test("POST /api/axiom/uploads rejects oversized files with 413 and passes throug
     delete process.env.AXIOM_ENGINE_URL;
     delete process.env.AXIOM_MAX_UPLOAD_BODY_BYTES;
     process.env.AXIOM_MEMORY_DIRECTORY = memoryDirectory;
+  }
+});
+
+test("aborted public upload requests do not crash the web service", async () => {
+  let webServer;
+  try {
+    process.env.AXIOM_ENGINE_URL = "http://127.0.0.1:1";
+    delete require.cache[require.resolve("../server")];
+    const web = require("../server");
+    webServer = await startServer(web);
+    const { port: webPort } = webServer.address();
+
+    await new Promise((resolve) => {
+      const request = http.request({
+        hostname: "127.0.0.1",
+        port: webPort,
+        method: "POST",
+        path: "/api/axiom/uploads",
+        headers: {
+          "X-Source-Filename": "notes.txt",
+          "Content-Type": "application/octet-stream",
+          "Content-Length": "1000000"
+        }
+      });
+      request.on("error", () => resolve());
+      request.write("partial-upload-bytes");
+      request.destroy(new Error("client aborted upload"));
+      setTimeout(resolve, 50);
+    });
+
+    const health = await fetch(`http://127.0.0.1:${webPort}/health`);
+    assert.equal(health.status, 200);
+  } finally {
+    if (webServer) {
+      await stopServer(webServer);
+    }
+    delete process.env.AXIOM_ENGINE_URL;
   }
 });
 
