@@ -1,152 +1,259 @@
 # Copilot accountability tracker
 
-This repository now includes a private **directive-versus-delivery
-accountability ledger** for founder-directed Copilot work.
+This repository's **single source of truth** for founder-directed task records
+is the private append-only accountability ledger exposed through
+`/system/accountability*` and `/api/accountability*`, with the founder-facing
+UI at `/accountability`.
 
-## What it records
+It extends the earlier draft PR #173 implementation instead of creating a
+parallel ledger.
 
-- The founder's **exact original directive verbatim**
-- Project, repository, branch, session/task identifier, requested deliverable,
-  constraints, deadline, dependencies, budget/time cap, and definition of done
-- Detailed subrequirements
-- Amendments and superseded instructions
-- Agent interpretation
-- Delivery claims, separated into repository artifacts vs. working outcomes
-- Evidence items with type, locator, verification state, verifier, and timestamp
-- Requirement-by-requirement comparison states
-- Deviations
-- Outcome state
-- Founder ratings and assistant self-assessment
-- Loss/resource entries that keep founder-confirmed hours separate from
-  assistant/session elapsed time
-- Append-only event history
-- Markdown/JSON report exports
-- Missing-direction / missing-evidence reporting
+## Task-ID and lifecycle
 
-## What it can prove
+- **Task-ID format:** `TASK-YYYYMMDD-0001`
+- A `directive.created` event may supply `taskId`, but if it is omitted the
+  ledger generates one automatically.
+- **Lifecycle states:** `planned`, `accepted`, `in_progress`, `blocked`,
+  `delivered`, `verified_success`, `verified_partial`, `failed`,
+  `superseded`, `archived`
+- `verified_success` is blocked unless the ledger already has:
+  - explicit evidence references
+  - evidence in the `verified` state
+  - explicit human confirmation
 
-- What was recorded in the append-only local ledger
-- Whether a recorded `verified_success` has explicit human confirmation and
-  its referenced evidence is still marked verified in the ledger
-- Whether a directive currently has missing evidence or missing exact direction
-- Proven totals from **confirmed inputs only**
-- Estimated exposure ranges when estimates are entered explicitly
+Task-ID should also be copied into PR bodies, commits where feasible,
+continuity/memory records, and exported reports.
 
-## What it cannot prove
+## What a task record stores
 
-- External invoices, billing dashboards, registrar/domain charges, cloud bills,
-  or bank/account totals that are not separately supplied by a human
-- That a repository artifact alone equals a successful founder outcome
-- That all historical founder directions have been captured
-- Exact founder labor time when only assistant/session elapsed time is known
-- Production deployment state, external account state, or third-party actions
-  outside the evidence actually attached to the record
-- Complete historical Copilot session access when those sessions are not present
-  in repository-controlled records
+Each directive record can store:
 
-## Local UI and API
+- exact founder directive text
+- Task-ID, project, repository, branch, and session identifier
+- planned deliverables, subrequirements, assumptions, dependencies, risks,
+  acceptance criteria, deadline, and definition of done
+- authorship and accountability fields:
+  - directive author
+  - task owner
+  - implementer(s)
+  - reviewer(s)
+  - merger / acceptor
+  - human confirmation
+  - AI / tool attribution
+- retention / continuity fields:
+  - `createdAt`
+  - `latestUpdatedAt`
+  - `lastVerifiedAt`
+  - `reviewDueAt`
+  - `expiresAt`
+  - `archivalState`
+  - source references
+  - continuity links
+- delivery claims separated into:
+  - repository artifacts
+  - working outcomes
+  - external actions
+  - unverified claims
+- evidence items with verification state
+- requirement assessments and deviations
+- lifecycle / outcome updates
+- founder ratings and assistant self-assessments
+- financial/resource entries
+- intelligence evaluation criteria
+- value and decision-quality assessment fields
 
-Private web UI:
+## Intelligence evaluation system
 
-- `/accountability`
+The ledger can store a repository-controlled `intelligenceEvaluation` object on
+`directive.created` records. It is for bounded review of AI work and does not
+grant legal personhood, legal authority, or external adjudication power.
 
-Private web proxy endpoints:
+Criteria fields:
 
-- `GET /api/accountability`
-- `GET /api/accountability/events`
-- `GET /api/accountability/directives`
-- `GET /api/accountability/summary`
-- `GET /api/accountability/missing`
-- `GET /api/accountability/directives/:directiveId`
-- `GET /api/accountability/directives/:directiveId/report?format=json|markdown`
-- `POST /api/accountability/events`
+- `directiveAdherence`
+- `scopeControl`
+- `accuracyTruthfulness`
+- `verificationQuality`
+- `contributionValueClassification`
+- `decisionMakingQuality`
+- `provenanceAttributionIntegrity`
 
-Private engine endpoints:
+Each criterion stores:
 
-- `GET /system/accountability`
-- `GET /system/accountability/events`
-- `GET /system/accountability/directives`
-- `GET /system/accountability/summary`
-- `GET /system/accountability/missing`
-- `GET /system/accountability/directives/:directiveId`
-- `GET /system/accountability/directives/:directiveId/report?format=json|markdown`
-- `POST /system/accountability/events`
+- `state`: `not_evaluated`, `needs_review`, `met`, `partially_met`, `not_met`
+- `notes`
 
-The directive, summary, and missing-report queries accept `ratingMin` as a
-decimal integer from `-10` through `10`, including URL query strings. Unrated
-directives do not match a minimum-rating filter; invalid values are rejected.
+It also stores a `provenanceBoundary` object that must keep these classes
+distinct:
 
-### Protected write requests
+- `founderClaim`
+- `aiToolAttribution`
+- `verifiedEvidence`
 
-`POST /api/accountability/events` requires the existing administrator Basic
-authentication, `Content-Type: application/json` (including normal charset
-parameters), and the explicit `X-AXIOM-Accountability: write` header. The UI
-sends that header automatically. Simple form content types, missing or invalid
-write headers, and any supplied `Sec-Fetch-Site` value other than `same-origin`
-are rejected before calling the engine. The POST and its preflight do not
-inherit the portal's wildcard CORS headers; preflight receives 403 with no
-CORS allow headers. Other endpoints' CORS behavior is unchanged.
+Accepted evidence classes are:
 
-Authenticated nonbrowser clients must also send the write header; they need
-not synthesize browser Fetch Metadata. For example, with a reviewed synthetic
-event in a local `event.json` file, curl prompts for the administrator password:
+- `not_provided`
+- `founder_claim`
+- `ai_tool_attribution`
+- `repository_verified`
+- `external_primary`
+- `external_secondary`
 
-```powershell
-curl.exe --user admin --header "Content-Type: application/json" --header "X-AXIOM-Accountability: write" --data-binary "@event.json" "http://127.0.0.1:8080/api/accountability/events"
-```
+This preserves the required distinction between founder claim, AI/tool
+attribution, and verified evidence.
 
-Use the approved HTTPS portal address outside local development. This
-non-secret request marker is a browser-CSRF defense, not authentication,
-human confirmation, or evidence of approval. Its protection depends on
-rejecting cross-origin preflight on this route. No `Forwarded` or
-`X-Forwarded-*` header is trusted to establish an origin, so TLS termination
-does not require a new origin configuration. The private engine API retains
-its existing authentication contract.
+## Value and decision-quality assessment
 
-### Recorded outcomes versus current verification
+The ledger can also store a separate `valueAssessment` object. These fields are
+reviewable descriptors only; they do not convert a claim into confirmed cost,
+legal rights, patent status, or market valuation.
 
-When supplied, `outcome.recorded.payload.humanConfirmed` must be an actual JSON
-boolean. Strings (including `"false"`), numbers, null, arrays, and objects are
-errors, not confirmation. Omission retains the existing non-success default
-of false; `verified_success` still requires true, `confirmedBy`, and explicit
-qualifying evidence IDs.
+Structured fields:
 
-`currentOutcome`, `outcomes`, list/report `outcomeState`, and the `outcome`
-filter describe recorded outcomes. They are not rewritten when evidence is
-disputed, unverified, or marked not applicable. UI and Markdown labels identify
-these as recorded facts. `currentStatus`, `evidenceBackedCompletion`, success
-counts, completion rates, and the `status` filter describe current eligibility.
-They reuse the write gate's evidence check: every referenced item must exist
-and currently be marked verified. A recorded success that loses that support
-projects as `blocked`, stops counting as a current success, appears in the
-missing-evidence report, and has no current time-to-verifiable-outcome value.
-Later explicit evidence re-verification can restore eligibility for the same
-recorded outcome; it does not append or manufacture a new human confirmation.
-Unrelated evidence does not revoke an otherwise supported outcome.
+- `creatorClaimantValue`
+- `technicalValue`
+- `evaluatedContributionValue`
+- `estimatedValue`
+- `validatedValue`
+- `decisionQuality`
+- `reasoningQuality`
+- `recommendationQuality`
 
-These checks do not independently verify an external artifact or prove who
-supplied a past confirmation. Older events already normalized to boolean true
-do not retain their original input type and cannot be retroactively corrected
-by guessing. The service neither migrates nor rewrites those records.
+Each field stores:
 
-## Durability and readiness
+- `level`: `not_evaluated`, `low`, `medium`, `high`, `origin_critical`
+- `validationState`: `not_evaluated`, `estimated`, `founder_reported`, `validated`
+- `evidenceClass`
+- `summary`
 
-The private `accountability-ledger.jsonl` file is included in continuity
-checkpoint checksums and runtime recovery bundles. Restore remains limited
-to the separately configured, isolated recovery directory; a local bundle
-does not prove independent storage durability or authorize a live restore.
+Separate state fields:
 
-An invalid retained ledger blocks automation processing and produces
-`accountability-ledger-unavailable` in private monitoring attention. Monitoring
-reports the condition without rewriting ledger history or enabling the scheduler.
+- `founderConfirmationState`: `pending`, `confirmed`, `not_required`
+- `externalReviewState`: `not_requested`, `pending`, `reviewed`, `not_applicable`
+- `notes`
 
-## Manual reconstructed sample
+Interpretation rules:
 
-`docs/COPILOT_ACCOUNTABILITY_RECONSTRUCTED_SAMPLE.json` contains a manually
-reconstructed example bundle based on current repository records. It is
-explicitly labeled reconstructed/incomplete and is **not** an audited financial
-claim. Import each event manually through `POST /api/accountability/events` or
-`POST /system/accountability/events`.
+- **creator/claimant value** preserves founder-assigned value claims as claims
+- **technical value** describes repository-verified implementation value
+- **evaluated contribution value** describes the contribution after review
+- **estimated value** remains hypothetical/modelled
+- **validated value** requires attached evidence and explicit validation
+- **decision/reasoning/recommendation quality** remain review metrics, not legal conclusions
+- patent or filing status must remain **founder-reported** unless primary
+  receipts or Patent Center evidence are attached in the repository
 
-`docs/COPILOT_ACCOUNTABILITY_RECONSTRUCTED_SAMPLE.md` shows the same example as
-a human-readable reconciliation report.
+## Financial separation rules
+
+The ledger keeps these categories separate:
+
+- **confirmed / measured cost**
+- **estimated exposure**
+- **claimed loss**
+- **validated loss**
+- **founder-confirmed hours**
+- **assistant/session elapsed hours**
+- **external spend**
+- **rework cost**
+- **opportunity-cost estimate**
+
+Founder-reported claims or modeled numbers stay in estimated/claimed fields
+until separately validated by a human. They are **not** promoted into confirmed
+cost or validated loss automatically.
+
+## Reports and status views
+
+The ledger derives status reports for:
+
+- task lifecycle
+- PR evidence presence
+- CI/test evidence presence
+- deployment/outcome evidence presence
+- verification state
+- founder-confirmation state
+- repository-artifact completion vs. real-world outcome status
+- overdue review state
+- authorship gaps
+
+Exports:
+
+- `GET /system/accountability/directives/:directiveId/report?format=json`
+- `GET /system/accountability/directives/:directiveId/report?format=markdown`
+
+Profile-level summaries include counts/totals for:
+
+- open tasks
+- overdue reviews
+- missing evidence
+- missing direction
+- verified successes
+- verified partial outcomes
+- failed tasks
+- claimed losses
+- confirmed costs
+- authorship gaps
+
+## PR template and CI enforcement
+
+`.github/PULL_REQUEST_TEMPLATE.md` now requires Task-ID and accountability
+fields while preserving the existing scope-match, estimate, founder-time,
+suggested-improvement, self-rating, and verification sections.
+
+`.github/workflows/axi-continuity-validation.yml` runs
+`.github/scripts/validate-pr-body.js` on pull requests. It fails when the PR
+body is missing required accountability sections or still uses placeholders.
+
+### Exception path
+
+Historical or administrative PRs may omit a Task-ID only when the PR body
+explicitly declares:
+
+- `Exception path: historical` or `administrative`
+- a specific non-placeholder exception reason
+
+This avoids inventing historical Task-IDs for older work.
+
+## Worked example
+
+1. Open `/accountability`.
+2. Create a directive record with the founder's exact instruction.
+3. Leave `Task ID` blank if you want the ledger to generate one.
+4. Fill in planning fields: planned deliverables, assumptions, risks,
+   acceptance criteria, owner, and review date.
+5. Record `accepted` or `in_progress` as work begins.
+6. Add delivery claims and evidence as implementation and testing happen.
+7. Record financial entries:
+   - confirmed costs only when a human has actually confirmed them
+   - claimed/estimated values separately when they are not yet validated
+8. Record `verified_success` only after verified evidence and human
+   confirmation exist.
+9. Copy the Task-ID into the PR body, continuity record, and any follow-up
+   report.
+
+## Backfill / migration guidance
+
+- Use `reconstructed: true` and `incomplete: true` for older work that can only
+  be partially rebuilt from repository evidence.
+- Do not invent missing Task-IDs, founder confirmations, durations, or
+  financial amounts.
+- Prefer phrases like "reconstructed", "reported", "estimated", or
+  "pending confirmation" when certainty is incomplete.
+- `docs/COPILOT_ACCOUNTABILITY_RECONSTRUCTED_SAMPLE.json` and
+  `docs/COPILOT_ACCOUNTABILITY_RECONSTRUCTED_SAMPLE.md` show the expected
+  backfill style.
+
+## Boundaries
+
+This system is:
+
+- an accountability and project-management record
+- a repository-controlled evidence tracker
+- a founder-facing continuity aid
+
+This system is **not**:
+
+- a legal ownership adjudicator
+- audited accounting
+- proof of production deployment by itself
+- proof of all historical completeness
+- proof of business/IP ownership outside the evidence actually attached

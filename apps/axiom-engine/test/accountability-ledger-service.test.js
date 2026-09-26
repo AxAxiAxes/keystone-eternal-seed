@@ -7,7 +7,9 @@ const {
   ACCOUNTABILITY_LEDGER_ID,
   ACCOUNTABILITY_LEDGER_NOTICE,
   AccountabilityLedgerService,
-  RATING_CATEGORIES
+  TASK_ID_PATTERN,
+  INTELLIGENCE_EVALUATION_CRITERIA,
+  VALUE_ASSESSMENT_FIELDS
 } = require("../accountability-ledger-service");
 
 const DIRECTIVE_ID = "11111111-1111-4111-8111-111111111111";
@@ -19,28 +21,122 @@ function directiveCreated(overrides = {}) {
     eventType: "directive.created",
     actor: "founder",
     payload: {
-      title: "Build Copilot accountability tracker",
+      title: "Build accountability policy",
       verbatimOriginalDirective:
-        "Store the founder's exact directive verbatim and compare it against actual delivery with evidence, deviations, ratings, and loss tracking.",
+        "Implement a general task-record and accountability policy that keeps exact directives, planning, verification, financial separation, and authorship distinct.",
       project: "AXIOM",
       repository: "AxAxiAxes/keystone-eternal-seed",
       branch: "axaxiaxes-axiom-monorepo",
       taskSessionIdentifier: "session-123",
-      requestedDeliverable: "A locally usable directive-vs-delivery audit ledger",
-      constraints: [
-        "Do not treat planning or PR activity as verified success",
-        "Use human-confirmed fields for money and hours"
+      requestedDeliverable: "A single source of truth for founder-directed task records",
+      plannedDeliverables: [
+        "Engine ledger",
+        "Portal accountability view",
+        "PR-template and CI validation"
       ],
-      deadline: "2026-09-20",
+      constraints: [
+        "Do not fabricate historical facts",
+        "Keep repository artifacts separate from real-world outcomes"
+      ],
+      assumptions: [
+        "Historical backfill will remain incomplete",
+        "Production state is not implied by local repository work"
+      ],
+      deadline: "2026-09-30",
       budgetTimeCap: "Founder approval before spending more than 4 hours",
       dependencies: ["Existing AXIOM engine and portal"],
-      definitionOfDone:
-        "A founder can preserve detailed directions verbatim, compare them to delivery, and record verified outcomes with evidence.",
-      subrequirements: [
-        { id: "capture-exact-direction", text: "Store the founder's exact original directive verbatim." },
-        { id: "require-human-confirmation", text: "Never allow verified success without evidence and human confirmation." }
+      risks: ["Historical reconstruction gaps", "Founder confirmation still pending"],
+      acceptanceCriteria: [
+        "Task IDs are stable",
+        "verified_success requires verified evidence and human confirmation",
+        "Financial claims stay separate from confirmed costs"
       ],
-      sourceReference: "founder-chat-2026-09-19"
+      definitionOfDone:
+        "A founder can create a task, track lifecycle and evidence, and export truthful reports without conflating estimates, claims, and confirmed outcomes.",
+      subrequirements: [
+        { id: "task-id", text: "Generate or validate a stable Task-ID." },
+        { id: "human-gate", text: "Require explicit human confirmation for verified_success." }
+      ],
+      attribution: {
+        directiveAuthor: "Axel Urartu (AX) · Axes Contracting",
+        taskOwner: "Axel Urartu (AX) · Axes Contracting",
+        implementers: ["Copilot App"],
+        reviewers: ["pending founder review"],
+        aiAttribution: ["Copilot App", "local repository edits"]
+      },
+      intelligenceEvaluation: {
+        criteria: {
+          directiveAdherence: { state: "met", notes: "Mapped directly to the founder directive." },
+          scopeControl: { state: "met", notes: "Repository-only scope preserved." },
+          accuracyTruthfulness: { state: "met", notes: "Claims stay tied to recorded evidence." },
+          verificationQuality: { state: "needs_review", notes: "Founder verification still required for some follow-up." },
+          contributionValueClassification: { state: "met", notes: "Repository artifact value kept separate from legal/market value." },
+          decisionMakingQuality: { state: "needs_review", notes: "Decision quality remains founder-reviewed." },
+          provenanceAttributionIntegrity: { state: "met", notes: "Founder claim, AI attribution, and verified evidence are split." }
+        },
+        provenanceBoundary: {
+          founderClaim: "founder_claim",
+          aiToolAttribution: "ai_tool_attribution",
+          verifiedEvidence: "repository_verified"
+        },
+        notes: "Repository-controlled intelligence evaluation only."
+      },
+      valueAssessment: {
+        creatorClaimantValue: {
+          level: "high",
+          validationState: "founder_reported",
+          evidenceClass: "founder_claim",
+          summary: "Founder-reported creator value remains separate from verified costs."
+        },
+        technicalValue: {
+          level: "high",
+          validationState: "validated",
+          evidenceClass: "repository_verified",
+          summary: "Implemented through the ledger, tests, and accountability UI."
+        },
+        evaluatedContributionValue: {
+          level: "medium",
+          validationState: "founder_reported",
+          evidenceClass: "ai_tool_attribution",
+          summary: "Contribution value still needs founder review."
+        },
+        estimatedValue: {
+          level: "medium",
+          validationState: "estimated",
+          evidenceClass: "founder_claim",
+          summary: "Potential value only."
+        },
+        validatedValue: {
+          level: "low",
+          validationState: "not_evaluated",
+          evidenceClass: "not_provided",
+          summary: "No external validation recorded."
+        },
+        decisionQuality: {
+          level: "medium",
+          validationState: "founder_reported",
+          evidenceClass: "founder_claim",
+          summary: "Decision quality remains under founder review."
+        },
+        reasoningQuality: {
+          level: "medium",
+          validationState: "founder_reported",
+          evidenceClass: "ai_tool_attribution",
+          summary: "Reasoning quality tracked separately from outcomes."
+        },
+        recommendationQuality: {
+          level: "medium",
+          validationState: "founder_reported",
+          evidenceClass: "ai_tool_attribution",
+          summary: "Recommendations still require founder confirmation."
+        },
+        founderConfirmationState: "pending",
+        externalReviewState: "not_requested",
+        notes: "Patent/final rights status remains founder-reported unless primary evidence is attached."
+      },
+      reviewDueAt: "2026-09-25T00:00:00.000Z",
+      sourceReferences: ["founder-chat-2026-09-21"],
+      continuityLinks: ["docs/memory/2026-09-21-accountability-policy.md"]
     },
     ...overrides
   };
@@ -53,7 +149,7 @@ function sampleDelivery(overrides = {}) {
     actor: "assistant",
     payload: {
       deliveryId: "44444444-4444-4444-8444-444444444444",
-      summary: "Implemented the new accountability ledger service and UI",
+      summary: "Implemented the accountability ledger service and PR validator",
       claimedCompletion: true,
       items: [
         {
@@ -61,6 +157,12 @@ function sampleDelivery(overrides = {}) {
           deliveryClass: "repository_artifact",
           label: "Engine ledger service",
           locator: "apps/axiom-engine/accountability-ledger-service.js"
+        },
+        {
+          type: "pull_request",
+          deliveryClass: "repository_artifact",
+          label: "PR template",
+          locator: ".github/PULL_REQUEST_TEMPLATE.md"
         },
         {
           type: "deployment",
@@ -83,39 +185,23 @@ function sampleDelivery(overrides = {}) {
   };
 }
 
-function sampleOutcome(payload = {}) {
-  return {
-    directiveId: DIRECTIVE_ID,
-    eventType: "outcome.recorded",
-    actor: "operator",
-    payload: {
-      state: "verified_success",
-      explanation: "Synthetic confirmation for regression coverage only.",
-      humanConfirmed: true,
-      confirmedBy: "test-reviewer",
-      evidenceIds: ["33333333-3333-4333-8333-333333333333"],
-      ...payload
-    }
-  };
-}
-
-test("stores append-only directive, delivery, outcome, rating, and loss history", async (t) => {
+test("records task IDs, lifecycle transitions, authorship, retention, and financial separation", async (t) => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));
   const timestamps = [
-    "2026-09-19T08:00:00.000Z",
-    "2026-09-19T08:15:00.000Z",
-    "2026-09-19T08:30:00.000Z",
-    "2026-09-19T08:45:00.000Z",
-    "2026-09-19T09:00:00.000Z",
-    "2026-09-19T09:15:00.000Z",
-    "2026-09-19T09:30:00.000Z",
-    "2026-09-19T09:45:00.000Z",
-    "2026-09-19T10:00:00.000Z"
+    "2026-09-21T08:00:00.000Z",
+    "2026-09-21T08:15:00.000Z",
+    "2026-09-21T08:30:00.000Z",
+    "2026-09-21T08:45:00.000Z",
+    "2026-09-21T09:00:00.000Z",
+    "2026-09-21T09:15:00.000Z",
+    "2026-09-21T09:30:00.000Z",
+    "2026-09-21T09:45:00.000Z",
+    "2026-09-21T10:00:00.000Z"
   ];
   const service = new AccountabilityLedgerService({
     directory,
-    now: () => new Date(timestamps.shift() || timestamps[timestamps.length - 1] || "2026-09-19T10:00:00.000Z")
+    now: () => new Date(timestamps.shift() || "2026-09-21T10:00:00.000Z")
   });
 
   const initial = await service.initialize();
@@ -125,30 +211,24 @@ test("stores append-only directive, delivery, outcome, rating, and loss history"
   await service.record(directiveCreated());
   await service.record({
     directiveId: DIRECTIVE_ID,
-    eventType: "directive.amended",
-    actor: "founder",
+    eventType: "outcome.recorded",
+    actor: "assistant",
     payload: {
-      amendmentText: "Also preserve amendments with timestamps and source references.",
-      sourceReference: "founder-chat-2026-09-19-followup",
-      supersedesInstructions: ["founder-chat-2026-09-19"],
-      subrequirementsAdded: [
-        { id: "preserve-amendments", text: "Preserve amendments and superseded instructions." }
-      ],
-      constraintsAdded: ["Do not invent external invoices or hours"]
+      state: "accepted",
+      explanation: "The founder-directed task was accepted into active work.",
+      humanConfirmed: false,
+      evidenceIds: []
     }
   });
   await service.record({
     directiveId: DIRECTIVE_ID,
-    eventType: "interpretation.recorded",
+    eventType: "outcome.recorded",
     actor: "assistant",
     payload: {
-      interpretation: "Build an append-only ledger plus a dedicated comparison UI.",
-      checklistMapping: [
-        {
-          requirementId: "capture-exact-direction",
-          interpretation: "Use a verbatimOriginalDirective field and keep it searchable."
-        }
-      ]
+      state: "in_progress",
+      explanation: "Implementation is underway.",
+      humanConfirmed: false,
+      evidenceIds: []
     }
   });
   await service.record(sampleDelivery());
@@ -168,9 +248,9 @@ test("stores append-only directive, delivery, outcome, rating, and loss history"
     eventType: "requirement.assessed",
     actor: "operator",
     payload: {
-      requirementId: "capture-exact-direction",
+      requirementId: "task-id",
       status: "met",
-      explanation: "The directive is stored verbatim and shown prominently in the report.",
+      explanation: "The directive received a stable Task-ID and exposes it in reports.",
       evidenceIds: ["33333333-3333-4333-8333-333333333333"],
       deviations: []
     }
@@ -190,7 +270,7 @@ test("stores append-only directive, delivery, outcome, rating, and loss history"
         rework: -10,
         outcomeFocus: -10
       },
-      notes: "Historical rating before the tracker can prove better follow-through."
+      notes: "Historical dissatisfaction remains recorded; the ledger should not erase it."
     }
   });
   await service.record({
@@ -202,21 +282,46 @@ test("stores append-only directive, delivery, outcome, rating, and loss history"
       founderConfirmedHours: 4,
       assistantSessionElapsedHours: 12.5,
       hourlyValueCents: 7500,
-      directCostCents: 1500,
-      reworkCostCents: 2500,
-      notes: "Confirmed founder time plus rework and direct cost."
+      measuredCostCents: 1500,
+      confirmedCostCents: 2500,
+      externalSpendCents: 800,
+      reworkCostCents: 1200,
+      validatedLossCents: 3000,
+      currency: "USD",
+      confidenceGrade: "high",
+      reviewer: "Axel Urartu (AX) · Axes Contracting",
+      assumptions: ["Founder confirmed time directly"],
+      notes: "Confirmed founder time plus measured/confirmed repository work costs."
+    }
+  });
+  await service.record({
+    directiveId: DIRECTIVE_ID,
+    eventType: "resource.recorded",
+    actor: "founder",
+    payload: {
+      entryType: "estimated",
+      assistantSessionElapsedHours: 2,
+      estimatedCostLowCents: 5000,
+      estimatedCostHighCents: 9000,
+      opportunityCostEstimateCents: 6000,
+      claimedLossCents: 4000000,
+      currency: "USD",
+      confidenceGrade: "reported",
+      assumptions: ["Founder-reported loss not yet validated"],
+      reviewer: "Axel Urartu (AX) · Axes Contracting",
+      notes: "Claim stays separate from confirmed/validated totals."
     }
   });
 
-  const directive = await service.getDirective(DIRECTIVE_ID);
-  const verifiedEvidenceId = directive.deliveries[0].evidence[0].id;
+  const directiveBeforeOutcome = await service.getDirective(DIRECTIVE_ID);
+  const verifiedEvidenceId = directiveBeforeOutcome.deliveries[0].evidence[0].id;
   await service.record({
     directiveId: DIRECTIVE_ID,
     eventType: "outcome.recorded",
     actor: "operator",
     payload: {
       state: "verified_success",
-      explanation: "The founder confirmed the tracker only after verified evidence was recorded.",
+      explanation: "The founder confirmed the task only after verified evidence was recorded.",
       humanConfirmed: true,
       confirmedBy: "Axel Urartu (AX) · Axes Contracting",
       evidenceIds: [verifiedEvidenceId]
@@ -224,32 +329,131 @@ test("stores append-only directive, delivery, outcome, rating, and loss history"
   });
 
   const projected = await service.getDirective(DIRECTIVE_ID);
-  assert.equal(projected.directive.subrequirements.length, 3);
-  assert.equal(projected.directive.subrequirements[0].currentStatus, "met");
+  assert.match(projected.taskId, TASK_ID_PATTERN);
   assert.equal(projected.currentOutcome.state, "verified_success");
-  assert.equal(projected.founderRating.overall, -10);
-  assert.equal(projected.metrics.provenCostCents, 34000);
-  assert.equal(projected.metrics.assistantSessionElapsedHours, 12.5);
-  assert.equal(projected.deliveryCounts.file, 1);
+  assert.equal(projected.currentStatus, "verified_success");
+  assert.equal(projected.directive.subrequirements[0].currentStatus, "met");
+  assert.equal(projected.directive.attribution.directiveAuthor, "Axel Urartu (AX) · Axes Contracting");
+  assert.equal(projected.reviewStatus, "scheduled");
+  assert.equal(projected.statusReport.pullRequest, "recorded");
+  assert.equal(projected.statusReport.ci, "recorded");
+  assert.equal(projected.statusReport.founderConfirmation, "pending");
+  assert.equal(projected.statusReport.externalReview, "not_requested");
+  assert.equal(projected.metrics.confirmedCostCents, 36000);
+  assert.equal(projected.metrics.provenCostCents, 36000);
+  assert.equal(projected.metrics.claimedLossCents, 4000000);
+  assert.equal(projected.metrics.validatedLossCents, 3000);
   assert.equal(projected.evidenceBackedCompletion, true);
+  assert.equal(projected.deliveryCounts.file, 1);
   assert.equal(projected.timeToVerifiableOutcomeHours, 2);
+  assert.equal(projected.authorshipGaps.length, 0);
+  assert.equal(projected.directive.intelligenceEvaluation.provenanceBoundary.verifiedEvidence, "repository_verified");
+  assert.equal(projected.directive.valueAssessment.technicalValue.validationState, "validated");
 
   const summary = await service.summary();
   assert.equal(summary.totalDirectives, 1);
   assert.equal(summary.verifiedSuccesses, 1);
-  assert.equal(summary.provenCostCents, 34000);
+  assert.equal(summary.openTaskCount, 0);
+  assert.equal(summary.confirmedCostCents, 36000);
+  assert.equal(summary.claimedLossCents, 4000000);
   assert.deepEqual(summary.founderRatingTrend.map((entry) => entry.overall), [-10]);
 
   const markdown = await service.report(DIRECTIVE_ID, "markdown");
+  assert.match(markdown, /Task ID/);
   assert.match(markdown, /Founder direction \(verbatim\)/);
-  assert.match(markdown, /verified_success/);
-  assert.match(markdown, /Founder rating: -10/);
+  assert.match(markdown, /Intelligence evaluation system/);
+  assert.match(markdown, /Value and decision-quality assessment/);
+  assert.match(markdown, /Pull request status: recorded/);
+  assert.match(markdown, /Claimed loss \(cents\): 4000000/);
 });
 
-test("rejects unsupported verified success, invalid ratings, and tampered append-only history", async (t) => {
+test("tracks intelligence evaluation and value assessment defaults and explicit states", async (t) => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));
   const service = new AccountabilityLedgerService({ directory });
+
+  await service.record(directiveCreated());
+  const projected = await service.getDirective(DIRECTIVE_ID);
+
+  assert.equal(
+    Object.keys(projected.directive.intelligenceEvaluation.criteria).length,
+    INTELLIGENCE_EVALUATION_CRITERIA.length
+  );
+  assert.equal(
+    Object.keys(projected.directive.valueAssessment).filter((key) => VALUE_ASSESSMENT_FIELDS.includes(key)).length,
+    VALUE_ASSESSMENT_FIELDS.length
+  );
+  assert.equal(projected.directive.valueAssessment.creatorClaimantValue.validationState, "founder_reported");
+  assert.equal(projected.directive.valueAssessment.validatedValue.validationState, "not_evaluated");
+});
+
+test("removes evidence-backed completion when previously verified evidence becomes disputed", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AccountabilityLedgerService({ directory });
+
+  await service.record(directiveCreated());
+  await service.record(sampleDelivery());
+  await service.record({
+    directiveId: DIRECTIVE_ID,
+    eventType: "evidence.verified",
+    actor: "operator",
+    payload: {
+      deliveryId: "44444444-4444-4444-8444-444444444444",
+      evidenceId: "33333333-3333-4333-8333-333333333333",
+      verificationState: "verified",
+      verifier: "Axel Urartu (AX) · Axes Contracting"
+    }
+  });
+  await service.record({
+    directiveId: DIRECTIVE_ID,
+    eventType: "outcome.recorded",
+    actor: "operator",
+    payload: {
+      state: "verified_success",
+      explanation: "Verified at first.",
+      humanConfirmed: true,
+      confirmedBy: "Axel Urartu (AX) · Axes Contracting",
+      evidenceIds: ["33333333-3333-4333-8333-333333333333"]
+    }
+  });
+  await service.record({
+    directiveId: DIRECTIVE_ID,
+    eventType: "evidence.verified",
+    actor: "operator",
+    payload: {
+      deliveryId: "44444444-4444-4444-8444-444444444444",
+      evidenceId: "33333333-3333-4333-8333-333333333333",
+      verificationState: "disputed",
+      verifier: "Axel Urartu (AX) · Axes Contracting",
+      notes: "Evidence integrity needs re-review."
+    }
+  });
+
+  const projected = await service.getDirective(DIRECTIVE_ID);
+  assert.equal(projected.currentOutcome.state, "verified_success");
+  assert.equal(projected.currentStatus, "blocked");
+  assert.equal(projected.evidenceBackedCompletion, false);
+  assert.equal(projected.missingEvidence, true);
+
+  const summary = await service.summary();
+  assert.equal(summary.verifiedSuccesses, 0);
+});
+
+test("rejects invalid Task-IDs and unverified verified_success transitions", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AccountabilityLedgerService({ directory });
+
+  await assert.rejects(
+    () => service.record(directiveCreated({
+      payload: {
+        ...directiveCreated().payload,
+        taskId: "bad-task-id"
+      }
+    })),
+    /taskId must match TASK-YYYYMMDD-0001/
+  );
 
   await service.record(directiveCreated());
   await service.record(sampleDelivery());
@@ -263,53 +467,89 @@ test("rejects unsupported verified success, invalid ratings, and tampered append
         payload: {
           state: "verified_success",
           explanation: "Should fail because evidence is not verified yet.",
-          humanConfirmed: false,
+          humanConfirmed: true,
+          confirmedBy: "Axel Urartu (AX) · Axes Contracting",
           evidenceIds: ["33333333-3333-4333-8333-333333333333"]
         }
       }),
-    /verified_success requires/
+    /verified_success evidence must already be marked verified/
   );
+});
 
-  await assert.rejects(
-    () =>
-      service.record({
-        directiveId: DIRECTIVE_ID,
-        eventType: "rating.recorded",
-        actor: "founder",
-        payload: {
-          kind: "founder",
-          overall: -11,
-          categories: {
-            instructionAdherence: 0,
-            accuracy: 0,
-            scopeControl: 0,
-            verification: 0,
-            rework: 0,
-            outcomeFocus: 0
-          }
-        }
-      }),
-    /between -10 and 10/
-  );
+test("autogenerates per-day Task-IDs from directive-created events only", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const timestamps = [
+    "2026-09-21T08:00:00.000Z",
+    "2026-09-21T08:15:00.000Z",
+    "2026-09-21T08:30:00.000Z"
+  ];
+  const service = new AccountabilityLedgerService({
+    directory,
+    now: () => new Date(timestamps.shift() || "2026-09-21T08:45:00.000Z")
+  });
 
-  await assert.rejects(
-    () =>
-      service.record({
-        directiveId: SECOND_DIRECTIVE_ID,
-        eventType: "directive.created",
-        actor: "founder",
-        payload: {
-          title: "Historical reconstructed directive",
-          verbatimOriginalDirective: null,
-          project: "AXIOM",
-          repository: "AxAxiAxes/keystone-eternal-seed",
-          requestedDeliverable: null,
-          definitionOfDone: null,
-          subrequirements: []
-        }
-      }),
-    /required unless the entry is reconstructed/
+  await service.record(directiveCreated());
+  await service.record(sampleDelivery());
+  await service.record(directiveCreated({
+    directiveId: SECOND_DIRECTIVE_ID,
+    payload: {
+      ...directiveCreated().payload,
+      title: "Second accountability policy task"
+    }
+  }));
+
+  const directives = (await service.listDirectives()).directives.sort((left, right) =>
+    left.taskId.localeCompare(right.taskId)
   );
+  assert.deepEqual(
+    directives.map((directive) => directive.taskId),
+    ["TASK-20260921-0001", "TASK-20260921-0002"]
+  );
+});
+
+test("autogeneration advances past the highest same-day explicit Task-ID", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const timestamps = [
+    "2026-09-21T08:00:00.000Z",
+    "2026-09-21T08:05:00.000Z",
+    "2026-09-21T08:10:00.000Z"
+  ];
+  const service = new AccountabilityLedgerService({
+    directory,
+    now: () => new Date(timestamps.shift() || "2026-09-21T08:15:00.000Z")
+  });
+
+  await service.record(directiveCreated());
+  await service.record(directiveCreated({
+    directiveId: SECOND_DIRECTIVE_ID,
+    payload: {
+      ...directiveCreated().payload,
+      taskId: "TASK-20260921-0173",
+      title: "Backfilled explicit task"
+    }
+  }));
+  await service.record(directiveCreated({
+    directiveId: "33333333-3333-4333-8333-333333333333",
+    payload: {
+      ...directiveCreated().payload,
+      title: "Next generated task"
+    }
+  }));
+
+  const directives = (await service.listDirectives()).directives;
+  const generated = directives.find((directive) => directive.title === "Next generated task");
+  assert.equal(generated.taskId, "TASK-20260921-0174");
+});
+
+test("flags overdue review and missing authorship without deleting evidence", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AccountabilityLedgerService({
+    directory,
+    now: () => new Date("2026-09-21T12:00:00.000Z")
+  });
 
   await service.record({
     directiveId: SECOND_DIRECTIVE_ID,
@@ -318,22 +558,56 @@ test("rejects unsupported verified success, invalid ratings, and tampered append
     reconstructed: true,
     incomplete: true,
     payload: {
-      title: "Historical reconstructed directive",
-      verbatimOriginalDirective: null,
+      title: "Historical backfill",
+      taskId: "TASK-20260901-0007",
+      verbatimOriginalDirective: "Reconstruct a historical PR without inventing facts.",
       project: "AXIOM",
       repository: "AxAxiAxes/keystone-eternal-seed",
-      requestedDeliverable: null,
-      definitionOfDone: null,
-      subrequirements: []
+      requestedDeliverable: "Backfilled accountability record",
+      definitionOfDone: "Historical facts are marked reconstructed/incomplete.",
+      subrequirements: [],
+      reviewDueAt: "2020-01-01T00:00:00.000Z",
+      attribution: {
+        directiveAuthor: null,
+        taskOwner: null,
+        implementers: [],
+        reviewers: [],
+        aiAttribution: []
+      }
     }
   });
 
-  const missing = await service.missingReport();
-  assert.equal(missing.missingDirectionCount, 1);
+  const historical = await service.getDirective(SECOND_DIRECTIVE_ID);
+  assert.equal(historical.reviewStatus, "overdue");
+  assert.deepEqual(historical.authorshipGaps.sort(), [
+    "aiAttribution",
+    "directiveAuthor",
+    "implementers",
+    "taskOwner"
+  ]);
+  assert.equal(historical.reconstructed, true);
+  assert.equal(historical.incomplete, true);
 
+  const missing = await service.missingReport();
+  assert.equal(missing.missingEvidenceCount, 0);
+  assert.equal(missing.missingDirectionCount, 0);
+
+  const summary = await service.summary();
+  assert.equal(summary.openTaskCount, 1);
+  assert.equal(summary.overdueReviewCount, 1);
+  assert.equal(summary.authorshipGapCount, 1);
+});
+
+test("reports attention when the append-only ledger is tampered with", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AccountabilityLedgerService({ directory });
+
+  await service.record(directiveCreated());
   const statePath = path.join(directory, "accountability-ledger.jsonl");
   const original = await fs.readFile(statePath, "utf8");
   await fs.writeFile(statePath, original.replace("AXIOM", "BROKEN"));
+
   assert.deepEqual(await service.status(), {
     status: "attention",
     code: "accountability-ledger-invalid",
@@ -341,250 +615,4 @@ test("rejects unsupported verified success, invalid ratings, and tampered append
     expectedSchemaVersion: 1,
     label: ACCOUNTABILITY_LEDGER_NOTICE
   });
-});
-
-test("filters directives and keeps estimated exposure separate from proven cost", async (t) => {
-  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
-  t.after(() => fs.rm(directory, { recursive: true, force: true }));
-  const timestamps = [
-    "2026-09-19T08:00:00.000Z",
-    "2026-09-19T08:01:00.000Z",
-    "2026-09-19T08:02:00.000Z",
-    "2026-09-19T08:03:00.000Z"
-  ];
-  const service = new AccountabilityLedgerService({
-    directory,
-    now: () => new Date(timestamps.shift())
-  });
-
-  await service.record(directiveCreated());
-  await service.record({
-    directiveId: DIRECTIVE_ID,
-    eventType: "resource.recorded",
-    actor: "founder",
-    payload: {
-      entryType: "estimated",
-      assistantSessionElapsedHours: 249.25,
-      estimatedCostLowCents: 623125,
-      estimatedCostHighCents: 3738750,
-      notes: "Estimated exposure only; not confirmed founder labor."
-    }
-  });
-  await service.record({
-    directiveId: SECOND_DIRECTIVE_ID,
-    eventType: "directive.created",
-    actor: "founder",
-    reconstructed: true,
-    incomplete: true,
-    payload: {
-      title: "Reconstructed AXIOM outage record",
-      verbatimOriginalDirective: "Investigate the live AXIOM chat outage and preserve evidence.",
-      project: "AXIOM",
-      repository: "AxAxiAxes/keystone-eternal-seed",
-      branch: "axaxiaxes-axiom-monorepo",
-      requestedDeliverable: "Honest outage record",
-      definitionOfDone: "Evidence of what was delivered versus what remained blocked",
-      subrequirements: [
-        { id: "outage-proof", text: "Record the outage and remaining blockers honestly." }
-      ]
-    }
-  });
-  await service.record({
-    directiveId: SECOND_DIRECTIVE_ID,
-    eventType: "outcome.recorded",
-    actor: "operator",
-    reconstructed: true,
-    incomplete: true,
-    payload: {
-      state: "blocked",
-      explanation: "The deployment/integration path remained incomplete.",
-      humanConfirmed: true,
-      confirmedBy: "Axel Urartu (AX) · Axes Contracting",
-      evidenceIds: []
-    }
-  });
-
-  const summary = await service.summary({ outcome: "blocked" });
-  assert.equal(summary.totalDirectives, 1);
-
-  const directives = await service.listDirectives({ search: "verbatim", repository: "AxAxiAxes/keystone-eternal-seed" });
-  assert.equal(directives.directives.length, 1);
-  assert.equal(directives.directives[0].directiveId, DIRECTIVE_ID);
-
-  const fullSummary = await service.summary();
-  assert.equal(fullSummary.provenCostCents, 0);
-  assert.equal(fullSummary.estimatedExposureLowCents, 623125);
-  assert.equal(fullSummary.estimatedExposureHighCents, 3738750);
-});
-
-test("accepts bounded integer rating query strings without coercing invalid filters", async (t) => {
-  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
-  t.after(() => fs.rm(directory, { recursive: true, force: true }));
-  const service = new AccountabilityLedgerService({ directory });
-  await service.record(directiveCreated());
-  await service.record({
-    directiveId: DIRECTIVE_ID,
-    eventType: "rating.recorded",
-    actor: "founder",
-    payload: {
-      kind: "founder",
-      overall: -10,
-      categories: Object.fromEntries(RATING_CATEGORIES.map((category) => [category, -10]))
-    }
-  });
-
-  for (const ratingMin of [-10, "-10"]) {
-    assert.equal((await service.listDirectives({ ratingMin })).directives.length, 1);
-    assert.equal((await service.summary({ ratingMin })).totalDirectives, 1);
-    assert.equal((await service.missingReport({ ratingMin })).totalDirectives, 1);
-  }
-  for (const ratingMin of [0, "0", 10, "10"]) {
-    assert.equal((await service.listDirectives({ ratingMin })).directives.length, 0);
-  }
-  for (const ratingMin of ["", " ", "1.5", "11", "-11", "invalid", "0x0", [], ["0"], {}, false]) {
-    await assert.rejects(
-      () => service.listDirectives({ ratingMin }),
-      /ratingMin must be an integer between -10 and 10/
-    );
-  }
-});
-
-test("rejects non-boolean human confirmation without appending an event", async (t) => {
-  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
-  t.after(() => fs.rm(directory, { recursive: true, force: true }));
-  const service = new AccountabilityLedgerService({ directory });
-  await service.record(directiveCreated());
-  const delivery = sampleDelivery();
-  delivery.payload.evidence[0].verificationState = "verified";
-  delivery.payload.evidence[0].verifier = "test-reviewer";
-  await service.record(delivery);
-  const statePath = path.join(directory, "accountability-ledger.jsonl");
-  const original = await fs.readFile(statePath, "utf8");
-
-  for (const state of ["verified_success", "blocked"]) {
-    await t.test(state, async () => {
-      for (const humanConfirmed of ["false", "true", "", 0, 1, null, [], {}]) {
-        await assert.rejects(
-          () => service.record(sampleOutcome({ state, humanConfirmed })),
-          { name: "TypeError", message: "humanConfirmed must be a boolean when provided" }
-        );
-        assert.equal(await fs.readFile(statePath, "utf8"), original);
-      }
-    });
-  }
-
-  for (const humanConfirmed of [false, undefined]) {
-    await assert.rejects(
-      () => service.record(sampleOutcome({ humanConfirmed })),
-      /verified_success requires/
-    );
-    const recorded = await service.record(sampleOutcome({ state: "blocked", humanConfirmed }));
-    assert.equal(recorded.payload.humanConfirmed, false);
-  }
-  const confirmed = await service.record(sampleOutcome());
-  assert.equal(confirmed.payload.humanConfirmed, true);
-  const reopened = new AccountabilityLedgerService({ directory });
-  assert.equal((await reopened.getDirective(DIRECTIVE_ID)).evidenceBackedCompletion, true);
-});
-
-test("recomputes current verification while preserving recorded success and its history", async (t) => {
-  for (const verificationState of ["disputed", "unverified", "not_applicable"]) {
-    await t.test(verificationState, async (t) => {
-      const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
-      t.after(() => fs.rm(directory, { recursive: true, force: true }));
-      const service = new AccountabilityLedgerService({
-        directory,
-        now: () => new Date("2026-09-22T12:00:00.000Z")
-      });
-      await service.record(directiveCreated());
-      const delivery = sampleDelivery();
-      const secondEvidenceId = "77777777-7777-4777-8777-777777777777";
-      const unrelatedEvidenceId = "88888888-8888-4888-8888-888888888888";
-      delivery.payload.evidence[0].verificationState = "verified";
-      delivery.payload.evidence[0].verifier = "test-reviewer";
-      delivery.payload.evidence.push(
-        { ...delivery.payload.evidence[0], id: secondEvidenceId },
-        { ...delivery.payload.evidence[0], id: unrelatedEvidenceId }
-      );
-      await service.record(delivery);
-      const outcome = sampleOutcome({
-        evidenceIds: [delivery.payload.evidence[0].id, secondEvidenceId]
-      });
-      const success = await service.record(outcome);
-      const statePath = path.join(directory, "accountability-ledger.jsonl");
-      const original = await fs.readFile(statePath, "utf8");
-      const before = await service.getDirective(DIRECTIVE_ID);
-      assert.equal(before.evidenceBackedCompletion, true);
-      assert.equal(before.currentStatus, "verified_success");
-
-      const evidenceReview = {
-        directiveId: DIRECTIVE_ID,
-        eventType: "evidence.verified",
-        actor: "operator",
-        payload: {
-          deliveryId: delivery.payload.deliveryId,
-          evidenceId: secondEvidenceId,
-          verificationState,
-          verifier: "test-reviewer"
-        }
-      };
-      await service.record(evidenceReview);
-      assert.ok((await fs.readFile(statePath, "utf8")).startsWith(original));
-      const reopened = new AccountabilityLedgerService({ directory });
-      assert.equal((await reopened.status()).status, "ready");
-      const current = await reopened.getDirective(DIRECTIVE_ID);
-      assert.equal(current.currentStatus, "blocked");
-      assert.equal(current.evidenceBackedCompletion, false);
-      assert.equal(current.missingEvidence, true);
-      assert.equal(current.timeToVerifiableOutcomeHours, null);
-      assert.deepEqual(current.currentOutcome, before.currentOutcome);
-      assert.deepEqual(current.outcomes, before.outcomes);
-      assert.deepEqual(current.history.slice(0, -1), before.history);
-      assert.deepEqual(current.history.find((event) => event.id === success.id), success);
-
-      const summary = await reopened.summary();
-      assert.equal(summary.verifiedSuccesses, 0);
-      assert.equal(summary.evidenceBackedCompletionRate, 0);
-      assert.equal(summary.partialBlockedFailedCount, 1);
-      const list = await reopened.listDirectives({ status: "blocked" });
-      assert.equal(list.directives.length, 1);
-      assert.equal(list.directives[0].outcomeState, "verified_success");
-      assert.equal((await reopened.listDirectives({ status: "verified_success" })).directives.length, 0);
-      assert.equal((await reopened.listDirectives({ outcome: "verified_success" })).directives.length, 1);
-      const missing = await reopened.missingReport();
-      assert.equal(missing.missingEvidenceCount, 1);
-      assert.equal(missing.missingEvidence[0].currentStatus, "blocked");
-      assert.deepEqual(await reopened.report(DIRECTIVE_ID, "json"), current);
-      const markdown = await reopened.report(DIRECTIVE_ID, "markdown");
-      assert.match(markdown, /Current status: blocked/);
-      assert.match(markdown, /Latest recorded outcome: verified_success/);
-      assert.match(markdown, /Current evidence-backed completion: no/);
-      assert.match(markdown, /Recorded outcome history/);
-      await assert.rejects(
-        () => reopened.record(outcome),
-        /verified_success evidence must already be marked verified/
-      );
-
-      evidenceReview.payload.verificationState = "verified";
-      await reopened.record(evidenceReview);
-      const restored = await reopened.getDirective(DIRECTIVE_ID);
-      assert.equal(restored.evidenceBackedCompletion, true);
-      assert.equal(restored.currentStatus, "verified_success");
-      assert.equal(restored.missingEvidence, false);
-      assert.equal(restored.timeToVerifiableOutcomeHours, before.timeToVerifiableOutcomeHours);
-      assert.deepEqual(restored.outcomes, before.outcomes);
-      assert.equal((await reopened.summary()).verifiedSuccesses, 1);
-      assert.equal((await reopened.summary()).partialBlockedFailedCount, 0);
-      assert.equal((await reopened.missingReport()).missingEvidenceCount, 0);
-
-      evidenceReview.payload.evidenceId = unrelatedEvidenceId;
-      evidenceReview.payload.verificationState = verificationState;
-      await reopened.record(evidenceReview);
-      assert.equal((await reopened.getDirective(DIRECTIVE_ID)).evidenceBackedCompletion, true);
-      await reopened.record(sampleOutcome({ state: "blocked", humanConfirmed: false }));
-      assert.equal((await reopened.getDirective(DIRECTIVE_ID)).evidenceBackedCompletion, false);
-      assert.equal((await reopened.summary()).verifiedSuccesses, 0);
-      assert.equal((await reopened.getDirective(DIRECTIVE_ID)).outcomes[0].state, "verified_success");
-    });
-  }
 });

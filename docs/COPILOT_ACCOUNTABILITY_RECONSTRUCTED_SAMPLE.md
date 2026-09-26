@@ -23,13 +23,33 @@
 
 ## Honest outcome classification
 
-**Outcome:** `partial`
+**Outcome:** `verified_partial`
 
 Reason:
 
 - some repository-controlled work was real and locally testable
 - important external or deployment outcomes remained incomplete or unverified
 - documentation/PR activity must not be treated as verified success
+
+## Intelligence evaluation and value assessment
+
+- **Directive adherence / scope control / truthfulness:** tracked as explicit
+  repository-controlled evaluation criteria, not implied by a merged PR alone.
+- **Provenance boundary:** founder claim, AI/tool attribution, and verified
+  evidence are recorded as separate classes.
+- **Creator/claimant value:** may be founder-reported and reviewed, but remains
+  distinct from verified evidence and legal rights.
+- **Technical value:** can be repository-validated when code, tests, or reports
+  exist.
+- **Estimated vs. validated value:** modeled value stays estimated until
+  supporting evidence is attached and reviewed.
+- **Decision / reasoning / recommendation quality:** preserved as reviewable
+  quality fields, not as proof of authority.
+- **Founder confirmation / external review state:** tracked separately from
+  outcome state and cost totals.
+- **Patent note:** any provisional/non-provisional status must remain
+  founder-reported unless primary receipts or Patent Center records are present
+  in the repository.
 
 ## Loss/resource handling
 
