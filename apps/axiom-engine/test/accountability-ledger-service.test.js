@@ -474,6 +474,27 @@ test("rejects invalid Task-IDs and unverified verified_success transitions", asy
       }),
     /verified_success evidence must already be marked verified/
   );
+
+  await assert.rejects(
+    () =>
+      service.record({
+        directiveId: DIRECTIVE_ID,
+        eventType: "outcome.recorded",
+        actor: "operator",
+        payload: {
+          state: "accepted",
+          explanation: "Malformed confirmation type.",
+          humanConfirmed: "false",
+          evidenceIds: []
+        }
+      }),
+    /humanConfirmed must be a boolean when provided/
+  );
+
+  await assert.rejects(
+    () => service.listDirectives({ ratingMin: "  " }),
+    /ratingMin must be an integer between -10 and 10/
+  );
 });
 
 test("autogenerates per-day Task-IDs from directive-created events only", async (t) => {

@@ -1723,7 +1723,7 @@ function normalizeFilters(filters) {
       : normalizeOptionalText(filters.status, 120),
     ratingMin: filters.ratingMin === undefined || filters.ratingMin === null
       ? null
-      : normalizeRating(Number(filters.ratingMin), "ratingMin"),
+      : normalizeFilterRating(filters.ratingMin),
     search: normalizeOptionalText(filters.search, 2_000)
   };
 }
@@ -2083,6 +2083,17 @@ function normalizeRating(value, fieldName) {
     throw new RangeError(`${fieldName} must be an integer between -10 and 10`);
   }
   return value;
+}
+
+function normalizeFilterRating(value) {
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (!/^-?\d+$/.test(trimmed)) {
+      throw new RangeError("ratingMin must be an integer between -10 and 10");
+    }
+    return normalizeRating(Number(trimmed), "ratingMin");
+  }
+  return normalizeRating(value, "ratingMin");
 }
 
 function defaultDirectiveTitle(verbatim) {
