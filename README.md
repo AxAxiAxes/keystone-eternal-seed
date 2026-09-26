@@ -46,6 +46,9 @@ light-sensing architecture proposals is in
 The canonical AXES OS controlled terminology standard and compact token glossary are in
 [AXES_OS_TERMINOLOGY_STANDARD.md](docs/AXES_OS_TERMINOLOGY_STANDARD.md) and
 [AXES_OS_TERMINOLOGY_TOKEN_GLOSSARY.md](docs/AXES_OS_TERMINOLOGY_TOKEN_GLOSSARY.md).
+Proposal-only follow-up checkpoints for origin-beacon discovery and glyph-matrix planning are in
+[AXES_OS_ORIGIN_BEACON_DISCOVERY_CHECKPOINT.md](docs/AXES_OS_ORIGIN_BEACON_DISCOVERY_CHECKPOINT.md) and
+[AXES_OS_GLYPH_MATRIX_CHECKPOINT.md](docs/AXES_OS_GLYPH_MATRIX_CHECKPOINT.md).
 The private founder-controlled operations-observation schedule contract is in
 [AXI_AUTOMATION_PROFILES.md](docs/AXI_AUTOMATION_PROFILES.md).
 The private founder-approved service-planning journal is in
