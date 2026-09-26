@@ -1119,6 +1119,7 @@ function computeTimeToVerifiableOutcomeHours(directive) {
 function deriveDirectiveStatus(directive) {
   if (
     directive.currentOutcome?.state === "verified_success" &&
+    directive.currentOutcome.humanConfirmed === true &&
     verifiedOutcomeEvidenceError(directive, directive.currentOutcome.evidenceIds) !== null
   ) {
     return "blocked";

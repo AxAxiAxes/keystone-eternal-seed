@@ -97,11 +97,12 @@ function validatePullRequestBody(body) {
   if (accountabilitySection !== null) {
     const bullets = parseBullets(accountabilitySection);
     const exceptionPath = (bullets.get("Exception path") || "").toLowerCase();
-    const taskId = bullets.get("Task-ID") || "";
+    const taskIdRequired = exceptionPath === "none";
+    const taskId = taskIdRequired ? (bullets.get("Task-ID") || "") : "";
     const exceptionReason = bullets.get("Exception reason") || "";
 
     for (const field of REQUIRED_ACCOUNTABILITY_FIELDS) {
-      if (field === "Task-ID" && exceptionPath !== "none") continue;
+      if (field === "Task-ID" && !taskIdRequired) continue;
       if (!bullets.has(field)) {
         failures.push(`Missing required accountability field: ${field}`);
       }
@@ -110,7 +111,7 @@ function validatePullRequestBody(body) {
     if (!["none", "historical", "administrative"].includes(exceptionPath)) {
       failures.push("Exception path must be one of: none, historical, administrative");
     }
-    if (exceptionPath === "none") {
+    if (taskIdRequired) {
       if (!TASK_ID_PATTERN.test(taskId)) {
         failures.push("Task-ID is required and must match TASK-YYYYMMDD-0001 when no exception path is used");
       }
@@ -126,7 +127,7 @@ function validatePullRequestBody(body) {
     for (const field of REQUIRED_ACCOUNTABILITY_FIELDS) {
       const value = bullets.get(field);
       if (value === undefined) continue;
-      if (field === "Task-ID" && exceptionPath !== "none") continue;
+      if (field === "Task-ID" && !taskIdRequired) continue;
       if (isPlaceholder(value)) {
         failures.push(`Accountability field cannot be left blank or placeholder-only: ${field}`);
       }
