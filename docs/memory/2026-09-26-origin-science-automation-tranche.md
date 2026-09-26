@@ -31,6 +31,7 @@ Implement the next repository-controlled automation/workflow tranche for the mon
 
 - Added `docs/AXES_OS_ORIGIN_SCIENCE_AND_DISCOVERY_CHECKPOINT.md` to preserve the founder-defined origin-block / X / multiplier / equilibrium / vertex / resequencing concepts as a **proposal and technical checkpoint**, not as standard mathematics, physical proof, or legal status.
 - Added `docs/fixtures/origin-science/origin-property-record-v1.schema.json` plus sample records and `origin-record-validator.js`.
+- Expanded the checkpoint/schema/sample-record layer to distinguish currently named origin evaluation systems from an `unknown` / `unaccounted` / `not-yet-discovered` reserve that remains proposal-only.
 - Added offline tests that validate origin references, append-only lineage, correction chaining, equilibrium classification, and no-silent-replacement behavior.
 - Extended `apps/axiom-engine/accountability-ledger-service.js` with an **optional**, backward-compatible bounded evaluation payload for directive adherence, scope control, truthfulness/accuracy, verification quality, attribution integrity, decision quality, recommendation quality, technical contribution, estimated/validated value state, founder confirmation state, and external review state.
 - Added `docs/AXI_REPOSITORY_CONTROLLED_ORIGIN_WORKFLOW.md` to keep founder concepts, implementation facts, and external reports labeled separately.
@@ -39,6 +40,7 @@ Implement the next repository-controlled automation/workflow tranche for the mon
 ### Proposal-only items preserved as proposal-only
 
 - The symbolic meanings of the origin block, X, Ux, Ur, and AU remain founder-defined proposals unless a narrower repository artifact or other reviewed evidence validates them.
+- The full set of possible origin properties is **not** claimed as fully enumerated here; the repository only records the currently named systems plus a bounded reserve for properties not yet specified.
 - Patent status remains outside repository proof. Any filing or receipt state is still founder-reported / primary-receipt-pending unless the repository later includes primary filing evidence.
 
 ## Validation performed

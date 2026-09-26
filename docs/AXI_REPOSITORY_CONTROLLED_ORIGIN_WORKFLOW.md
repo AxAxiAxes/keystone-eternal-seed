@@ -19,6 +19,7 @@ Use this workflow for the repository-controlled timeline items added in the 2026
 - [ ] Add or update a dated `docs/memory/` continuity entry.
 - [ ] State whether each item is still proposal-only or implemented/test-verified.
 - [ ] Keep AI/tool attribution separate from human authorship, founder claim, and legal ownership.
+- [ ] Separate named proposed origin evaluation systems from `unknown`, `unaccounted`, and `not-yet-discovered` reserve entries that remain proposal-only.
 - [ ] Record patent follow-up only as `founder-reported` or `primary receipt pending` unless a primary receipt exists in repository evidence.
 - [ ] Keep operational-readiness items limited to repository authority; do not enable the scheduler, deployment, DNS, email, payment, legal, or patent-account actions from repository work alone.
 
@@ -30,6 +31,7 @@ Use this workflow for the repository-controlled timeline items added in the 2026
 - Origin-property schema and sample records: **implemented repository artifact**
 - Offline origin validator and tests: **implementation fact** after tests pass
 - Bounded evaluation extension in the accountability ledger: **implementation fact** after tests pass
+- Unknown/unaccounted/not-yet-discovered origin reserve: **proposal checkpoint** unless a later bounded artifact names and validates a specific property
 
 ### Patent evidence follow-up status
 
@@ -39,3 +41,12 @@ Use this workflow for the repository-controlled timeline items added in the 2026
 ### Operational readiness status
 
 Repository work may verify tests, CI results, docs, schemas, validators, and continuity records only. It may not treat a passing test as proof that Railway, scheduler, domains, email, external accounts, or counsel processes are configured or approved.
+
+## Origin evaluation system handling
+
+- Record currently named systems as proposal checkpoints or implementation facts,
+  depending on whether repository code/tests can validate them.
+- Preserve unknown or undiscovered origin-property space only as a founder-defined
+  reserve proposal.
+- Do not convert the reserve proposal into legal ownership, physical proof,
+  identity authority, or external exclusivity claims from repository work alone.

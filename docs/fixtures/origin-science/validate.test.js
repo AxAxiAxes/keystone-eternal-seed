@@ -13,6 +13,7 @@ const {
 
 test("sample origin science records validate and classify bounded equilibrium states", () => {
   assert.equal(schema.properties.originReference.pattern, "^[A-Z][A-Z0-9-]{2,119}$");
+  assert.equal(schema.required.includes("evaluationSystems"), true);
   assert.equal(sample.records.length, 2);
   for (const record of sample.records) {
     assert.deepEqual(validateOriginRecord(record), []);
@@ -54,6 +55,12 @@ test("allows a correction entry when lineage declares which prior record it supe
   assert.equal(result.classifications.at(-1).equilibrium, "proposed");
 });
 
+test("accepts a reserve entry for unknown or not-yet-discovered origin properties", () => {
+  const result = validateOriginRecord(sample.records[0]);
+  assert.deepEqual(result, []);
+  assert.equal(sample.records[0].evaluationSystems.unknownReserve.status, "not-yet-discovered");
+});
+
 test("classifies failed and unknown equilibrium conservatively", () => {
   const failed = structuredClone(sample.records[1]);
   failed.verificationState = "failed";
@@ -76,6 +83,16 @@ test("rejects a lineage chain whose non-genesis record points to a missing paren
   const result = validateOriginRecordSet([sample.records[0], orphan]);
   assert.equal(result.valid, false);
   assert.ok(result.errors.some((error) => error.includes("must reference an earlier recorded origin property")), result.errors.join("; "));
+});
+
+test("rejects unsupported origin evaluation system status values", () => {
+  const invalid = structuredClone(sample.records[0]);
+  invalid.evaluationSystems.proposedSystems[0].status = "discovered";
+  const errors = validateOriginRecord(invalid);
+  assert.ok(
+    errors.some((error) => error.includes("evaluationSystems.proposedSystems[0].status")),
+    errors.join("; ")
+  );
 });
 
 test("returns validation errors instead of throwing for non-object record-set members", () => {

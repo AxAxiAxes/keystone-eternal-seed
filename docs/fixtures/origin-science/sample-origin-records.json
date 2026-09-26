@@ -42,6 +42,43 @@
       "lineage": {
         "parentRecordId": null,
         "correctionOfRecordId": null
+      },
+      "evaluationSystems": {
+        "proposedSystems": [
+          {
+            "systemKey": "origin-reference-evaluation",
+            "label": "Origin reference evaluation",
+            "status": "technical-checkpoint",
+            "boundary": "repository-technical-checkpoint",
+            "statement": "The repository records a bounded originReference tied to existing coordinate and Genesis sources."
+          },
+          {
+            "systemKey": "center-block-evaluation",
+            "label": "Center block evaluation",
+            "status": "technical-checkpoint",
+            "boundary": "repository-technical-checkpoint",
+            "statement": "The founder-defined origin is preserved as a value-bearing center block rather than an empty void."
+          },
+          {
+            "systemKey": "variable-property-evaluation",
+            "label": "Variable property evaluation",
+            "status": "founder-proposed",
+            "boundary": "symbolic-axiom-only",
+            "statement": "X, Ux, Ur, and AU remain founder-defined origin-property proposals unless later narrowed by reviewed evidence."
+          },
+          {
+            "systemKey": "vertex-contact-evaluation",
+            "label": "Vertex contact evaluation",
+            "status": "founder-proposed",
+            "boundary": "symbolic-axiom-only",
+            "statement": "Vertex remains a proposal-level contact relation between origin and a derived relation."
+          }
+        ],
+        "unknownReserve": {
+          "status": "not-yet-discovered",
+          "statement": "Unknown, unaccounted, or not-yet-discovered origin properties remain reserved as origin-related proposal space until separately named.",
+          "boundary": "proposal-reserve-only"
+        }
       }
     },
     {
@@ -86,6 +123,43 @@
       "lineage": {
         "parentRecordId": "origin-center-block",
         "correctionOfRecordId": null
+      },
+      "evaluationSystems": {
+        "proposedSystems": [
+          {
+            "systemKey": "transformation-multiplier-evaluation",
+            "label": "Transformation / multiplier evaluation",
+            "status": "validator-backed",
+            "boundary": "repository-validation-only",
+            "statement": "The validator checks whether a declared transformation still claims preserved relation to origin."
+          },
+          {
+            "systemKey": "equilibrium-evaluation",
+            "label": "Equilibrium evaluation",
+            "status": "validator-backed",
+            "boundary": "repository-validation-only",
+            "statement": "The validator classifies equilibrium conservatively as proposed, verified, failed, or unknown."
+          },
+          {
+            "systemKey": "resequencing-lineage-evaluation",
+            "label": "Resequencing / lineage evaluation",
+            "status": "validator-backed",
+            "boundary": "repository-validation-only",
+            "statement": "Append-only lineage and explicit correction chaining are enforced as repository validation rules."
+          },
+          {
+            "systemKey": "attribution-accountability-evaluation",
+            "label": "Attribution / accountability evaluation",
+            "status": "technical-checkpoint",
+            "boundary": "repository-technical-checkpoint",
+            "statement": "Founder claim, implementation role, and tool attribution remain separated in repository records."
+          }
+        ],
+        "unknownReserve": {
+          "status": "unknown",
+          "statement": "The validator may preserve an unknown remainder without converting it into legal, identity, or external scientific authority.",
+          "boundary": "proposal-reserve-only"
+        }
       }
     }
   ]

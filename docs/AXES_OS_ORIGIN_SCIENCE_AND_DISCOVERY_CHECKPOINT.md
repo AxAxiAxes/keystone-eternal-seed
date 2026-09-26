@@ -26,6 +26,32 @@ The following meanings are preserved as **founder-defined proposals** unless a l
 
 The founder-defined meanings of **Ux**, **Ur**, **AU**, and **X** remain proposal-only unless a bounded implementation or separately reviewed evidence narrows them further. This repository does **not** invent pronunciation rules, physical units, or universal mathematical proof.
 
+## Current proposed origin evaluation systems
+
+This checkpoint now preserves the currently proposed repository-facing origin
+evaluation systems as a bounded map. Each system below is either a founder
+concept or a repository proposal/checkpoint; none of them is an external legal,
+scientific, or identity authority:
+
+| Evaluation system | Current status | Repository meaning |
+| --- | --- | --- |
+| Origin-reference evaluation | Implemented technical checkpoint | Confirms that a record names a bounded `originReference` and connects it to existing Genesis/coordinate records. |
+| Center-block evaluation | Implemented technical checkpoint | Confirms that the first record establishes a value-bearing center block rather than an empty origin placeholder. |
+| Variable-property evaluation | Founder-defined proposal | Preserves proposed meanings for `X`, `Ux`, `Ur`, and `AU` without treating them as externally verified terminology. |
+| Transformation / multiplier evaluation | Proposal + bounded validation | Records whether a declared transformation claims to preserve origin relation and whether the validator can confirm that claim mechanically. |
+| Equilibrium evaluation | Proposal + bounded validation | Classifies a record conservatively as `proposed`, `verified`, `failed`, or `unknown` based on repository evidence only. |
+| Vertex / contact evaluation | Founder-defined proposal | Preserves the stated contact relation between origin and a derived/returning state as structured proposal data. |
+| Resequencing / lineage evaluation | Implemented technical checkpoint | Requires append-only parent lineage and explicit correction links; rejects silent replacement. |
+| Evidence / verification evaluation | Implemented technical checkpoint | Separates founder-defined proposal, checkpoint, repository artifact, test evidence, and external report classes. |
+| Attribution / accountability evaluation | Implemented technical checkpoint | Preserves founder claim, implementation attribution, and AI/tool assistance as separate fields. |
+| Unknown / unaccounted / not-yet-discovered origin reserve | Founder-defined proposal | Preserves that currently unspecified or undiscovered properties remain reserved to origin within this internal framework until named or versioned later. |
+
+The final row above is intentionally conservative: it records an internal
+proposal that unknown or not-yet-discovered properties remain attributable to
+origin, but it does **not** assert exclusive legal ownership over unknown facts,
+future discoveries by others, or external rights not established through
+appropriate review.
+
 ## Relation to current AXI technical foundations
 
 This checkpoint is intentionally tied to existing repository-controlled records instead of replacing them:

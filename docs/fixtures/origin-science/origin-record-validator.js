@@ -9,6 +9,19 @@ const BOUNDARIES = new Set(schema.properties.boundary.enum);
 const PRESERVES_RELATION = new Set(schema.properties.transformationMultiplier.properties.preservesOriginRelation.enum);
 const EQUILIBRIUM_SIGNALS = new Set(schema.properties.equilibriumRule.properties.statusSignal.enum);
 const CONTACT_MODES = new Set(schema.properties.vertexContactRelation.properties.contactMode.enum);
+const EVALUATION_SYSTEM_FIELDS = new Set(Object.keys(schema.properties.evaluationSystems.properties));
+const EVALUATION_SYSTEM_STATUSES = new Set(
+  schema.properties.evaluationSystems.properties.proposedSystems.items.properties.status.enum
+);
+const EVALUATION_SYSTEM_BOUNDARIES = new Set(
+  schema.properties.evaluationSystems.properties.proposedSystems.items.properties.boundary.enum
+);
+const UNKNOWN_RESERVE_STATUSES = new Set(
+  schema.properties.evaluationSystems.properties.unknownReserve.properties.status.enum
+);
+const UNKNOWN_RESERVE_BOUNDARIES = new Set(
+  schema.properties.evaluationSystems.properties.unknownReserve.properties.boundary.enum
+);
 const REQUIRED_VARIABLE_FIELDS = Object.keys(schema.properties.variableProperties.properties);
 const REQUIRED_SOURCE_FIELDS = ["primary", "coordinateSystem", "genesisCheckpoint"];
 const REQUIRED_ATTRIBUTION_FIELDS = ["founderClaim", "implementedBy", "toolAttribution"];
@@ -89,6 +102,7 @@ function validateOriginRecord(record) {
     requireNullableString(record.lineage.parentRecordId, "lineage.parentRecordId", errors);
     requireNullableString(record.lineage.correctionOfRecordId, "lineage.correctionOfRecordId", errors);
   }
+  validateEvaluationSystems(record.evaluationSystems, errors);
 
   return errors;
 }
@@ -211,6 +225,56 @@ function validateNestedStrings(value, fieldName, requiredFields, allowedFields, 
   }
   for (const field of requiredFields) {
     requireString(value[field], `${fieldName}.${field}`, errors);
+  }
+}
+
+function validateEvaluationSystems(value, errors) {
+  if (!isRecord(value)) {
+    errors.push("evaluationSystems: must be an object");
+    return;
+  }
+  for (const key of Object.keys(value)) {
+    if (!EVALUATION_SYSTEM_FIELDS.has(key)) {
+      errors.push(`evaluationSystems.${key}: unsupported field`);
+    }
+  }
+  if (!Array.isArray(value.proposedSystems) || value.proposedSystems.length === 0) {
+    errors.push("evaluationSystems.proposedSystems: must be a non-empty array");
+  } else {
+    value.proposedSystems.forEach((entry, index) => {
+      const prefix = `evaluationSystems.proposedSystems[${index}]`;
+      if (!isRecord(entry)) {
+        errors.push(`${prefix}: must be an object`);
+        return;
+      }
+      requirePattern(entry.systemKey, `${prefix}.systemKey`, RECORD_KEY_PATTERN, errors);
+      requireString(entry.label, `${prefix}.label`, errors);
+      requireEnum(entry.status, `${prefix}.status`, EVALUATION_SYSTEM_STATUSES, errors);
+      requireEnum(entry.boundary, `${prefix}.boundary`, EVALUATION_SYSTEM_BOUNDARIES, errors);
+      requireString(entry.statement, `${prefix}.statement`, errors);
+      for (const key of Object.keys(entry)) {
+        if (!["systemKey", "label", "status", "boundary", "statement"].includes(key)) {
+          errors.push(`${prefix}.${key}: unsupported field`);
+        }
+      }
+    });
+  }
+  if (!isRecord(value.unknownReserve)) {
+    errors.push("evaluationSystems.unknownReserve: must be an object");
+    return;
+  }
+  requireEnum(value.unknownReserve.status, "evaluationSystems.unknownReserve.status", UNKNOWN_RESERVE_STATUSES, errors);
+  requireString(value.unknownReserve.statement, "evaluationSystems.unknownReserve.statement", errors);
+  requireEnum(
+    value.unknownReserve.boundary,
+    "evaluationSystems.unknownReserve.boundary",
+    UNKNOWN_RESERVE_BOUNDARIES,
+    errors
+  );
+  for (const key of Object.keys(value.unknownReserve)) {
+    if (!["status", "statement", "boundary"].includes(key)) {
+      errors.push(`evaluationSystems.unknownReserve.${key}: unsupported field`);
+    }
   }
 }
 

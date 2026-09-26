@@ -19,7 +19,8 @@
     "attribution",
     "verificationState",
     "boundary",
-    "lineage"
+    "lineage",
+    "evaluationSystems"
   ],
   "properties": {
     "schemaVersion": { "const": "origin-property-record-v1" },
@@ -132,6 +133,55 @@
       "properties": {
         "parentRecordId": { "type": ["string", "null"] },
         "correctionOfRecordId": { "type": ["string", "null"] }
+      }
+    },
+    "evaluationSystems": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposedSystems", "unknownReserve"],
+      "properties": {
+        "proposedSystems": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["systemKey", "label", "status", "boundary", "statement"],
+            "properties": {
+              "systemKey": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+              "label": { "type": "string", "minLength": 1 },
+              "status": {
+                "type": "string",
+                "enum": ["founder-proposed", "technical-checkpoint", "validator-backed"]
+              },
+              "boundary": {
+                "type": "string",
+                "enum": [
+                  "symbolic-axiom-only",
+                  "repository-technical-checkpoint",
+                  "repository-validation-only"
+                ]
+              },
+              "statement": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "unknownReserve": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "statement", "boundary"],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["unaccounted", "unknown", "not-yet-discovered"]
+            },
+            "statement": { "type": "string", "minLength": 1 },
+            "boundary": {
+              "type": "string",
+              "enum": ["proposal-reserve-only"]
+            }
+          }
+        }
       }
     }
   }
