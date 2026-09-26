@@ -449,6 +449,92 @@ test("accepts bounded integer rating query strings without coercing invalid filt
   }
 });
 
+test("stores bounded evaluation details without changing legacy rating compatibility", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AccountabilityLedgerService({ directory });
+  await service.record(directiveCreated());
+  await service.record({
+    directiveId: DIRECTIVE_ID,
+    eventType: "rating.recorded",
+    actor: "founder",
+    payload: {
+      kind: "founder",
+      overall: 6,
+      categories: Object.fromEntries(RATING_CATEGORIES.map((category) => [category, 6])),
+      evaluation: {
+        directiveAdherence: 7,
+        scopeControl: 6,
+        truthfulnessAccuracy: 7,
+        verificationQuality: 5,
+        attributionIntegrity: 8,
+        decisionQuality: 6,
+        recommendationQuality: 5,
+        technicalContribution: 7,
+        estimatedValueState: "estimated_only",
+        validatedValueState: "not_recorded",
+        founderConfirmation: "pending",
+        externalReviewState: "primary_receipt_pending"
+      },
+      notes: "Bounded repository-only evaluation."
+    }
+  });
+
+  const directive = await service.getDirective(DIRECTIVE_ID);
+  assert.deepEqual(directive.founderRating.evaluation, {
+    directiveAdherence: 7,
+    scopeControl: 6,
+    truthfulnessAccuracy: 7,
+    verificationQuality: 5,
+    attributionIntegrity: 8,
+    decisionQuality: 6,
+    recommendationQuality: 5,
+    technicalContribution: 7,
+    estimatedValueState: "estimated_only",
+    validatedValueState: "not_recorded",
+    founderConfirmation: "pending",
+    externalReviewState: "primary_receipt_pending"
+  });
+  const markdown = await service.report(DIRECTIVE_ID, "markdown");
+  assert.match(markdown, /Latest bounded evaluation: directive adherence 7;/);
+  assert.match(markdown, /external review primary_receipt_pending/);
+});
+
+test("rejects unsupported bounded evaluation states", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AccountabilityLedgerService({ directory });
+  await service.record(directiveCreated());
+  await assert.rejects(
+    () =>
+      service.record({
+        directiveId: DIRECTIVE_ID,
+        eventType: "rating.recorded",
+        actor: "founder",
+        payload: {
+          kind: "founder",
+          overall: 0,
+          categories: Object.fromEntries(RATING_CATEGORIES.map((category) => [category, 0])),
+          evaluation: {
+            directiveAdherence: 0,
+            scopeControl: 0,
+            truthfulnessAccuracy: 0,
+            verificationQuality: 0,
+            attributionIntegrity: 0,
+            decisionQuality: 0,
+            recommendationQuality: 0,
+            technicalContribution: 0,
+            estimatedValueState: "automatic_money",
+            validatedValueState: "not_recorded",
+            founderConfirmation: "pending",
+            externalReviewState: "not_requested"
+          }
+        }
+      }),
+    /estimatedValueState is unsupported/
+  );
+});
+
 test("rejects non-boolean human confirmation without appending an event", async (t) => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));

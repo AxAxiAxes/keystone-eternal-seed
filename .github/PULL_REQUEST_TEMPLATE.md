@@ -34,6 +34,11 @@ section below before requesting merge; do not delete sections.
 - Quality rating (1-10): <!-- with one-line justification -->
 - Founder rating requested: yes (ask directly in the PR/chat, every time)
 
+## Founder review + limitations
+
+- Founder review required before merge: <!-- yes/no + why -->
+- Explicit limitations / external items not completed: <!-- Required non-empty. Name repository-only boundaries, blocked external actions, and any proposal-only items. -->
+
 ## Verification performed
 
 <!-- Tests run, CI checks expected, manual verification steps taken. -->

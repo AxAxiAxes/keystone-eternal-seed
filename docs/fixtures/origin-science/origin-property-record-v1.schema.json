@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://axes.example/origin-property-record-v1.schema.json",
+  "title": "Origin Property Record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "recordId",
+    "propertyKey",
+    "originReference",
+    "centerStatus",
+    "variableProperties",
+    "transformationMultiplier",
+    "equilibriumRule",
+    "vertexContactRelation",
+    "evidenceClass",
+    "sourceRefs",
+    "attribution",
+    "verificationState",
+    "boundary",
+    "lineage"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "origin-property-record-v1" },
+    "recordId": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "propertyKey": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "originReference": { "type": "string", "pattern": "^[A-Z][A-Z0-9-]{2,119}$" },
+    "centerStatus": {
+      "type": "string",
+      "enum": [
+        "value-bearing-center-block",
+        "derived-relation",
+        "contact-relation"
+      ]
+    },
+    "variableProperties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["xIdentity", "uxMeaning", "urMeaning", "auMeaning"],
+      "properties": {
+        "xIdentity": { "type": "string", "minLength": 1 },
+        "uxMeaning": { "type": "string", "minLength": 1 },
+        "urMeaning": { "type": "string", "minLength": 1 },
+        "auMeaning": { "type": "string", "minLength": 1 }
+      }
+    },
+    "transformationMultiplier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "preservesOriginRelation"],
+      "properties": {
+        "statement": { "type": "string", "minLength": 1 },
+        "preservesOriginRelation": {
+          "type": "string",
+          "enum": ["yes", "no", "unknown"]
+        }
+      }
+    },
+    "equilibriumRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "statusSignal"],
+      "properties": {
+        "statement": { "type": "string", "minLength": 1 },
+        "statusSignal": {
+          "type": "string",
+          "enum": ["preserved", "proposed", "broken", "unknown"]
+        }
+      }
+    },
+    "vertexContactRelation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "contactMode"],
+      "properties": {
+        "statement": { "type": "string", "minLength": 1 },
+        "contactMode": {
+          "type": "string",
+          "enum": ["origin-contact", "derived-contact", "unknown"]
+        }
+      }
+    },
+    "evidenceClass": {
+      "type": "string",
+      "enum": [
+        "founder-defined-proposal",
+        "technical-checkpoint",
+        "implemented-repository-artifact",
+        "verified-test-evidence",
+        "external-report"
+      ]
+    },
+    "sourceRefs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary", "coordinateSystem", "genesisCheckpoint"],
+      "properties": {
+        "primary": { "type": "string", "minLength": 1 },
+        "coordinateSystem": { "type": "string", "minLength": 1 },
+        "genesisCheckpoint": { "type": "string", "minLength": 1 },
+        "resequencerProposal": { "type": "string" },
+        "accountabilityEvidence": { "type": "string" }
+      }
+    },
+    "attribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["founderClaim", "implementedBy", "toolAttribution"],
+      "properties": {
+        "founderClaim": { "type": "string", "minLength": 1 },
+        "implementedBy": { "type": "string", "minLength": 1 },
+        "toolAttribution": { "type": "string", "minLength": 1 }
+      }
+    },
+    "verificationState": {
+      "type": "string",
+      "enum": ["proposed", "founder_reported", "verified", "failed", "unknown"]
+    },
+    "boundary": {
+      "type": "string",
+      "enum": [
+        "symbolic-axiom-only",
+        "repository-technical-checkpoint",
+        "external-report-unverified"
+      ]
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parentRecordId", "correctionOfRecordId"],
+      "properties": {
+        "parentRecordId": { "type": ["string", "null"] },
+        "correctionOfRecordId": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

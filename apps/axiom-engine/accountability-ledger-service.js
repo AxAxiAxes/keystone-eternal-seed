@@ -89,6 +89,27 @@ const RATING_CATEGORIES = [
   "rework",
   "outcomeFocus"
 ];
+const EVALUATION_VALUE_STATES = new Set([
+  "not_recorded",
+  "estimated_only",
+  "partially_validated",
+  "validated",
+  "disputed"
+]);
+const EVALUATION_CONFIRMATION_STATES = new Set([
+  "pending",
+  "confirmed",
+  "withheld",
+  "not_applicable"
+]);
+const EVALUATION_EXTERNAL_REVIEW_STATES = new Set([
+  "not_requested",
+  "founder_reported",
+  "primary_receipt_pending",
+  "under_review",
+  "reviewed",
+  "disputed"
+]);
 const RESOURCE_ENTRY_TYPES = new Set(["confirmed", "estimated", "unknown"]);
 
 class AccountabilityLedgerService {
@@ -505,6 +526,7 @@ function normalizePayload(eventType, payload, now) {
       kind: normalizeEnum(payload.kind, RATING_KINDS, "kind"),
       overall: normalizeRating(payload.overall, "overall"),
       categories: normalizeRatingCategories(payload.categories),
+      evaluation: normalizeOptionalEvaluation(payload.evaluation),
       notes: normalizeOptionalText(payload.notes, 4_000)
     };
   }
@@ -1010,6 +1032,7 @@ function renderDirectiveReportMarkdown(directive) {
   const assistantRating = directive.assistantSelfAssessment
     ? `${directive.assistantSelfAssessment.overall}`
     : "Not recorded";
+  const latestEvaluation = directive.founderRating?.evaluation || directive.assistantSelfAssessment?.evaluation || null;
   const subrequirements = directive.directive.subrequirements.length
     ? directive.directive.subrequirements
       .map((item) =>
@@ -1058,6 +1081,7 @@ function renderDirectiveReportMarkdown(directive) {
     `- Current evidence-backed completion: ${directive.evidenceBackedCompletion ? "yes" : "no"}`,
     `- Founder rating: ${founderRating}`,
     `- Assistant self-assessment: ${assistantRating}`,
+    `- Latest bounded evaluation: ${latestEvaluation ? renderEvaluationSummary(latestEvaluation) : "Not recorded"}`,
     `- Proven cost (cents): ${directive.metrics.provenCostCents}`,
     `- Estimated exposure range (cents): ${directive.metrics.estimatedExposureLowCents}-${directive.metrics.estimatedExposureHighCents}`,
     "",
@@ -1274,6 +1298,77 @@ function normalizeRatingCategories(value) {
     throw new TypeError("rating categories contain unsupported fields");
   }
   return categories;
+}
+
+function normalizeOptionalEvaluation(value) {
+  if (value === undefined || value === null) return null;
+  if (!isRecord(value)) {
+    throw new TypeError("evaluation must be an object when provided");
+  }
+  const allowed = new Set([
+    "directiveAdherence",
+    "scopeControl",
+    "truthfulnessAccuracy",
+    "verificationQuality",
+    "attributionIntegrity",
+    "decisionQuality",
+    "recommendationQuality",
+    "technicalContribution",
+    "estimatedValueState",
+    "validatedValueState",
+    "founderConfirmation",
+    "externalReviewState"
+  ]);
+  if (Object.keys(value).some((field) => !allowed.has(field))) {
+    throw new TypeError("evaluation contains unsupported fields");
+  }
+  return {
+    directiveAdherence: normalizeRating(value.directiveAdherence, "directiveAdherence"),
+    scopeControl: normalizeRating(value.scopeControl, "scopeControl"),
+    truthfulnessAccuracy: normalizeRating(value.truthfulnessAccuracy, "truthfulnessAccuracy"),
+    verificationQuality: normalizeRating(value.verificationQuality, "verificationQuality"),
+    attributionIntegrity: normalizeRating(value.attributionIntegrity, "attributionIntegrity"),
+    decisionQuality: normalizeRating(value.decisionQuality, "decisionQuality"),
+    recommendationQuality: normalizeRating(value.recommendationQuality, "recommendationQuality"),
+    technicalContribution: normalizeRating(value.technicalContribution, "technicalContribution"),
+    estimatedValueState: normalizeEnum(
+      value.estimatedValueState,
+      EVALUATION_VALUE_STATES,
+      "estimatedValueState"
+    ),
+    validatedValueState: normalizeEnum(
+      value.validatedValueState,
+      EVALUATION_VALUE_STATES,
+      "validatedValueState"
+    ),
+    founderConfirmation: normalizeEnum(
+      value.founderConfirmation,
+      EVALUATION_CONFIRMATION_STATES,
+      "founderConfirmation"
+    ),
+    externalReviewState: normalizeEnum(
+      value.externalReviewState,
+      EVALUATION_EXTERNAL_REVIEW_STATES,
+      "externalReviewState"
+    )
+  };
+}
+
+function renderEvaluationSummary(evaluation) {
+  return [
+    `directive adherence ${evaluation.directiveAdherence}`,
+    `scope control ${evaluation.scopeControl}`,
+    `truthfulness/accuracy ${evaluation.truthfulnessAccuracy}`,
+    `verification quality ${evaluation.verificationQuality}`,
+    `attribution integrity ${evaluation.attributionIntegrity}`,
+    `decision quality ${evaluation.decisionQuality}`,
+    `recommendation quality ${evaluation.recommendationQuality}`,
+    `technical contribution ${evaluation.technicalContribution}`,
+    `estimated value ${evaluation.estimatedValueState}`,
+    `validated value ${evaluation.validatedValueState}`,
+    `founder confirmation ${evaluation.founderConfirmation}`,
+    `external review ${evaluation.externalReviewState}`
+  ].join("; ");
 }
 
 function normalizeResourceEntry(value) {
