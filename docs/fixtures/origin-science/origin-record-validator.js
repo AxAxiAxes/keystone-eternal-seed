@@ -12,6 +12,15 @@ const CONTACT_MODES = new Set(schema.properties.vertexContactRelation.properties
 const REQUIRED_VARIABLE_FIELDS = Object.keys(schema.properties.variableProperties.properties);
 const REQUIRED_SOURCE_FIELDS = ["primary", "coordinateSystem", "genesisCheckpoint"];
 const REQUIRED_ATTRIBUTION_FIELDS = ["founderClaim", "implementedBy", "toolAttribution"];
+const VARIABLE_PROPERTY_FIELDS = new Set(REQUIRED_VARIABLE_FIELDS);
+const SOURCE_REF_FIELDS = new Set([
+  "primary",
+  "coordinateSystem",
+  "genesisCheckpoint",
+  "resequencerProposal",
+  "accountabilityEvidence"
+]);
+const ATTRIBUTION_FIELDS = new Set(REQUIRED_ATTRIBUTION_FIELDS);
 const ORIGIN_REFERENCE_PATTERN = /^[A-Z][A-Z0-9-]{2,119}$/;
 const RECORD_KEY_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -30,7 +39,7 @@ function validateOriginRecord(record) {
     record.variableProperties,
     "variableProperties",
     REQUIRED_VARIABLE_FIELDS,
-    REQUIRED_VARIABLE_FIELDS,
+    VARIABLE_PROPERTY_FIELDS,
     errors
   );
   validatePairObject(
@@ -62,14 +71,14 @@ function validateOriginRecord(record) {
     record.sourceRefs,
     "sourceRefs",
     REQUIRED_SOURCE_FIELDS,
-    ["primary", "coordinateSystem", "genesisCheckpoint", "resequencerProposal", "accountabilityEvidence"],
+    SOURCE_REF_FIELDS,
     errors
   );
   validateNestedStrings(
     record.attribution,
     "attribution",
     REQUIRED_ATTRIBUTION_FIELDS,
-    REQUIRED_ATTRIBUTION_FIELDS,
+    ATTRIBUTION_FIELDS,
     errors
   );
   requireEnum(record.verificationState, "verificationState", VERIFICATION_STATES, errors);
@@ -115,8 +124,8 @@ function validateOriginRecordSet(records) {
   }
 
   const byId = new Map();
+  const recordIndexById = new Map();
   const propertyVersions = new Map();
-  const correctionTargets = new Set();
   const classifications = [];
 
   records.forEach((record, index) => {
@@ -124,16 +133,24 @@ function validateOriginRecordSet(records) {
     for (const error of validateOriginRecord(record)) {
       errors.push(`${prefix}.${error}`);
     }
+    if (!isRecord(record)) {
+      classifications.push({ recordId: null, equilibrium: "unknown" });
+      return;
+    }
     if (byId.has(record.recordId)) {
       errors.push(`${prefix}.recordId: duplicate recordId ${record.recordId}`);
     } else {
       byId.set(record.recordId, record);
+      recordIndexById.set(record.recordId, index);
     }
     classifications.push({ recordId: record.recordId, equilibrium: classifyEquilibrium(record) });
   });
 
   records.forEach((record, index) => {
     const prefix = `records[${index}]`;
+    if (!isRecord(record)) {
+      return;
+    }
     if (!record.originReference) {
       errors.push(`${prefix}.originReference: missing origin reference`);
     }
@@ -145,8 +162,8 @@ function validateOriginRecordSet(records) {
         errors.push(`${prefix}.lineage.parentRecordId: first record must not declare a parent`);
       }
     } else {
-      const parentIndex = records.findIndex((entry) => entry.recordId === record.lineage?.parentRecordId);
-      if (parentIndex === -1 || parentIndex >= index) {
+      const parentIndex = recordIndexById.get(record.lineage?.parentRecordId);
+      if (parentIndex === undefined || parentIndex >= index) {
         errors.push(`${prefix}.lineage.parentRecordId: must reference an earlier recorded origin property`);
       }
     }
@@ -161,14 +178,7 @@ function validateOriginRecordSet(records) {
         errors.push(
           `${prefix}.lineage.correctionOfRecordId: silent replacement rejected for ${key}; append a correction reference instead`
         );
-      } else if (correctionTargets.has(previous.recordId)) {
-        errors.push(
-          `${prefix}.lineage.correctionOfRecordId: correction entries must extend the latest record in one append-only chain`
-        );
       }
-    }
-    if (record.lineage?.correctionOfRecordId) {
-      correctionTargets.add(record.lineage.correctionOfRecordId);
     }
     propertyVersions.set(key, record);
   });
@@ -194,9 +204,8 @@ function validateNestedStrings(value, fieldName, requiredFields, allowedFields, 
     errors.push(`${fieldName}: must be an object`);
     return;
   }
-  const allowed = new Set(allowedFields);
   for (const key of Object.keys(value)) {
-    if (!allowed.has(key)) {
+    if (!allowedFields.has(key)) {
       errors.push(`${fieldName}.${key}: unsupported field`);
     }
   }

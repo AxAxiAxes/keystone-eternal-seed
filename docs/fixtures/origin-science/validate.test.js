@@ -77,3 +77,10 @@ test("rejects a lineage chain whose non-genesis record points to a missing paren
   assert.equal(result.valid, false);
   assert.ok(result.errors.some((error) => error.includes("must reference an earlier recorded origin property")), result.errors.join("; "));
 });
+
+test("returns validation errors instead of throwing for non-object record-set members", () => {
+  const result = validateOriginRecordSet([sample.records[0], null]);
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some((error) => error.includes("must be a plain object")), result.errors.join("; "));
+  assert.deepEqual(result.classifications.at(-1), { recordId: null, equilibrium: "unknown" });
+});
