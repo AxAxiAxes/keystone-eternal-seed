@@ -60,6 +60,12 @@ function getSection(body, heading) {
   return (nextHeading === -1 ? afterHeading : afterHeading.slice(0, nextHeading)).trim();
 }
 
+function countHeadingOccurrences(body, heading) {
+  const escapedHeading = heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const matches = body.match(new RegExp(`^${escapedHeading}$`, "gm"));
+  return matches ? matches.length : 0;
+}
+
 function parseBullets(section) {
   const values = new Map();
   for (const line of stripComments(section).split(/\r?\n/)) {
@@ -73,6 +79,10 @@ function validatePullRequestBody(body) {
   const failures = [];
   const normalizedBody = String(body || "");
   for (const heading of REQUIRED_HEADINGS) {
+    const occurrences = countHeadingOccurrences(normalizedBody, heading);
+    if (occurrences > 1) {
+      failures.push(`Duplicate required section heading: ${heading}`);
+    }
     const section = getSection(normalizedBody, heading);
     if (section === null) {
       failures.push(`Missing required section: ${heading}`);

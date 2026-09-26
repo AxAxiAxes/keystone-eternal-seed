@@ -1178,7 +1178,11 @@ function deriveAuthorshipGaps(directive) {
   if (!attribution.directiveAuthor) gaps.push("directiveAuthor");
   if (!attribution.taskOwner) gaps.push("taskOwner");
   if (!attribution.implementers.length) gaps.push("implementers");
-  if (!attribution.aiAttribution.length) gaps.push("aiAttribution");
+  const hasAiActivity = attribution.implementers.some((entry) => /\b(ai|copilot|assistant|agent|tool)\b/i.test(entry)) ||
+    directive.interpretations.some((entry) => entry.actor === "assistant") ||
+    directive.deliveries.some((entry) => entry.actor === "assistant") ||
+    directive.ratings.some((entry) => entry.kind === "assistant");
+  if (hasAiActivity && !attribution.aiAttribution.length) gaps.push("aiAttribution");
   return gaps;
 }
 
@@ -2094,10 +2098,10 @@ function generateTaskId(recordedAt, events) {
   let highestExistingSequence = 0;
   for (const event of events) {
     if (event.eventType !== "directive.created" || !isSameUtcDate(event.recordedAt, parsed)) continue;
-    const explicitSequence = parseTaskIdSequence(event.payload?.taskId, dayPrefix);
-    highestExistingSequence = explicitSequence === null
-      ? highestExistingSequence + 1
-      : Math.max(highestExistingSequence, explicitSequence);
+    const existingSequence = parseTaskIdSequence(event.payload?.taskId, dayPrefix);
+    if (existingSequence !== null) {
+      highestExistingSequence = Math.max(highestExistingSequence, existingSequence);
+    }
   }
   const sequence = String(highestExistingSequence + 1).padStart(4, "0");
   return `TASK-${y}${m}${d}-${sequence}`;

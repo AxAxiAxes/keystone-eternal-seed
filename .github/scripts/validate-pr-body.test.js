@@ -90,3 +90,34 @@ test("rejects placeholder-only accountability content", () => {
   ));
   assert.match(failures.join("\n"), /AI \/ tool attribution/);
 });
+
+test("rejects malformed accountability bullets when required fields cannot be parsed", () => {
+  const failures = validatePullRequestBody(VALID_BODY.replace(
+    "- Task owner: Axel Urartu (AX) · Axes Contracting",
+    "- Task owner Axel Urartu (AX) · Axes Contracting"
+  ));
+  assert.match(failures.join("\n"), /Missing required accountability field: Task owner/);
+});
+
+test("rejects duplicate required section headings", () => {
+  const failures = validatePullRequestBody(`${VALID_BODY}
+
+## Task accountability
+
+- Task-ID: TASK-20260921-0002
+- Exception path: none
+- Exception reason: none
+- Directive author: Duplicate section
+- Task owner: Duplicate section
+- Implementer(s): Duplicate section
+- Reviewer: Duplicate section
+- Merger / acceptor: Duplicate section
+- AI / tool attribution: Duplicate section
+- Continuity / memory record: docs/memory/example.md
+- Next review date: 2026-09-29T00:00:00.000Z
+- Repository artifact status: delivered
+- Real-world / production outcome status: not applicable
+- Founder confirmation state: pending
+`);
+  assert.match(failures.join("\n"), /Duplicate required section heading: ## Task accountability/);
+});

@@ -580,7 +580,6 @@ test("flags overdue review and missing authorship without deleting evidence", as
   const historical = await service.getDirective(SECOND_DIRECTIVE_ID);
   assert.equal(historical.reviewStatus, "overdue");
   assert.deepEqual(historical.authorshipGaps.sort(), [
-    "aiAttribution",
     "directiveAuthor",
     "implementers",
     "taskOwner"
@@ -596,6 +595,25 @@ test("flags overdue review and missing authorship without deleting evidence", as
   assert.equal(summary.openTaskCount, 1);
   assert.equal(summary.overdueReviewCount, 1);
   assert.equal(summary.authorshipGapCount, 1);
+});
+
+test("flags missing aiAttribution only when AI or assistant work is actually recorded", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-accountability-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const service = new AccountabilityLedgerService({ directory });
+
+  await service.record(directiveCreated({
+    payload: {
+      ...directiveCreated().payload,
+      attribution: {
+        ...directiveCreated().payload.attribution,
+        aiAttribution: []
+      }
+    }
+  }));
+
+  const projected = await service.getDirective(DIRECTIVE_ID);
+  assert.ok(projected.authorshipGaps.includes("aiAttribution"));
 });
 
 test("reports attention when the append-only ledger is tampered with", async (t) => {
