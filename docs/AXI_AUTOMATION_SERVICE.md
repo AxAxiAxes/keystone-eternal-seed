@@ -129,9 +129,14 @@ Each agent also retains immutable `createdAt` creation/registration evidence
 and its legacy `registeredAt` timestamp. The protected report, agent list,
 readiness result, and Operations Observer monitoring snapshot provide a
 factual internal observation of those timestamps, creator registration,
-compatible capabilities, task/run state, and attention conditions. This is
-visibility only: it does not grant self-approval or mutation authority, claim
-cognition or memory completeness, or create legal ownership/right conclusions.
+compatible capabilities, task/run state, and attention conditions, including a
+versioned `productionRights` block with canonical creator attribution,
+immutable creation/origin provenance, bounded internal output scope, and
+human-owner accountability notice. This is visibility only: it does not grant
+self-approval or mutation authority, claim cognition or memory completeness, or
+create legal ownership/right conclusions. A missing or invalid production-rights
+block is a fail-closed attention state: the record is unregistered for
+assignment/selection until reconciled.
 
 ## Private API
 

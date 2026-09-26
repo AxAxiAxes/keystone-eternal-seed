@@ -137,9 +137,17 @@ function serveFile(res, filePath, contentType) {
 
 function parseBody(req) {
     return new Promise((resolve) => {
+          let finished = false;
+          function finish(value) {
+              if (finished) return;
+              finished = true;
+              resolve(value);
+          }
           let body = '';
           let bodySize = 0;
           let oversized = false;
+          req.on('error', () => finish({}));
+          req.on('aborted', () => finish({}));
           req.on('data', chunk => {
               bodySize += chunk.length;
               if (bodySize > MAX_REQUEST_BODY_BYTES) {
@@ -150,10 +158,10 @@ function parseBody(req) {
           });
           req.on('end', () => {
               if (oversized) {
-                  resolve(null);
+                  finish(null);
                   return;
               }
-              try { resolve(JSON.parse(body)); } catch(e) { resolve({}); }
+              try { finish(JSON.parse(body)); } catch(e) { finish({}); }
           });
     });
 }
@@ -164,9 +172,17 @@ function parseBody(req) {
 // received. Resolves null on oversize, matching parseBody()'s contract.
 function parseRawBody(req, maxBytes) {
     return new Promise((resolve) => {
+          let finished = false;
+          function finish(value) {
+              if (finished) return;
+              finished = true;
+              resolve(value);
+          }
           const chunks = [];
           let bodySize = 0;
           let oversized = false;
+          req.on('error', () => finish(false));
+          req.on('aborted', () => finish(false));
           req.on('data', chunk => {
               bodySize += chunk.length;
               if (bodySize > maxBytes) {
@@ -176,7 +192,7 @@ function parseRawBody(req, maxBytes) {
               chunks.push(chunk);
           });
           req.on('end', () => {
-              resolve(oversized ? null : Buffer.concat(chunks));
+              finish(oversized ? null : Buffer.concat(chunks));
           });
     });
 }
@@ -916,6 +932,11 @@ const server = http.createServer(async (req, res) => {
           const buffer = await parseRawBody(req, MAX_UPLOAD_BODY_BYTES);
           if (buffer === null) {
               rejectOversizedRequest(res);
+              return;
+          }
+          if (buffer === false) {
+              res.writeHead(400, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: 'request body stream was interrupted' }));
               return;
           }
           if (buffer.length === 0) {

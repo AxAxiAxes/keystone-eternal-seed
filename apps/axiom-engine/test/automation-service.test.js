@@ -442,6 +442,18 @@ test("registers each AXI agent with creator accountability and an origin", async
   assert.equal(agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
   assert.match(agent.keystoneRegistration.ownershipClaim, /claims ownership and accountability/);
   assert.equal(agent.keystoneRegistration.genesisCheckpoint.id, "axi-genesis-creator-ownership");
+  assert.equal(agent.productionRights.version, "axi-agent-production-rights-v1");
+  assert.equal(agent.productionRights.scope, "internal-axes-governance-attribution");
+  assert.equal(agent.productionRights.provenance.createdAt, agent.createdAt);
+  assert.equal(agent.productionRights.provenance.originCheckpoint, agent.originCheckpoint);
+  assert.equal(
+    agent.productionRights.accountability.responsibleHumanOwner,
+    "Axel Urartu (AX) · Axes Contracting"
+  );
+  assert.match(
+    agent.productionRights.accountability.responsibilityNotice,
+    /Responsibility remains with the accountable human AXES founder/
+  );
 
   await assert.rejects(
     () => service.registerAgent({
@@ -470,6 +482,17 @@ test("upgrades legacy agent registrations with the ownership claim", async (t) =
         registry: "KEYSTONE origin and lineage registry",
         sourceRecord: "KEYSTONE-ORIGIN-000001",
         creatorAuthority: "Axel Urartu (AX) · Axes Contracting"
+      },
+      productionRights: {
+        version: "axi-agent-production-rights-v1",
+        scope: "internal-axes-governance-attribution",
+        creatorAttribution: {
+          creatorAuthority: "Axel Urartu (AX) · Axes Contracting"
+        },
+        provenance: {
+          createdAt: "2026-09-10T00:00:00.000Z",
+          originCheckpoint: "axi-legacy-foundation"
+        }
       }
     }],
     tasks: [],
@@ -483,6 +506,11 @@ test("upgrades legacy agent registrations with the ownership claim", async (t) =
   assert.equal(report.agent.keystoneRegistration.sourceRecord, "KEYSTONE-ORIGIN-000001");
   assert.equal(report.agent.keystoneRegistration.genesisCheckpoint.id, "axi-genesis-creator-ownership");
   assert.equal(report.agent.createdAt, "2026-09-10T00:00:00.000Z");
+  assert.equal(report.agent.productionRights.version, "axi-agent-production-rights-v1");
+  assert.equal(
+    report.agent.productionRights.provenance.originCheckpoint,
+    "axi-legacy-foundation"
+  );
 });
 
 test("retains legacy provenance evidence and observes invalid agent records without repairing them", async (t) => {
@@ -525,6 +553,7 @@ test("retains legacy provenance evidence and observes invalid agent records with
     "creator-authority-invalid",
     "origin-checkpoint-missing",
     "ownership-claim-invalid",
+    "production-rights-missing",
     "unsupported-capability"
   ]);
   await assert.rejects(() => service.getAgent("invalid-legacy-agent"), /not registered/);
@@ -535,6 +564,7 @@ test("retains legacy provenance evidence and observes invalid agent records with
     "creator-authority-invalid",
     "origin-checkpoint-missing",
     "ownership-claim-invalid",
+    "production-rights-missing",
     "registration-timestamp-invalid"
   ]);
   const readiness = await service.getGovernanceReadiness();
@@ -553,6 +583,7 @@ test("fails closed when a custom agent loses its canonical Genesis source", asyn
     name: "Source Integrity Test",
     capabilities: ["automation.noop"]
   });
+
   const statePath = path.join(directory, "automation.json");
   const state = JSON.parse(await fs.readFile(statePath, "utf8"));
   state.agents.find((entry) => entry.id === agent.id).keystoneRegistration.sourceRecord =
@@ -570,6 +601,130 @@ test("fails closed when a custom agent loses its canonical Genesis source", asyn
     code: "unregistered-agent",
     agentId: agent.id
   }]);
+});
+
+test("fails closed when an agent loses its production-rights block", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  await fs.writeFile(path.join(directory, "automation.json"), JSON.stringify({
+    agents: [{
+      id: "production-rights-integrity-test",
+      name: "Production Rights Integrity Test",
+      capabilities: ["automation.noop"],
+      enabled: true,
+      createdAt: "2026-09-10T00:00:00.000Z",
+      registeredAt: "2026-09-10T00:00:00.000Z",
+      originCheckpoint: "axi-production-rights-integrity",
+      creator: "Axel Urartu (AX) · Axes Contracting",
+      keystoneRegistration: {
+        registry: "KEYSTONE origin and lineage registry",
+        sourceRecord: "KEYSTONE-ORIGIN-000001",
+        creatorAuthority: "Axel Urartu (AX) · Axes Contracting",
+        ownershipClaim: "Axel Urartu (AX) · Axes Contracting claims ownership and accountability for AXI agents created and registered within the AXES system.",
+        genesisCheckpoint: {
+          id: "axi-genesis-creator-ownership",
+          sourceRecord: "KEYSTONE-ORIGIN-000001",
+          creatorAuthority: "Axel Urartu (AX) · Axes Contracting"
+        }
+      },
+      accountability: {
+        status: "active",
+        reviewedAt: "2026-09-10T00:00:00.000Z",
+        reason: "Genesis registration accepted.",
+        history: [{
+          status: "active",
+          occurredAt: "2026-09-10T00:00:00.000Z",
+          reason: "Genesis registration accepted."
+        }]
+      }
+    }],
+    tasks: [],
+    runs: []
+  }), "utf8");
+  const service = new AutomationService({ directory, memoryStore: createMemoryStore() });
+
+  await assert.rejects(
+    () => service.getAgent("production-rights-integrity-test"),
+    /agent is not registered with creator ownership and accountability/
+  );
+  const readiness = await service.getGovernanceReadiness();
+  assert.equal(readiness.status, "attention");
+  assert.deepEqual(readiness.issues, [{
+    code: "unregistered-agent",
+    agentId: "production-rights-integrity-test"
+  }]);
+  const observation = readiness.agentObservations.find((entry) =>
+    entry.agentId === "production-rights-integrity-test");
+  assert.ok(observation.attention.includes("production-rights-missing"));
+});
+
+test("backfills only missing production-rights values without overwriting retained provenance", async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "axiom-automation-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  await fs.writeFile(path.join(directory, "automation.json"), JSON.stringify({
+    agents: [{
+      id: "retained-production-rights-agent",
+      name: "Retained Production Rights Agent",
+      capabilities: ["automation.noop"],
+      enabled: true,
+      createdAt: "2026-09-10T00:00:00.000Z",
+      registeredAt: "2026-09-10T00:00:00.000Z",
+      originCheckpoint: "axi-retained-origin",
+      creator: "Axel Urartu (AX) · Axes Contracting",
+      keystoneRegistration: {
+        registry: "KEYSTONE origin and lineage registry",
+        sourceRecord: "KEYSTONE-ORIGIN-000001",
+        creatorAuthority: "Axel Urartu (AX) · Axes Contracting",
+        ownershipClaim: "Axel Urartu (AX) · Axes Contracting claims ownership and accountability for AXI agents created and registered within the AXES system.",
+        genesisCheckpoint: {
+          id: "axi-genesis-creator-ownership",
+          sourceRecord: "KEYSTONE-ORIGIN-000001",
+          creatorAuthority: "Axel Urartu (AX) · Axes Contracting"
+        }
+      },
+      productionRights: {
+        version: "retained-invalid-version",
+        scope: "retained-invalid-scope",
+        creatorAttribution: {
+          creatorAuthority: "retained-invalid-authority"
+        },
+        provenance: {
+          createdAt: "2026-09-10T00:00:00.000Z",
+          originCheckpoint: "axi-retained-origin"
+        }
+      },
+      accountability: {
+        status: "active",
+        reviewedAt: "2026-09-10T00:00:00.000Z",
+        reason: "Genesis registration accepted.",
+        history: [{
+          status: "active",
+          occurredAt: "2026-09-10T00:00:00.000Z",
+          reason: "Genesis registration accepted."
+        }]
+      }
+    }],
+    tasks: [],
+    runs: []
+  }), "utf8");
+  const service = new AutomationService({ directory, memoryStore: createMemoryStore() });
+
+  const report = await service.getAgentReport("retained-production-rights-agent");
+  assert.equal(report.agent.productionRights.version, "retained-invalid-version");
+  assert.equal(report.agent.productionRights.scope, "retained-invalid-scope");
+  assert.equal(
+    report.agent.productionRights.creatorAttribution.creatorAuthority,
+    "retained-invalid-authority"
+  );
+  assert.equal(report.agent.productionRights.outputs.allowed,
+    "Bounded internal AXES outputs tied to the registered role's allowlisted capabilities, purpose, and duties.");
+  assert.equal(
+    report.agent.productionRights.accountability.responsibleHumanOwner,
+    "Axel Urartu (AX) · Axes Contracting"
+  );
+  assert.equal(report.observation.attention.includes("production-rights-version-invalid"), true);
+  assert.equal(report.observation.attention.includes("production-rights-scope-invalid"), true);
+  assert.equal(report.observation.attention.includes("production-rights-creator-invalid"), true);
 });
 
 test("reconciles default agents to the Genesis authority after a reset", async (t) => {

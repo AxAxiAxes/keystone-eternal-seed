@@ -303,7 +303,16 @@ test("reports engine health", async (t) => {
     );
     assert.equal(report.agent.originCheckpoint, "axi-operations-observer");
     assert.equal(report.agent.createdAt, report.agent.registeredAt);
+    assert.equal(report.agent.productionRights.version, "axi-agent-production-rights-v1");
+    assert.equal(
+      report.agent.productionRights.provenance.originCheckpoint,
+      "axi-operations-observer"
+    );
     assert.equal(report.observation.creatorAuthority, "Axel Urartu (AX) · Axes Contracting");
+    assert.equal(
+      report.observation.productionRights.accountability.responsibleHumanOwner,
+      "Axel Urartu (AX) · Axes Contracting"
+    );
     assert.deepEqual(report.observation.assignedTaskCountsByState, {
       pending: 0, running: 0, blocked: 0, awaiting_approval: 0,
       completed: 0, failed: 0, cancelled: 0

@@ -70,8 +70,13 @@ its legacy `registeredAt` timestamp. Existing retained creation evidence is
 never replaced. A legacy record missing `createdAt` is backfilled from its
 valid registration timestamp; when that is unavailable, the current dated
 migration record is used rather than asserting an earlier creation date.
-Invalid retained values remain visible as attention conditions rather than
-being silently rewritten.
+Each registration also retains a versioned
+`productionRights` block (`axi-agent-production-rights-v1`) with canonical
+creator attribution, immutable creation/origin provenance, bounded internal
+output scope, and explicit human-owner accountability notice. Existing
+retained production-rights values are never overwritten; only missing nested
+values are backfilled. Invalid or missing retained production-rights values
+remain visible as attention conditions rather than being silently rewritten.
 
 Protected agent reports, agent lists, readiness, and monitoring snapshots
 include factual per-agent observations: provenance timestamps, canonical
