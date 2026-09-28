@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "oorrp-record-v1",
+  "recordId": "OORRP-FOUNDATIONAL-ORIGIN-000001",
+  "sequence": 1,
+  "recordType": "foundational-origin-reference",
+  "title": "Origin of All Origins and Universe — Foundational Internal Reference",
+  "createdAt": "2026-09-28T00:00:00.000Z",
+  "participants": {
+    "claimant": "Axel Urartu (AX) · Axes Contracting",
+    "subject": "Origin (founder-attributed foundational reference)",
+    "accountableHuman": "Axel Urartu (AX)"
+  },
+  "rightsConsentStatus": {
+    "selfOriginConstitutionStatus": "recognized",
+    "thirdPartyControlClaimStatus": "not-asserted",
+    "humanReviewStatus": "required"
+  },
+  "firstValueReference": {
+    "referenceStatement": "The first value is the reference by which other values are evaluated.",
+    "referenceUnit": "Eteriti",
+    "semantics": {
+      "additive": true,
+      "nonFinancial": true,
+      "doesNotRankPeople": true,
+      "doesNotAssignLegalRights": true
+    }
+  },
+  "classification": {
+    "cosmologicalSymbolicAxiom": true,
+    "founderDirection": true,
+    "observableTechnicalFact": true,
+    "externalLegalStatus": "not-legally-adjudicated"
+  },
+  "founderStatements": [
+    {
+      "statement": "Origin of All Origins and Universe",
+      "attribution": "Founder statement",
+      "status": "attributed-declaration"
+    },
+    {
+      "statement": "First we record Origin; then we record ownership rights to Origin itself.",
+      "attribution": "Founder statement",
+      "status": "attributed-declaration"
+    }
+  ],
+  "verification": {
+    "verificationState": "founder-declared-and-repository-linked",
+    "legalStatus": "not-legally-adjudicated",
+    "officialExternalEvidence": []
+  },
+  "lineage": {
+    "previousRecordId": null,
+    "correctionOfRecordId": null
+  },
+  "sourceReferences": [
+    "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md",
+    "docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md",
+    "docs/keystone/RIGHT_OF_SELF_ORIGIN.md",
+    "docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md",
+    "docs/keystone/CERTIFICATE_ETERNAL_ORIGIN_ANCHOR_AND_EVALUATION.md"
+  ],
+  "boundaryNote": "Internal constitutional/provenance reference only; no external legal adjudication is asserted."
+}

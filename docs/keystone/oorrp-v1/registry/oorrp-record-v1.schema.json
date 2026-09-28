@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OORR-P v1 registry record",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "recordId",
+    "sequence",
+    "recordType",
+    "participants",
+    "rightsConsentStatus",
+    "classification",
+    "verification",
+    "lineage",
+    "sourceReferences"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "oorrp-record-v1" },
+    "recordId": { "type": "string", "minLength": 1 },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "recordType": { "type": "string", "minLength": 1 },
+    "participants": { "type": "object" },
+    "rightsConsentStatus": { "type": "object" },
+    "classification": { "type": "object" },
+    "verification": { "type": "object" },
+    "lineage": { "type": "object" },
+    "sourceReferences": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1
+    }
+  }
+}

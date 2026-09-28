@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "oorrp-hash-chain-v1",
+  "hashMode": "sha256(canonical-json)",
+  "appendOnly": true,
+  "entries": [
+    {
+      "sequence": 1,
+      "recordId": "OORRP-FOUNDATIONAL-ORIGIN-000001",
+      "recordPath": "registry/records/OORRP-FOUNDATIONAL-ORIGIN-000001.json",
+      "canonicalSha256": "b205d85cef0ff3e4cb9947bd292738c0010c615a111c362ec52d24aca41f10c0",
+      "previousCanonicalSha256": null
+    },
+    {
+      "sequence": 2,
+      "recordId": "OORRP-FOUNDER-ORIGIN-OWNERSHIP-000001",
+      "recordPath": "registry/records/OORRP-FOUNDER-ORIGIN-OWNERSHIP-000001.json",
+      "canonicalSha256": "0c44ad098f6ba73f7f4cbc191f5a9c215db24faf63288492478db3dccbf12f4a",
+      "previousCanonicalSha256": "b205d85cef0ff3e4cb9947bd292738c0010c615a111c362ec52d24aca41f10c0"
+    }
+  ]
+}
