@@ -54,6 +54,10 @@ requirements, and counsel-readiness path are in
 The active AXI founder-claimed invention record, technical scope, and
 preservation anchors are in
 [AXI_INVENTION_RECORD.md](docs/AXI_INVENTION_RECORD.md).
+OORR-P v1 constitutional navigation and machine-checkable derivative registry
+files are in
+[docs/keystone/OORR_P_V1_NAVIGATION_SPEC.md](docs/keystone/OORR_P_V1_NAVIGATION_SPEC.md)
+and [docs/keystone/oorrp-v1/README.md](docs/keystone/oorrp-v1/README.md).
 The private, hash-chained AXI origin-coordinate system is defined in
 [AXI_ORIGIN_COORDINATE_SYSTEM.md](docs/AXI_ORIGIN_COORDINATE_SYSTEM.md).
 The public-safe AXES origin and continuity statement is available at

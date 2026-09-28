@@ -78,6 +78,21 @@ jobs:
           node-version: 20
       - run: node --test
 
+  keystone-oorrp-registry-validation:
+    name: KEYSTONE OORR-P registry validation
+    if: ${{ github.event_name != 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: docs/keystone/oorrp-v1
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+      - run: node --test
+
   engine-image:
     name: AXIOM engine image
     if: ${{ github.event_name != 'workflow_run' }}

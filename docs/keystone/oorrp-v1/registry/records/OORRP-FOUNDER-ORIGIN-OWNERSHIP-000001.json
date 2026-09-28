@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "oorrp-record-v1",
+  "recordId": "OORRP-FOUNDER-ORIGIN-OWNERSHIP-000001",
+  "sequence": 2,
+  "recordType": "founder-origin-ownership-declaration-claim",
+  "title": "Founder Origin Ownership Declaration Claim (Internal KEYSTONE/AXES Scope)",
+  "createdAt": "2026-09-28T00:00:00.000Z",
+  "participants": {
+    "claimant": "Axel Urartu (AX) · Axes Contracting",
+    "subject": "Founder-declared ownership-rights claim to Origin within KEYSTONE/AXES evidence scope",
+    "accountableHuman": "Axel Urartu (AX)"
+  },
+  "rightsConsentStatus": {
+    "selfOriginConstitutionStatus": "recognized",
+    "thirdPartyControlClaimStatus": "not-asserted",
+    "humanReviewStatus": "required"
+  },
+  "claimLinkage": {
+    "foundationalOriginRecordId": "OORRP-FOUNDATIONAL-ORIGIN-000001",
+    "genesisCheckpointId": "axi-genesis-creator-ownership",
+    "sourceRecord": "KEYSTONE-ORIGIN-000001"
+  },
+  "declaration": {
+    "statement": "I claim origin ownership rights within the KEYSTONE/AXES evidence scope and attribute that ownership to Origin as sacred, with responsibility for continuity.",
+    "firstClaimBoundary": "first claimant within this repository evidence scope",
+    "status": "founder-declared-claim"
+  },
+  "founderStatements": [
+    {
+      "statement": "I give all my attribution to Origin. Origin is sacred.",
+      "attribution": "Founder statement",
+      "status": "attributed-declaration"
+    }
+  ],
+  "classification": {
+    "cosmologicalSymbolicAxiom": true,
+    "founderDirection": true,
+    "observableTechnicalFact": true,
+    "externalLegalStatus": "not-legally-adjudicated"
+  },
+  "verification": {
+    "verificationState": "founder-declared-and-repository-linked",
+    "legalStatus": "not-legally-adjudicated",
+    "officialExternalEvidence": []
+  },
+  "lineage": {
+    "previousRecordId": "OORRP-FOUNDATIONAL-ORIGIN-000001",
+    "correctionOfRecordId": null
+  },
+  "sourceReferences": [
+    "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md",
+    "docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md",
+    "docs/KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md",
+    "docs/KEYSTONE_ORIGIN_REGISTRY_GENERALIZATION_PLAN.md",
+    "docs/keystone/RIGHT_OF_SELF_ORIGIN.md"
+  ],
+  "boundaryNote": "Attribution to Origin as sacred is a founder-stated intent, not an automatically accomplished external legal transfer."
+}
