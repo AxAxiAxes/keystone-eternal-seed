@@ -1,0 +1,211 @@
+{
+  "schemaVersion": "founder-review-board-v1",
+  "recordedAt": "2026-09-30T14:50:00Z",
+  "source": {
+    "method": "Read from GitHub pull request, workflow-run, and file metadata by the Copilot coding agent while preparing PR #220. This is a repository-maintained snapshot, not a live sync.",
+    "refreshHow": "Open each linked pull request on GitHub, compare with this file, edit it in a reviewed pull request, and update recordedAt and observedAt. See docs/FOUNDER_REVIEW_COMMAND_CENTER.md.",
+    "baseBranch": "axaxiaxes-axiom-monorepo @ 7b9a6b4 (Reconcile AXES Command Center UI, #210)"
+  },
+  "automation": {
+    "mayApprove": false,
+    "mayMerge": false,
+    "mayPostReviewComments": false,
+    "mayRecordFounderConfirmation": false
+  },
+  "lenses": {
+    "fundamentals": {
+      "nextStep": {
+        "title": "Let the tests run on PR #216 — nothing else is needed today.",
+        "why": "PR #216 is the foundation that #217 builds on. Its tests have not run on the current commit because GitHub is waiting for approval, so nobody can yet see whether it works.",
+        "how": "Open the linked run, press \"Approve and run\" (or re-run), and wait for the result. Reviewing and merging are separate, later steps.",
+        "link": "https://github.com/AxAxiAxes/keystone-eternal-seed/actions/runs/36253839687"
+      },
+      "basics": [
+        "Tests passing means the code checks passed. It does not mean you have accepted the work.",
+        "A pull request is a proposal. Nothing in it is on the main branch or in production until you merge it and it is deployed.",
+        "One pull request at a time is enough. Everything else below can wait."
+      ]
+    },
+    "inReview": [
+      {
+        "id": "pr-216",
+        "pr": 216,
+        "url": "https://github.com/AxAxiAxes/keystone-eternal-seed/pull/216",
+        "title": "Accountability ledger: PR #206 conflict resolution + intelligence/value evaluation",
+        "state": "implemented_on_branch",
+        "provenance": "Copilot coding agent pull request; open draft with founder review requested. Nothing from it is on the base branch.",
+        "headBranch": "copilot/resolve-pr-206-merge-conflicts @ 672741c",
+        "draft": true,
+        "observedMergeState": "blocked",
+        "observedAt": "2026-09-30T14:50:00Z",
+        "ciObservation": "not_run_action_required",
+        "ciEvidence": "https://github.com/AxAxiAxes/keystone-eternal-seed/actions/runs/36253839687",
+        "dependencies": [
+          "Carries PR #206's task-record changes; #206 is still open separately.",
+          "#217 also edits apps/axiom-engine/accountability-ledger-service.js and the PR template, so whichever merges second will need a rebase.",
+          "Adds a required PR-body check (.github/scripts/validate-pr-body.js) that would apply to every later pull request — see the transition decision."
+        ],
+        "nextStep": "Approve the waiting CI run, then read the summary at the top of the pull request.",
+        "checklist": [
+          { "item": "CI runs on the current commit (engine and portal tests, images, new PR-body check).", "owner": "automated_check", "status": "pending" },
+          { "item": "Read the pull request summary: do the evaluation and value fields match what you asked for?", "owner": "founder", "status": "pending" },
+          { "item": "Decide how the new PR-body rule applies to pull requests that are already open.", "owner": "founder", "status": "pending" },
+          { "item": "When satisfied, mark it ready for review and leave your own GitHub review (approve or request changes).", "owner": "founder", "status": "pending" }
+        ],
+        "founderConfirmation": { "state": "pending" }
+      },
+      {
+        "id": "pr-217",
+        "pr": 217,
+        "url": "https://github.com/AxAxiAxes/keystone-eternal-seed/pull/217",
+        "title": "Origin Science checkpoint, offline origin validator, bounded accountability evaluation",
+        "state": "implemented_on_branch",
+        "provenance": "Copilot coding agent pull request; open and ready for review. Origin Science concepts in it are founder-defined proposals, not verified scientific, legal, or financial statements.",
+        "headBranch": "copilot/create-automated-workflows @ afbc097",
+        "draft": false,
+        "observedMergeState": "blocked",
+        "observedAt": "2026-09-30T14:50:00Z",
+        "ciObservation": "not_run_action_required",
+        "ciEvidence": "https://github.com/AxAxiAxes/keystone-eternal-seed/actions/runs/36255366901",
+        "dependencies": [
+          "Best reviewed after #216: both change the accountability ledger service and the PR template.",
+          "An earlier commit (db3ed28) passed CI after a manual re-run; that does not cover the current commit."
+        ],
+        "nextStep": "Wait until #216 is settled, then approve its CI run and review.",
+        "checklist": [
+          { "item": "CI runs on the current commit.", "owner": "automated_check", "status": "pending" },
+          { "item": "Confirm the Origin Science wording stays labeled as your proposal, not as established science or law.", "owner": "founder", "status": "pending" },
+          { "item": "Confirm the merge order relative to #216.", "owner": "founder", "status": "pending" },
+          { "item": "Leave your own GitHub review.", "owner": "founder", "status": "pending" }
+        ],
+        "founderConfirmation": { "state": "pending" }
+      },
+      {
+        "id": "pr-219",
+        "pr": 219,
+        "url": "https://github.com/AxAxiAxes/keystone-eternal-seed/pull/219",
+        "title": "OORR-P v1 registry, boundaries, and deterministic validator",
+        "state": "implemented_on_branch",
+        "provenance": "Copilot coding agent pull request; open draft with founder review requested. Registry records hold founder claims with an explicit not-legally-adjudicated boundary.",
+        "headBranch": "copilot/implement-oorrr-p-v1 @ 51da434",
+        "draft": true,
+        "observedMergeState": "blocked",
+        "observedAt": "2026-09-30T14:50:00Z",
+        "ciObservation": "not_run_action_required",
+        "ciEvidence": "https://github.com/AxAxiAxes/keystone-eternal-seed/actions/runs/36490848903",
+        "dependencies": [
+          "Adds a CI job at the same place in axi-continuity-validation.yml as #216, so the second to merge needs a small rebase.",
+          "Refers to #206, #216, #217, and #218 as open context only."
+        ],
+        "nextStep": "Park until #216 and #217 are settled.",
+        "checklist": [
+          { "item": "CI runs on the current commit (including the new OORR-P registry job).", "owner": "automated_check", "status": "pending" },
+          { "item": "Read the two registry records: is the claimant, subject, and rights wording what you intend?", "owner": "founder", "status": "pending" },
+          { "item": "Leave your own GitHub review.", "owner": "founder", "status": "pending" }
+        ],
+        "founderConfirmation": { "state": "pending" }
+      },
+      {
+        "id": "pr-220",
+        "pr": 220,
+        "url": "https://github.com/AxAxiAxes/keystone-eternal-seed/pull/220",
+        "title": "Founder pace view in Command Center + advisory review-board check",
+        "state": "implemented_on_branch",
+        "provenance": "Copilot coding agent pull request that adds this board. It does not change #216, #217, or #219.",
+        "headBranch": "copilot/open-reviewable-pr-automation",
+        "draft": true,
+        "observedMergeState": "not recorded",
+        "observedAt": "2026-09-30T14:50:00Z",
+        "ciObservation": "unknown",
+        "dependencies": [
+          "Independent of #216, #217, and #219; it only reads their public pull request metadata into this file."
+        ],
+        "nextStep": "Optional: open /command-center after it is deployed and check whether the Founder pace view feels calm enough.",
+        "checklist": [
+          { "item": "Portal tests and the founder review board check pass.", "owner": "automated_check", "status": "pending" },
+          { "item": "Is the single next step the right one for you?", "owner": "founder", "status": "pending" },
+          { "item": "Leave your own GitHub review.", "owner": "founder", "status": "pending" }
+        ],
+        "founderConfirmation": { "state": "pending" }
+      }
+    ],
+    "needsFounderDecision": [
+      {
+        "id": "decision-merge-order",
+        "title": "Merge order for the overlapping pull requests",
+        "state": "proposed",
+        "provenance": "Proposed by the Copilot coding agent from the files each pull request changes.",
+        "question": "#216 and #217 change the same accountability file; #216 and #219 change the same workflow spot. Which should go first?",
+        "options": [
+          "#216 first, then rebase #217, then #219 (suggested: #216 is the foundation).",
+          "#217 first, then rebase #216 and #219.",
+          "Pause all three; nothing merges until you choose."
+        ],
+        "ifNoDecision": "Nothing merges. All three stay open and unchanged.",
+        "nextStep": "Choose when you review #216; no rush before its tests have run."
+      },
+      {
+        "id": "decision-pr-body-transition",
+        "title": "How the #216 PR-body rule treats pull requests that are already open",
+        "state": "proposed",
+        "provenance": "Proposed by the Copilot coding agent. #216's own description lists historical and administrative exception paths; that code is not on the base branch.",
+        "question": "If #216 merges, should its required Task-ID/accountability sections fail older open pull requests?",
+        "options": [
+          "Apply only to pull requests opened after #216 merges; older ones use the historical exception.",
+          "Run it as advisory (non-failing) for two weeks, then make it required.",
+          "Require it immediately for every open pull request."
+        ],
+        "ifNoDecision": "No new required PR-body rule exists on the base branch; this pull request does not add one.",
+        "nextStep": "Decide during your #216 review."
+      },
+      {
+        "id": "decision-branch-protection",
+        "title": "Required checks and founder review before merge",
+        "state": "externally_reported_unverified",
+        "provenance": "GitHub reports these pull requests as \"blocked\", and PROJECT_TIMELINE.md records CI-gated auto-merge as live. Repository settings cannot be read or changed from code, so the exact rules are unverified here.",
+        "question": "Should merges into axaxiaxes-axiom-monorepo require passing checks and your approving review, and should auto-merge stay enabled?",
+        "options": [
+          "Require checks and one founder approval; keep auto-merge only after both.",
+          "Require checks only (current reported behavior).",
+          "Leave settings as they are for now."
+        ],
+        "ifNoDecision": "Settings stay exactly as they are; nothing in this repository changes them.",
+        "nextStep": "If you want the gate, follow the manual steps in docs/FOUNDER_REVIEW_COMMAND_CENTER.md."
+      }
+    ],
+    "later": [
+      {
+        "id": "later-other-open-prs",
+        "title": "Other open pull requests (#206, #207, #211, #212, #213, #214, #218)",
+        "state": "implemented_on_branch",
+        "provenance": "Listed from GitHub's open pull request list; not yet mapped into checklists here.",
+        "parked": true,
+        "nextStep": "Add one at a time to In review after the four above settle."
+      },
+      {
+        "id": "later-live-sync",
+        "title": "Live GitHub sync for this board",
+        "state": "proposed",
+        "provenance": "Idea only. It would need a read-only GitHub token or app permission, which is an account decision.",
+        "parked": true,
+        "nextStep": "Keep the hand-maintained snapshot until you decide on read-only access."
+      },
+      {
+        "id": "later-origin-concepts",
+        "title": "Origin Science and OORR-P concepts (from #217 and #219)",
+        "state": "proposed",
+        "provenance": "Founder-defined proposals preserved in open pull requests; not scientific, legal, patent, or financial findings.",
+        "parked": true,
+        "nextStep": "Stay parked until #217 and #219 are reviewed."
+      },
+      {
+        "id": "later-external-operations",
+        "title": "Scheduler activation, Railway, DNS, email, payment, and patent actions",
+        "state": "proposed",
+        "provenance": "Outside repository control. They need an authorized human and, where applicable, qualified professional review.",
+        "parked": true,
+        "nextStep": "Not part of any pull request here; revisit through the existing activation records."
+      }
+    ]
+  }
+}

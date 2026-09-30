@@ -12,6 +12,7 @@ Use this runbook to keep Copilot branch delivery fluent when GitHub Actions may 
 - `AXI continuity validation` runs on pull requests targeting `axaxiaxes-axiom-monorepo`.
 - `AXI continuity validation` also receives a safe `workflow_run` continuity signal after `Running Copilot cloud agent` completes successfully on same-repository `copilot/` branches.
 - Code-executing jobs are skipped for `workflow_run` events by design (security boundary).
+- The `Founder review board (advisory summary)` job validates the Command Center founder pace data and writes a read-only step summary. It never approves, merges, or comments; see [FOUNDER_REVIEW_COMMAND_CENTER.md](FOUNDER_REVIEW_COMMAND_CENTER.md).
 
 Source: `.github/workflows/axi-continuity-validation.yml`.
 

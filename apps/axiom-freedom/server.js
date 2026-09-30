@@ -2,6 +2,7 @@ const http = require('http');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const { loadFounderReviewBoard } = require('./founder-review-board');
 
 const port = Number(process.env.AXIOM_PORT || 8080);
 const host = '0.0.0.0';
@@ -13,6 +14,7 @@ const DOCUMENTS_DIRECTORY = fs.existsSync(path.join(__dirname, 'docs'))
 const PROJECT_TIMELINE_FILE = fs.existsSync(path.join(__dirname, 'PROJECT_TIMELINE.md'))
     ? path.resolve(__dirname, 'PROJECT_TIMELINE.md')
     : path.resolve(__dirname, '..', '..', 'PROJECT_TIMELINE.md');
+const FOUNDER_REVIEW_BOARD_FILE = path.join(DOCUMENTS_DIRECTORY, 'founder-review', 'founder-review-board.v1.json');
 const PUBLIC_DOCUMENTS = new Set([
     'AXES_BUSINESS_PLAN.md',
     'ENGINE_INTEGRATION.md'
@@ -1108,6 +1110,19 @@ const server = http.createServer(async (req, res) => {
                   console.error('AXES Command Center checkpoint request failed:', error.message);
                   res.writeHead(500, { 'Content-Type': 'application/json' });
                   res.end(JSON.stringify({ error: 'AXES Command Center checkpoints are unavailable' }));
+          }
+          return;
+    }
+    if (pathname === '/api/command-center/founder-review' && req.method === 'GET') {
+          if (!requireAdmin(req, res)) return;
+          try {
+                  const board = loadFounderReviewBoard(FOUNDER_REVIEW_BOARD_FILE);
+                  res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+                  res.end(JSON.stringify(board));
+          } catch (error) {
+                  console.error('AXES founder review board request failed:', error.message);
+                  res.writeHead(500, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ error: 'AXES founder review board is unavailable' }));
           }
           return;
     }
