@@ -699,27 +699,12 @@ function renderCheckpoints(timeline) {
   document.querySelector("#checkpoints").innerHTML = `<p><strong>Current phase:</strong> ${escapeHtml(timeline.currentPhase)}</p><table><thead><tr><th>Status</th><th>Checkpoint</th></tr></thead><tbody>${rows || "<tr><td colspan='2'>No current checkpoints found.</td></tr>"}</tbody></table>`;
 }
 
-const REVIEW_STATE_LABELS = {
-  proposed: "Proposed",
-  implemented_on_branch: "Implemented on branch",
-  verified_on_base: "Verified on base",
-  externally_reported_unverified: "Externally reported · unverified"
-};
-const CI_OBSERVATION_LABELS = {
-  not_run_action_required: "CI waiting for approval on current commit",
-  passed_on_head: "CI passed on current commit",
-  failed_on_head: "CI failed on current commit",
-  unknown: "CI status not recorded"
-};
-const CHECKLIST_LABELS = {
-  pending: "to do",
-  done_by_check: "done by automated check",
-  founder_confirmed: "confirmed by founder",
-  not_applicable: "not applicable"
-};
+function label(labels, key) {
+  return labels && Object.prototype.hasOwnProperty.call(labels, key) ? labels[key] : key;
+}
 
-function stateTag(state) {
-  return `<span class="state-tag">${escapeHtml(REVIEW_STATE_LABELS[state] || state)}</span>`;
+function stateTag(labels, state) {
+  return `<span class="state-tag">${escapeHtml(label(labels.states, state))}</span>`;
 }
 
 function safeLink(url, text) {
@@ -732,16 +717,17 @@ function lens(title, count, body) {
 
 function renderFounderReview(board) {
   const lenses = board.lenses;
+  const labels = board.labels || {};
   const next = lenses.fundamentals.nextStep;
   const basics = (lenses.fundamentals.basics || []).map(basic => `<li>${escapeHtml(basic)}</li>`).join("");
   const nextStep = `<article class="next-step"><p class="label">Fundamentals · your one next step</p><h3>${escapeHtml(next.title)}</h3><p>${escapeHtml(next.why)}</p><p><strong>How:</strong> ${escapeHtml(next.how)} ${safeLink(next.link, "Open it on GitHub")}</p>${basics ? `<ul>${basics}</ul>` : ""}</article>`;
   const prs = lenses.inReview.map(pr => {
-    const checklist = pr.checklist.map(step => `<li>${step.owner === "founder" ? "You" : "Automated check"}: ${escapeHtml(step.item)} — <span class="${step.status === "pending" ? "attention" : "ready"}">${escapeHtml(CHECKLIST_LABELS[step.status] || step.status)}</span></li>`).join("");
+    const checklist = pr.checklist.map(step => `<li>${step.owner === "founder" ? "You" : "Automated check"}: ${escapeHtml(step.item)} — <span class="${step.status === "pending" ? "attention" : "ready"}">${escapeHtml(label(labels.checklistStatuses, step.status))}</span></li>`).join("");
     const dependencies = pr.dependencies.length ? `<p><strong>Depends on / overlaps:</strong></p><ul>${pr.dependencies.map(dependency => `<li>${escapeHtml(dependency)}</li>`).join("")}</ul>` : "";
-    return `<details class="lens"><summary>#${escapeHtml(pr.pr)} ${escapeHtml(pr.title)}</summary><p>${stateTag(pr.state)}${pr.draft ? '<span class="state-tag">Draft</span>' : ""}<span class="state-tag">Your confirmation: ${escapeHtml(pr.founderConfirmation.state)}</span></p><p><strong>Next:</strong> ${escapeHtml(pr.nextStep)}</p><p class="muted">${escapeHtml(CI_OBSERVATION_LABELS[pr.ciObservation] || pr.ciObservation)} · GitHub merge state: ${escapeHtml(pr.observedMergeState)} · ${escapeHtml(pr.headBranch)} · observed ${escapeHtml(pr.observedAt)} ${safeLink(pr.ciEvidence, "CI run")} ${safeLink(pr.url, "Pull request")}</p><p class="muted">Where this comes from: ${escapeHtml(pr.provenance)}</p>${dependencies}<p><strong>Review checklist</strong> (you confirm your own steps on GitHub):</p><ul>${checklist}</ul></details>`;
+    return `<details class="lens"><summary>#${escapeHtml(pr.pr)} ${escapeHtml(pr.title)}</summary><p>${stateTag(labels, pr.state)}${pr.draft ? '<span class="state-tag">Draft</span>' : ""}<span class="state-tag">Your confirmation: ${escapeHtml(pr.founderConfirmation.state)}</span></p><p><strong>Next:</strong> ${escapeHtml(pr.nextStep)}</p><p class="muted">${escapeHtml(label(labels.ciObservations, pr.ciObservation))} · GitHub merge state: ${escapeHtml(pr.observedMergeState)} · ${escapeHtml(pr.headBranch)} · observed ${escapeHtml(pr.observedAt)} ${safeLink(pr.ciEvidence, "CI run")} ${safeLink(pr.url, "Pull request")}</p><p class="muted">Where this comes from: ${escapeHtml(pr.provenance)}</p>${dependencies}<p><strong>Review checklist</strong> (you confirm your own steps on GitHub):</p><ul>${checklist}</ul></details>`;
   }).join("");
-  const decisions = lenses.needsFounderDecision.map(decision => `<div class="lens"><p>${stateTag(decision.state)}<strong>${escapeHtml(decision.title)}</strong></p><p>${escapeHtml(decision.question)}</p><ul>${decision.options.map(option => `<li>${escapeHtml(option)}</li>`).join("")}</ul><p><strong>If you do not decide yet:</strong> ${escapeHtml(decision.ifNoDecision)}</p><p><strong>Next:</strong> ${escapeHtml(decision.nextStep)}</p><p class="muted">Where this comes from: ${escapeHtml(decision.provenance)}</p></div>`).join("");
-  const later = lenses.later.map(item => `<li>${stateTag(item.state)}<strong>${escapeHtml(item.title)}</strong> — ${escapeHtml(item.nextStep)} <span class="muted">(${escapeHtml(item.provenance)})</span></li>`).join("");
+  const decisions = lenses.needsFounderDecision.map(decision => `<div class="lens"><p>${stateTag(labels, decision.state)}<strong>${escapeHtml(decision.title)}</strong></p><p>${escapeHtml(decision.question)}</p><ul>${decision.options.map(option => `<li>${escapeHtml(option)}</li>`).join("")}</ul><p><strong>If you do not decide yet:</strong> ${escapeHtml(decision.ifNoDecision)}</p><p><strong>Next:</strong> ${escapeHtml(decision.nextStep)}</p><p class="muted">Where this comes from: ${escapeHtml(decision.provenance)}</p></div>`).join("");
+  const later = lenses.later.map(item => `<li>${stateTag(labels, item.state)}<strong>${escapeHtml(item.title)}</strong> — ${escapeHtml(item.nextStep)} <span class="muted">(${escapeHtml(item.provenance)})</span></li>`).join("");
   document.querySelector("#founder-review").innerHTML = nextStep
     + lens("In review — pull requests", lenses.inReview.length, prs || "<p class='muted'>Nothing in review.</p>")
     + lens("Needs your decision", lenses.needsFounderDecision.length, decisions || "<p class='muted'>No open decisions.</p>")

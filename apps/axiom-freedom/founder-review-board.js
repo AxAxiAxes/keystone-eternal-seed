@@ -23,13 +23,18 @@ const STATES = Object.freeze({
     externally_reported_unverified: 'Externally reported · unverified'
 });
 const CI_OBSERVATIONS = Object.freeze({
-    not_run_action_required: 'CI waiting for approval (action_required) on current head',
-    passed_on_head: 'CI passed on current head',
-    failed_on_head: 'CI failed on current head',
+    not_run_action_required: 'CI waiting for approval (action_required) on current commit',
+    passed_on_head: 'CI passed on current commit',
+    failed_on_head: 'CI failed on current commit',
     unknown: 'CI status not recorded'
 });
 const CHECKLIST_OWNERS = new Set(['automated_check', 'founder']);
-const CHECKLIST_STATUSES = new Set(['pending', 'done_by_check', 'founder_confirmed', 'not_applicable']);
+const CHECKLIST_STATUSES = Object.freeze({
+    pending: 'to do',
+    done_by_check: 'done by automated check',
+    founder_confirmed: 'confirmed by founder',
+    not_applicable: 'not applicable'
+});
 const CONFIRMATION_STATES = new Set(['pending', 'confirmed', 'declined']);
 const LENSES = ['fundamentals', 'inReview', 'needsFounderDecision', 'later'];
 
@@ -169,8 +174,8 @@ function validateFounderReviewBoard(board) {
                     }
                     text(step.item, `${stepWhere}.item`, 240);
                     if (!CHECKLIST_OWNERS.has(step.owner)) errors.push(`${stepWhere}.owner must be automated_check or founder`);
-                    if (!CHECKLIST_STATUSES.has(step.status)) {
-                        errors.push(`${stepWhere}.status must be one of ${[...CHECKLIST_STATUSES].join(', ')}`);
+                    if (!Object.hasOwn(CHECKLIST_STATUSES, step.status)) {
+                        errors.push(`${stepWhere}.status must be one of ${Object.keys(CHECKLIST_STATUSES).join(', ')}`);
                     }
                     // A passing check is never a founder decision, and a founder step is never satisfied by CI.
                     if (step.owner === 'founder' && step.status === 'done_by_check') {
@@ -251,11 +256,15 @@ function loadFounderReviewBoard(boardPath = defaultBoardPath(), now = new Date()
         error.validationErrors = errors;
         throw error;
     }
-    return { ...board, freshness: describeFreshness(board.recordedAt, now) };
+    return {
+        ...board,
+        freshness: describeFreshness(board.recordedAt, now),
+        labels: { states: STATES, ciObservations: CI_OBSERVATIONS, checklistStatuses: CHECKLIST_STATUSES }
+    };
 }
 
 function renderAdvisorySummary(board) {
-    const cell = value => String(value).replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
+    const cell = value => String(value).replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
     const next = board.lenses.fundamentals.nextStep;
     const lines = [
         '## Founder review board — advisory summary',
@@ -299,6 +308,7 @@ module.exports = {
     SCHEMA_VERSION,
     STATES,
     CI_OBSERVATIONS,
+    CHECKLIST_STATUSES,
     defaultBoardPath,
     describeFreshness,
     loadFounderReviewBoard,

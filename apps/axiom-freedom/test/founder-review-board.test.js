@@ -160,7 +160,7 @@ test("labels stale snapshots and renders an advisory summary without approval la
   const summary = board.renderAdvisorySummary({ ...validBoard(), freshness: stale });
   assert.match(summary, /Advisory only/);
   assert.match(summary, /not founder acceptance/);
-  assert.match(summary, /\| #1 \| Implemented on branch \| CI passed on current head \| pending \| 1 \|/);
+  assert.match(summary, /\| #1 \| Implemented on branch \| CI passed on current commit \| pending \| 1 \|/);
   assert.doesNotMatch(summary, /\bapproved\b|LGTM|ready to merge/i);
 });
 
@@ -201,6 +201,7 @@ test("serves the founder review board only to the protected Command Center", asy
     assert.equal(payload.schemaVersion, board.SCHEMA_VERSION);
     assert.ok(["recent", "stale"].includes(payload.freshness.status));
     assert.equal(payload.automation.mayMerge, false);
+    assert.equal(payload.labels.states.verified_on_base, "Verified on base");
   } finally {
     web.closeAllConnections();
     await new Promise(resolve => web.close(resolve));
@@ -209,7 +210,7 @@ test("serves the founder review board only to the protected Command Center", asy
 
 test("Command Center renders one next step first, collapses other lenses, and escapes board text", async () => {
   const markup = await fs.readFile(path.join(__dirname, "..", "command-center.html"), "utf8");
-  const script = markup.match(/<script>([\s\S]*?)<\/script>/);
+  const script = markup.match(/<script>([\s\S]*?)<\/script\s*>/i);
   assert.ok(script, "the Command Center page must contain its application script");
   const elements = new Map();
   const context = vm.createContext({
@@ -231,7 +232,11 @@ test("Command Center renders one next step first, collapses other lenses, and es
   assert.match(elements.get("#founder-freshness").textContent, /Founder pace view unavailable/);
 
   const hostile = '<img src=x onerror="globalThis.compromised=true">';
-  const candidate = { ...validBoard(), freshness: board.describeFreshness("2026-09-30T14:50:00Z", new Date("2026-09-30T15:00:00Z")) };
+  const candidate = {
+    ...validBoard(),
+    freshness: board.describeFreshness("2026-09-30T14:50:00Z", new Date("2026-09-30T15:00:00Z")),
+    labels: { states: board.STATES, ciObservations: board.CI_OBSERVATIONS, checklistStatuses: board.CHECKLIST_STATUSES }
+  };
   candidate.lenses.fundamentals.nextStep.title = `Next ${hostile}`;
   candidate.lenses.inReview[0].title = hostile;
   candidate.lenses.inReview[0].ciEvidence = 'javascript:alert(1)';
