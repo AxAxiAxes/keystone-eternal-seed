@@ -180,6 +180,7 @@ test("loading an invalid board fails closed with every validation error", async 
 });
 
 test("serves the founder review board only to the protected Command Center", async () => {
+  const previousPassword = process.env.ADMIN_PASSWORD;
   process.env.ADMIN_PASSWORD = "test-admin-password";
   delete require.cache[require.resolve("../server")];
   const web = require("../server");
@@ -205,6 +206,9 @@ test("serves the founder review board only to the protected Command Center", asy
   } finally {
     web.closeAllConnections();
     await new Promise(resolve => web.close(resolve));
+    delete require.cache[require.resolve("../server")];
+    if (previousPassword === undefined) delete process.env.ADMIN_PASSWORD;
+    else process.env.ADMIN_PASSWORD = previousPassword;
   }
 });
 
