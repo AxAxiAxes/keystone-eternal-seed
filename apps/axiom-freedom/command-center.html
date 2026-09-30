@@ -454,6 +454,52 @@
     .attention { color: var(--attention); }
     .muted { color: var(--muted); }
 
+    .next-step {
+      background: linear-gradient(145deg, rgba(87, 27, 43, 0.62), rgba(16, 12, 17, 0.86));
+      border: 1px solid var(--line-strong);
+      border-radius: 16px;
+      padding: 18px 20px;
+    }
+
+    .next-step h3 {
+      font-size: 1.35rem;
+      margin: 6px 0 10px;
+    }
+
+    .next-step ul,
+    .lens ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .lens {
+      background: rgba(16, 12, 17, 0.3);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      margin-top: 12px;
+      padding: 12px 16px;
+    }
+
+    .lens summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .lens .lens {
+      background: var(--node);
+    }
+
+    .state-tag {
+      display: inline-block;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      margin-right: 6px;
+      padding: 1px 10px;
+    }
+
     .footer-note {
       color: var(--muted);
       font-size: 0.9rem;
@@ -528,6 +574,7 @@
     </div>
 
     <nav class="quicknav" aria-label="Command Center quick navigation">
+      <a class="nav-card" href="#founder-pace"><strong>Founder pace</strong><span>One next step first; reviews, decisions, and parked ideas when you want them.</span></a>
       <a class="nav-card" href="#continuity"><strong>Continuity</strong><span>Clock, current phase, and timeline checkpoints.</span></a>
       <a class="nav-card" href="#signals"><strong>Signals</strong><span>Recorded metrics for agents, tasks, runs, and governance.</span></a>
       <a class="nav-card" href="#tree-section"><strong>Continuity tree</strong><span>AXI root, governance, agents, tasks, and latest runs.</span></a>
@@ -535,6 +582,18 @@
     </nav>
 
     <p class="notice">The protected Command Center is intended to serve at the root of axescontracting.com once authorized Railway and DNS work is completed. This page is repository-controlled UI work only; it does not prove that external domain connection is live.</p>
+  </section>
+
+  <section id="founder-pace">
+    <div class="section-head">
+      <div>
+        <p class="subhead">Fundamentals first</p>
+        <h2>Founder pace view</h2>
+      </div>
+    </div>
+    <p class="note">A hand-maintained snapshot of open pull requests, decisions, and parked ideas, read from the repository. It is not live GitHub data and it never approves, merges, or reviews anything for you. Tests passing is not your acceptance; a pull request is not production.</p>
+    <p id="founder-freshness" class="footer-note" aria-live="polite"></p>
+    <div id="founder-review"></div>
   </section>
 
   <section id="continuity">
@@ -640,6 +699,50 @@ function renderCheckpoints(timeline) {
   document.querySelector("#checkpoints").innerHTML = `<p><strong>Current phase:</strong> ${escapeHtml(timeline.currentPhase)}</p><table><thead><tr><th>Status</th><th>Checkpoint</th></tr></thead><tbody>${rows || "<tr><td colspan='2'>No current checkpoints found.</td></tr>"}</tbody></table>`;
 }
 
+function label(labels, key) {
+  return labels && Object.prototype.hasOwnProperty.call(labels, key) ? labels[key] : key;
+}
+
+function stateTag(labels, state) {
+  return `<span class="state-tag">${escapeHtml(label(labels.states, state))}</span>`;
+}
+
+function safeLink(url, text) {
+  return /^https:\/\/github\.com\//.test(String(url || "")) ? `<a href="${escapeHtml(url)}" rel="noopener noreferrer">${escapeHtml(text)}</a>` : "";
+}
+
+function lens(title, count, body) {
+  return `<details class="lens"><summary>${escapeHtml(title)} (${count})</summary>${body}</details>`;
+}
+
+function renderFounderReview(board) {
+  const lenses = board.lenses;
+  const labels = board.labels || {};
+  const next = lenses.fundamentals.nextStep;
+  const basics = (lenses.fundamentals.basics || []).map(basic => `<li>${escapeHtml(basic)}</li>`).join("");
+  const nextStep = `<article class="next-step"><p class="label">Fundamentals · your one next step</p><h3>${escapeHtml(next.title)}</h3><p>${escapeHtml(next.why)}</p><p><strong>How:</strong> ${escapeHtml(next.how)} ${safeLink(next.link, "Open it on GitHub")}</p>${basics ? `<ul>${basics}</ul>` : ""}</article>`;
+  const prs = lenses.inReview.map(pr => {
+    const checklist = pr.checklist.map(step => `<li>${step.owner === "founder" ? "You" : "Automated check"}: ${escapeHtml(step.item)} — <span class="${step.status === "pending" ? "attention" : "ready"}">${escapeHtml(label(labels.checklistStatuses, step.status))}</span></li>`).join("");
+    const dependencies = pr.dependencies.length ? `<p><strong>Depends on / overlaps:</strong></p><ul>${pr.dependencies.map(dependency => `<li>${escapeHtml(dependency)}</li>`).join("")}</ul>` : "";
+    return `<details class="lens"><summary>#${escapeHtml(pr.pr)} ${escapeHtml(pr.title)}</summary><p>${stateTag(labels, pr.state)}${pr.draft ? '<span class="state-tag">Draft</span>' : ""}<span class="state-tag">Your confirmation: ${escapeHtml(pr.founderConfirmation.state)}</span></p><p><strong>Next:</strong> ${escapeHtml(pr.nextStep)}</p><p class="muted">${escapeHtml(label(labels.ciObservations, pr.ciObservation))} · GitHub merge state: ${escapeHtml(pr.observedMergeState)} · ${escapeHtml(pr.headBranch)} · observed ${escapeHtml(pr.observedAt)} ${safeLink(pr.ciEvidence, "CI run")} ${safeLink(pr.url, "Pull request")}</p><p class="muted">Where this comes from: ${escapeHtml(pr.provenance)}</p>${dependencies}<p><strong>Review checklist</strong> (you confirm your own steps on GitHub):</p><ul>${checklist}</ul></details>`;
+  }).join("");
+  const decisions = lenses.needsFounderDecision.map(decision => `<div class="lens"><p>${stateTag(labels, decision.state)}<strong>${escapeHtml(decision.title)}</strong></p><p>${escapeHtml(decision.question)}</p><ul>${decision.options.map(option => `<li>${escapeHtml(option)}</li>`).join("")}</ul><p><strong>If you do not decide yet:</strong> ${escapeHtml(decision.ifNoDecision)}</p><p><strong>Next:</strong> ${escapeHtml(decision.nextStep)}</p><p class="muted">Where this comes from: ${escapeHtml(decision.provenance)}</p></div>`).join("");
+  const later = lenses.later.map(item => `<li>${stateTag(labels, item.state)}<strong>${escapeHtml(item.title)}</strong> — ${escapeHtml(item.nextStep)} <span class="muted">(${escapeHtml(item.provenance)})</span></li>`).join("");
+  document.querySelector("#founder-review").innerHTML = nextStep
+    + lens("In review — pull requests", lenses.inReview.length, prs || "<p class='muted'>Nothing in review.</p>")
+    + lens("Needs your decision", lenses.needsFounderDecision.length, decisions || "<p class='muted'>No open decisions.</p>")
+    + lens("Later — possibilities, parked", lenses.later.length, later ? `<p class="muted">Kept visible so nothing is lost, but nothing here needs you now.</p><ul>${later}</ul>` : "<p class='muted'>Nothing parked.</p>");
+  document.querySelector("#founder-freshness").textContent = `${board.freshness.label} Source: ${board.source.method}`;
+}
+
+async function refreshFounderReview() {
+  try {
+    renderFounderReview(await request("/api/command-center/founder-review"));
+  } catch (error) {
+    document.querySelector("#founder-freshness").textContent = `Founder pace view unavailable: ${error.message}`;
+  }
+}
+
 function renderTree(reports, tasks, runs, governance) {
   const assigned = new Set();
   const agents = reports.map(report => {
@@ -700,9 +803,13 @@ async function refresh() {
   document.querySelector("#updated").textContent = `Last refreshed: ${new Date().toLocaleString()}`;
 }
 
-document.querySelector("#refresh").addEventListener("click", () => refresh().catch(error => {
-  document.querySelector("#updated").textContent = error.message;
-}));
+document.querySelector("#refresh").addEventListener("click", () => {
+  refreshFounderReview();
+  refresh().catch(error => {
+    document.querySelector("#updated").textContent = error.message;
+  });
+});
+refreshFounderReview();
 refresh().catch(error => {
   document.querySelector("#updated").textContent = error.message;
 });

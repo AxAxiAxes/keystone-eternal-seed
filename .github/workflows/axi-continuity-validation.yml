@@ -130,3 +130,17 @@ jobs:
           echo "Copilot workflow completed for branch: ${{ github.event.workflow_run.head_branch }}"
           echo "Result: ${{ github.event.workflow_run.conclusion }}"
           echo "If CI push/pull_request runs remain action_required, this is controlled by repository/org approval policy."
+
+  founder-review-board:
+    name: Founder review board (advisory summary)
+    if: ${{ github.event_name != 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+      # Validates repository data and writes a read-only step summary. It never
+      # approves, merges, comments on, or confirms anything for the founder.
+      - run: node apps/axiom-freedom/founder-review-board.js --summary >> "$GITHUB_STEP_SUMMARY"

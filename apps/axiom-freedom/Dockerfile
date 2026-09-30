@@ -7,6 +7,7 @@ COPY apps/axiom-freedom/package-lock.json ./
 RUN npm ci --omit=dev
 
 COPY apps/axiom-freedom/server.js ./
+COPY apps/axiom-freedom/founder-review-board.js ./
 COPY apps/axiom-freedom/index.html ./
 COPY apps/axiom-freedom/axescontracting.html ./
 COPY apps/axiom-freedom/library.html ./

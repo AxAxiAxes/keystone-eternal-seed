@@ -18,6 +18,7 @@ It runs automatically for pushes to `axaxiaxes-axes-directory-data-model` and
 | AXI.Core tests | `dotnet test AXIOM.sln --configuration Release` | AXI.Core library and tests |
 | Engine image | Build and start `apps/axiom-engine/Dockerfile`; query private `/health` | Production engine image and imported runtime modules |
 | Portal image | Build and start `apps/axiom-freedom/Dockerfile`; query `/health` and `/origin-continuity` | Production portal image, including required public and protected-view assets |
+| Founder review board (advisory summary) | `node apps/axiom-freedom/founder-review-board.js --summary` writes a read-only step summary; fails only if `docs/founder-review/founder-review-board.v1.json` breaks its boundary rules | Command Center founder pace data; see [FOUNDER_REVIEW_COMMAND_CENTER.md](FOUNDER_REVIEW_COMMAND_CENTER.md) |
 
 The workflow has `contents: read` permission only. It does not receive
 deployment credentials, access production data, contact third parties, enable
