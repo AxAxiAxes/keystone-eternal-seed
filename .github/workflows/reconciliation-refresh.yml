@@ -1,0 +1,67 @@
+name: Reconciliation refresh
+
+# Weekly, review-only refresh of the repository reconciliation reports.
+# Reads pull-request metadata (read-only API call), regenerates
+# docs/reconciliation/, runs the generator tests, and opens a pull request
+# for founder review. It never merges, deploys, or changes other files.
+# Requires the repository setting "Allow GitHub Actions to create and
+# approve pull requests" for the final step.
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: reconciliation-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Refresh reconciliation reports
+    if: ${{ github.repository == 'AxAxiAxes/keystone-eternal-seed' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+      - name: Refresh PR snapshot (read-only API)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node scripts/reconciliation/refresh-pr-snapshot.js
+      - name: Regenerate reports
+        run: node scripts/reconciliation/generate-reconciliation-report.js
+      - name: Validate
+        run: |
+          node --test scripts/reconciliation/test/generate-reconciliation-report.test.js
+          node scripts/reconciliation/generate-reconciliation-report.js --check --strict
+      - name: Open review pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_BRANCH: ${{ github.ref_name }}
+        run: |
+          if git diff --quiet -- docs/reconciliation; then
+            echo "Reconciliation reports already current; no pull request needed."
+            exit 0
+          fi
+          branch="automation/reconciliation-refresh-$(date -u +%Y-%m-%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add docs/reconciliation
+          git commit -m "Refresh reconciliation reports ($(date -u +%Y-%m-%d))"
+          git push origin "$branch"
+          gh pr create \
+            --base "$BASE_BRANCH" \
+            --head "$branch" \
+            --title "Reconciliation refresh $(date -u +%Y-%m-%d)" \
+            --body "Automated weekly reconciliation refresh: PR snapshot re-read from the GitHub API and all reports in docs/reconciliation/ regenerated. Review DIRECTIVES_ROADMAP_AND_ETA.md for overdue steps, merged-PR findings, and the review queue. Founder review and merge required; this workflow never merges."

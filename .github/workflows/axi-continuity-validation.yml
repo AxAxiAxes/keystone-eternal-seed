@@ -78,6 +78,19 @@ jobs:
           node-version: 20
       - run: node --test
 
+  reconciliation-report-validation:
+    name: Reconciliation report validation
+    if: ${{ github.event_name != 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+      - run: node --test scripts/reconciliation/test/generate-reconciliation-report.test.js
+      - run: node scripts/reconciliation/generate-reconciliation-report.js --check
+
   engine-image:
     name: AXIOM engine image
     if: ${{ github.event_name != 'workflow_run' }}
