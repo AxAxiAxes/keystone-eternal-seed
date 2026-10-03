@@ -155,6 +155,7 @@ function compareStrings(a, b) {
 function md(value) {
   return String(value === undefined || value === null ? "" : value)
     .replace(/\s+/g, " ")
+    .replace(/\\/g, "\\\\")
     .replace(/\|/g, "\\|")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
