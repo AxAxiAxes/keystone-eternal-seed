@@ -66,9 +66,13 @@ plus the existing portal UI, routes, tests, Dockerfiles, and CI workflow.
   and rejection of POST, PUT, PATCH, and DELETE. Browser-tool transport was
   unavailable; no visual browser verification is claimed.
 - GitHub Actions
-  [run 37089124409](https://github.com/AxAxiAxes/keystone-eternal-seed/actions/runs/37089124409)
+  [run 37089712473](https://github.com/AxAxiAxes/keystone-eternal-seed/actions/runs/37089712473)
   was `action_required`; its failed-job query returned no jobs. Hosted CI
   approval remains an authorized human action, not a test failure or local proof.
+- The automated code-review binary was unavailable; a read-only specialist
+  reviewed the committed changes and found no significant issues. An initial
+  CodeQL warning concerned the test-only script extractor; it was made
+  case-insensitive, and all five focused tests still passed.
 - No runtime scheduler, deployment, domain, DNS, provider, mailbox, financial
   account, or external service was enabled or changed. Scheduled reconciliation
   remains a recommendation pending review/integration of the open PRs.

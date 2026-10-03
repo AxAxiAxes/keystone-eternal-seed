@@ -108,7 +108,7 @@ test("fails closed on missing or malformed source and missing evidence or approv
 
 test("Command Center renders empty, approved, draft, and escaped ledger records", () => {
   const markup = fs.readFileSync(path.resolve(__dirname, "../command-center.html"), "utf8");
-  const script = markup.match(/<script>([\s\S]*?)<\/script>/)[1];
+  const script = markup.match(/<script>([\s\S]*?)<\/script>/i)[1];
   const nodes = new Map();
   const context = vm.createContext({
     document: {
