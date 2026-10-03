@@ -301,6 +301,33 @@ test("forwards valid commands to the AXIOM engine", async (t) => {
     assert.match(commandCenterMarkup, /Paperwork, workspace, and accountability/);
     assert.match(commandCenterMarkup, /\/library\/docs\/axes-os-command-center\/INDEX\.md/);
     assert.match(commandCenterMarkup, /api\/command-center\/checkpoints/);
+    assert.match(commandCenterMarkup, /Accounting-balance ledger/);
+    assert.match(commandCenterMarkup, /not a financial instrument or external accounting system/);
+    assert.match(commandCenterMarkup, /KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN\.md/);
+    assert.match(commandCenterMarkup, /api\/command-center\/accounting-balances/);
+
+    const ledgerUrl = `http://127.0.0.1:${webPort}/api/command-center/accounting-balances`;
+    assert.equal((await fetch(ledgerUrl)).status, 401);
+    const ledgerResponse = await fetch(ledgerUrl, {
+      headers: { Authorization: authorization }
+    });
+    assert.equal(ledgerResponse.status, 200);
+    assert.equal(ledgerResponse.headers.get("cache-control"), "no-store");
+    assert.deepEqual(await ledgerResponse.json(), require("../accounting-balances").readLedger());
+    assert.equal((await fetch(ledgerUrl, {
+      method: "POST",
+      headers: { Authorization: authorization }
+    })).status, 405);
+    for (const name of ["accounting-balances.json", "PROJECT_BUDGET.md",
+      "KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md"]) {
+      const documentUrl = `http://127.0.0.1:${webPort}/library/docs/${name}`;
+      assert.equal((await fetch(documentUrl)).status, 401);
+      const documentResponse = await fetch(documentUrl, {
+        headers: { Authorization: authorization }
+      });
+      assert.equal(documentResponse.status, 200);
+      assert.equal(documentResponse.headers.get("cache-control"), "no-store");
+    }
 
     const commandCenterWithTrailingSlash = await fetch(
       `http://127.0.0.1:${webPort}/command-center/`,

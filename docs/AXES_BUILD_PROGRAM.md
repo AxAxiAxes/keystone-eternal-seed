@@ -236,6 +236,14 @@ of it.
 
 ## Current next action
 
+For repository-only sequencing, use the
+[prioritized Tier 1 action plan](KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md#prioritized-repository-action-plan):
+daily drafts → deterministic reconciliation → workflow continuity → bounded
+origin/registry checks → reviewed task records and the Command Center
+[Accounting-balance ledger](PROJECT_BUDGET.md#accounting-balance-ledger--command-center).
+Open PR references remain proposals until reviewed and integrated. This internal
+plan does not supersede the external human-controlled actions below.
+
 1. Contact qualified financial-services and digital-asset counsel before
    resuming crypto registration or designing financial-market functionality for
    URNUR.

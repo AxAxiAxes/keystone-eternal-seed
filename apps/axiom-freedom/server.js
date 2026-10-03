@@ -2,6 +2,7 @@ const http = require('http');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const { readLedger } = require('./accounting-balances');
 
 const port = Number(process.env.AXIOM_PORT || 8080);
 const host = '0.0.0.0';
@@ -16,6 +17,11 @@ const PROJECT_TIMELINE_FILE = fs.existsSync(path.join(__dirname, 'PROJECT_TIMELI
 const PUBLIC_DOCUMENTS = new Set([
     'AXES_BUSINESS_PLAN.md',
     'ENGINE_INTEGRATION.md'
+]);
+const COMMAND_CENTER_DOCUMENTS = new Set([
+    'PROJECT_BUDGET.md',
+    'KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md',
+    'accounting-balances.json'
 ]);
 const AXIOM_ENGINE_URL = new URL(process.env.AXIOM_ENGINE_URL || 'http://127.0.0.1:3000');
 // apps/axiom-engine now requires admin credentials on every state-mutating
@@ -780,6 +786,19 @@ const server = http.createServer(async (req, res) => {
           return;
     }
     if (pathname.startsWith('/library/')) {
+          const documentName = pathname.slice('/library/docs/'.length);
+          if (pathname.startsWith('/library/docs/') && COMMAND_CENTER_DOCUMENTS.has(documentName)) {
+                  if (!requireAdmin(req, res)) return;
+                  if (req.method !== 'GET') {
+                          res.writeHead(405, { 'Allow': 'GET' });
+                          res.end();
+                          return;
+                  }
+                  res.setHeader('Cache-Control', 'no-store');
+                  serveFile(res, path.join(DOCUMENTS_DIRECTORY, documentName),
+                      documentName.endsWith('.json') ? 'application/json' : 'text/plain; charset=utf-8');
+                  return;
+          }
           serveDocument(res, pathname);
           return;
     }
@@ -1098,6 +1117,23 @@ const server = http.createServer(async (req, res) => {
                       res.end(JSON.stringify({ error: 'AXIOM automation service is unavailable' }));
               }
               return;
+    }
+    if (pathname === '/api/command-center/accounting-balances') {
+          if (!requireAdmin(req, res)) return;
+          if (req.method !== 'GET') {
+                  res.writeHead(405, { 'Allow': 'GET' });
+                  res.end();
+                  return;
+          }
+          try {
+                  const ledger = readLedger();
+                  res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+                  res.end(JSON.stringify(ledger));
+          } catch (error) {
+                  res.writeHead(500, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+                  res.end(JSON.stringify({ error: 'Accounting-balance ledger is unavailable; review repository records.' }));
+          }
+          return;
     }
     if (pathname === '/api/command-center/checkpoints' && req.method === 'GET') {
           if (!requireAdmin(req, res)) return;
