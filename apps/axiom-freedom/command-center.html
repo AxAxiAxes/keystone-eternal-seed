@@ -488,7 +488,7 @@
       <div class="topbar-meta">
         <span class="chip"><span class="chip-dot" aria-hidden="true"></span>Private operator surface</span>
         <span>AXES OS portfolio framing</span>
-        <span>Routes, auth, and engine calls unchanged</span>
+        <span>Read-only records · protected access</span>
       </div>
     </div>
   </header>
@@ -532,6 +532,7 @@
       <a class="nav-card" href="#signals"><strong>Signals</strong><span>Recorded metrics for agents, tasks, runs, and governance.</span></a>
       <a class="nav-card" href="#tree-section"><strong>Continuity tree</strong><span>AXI root, governance, agents, tasks, and latest runs.</span></a>
       <a class="nav-card" href="#records"><strong>Paperwork & links</strong><span>Workspace, accountability, support, and document index access.</span></a>
+      <a class="nav-card" href="#accounting-balances"><strong>Accounting-balance ledger</strong><span>Approved internal balances and separate draft changes.</span></a>
     </nav>
 
     <p class="notice">The protected Command Center is intended to serve at the root of axescontracting.com once authorized Railway and DNS work is completed. This page is repository-controlled UI work only; it does not prove that external domain connection is live.</p>
@@ -571,6 +572,19 @@
     <div id="tree" aria-live="polite"></div>
   </section>
 
+  <section id="accounting-balances">
+    <div class="section-head">
+      <div>
+        <p class="subhead">Human-reviewed internal recordkeeping</p>
+        <h2>Accounting-balance ledger</h2>
+      </div>
+    </div>
+    <p class="note">Read-only repository records, not a financial instrument or external accounting system. Approved balances are sums of reviewed entries, not verified bank balances. Draft changes never affect approved balances; currencies are never combined. No payments, transfers, account connections, or spending authority.</p>
+    <p class="note">Do not enter private financial, invoice, account, customer, payment, credential, or personal data. Protected UI access does not make committed repository data private.</p>
+    <p><a href="/library/docs/PROJECT_BUDGET.md">Ledger schema and human approval process</a> · <a href="/library/docs/accounting-balances.json">Canonical ledger source</a></p>
+    <div id="ledger" aria-live="polite">Loading Accounting-balance ledger…</div>
+  </section>
+
   <section id="records">
     <div class="section-head">
       <div>
@@ -597,6 +611,7 @@
           <li><a href="/library/docs/axes-os-command-center/INDEX.md">AXES OS Command Center index</a></li>
           <li><a href="/library/PROJECT_TIMELINE.md">Project timeline</a></li>
           <li><a href="/library/docs/AXES_PLATFORM_PLAN.md">AXES platform plan</a></li>
+          <li><a href="/library/docs/KEYSTONE_TIER_1_AUTOMATION_AND_INCOME_PLAN.md">Prioritized repository action plan</a> — deterministic reconciliation, continuity, origin validation, and internal recordkeeping.</li>
           <li><a href="/library/docs/RAILWAY_DEPLOYMENT.md">Railway deployment record</a></li>
         </ul>
       </article>
@@ -638,6 +653,20 @@ function updateClock() {
 function renderCheckpoints(timeline) {
   const rows = timeline.checkpoints.map(checkpoint => `<tr><td class="${checkpoint.status === "complete" ? "ready" : "attention"}">${escapeHtml(checkpoint.status)}</td><td>${escapeHtml(checkpoint.title)}</td></tr>`).join("");
   document.querySelector("#checkpoints").innerHTML = `<p><strong>Current phase:</strong> ${escapeHtml(timeline.currentPhase)}</p><table><thead><tr><th>Status</th><th>Checkpoint</th></tr></thead><tbody>${rows || "<tr><td colspan='2'>No current checkpoints found.</td></tr>"}</tbody></table>`;
+}
+
+function renderLedger(ledger) {
+  const balances = ledger.balances.map(account => `<tr><td>${escapeHtml(account.label)} (${escapeHtml(account.id)})</td><td>${escapeHtml(account.currency)}</td><td>${escapeHtml(account.approvedBalance)}</td><td>${escapeHtml(account.draftChange)}</td></tr>`).join("");
+  const entries = ledger.entries.map(entry => `<tr><td>${escapeHtml(entry.date)}<br>${escapeHtml(entry.id)}</td><td>${escapeHtml(entry.accountId)}</td><td>${escapeHtml(entry.amount)} ${escapeHtml(entry.currency)}</td><td>${escapeHtml(entry.description)}</td><td>${escapeHtml(entry.status)}</td><td>${escapeHtml(entry.evidenceRef)}<br>${escapeHtml(entry.approvalRef || "Human approval pending")}</td></tr>`).join("");
+  document.querySelector("#ledger").innerHTML = `<div style="overflow-x:auto"><table><caption>Recorded balances (two decimal places)</caption><thead><tr><th scope="col">Internal account</th><th scope="col">Currency label</th><th scope="col">Approved balance</th><th scope="col">Draft change (excluded)</th></tr></thead><tbody>${balances || "<tr><td colspan='4'>No accounts recorded; no actual balances are asserted.</td></tr>"}</tbody></table><table><caption>Accounting entries and review evidence</caption><thead><tr><th scope="col">Date / ID</th><th scope="col">Account</th><th scope="col">Signed amount</th><th scope="col">Description</th><th scope="col">Review status</th><th scope="col">Evidence / approval reference</th></tr></thead><tbody>${entries || "<tr><td colspan='6'>No accounting entries recorded.</td></tr>"}</tbody></table></div>`;
+}
+
+async function refreshLedger() {
+  try {
+    renderLedger(await request("/api/command-center/accounting-balances"));
+  } catch (error) {
+    document.querySelector("#ledger").textContent = error.message;
+  }
 }
 
 function renderTree(reports, tasks, runs, governance) {
@@ -700,10 +729,15 @@ async function refresh() {
   document.querySelector("#updated").textContent = `Last refreshed: ${new Date().toLocaleString()}`;
 }
 
-document.querySelector("#refresh").addEventListener("click", () => refresh().catch(error => {
+function refreshAll() {
+  refreshLedger();
+  return refresh();
+}
+
+document.querySelector("#refresh").addEventListener("click", () => refreshAll().catch(error => {
   document.querySelector("#updated").textContent = error.message;
 }));
-refresh().catch(error => {
+refreshAll().catch(error => {
   document.querySelector("#updated").textContent = error.message;
 });
 updateClock();

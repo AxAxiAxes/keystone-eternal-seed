@@ -50,6 +50,18 @@ jobs:
       - if: matrix.application == 'apps/axiom-freedom'
         run: npm ci --prefix ../axiom-engine
       - run: npm test
+      - name: Validate Accounting-balance ledger and summarize repository records
+        if: matrix.application == 'apps/axiom-freedom'
+        run: |
+          node accounting-balances.js
+          node accounting-balances.js --report > "$RUNNER_TEMP/accounting-balances.json"
+          {
+            echo '### Accounting-balance ledger — internal recordkeeping only'
+            echo 'Draft changes are excluded from approved balances. Human review is required.'
+            echo '```json'
+            cat "$RUNNER_TEMP/accounting-balances.json"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
   axi-core-tests:
     name: AXI.Core tests
