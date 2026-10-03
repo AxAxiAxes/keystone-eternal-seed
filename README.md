@@ -11,6 +11,9 @@ Copilot-branch CI monitoring and approval-gate operations are in
 [CI_CONTINUITY_RUNBOOK.md](docs/CI_CONTINUITY_RUNBOOK.md).
 Copilot directive-vs-delivery tracking is documented in
 [COPILOT_ACCOUNTABILITY_TRACKER.md](docs/COPILOT_ACCOUNTABILITY_TRACKER.md).
+The repeatable origin, ownership, governance, timeline, PR, and business-plan
+reconciliation reports, and the command that regenerates them, are in
+[docs/reconciliation/](docs/reconciliation/README.md).
 
 AXES's top-level governing principles, and an index of its more detailed
 constitutional and governance records, are in

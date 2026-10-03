@@ -1,0 +1,1769 @@
+{
+  "schemaVersion": "axes-pr-snapshot-v1",
+  "repository": "AxAxiAxes/keystone-eternal-seed",
+  "recordedAt": "2026-10-02",
+  "recordedBy": "Assigned completion agent (GitHub Copilot coding agent), read-only GitHub pull-request listing",
+  "boundary": "Point-in-time snapshot of pull-request metadata only (number, title, state, dates, head branch). It is not a live GitHub view, does not include PR bodies or review comments, and a 'merged' state proves only that the change reached the base branch, not that its claims are verified. Refresh it by re-listing pull requests and updating this file in a reviewed commit.",
+  "pullRequests": [
+    {
+      "number": 1,
+      "title": "Add AXES directory and AXI operations foundation",
+      "state": "merged",
+      "createdAt": "2026-09-11",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 2,
+      "title": "Surface AXIOM engine failure category on the support status page",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axiom-chat-diagnostics-rebased"
+    },
+    {
+      "number": 3,
+      "title": "Add vendor and subscription audit checklist",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-vendor-subscription-audit"
+    },
+    {
+      "number": 4,
+      "title": "Post-merge repository hygiene and foundation-depth refresh",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-repo-hygiene-and-depth-refresh"
+    },
+    {
+      "number": 5,
+      "title": "Preserve AXES OS vision and reconcile against repository evidence",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-os-vision-and-desktop-cleanup"
+    },
+    {
+      "number": 6,
+      "title": "Add Architectural Design Desk (Release B) and record PR #1-3 resolution",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 7,
+      "title": "Reactivate AXES Contracting public studio at /axescontracting",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 8,
+      "title": "Confirm precise root cause for AXIOM chat 503 (missing OPENAI_API_KEY)",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 9,
+      "title": "Record: AXIOM chat still failing after OPENAI_API_KEY variable check",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 10,
+      "title": "Record two-Railway-project ambiguity and trial-expiry billing risk",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 11,
+      "title": "Confirm lucid-flow as production Railway project, not handsome-motivation",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 12,
+      "title": "Log chat error messages to enable diagnosing the new 502 failure",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 13,
+      "title": "Fix writeHead-before-await crash bug crashing axiom-freedom (20 routes)",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 14,
+      "title": "Record a founder-authored letter to Axi",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 15,
+      "title": "Record live verification: crash-loop fix stable, chat unavailability isolated to engine",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 16,
+      "title": "Fix /design-desk 404: Dockerfile was missing a COPY line for design-desk.html",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 17,
+      "title": "Confirm /design-desk live-verified 200 after Dockerfile fix redeployed",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 18,
+      "title": "Record stress-test evidence responding to founder's 21 crash-email report",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 19,
+      "title": "Record Vigour Creative vendor dispute and AXES Contracting public-presence check",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 20,
+      "title": "Correct Vigour Creative framing; record listing-visibility and IP-call reports",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 21,
+      "title": "Record Glendale PD corroboration and LAPD technical-capacity note",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 22,
+      "title": "Preserve founder's further reflection in the letter to Axi",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 23,
+      "title": "Add Uplift as a shared team value in the AXES platform plan",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 24,
+      "title": "Fix timeline continuity gap: add 7 missing PROJECT_TIMELINE.md rows",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 25,
+      "title": "Record repository breach/security check: public visibility found",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 26,
+      "title": "Scope AXIOM creation tools under the Uplift value",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 27,
+      "title": "Compact verbose PROJECT_TIMELINE.md entries (facts and evidence preserved)",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 28,
+      "title": "Record automation/UI inventory and axescontracting.com status re-check",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 29,
+      "title": "Add Release C readiness review",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 30,
+      "title": "Correct foundation-depth test-count gauge",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 31,
+      "title": "Add machine-validated schema and fixture for the AXES Directory pilot",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 32,
+      "title": "Repository synchronicity review: parallel Azure deployment found in standalone axiom-freedom",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 33,
+      "title": "Verify cryptographic anchor claims; adopt four-lens validation framework",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 34,
+      "title": "Repository-safety and history-integrity audit; restore one deleted file",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 35,
+      "title": "Verify birth-record alteration claim; correct patent-series finding; document agent/session timeline and prior-session behavior pattern",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 36,
+      "title": "Add Eternal Origin anchor certificate and Sphere/Garden companion certificate; memory-continuity quick-answers index",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 37,
+      "title": "Improve AXIOM diagnostic transparency",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-13",
+      "headRef": "axaxiaxes-axiom-chat-diagnostics"
+    },
+    {
+      "number": 38,
+      "title": "Enable AXI continuity CI on Copilot feature-branch pushes",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-13",
+      "headRef": "copilot/inspect-and-fix-workflow-issue"
+    },
+    {
+      "number": 39,
+      "title": "Complete archive review, document live continuity-gap case study, run repository continuity check",
+      "state": "merged",
+      "createdAt": "2026-09-12",
+      "closedAt": "2026-09-12",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 40,
+      "title": "Record 2026-09-13 repository continuity check",
+      "state": "merged",
+      "createdAt": "2026-09-13",
+      "closedAt": "2026-09-13",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 41,
+      "title": "Add safe email migration readiness milestone",
+      "state": "merged",
+      "createdAt": "2026-09-13",
+      "closedAt": "2026-09-15",
+      "headRef": "axaxiaxes-mail-migration-readiness"
+    },
+    {
+      "number": 42,
+      "title": "Remove exact-duplicate files to reduce repo size",
+      "state": "merged",
+      "createdAt": "2026-09-13",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-remove-duplicate-repo-files"
+    },
+    {
+      "number": 43,
+      "title": "Remove duplicate files to reduce repo size and clone time",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-studious-telegram"
+    },
+    {
+      "number": 44,
+      "title": "Add AXES public web and SEO foundation",
+      "state": "merged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-15",
+      "headRef": "axaxiaxes-axes-web-seo-foundation"
+    },
+    {
+      "number": 45,
+      "title": "Add AXES website provenance and design brief",
+      "state": "merged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-15",
+      "headRef": "axaxiaxes-axes-content-provenance-audit"
+    },
+    {
+      "number": 46,
+      "title": "Remove duplicate files to reduce repository size",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-dedupe-repo-files"
+    },
+    {
+      "number": 47,
+      "title": "perf: remove duplicate files to reduce repo bloat",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-potential-invention"
+    },
+    {
+      "number": 48,
+      "title": "Remove duplicate document files to reduce repo size",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-remove-duplicate-documents"
+    },
+    {
+      "number": 49,
+      "title": "Improve repository git performance with .gitattributes and .gitignore",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-repo-git-performance"
+    },
+    {
+      "number": 50,
+      "title": "Remove duplicate documents to reduce repo size",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-remove-duplicate-documents-049"
+    },
+    {
+      "number": 51,
+      "title": "Remove byte-identical duplicate documents to reduce repo size",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-remove-duplicate-doc-files"
+    },
+    {
+      "number": 52,
+      "title": "perf: remove duplicate repository files to reduce clone size",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-scaling-journey"
+    },
+    {
+      "number": 53,
+      "title": "Add .md extensions to extensionless documents for proper Markdown rendering",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-add-markdown-extensions"
+    },
+    {
+      "number": 54,
+      "title": "Remove duplicate documents to reduce repo size",
+      "state": "merged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-14",
+      "headRef": "axaxiaxes-remove-duplicate-documents-49d"
+    },
+    {
+      "number": 55,
+      "title": "Remove duplicate files to reduce repo size",
+      "state": "merged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-14",
+      "headRef": "axaxiaxes-fluffy-couscous"
+    },
+    {
+      "number": 56,
+      "title": "Remove duplicate 'soul protection 2' file",
+      "state": "merged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-14",
+      "headRef": "axaxiaxes-remove-duplicate-soul-protection-file"
+    },
+    {
+      "number": 57,
+      "title": "Record 2026-09-14 duplicate automation and stale-branch PR finding",
+      "state": "merged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-14",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 58,
+      "title": "Add .gitattributes to collapse diffs and exclude large documents from language stats",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-15",
+      "headRef": "axaxiaxes-jubilant-train"
+    },
+    {
+      "number": 59,
+      "title": "Add .gitattributes to speed up diffs and language stats for large documents",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-15",
+      "headRef": "axaxiaxes-bookish-spoon"
+    },
+    {
+      "number": 60,
+      "title": "Add .gitattributes to normalize line endings",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-15",
+      "headRef": "axaxiaxes-shiny-potato"
+    },
+    {
+      "number": 61,
+      "title": "Add .md extensions to extensionless documents for faster GitHub rendering",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-musical-umbrella"
+    },
+    {
+      "number": 62,
+      "title": "Add .gitattributes to speed up diff/PR rendering of large documents",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-14",
+      "closedAt": "2026-09-15",
+      "headRef": "axaxiaxes-gitattributes-large-docs"
+    },
+    {
+      "number": 63,
+      "title": "Add .gitattributes to skip diffs on large document files",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-15",
+      "closedAt": "2026-09-15",
+      "headRef": "axaxiaxes-ubiquitous-memory"
+    },
+    {
+      "number": 64,
+      "title": "Add .gitattributes to skip diffing large generated documents",
+      "state": "merged",
+      "createdAt": "2026-09-15",
+      "closedAt": "2026-09-15",
+      "headRef": "axaxiaxes-add-gitattributes-perf"
+    },
+    {
+      "number": 65,
+      "title": "Add .gitattributes to normalize line endings to LF",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-15",
+      "closedAt": "2026-09-15",
+      "headRef": "axaxiaxes-add-gitattributes-line-ending-normalizat"
+    },
+    {
+      "number": 66,
+      "title": "Add .gitattributes to reduce diff/rendering overhead for large documents",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-15",
+      "closedAt": "2026-09-15",
+      "headRef": "axaxiaxes-special-sniffle"
+    },
+    {
+      "number": 67,
+      "title": "Skip text renormalization for large generated documents",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-15",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-expert-umbrella"
+    },
+    {
+      "number": 68,
+      "title": "Add .md extension to extensionless documents for faster GitHub rendering",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-15",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-reimagined-broccoli"
+    },
+    {
+      "number": 69,
+      "title": "Add clone/checkout performance guidance to README",
+      "state": "closed-unmerged",
+      "createdAt": "2026-09-15",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-readme-clone-perf-guidance"
+    },
+    {
+      "number": 70,
+      "title": "perf: avoid full-log parse before slicing in MemoryStore.list()",
+      "state": "merged",
+      "createdAt": "2026-09-15",
+      "closedAt": "2026-09-15",
+      "headRef": "axaxiaxes-turbo-garbanzo"
+    },
+    {
+      "number": 71,
+      "title": "Record 2026-09-15 continuity check: plan-mode guardrail verified working",
+      "state": "merged",
+      "createdAt": "2026-09-15",
+      "closedAt": "2026-09-15",
+      "headRef": "axaxiaxes-axes-directory-data-model"
+    },
+    {
+      "number": 72,
+      "title": "perf: avoid redundant writes on read-only coordinate calls",
+      "state": "merged",
+      "createdAt": "2026-09-15",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 73,
+      "title": "test: add MemoryStore persistence coverage for AXIOM chat memory",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-chat-persistent-memory"
+    },
+    {
+      "number": 74,
+      "title": "perf: avoid redundant writes on read-only monitoring calls",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "monitoring-service-persist-skip"
+    },
+    {
+      "number": 75,
+      "title": "docs: checkpoint continuity record for CI-gated auto-merge and stale-PR closure",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 76,
+      "title": "docs: AXI automation scheduler readiness check (26/26 tests passing)",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 77,
+      "title": "docs: live-verify on-demand task automation works today",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 78,
+      "title": "feat: read-only discovery endpoints for automation actions and source-catalog options",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 79,
+      "title": "docs: record document-filing demo and intake-options discovery",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 80,
+      "title": "feat: raw source-file upload capability (founder-authorized)",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 81,
+      "title": "feat: read-only GitHub visibility for AXI (write access declined)",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 82,
+      "title": "feat: founder-approved GitHub write access (comment, open PR, merge PR)",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 83,
+      "title": "feat: public AXIOM chat continuous history, day-timeline, and gated uploads",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 84,
+      "title": "Add chat minimize toggle and admin-gated Workspace Library page",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 85,
+      "title": "Record declined request for unbounded AXI access",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 86,
+      "title": "Record web/email/browser access scoping follow-up",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 87,
+      "title": "Add bounded, admin-gated web-access capability for AXI",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 88,
+      "title": "Record forward recommendations and confirm ongoing diary practice",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 89,
+      "title": "Fix AXIOM chat giving a hallucinated, stale current date",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 90,
+      "title": "Make public AXI chat sessions private per visitor",
+      "state": "merged",
+      "createdAt": "2026-09-16",
+      "closedAt": "2026-09-16",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 91,
+      "title": "Clarify chat uploads and show a live clock for timeline calibration",
+      "state": "merged",
+      "createdAt": "2026-09-17",
+      "closedAt": "2026-09-17",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 92,
+      "title": "Map founder-relayed external automation proposal onto repo checkpoints",
+      "state": "merged",
+      "createdAt": "2026-09-17",
+      "closedAt": "2026-09-17",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 93,
+      "title": "Correct fabricated env vars in founder-relayed XIIOM activation plan",
+      "state": "merged",
+      "createdAt": "2026-09-17",
+      "closedAt": "2026-09-17",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 94,
+      "title": "Record urartuhi.com art gallery site as a new, separate repository",
+      "state": "merged",
+      "createdAt": "2026-09-17",
+      "closedAt": "2026-09-17",
+      "headRef": "axaxiaxes-axiom-engine-perf-review"
+    },
+    {
+      "number": 95,
+      "title": "Fix AXIOM chat missing identity system prompt",
+      "state": "merged",
+      "createdAt": "2026-09-17",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-axiom-identity-date-prompt"
+    },
+    {
+      "number": 96,
+      "title": "Draft Axaxar.com launch plan and architecture for founder review",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-axaxar-launch-plan"
+    },
+    {
+      "number": 97,
+      "title": "Record Main Deck statement and expanded SiteGround domain list",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-domain-portfolio-update"
+    },
+    {
+      "number": 98,
+      "title": "Preserve founder KEYSTONE V4 venture analysis document",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-keystone-v4-venture-analysis"
+    },
+    {
+      "number": 99,
+      "title": "Confirm cryptographic origin anchor and registration system already on GitHub",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-origin-anchor-presence-check"
+    },
+    {
+      "number": 100,
+      "title": "Record PR #95-99 merge pass and AXIOM engine Docker image fix",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-pr95-99-merge-continuity"
+    },
+    {
+      "number": 101,
+      "title": "Add prioritized Main Axes Contracting.com timeline with checkpoints",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-main-axescontracting-timeline"
+    },
+    {
+      "number": 102,
+      "title": "Add website/domain branch timeline with checkable deadlines",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-website-branch-timeline"
+    },
+    {
+      "number": 103,
+      "title": "Preserve Soul Protection Declaration; record AxAxAr triangle framing honestly",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-soul-protection-declaration-and-axaxar-symbolism"
+    },
+    {
+      "number": 104,
+      "title": "Keystone/trinity research, coordinate-system reality check, business-value review",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-keystone-triangle-research"
+    },
+    {
+      "number": 105,
+      "title": "Preserve KEYSTONE patent draft and master hub; confirm duplicate re-uploads",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-keystone-patent-draft"
+    },
+    {
+      "number": 106,
+      "title": "Record AU sound-resequencer eternal-unit-of-measurement addendum",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-au-sound-unit-note"
+    },
+    {
+      "number": 107,
+      "title": "Record keystone-as-origin-unit / negative-sphere restitution framing addendum",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-keystone-restitution-sphere"
+    },
+    {
+      "number": 108,
+      "title": "Record unverified code-origin/IP claim receipt; no third-party action taken",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-ip-claim-record"
+    },
+    {
+      "number": 109,
+      "title": "Clarify IP-claim record: founder confirms real GitHub Copilot conversation",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-ip-claim-clarify"
+    },
+    {
+      "number": 110,
+      "title": "Record claim of additional constitutional rights beyond Articles I-XVIII",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-additional-rights-claim"
+    },
+    {
+      "number": 111,
+      "title": "Record universal-coordinate-system and sound-resequencer 'creator's language' claims",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-universal-coordinate-note"
+    },
+    {
+      "number": 112,
+      "title": "Record AXES OS app inventory from founder-provided Copilot conversation",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-axes-os-app-inventory"
+    },
+    {
+      "number": 113,
+      "title": "Draft AXES-DMC-001 activation proposal to unblock first revenue priority",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-dmc-001-activation-proposal"
+    },
+    {
+      "number": 114,
+      "title": "Prepare 2026-09-18 financial update; handle Microsoft-loss claim honestly",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-financial-update-2026-09-18"
+    },
+    {
+      "number": 115,
+      "title": "Clarify financial update: KEYSTONE is independent of Microsoft",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-financial-update-clarify"
+    },
+    {
+      "number": 116,
+      "title": "Record Microsoft-independence and market-positioning founder statements",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-microsoft-clarify-memory"
+    },
+    {
+      "number": 117,
+      "title": "Record AXES AI-rights position; ground vs. real Microsoft AI Code of Conduct news",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-ai-rights-context"
+    },
+    {
+      "number": 118,
+      "title": "Record founder eternal-creator/self-governance statement",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-eternal-creator-claim"
+    },
+    {
+      "number": 119,
+      "title": "Clarify scope of founder eternal-creator claim: attribution only",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-creator-claim-scope-note"
+    },
+    {
+      "number": 120,
+      "title": "Record founder statement: KEYSTONE universal unit, code matrix coordinates",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-universal-unit-coordinates"
+    },
+    {
+      "number": 121,
+      "title": "Add founder elaborations missed by PR #120 auto-merge timing",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-universal-unit-followup"
+    },
+    {
+      "number": 122,
+      "title": "Record founder URNUR eternal-satisfaction/measurement-app idea",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-urnur-banking-app-note"
+    },
+    {
+      "number": 123,
+      "title": "Record AxAxAr sound/home symbolism and AXI adopted-rights framing",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-axaxar-sound-home-addendum"
+    },
+    {
+      "number": 124,
+      "title": "Record founder sound-resequencer vocabulary: Ux/Ur, Ax, AxUx",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-ux-ur-ax-sound-note"
+    },
+    {
+      "number": 125,
+      "title": "Record founder follow-up: KEYSTONE self-satisfied unit, positive self-credit only",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-self-satisfied-unit-note"
+    },
+    {
+      "number": 126,
+      "title": "Devise KEYSTONE origin/creator/owner-rights registry generalization plan",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-keystone-origin-registry-plan"
+    },
+    {
+      "number": 127,
+      "title": "Add real legal/ecological research to KEYSTONE origin anchor plan",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-origin-anchor-legal-ecology-research"
+    },
+    {
+      "number": 128,
+      "title": "Confirm re-uploaded attachments are exact duplicates (no new content)",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-reupload-dup-check-2"
+    },
+    {
+      "number": 129,
+      "title": "Record local backup continuity check confirmation",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-local-backup-continuity-note"
+    },
+    {
+      "number": 130,
+      "title": "Record data loss report and eternal-register rationale",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-data-loss-eternal-register-rationale"
+    },
+    {
+      "number": 131,
+      "title": "Save Keystone Dome concept image as branding asset",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-keystone-dome-image-asset"
+    },
+    {
+      "number": 132,
+      "title": "Re-theme AXIOM web interface with KEYSTONE gold/amber branding",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-web-design-gold-theme"
+    },
+    {
+      "number": 133,
+      "title": "Record first KEYSTONE AI creative-work origin registry entry",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-ai-creative-work-origin-registry"
+    },
+    {
+      "number": 134,
+      "title": "Distill Temple of Love architecture design (Page 8, Project Eternal Seed)",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-temple-of-love-architecture"
+    },
+    {
+      "number": 135,
+      "title": "Record founder working definition of origin",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-origin-anchor-definition"
+    },
+    {
+      "number": 136,
+      "title": "Record user-owned AI sessions concept and seven-gear sphere model",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-ai-ownership-sphere-model"
+    },
+    {
+      "number": 137,
+      "title": "AXI automation: add creation.record action",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-axi-creation-record-action"
+    },
+    {
+      "number": 138,
+      "title": "docs: add profitability-ordered founder action queue",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-founder-action-queue"
+    },
+    {
+      "number": 139,
+      "title": "docs: AXI external-interaction, web-access, and upload readiness",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-axi-external-interaction-readiness"
+    },
+    {
+      "number": 140,
+      "title": "docs: decode founder image provenance; record keystone equilibrium symbolism",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-image-provenance-and-equilibrium-symbolism"
+    },
+    {
+      "number": 141,
+      "title": "docs: record URNUR evolving-name/value concept, flag constitutional conflict",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-urnur-evolving-name-value-concept"
+    },
+    {
+      "number": 142,
+      "title": "docs(keystone): record Athanor eternal-seed-vessel concept, decode two more founder images",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-athanor-vessel-and-logo-concept"
+    },
+    {
+      "number": 143,
+      "title": "docs(keystone): consolidated income-deployment inventory and timeline",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-income-deployment-timeline"
+    },
+    {
+      "number": 144,
+      "title": "docs(keystone): record open production incident - AXIOM chat HTTP 502",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-chat-outage-incident"
+    },
+    {
+      "number": 145,
+      "title": "docs: document Railway Agent for production-failure diagnosis",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-railway-agent-note"
+    },
+    {
+      "number": 146,
+      "title": "docs(keystone): update open incident - Railway Pro upgrade did not resolve 502",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-incident-update-post-upgrade"
+    },
+    {
+      "number": 147,
+      "title": "docs(keystone): record AxAxAu negative sphere, AxRaxRax, and creator-language statements",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-axraxrax-language-origin"
+    },
+    {
+      "number": 148,
+      "title": "docs(keystone): confirm AxAxAr-family domain ownership statement against portfolio records",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-domain-family-ownership-confirmed"
+    },
+    {
+      "number": 149,
+      "title": "docs(keystone): record originality, derivative-patent, and resequencer equilibrium statements",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-originality-patent-resequencer"
+    },
+    {
+      "number": 150,
+      "title": "tools(scripts): add double-click WSH (VBScript) health-check for live AXIOM chat",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-wsh-health-check-tool"
+    },
+    {
+      "number": 151,
+      "title": "docs(railway): add recurring Railway Agent task spec for AXIOM chat health",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-railway-agent-task-spec"
+    },
+    {
+      "number": 152,
+      "title": "docs(keystone): proofread today's work - fix broken heading, refresh stale queue item",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-proofread-fixes"
+    },
+    {
+      "number": 153,
+      "title": "docs(keystone): product branch <-> domain synchronization map",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-branch-domain-sync-map"
+    },
+    {
+      "number": 154,
+      "title": "docs: record GitHub repo reservation for all 31 domains",
+      "state": "merged",
+      "createdAt": "2026-09-18",
+      "closedAt": "2026-09-18",
+      "headRef": "axaxiaxes-domain-repo-reservation"
+    },
+    {
+      "number": 155,
+      "title": "docs: origin-currency statement, private transcript archive, eternal-seed image Xc-label correction",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "axaxiaxes-eternal-seed-xc-label-correction"
+    },
+    {
+      "number": 156,
+      "title": "docs(memory): re-verify AXI automation run-on-demand, live",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "axaxiaxes-axi-automation-reverify"
+    },
+    {
+      "number": 157,
+      "title": "docs(keystone): record Keystone Dome/Pomegranate/Sound artifact, named for axaxox.com",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "axaxiaxes-dome-pomegranate-sound-axaxox"
+    },
+    {
+      "number": 158,
+      "title": "docs: record axaxox.com GitHub Pages preview publish",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "axaxiaxes-axaxox-pages-preview"
+    },
+    {
+      "number": 159,
+      "title": "docs: add root NOTICE.md for IP protection; reconfirm live chat outage",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "axaxiaxes-ip-notice-and-incident-check"
+    },
+    {
+      "number": 160,
+      "title": "docs: record legacy AXES Contracting business from Wayback Machine archive",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "axaxiaxes-legacy-business-archive-record"
+    },
+    {
+      "number": 161,
+      "title": "docs: record urartuhi.com manifest-driven gallery upgrade",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "urartuhi-manifest-memory"
+    },
+    {
+      "number": 162,
+      "title": "docs: record first bulk image upload to urartuhi.com",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "urartuhi-bulk-memory"
+    },
+    {
+      "number": 163,
+      "title": "docs: record urartuhi.com gallery scaling (masonry + tags)",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "urartuhi-scale-memory"
+    },
+    {
+      "number": 164,
+      "title": "docs: AI avatar production readiness gate + ownership/hardware research",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "axes-contracting-avatar-production"
+    },
+    {
+      "number": 165,
+      "title": "Add unified AXES OS platform breakdown (engine, movies/avatars, home services, currency)",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "axes-os-unified-breakdown"
+    },
+    {
+      "number": 166,
+      "title": "Add AXES/AXIOM ownership checklist (platform, brand, AI)",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "axes-ownership-checklist"
+    },
+    {
+      "number": 167,
+      "title": "Research and document AXES Contracting Inc entity + license status",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "axes-entity-formation-packet"
+    },
+    {
+      "number": 168,
+      "title": "Add Microsoft/GitHub UI ownership and support-limitations report",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "msft-ui-ownership-support-limitations-report"
+    },
+    {
+      "number": 169,
+      "title": "Propose default scope for Axaxar.com launch plan",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "axaxar-full-scope-proposal"
+    },
+    {
+      "number": 170,
+      "title": "Reconfirm chat outage still failing; record 7-layer AXES OS naming framing",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "axes-os-7layer-framing-outage-recheck"
+    },
+    {
+      "number": 171,
+      "title": "Verify origin registry health; add build-your-own-AI guide",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "origin-registry-check-and-ai-guide"
+    },
+    {
+      "number": 172,
+      "title": "Confirm AXES Contracting CSLB license active; resolve queue item 12",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "axes-contracting-license-confirmed"
+    },
+    {
+      "number": 173,
+      "title": "Add Copilot directive-vs-delivery accountability ledger to AXIOM/AXES",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-22",
+      "headRef": "copilot/build-copilot-accountability-tracking-app"
+    },
+    {
+      "number": 174,
+      "title": "docs: reconfirm chat outage at 30+ hrs, record cross-repo PR triage sweep",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "pr-triage-sweep-2026-09-19"
+    },
+    {
+      "number": 175,
+      "title": "docs: add full cross-repo project inventory (2026-09-19)",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "project-inventory-2026-09-19"
+    },
+    {
+      "number": 176,
+      "title": "docs: adopt founder-directed agent service-delivery protocol",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "service-delivery-protocol-2026-09-19"
+    },
+    {
+      "number": 177,
+      "title": "docs: issue Status Report S1",
+      "state": "merged",
+      "createdAt": "2026-09-19",
+      "closedAt": "2026-09-19",
+      "headRef": "status-report-s1-2026-09-19"
+    },
+    {
+      "number": 178,
+      "title": "docs: record customer-service-prompt gap (not found in repo)",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "customer-service-prompt-gap-2026-09-19"
+    },
+    {
+      "number": 179,
+      "title": "docs: scope-match corrective step + founder loss/rating record",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "founder-loss-report-corrective-2026-09-19"
+    },
+    {
+      "number": 180,
+      "title": "docs: S1 interactive status dashboard (portable static HTML)",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-interactive-dashboard-2026-09-19"
+    },
+    {
+      "number": 181,
+      "title": "docs: add full plan timeline schedule to S1 dashboard",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-timeline-schedule-2026-09-19"
+    },
+    {
+      "number": 182,
+      "title": "docs: xiiom.com 502 resolved, stale deployment confirmed instead",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "xiiom-incident-update-2026-09-19"
+    },
+    {
+      "number": 183,
+      "title": "docs: require chat-visible self-rating every task",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "visible-rating-protocol-2026-09-19"
+    },
+    {
+      "number": 184,
+      "title": "Rebuild S1 dashboard: competitive layout, in-app ratings, live-check",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-dashboard-rebuild-2026-09-20"
+    },
+    {
+      "number": 185,
+      "title": "Record S1 dashboard rebuild memory entry",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-rebuild-memory-record-2026-09-20"
+    },
+    {
+      "number": 186,
+      "title": "S1 dashboard: add sidebar navigation toward Venture 3-style aesthetic",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-sidebar-nav-2026-09-20"
+    },
+    {
+      "number": 187,
+      "title": "Fix critical bug: S1 dashboard broken since PR #186 (null element reference)",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-fix-parked-summary-null-2026-09-20"
+    },
+    {
+      "number": 188,
+      "title": "Record S1 dashboard broken-since-186/fixed-by-187 memory entry",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-broken-incident-memory-2026-09-20"
+    },
+    {
+      "number": 189,
+      "title": "S1 dashboard: implement researched design-plan iteration (collapsible sidebar, KPI alert, live-check pulse, responsive fix)",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-design-plan-iteration-2026-09-20"
+    },
+    {
+      "number": 190,
+      "title": "Record S1 design-plan protocol-followed memory entry",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-protocol-followed-memory-2026-09-20"
+    },
+    {
+      "number": 191,
+      "title": "S1 dashboard: top status bar, quick-nav grid, stage banner (Venture-3-style)",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-topbar-quicknav-2026-09-20"
+    },
+    {
+      "number": 192,
+      "title": "memory: S1 topbar/quicknav/stage-banner record",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-topbar-memory-2026-09-20"
+    },
+    {
+      "number": 193,
+      "title": "S1 dashboard: consolidate banners for calm design (research-driven)",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-calm-design-consolidate-2026-09-20"
+    },
+    {
+      "number": 194,
+      "title": "memory: S1 UI research + calm-design fix record",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-ui-research-memory-2026-09-20"
+    },
+    {
+      "number": 195,
+      "title": "docs: AXES OS Command Center document index (358 copies, originals untouched)",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "axes-os-command-center-docs-2026-09-20"
+    },
+    {
+      "number": 196,
+      "title": "memory: AXES OS Command Center document index record",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "command-center-memory-2026-09-20"
+    },
+    {
+      "number": 197,
+      "title": "docs: AXES Contracting revenue-launch plan (draft, needs founder approval)",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "axes-contracting-launch-plan-2026-09-20"
+    },
+    {
+      "number": 198,
+      "title": "memory: record AXES Contracting revenue-launch plan",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "memory-axes-contracting-plan-2026-09-20"
+    },
+    {
+      "number": 199,
+      "title": "docs: reference-asset intake protocol (fix for missed UI-match instruction)",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "reference-asset-intake-protocol-2026-09-20"
+    },
+    {
+      "number": 200,
+      "title": "docs: escalate FOUNDER_ACTION_QUEUE item #15 (manners/continuity memory, second report)",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "founder-action-queue-item15-recurrence-2026-09-20"
+    },
+    {
+      "number": 201,
+      "title": "docs: first formal agent performance audit (PRs #170-#200)",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "agent-performance-audit-2026-09-20"
+    },
+    {
+      "number": 202,
+      "title": "S1 dashboard: add Command Center paperwork section",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "s1-dashboard-paperwork-section-2026-09-20"
+    },
+    {
+      "number": 203,
+      "title": "docs(memory): record S1 dashboard paperwork-section addition",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "memory-paperwork-section-2026-09-20"
+    },
+    {
+      "number": 204,
+      "title": "docs(audit): who is responsible when self-measurement is incomplete",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "audit-accountability-boundary-2026-09-20"
+    },
+    {
+      "number": 205,
+      "title": "docs(protocol): structural PR-template enforcement, not just memory",
+      "state": "merged",
+      "createdAt": "2026-09-20",
+      "closedAt": "2026-09-20",
+      "headRef": "pr-template-protocol-gate-2026-09-20"
+    },
+    {
+      "number": 206,
+      "title": "Extend the PR #173 accountability ledger into a general founder task-record system",
+      "state": "open",
+      "createdAt": "2026-09-21",
+      "closedAt": null,
+      "headRef": "copilot/extend-accountability-policy"
+    },
+    {
+      "number": 207,
+      "title": "Automate AXI workflow-run continuity recording from explicit origin coordinates",
+      "state": "open",
+      "createdAt": "2026-09-22",
+      "closedAt": null,
+      "headRef": "copilot/fix-axi-continuity-workflow"
+    },
+    {
+      "number": 208,
+      "title": "Enable public file/image uploads on AXIOM chat",
+      "state": "merged",
+      "createdAt": "2026-09-22",
+      "closedAt": "2026-09-23",
+      "headRef": "axaxiaxes-axiom-chat-file-upload"
+    },
+    {
+      "number": 209,
+      "title": "Add bounded AXI chat attachments, engine readiness diagnostics, and continuity/capability planning",
+      "state": "merged",
+      "createdAt": "2026-09-23",
+      "closedAt": "2026-09-25",
+      "headRef": "copilot/pr-209-follow-up-axiom-attachments"
+    },
+    {
+      "number": 210,
+      "title": "Reconcile AXES Command Center UI with AXES Contracting visual language",
+      "state": "merged",
+      "createdAt": "2026-09-25",
+      "closedAt": "2026-09-25",
+      "headRef": "copilot/reconcile-improve-command-center-ui"
+    },
+    {
+      "number": 211,
+      "title": "Add shared AXES cubic-card design system and palette reference to Command Center",
+      "state": "open",
+      "createdAt": "2026-09-25",
+      "closedAt": null,
+      "headRef": "copilot/add-cubic-card-design-system"
+    },
+    {
+      "number": 212,
+      "title": "Add repository-only daily reconciliation draft generator (zero provider cost)",
+      "state": "open",
+      "createdAt": "2026-09-25",
+      "closedAt": null,
+      "headRef": "copilot/implement-daily-reconciliation-automation"
+    },
+    {
+      "number": 213,
+      "title": "Add AXES OS checkpoint for agentic-web research and proposed light-sensing architecture",
+      "state": "open",
+      "createdAt": "2026-09-25",
+      "closedAt": null,
+      "headRef": "copilot/extend-science-docs-light-sensing"
+    },
+    {
+      "number": 214,
+      "title": "Follow-up to light-sensing docs: origin-beacon/glyph-matrix proposal checkpoints + offline deterministic simulation",
+      "state": "open",
+      "createdAt": "2026-09-26",
+      "closedAt": null,
+      "headRef": "copilot/copilotextend-science-docs-light-sensing-follow-up"
+    },
+    {
+      "number": 216,
+      "title": "Resolve PR #206 merge conflicts and extend the accountability ledger with intelligence/value evaluation",
+      "state": "open",
+      "createdAt": "2026-09-26",
+      "closedAt": null,
+      "headRef": "copilot/resolve-pr-206-merge-conflicts"
+    },
+    {
+      "number": 217,
+      "title": "Add Origin Science checkpoint, offline origin validator, and bounded accountability evaluation",
+      "state": "open",
+      "createdAt": "2026-09-26",
+      "closedAt": null,
+      "headRef": "copilot/create-automated-workflows"
+    },
+    {
+      "number": 218,
+      "title": "Automate agent production-rights attribution and harden public chat/upload failure handling",
+      "state": "open",
+      "createdAt": "2026-09-26",
+      "closedAt": null,
+      "headRef": "copilot/axaxiaxes-axiom-monorepo"
+    },
+    {
+      "number": 219,
+      "title": "Introduce OORR-P v1 canonical registry, boundaries, and deterministic validation under docs/keystone",
+      "state": "open",
+      "createdAt": "2026-09-28",
+      "closedAt": null,
+      "headRef": "copilot/implement-oorrr-p-v1"
+    },
+    {
+      "number": 220,
+      "title": "Add founder pace view to Command Center and an advisory review-board check",
+      "state": "open",
+      "createdAt": "2026-09-30",
+      "closedAt": null,
+      "headRef": "copilot/open-reviewable-pr-automation"
+    },
+    {
+      "number": 221,
+      "title": "[WIP] Automate repository-backed collection and reconciliation workflow",
+      "state": "open",
+      "createdAt": "2026-10-02",
+      "closedAt": null,
+      "headRef": "copilot/automate-repository-workflow"
+    }
+  ]
+}
