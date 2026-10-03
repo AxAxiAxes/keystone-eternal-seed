@@ -4,7 +4,7 @@
 
 > Separates founder authority, repository context, and assistant responsibility, and classifies origin science, constitution, governance, ownership, and invention material by status.
 >
-> Generated from repository records only. Curated inputs recorded 2026-10-02; pull-request snapshot recorded 2026-10-02. Source fingerprint `sha256:acf04aef2e2bea89`. Every status label below follows the definitions in [RECONCILIATION_INDEX.md](RECONCILIATION_INDEX.md#status-labels); symbolic or proposed material is never presented as verified, and nothing here is a legal, financial, or professional determination.
+> Generated from repository records only. Curated inputs recorded 2026-10-02; pull-request snapshot recorded 2026-10-02. Source fingerprint `sha256:899e978d92a15b00`. Every status label below follows the definitions in [RECONCILIATION_INDEX.md](RECONCILIATION_INDEX.md#status-labels); symbolic or proposed material is never presented as verified, and nothing here is a legal, financial, or professional determination.
 
 ## Responsible parties
 

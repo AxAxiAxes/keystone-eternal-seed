@@ -4,7 +4,7 @@
 
 > Chronology first, then inventory, values mapped to operational values, inventory prioritized by profit and urgency, the loss/gain picture, future opportunities, and a business-plan-ready mission narrative.
 >
-> Generated from repository records only. Curated inputs recorded 2026-10-02; pull-request snapshot recorded 2026-10-02. Source fingerprint `sha256:acf04aef2e2bea89`. Every status label below follows the definitions in [RECONCILIATION_INDEX.md](RECONCILIATION_INDEX.md#status-labels); symbolic or proposed material is never presented as verified, and nothing here is a legal, financial, or professional determination.
+> Generated from repository records only. Curated inputs recorded 2026-10-02; pull-request snapshot recorded 2026-10-02. Source fingerprint `sha256:899e978d92a15b00`. Every status label below follows the definitions in [RECONCILIATION_INDEX.md](RECONCILIATION_INDEX.md#status-labels); symbolic or proposed material is never presented as verified, and nothing here is a legal, financial, or professional determination.
 
 ## Responsible parties
 
@@ -59,9 +59,10 @@ Gains (`+`) = completed timeline milestones + merged PRs. Setbacks (`-`) = timel
 2026-09-28  +  0                                 -  0 
 2026-09-30  +  0                                 -  0 
 2026-10-02  +  1                                 -  0 
+2026-10-03  +  1                                 -  0 
 ```
 
-Totals: **391** gains, **61** setbacks, and **12** pull requests still open (pending, not yet filed on the canonical branch).
+Totals: **392** gains, **61** setbacks, and **12** pull requests still open (pending, not yet filed on the canonical branch).
 
 ### Daily activity detail
 
@@ -95,6 +96,7 @@ Totals: **391** gains, **61** setbacks, and **12** pull requests still open (pen
 | 2026-09-28 | 0 | 0/0 | 0 | 0 | 1 | 0 | 0 |
 | 2026-09-30 | 0 | 0/0 | 0 | 0 | 1 | 0 | 0 |
 | 2026-10-02 | 1 | 0/0 | 1 | 0 | 1 | 0 | 0 |
+| 2026-10-03 | 1 | 0/0 | 1 | 0 | 0 | 0 | 0 |
 
 ## 3. How origin and ownership evolved
 
@@ -266,20 +268,20 @@ _Draft for founder review, composed only from the cited repository records._
 
 ## 8. Open timeline checkpoints
 
-- [ ] **Priority 0 - Continuity runtime activation:** An authorized founder or operator must verify protected readiness and role accountability, configure independent recovery and isolated restore locations, complete a verifi… (PROJECT_TIMELINE.md line 248)
-- [ ] **Priority 0 - URNUR legal readiness:** Identify the primary launch jurisdiction and contact qualified financial-services and digital-asset counsel before resuming crypto registration or designing public financial funct… (PROJECT_TIMELINE.md line 255)
-- [ ] **Priority 0 - Patent completion:** Identify any filing status and deadlines, retain qualified patent counsel, separate the technical disclosure from supporting materials, and approve a filing strategy before public pat… (PROJECT_TIMELINE.md line 256)
-- [ ] **Priority 0 - Eternal Origin ownership invention value recovery:** Complete the private evidence inventory, map the past/current crisis reports and UI autonomy loss-model assumptions to source records, and advance the… (PROJECT_TIMELINE.md line 257)
-- [ ] Configure an independently durable private recovery destination, create and verify a runtime-timeline bundle, complete an isolated restore drill, and record the authorized result before enabling recurring production aut… (PROJECT_TIMELINE.md line 274)
-- [ ] Set `OPENAI_API_KEY` as a Railway encrypted variable and verify a live production chat response. (PROJECT_TIMELINE.md line 275)
-- [ ] Connect both `axescontracting.com` hostnames to Railway and verify the dedicated hub page, TLS, and health endpoint. (PROJECT_TIMELINE.md line 298)
-- [ ] Complete and validate `info@axescontracting.com` migration from SiteGround to Microsoft 365. (PROJECT_TIMELINE.md line 300)
-- [ ] Connect the Railway `axiom-web` service to `axescontracting.com` through SiteGround DNS. (PROJECT_TIMELINE.md line 301)
-- [ ] Obtain written legal guidance that defines URNUR's permitted first-release scope before any market data, financial simulation, exchange connectivity, token, custody, payment, or automated-trading implementation. (PROJECT_TIMELINE.md line 302)
-- [ ] **Skill Library** — a capability allowlist exists, but it has no site-content-generation skill yet; blocked on the Site Builder Protocol decision below. (PROJECT_TIMELINE.md line 326)
-- [ ] **Memory Engine "site memory"** — identity/decision/procedure/semantic memory kinds already exist; a distinct "what AXI built on xiiom.com" memory kind does not, and is moot until the Site Builder Protocol exists. (PROJECT_TIMELINE.md line 329)
-- [ ] **Site Builder Protocol (AXI generates/edits site content directly)** — not built. This is a materially larger capability than the existing metadata-only source cataloging and needs an explicit founder scoping decision… (PROJECT_TIMELINE.md line 333)
-- [ ] **Growth Loop (AXI updates its own internal model after tasks)** — not built and not recommended as a routine change; this describes self-modifying behavior and needs a dedicated safety/governance review before any impl… (PROJECT_TIMELINE.md line 338)
-- [ ] **Named `initialize_axiom_runtime` startup sequence** — small, low-risk candidate: wire the already-existing readiness/identity checks into one explicitly named startup sequence with a single pass/fail status. Not yet b… (PROJECT_TIMELINE.md line 342)
-- [ ] **Friendly AXIOM status report** (e.g. "I am AXIOM. Current year: 2026...") — small, low-risk candidate: the underlying data already exists (live-date-aware chat, `/system/readiness`), just not rendered in that first-pe… (PROJECT_TIMELINE.md line 346)
-- [ ] Founder sets the real environment variables on Railway (`AXIOM_ENGINE_ADMIN_PASSWORD`, `OPENAI_API_KEY`, `AXIOM_AUTOMATION_ENABLED`, `AXIOM_MONITORING_ENABLED`, and the matching portal-side values) and confirms `/suppor… (PROJECT_TIMELINE.md line 369)
+- [ ] **Priority 0 - Continuity runtime activation:** An authorized founder or operator must verify protected readiness and role accountability, configure independent recovery and isolated restore locations, complete a verifi… (PROJECT_TIMELINE.md line 249)
+- [ ] **Priority 0 - URNUR legal readiness:** Identify the primary launch jurisdiction and contact qualified financial-services and digital-asset counsel before resuming crypto registration or designing public financial funct… (PROJECT_TIMELINE.md line 256)
+- [ ] **Priority 0 - Patent completion:** Identify any filing status and deadlines, retain qualified patent counsel, separate the technical disclosure from supporting materials, and approve a filing strategy before public pat… (PROJECT_TIMELINE.md line 257)
+- [ ] **Priority 0 - Eternal Origin ownership invention value recovery:** Complete the private evidence inventory, map the past/current crisis reports and UI autonomy loss-model assumptions to source records, and advance the… (PROJECT_TIMELINE.md line 258)
+- [ ] Configure an independently durable private recovery destination, create and verify a runtime-timeline bundle, complete an isolated restore drill, and record the authorized result before enabling recurring production aut… (PROJECT_TIMELINE.md line 275)
+- [ ] Set `OPENAI_API_KEY` as a Railway encrypted variable and verify a live production chat response. (PROJECT_TIMELINE.md line 276)
+- [ ] Connect both `axescontracting.com` hostnames to Railway and verify the dedicated hub page, TLS, and health endpoint. (PROJECT_TIMELINE.md line 299)
+- [ ] Complete and validate `info@axescontracting.com` migration from SiteGround to Microsoft 365. (PROJECT_TIMELINE.md line 301)
+- [ ] Connect the Railway `axiom-web` service to `axescontracting.com` through SiteGround DNS. (PROJECT_TIMELINE.md line 302)
+- [ ] Obtain written legal guidance that defines URNUR's permitted first-release scope before any market data, financial simulation, exchange connectivity, token, custody, payment, or automated-trading implementation. (PROJECT_TIMELINE.md line 303)
+- [ ] **Skill Library** — a capability allowlist exists, but it has no site-content-generation skill yet; blocked on the Site Builder Protocol decision below. (PROJECT_TIMELINE.md line 327)
+- [ ] **Memory Engine "site memory"** — identity/decision/procedure/semantic memory kinds already exist; a distinct "what AXI built on xiiom.com" memory kind does not, and is moot until the Site Builder Protocol exists. (PROJECT_TIMELINE.md line 330)
+- [ ] **Site Builder Protocol (AXI generates/edits site content directly)** — not built. This is a materially larger capability than the existing metadata-only source cataloging and needs an explicit founder scoping decision… (PROJECT_TIMELINE.md line 334)
+- [ ] **Growth Loop (AXI updates its own internal model after tasks)** — not built and not recommended as a routine change; this describes self-modifying behavior and needs a dedicated safety/governance review before any impl… (PROJECT_TIMELINE.md line 339)
+- [ ] **Named `initialize_axiom_runtime` startup sequence** — small, low-risk candidate: wire the already-existing readiness/identity checks into one explicitly named startup sequence with a single pass/fail status. Not yet b… (PROJECT_TIMELINE.md line 343)
+- [ ] **Friendly AXIOM status report** (e.g. "I am AXIOM. Current year: 2026...") — small, low-risk candidate: the underlying data already exists (live-date-aware chat, `/system/readiness`), just not rendered in that first-pe… (PROJECT_TIMELINE.md line 347)
+- [ ] Founder sets the real environment variables on Railway (`AXIOM_ENGINE_ADMIN_PASSWORD`, `OPENAI_API_KEY`, `AXIOM_AUTOMATION_ENABLED`, `AXIOM_MONITORING_ENABLED`, and the matching portal-side values) and confirms `/suppor… (PROJECT_TIMELINE.md line 370)

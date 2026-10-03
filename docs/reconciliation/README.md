@@ -32,6 +32,7 @@ Start at [RECONCILIATION_INDEX.md](RECONCILIATION_INDEX.md).
 | [ORIGIN_OWNERSHIP_GOVERNANCE_MATRIX.md](ORIGIN_OWNERSHIP_GOVERNANCE_MATRIX.md) | Authority separation, origin science / constitution / governance concepts, every reviewed record classified |
 | [TIMELINE_AND_BUSINESS_SYNTHESIS.md](TIMELINE_AND_BUSINESS_SYNTHESIS.md) | Chronology, loss/gain graph, values → operational values, inventory by profit × urgency, mission narrative |
 | [MISSING_MEANING_AND_GAPS.md](MISSING_MEANING_AND_GAPS.md) | Unfiled, missing, unverified, and blocked meaning |
+| [DIRECTIVES_ROADMAP_AND_ETA.md](DIRECTIVES_ROADMAP_AND_ETA.md) | Story synopsis, founder directives in order (exact wording), execution order with ETAs, origin IDs, report and business plan on one timeline, review automation queue and findings |
 
 Do not edit the generated reports by hand.
 
@@ -44,7 +45,22 @@ node scripts/reconciliation/generate-reconciliation-report.js                   
 node scripts/reconciliation/generate-reconciliation-report.js --check           # validate inputs; warn if reports are stale
 node scripts/reconciliation/generate-reconciliation-report.js --check --strict  # also fail if reports are stale
 node --test scripts/reconciliation/test/generate-reconciliation-report.test.js
+GITHUB_TOKEN=... GITHUB_REPOSITORY=AxAxiAxes/keystone-eternal-seed \
+  node scripts/reconciliation/refresh-pr-snapshot.js                            # read-only PR snapshot refresh
 ```
+
+## Review automation
+
+`.github/workflows/reconciliation-refresh.yml` runs every Monday (and on
+manual dispatch). It re-reads pull-request metadata with a read-only API
+listing, regenerates every report, runs the tests and `--check --strict`, and
+opens a review pull request when anything changed. It never merges, deploys,
+or edits anything outside `docs/reconciliation/`. Because the roadmap review
+date is the snapshot's `recordedAt`, each refresh surfaces newly overdue
+steps, steps whose PRs have all merged or closed, and the open-PR review queue
+in `DIRECTIVES_ROADMAP_AND_ETA.md`. Founder actions required once: approve
+the workflow run and enable "Allow GitHub Actions to create and approve pull
+requests" in the repository settings.
 
 CI (`Reconciliation report validation` in
 `.github/workflows/axi-continuity-validation.yml`) runs the tests and
@@ -80,9 +96,17 @@ and commit the reports when a reconciliation refresh is wanted.
 - [`sources/reconciliation-config.v1.json`](sources/reconciliation-config.v1.json):
   responsible parties, scope, required sources, scan settings, focus PRs and
   probes, chronology phases, origin/governance concepts, value map, inventory
-  with profit and urgency scores (1–5), known gaps, and the mission narrative.
-  Profit and urgency scores are the agent's proposed ranking; the founder
-  confirms or changes them here.
+  with profit and urgency scores (1–5), known gaps, the mission narrative,
+  `originalDirectives` (founder wording, in order), `storySynopsis`, and the
+  `roadmap` (start date, ordered steps with owner, duration, dependencies,
+  directives, inventory and PR references). Profit and urgency scores and
+  roadmap durations are the agent's proposed estimates; the founder confirms
+  or changes them here. ETAs are computed (start + dependencies + duration);
+  every directive must be scheduled by at least one step, and dependency
+  cycles fail validation.
+- Origin IDs (`AXES-OID-<kind>-<id>-<hash>`) are deterministic, content-addressed
+  internal identifiers for directives and inventory items. They are not legal,
+  copyright, patent, or registry filings; formal registration is a roadmap step.
 - [`sources/pr-snapshot.v1.json`](sources/pr-snapshot.v1.json): point-in-time
   PR metadata (number, title, state, dates, head branch). Refresh it from a
   read-only pull-request listing in a reviewed commit and update `recordedAt`.

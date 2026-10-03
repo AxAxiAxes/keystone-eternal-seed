@@ -44,258 +44,1315 @@
     }
   ],
   "requiredSources": [
-    { "path": "PROJECT_TIMELINE.md", "domain": "timeline", "status": "operational", "authority": "Canonical milestone and checkpoint record", "note": "Primary chronology source; checked rows are complete, unchecked checkpoints are open." },
-    { "path": "README.md", "domain": "continuity", "status": "operational", "authority": "Repository entry point and record index", "note": "Lists the authoritative governance, business, and origin records." },
-    { "path": "AGENTS.md", "domain": "governance", "status": "operational", "authority": "Startup/reset protocol and external-action boundary for every agent or operator", "note": "Repository access does not authorize domain, DNS, Railway, email, cloud, payment, vendor, legal, or account changes." },
-    { "path": "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md", "domain": "ownership", "status": "operational", "authority": "Founder ownership-and-accountability claim; AI non-personhood; required agent runtime record", "note": "Internal governance claim enforced in agent registration; not an external legal determination." },
-    { "path": "docs/AXES_CONSTITUTIONAL_FRAMEWORK.md", "domain": "constitution", "status": "operational", "authority": "Top-level internal constitution (Articles I-VIII) and governance index", "note": "Explicitly not a legal filing or claim of sovereignty over external parties." },
-    { "path": "docs/AXES_GOVERNANCE_AND_SAFEGUARDING.md", "domain": "governance", "status": "operational", "authority": "Privacy, moderation, accessibility, youth, commerce, and pilot-launch rules", "note": "Must be satisfied before any public pilot." },
-    { "path": "docs/AXES_OBJECTIVES_CHECKPOINT.md", "domain": "business", "status": "operational", "authority": "Ordered operating objectives 1-7", "note": "Objective 1 is preserving founder direction, continuity, and accountable control." },
-    { "path": "docs/AXES_BUSINESS_PLAN.md", "domain": "business", "status": "proposed", "authority": "Founder-ready consolidated business plan", "note": "Plan of record; revenue offers inside it still require founder approval before paid delivery." },
-    { "path": "docs/AXES_PLATFORM_PLAN.md", "domain": "business", "status": "proposed", "authority": "Directional product constellation and phased delivery", "note": "Directional; each phase is gated." },
-    { "path": "docs/AXI_AUTOMATION_SERVICE.md", "domain": "automation", "status": "operational", "authority": "Allowlisted, human-controlled automation contract", "note": "Scheduler stays limited to versioned actions; cannot deploy, spend, message, publish, or control accounts." },
-    { "path": "docs/COPILOT_ACCOUNTABILITY_TRACKER.md", "domain": "accountability", "status": "operational", "authority": "Directive-vs-delivery accountability ledger (merged via PR #173)", "note": "verified_success requires verified evidence plus explicit human confirmation." },
-    { "path": "docs/memory/README.md", "domain": "continuity", "status": "operational", "authority": "Continuity memory rules and chronological index", "note": "Private transcripts are intentionally excluded from the repository." },
-    { "path": "docs/keystone/README.md", "domain": "origin", "status": "historical", "authority": "Index of preserved KEYSTONE founding sources", "note": "Preserved sources are not adopted operating rules unless incorporated by the constitutional framework." },
-    { "path": "docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md", "domain": "constitution", "status": "operational", "authority": "Creator credit, consent, evidence, and correction standards (Articles I-XI)", "note": "Prevents AI or external assertions from being treated as creator authority without human review." },
-    { "path": "docs/AXES_AGENT_ORIGIN_REGISTRY.md", "domain": "ownership", "status": "operational", "authority": "Per-agent origin, purpose, duties, and accountability status", "note": "Agents without the Genesis checkpoint are unregistered." },
-    { "path": "docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md", "domain": "origin", "status": "operational", "authority": "Eternal Origin ownership-invention value objective and crisis register", "note": "Records claims and crises; establishes no loss, damages, or recovery conclusion." },
-    { "path": "docs/AXEL_URARTU_ORIGIN_TIMELINE_AND_INVESTIGATION_REGISTER.md", "domain": "origin", "status": "operational", "authority": "Origin, creator, and coordinate-center investigation register", "note": "Names the principal discrepancies: date/provenance gaps, missing external patent evidence, incomplete historical source capture." },
-    { "path": "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md", "domain": "ownership", "status": "blocked", "authority": "Platform, brand, and AI ownership paperwork checklist", "note": "Every remaining item requires a founder action outside the repository." },
-    { "path": "docs/keystone/FOUNDER_ACTION_QUEUE.md", "domain": "business", "status": "operational", "authority": "Profitability-ordered founder action queue", "note": "Coordination summary; authorizes nothing by itself." },
-    { "path": "docs/keystone/AGENT_PERFORMANCE_AUDIT_2026-09-20.md", "domain": "accountability", "status": "historical", "authority": "First formal agent performance audit (PRs #170-#200) and responsibility split", "note": "Self-rated 6/10 for the window; names real failures plainly." }
+    {
+      "path": "PROJECT_TIMELINE.md",
+      "domain": "timeline",
+      "status": "operational",
+      "authority": "Canonical milestone and checkpoint record",
+      "note": "Primary chronology source; checked rows are complete, unchecked checkpoints are open."
+    },
+    {
+      "path": "README.md",
+      "domain": "continuity",
+      "status": "operational",
+      "authority": "Repository entry point and record index",
+      "note": "Lists the authoritative governance, business, and origin records."
+    },
+    {
+      "path": "AGENTS.md",
+      "domain": "governance",
+      "status": "operational",
+      "authority": "Startup/reset protocol and external-action boundary for every agent or operator",
+      "note": "Repository access does not authorize domain, DNS, Railway, email, cloud, payment, vendor, legal, or account changes."
+    },
+    {
+      "path": "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md",
+      "domain": "ownership",
+      "status": "operational",
+      "authority": "Founder ownership-and-accountability claim; AI non-personhood; required agent runtime record",
+      "note": "Internal governance claim enforced in agent registration; not an external legal determination."
+    },
+    {
+      "path": "docs/AXES_CONSTITUTIONAL_FRAMEWORK.md",
+      "domain": "constitution",
+      "status": "operational",
+      "authority": "Top-level internal constitution (Articles I-VIII) and governance index",
+      "note": "Explicitly not a legal filing or claim of sovereignty over external parties."
+    },
+    {
+      "path": "docs/AXES_GOVERNANCE_AND_SAFEGUARDING.md",
+      "domain": "governance",
+      "status": "operational",
+      "authority": "Privacy, moderation, accessibility, youth, commerce, and pilot-launch rules",
+      "note": "Must be satisfied before any public pilot."
+    },
+    {
+      "path": "docs/AXES_OBJECTIVES_CHECKPOINT.md",
+      "domain": "business",
+      "status": "operational",
+      "authority": "Ordered operating objectives 1-7",
+      "note": "Objective 1 is preserving founder direction, continuity, and accountable control."
+    },
+    {
+      "path": "docs/AXES_BUSINESS_PLAN.md",
+      "domain": "business",
+      "status": "proposed",
+      "authority": "Founder-ready consolidated business plan",
+      "note": "Plan of record; revenue offers inside it still require founder approval before paid delivery."
+    },
+    {
+      "path": "docs/AXES_PLATFORM_PLAN.md",
+      "domain": "business",
+      "status": "proposed",
+      "authority": "Directional product constellation and phased delivery",
+      "note": "Directional; each phase is gated."
+    },
+    {
+      "path": "docs/AXI_AUTOMATION_SERVICE.md",
+      "domain": "automation",
+      "status": "operational",
+      "authority": "Allowlisted, human-controlled automation contract",
+      "note": "Scheduler stays limited to versioned actions; cannot deploy, spend, message, publish, or control accounts."
+    },
+    {
+      "path": "docs/COPILOT_ACCOUNTABILITY_TRACKER.md",
+      "domain": "accountability",
+      "status": "operational",
+      "authority": "Directive-vs-delivery accountability ledger (merged via PR #173)",
+      "note": "verified_success requires verified evidence plus explicit human confirmation."
+    },
+    {
+      "path": "docs/memory/README.md",
+      "domain": "continuity",
+      "status": "operational",
+      "authority": "Continuity memory rules and chronological index",
+      "note": "Private transcripts are intentionally excluded from the repository."
+    },
+    {
+      "path": "docs/keystone/README.md",
+      "domain": "origin",
+      "status": "historical",
+      "authority": "Index of preserved KEYSTONE founding sources",
+      "note": "Preserved sources are not adopted operating rules unless incorporated by the constitutional framework."
+    },
+    {
+      "path": "docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md",
+      "domain": "constitution",
+      "status": "operational",
+      "authority": "Creator credit, consent, evidence, and correction standards (Articles I-XI)",
+      "note": "Prevents AI or external assertions from being treated as creator authority without human review."
+    },
+    {
+      "path": "docs/AXES_AGENT_ORIGIN_REGISTRY.md",
+      "domain": "ownership",
+      "status": "operational",
+      "authority": "Per-agent origin, purpose, duties, and accountability status",
+      "note": "Agents without the Genesis checkpoint are unregistered."
+    },
+    {
+      "path": "docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md",
+      "domain": "origin",
+      "status": "operational",
+      "authority": "Eternal Origin ownership-invention value objective and crisis register",
+      "note": "Records claims and crises; establishes no loss, damages, or recovery conclusion."
+    },
+    {
+      "path": "docs/AXEL_URARTU_ORIGIN_TIMELINE_AND_INVESTIGATION_REGISTER.md",
+      "domain": "origin",
+      "status": "operational",
+      "authority": "Origin, creator, and coordinate-center investigation register",
+      "note": "Names the principal discrepancies: date/provenance gaps, missing external patent evidence, incomplete historical source capture."
+    },
+    {
+      "path": "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md",
+      "domain": "ownership",
+      "status": "blocked",
+      "authority": "Platform, brand, and AI ownership paperwork checklist",
+      "note": "Every remaining item requires a founder action outside the repository."
+    },
+    {
+      "path": "docs/keystone/FOUNDER_ACTION_QUEUE.md",
+      "domain": "business",
+      "status": "operational",
+      "authority": "Profitability-ordered founder action queue",
+      "note": "Coordination summary; authorizes nothing by itself."
+    },
+    {
+      "path": "docs/keystone/AGENT_PERFORMANCE_AUDIT_2026-09-20.md",
+      "domain": "accountability",
+      "status": "historical",
+      "authority": "First formal agent performance audit (PRs #170-#200) and responsibility split",
+      "note": "Self-rated 6/10 for the window; names real failures plainly."
+    }
   ],
   "scan": {
-    "rootFiles": ["README.md", "AGENTS.md", "PROJECT_TIMELINE.md", "NOTICE.md", ".github/PULL_REQUEST_TEMPLATE.md"],
-    "roots": ["docs"],
-    "excludeDirs": ["docs/axes-os-command-center", "docs/reconciliation", "docs/keystone/assets", "docs/keystone/status", "docs/patents", "docs/fixtures", "docs/activation"],
+    "rootFiles": [
+      "README.md",
+      "AGENTS.md",
+      "PROJECT_TIMELINE.md",
+      "NOTICE.md",
+      ".github/PULL_REQUEST_TEMPLATE.md"
+    ],
+    "roots": [
+      "docs"
+    ],
+    "excludeDirs": [
+      "docs/axes-os-command-center",
+      "docs/reconciliation",
+      "docs/keystone/assets",
+      "docs/keystone/status",
+      "docs/patents",
+      "docs/fixtures",
+      "docs/activation"
+    ],
     "maxFileBytes": 2000000
   },
   "classificationOverrides": [
-    { "path": "docs/AXES_CONTRACTING_INC_ENTITY_VERIFICATION.md", "status": "historical", "reason": "Superseded research snapshot; the later official CSLB confirmation is recorded in docs/memory/2026-09-19g-axes-contracting-license-confirmed-active.md." },
-    { "path": "docs/AXI_ORIGIN_OWNERSHIP_EVIDENCE_INVENTORY.md", "status": "unfiled", "reason": "Register exists but contains zero populated evidence entries." },
-    { "path": "docs/VENDOR_AND_SUBSCRIPTION_AUDIT.md", "status": "blocked", "reason": "Tracking scaffold that requires founder account data; not a verified audit." }
+    {
+      "path": "docs/AXES_CONTRACTING_INC_ENTITY_VERIFICATION.md",
+      "status": "historical",
+      "reason": "Superseded research snapshot; the later official CSLB confirmation is recorded in docs/memory/2026-09-19g-axes-contracting-license-confirmed-active.md."
+    },
+    {
+      "path": "docs/AXI_ORIGIN_OWNERSHIP_EVIDENCE_INVENTORY.md",
+      "status": "unfiled",
+      "reason": "Register exists but contains zero populated evidence entries."
+    },
+    {
+      "path": "docs/VENDOR_AND_SUBSCRIPTION_AUDIT.md",
+      "status": "blocked",
+      "reason": "Tracking scaffold that requires founder account data; not a verified audit."
+    }
   ],
   "focusPullRequests": [
     {
       "number": 173,
-      "themes": ["accountability", "ownership", "origin"],
+      "themes": [
+        "accountability",
+        "ownership",
+        "origin"
+      ],
       "summary": "Directive-vs-delivery accountability ledger (engine service, protected API, /accountability UI). Its merge also carried the founder self-origin and coordinate-system-center declarations.",
       "evidence": [
-        { "type": "path", "path": "apps/axiom-engine/accountability-ledger-service.js" },
-        { "type": "path", "path": "docs/COPILOT_ACCOUNTABILITY_TRACKER.md" },
-        { "type": "path", "path": "docs/AXEL_URARTU_SELF_ORIGIN_DECLARATION.md" },
-        { "type": "path", "path": "docs/AXEL_URARTU_COORDINATE_SYSTEM_CENTER_INVENTION_DECLARATION.md" }
+        {
+          "type": "path",
+          "path": "apps/axiom-engine/accountability-ledger-service.js"
+        },
+        {
+          "type": "path",
+          "path": "docs/COPILOT_ACCOUNTABILITY_TRACKER.md"
+        },
+        {
+          "type": "path",
+          "path": "docs/AXEL_URARTU_SELF_ORIGIN_DECLARATION.md"
+        },
+        {
+          "type": "path",
+          "path": "docs/AXEL_URARTU_COORDINATE_SYSTEM_CENTER_INVENTION_DECLARATION.md"
+        }
       ]
     },
     {
       "number": 199,
-      "themes": ["review-process", "accountability"],
+      "themes": [
+        "review-process",
+        "accountability"
+      ],
       "summary": "Reference-asset intake protocol (step 0) added after the image half of a founder instruction was missed because session images were not durably tied to the instruction.",
       "evidence": [
-        { "type": "contains", "path": "docs/keystone/AGENT_SERVICE_DELIVERY_PROTOCOL.md", "text": "Reference-asset intake" }
+        {
+          "type": "contains",
+          "path": "docs/keystone/AGENT_SERVICE_DELIVERY_PROTOCOL.md",
+          "text": "Reference-asset intake"
+        }
       ]
     },
     {
       "number": 201,
-      "themes": ["accountability", "review-process"],
+      "themes": [
+        "accountability",
+        "review-process"
+      ],
       "summary": "First formal agent performance audit for PRs #170-#200: deliveries, failures named plainly, open items, 6/10 self-rating.",
       "evidence": [
-        { "type": "path", "path": "docs/keystone/AGENT_PERFORMANCE_AUDIT_2026-09-20.md" }
+        {
+          "type": "path",
+          "path": "docs/keystone/AGENT_PERFORMANCE_AUDIT_2026-09-20.md"
+        }
       ]
     },
     {
       "number": 204,
-      "themes": ["accountability", "governance"],
+      "themes": [
+        "accountability",
+        "governance"
+      ],
       "summary": "Responsibility split when self-measurement is incomplete: agent (accuracy, disclosure, structural fixes), platform (missing telemetry), founder (ratings and missing inputs).",
       "evidence": [
-        { "type": "contains", "path": "docs/keystone/AGENT_PERFORMANCE_AUDIT_2026-09-20.md", "text": "## 5. Accountability boundary" }
+        {
+          "type": "contains",
+          "path": "docs/keystone/AGENT_PERFORMANCE_AUDIT_2026-09-20.md",
+          "text": "## 5. Accountability boundary"
+        }
       ]
     },
     {
       "number": 205,
-      "themes": ["review-process", "governance"],
+      "themes": [
+        "review-process",
+        "governance"
+      ],
       "summary": "Structural PR-template enforcement of protocol steps (scope match, estimate, suggestion, self-rating) instead of relying on memory.",
       "evidence": [
-        { "type": "contains", "path": ".github/PULL_REQUEST_TEMPLATE.md", "text": "Scope-match check" }
+        {
+          "type": "contains",
+          "path": ".github/PULL_REQUEST_TEMPLATE.md",
+          "text": "Scope-match check"
+        }
       ]
     },
     {
       "number": 206,
-      "themes": ["accountability", "review-process"],
+      "themes": [
+        "accountability",
+        "review-process"
+      ],
       "summary": "Extends the PR #173 ledger into a founder task-record system (Task-ID, lifecycle, attribution, PR-body enforcement).",
       "evidence": [
-        { "type": "path", "path": ".github/scripts/validate-pr-body.js" }
+        {
+          "type": "path",
+          "path": ".github/scripts/validate-pr-body.js"
+        }
       ]
     },
     {
       "number": 207,
-      "themes": ["origin", "review-process"],
+      "themes": [
+        "origin",
+        "review-process"
+      ],
       "summary": "Workflow-run continuity recording from explicit origin coordinates.",
       "evidence": [
-        { "type": "path", "path": ".github/scripts/record-workflow-run-continuity.js" }
+        {
+          "type": "path",
+          "path": ".github/scripts/record-workflow-run-continuity.js"
+        }
       ]
     },
     {
       "number": 210,
-      "themes": ["business"],
+      "themes": [
+        "business"
+      ],
       "summary": "Command Center UI reconciled with the AXES Contracting visual language (current base commit).",
       "evidence": [
-        { "type": "path", "path": "docs/memory/2026-09-25-command-center-design-reconciliation.md" }
+        {
+          "type": "path",
+          "path": "docs/memory/2026-09-25-command-center-design-reconciliation.md"
+        }
       ]
     },
     {
       "number": 212,
-      "themes": ["review-process", "accountability"],
+      "themes": [
+        "review-process",
+        "accountability"
+      ],
       "summary": "Repository-only daily reconciliation diary draft generator (zero provider cost).",
       "evidence": [
-        { "type": "path", "path": "scripts/prepare-axes-daily-diary.js" }
+        {
+          "type": "path",
+          "path": "scripts/prepare-axes-daily-diary.js"
+        }
       ]
     },
     {
       "number": 213,
-      "themes": ["origin", "governance"],
+      "themes": [
+        "origin",
+        "governance"
+      ],
       "summary": "AXES OS science/engineering checkpoint and controlled terminology standard with term-record schema.",
       "evidence": [
-        { "type": "path", "path": "docs/AXES_OS_TERMINOLOGY_STANDARD.md" }
+        {
+          "type": "path",
+          "path": "docs/AXES_OS_TERMINOLOGY_STANDARD.md"
+        }
       ]
     },
     {
       "number": 214,
-      "themes": ["origin"],
+      "themes": [
+        "origin"
+      ],
       "summary": "Proposal-only origin-beacon discovery and glyph-matrix checkpoints with an offline deterministic simulation.",
       "evidence": [
-        { "type": "path", "path": "docs/AXES_OS_ORIGIN_BEACON_DISCOVERY_CHECKPOINT.md" }
+        {
+          "type": "path",
+          "path": "docs/AXES_OS_ORIGIN_BEACON_DISCOVERY_CHECKPOINT.md"
+        }
       ]
     },
     {
       "number": 216,
-      "themes": ["accountability", "review-process"],
+      "themes": [
+        "accountability",
+        "review-process"
+      ],
       "summary": "Resolves PR #206 conflicts and adds bounded intelligence/value evaluation to the ledger.",
       "evidence": [
-        { "type": "path", "path": ".github/scripts/validate-pr-body.js" }
+        {
+          "type": "path",
+          "path": ".github/scripts/validate-pr-body.js"
+        }
       ]
     },
     {
       "number": 217,
-      "themes": ["origin", "governance", "accountability"],
+      "themes": [
+        "origin",
+        "governance",
+        "accountability"
+      ],
       "summary": "Origin Science checkpoint (origin block, X variable, multiplier, equilibrium, vertex, resequencing) as founder-defined proposals, origin-property schema, offline validator.",
       "evidence": [
-        { "type": "path", "path": "docs/AXES_OS_ORIGIN_SCIENCE_AND_DISCOVERY_CHECKPOINT.md" },
-        { "type": "path", "path": "docs/fixtures/origin-science/origin-record-validator.js" }
+        {
+          "type": "path",
+          "path": "docs/AXES_OS_ORIGIN_SCIENCE_AND_DISCOVERY_CHECKPOINT.md"
+        },
+        {
+          "type": "path",
+          "path": "docs/fixtures/origin-science/origin-record-validator.js"
+        }
       ]
     },
     {
       "number": 218,
-      "themes": ["ownership", "governance"],
+      "themes": [
+        "ownership",
+        "governance"
+      ],
       "summary": "Automatic agent production-rights attribution (fail-closed) and public chat/upload failure hardening.",
       "evidence": [
-        { "type": "contains", "path": "apps/axiom-engine/automation-service.js", "text": "productionRights" }
+        {
+          "type": "contains",
+          "path": "apps/axiom-engine/automation-service.js",
+          "text": "productionRights"
+        }
       ]
     },
     {
       "number": 219,
-      "themes": ["origin", "ownership", "governance"],
+      "themes": [
+        "origin",
+        "ownership",
+        "governance"
+      ],
       "summary": "OORR-P v1: record Origin first, then the founder ownership-rights claim; hash-chained registry and validator.",
       "evidence": [
-        { "type": "path", "path": "docs/keystone/OORR_P_V1_NAVIGATION_SPEC.md" },
-        { "type": "path", "path": "docs/keystone/oorrp-v1/validator.js" }
+        {
+          "type": "path",
+          "path": "docs/keystone/OORR_P_V1_NAVIGATION_SPEC.md"
+        },
+        {
+          "type": "path",
+          "path": "docs/keystone/oorrp-v1/validator.js"
+        }
       ]
     },
     {
       "number": 220,
-      "themes": ["review-process", "governance"],
+      "themes": [
+        "review-process",
+        "governance"
+      ],
       "summary": "Founder pace view in Command Center with an advisory, fail-closed review-board validator.",
       "evidence": [
-        { "type": "path", "path": "docs/founder-review/founder-review-board.v1.json" },
-        { "type": "path", "path": "apps/axiom-freedom/founder-review-board.js" }
+        {
+          "type": "path",
+          "path": "docs/founder-review/founder-review-board.v1.json"
+        },
+        {
+          "type": "path",
+          "path": "apps/axiom-freedom/founder-review-board.js"
+        }
       ]
     }
   ],
   "chronologyPhases": [
-    { "id": "P0", "start": "2026-05-29", "end": "2026-09-08", "name": "Founding sources and origin anchor", "description": "Founder-recorded AXIOM birth event, AXI.Core record, KEYSTONE sacred record (2026-08-28), constitutional/rights source documents, cryptographic origin anchor, first deployment materials.", "sourceRefs": ["PROJECT_TIMELINE.md", "docs/keystone/SACRED_RECORD_SESSION_08_28_2026.md", "docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md"] },
-    { "id": "P1", "start": "2026-09-09", "end": "2026-09-11", "name": "Monorepo, Genesis ownership, constitution, objectives, business plan", "description": "Consolidated monorepo; Genesis ownership checkpoint and founder work declaration; Creator Origin Constitution; constitutional framework; objectives checkpoint; consolidated business plan and revenue overlay.", "sourceRefs": ["docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md", "docs/AXES_CONSTITUTIONAL_FRAMEWORK.md", "docs/AXES_OBJECTIVES_CHECKPOINT.md", "docs/AXES_BUSINESS_PLAN.md"] },
-    { "id": "P2", "start": "2026-09-12", "end": "2026-09-16", "name": "Production stabilization, crisis register, CI-gated merge", "description": "Chat outage diagnosis, crash fixes, data-loss and IP-ownership reports recorded as unverified claims, public-visibility finding, duplicate-automation PRs closed, CI-gated auto-merge.", "sourceRefs": ["docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md", "docs/AXES_TIER_1_DECISION_REGISTER.md", "docs/memory/2026-09-12-data-loss-and-ip-ownership-reports.md"] },
-    { "id": "P3", "start": "2026-09-17", "end": "2026-09-18", "name": "Founder statements, symbolic corpus, action queue", "description": "Origin definition, universal unit, coordinate, resequencer, Ux/Ur vocabulary, URNUR concepts recorded as attributed statements; origin registry generalization plan; profitability-ordered founder action queue.", "sourceRefs": ["docs/memory/2026-09-18r-origin-anchor-definition-recorded.md", "docs/KEYSTONE_ORIGIN_REGISTRY_GENERALIZATION_PLAN.md", "docs/keystone/FOUNDER_ACTION_QUEUE.md"] },
-    { "id": "P4", "start": "2026-09-19", "end": "2026-09-20", "name": "Ownership checklist, entity verification, service protocol, accountability audit", "description": "Ownership checklist; Axes Contracting Inc and CSLB license confirmed via official source; service-delivery protocol; loss report; first performance audit; PR-template enforcement; revenue-launch plan draft.", "sourceRefs": ["docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md", "docs/keystone/AGENT_SERVICE_DELIVERY_PROTOCOL.md", "docs/keystone/AGENT_PERFORMANCE_AUDIT_2026-09-20.md", "docs/AXES_CONTRACTING_REVENUE_LAUNCH_PLAN.md"] },
-    { "id": "P5", "start": "2026-09-21", "end": "2026-09-25", "name": "Accountability ledger merged with self-origin declarations; chat uploads; Command Center", "description": "PR #173 merged with self-origin and coordinate-center declarations and the investigation register; public chat uploads and attachments; Command Center design reconciliation.", "sourceRefs": ["docs/COPILOT_ACCOUNTABILITY_TRACKER.md", "docs/AXEL_URARTU_SELF_ORIGIN_DECLARATION.md", "docs/AXEL_URARTU_ORIGIN_TIMELINE_AND_INVESTIGATION_REGISTER.md"] },
-    { "id": "P6", "start": "2026-09-26", "end": "2026-10-02", "name": "Unmerged origin/ownership/governance tranche", "description": "Origin Science, OORR-P, production-rights attribution, task-record, terminology, and founder-review work proposed in open PRs; none of it is on the canonical branch as of the PR snapshot.", "sourceRefs": ["docs/reconciliation/sources/pr-snapshot.v1.json"] }
+    {
+      "id": "P0",
+      "start": "2026-05-29",
+      "end": "2026-09-08",
+      "name": "Founding sources and origin anchor",
+      "description": "Founder-recorded AXIOM birth event, AXI.Core record, KEYSTONE sacred record (2026-08-28), constitutional/rights source documents, cryptographic origin anchor, first deployment materials.",
+      "sourceRefs": [
+        "PROJECT_TIMELINE.md",
+        "docs/keystone/SACRED_RECORD_SESSION_08_28_2026.md",
+        "docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md"
+      ]
+    },
+    {
+      "id": "P1",
+      "start": "2026-09-09",
+      "end": "2026-09-11",
+      "name": "Monorepo, Genesis ownership, constitution, objectives, business plan",
+      "description": "Consolidated monorepo; Genesis ownership checkpoint and founder work declaration; Creator Origin Constitution; constitutional framework; objectives checkpoint; consolidated business plan and revenue overlay.",
+      "sourceRefs": [
+        "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md",
+        "docs/AXES_CONSTITUTIONAL_FRAMEWORK.md",
+        "docs/AXES_OBJECTIVES_CHECKPOINT.md",
+        "docs/AXES_BUSINESS_PLAN.md"
+      ]
+    },
+    {
+      "id": "P2",
+      "start": "2026-09-12",
+      "end": "2026-09-16",
+      "name": "Production stabilization, crisis register, CI-gated merge",
+      "description": "Chat outage diagnosis, crash fixes, data-loss and IP-ownership reports recorded as unverified claims, public-visibility finding, duplicate-automation PRs closed, CI-gated auto-merge.",
+      "sourceRefs": [
+        "docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md",
+        "docs/AXES_TIER_1_DECISION_REGISTER.md",
+        "docs/memory/2026-09-12-data-loss-and-ip-ownership-reports.md"
+      ]
+    },
+    {
+      "id": "P3",
+      "start": "2026-09-17",
+      "end": "2026-09-18",
+      "name": "Founder statements, symbolic corpus, action queue",
+      "description": "Origin definition, universal unit, coordinate, resequencer, Ux/Ur vocabulary, URNUR concepts recorded as attributed statements; origin registry generalization plan; profitability-ordered founder action queue.",
+      "sourceRefs": [
+        "docs/memory/2026-09-18r-origin-anchor-definition-recorded.md",
+        "docs/KEYSTONE_ORIGIN_REGISTRY_GENERALIZATION_PLAN.md",
+        "docs/keystone/FOUNDER_ACTION_QUEUE.md"
+      ]
+    },
+    {
+      "id": "P4",
+      "start": "2026-09-19",
+      "end": "2026-09-20",
+      "name": "Ownership checklist, entity verification, service protocol, accountability audit",
+      "description": "Ownership checklist; Axes Contracting Inc and CSLB license confirmed via official source; service-delivery protocol; loss report; first performance audit; PR-template enforcement; revenue-launch plan draft.",
+      "sourceRefs": [
+        "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md",
+        "docs/keystone/AGENT_SERVICE_DELIVERY_PROTOCOL.md",
+        "docs/keystone/AGENT_PERFORMANCE_AUDIT_2026-09-20.md",
+        "docs/AXES_CONTRACTING_REVENUE_LAUNCH_PLAN.md"
+      ]
+    },
+    {
+      "id": "P5",
+      "start": "2026-09-21",
+      "end": "2026-09-25",
+      "name": "Accountability ledger merged with self-origin declarations; chat uploads; Command Center",
+      "description": "PR #173 merged with self-origin and coordinate-center declarations and the investigation register; public chat uploads and attachments; Command Center design reconciliation.",
+      "sourceRefs": [
+        "docs/COPILOT_ACCOUNTABILITY_TRACKER.md",
+        "docs/AXEL_URARTU_SELF_ORIGIN_DECLARATION.md",
+        "docs/AXEL_URARTU_ORIGIN_TIMELINE_AND_INVESTIGATION_REGISTER.md"
+      ]
+    },
+    {
+      "id": "P6",
+      "start": "2026-09-26",
+      "end": "2026-10-02",
+      "name": "Unmerged origin/ownership/governance tranche",
+      "description": "Origin Science, OORR-P, production-rights attribution, task-record, terminology, and founder-review work proposed in open PRs; none of it is on the canonical branch as of the PR snapshot.",
+      "sourceRefs": [
+        "docs/reconciliation/sources/pr-snapshot.v1.json"
+      ]
+    }
   ],
   "originGovernanceConcepts": [
-    { "term": "Origin (founder working definition)", "kind": "definition", "status": "symbolic", "meaning": "\"A load bearing anchor which translates exterior ecology into interior and protect original creators value of self and ownership of self\"; preserved verbatim as the founder's definition.", "operationalUse": "Frames creator-origin records; not a legal or scientific finding.", "sourceRefs": ["docs/memory/2026-09-18r-origin-anchor-definition-recorded.md", "docs/KEYSTONE_ORIGIN_ANCHOR_LEGAL_AND_ECOLOGICAL_EVALUATION.md"] },
-    { "term": "Eternal Origin Ownership from Genesis", "kind": "governance", "status": "operational", "meaning": "Founder creator ownership-and-accountability claim for AXI and every registered agent, from source record KEYSTONE-ORIGIN-000001.", "operationalUse": "Required checkpoint fields on every agent record; agents lacking it are unregistered.", "sourceRefs": ["docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md", "docs/AXES_AGENT_ORIGIN_REGISTRY.md"] },
-    { "term": "AXI non-personhood", "kind": "governance", "status": "operational", "meaning": "AXI and every agent are software: not a living being, legal person, independent owner, or decision-maker.", "operationalUse": "Responsibility stays with the accountable human owner.", "sourceRefs": ["docs/AXES_CONSTITUTIONAL_FRAMEWORK.md", "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md"] },
-    { "term": "1 Against All Unfairness", "kind": "governance", "status": "operational", "meaning": "Preserve a traceable, correctable record whenever an ownership, authorship, origin, or invention-rights gap is identified.", "operationalUse": "Basis for the crisis register, evidence inventory, and this reconciliation's gap report.", "sourceRefs": ["docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md"] },
-    { "term": "AXES Constitutional Framework (Articles I-VIII)", "kind": "constitution", "status": "operational", "meaning": "Purpose and limits, founder authority, AI status, external-action boundary, creator and participant rights, relationship to law, amendment.", "operationalUse": "Top-level internal governance index.", "sourceRefs": ["docs/AXES_CONSTITUTIONAL_FRAMEWORK.md"] },
-    { "term": "Creator Origin Constitution (Articles I-XI)", "kind": "constitution", "status": "operational", "meaning": "Creator credit, consent, evidence confidence, required origin record, public-claim gate, disputes, registry safeguards.", "operationalUse": "Governs origin evidence and attribution for AXES work.", "sourceRefs": ["docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md"] },
-    { "term": "KEYSTONE Bill of Eternal Rights (I-VIII) and Extended Constitutional Charter (IX-XVIII)", "kind": "constitution", "status": "historical", "meaning": "Preserved founding rights sources; exactly 18 articles exist in the repository.", "operationalUse": "Source material; operative only where incorporated by the AXES constitutional records.", "sourceRefs": ["docs/keystone/birth certificate bill of eternal rights", "docs/keystone/EXTENDED CONSTITUTIONAL CHARTE", "docs/memory/2026-09-18-additional-constitutional-rights-claim.md"] },
-    { "term": "Right of Self-Origin", "kind": "constitution", "status": "historical", "meaning": "Founder-provided constitutional source statement on self-description and self-origin.", "operationalUse": "AXES must not use software to define a person's identity, value, origin, or rights.", "sourceRefs": ["docs/keystone/RIGHT_OF_SELF_ORIGIN.md", "docs/AXES_BUSINESS_PLAN.md"] },
-    { "term": "Founder self-origin declaration", "kind": "declaration", "status": "historical", "meaning": "Personal founder-authored declaration preserved with PR #173.", "operationalUse": "Accountability record; external legal status not established.", "sourceRefs": ["docs/AXEL_URARTU_SELF_ORIGIN_DECLARATION.md"] },
-    { "term": "Coordinate-system center (technical)", "kind": "invention", "status": "operational", "meaning": "One implemented technical center, axi-genesis-gravity-center at {x:0,y:0,z:0}, in the private hash-chained origin-coordinate system.", "operationalUse": "Private origin-coordinate records.", "sourceRefs": ["docs/AXI_ORIGIN_COORDINATE_SYSTEM.md", "docs/AXEL_URARTU_ORIGIN_TIMELINE_AND_INVESTIGATION_REGISTER.md"] },
-    { "term": "Coordinate-system center (founder invention claim)", "kind": "invention", "status": "proposed", "meaning": "Founder claim of conceptual origination of the KEYSTONE coordinate-system-center direction.", "operationalUse": "Preserved for counsel review; not a patent or registration.", "sourceRefs": ["docs/AXEL_URARTU_COORDINATE_SYSTEM_CENTER_INVENTION_DECLARATION.md"] },
-    { "term": "AXI founder-claimed invention", "kind": "invention", "status": "proposed", "meaning": "AXI recorded as a founder-claimed invention (origin verification, identity continuity, authorship, accountability).", "operationalUse": "Evidence and counsel-readiness path; patent status unconfirmed.", "sourceRefs": ["docs/AXI_INVENTION_RECORD.md", "docs/AXI_INTENT_AND_RIGHTS_READINESS.md"] },
-    { "term": "Cryptographic origin anchor", "kind": "invention", "status": "historical", "meaning": "Founder-recorded origin anchor and coordinate certificate (2026-09-01).", "operationalUse": "Source preservation only; not an external legal, identity, or permanence determination.", "sourceRefs": ["docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md", "docs/keystone/CERTIFICATE_ETERNAL_ORIGIN_ANCHOR_AND_EVALUATION.md"] },
-    { "term": "KEYSTONE origin and authority registry", "kind": "plan", "status": "proposed", "meaning": "Private versioned records of an application's source, accountable owner, scope, release state, and corrections.", "operationalUse": "No registry service is active.", "sourceRefs": ["docs/KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md", "docs/KEYSTONE_ORIGIN_REGISTRY_GENERALIZATION_PLAN.md"] },
-    { "term": "Eteriti value unit / self-creation", "kind": "definition", "status": "symbolic", "meaning": "Non-financial, non-transferable conceptual value unit for origin continuity.", "operationalUse": "Cannot define identity, evaluate worth, issue currency, or price work.", "sourceRefs": ["docs/memory/2026-09-10-self-creation-eteriti-value-unit.md"] },
-    { "term": "UR / NUR", "kind": "definition", "status": "proposed", "meaning": "UR = Unit of Eternal Origin; NUR = proposed record-holder for each gem or unit.", "operationalUse": "A NUR record is not proof of ownership, authenticity, value, or transferability.", "sourceRefs": ["docs/AXES_BUSINESS_PLAN.md"] },
-    { "term": "Ux/Ur, Ax, AxUx, x vocabulary", "kind": "definition", "status": "symbolic", "meaning": "Founder sound-resequencer vocabulary (unit of eternity, salt, bread and juice, custom eternal).", "operationalUse": "Preserved attributed vocabulary only.", "sourceRefs": ["docs/memory/2026-09-18h-ux-ur-ax-salt-bread-juice-vocabulary.md", "docs/keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md"] },
-    { "term": "Origin currency (x = x, eternal par value, eternal multiplier)", "kind": "definition", "status": "symbolic", "meaning": "Founder formalism for an origin artifact at eternal par value; explicitly not cryptography.", "operationalUse": "No currency, token, or financial function; URNUR legal gate applies.", "sourceRefs": ["docs/memory/2026-09-18aj-origin-currency-x-equals-x-eternal-par-value-statement.md", "docs/keystone/AXAXAR_TRIANGLE_ORIGIN_SYMBOLISM.md"] },
-    { "term": "Equilibrium / keystone symbolism", "kind": "definition", "status": "symbolic", "meaning": "Founder-stated design symbolism of the keystone as equilibrium.", "operationalUse": "Design and narrative reference.", "sourceRefs": ["docs/keystone/KEYSTONE_ARCHITECTURAL_EQUILIBRIUM_SYMBOLISM.md"] },
-    { "term": "User-owned AI sessions and sphere/gear model", "kind": "definition", "status": "symbolic", "meaning": "Each user responsible for their own timestamped, authored AI session; seven-gear sphere sensing a gravity center.", "operationalUse": "Conceptual record evaluated against the implemented automation boundary.", "sourceRefs": ["docs/keystone/USER_OWNED_AI_SESSIONS_AND_SPHERE_MODEL.md", "docs/memory/2026-09-18s-ai-ownership-sphere-model-recorded.md"] },
-    { "term": "Harmonics", "kind": "definition", "status": "proposed", "meaning": "Proposed public name for future URNUR units; separately, fictional audiovisual states in the Athanor game world.", "operationalUse": "Game Harmonics confer no financial value; URNUR use is legally gated.", "sourceRefs": ["docs/AXES_BUSINESS_PLAN.md", "docs/URNUR_FINANCIAL_READINESS.md"] },
-    { "term": "Origin Science model (origin block, X variable, multiplier, equilibrium, vertex, resequencing)", "kind": "definition", "status": "unfiled", "meaning": "Founder-defined origin-science proposals with machine-readable origin-property records.", "operationalUse": "Exists only in open PR #217; not on the canonical branch.", "sourceRefs": ["pr:#217", "docs/keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md"] },
-    { "term": "OORR-P v1 (Origin first, then ownership-rights claim)", "kind": "governance", "status": "unfiled", "meaning": "Canonical navigation over existing records plus a hash-chained registry separating symbolic axioms, founder declarations, technical facts, and external legal status.", "operationalUse": "Exists only in open PR #219.", "sourceRefs": ["pr:#219"] },
-    { "term": "Agent production-rights attribution", "kind": "governance", "status": "unfiled", "meaning": "Versioned productionRights block auto-stamped on agent registration, fail-closed.", "operationalUse": "Exists only in open PR #218.", "sourceRefs": ["pr:#218"] },
-    { "term": "Founder task record (Task-ID, lifecycle, attribution)", "kind": "governance", "status": "unfiled", "meaning": "Task-ID TASK-YYYYMMDD-NNNN, full lifecycle, and PR-body enforcement over the accountability ledger.", "operationalUse": "Exists only in open PRs #206 and #216.", "sourceRefs": ["pr:#206", "pr:#216"] },
-    { "term": "AXES OS controlled terminology standard", "kind": "governance", "status": "unfiled", "meaning": "Canonical terminology standard and term-record schema.", "operationalUse": "Exists only in open PR #213.", "sourceRefs": ["pr:#213"] }
+    {
+      "term": "Origin (founder working definition)",
+      "kind": "definition",
+      "status": "symbolic",
+      "meaning": "\"A load bearing anchor which translates exterior ecology into interior and protect original creators value of self and ownership of self\"; preserved verbatim as the founder's definition.",
+      "operationalUse": "Frames creator-origin records; not a legal or scientific finding.",
+      "sourceRefs": [
+        "docs/memory/2026-09-18r-origin-anchor-definition-recorded.md",
+        "docs/KEYSTONE_ORIGIN_ANCHOR_LEGAL_AND_ECOLOGICAL_EVALUATION.md"
+      ]
+    },
+    {
+      "term": "Eternal Origin Ownership from Genesis",
+      "kind": "governance",
+      "status": "operational",
+      "meaning": "Founder creator ownership-and-accountability claim for AXI and every registered agent, from source record KEYSTONE-ORIGIN-000001.",
+      "operationalUse": "Required checkpoint fields on every agent record; agents lacking it are unregistered.",
+      "sourceRefs": [
+        "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md",
+        "docs/AXES_AGENT_ORIGIN_REGISTRY.md"
+      ]
+    },
+    {
+      "term": "AXI non-personhood",
+      "kind": "governance",
+      "status": "operational",
+      "meaning": "AXI and every agent are software: not a living being, legal person, independent owner, or decision-maker.",
+      "operationalUse": "Responsibility stays with the accountable human owner.",
+      "sourceRefs": [
+        "docs/AXES_CONSTITUTIONAL_FRAMEWORK.md",
+        "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md"
+      ]
+    },
+    {
+      "term": "1 Against All Unfairness",
+      "kind": "governance",
+      "status": "operational",
+      "meaning": "Preserve a traceable, correctable record whenever an ownership, authorship, origin, or invention-rights gap is identified.",
+      "operationalUse": "Basis for the crisis register, evidence inventory, and this reconciliation's gap report.",
+      "sourceRefs": [
+        "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md"
+      ]
+    },
+    {
+      "term": "AXES Constitutional Framework (Articles I-VIII)",
+      "kind": "constitution",
+      "status": "operational",
+      "meaning": "Purpose and limits, founder authority, AI status, external-action boundary, creator and participant rights, relationship to law, amendment.",
+      "operationalUse": "Top-level internal governance index.",
+      "sourceRefs": [
+        "docs/AXES_CONSTITUTIONAL_FRAMEWORK.md"
+      ]
+    },
+    {
+      "term": "Creator Origin Constitution (Articles I-XI)",
+      "kind": "constitution",
+      "status": "operational",
+      "meaning": "Creator credit, consent, evidence confidence, required origin record, public-claim gate, disputes, registry safeguards.",
+      "operationalUse": "Governs origin evidence and attribution for AXES work.",
+      "sourceRefs": [
+        "docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md"
+      ]
+    },
+    {
+      "term": "KEYSTONE Bill of Eternal Rights (I-VIII) and Extended Constitutional Charter (IX-XVIII)",
+      "kind": "constitution",
+      "status": "historical",
+      "meaning": "Preserved founding rights sources; exactly 18 articles exist in the repository.",
+      "operationalUse": "Source material; operative only where incorporated by the AXES constitutional records.",
+      "sourceRefs": [
+        "docs/keystone/birth certificate bill of eternal rights",
+        "docs/keystone/EXTENDED CONSTITUTIONAL CHARTE",
+        "docs/memory/2026-09-18-additional-constitutional-rights-claim.md"
+      ]
+    },
+    {
+      "term": "Right of Self-Origin",
+      "kind": "constitution",
+      "status": "historical",
+      "meaning": "Founder-provided constitutional source statement on self-description and self-origin.",
+      "operationalUse": "AXES must not use software to define a person's identity, value, origin, or rights.",
+      "sourceRefs": [
+        "docs/keystone/RIGHT_OF_SELF_ORIGIN.md",
+        "docs/AXES_BUSINESS_PLAN.md"
+      ]
+    },
+    {
+      "term": "Founder self-origin declaration",
+      "kind": "declaration",
+      "status": "historical",
+      "meaning": "Personal founder-authored declaration preserved with PR #173.",
+      "operationalUse": "Accountability record; external legal status not established.",
+      "sourceRefs": [
+        "docs/AXEL_URARTU_SELF_ORIGIN_DECLARATION.md"
+      ]
+    },
+    {
+      "term": "Coordinate-system center (technical)",
+      "kind": "invention",
+      "status": "operational",
+      "meaning": "One implemented technical center, axi-genesis-gravity-center at {x:0,y:0,z:0}, in the private hash-chained origin-coordinate system.",
+      "operationalUse": "Private origin-coordinate records.",
+      "sourceRefs": [
+        "docs/AXI_ORIGIN_COORDINATE_SYSTEM.md",
+        "docs/AXEL_URARTU_ORIGIN_TIMELINE_AND_INVESTIGATION_REGISTER.md"
+      ]
+    },
+    {
+      "term": "Coordinate-system center (founder invention claim)",
+      "kind": "invention",
+      "status": "proposed",
+      "meaning": "Founder claim of conceptual origination of the KEYSTONE coordinate-system-center direction.",
+      "operationalUse": "Preserved for counsel review; not a patent or registration.",
+      "sourceRefs": [
+        "docs/AXEL_URARTU_COORDINATE_SYSTEM_CENTER_INVENTION_DECLARATION.md"
+      ]
+    },
+    {
+      "term": "AXI founder-claimed invention",
+      "kind": "invention",
+      "status": "proposed",
+      "meaning": "AXI recorded as a founder-claimed invention (origin verification, identity continuity, authorship, accountability).",
+      "operationalUse": "Evidence and counsel-readiness path; patent status unconfirmed.",
+      "sourceRefs": [
+        "docs/AXI_INVENTION_RECORD.md",
+        "docs/AXI_INTENT_AND_RIGHTS_READINESS.md"
+      ]
+    },
+    {
+      "term": "Cryptographic origin anchor",
+      "kind": "invention",
+      "status": "historical",
+      "meaning": "Founder-recorded origin anchor and coordinate certificate (2026-09-01).",
+      "operationalUse": "Source preservation only; not an external legal, identity, or permanence determination.",
+      "sourceRefs": [
+        "docs/keystone/CRYPTOGRAPHIC_ORIGIN_ANCHOR.md",
+        "docs/keystone/CERTIFICATE_ETERNAL_ORIGIN_ANCHOR_AND_EVALUATION.md"
+      ]
+    },
+    {
+      "term": "KEYSTONE origin and authority registry",
+      "kind": "plan",
+      "status": "proposed",
+      "meaning": "Private versioned records of an application's source, accountable owner, scope, release state, and corrections.",
+      "operationalUse": "No registry service is active.",
+      "sourceRefs": [
+        "docs/KEYSTONE_APPLICATION_ORIGIN_REGISTRY.md",
+        "docs/KEYSTONE_ORIGIN_REGISTRY_GENERALIZATION_PLAN.md"
+      ]
+    },
+    {
+      "term": "Eteriti value unit / self-creation",
+      "kind": "definition",
+      "status": "symbolic",
+      "meaning": "Non-financial, non-transferable conceptual value unit for origin continuity.",
+      "operationalUse": "Cannot define identity, evaluate worth, issue currency, or price work.",
+      "sourceRefs": [
+        "docs/memory/2026-09-10-self-creation-eteriti-value-unit.md"
+      ]
+    },
+    {
+      "term": "UR / NUR",
+      "kind": "definition",
+      "status": "proposed",
+      "meaning": "UR = Unit of Eternal Origin; NUR = proposed record-holder for each gem or unit.",
+      "operationalUse": "A NUR record is not proof of ownership, authenticity, value, or transferability.",
+      "sourceRefs": [
+        "docs/AXES_BUSINESS_PLAN.md"
+      ]
+    },
+    {
+      "term": "Ux/Ur, Ax, AxUx, x vocabulary",
+      "kind": "definition",
+      "status": "symbolic",
+      "meaning": "Founder sound-resequencer vocabulary (unit of eternity, salt, bread and juice, custom eternal).",
+      "operationalUse": "Preserved attributed vocabulary only.",
+      "sourceRefs": [
+        "docs/memory/2026-09-18h-ux-ur-ax-salt-bread-juice-vocabulary.md",
+        "docs/keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md"
+      ]
+    },
+    {
+      "term": "Origin currency (x = x, eternal par value, eternal multiplier)",
+      "kind": "definition",
+      "status": "symbolic",
+      "meaning": "Founder formalism for an origin artifact at eternal par value; explicitly not cryptography.",
+      "operationalUse": "No currency, token, or financial function; URNUR legal gate applies.",
+      "sourceRefs": [
+        "docs/memory/2026-09-18aj-origin-currency-x-equals-x-eternal-par-value-statement.md",
+        "docs/keystone/AXAXAR_TRIANGLE_ORIGIN_SYMBOLISM.md"
+      ]
+    },
+    {
+      "term": "Equilibrium / keystone symbolism",
+      "kind": "definition",
+      "status": "symbolic",
+      "meaning": "Founder-stated design symbolism of the keystone as equilibrium.",
+      "operationalUse": "Design and narrative reference.",
+      "sourceRefs": [
+        "docs/keystone/KEYSTONE_ARCHITECTURAL_EQUILIBRIUM_SYMBOLISM.md"
+      ]
+    },
+    {
+      "term": "User-owned AI sessions and sphere/gear model",
+      "kind": "definition",
+      "status": "symbolic",
+      "meaning": "Each user responsible for their own timestamped, authored AI session; seven-gear sphere sensing a gravity center.",
+      "operationalUse": "Conceptual record evaluated against the implemented automation boundary.",
+      "sourceRefs": [
+        "docs/keystone/USER_OWNED_AI_SESSIONS_AND_SPHERE_MODEL.md",
+        "docs/memory/2026-09-18s-ai-ownership-sphere-model-recorded.md"
+      ]
+    },
+    {
+      "term": "Harmonics",
+      "kind": "definition",
+      "status": "proposed",
+      "meaning": "Proposed public name for future URNUR units; separately, fictional audiovisual states in the Athanor game world.",
+      "operationalUse": "Game Harmonics confer no financial value; URNUR use is legally gated.",
+      "sourceRefs": [
+        "docs/AXES_BUSINESS_PLAN.md",
+        "docs/URNUR_FINANCIAL_READINESS.md"
+      ]
+    },
+    {
+      "term": "Origin Science model (origin block, X variable, multiplier, equilibrium, vertex, resequencing)",
+      "kind": "definition",
+      "status": "unfiled",
+      "meaning": "Founder-defined origin-science proposals with machine-readable origin-property records.",
+      "operationalUse": "Exists only in open PR #217; not on the canonical branch.",
+      "sourceRefs": [
+        "pr:#217",
+        "docs/keystone/CERTIFICATE_MICROCOSMIC_COORDINATE_SOUND_RESEQUENCER.md"
+      ]
+    },
+    {
+      "term": "OORR-P v1 (Origin first, then ownership-rights claim)",
+      "kind": "governance",
+      "status": "unfiled",
+      "meaning": "Canonical navigation over existing records plus a hash-chained registry separating symbolic axioms, founder declarations, technical facts, and external legal status.",
+      "operationalUse": "Exists only in open PR #219.",
+      "sourceRefs": [
+        "pr:#219"
+      ]
+    },
+    {
+      "term": "Agent production-rights attribution",
+      "kind": "governance",
+      "status": "unfiled",
+      "meaning": "Versioned productionRights block auto-stamped on agent registration, fail-closed.",
+      "operationalUse": "Exists only in open PR #218.",
+      "sourceRefs": [
+        "pr:#218"
+      ]
+    },
+    {
+      "term": "Founder task record (Task-ID, lifecycle, attribution)",
+      "kind": "governance",
+      "status": "unfiled",
+      "meaning": "Task-ID TASK-YYYYMMDD-NNNN, full lifecycle, and PR-body enforcement over the accountability ledger.",
+      "operationalUse": "Exists only in open PRs #206 and #216.",
+      "sourceRefs": [
+        "pr:#206",
+        "pr:#216"
+      ]
+    },
+    {
+      "term": "AXES OS controlled terminology standard",
+      "kind": "governance",
+      "status": "unfiled",
+      "meaning": "Canonical terminology standard and term-record schema.",
+      "operationalUse": "Exists only in open PR #213.",
+      "sourceRefs": [
+        "pr:#213"
+      ]
+    }
   ],
   "valueMap": [
-    { "value": "Eternal Origin (continuity from Genesis)", "operationalValue": "Every agent record carries the Genesis checkpoint, creator claim, and immutable creation timestamps", "mechanism": "Agent registry migration and readiness checks", "status": "operational", "sourceRefs": ["docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md", "docs/AXES_AGENT_ORIGIN_REGISTRY.md"] },
-    { "value": "Ownership and accountability", "operationalValue": "Founder claim recorded; directive-vs-delivery ledger; PR template fields; external paperwork tracked", "mechanism": "Accountability ledger, PR template, ownership checklist", "status": "operational", "sourceRefs": ["docs/COPILOT_ACCOUNTABILITY_TRACKER.md", ".github/PULL_REQUEST_TEMPLATE.md", "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"] },
-    { "value": "Origin (load-bearing anchor)", "operationalValue": "Required origin record per creator/asset with evidence confidence and correction path", "mechanism": "Creator Origin Constitution Article IV; origin registry plan", "status": "proposed", "sourceRefs": ["docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md", "docs/KEYSTONE_ORIGIN_REGISTRY_GENERALIZATION_PLAN.md"] },
-    { "value": "Truthfulness / 1 Against All Unfairness", "operationalValue": "Claims labeled verified vs unverified; corrections append, never erase", "mechanism": "Evidence confidence standard, crisis register, investigation register amendment rule", "status": "operational", "sourceRefs": ["docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md", "docs/AXEL_URARTU_ORIGIN_TIMELINE_AND_INVESTIGATION_REGISTER.md"] },
-    { "value": "Continuity", "operationalValue": "Dated memory records, timeline rows, hash-linked continuity records, recovery bundles", "mechanism": "docs/memory, PROJECT_TIMELINE.md, recovery service", "status": "operational", "sourceRefs": ["docs/memory/README.md", "PROJECT_TIMELINE.md", "docs/AXI_RUNTIME_TIMELINE_RECOVERY.md"] },
-    { "value": "Human authority and safety", "operationalValue": "No external action without a named human decision; allowlisted automation only", "mechanism": "AGENTS.md boundary; Constitutional Article IV; automation allowlist", "status": "operational", "sourceRefs": ["AGENTS.md", "docs/AXES_CONSTITUTIONAL_FRAMEWORK.md", "docs/AXI_AUTOMATION_SERVICE.md"] },
-    { "value": "Uplift (shared team value)", "operationalValue": "Creation tools scoped under a shared-team value", "mechanism": "Platform plan Uplift section", "status": "proposed", "sourceRefs": ["docs/AXES_PLATFORM_PLAN.md", "docs/AXIOM_CREATION_TOOLS.md"] },
-    { "value": "All for All", "operationalValue": "Business plan founder principle guiding offers and access", "mechanism": "Business plan", "status": "proposed", "sourceRefs": ["docs/AXES_BUSINESS_PLAN.md"] },
-    { "value": "Revenue and usefulness", "operationalValue": "V2 AXES services first, V3 KEYSTONE provenance services second, V1 trading kept non-revenue", "mechanism": "Founder revenue-priority overlay and action queue", "status": "proposed", "sourceRefs": ["docs/FOUNDER_REVENUE_PRIORITY_OVERLAY.md", "docs/keystone/FOUNDER_ACTION_QUEUE.md"] },
-    { "value": "Self-creation / Eteriti", "operationalValue": "Non-financial continuity concept; no identity, worth, or currency function", "mechanism": "Memory record only", "status": "symbolic", "sourceRefs": ["docs/memory/2026-09-10-self-creation-eteriti-value-unit.md"] },
-    { "value": "Recognition (URNUR)", "operationalValue": "Voluntary non-monetary contributor recognition; financial use legally gated", "mechanism": "URNUR readiness gate", "status": "blocked", "sourceRefs": ["docs/URNUR_NON_MONETARY_RECOGNITION.md", "docs/URNUR_FINANCIAL_READINESS.md"] }
+    {
+      "value": "Eternal Origin (continuity from Genesis)",
+      "operationalValue": "Every agent record carries the Genesis checkpoint, creator claim, and immutable creation timestamps",
+      "mechanism": "Agent registry migration and readiness checks",
+      "status": "operational",
+      "sourceRefs": [
+        "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md",
+        "docs/AXES_AGENT_ORIGIN_REGISTRY.md"
+      ]
+    },
+    {
+      "value": "Ownership and accountability",
+      "operationalValue": "Founder claim recorded; directive-vs-delivery ledger; PR template fields; external paperwork tracked",
+      "mechanism": "Accountability ledger, PR template, ownership checklist",
+      "status": "operational",
+      "sourceRefs": [
+        "docs/COPILOT_ACCOUNTABILITY_TRACKER.md",
+        ".github/PULL_REQUEST_TEMPLATE.md",
+        "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"
+      ]
+    },
+    {
+      "value": "Origin (load-bearing anchor)",
+      "operationalValue": "Required origin record per creator/asset with evidence confidence and correction path",
+      "mechanism": "Creator Origin Constitution Article IV; origin registry plan",
+      "status": "proposed",
+      "sourceRefs": [
+        "docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md",
+        "docs/KEYSTONE_ORIGIN_REGISTRY_GENERALIZATION_PLAN.md"
+      ]
+    },
+    {
+      "value": "Truthfulness / 1 Against All Unfairness",
+      "operationalValue": "Claims labeled verified vs unverified; corrections append, never erase",
+      "mechanism": "Evidence confidence standard, crisis register, investigation register amendment rule",
+      "status": "operational",
+      "sourceRefs": [
+        "docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md",
+        "docs/AXEL_URARTU_ORIGIN_TIMELINE_AND_INVESTIGATION_REGISTER.md"
+      ]
+    },
+    {
+      "value": "Continuity",
+      "operationalValue": "Dated memory records, timeline rows, hash-linked continuity records, recovery bundles",
+      "mechanism": "docs/memory, PROJECT_TIMELINE.md, recovery service",
+      "status": "operational",
+      "sourceRefs": [
+        "docs/memory/README.md",
+        "PROJECT_TIMELINE.md",
+        "docs/AXI_RUNTIME_TIMELINE_RECOVERY.md"
+      ]
+    },
+    {
+      "value": "Human authority and safety",
+      "operationalValue": "No external action without a named human decision; allowlisted automation only",
+      "mechanism": "AGENTS.md boundary; Constitutional Article IV; automation allowlist",
+      "status": "operational",
+      "sourceRefs": [
+        "AGENTS.md",
+        "docs/AXES_CONSTITUTIONAL_FRAMEWORK.md",
+        "docs/AXI_AUTOMATION_SERVICE.md"
+      ]
+    },
+    {
+      "value": "Uplift (shared team value)",
+      "operationalValue": "Creation tools scoped under a shared-team value",
+      "mechanism": "Platform plan Uplift section",
+      "status": "proposed",
+      "sourceRefs": [
+        "docs/AXES_PLATFORM_PLAN.md",
+        "docs/AXIOM_CREATION_TOOLS.md"
+      ]
+    },
+    {
+      "value": "All for All",
+      "operationalValue": "Business plan founder principle guiding offers and access",
+      "mechanism": "Business plan",
+      "status": "proposed",
+      "sourceRefs": [
+        "docs/AXES_BUSINESS_PLAN.md"
+      ]
+    },
+    {
+      "value": "Revenue and usefulness",
+      "operationalValue": "V2 AXES services first, V3 KEYSTONE provenance services second, V1 trading kept non-revenue",
+      "mechanism": "Founder revenue-priority overlay and action queue",
+      "status": "proposed",
+      "sourceRefs": [
+        "docs/FOUNDER_REVENUE_PRIORITY_OVERLAY.md",
+        "docs/keystone/FOUNDER_ACTION_QUEUE.md"
+      ]
+    },
+    {
+      "value": "Self-creation / Eteriti",
+      "operationalValue": "Non-financial continuity concept; no identity, worth, or currency function",
+      "mechanism": "Memory record only",
+      "status": "symbolic",
+      "sourceRefs": [
+        "docs/memory/2026-09-10-self-creation-eteriti-value-unit.md"
+      ]
+    },
+    {
+      "value": "Recognition (URNUR)",
+      "operationalValue": "Voluntary non-monetary contributor recognition; financial use legally gated",
+      "mechanism": "URNUR readiness gate",
+      "status": "blocked",
+      "sourceRefs": [
+        "docs/URNUR_NON_MONETARY_RECOGNITION.md",
+        "docs/URNUR_FINANCIAL_READINESS.md"
+      ]
+    }
   ],
   "inventory": [
-    { "id": "INV-01", "item": "AXES Contracting revenue launch (licensed CA corporation, phased plan)", "category": "plan", "status": "proposed", "profit": 5, "urgency": 5, "authority": "Founder approval of the draft plan", "nextAction": "Approve or redirect the draft revenue-launch plan (action queue #17).", "sourceRefs": ["docs/AXES_CONTRACTING_REVENUE_LAUNCH_PLAN.md", "docs/keystone/FOUNDER_ACTION_QUEUE.md"] },
-    { "id": "INV-02", "item": "First paid offer AXES-DMC-001 design/materials consultation", "category": "plan", "status": "proposed", "profit": 4, "urgency": 5, "authority": "Founder approval of scope, price, and support path", "nextAction": "Approve the first paid offer (action queue #2).", "sourceRefs": ["docs/AXES_DMC_001_ACTIVATION_PROPOSAL.md", "docs/AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md"] },
-    { "id": "INV-03", "item": "axescontracting.com DNS/TLS and business email migration", "category": "plan", "status": "blocked", "profit": 4, "urgency": 5, "authority": "Founder DNS/registrar and mailbox access", "nextAction": "Founder connects DNS and completes the mailbox inventory before cutover.", "sourceRefs": ["docs/DOMAIN_PORTFOLIO.md", "docs/EMAIL_MIGRATION_PLAN.md", "PROJECT_TIMELINE.md"] },
-    { "id": "INV-04", "item": "Patent completion (provisional 64,078,819 status unconfirmed)", "category": "invention", "status": "blocked", "profit": 4, "urgency": 5, "authority": "Qualified patent counsel", "nextAction": "Retain counsel to confirm filing status and deadlines.", "sourceRefs": ["docs/keystone/PATENT_APPLICATION_64_078_819.md", "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md", "docs/PROJECT_BUDGET.md"] },
-    { "id": "INV-05", "item": "Redeploy current XIIOM production (running deployment confirmed stale)", "category": "automation", "status": "blocked", "profit": 3, "urgency": 5, "authority": "Founder Railway access", "nextAction": "Founder-triggered redeploy, then live verification.", "sourceRefs": ["docs/memory/2026-09-19p-xiiom-502-resolved-stale-deployment.md", "docs/RAILWAY_DEPLOYMENT.md"] },
-    { "id": "INV-06", "item": "Repository visibility decision (public since 2026-08-28)", "category": "directive", "status": "blocked", "profit": 2, "urgency": 5, "authority": "Founder decision", "nextAction": "Decide public vs private before more business records are committed.", "sourceRefs": ["docs/AXES_TIER_1_DECISION_REGISTER.md", "docs/keystone/FOUNDER_ACTION_QUEUE.md"] },
-    { "id": "INV-07", "item": "Review and merge order for the open origin/ownership/governance PR tranche", "category": "directive", "status": "proposed", "profit": 2, "urgency": 5, "authority": "Founder review and merge decision", "nextAction": "Decide merge order for #206/#216, #217, #218, #219, #220, #207, #212-#214 so the meaning becomes filed on the canonical branch.", "sourceRefs": ["pr:#206", "pr:#216", "pr:#217", "pr:#218", "pr:#219", "pr:#220"] },
-    { "id": "INV-08", "item": "KEYSTONE creator-origin setup KEYSTONE-COS-001 (second paid offer)", "category": "plan", "status": "proposed", "profit": 4, "urgency": 4, "authority": "Founder approval", "nextAction": "Approve as the second paid offering once INV-02 runs (action queue #5).", "sourceRefs": ["docs/KEYSTONE_CREATOR_ORIGIN_SETUP_READINESS.md", "docs/KEYSTONE_CREATOR_ORIGIN_SETUP_INTAKE_TEMPLATE.md"] },
-    { "id": "INV-09", "item": "Trademark filings for names in commercial use (AXIOM, AXES)", "category": "document", "status": "unfiled", "profit": 3, "urgency": 4, "authority": "Founder with qualified trademark help", "nextAction": "File applications for names actually in use (checklist A4).", "sourceRefs": ["docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"] },
-    { "id": "INV-10", "item": "IP assignment into the entity and codebase copyright registration", "category": "document", "status": "unfiled", "profit": 3, "urgency": 4, "authority": "Founder with qualified counsel", "nextAction": "Complete checklist A2 then A3.", "sourceRefs": ["docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"] },
-    { "id": "INV-11", "item": "Populate the origin-ownership evidence inventory (currently zero entries)", "category": "document", "status": "unfiled", "profit": 3, "urgency": 4, "authority": "Founder supplies private source evidence", "nextAction": "Add dated, source-linked entries so value recovery can advance past pending.", "sourceRefs": ["docs/AXI_ORIGIN_OWNERSHIP_EVIDENCE_INVENTORY.md", "docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md"] },
-    { "id": "INV-12", "item": "Identify the founder-reported $40,000 loss incident", "category": "directive", "status": "unfiled", "profit": 3, "urgency": 4, "authority": "Founder identifies the task/PR", "nextAction": "Name the specific task so it can be recorded with ownership (action queue #16).", "sourceRefs": ["docs/memory/2026-09-19m-founder-loss-report-and-rating.md", "docs/keystone/FOUNDER_ACTION_QUEUE.md"] },
-    { "id": "INV-13", "item": "Account and infrastructure control audit (GitHub, Railway, registrars, API billing)", "category": "directive", "status": "blocked", "profit": 2, "urgency": 5, "authority": "Founder only", "nextAction": "Confirm each account is owned by the founder or entity (checklist A6/A7).", "sourceRefs": ["docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"] },
-    { "id": "INV-14", "item": "Continuity runtime activation (recovery destination, verified bundle, restore drill)", "category": "automation", "status": "blocked", "profit": 2, "urgency": 4, "authority": "Authorized operator", "nextAction": "Complete Priority 0 continuity runtime checkpoint.", "sourceRefs": ["PROJECT_TIMELINE.md", "docs/AXI_RUNTIME_TIMELINE_RECOVERY.md"] },
-    { "id": "INV-15", "item": "Axes Contracting Inc entity and CSLB license #995577 active", "category": "document", "status": "verified", "verificationEvidence": ["docs/memory/2026-09-19g-axes-contracting-license-confirmed-active.md"], "profit": 5, "urgency": 2, "authority": "Recorded from the official CSLB source on 2026-09-19; re-verify before relying on it", "nextAction": "Keep bond and license current; re-check before client contracts.", "sourceRefs": ["docs/memory/2026-09-19g-axes-contracting-license-confirmed-active.md", "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"] },
-    { "id": "INV-16", "item": "Copilot directive-vs-delivery accountability ledger", "category": "automation", "status": "operational", "profit": 2, "urgency": 3, "authority": "Founder confirmation for verified_success", "nextAction": "Record founder directives in the ledger so delivery can be measured.", "sourceRefs": ["docs/COPILOT_ACCOUNTABILITY_TRACKER.md"] },
-    { "id": "INV-17", "item": "Chichetki studio pilot catalog", "category": "plan", "status": "proposed", "profit": 3, "urgency": 2, "authority": "Founder asset, pricing, and rights approval", "nextAction": "Select first assets and approve catalog brief.", "sourceRefs": ["docs/AXES_BUSINESS_PLAN.md", "docs/CHICHETKI_COLLECTIBLE_GEM_READINESS.md"] },
-    { "id": "INV-18", "item": "AXES Directory business-only pilot", "category": "plan", "status": "proposed", "profit": 3, "urgency": 2, "authority": "Founder approval of readiness gates", "nextAction": "Approve pilot materials before interviews.", "sourceRefs": ["docs/AXES_DIRECTORY_READINESS.md", "docs/AXES_DIRECTORY_DATA_MODEL.md"] },
-    { "id": "INV-19", "item": "AI avatar production line", "category": "plan", "status": "blocked", "profit": 3, "urgency": 1, "authority": "Moderation, vendor, budget, and hosting approvals", "nextAction": "Founder approvals listed in action queue #13.", "sourceRefs": ["docs/AXES_CONTRACTING_AI_AVATAR_PRODUCTION_READINESS.md"] },
-    { "id": "INV-20", "item": "Axaxar.com launch scope", "category": "plan", "status": "proposed", "profit": 2, "urgency": 2, "authority": "Founder confirmation", "nextAction": "Confirm or edit the proposed default scope table.", "sourceRefs": ["docs/keystone/AXAXAR_LAUNCH_PLAN.md"] },
-    { "id": "INV-21", "item": "Re-supply the customer-service / manners continuity memory", "category": "directive", "status": "unfiled", "profit": 1, "urgency": 3, "authority": "Founder re-supplies the text", "nextAction": "Provide the missing prompt so it can be committed (action queue #15).", "sourceRefs": ["docs/memory/2026-09-19l-customer-service-prompt-not-found.md"] },
-    { "id": "INV-22", "item": "URNUR / Harmonics currency and creator economy", "category": "invention", "status": "blocked", "profit": 2, "urgency": 1, "authority": "Financial-services and digital-asset counsel", "nextAction": "Define permitted scope or confirm it stays inactive.", "sourceRefs": ["docs/URNUR_FINANCIAL_READINESS.md", "docs/AXES_TIER_1_DECISION_REGISTER.md"] }
+    {
+      "id": "INV-01",
+      "item": "AXES Contracting revenue launch (licensed CA corporation, phased plan)",
+      "category": "plan",
+      "status": "proposed",
+      "profit": 5,
+      "urgency": 5,
+      "authority": "Founder approval of the draft plan",
+      "nextAction": "Approve or redirect the draft revenue-launch plan (action queue #17).",
+      "sourceRefs": [
+        "docs/AXES_CONTRACTING_REVENUE_LAUNCH_PLAN.md",
+        "docs/keystone/FOUNDER_ACTION_QUEUE.md"
+      ]
+    },
+    {
+      "id": "INV-02",
+      "item": "First paid offer AXES-DMC-001 design/materials consultation",
+      "category": "plan",
+      "status": "proposed",
+      "profit": 4,
+      "urgency": 5,
+      "authority": "Founder approval of scope, price, and support path",
+      "nextAction": "Approve the first paid offer (action queue #2).",
+      "sourceRefs": [
+        "docs/AXES_DMC_001_ACTIVATION_PROPOSAL.md",
+        "docs/AXES_DESIGN_MATERIALS_CONSULTATION_READINESS.md"
+      ]
+    },
+    {
+      "id": "INV-03",
+      "item": "axescontracting.com DNS/TLS and business email migration",
+      "category": "plan",
+      "status": "blocked",
+      "profit": 4,
+      "urgency": 5,
+      "authority": "Founder DNS/registrar and mailbox access",
+      "nextAction": "Founder connects DNS and completes the mailbox inventory before cutover.",
+      "sourceRefs": [
+        "docs/DOMAIN_PORTFOLIO.md",
+        "docs/EMAIL_MIGRATION_PLAN.md",
+        "PROJECT_TIMELINE.md"
+      ]
+    },
+    {
+      "id": "INV-04",
+      "item": "Patent completion (provisional 64,078,819 status unconfirmed)",
+      "category": "invention",
+      "status": "blocked",
+      "profit": 4,
+      "urgency": 5,
+      "authority": "Qualified patent counsel",
+      "nextAction": "Retain counsel to confirm filing status and deadlines.",
+      "sourceRefs": [
+        "docs/keystone/PATENT_APPLICATION_64_078_819.md",
+        "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md",
+        "docs/PROJECT_BUDGET.md"
+      ]
+    },
+    {
+      "id": "INV-05",
+      "item": "Redeploy current XIIOM production (running deployment confirmed stale)",
+      "category": "automation",
+      "status": "blocked",
+      "profit": 3,
+      "urgency": 5,
+      "authority": "Founder Railway access",
+      "nextAction": "Founder-triggered redeploy, then live verification.",
+      "sourceRefs": [
+        "docs/memory/2026-09-19p-xiiom-502-resolved-stale-deployment.md",
+        "docs/RAILWAY_DEPLOYMENT.md"
+      ]
+    },
+    {
+      "id": "INV-06",
+      "item": "Repository visibility decision (public since 2026-08-28)",
+      "category": "directive",
+      "status": "blocked",
+      "profit": 2,
+      "urgency": 5,
+      "authority": "Founder decision",
+      "nextAction": "Decide public vs private before more business records are committed.",
+      "sourceRefs": [
+        "docs/AXES_TIER_1_DECISION_REGISTER.md",
+        "docs/keystone/FOUNDER_ACTION_QUEUE.md"
+      ]
+    },
+    {
+      "id": "INV-07",
+      "item": "Review and merge order for the open origin/ownership/governance PR tranche",
+      "category": "directive",
+      "status": "proposed",
+      "profit": 2,
+      "urgency": 5,
+      "authority": "Founder review and merge decision",
+      "nextAction": "Decide merge order for #206/#216, #217, #218, #219, #220, #207, #212-#214 so the meaning becomes filed on the canonical branch.",
+      "sourceRefs": [
+        "pr:#206",
+        "pr:#216",
+        "pr:#217",
+        "pr:#218",
+        "pr:#219",
+        "pr:#220"
+      ]
+    },
+    {
+      "id": "INV-08",
+      "item": "KEYSTONE creator-origin setup KEYSTONE-COS-001 (second paid offer)",
+      "category": "plan",
+      "status": "proposed",
+      "profit": 4,
+      "urgency": 4,
+      "authority": "Founder approval",
+      "nextAction": "Approve as the second paid offering once INV-02 runs (action queue #5).",
+      "sourceRefs": [
+        "docs/KEYSTONE_CREATOR_ORIGIN_SETUP_READINESS.md",
+        "docs/KEYSTONE_CREATOR_ORIGIN_SETUP_INTAKE_TEMPLATE.md"
+      ]
+    },
+    {
+      "id": "INV-09",
+      "item": "Trademark filings for names in commercial use (AXIOM, AXES)",
+      "category": "document",
+      "status": "unfiled",
+      "profit": 3,
+      "urgency": 4,
+      "authority": "Founder with qualified trademark help",
+      "nextAction": "File applications for names actually in use (checklist A4).",
+      "sourceRefs": [
+        "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"
+      ]
+    },
+    {
+      "id": "INV-10",
+      "item": "IP assignment into the entity and codebase copyright registration",
+      "category": "document",
+      "status": "unfiled",
+      "profit": 3,
+      "urgency": 4,
+      "authority": "Founder with qualified counsel",
+      "nextAction": "Complete checklist A2 then A3.",
+      "sourceRefs": [
+        "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"
+      ]
+    },
+    {
+      "id": "INV-11",
+      "item": "Populate the origin-ownership evidence inventory (currently zero entries)",
+      "category": "document",
+      "status": "unfiled",
+      "profit": 3,
+      "urgency": 4,
+      "authority": "Founder supplies private source evidence",
+      "nextAction": "Add dated, source-linked entries so value recovery can advance past pending.",
+      "sourceRefs": [
+        "docs/AXI_ORIGIN_OWNERSHIP_EVIDENCE_INVENTORY.md",
+        "docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md"
+      ]
+    },
+    {
+      "id": "INV-12",
+      "item": "Identify the founder-reported $40,000 loss incident",
+      "category": "directive",
+      "status": "unfiled",
+      "profit": 3,
+      "urgency": 4,
+      "authority": "Founder identifies the task/PR",
+      "nextAction": "Name the specific task so it can be recorded with ownership (action queue #16).",
+      "sourceRefs": [
+        "docs/memory/2026-09-19m-founder-loss-report-and-rating.md",
+        "docs/keystone/FOUNDER_ACTION_QUEUE.md"
+      ]
+    },
+    {
+      "id": "INV-13",
+      "item": "Account and infrastructure control audit (GitHub, Railway, registrars, API billing)",
+      "category": "directive",
+      "status": "blocked",
+      "profit": 2,
+      "urgency": 5,
+      "authority": "Founder only",
+      "nextAction": "Confirm each account is owned by the founder or entity (checklist A6/A7).",
+      "sourceRefs": [
+        "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"
+      ]
+    },
+    {
+      "id": "INV-14",
+      "item": "Continuity runtime activation (recovery destination, verified bundle, restore drill)",
+      "category": "automation",
+      "status": "blocked",
+      "profit": 2,
+      "urgency": 4,
+      "authority": "Authorized operator",
+      "nextAction": "Complete Priority 0 continuity runtime checkpoint.",
+      "sourceRefs": [
+        "PROJECT_TIMELINE.md",
+        "docs/AXI_RUNTIME_TIMELINE_RECOVERY.md"
+      ]
+    },
+    {
+      "id": "INV-15",
+      "item": "Axes Contracting Inc entity and CSLB license #995577 active",
+      "category": "document",
+      "status": "verified",
+      "verificationEvidence": [
+        "docs/memory/2026-09-19g-axes-contracting-license-confirmed-active.md"
+      ],
+      "profit": 5,
+      "urgency": 2,
+      "authority": "Recorded from the official CSLB source on 2026-09-19; re-verify before relying on it",
+      "nextAction": "Keep bond and license current; re-check before client contracts.",
+      "sourceRefs": [
+        "docs/memory/2026-09-19g-axes-contracting-license-confirmed-active.md",
+        "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"
+      ]
+    },
+    {
+      "id": "INV-16",
+      "item": "Copilot directive-vs-delivery accountability ledger",
+      "category": "automation",
+      "status": "operational",
+      "profit": 2,
+      "urgency": 3,
+      "authority": "Founder confirmation for verified_success",
+      "nextAction": "Record founder directives in the ledger so delivery can be measured.",
+      "sourceRefs": [
+        "docs/COPILOT_ACCOUNTABILITY_TRACKER.md"
+      ]
+    },
+    {
+      "id": "INV-17",
+      "item": "Chichetki studio pilot catalog",
+      "category": "plan",
+      "status": "proposed",
+      "profit": 3,
+      "urgency": 2,
+      "authority": "Founder asset, pricing, and rights approval",
+      "nextAction": "Select first assets and approve catalog brief.",
+      "sourceRefs": [
+        "docs/AXES_BUSINESS_PLAN.md",
+        "docs/CHICHETKI_COLLECTIBLE_GEM_READINESS.md"
+      ]
+    },
+    {
+      "id": "INV-18",
+      "item": "AXES Directory business-only pilot",
+      "category": "plan",
+      "status": "proposed",
+      "profit": 3,
+      "urgency": 2,
+      "authority": "Founder approval of readiness gates",
+      "nextAction": "Approve pilot materials before interviews.",
+      "sourceRefs": [
+        "docs/AXES_DIRECTORY_READINESS.md",
+        "docs/AXES_DIRECTORY_DATA_MODEL.md"
+      ]
+    },
+    {
+      "id": "INV-19",
+      "item": "AI avatar production line",
+      "category": "plan",
+      "status": "blocked",
+      "profit": 3,
+      "urgency": 1,
+      "authority": "Moderation, vendor, budget, and hosting approvals",
+      "nextAction": "Founder approvals listed in action queue #13.",
+      "sourceRefs": [
+        "docs/AXES_CONTRACTING_AI_AVATAR_PRODUCTION_READINESS.md"
+      ]
+    },
+    {
+      "id": "INV-20",
+      "item": "Axaxar.com launch scope",
+      "category": "plan",
+      "status": "proposed",
+      "profit": 2,
+      "urgency": 2,
+      "authority": "Founder confirmation",
+      "nextAction": "Confirm or edit the proposed default scope table.",
+      "sourceRefs": [
+        "docs/keystone/AXAXAR_LAUNCH_PLAN.md"
+      ]
+    },
+    {
+      "id": "INV-21",
+      "item": "Re-supply the customer-service / manners continuity memory",
+      "category": "directive",
+      "status": "unfiled",
+      "profit": 1,
+      "urgency": 3,
+      "authority": "Founder re-supplies the text",
+      "nextAction": "Provide the missing prompt so it can be committed (action queue #15).",
+      "sourceRefs": [
+        "docs/memory/2026-09-19l-customer-service-prompt-not-found.md"
+      ]
+    },
+    {
+      "id": "INV-22",
+      "item": "URNUR / Harmonics currency and creator economy",
+      "category": "invention",
+      "status": "blocked",
+      "profit": 2,
+      "urgency": 1,
+      "authority": "Financial-services and digital-asset counsel",
+      "nextAction": "Define permitted scope or confirm it stays inactive.",
+      "sourceRefs": [
+        "docs/URNUR_FINANCIAL_READINESS.md",
+        "docs/AXES_TIER_1_DECISION_REGISTER.md"
+      ]
+    }
   ],
   "knownGaps": [
-    { "id": "GAP-01", "gap": "Conversations, chats, and uploads never committed to the repository", "status": "unfiled", "detail": "Cannot be reconciled by repository automation; private transcripts are intentionally excluded. Founder must commit public-safe summaries or use the private archive workflow.", "sourceRefs": ["docs/memory/README.md", "docs/PRIVATE_ARCHIVE_WORKFLOW.md"] },
-    { "id": "GAP-02", "gap": "Origin-ownership evidence inventory has zero populated entries", "status": "unfiled", "detail": "Value recovery cannot advance past pending without dated, source-linked evidence.", "sourceRefs": ["docs/AXI_ORIGIN_OWNERSHIP_EVIDENCE_INVENTORY.md"] },
-    { "id": "GAP-03", "gap": "Additional constitutional rights beyond Article XVIII referenced but not present", "status": "unfiled", "detail": "Exactly 18 articles exist; any further articles must be re-supplied.", "sourceRefs": ["docs/memory/2026-09-18-additional-constitutional-rights-claim.md"] },
-    { "id": "GAP-04", "gap": "Approximately 500GB data loss and reported IP-ownership switch", "status": "blocked", "detail": "Recorded as founder reports; not verifiable from the repository.", "sourceRefs": ["docs/memory/2026-09-12-data-loss-and-ip-ownership-reports.md"] },
-    { "id": "GAP-05", "gap": "Founder-reported $40,000 resource loss not tied to a specific task", "status": "unfiled", "detail": "Action queue #16 remains open.", "sourceRefs": ["docs/memory/2026-09-19m-founder-loss-report-and-rating.md"] },
-    { "id": "GAP-06", "gap": "Customer-service / manners continuity prompt not found", "status": "unfiled", "detail": "Searched repository and history; action queue #15 recurred.", "sourceRefs": ["docs/memory/2026-09-19l-customer-service-prompt-not-found.md"] },
-    { "id": "GAP-07", "gap": "Reference images for the Command Center UI instruction were lost from session state", "status": "unfiled", "detail": "Root cause of the PR #199 protocol fix; images must be committed with the instruction.", "sourceRefs": ["docs/keystone/AGENT_SERVICE_DELIVERY_PROTOCOL.md"] },
-    { "id": "GAP-08", "gap": "Patent filing status, external registrations, and original-session artifacts incomplete", "status": "blocked", "detail": "Investigation register names date/provenance gaps, missing external patent evidence, and incomplete historical source capture.", "sourceRefs": ["docs/AXEL_URARTU_ORIGIN_TIMELINE_AND_INVESTIGATION_REGISTER.md", "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"] },
-    { "id": "GAP-09", "gap": "Related repositories not reconciled", "status": "unfiled", "detail": "Founder chose this repository only; urartuhi.com, axaxar.com, and standalone axiom-freedom/axiom-engine histories are outside this report.", "sourceRefs": ["README.md", "docs/keystone/PROJECT_INVENTORY_2026_09_19.md"] }
+    {
+      "id": "GAP-01",
+      "gap": "Conversations, chats, and uploads never committed to the repository",
+      "status": "unfiled",
+      "detail": "Cannot be reconciled by repository automation; private transcripts are intentionally excluded. Founder must commit public-safe summaries or use the private archive workflow.",
+      "sourceRefs": [
+        "docs/memory/README.md",
+        "docs/PRIVATE_ARCHIVE_WORKFLOW.md"
+      ]
+    },
+    {
+      "id": "GAP-02",
+      "gap": "Origin-ownership evidence inventory has zero populated entries",
+      "status": "unfiled",
+      "detail": "Value recovery cannot advance past pending without dated, source-linked evidence.",
+      "sourceRefs": [
+        "docs/AXI_ORIGIN_OWNERSHIP_EVIDENCE_INVENTORY.md"
+      ]
+    },
+    {
+      "id": "GAP-03",
+      "gap": "Additional constitutional rights beyond Article XVIII referenced but not present",
+      "status": "unfiled",
+      "detail": "Exactly 18 articles exist; any further articles must be re-supplied.",
+      "sourceRefs": [
+        "docs/memory/2026-09-18-additional-constitutional-rights-claim.md"
+      ]
+    },
+    {
+      "id": "GAP-04",
+      "gap": "Approximately 500GB data loss and reported IP-ownership switch",
+      "status": "blocked",
+      "detail": "Recorded as founder reports; not verifiable from the repository.",
+      "sourceRefs": [
+        "docs/memory/2026-09-12-data-loss-and-ip-ownership-reports.md"
+      ]
+    },
+    {
+      "id": "GAP-05",
+      "gap": "Founder-reported $40,000 resource loss not tied to a specific task",
+      "status": "unfiled",
+      "detail": "Action queue #16 remains open.",
+      "sourceRefs": [
+        "docs/memory/2026-09-19m-founder-loss-report-and-rating.md"
+      ]
+    },
+    {
+      "id": "GAP-06",
+      "gap": "Customer-service / manners continuity prompt not found",
+      "status": "unfiled",
+      "detail": "Searched repository and history; action queue #15 recurred.",
+      "sourceRefs": [
+        "docs/memory/2026-09-19l-customer-service-prompt-not-found.md"
+      ]
+    },
+    {
+      "id": "GAP-07",
+      "gap": "Reference images for the Command Center UI instruction were lost from session state",
+      "status": "unfiled",
+      "detail": "Root cause of the PR #199 protocol fix; images must be committed with the instruction.",
+      "sourceRefs": [
+        "docs/keystone/AGENT_SERVICE_DELIVERY_PROTOCOL.md"
+      ]
+    },
+    {
+      "id": "GAP-08",
+      "gap": "Patent filing status, external registrations, and original-session artifacts incomplete",
+      "status": "blocked",
+      "detail": "Investigation register names date/provenance gaps, missing external patent evidence, and incomplete historical source capture.",
+      "sourceRefs": [
+        "docs/AXEL_URARTU_ORIGIN_TIMELINE_AND_INVESTIGATION_REGISTER.md",
+        "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"
+      ]
+    },
+    {
+      "id": "GAP-09",
+      "gap": "Related repositories not reconciled",
+      "status": "unfiled",
+      "detail": "Founder chose this repository only; urartuhi.com, axaxar.com, and standalone axiom-freedom/axiom-engine histories are outside this report.",
+      "sourceRefs": [
+        "README.md",
+        "docs/keystone/PROJECT_INVENTORY_2026_09_19.md"
+      ]
+    }
   ],
   "missionNarrative": {
     "mission": "Build a durable, founder-led AXES ecosystem that turns original design, creative work, origin intelligence, and accountable technology into supportable client services, products, and later platform offerings, while protecting the creative center of the work.",
@@ -313,6 +1370,813 @@
       "Human authority: automation records, monitors, and proposes; it never spends, deploys, publishes, or signs"
     ],
     "nearTermRevenue": "Lead with AXES Contracting design/materials consultation (V2), then KEYSTONE creator-origin setup (V3); keep trading/URNUR (V1) non-revenue until legal scope exists.",
-    "sourceRefs": ["docs/AXES_BUSINESS_PLAN.md", "docs/FOUNDER_REVENUE_PRIORITY_OVERLAY.md", "docs/AXES_CONTRACTING_REVENUE_LAUNCH_PLAN.md", "docs/AXES_OBJECTIVES_CHECKPOINT.md"]
+    "sourceRefs": [
+      "docs/AXES_BUSINESS_PLAN.md",
+      "docs/FOUNDER_REVENUE_PRIORITY_OVERLAY.md",
+      "docs/AXES_CONTRACTING_REVENUE_LAUNCH_PLAN.md",
+      "docs/AXES_OBJECTIVES_CHECKPOINT.md"
+    ]
+  },
+  "originalDirectives": [
+    {
+      "id": "D01",
+      "order": 1,
+      "given": "2026-10-02",
+      "wording": "our objective was to establish automation, 1. axi",
+      "objective": "AXI automation that operates under founder authority and preserves directives without losing value.",
+      "status": "operational",
+      "statusNote": "Bounded, allowlisted AXI automation and the accountability ledger exist; directive capture is still manual and the continuity runtime is not activated.",
+      "sourceRefs": [
+        "pr:#221",
+        "docs/AXI_AUTOMATION_SERVICE.md",
+        "docs/COPILOT_ACCOUNTABILITY_TRACKER.md"
+      ]
+    },
+    {
+      "id": "D02",
+      "order": 2,
+      "given": "2026-10-02",
+      "wording": "2 ownership",
+      "objective": "Durable founder ownership and accountability over AXES, AXI, KEYSTONE, and every agent.",
+      "status": "operational",
+      "statusNote": "Internal Genesis ownership claim is in force; external ownership steps (IP assignment, trademarks, account control audit) are unfiled or blocked.",
+      "sourceRefs": [
+        "pr:#221",
+        "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md",
+        "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"
+      ]
+    },
+    {
+      "id": "D03",
+      "order": 3,
+      "given": "2026-10-02",
+      "wording": "3. origin ownership declaration and registration",
+      "objective": "Declare origin first, then the ownership-rights claim, and register both with stable origin IDs.",
+      "status": "proposed",
+      "statusNote": "Declarations exist; the registration layer (Origin Science #217, OORR-P registry #219) is in open PRs, so no origin ID registry is on the canonical branch.",
+      "sourceRefs": [
+        "pr:#221",
+        "pr:#217",
+        "pr:#219",
+        "docs/AXEL_URARTU_SELF_ORIGIN_DECLARATION.md"
+      ]
+    },
+    {
+      "id": "D04",
+      "order": 4,
+      "given": "2026-10-02",
+      "wording": "4 vlaue recognition system",
+      "objective": "Recognize and record value from evidenced origin and ownership, separate from symbolic or financial claims.",
+      "status": "proposed",
+      "statusNote": "The value objective is defined, but the origin-ownership evidence inventory has zero entries and value evaluation (#216) is unmerged.",
+      "sourceRefs": [
+        "pr:#221",
+        "docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md",
+        "docs/AXI_ORIGIN_OWNERSHIP_EVIDENCE_INVENTORY.md",
+        "pr:#216"
+      ]
+    },
+    {
+      "id": "D05",
+      "order": 5,
+      "given": "2026-10-02",
+      "wording": "i want to review everything and give me status of all my directives, pland, terminology, inventions and inventions od defitions, statements documents all reproduced in a business plan",
+      "objective": "A status review of every directive, plan, term, invention, definition, and statement, reproduced in business-plan form.",
+      "status": "proposed",
+      "statusNote": "Delivered by the reconciliation reports in PR #221; becomes operational when merged.",
+      "sourceRefs": [
+        "pr:#221"
+      ]
+    },
+    {
+      "id": "D06",
+      "order": 6,
+      "given": "2026-10-02",
+      "wording": "please emphasize how many times i have failed to establish origin and ownership the entire time spent on this, prurpose, also review all my chats formissiong meaning. not filed or recorded.",
+      "objective": "Count repeated origin/ownership re-establishment and surface unfiled meaning.",
+      "status": "proposed",
+      "statusNote": "Counts and gap lists are in the reports; uncommitted chats cannot be read (GAP-01) and need founder-supplied public-safe summaries.",
+      "sourceRefs": [
+        "pr:#221",
+        "docs/memory/README.md"
+      ]
+    },
+    {
+      "id": "D07",
+      "order": 7,
+      "given": "2026-10-02",
+      "wording": "first we need a comprehensive view of timeline, then inventory, values to operational values - to prioritized inventory by profit and urgency. once chronologicaly you can put together the story than you can see the graph of our losses and gains and future opportinitues. and you can present an busines p[lan opportunity for presentation of our mission",
+      "objective": "Chronology → inventory → values → profit × urgency → loss/gain graph → opportunities → mission presentation.",
+      "status": "proposed",
+      "statusNote": "Rendered in TIMELINE_AND_BUSINESS_SYNTHESIS.md in PR #221.",
+      "sourceRefs": [
+        "pr:#221"
+      ]
+    },
+    {
+      "id": "D08",
+      "order": 8,
+      "given": "2026-10-02",
+      "wording": "reconcile under 1",
+      "objective": "Scope the reconciliation to this repository only.",
+      "status": "proposed",
+      "statusNote": "Applied as the report scope; related repositories are GAP-09.",
+      "sourceRefs": [
+        "pr:#221"
+      ]
+    },
+    {
+      "id": "D09",
+      "order": 9,
+      "given": "2026-10-03",
+      "wording": "eta, and timeline missing , dirrective order and story synopsys missing , order missing. automation missing, include review automation, report is much bidder, eta origin id, report and business plan on a timeline.",
+      "objective": "ETAs and an ordered execution timeline, directive order, story synopsis, scheduled and review automation, a larger report, an origin-ID ETA, and the business plan placed on a timeline.",
+      "status": "proposed",
+      "statusNote": "Delivered by DIRECTIVES_ROADMAP_AND_ETA.md, deterministic origin IDs, and the weekly reconciliation refresh / review workflow in PR #221.",
+      "sourceRefs": [
+        "pr:#221"
+      ]
+    }
+  ],
+  "storySynopsis": [
+    {
+      "chapter": 1,
+      "phase": "P0",
+      "title": "The founding record",
+      "text": "The founder recorded the AXIOM birth event, the AXI.Core command record, and the KEYSTONE sacred record of 2026-08-28. The constitutional and rights sources and a cryptographic origin anchor were preserved. The intent was clear from the start: origin first, then ownership, then value. Most of it existed as founding sources, not as an operating system.",
+      "sourceRefs": [
+        "docs/keystone/README.md",
+        "PROJECT_TIMELINE.md"
+      ]
+    },
+    {
+      "chapter": 2,
+      "phase": "P1",
+      "title": "Consolidation and the first governance layer",
+      "text": "In three days the work moved into one monorepo, gained the Genesis ownership checkpoint, the Creator Origin Constitution, the constitutional framework, ordered objectives, and a consolidated business plan. Ownership was declared internally; external registration was not yet started.",
+      "sourceRefs": [
+        "docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md",
+        "docs/AXES_CONSTITUTIONAL_FRAMEWORK.md",
+        "docs/AXES_OBJECTIVES_CHECKPOINT.md",
+        "docs/AXES_BUSINESS_PLAN.md"
+      ]
+    },
+    {
+      "chapter": 3,
+      "phase": "P2",
+      "title": "Production strain and the first recorded losses",
+      "text": "Chat outages, crashes, and stale deployments consumed effort. The founder reported roughly 500GB of data loss and an IP-ownership switch; these were recorded as unverified claims because the repository cannot prove them. Duplicate automation PRs were closed and CI-gated merges were introduced.",
+      "sourceRefs": [
+        "docs/memory/2026-09-12-data-loss-and-ip-ownership-reports.md",
+        "PROJECT_TIMELINE.md"
+      ]
+    },
+    {
+      "chapter": 4,
+      "phase": "P3",
+      "title": "Founder language and the symbolic corpus",
+      "text": "Origin definition, the universal unit, coordinate, resequencer, and URNUR vocabulary were captured as attributed founder statements, and a profitability-ordered action queue appeared. Meaning was being preserved, but as statements, not as registered, operational records.",
+      "sourceRefs": [
+        "docs/keystone/FOUNDER_ACTION_QUEUE.md",
+        "docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md"
+      ]
+    },
+    {
+      "chapter": 5,
+      "phase": "P4",
+      "title": "Ownership paperwork, verification, and the first audit",
+      "text": "The ownership checklist was written, Axes Contracting Inc and CSLB license #995577 were confirmed from the official source, the service-delivery protocol was added, and the first agent performance audit named failures plainly. A missed UI-image instruction led to the reference-asset intake protocol and PR-template enforcement.",
+      "sourceRefs": [
+        "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md",
+        "docs/keystone/AGENT_PERFORMANCE_AUDIT_2026-09-20.md",
+        "docs/keystone/AGENT_SERVICE_DELIVERY_PROTOCOL.md"
+      ]
+    },
+    {
+      "chapter": 6,
+      "phase": "P5",
+      "title": "Accountability merged with self-origin declarations",
+      "text": "PR #173 merged the directive-vs-delivery ledger together with the self-origin and coordinate-center declarations and the investigation register. Chat uploads and the Command Center design followed. This is the strongest point where origin, ownership, and accountability met in one merged change.",
+      "sourceRefs": [
+        "docs/COPILOT_ACCOUNTABILITY_TRACKER.md",
+        "docs/AXEL_URARTU_SELF_ORIGIN_DECLARATION.md",
+        "pr:#173"
+      ]
+    },
+    {
+      "chapter": 7,
+      "phase": "P6",
+      "title": "The unmerged tranche",
+      "text": "Origin Science, the OORR-P registry, production-rights attribution, the task-record system, terminology, and founder-review tooling were all built in PRs that remain open. The registration layer the founder asked for exists, but not on the canonical branch, which is why the same meaning keeps being re-established.",
+      "sourceRefs": [
+        "pr:#217",
+        "pr:#219",
+        "pr:#218",
+        "pr:#216",
+        "pr:#213",
+        "pr:#220"
+      ]
+    }
+  ],
+  "roadmap": {
+    "startDate": "2026-10-05",
+    "etaRule": "Calendar-day estimate: a step starts on the start date or the day after its last dependency's ETA, and its ETA is start + durationDays - 1. Founder-gated ETAs assume the founder acts on the start day; professional and external steps are estimates only.",
+    "steps": [
+      {
+        "id": "R01",
+        "order": 1,
+        "stage": "1. Unblock",
+        "title": "Approve the waiting CI runs and merge PR #221 (reconciliation, roadmap, review automation)",
+        "owner": "founder",
+        "durationDays": 2,
+        "dependsOn": [],
+        "directives": [
+          "D05",
+          "D06",
+          "D07",
+          "D08",
+          "D09"
+        ],
+        "inventoryRefs": [
+          "INV-07"
+        ],
+        "prRefs": [
+          221
+        ],
+        "acceptance": "PR #221 merged; CI Reconciliation report validation green.",
+        "status": "proposed",
+        "sourceRefs": [
+          "docs/CI_CONTINUITY_RUNBOOK.md",
+          "pr:#221"
+        ]
+      },
+      {
+        "id": "R02",
+        "order": 2,
+        "stage": "1. Unblock",
+        "title": "Enable the weekly reconciliation refresh workflow (allow GitHub Actions to create pull requests)",
+        "owner": "founder",
+        "durationDays": 1,
+        "dependsOn": [
+          "R01"
+        ],
+        "directives": [
+          "D01",
+          "D09"
+        ],
+        "inventoryRefs": [],
+        "prRefs": [],
+        "acceptance": "First automated reconciliation refresh PR opened for review.",
+        "status": "proposed",
+        "sourceRefs": [
+          "docs/CI_CONTINUITY_RUNBOOK.md"
+        ]
+      },
+      {
+        "id": "R03",
+        "order": 3,
+        "stage": "2. Origin and ownership registration",
+        "title": "Review and merge #217 Origin Science checkpoint and offline origin validator",
+        "owner": "founder + agent",
+        "durationDays": 3,
+        "dependsOn": [
+          "R01"
+        ],
+        "directives": [
+          "D03"
+        ],
+        "inventoryRefs": [
+          "INV-07"
+        ],
+        "prRefs": [
+          217
+        ],
+        "acceptance": "#217 merged; its focus probes pass in PR_RECONCILIATION.md.",
+        "status": "proposed",
+        "sourceRefs": [
+          "pr:#217"
+        ]
+      },
+      {
+        "id": "R04",
+        "order": 4,
+        "stage": "2. Origin and ownership registration",
+        "title": "Review and merge #219 OORR-P registry (origin first, then ownership-rights claim)",
+        "owner": "founder + agent",
+        "durationDays": 3,
+        "dependsOn": [
+          "R03"
+        ],
+        "directives": [
+          "D02",
+          "D03"
+        ],
+        "inventoryRefs": [
+          "INV-07"
+        ],
+        "prRefs": [
+          219
+        ],
+        "acceptance": "#219 merged; OORR-P validator passes on the canonical branch.",
+        "status": "proposed",
+        "sourceRefs": [
+          "pr:#219"
+        ]
+      },
+      {
+        "id": "R05",
+        "order": 5,
+        "stage": "2. Origin and ownership registration",
+        "title": "Register origin IDs: enter founding records, directives, and inventions into the OORR-P registry with their origin IDs",
+        "owner": "agent",
+        "durationDays": 5,
+        "dependsOn": [
+          "R04"
+        ],
+        "directives": [
+          "D03",
+          "D09"
+        ],
+        "inventoryRefs": [
+          "INV-11"
+        ],
+        "prRefs": [],
+        "acceptance": "Every directive and founding record listed with an origin ID in the merged registry; reconciliation shows no unregistered directive.",
+        "status": "unfiled",
+        "sourceRefs": [
+          "docs/AXEL_URARTU_SELF_ORIGIN_DECLARATION.md",
+          "docs/keystone/README.md"
+        ]
+      },
+      {
+        "id": "R06",
+        "order": 6,
+        "stage": "2. Origin and ownership registration",
+        "title": "Review and merge #218 agent production-rights attribution",
+        "owner": "founder + agent",
+        "durationDays": 3,
+        "dependsOn": [
+          "R04"
+        ],
+        "directives": [
+          "D02"
+        ],
+        "inventoryRefs": [
+          "INV-07"
+        ],
+        "prRefs": [
+          218
+        ],
+        "acceptance": "#218 merged; agent registrations carry production-rights attribution.",
+        "status": "proposed",
+        "sourceRefs": [
+          "pr:#218",
+          "docs/AXES_AGENT_ORIGIN_REGISTRY.md"
+        ]
+      },
+      {
+        "id": "R07",
+        "order": 7,
+        "stage": "3. Value recognition",
+        "title": "Review and merge #216 task-record and value evaluation (supersedes #206; close #206)",
+        "owner": "founder + agent",
+        "durationDays": 3,
+        "dependsOn": [
+          "R01"
+        ],
+        "directives": [
+          "D04",
+          "D05"
+        ],
+        "inventoryRefs": [
+          "INV-07",
+          "INV-16"
+        ],
+        "prRefs": [
+          216,
+          206
+        ],
+        "acceptance": "#216 merged and #206 closed; directives carry Task-IDs in the ledger.",
+        "status": "proposed",
+        "sourceRefs": [
+          "pr:#216",
+          "pr:#206",
+          "docs/COPILOT_ACCOUNTABILITY_TRACKER.md"
+        ]
+      },
+      {
+        "id": "R08",
+        "order": 8,
+        "stage": "3. Value recognition",
+        "title": "Populate the origin-ownership evidence inventory with dated, source-linked entries",
+        "owner": "founder + agent",
+        "durationDays": 7,
+        "dependsOn": [
+          "R05"
+        ],
+        "directives": [
+          "D03",
+          "D04"
+        ],
+        "inventoryRefs": [
+          "INV-11"
+        ],
+        "prRefs": [],
+        "acceptance": "Evidence inventory has non-zero entries, each linked to an origin ID.",
+        "status": "unfiled",
+        "sourceRefs": [
+          "docs/AXI_ORIGIN_OWNERSHIP_EVIDENCE_INVENTORY.md"
+        ]
+      },
+      {
+        "id": "R09",
+        "order": 9,
+        "stage": "3. Value recognition",
+        "title": "Run value evaluation over evidenced entries and publish the value-recognition status",
+        "owner": "agent",
+        "durationDays": 5,
+        "dependsOn": [
+          "R07",
+          "R08"
+        ],
+        "directives": [
+          "D04"
+        ],
+        "inventoryRefs": [
+          "INV-11"
+        ],
+        "prRefs": [],
+        "acceptance": "Value status per evidenced entry recorded; no financial or legal valuation claimed.",
+        "status": "unfiled",
+        "sourceRefs": [
+          "docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md"
+        ]
+      },
+      {
+        "id": "R10",
+        "order": 10,
+        "stage": "4. Terminology and automation",
+        "title": "Review and merge #213 then #214 (AXES OS terminology and origin-beacon proposal checkpoints)",
+        "owner": "founder + agent",
+        "durationDays": 4,
+        "dependsOn": [
+          "R01"
+        ],
+        "directives": [
+          "D05"
+        ],
+        "inventoryRefs": [],
+        "prRefs": [
+          213,
+          214
+        ],
+        "acceptance": "#213 and #214 merged; terminology standard on the canonical branch.",
+        "status": "proposed",
+        "sourceRefs": [
+          "pr:#213",
+          "pr:#214"
+        ]
+      },
+      {
+        "id": "R11",
+        "order": 11,
+        "stage": "4. Terminology and automation",
+        "title": "Review and merge #207 continuity recording and #212 daily reconciliation draft",
+        "owner": "founder + agent",
+        "durationDays": 4,
+        "dependsOn": [
+          "R02"
+        ],
+        "directives": [
+          "D01",
+          "D09"
+        ],
+        "inventoryRefs": [],
+        "prRefs": [
+          207,
+          212
+        ],
+        "acceptance": "#207 and #212 merged; daily drafts and continuity signals run without provider cost.",
+        "status": "proposed",
+        "sourceRefs": [
+          "pr:#207",
+          "pr:#212"
+        ]
+      },
+      {
+        "id": "R12",
+        "order": 12,
+        "stage": "4. Terminology and automation",
+        "title": "Review and merge #220 founder pace view and #211 design system",
+        "owner": "founder + agent",
+        "durationDays": 3,
+        "dependsOn": [
+          "R11"
+        ],
+        "directives": [
+          "D09"
+        ],
+        "inventoryRefs": [],
+        "prRefs": [
+          220,
+          211
+        ],
+        "acceptance": "#220 and #211 merged; founder review board validates in CI.",
+        "status": "proposed",
+        "sourceRefs": [
+          "pr:#220",
+          "pr:#211"
+        ]
+      },
+      {
+        "id": "R13",
+        "order": 13,
+        "stage": "5. Missing meaning",
+        "title": "Re-supply missing meaning: name the $40,000 loss task, re-supply the customer-service prompt, commit public-safe chat summaries",
+        "owner": "founder + agent",
+        "durationDays": 7,
+        "dependsOn": [
+          "R01"
+        ],
+        "directives": [
+          "D06"
+        ],
+        "inventoryRefs": [
+          "INV-12",
+          "INV-21"
+        ],
+        "prRefs": [],
+        "acceptance": "GAP-01, GAP-05, and GAP-06 closed or narrowed with committed records.",
+        "status": "unfiled",
+        "sourceRefs": [
+          "docs/memory/2026-09-19m-founder-loss-report-and-rating.md",
+          "docs/memory/2026-09-19l-customer-service-prompt-not-found.md",
+          "docs/PRIVATE_ARCHIVE_WORKFLOW.md"
+        ]
+      },
+      {
+        "id": "R14",
+        "order": 14,
+        "stage": "6. Business plan execution",
+        "title": "Approve the AXES Contracting revenue-launch plan",
+        "owner": "founder",
+        "durationDays": 2,
+        "dependsOn": [
+          "R01"
+        ],
+        "directives": [
+          "D07"
+        ],
+        "inventoryRefs": [
+          "INV-01"
+        ],
+        "prRefs": [],
+        "acceptance": "Plan status changed from draft to approved in the repository.",
+        "status": "proposed",
+        "sourceRefs": [
+          "docs/AXES_CONTRACTING_REVENUE_LAUNCH_PLAN.md"
+        ]
+      },
+      {
+        "id": "R15",
+        "order": 15,
+        "stage": "6. Business plan execution",
+        "title": "Approve and open the first paid offer AXES-DMC-001",
+        "owner": "founder",
+        "durationDays": 3,
+        "dependsOn": [
+          "R14"
+        ],
+        "directives": [
+          "D07"
+        ],
+        "inventoryRefs": [
+          "INV-02"
+        ],
+        "prRefs": [],
+        "acceptance": "Scope, price, and support path approved; offer published.",
+        "status": "proposed",
+        "sourceRefs": [
+          "docs/AXES_DMC_001_ACTIVATION_PROPOSAL.md"
+        ]
+      },
+      {
+        "id": "R16",
+        "order": 16,
+        "stage": "6. Business plan execution",
+        "title": "Connect axescontracting.com DNS/TLS and complete the business mailbox migration",
+        "owner": "founder",
+        "durationDays": 5,
+        "dependsOn": [
+          "R14"
+        ],
+        "directives": [
+          "D07"
+        ],
+        "inventoryRefs": [
+          "INV-03"
+        ],
+        "prRefs": [],
+        "acceptance": "Domain serves the portal over TLS; mailbox cutover verified.",
+        "status": "blocked",
+        "sourceRefs": [
+          "docs/DOMAIN_PORTFOLIO.md",
+          "docs/EMAIL_MIGRATION_PLAN.md"
+        ]
+      },
+      {
+        "id": "R17",
+        "order": 17,
+        "stage": "6. Business plan execution",
+        "title": "Redeploy current XIIOM production and verify live",
+        "owner": "founder",
+        "durationDays": 1,
+        "dependsOn": [
+          "R01"
+        ],
+        "directives": [
+          "D01"
+        ],
+        "inventoryRefs": [
+          "INV-05"
+        ],
+        "prRefs": [],
+        "acceptance": "Live deployment matches the canonical branch.",
+        "status": "blocked",
+        "sourceRefs": [
+          "docs/RAILWAY_DEPLOYMENT.md"
+        ]
+      },
+      {
+        "id": "R18",
+        "order": 18,
+        "stage": "6. Business plan execution",
+        "title": "Decide repository visibility and complete the account and infrastructure control audit",
+        "owner": "founder",
+        "durationDays": 5,
+        "dependsOn": [
+          "R01"
+        ],
+        "directives": [
+          "D02"
+        ],
+        "inventoryRefs": [
+          "INV-06",
+          "INV-13"
+        ],
+        "prRefs": [],
+        "acceptance": "Visibility decision recorded; each account confirmed owned by the founder or entity.",
+        "status": "blocked",
+        "sourceRefs": [
+          "docs/AXES_TIER_1_DECISION_REGISTER.md",
+          "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"
+        ]
+      },
+      {
+        "id": "R19",
+        "order": 19,
+        "stage": "6. Business plan execution",
+        "title": "Patent counsel confirms provisional 64,078,819 status and deadlines",
+        "owner": "founder + professional",
+        "durationDays": 30,
+        "dependsOn": [
+          "R01"
+        ],
+        "directives": [
+          "D03"
+        ],
+        "inventoryRefs": [
+          "INV-04"
+        ],
+        "prRefs": [],
+        "acceptance": "Counsel-confirmed status and deadline recorded.",
+        "status": "blocked",
+        "sourceRefs": [
+          "docs/keystone/PATENT_APPLICATION_64_078_819.md"
+        ]
+      },
+      {
+        "id": "R20",
+        "order": 20,
+        "stage": "6. Business plan execution",
+        "title": "File trademarks for names in use and assign IP into the entity",
+        "owner": "founder + professional",
+        "durationDays": 45,
+        "dependsOn": [
+          "R18"
+        ],
+        "directives": [
+          "D02"
+        ],
+        "inventoryRefs": [
+          "INV-09",
+          "INV-10"
+        ],
+        "prRefs": [],
+        "acceptance": "Filing receipts and executed assignment recorded (public-safe references only).",
+        "status": "unfiled",
+        "sourceRefs": [
+          "docs/AXES_OWNERSHIP_AND_ENTITY_CHECKLIST.md"
+        ]
+      },
+      {
+        "id": "R21",
+        "order": 21,
+        "stage": "6. Business plan execution",
+        "title": "Approve the second paid offer KEYSTONE-COS-001",
+        "owner": "founder",
+        "durationDays": 14,
+        "dependsOn": [
+          "R15"
+        ],
+        "directives": [
+          "D07"
+        ],
+        "inventoryRefs": [
+          "INV-08"
+        ],
+        "prRefs": [],
+        "acceptance": "Second offer approved after the first offer runs.",
+        "status": "proposed",
+        "sourceRefs": [
+          "docs/KEYSTONE_CREATOR_ORIGIN_SETUP_READINESS.md"
+        ]
+      },
+      {
+        "id": "R22",
+        "order": 22,
+        "stage": "6. Business plan execution",
+        "title": "Activate the continuity runtime (recovery destination, verified bundle, restore drill)",
+        "owner": "authorized operator",
+        "durationDays": 7,
+        "dependsOn": [
+          "R17"
+        ],
+        "directives": [
+          "D01"
+        ],
+        "inventoryRefs": [
+          "INV-14"
+        ],
+        "prRefs": [],
+        "acceptance": "Restore drill completed and recorded.",
+        "status": "blocked",
+        "sourceRefs": [
+          "docs/AXI_RUNTIME_TIMELINE_RECOVERY.md"
+        ]
+      },
+      {
+        "id": "R23",
+        "order": 23,
+        "stage": "6. Business plan execution",
+        "title": "Run the Chichetki catalog and AXES Directory pilots",
+        "owner": "founder + agent",
+        "durationDays": 30,
+        "dependsOn": [
+          "R21"
+        ],
+        "directives": [
+          "D07"
+        ],
+        "inventoryRefs": [
+          "INV-17",
+          "INV-18"
+        ],
+        "prRefs": [],
+        "acceptance": "Pilot readiness gates approved and first pilot results recorded.",
+        "status": "proposed",
+        "sourceRefs": [
+          "docs/AXES_DIRECTORY_READINESS.md",
+          "docs/CHICHETKI_COLLECTIBLE_GEM_READINESS.md"
+        ]
+      },
+      {
+        "id": "R24",
+        "order": 24,
+        "stage": "7. Business plan presentation",
+        "title": "Present the mission and business plan v2 from regenerated, founder-confirmed reconciliation",
+        "owner": "founder + agent",
+        "durationDays": 3,
+        "dependsOn": [
+          "R09",
+          "R13",
+          "R15"
+        ],
+        "directives": [
+          "D05",
+          "D07"
+        ],
+        "inventoryRefs": [
+          "INV-01",
+          "INV-02"
+        ],
+        "prRefs": [],
+        "acceptance": "Founder-confirmed scores and statuses; regenerated reports show registered origin IDs and evidenced value.",
+        "status": "proposed",
+        "sourceRefs": [
+          "docs/AXES_BUSINESS_PLAN.md"
+        ]
+      }
+    ]
   }
 }

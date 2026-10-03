@@ -4,8 +4,9 @@
 // Collects repository records (timeline, governance, origin, ownership,
 // business-plan, accountability, memory, and a committed pull-request
 // snapshot), classifies them with explicit status labels, reconciles the
-// curated inputs against the files that actually exist, and renders the
-// reports under docs/reconciliation/.
+// curated inputs against the files that actually exist, schedules the
+// ordered founder-directive roadmap with ETAs and review findings, and
+// renders the reports under docs/reconciliation/.
 //
 // Safety: reads only files inside the repository root, writes only the
 // generated Markdown files listed in OUTPUT_FILES, makes no network, git,
@@ -30,7 +31,8 @@ const OUTPUT_FILES = Object.freeze([
   "PR_RECONCILIATION.md",
   "ORIGIN_OWNERSHIP_GOVERNANCE_MATRIX.md",
   "TIMELINE_AND_BUSINESS_SYNTHESIS.md",
-  "MISSING_MEANING_AND_GAPS.md"
+  "MISSING_MEANING_AND_GAPS.md",
+  "DIRECTIVES_ROADMAP_AND_ETA.md"
 ]);
 const REGENERATE_COMMAND = "node scripts/reconciliation/generate-reconciliation-report.js";
 
@@ -56,6 +58,10 @@ const PR_STATES = Object.freeze(["merged", "open", "closed-unmerged"]);
 const CONCEPT_KINDS = Object.freeze(["definition", "governance", "constitution", "declaration", "invention", "plan"]);
 const INVENTORY_CATEGORIES = Object.freeze(["directive", "plan", "terminology", "invention", "definition", "document", "automation"]);
 const REQUIRED_FOCUS_PRS = Object.freeze([173, 199, 201, 204, 205, 206, 217, 218, 219, 220]);
+const ROADMAP_OWNERS = Object.freeze(["founder", "agent", "founder + agent", "founder + professional", "authorized operator"]);
+const DONE_STATUSES = new Set(["verified", "operational", "historical"]);
+const DAY_MS = 24 * 60 * 60 * 1000;
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 const PR_THEME_RULES = Object.freeze([
   ["origin", /origin|genesis|anchor|coordinate|oorr|birth|eternal|creator/i],
@@ -146,6 +152,28 @@ function readJson(root, rel) {
 
 function sha256(text) {
   return crypto.createHash("sha256").update(text, "utf8").digest("hex");
+}
+
+function isIsoDate(value) {
+  if (typeof value !== "string" || !ISO_DATE.test(value)) return false;
+  const parsed = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+}
+
+function addDays(date, days) {
+  return new Date(Date.parse(`${date}T00:00:00Z`) + days * DAY_MS).toISOString().slice(0, 10);
+}
+
+function daysBetween(from, to) {
+  return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / DAY_MS);
+}
+
+// Internal, content-addressed record identifier. It is deterministic (same
+// content, same ID) and changes when the identifying content changes. It is
+// not an external, legal, or registry filing.
+function originId(kind, id, parts) {
+  const digest = sha256([kind, id, ...parts].join("\u001f")).slice(0, 12).toUpperCase();
+  return `AXES-OID-${kind}-${id}-${digest}`;
 }
 
 function compareStrings(a, b) {
@@ -506,6 +534,80 @@ function validateInputs(root, config, snapshot) {
     checkRefs(context, gap.sourceRefs);
   });
 
+  const directives = Array.isArray(config.originalDirectives) ? config.originalDirectives : [];
+  if (directives.length === 0) fail("originalDirectives must not be empty");
+  const directiveIds = new Set();
+  const directiveOrders = new Set();
+  directives.forEach((directive, index) => {
+    const context = `originalDirectives[${index}] (${directive.id})`;
+    if (typeof directive.id !== "string" || directive.id === "" || directiveIds.has(directive.id)) fail(`${context}: id must be unique`);
+    directiveIds.add(directive.id);
+    if (!Number.isInteger(directive.order) || directive.order < 1 || directiveOrders.has(directive.order)) fail(`${context}: order must be a unique positive integer`);
+    directiveOrders.add(directive.order);
+    if (!isIsoDate(directive.given)) fail(`${context}: given must be a valid YYYY-MM-DD date`);
+    for (const field of ["wording", "objective", "statusNote"]) {
+      if (typeof directive[field] !== "string" || directive[field].trim() === "") fail(`${context}: ${field} is required`);
+    }
+    checkStatus(context, directive.status);
+    if (directive.status === "verified") fail(`${context}: a directive's delivery cannot be labeled verified by curation`);
+    checkRefs(context, directive.sourceRefs);
+  });
+
+  (Array.isArray(config.storySynopsis) ? config.storySynopsis : []).forEach((chapter, index) => {
+    const context = `storySynopsis[${index}]`;
+    if (!Number.isInteger(chapter.chapter)) fail(`${context}: chapter must be an integer`);
+    if (!(config.chronologyPhases || []).some((phase) => phase.id === chapter.phase)) fail(`${context}: phase ${JSON.stringify(chapter.phase)} is not a chronology phase`);
+    if (typeof chapter.text !== "string" || chapter.text.trim() === "") fail(`${context}: text is required`);
+    checkRefs(context, chapter.sourceRefs);
+  });
+
+  const roadmap = config.roadmap && typeof config.roadmap === "object" ? config.roadmap : null;
+  const steps = roadmap && Array.isArray(roadmap.steps) ? roadmap.steps : [];
+  if (!roadmap || !isIsoDate(roadmap.startDate)) fail("roadmap.startDate must be a valid YYYY-MM-DD date");
+  if (steps.length === 0) fail("roadmap.steps must not be empty");
+  const stepIds = new Set();
+  const stepOrders = new Set();
+  steps.forEach((step) => {
+    if (typeof step.id === "string" && step.id !== "") {
+      if (stepIds.has(step.id)) fail(`roadmap step ${step.id}: id must be unique`);
+      stepIds.add(step.id);
+    }
+  });
+  const coveredDirectives = new Set();
+  steps.forEach((step, index) => {
+    const context = `roadmap.steps[${index}] (${step.id})`;
+    if (typeof step.id !== "string" || step.id === "") fail(`${context}: id is required`);
+    if (!Number.isInteger(step.order) || step.order < 1 || stepOrders.has(step.order)) fail(`${context}: order must be a unique positive integer`);
+    stepOrders.add(step.order);
+    for (const field of ["stage", "title", "acceptance"]) {
+      if (typeof step[field] !== "string" || step[field].trim() === "") fail(`${context}: ${field} is required`);
+    }
+    if (!ROADMAP_OWNERS.includes(step.owner)) fail(`${context}: owner must be one of ${ROADMAP_OWNERS.join(", ")}`);
+    if (!Number.isInteger(step.durationDays) || step.durationDays < 1 || step.durationDays > 365) fail(`${context}: durationDays must be an integer 1-365`);
+    checkStatus(context, step.status);
+    checkVerified(context, step);
+    for (const dep of Array.isArray(step.dependsOn) ? step.dependsOn : [null]) {
+      if (!stepIds.has(dep)) fail(`${context}: dependsOn ${JSON.stringify(dep)} is not a roadmap step`);
+    }
+    const stepDirectives = Array.isArray(step.directives) ? step.directives : [];
+    if (stepDirectives.length === 0) fail(`${context}: directives must list at least one directive`);
+    for (const directive of stepDirectives) {
+      if (!directiveIds.has(directive)) fail(`${context}: directive ${JSON.stringify(directive)} is not defined`);
+      coveredDirectives.add(directive);
+    }
+    for (const ref of Array.isArray(step.inventoryRefs) ? step.inventoryRefs : [null]) {
+      if (!inventoryIds.has(ref)) fail(`${context}: inventoryRef ${JSON.stringify(ref)} is not an inventory id`);
+    }
+    for (const number of Array.isArray(step.prRefs) ? step.prRefs : [null]) {
+      if (!prNumbers.has(number)) fail(`${context}: prRef ${JSON.stringify(number)} is not in the PR snapshot`);
+    }
+    checkRefs(context, step.sourceRefs);
+  });
+  for (const id of directiveIds) {
+    if (!coveredDirectives.has(id)) fail(`originalDirectives ${id} has no roadmap step; every directive must be scheduled`);
+  }
+  if (steps.length > 0 && errors.length === 0 && scheduleRoadmap(roadmap) === null) fail("roadmap.steps dependencies contain a cycle");
+
   if (!config.missionNarrative || typeof config.missionNarrative.mission !== "string") fail("missionNarrative.mission is required");
   else checkRefs("missionNarrative", config.missionNarrative.sourceRefs);
 
@@ -622,6 +724,7 @@ function collect(root) {
   return {
     config,
     snapshot,
+    plan: errors.length === 0 ? buildPlan(config, snapshot, prByNumber) : null,
     errors,
     warnings,
     documents,
@@ -639,6 +742,81 @@ function collect(root) {
       return isSafeRelativePath(ref) && fileExists(root, ref);
     }
   };
+}
+
+function scheduleRoadmap(roadmap) {
+  const steps = [...roadmap.steps].sort((a, b) => a.order - b.order);
+  const byId = new Map(steps.map((step) => [step.id, step]));
+  const schedule = new Map();
+  const visiting = new Set();
+  const visit = (id) => {
+    if (schedule.has(id)) return schedule.get(id);
+    if (visiting.has(id)) return null;
+    visiting.add(id);
+    const step = byId.get(id);
+    let start = roadmap.startDate;
+    for (const dep of step.dependsOn) {
+      const depEntry = visit(dep);
+      if (depEntry === null) return null;
+      const next = depEntry.done ? roadmap.startDate : addDays(depEntry.eta, 1);
+      if (next > start) start = next;
+    }
+    visiting.delete(id);
+    const done = DONE_STATUSES.has(step.status);
+    const entry = done ? { done, start: null, eta: null } : { done, start, eta: addDays(start, step.durationDays - 1) };
+    schedule.set(id, entry);
+    return entry;
+  };
+  for (const step of steps) {
+    if (visit(step.id) === null) return null;
+  }
+  return schedule;
+}
+
+function buildPlan(config, snapshot, prByNumber) {
+  const roadmap = config.roadmap;
+  const schedule = scheduleRoadmap(roadmap);
+  const asOf = snapshot.recordedAt;
+  const steps = [...roadmap.steps].sort((a, b) => a.order - b.order).map((step) => {
+    const entry = schedule.get(step.id);
+    const prs = step.prRefs.map((number) => prByNumber.get(number));
+    const findings = [];
+    if (!entry.done && entry.eta < asOf) findings.push(`overdue by ${daysBetween(entry.eta, asOf)} day(s) as of ${asOf}`);
+    if (!entry.done && prs.length > 0 && prs.every((pr) => pr.state !== "open")) {
+      findings.push(`all referenced PRs are closed or merged (${prs.map((pr) => `#${pr.number} ${pr.state}`).join(", ")}); confirm the step and update its status`);
+    }
+    if (!entry.done && entry.start <= asOf && entry.eta >= asOf) findings.push(`in its ETA window as of ${asOf}`);
+    return {
+      ...step,
+      ...entry,
+      prs,
+      findings,
+      originId: originId("STEP", step.id, [step.title, step.acceptance])
+    };
+  });
+  const stepsById = new Map(steps.map((step) => [step.id, step]));
+  const directives = [...config.originalDirectives].sort((a, b) => a.order - b.order).map((directive) => {
+    const linked = steps.filter((step) => step.directives.includes(directive.id));
+    const open = linked.filter((step) => !step.done);
+    const eta = open.length ? open.map((step) => step.eta).sort(compareStrings)[open.length - 1] : null;
+    return {
+      ...directive,
+      steps: linked,
+      eta,
+      originId: originId("DIR", directive.id, [config.responsibleParties[0].name, directive.given, directive.wording])
+    };
+  });
+  const inventoryIds = new Set(steps.flatMap((step) => step.inventoryRefs));
+  const unscheduledInventory = config.inventory.filter((item) => !inventoryIds.has(item.id));
+  const scheduledPrs = new Set(steps.flatMap((step) => step.prRefs));
+  const unscheduledOpenPrs = snapshot.pullRequests
+    .filter((pr) => pr.state === "open" && !scheduledPrs.has(pr.number))
+    .sort((a, b) => a.number - b.number);
+  const reviewQueue = steps
+    .flatMap((step) => step.prs.filter((pr) => pr.state === "open").map((pr) => ({ pr, step })))
+    .map(({ pr, step }) => ({ pr, step, daysOpen: daysBetween(pr.createdAt, asOf) }));
+  const finalEta = steps.filter((step) => !step.done).map((step) => step.eta).sort(compareStrings).pop() || null;
+  return { asOf, startDate: roadmap.startDate, etaRule: roadmap.etaRule, steps, stepsById, directives, unscheduledInventory, unscheduledOpenPrs, reviewQueue, finalEta };
 }
 
 function reconcilePr(record) {
@@ -761,6 +939,7 @@ function renderIndex(model) {
     `- Focus pull requests reconciled: **${focus.length}** — ${statusCounts(focus.map((pr) => pr.reconciliation))}.`,
     `- Origin/ownership work in the PR history: **${stats.prs.length}** pull requests (${stats.merged} merged, ${stats.open} still open, ${stats.closedUnmerged} closed without merge) and **${stats.memory.length}** origin/ownership continuity records; dated origin/ownership activity spans ${stats.first} to ${stats.last}.`,
     `- After-the-fact capture: **${stats.captures}** PR titles record, preserve, document, or confirm earlier meaning; **${stats.corrections}** PR titles correct, clarify, restore, reconfirm, follow up, or reconcile earlier work.`,
+    `- Founder directives: **${model.plan.directives.length}** in order; roadmap: **${model.plan.steps.length}** ordered steps from ${model.plan.startDate}, projected completion **${model.plan.finalEta || "n/a"}** (see [DIRECTIVES_ROADMAP_AND_ETA.md](DIRECTIVES_ROADMAP_AND_ETA.md)).`,
     `- Curated inventory: **${config.inventory.length}** items (${statusCounts(config.inventory)}); concepts: **${config.originGovernanceConcepts.length}** (${statusCounts(config.originGovernanceConcepts)}); known gaps: **${config.knownGaps.length}**.`,
     "",
     "## Reports",
@@ -769,7 +948,8 @@ function renderIndex(model) {
       ["[PR_RECONCILIATION.md](PR_RECONCILIATION.md)", "Focus PR chain with evidence probes, relevant PR ledger, after-the-fact capture counts, closed-unmerged PRs."],
       ["[ORIGIN_OWNERSHIP_GOVERNANCE_MATRIX.md](ORIGIN_OWNERSHIP_GOVERNANCE_MATRIX.md)", "Authority separation, origin science / constitution / governance concepts, and every reviewed record classified by domain and status."],
       ["[TIMELINE_AND_BUSINESS_SYNTHESIS.md](TIMELINE_AND_BUSINESS_SYNTHESIS.md)", "Chronology, loss/gain graph, values → operational values, inventory prioritized by profit and urgency, mission narrative."],
-      ["[MISSING_MEANING_AND_GAPS.md](MISSING_MEANING_AND_GAPS.md)", "Unfiled, missing, unverified, and blocked meaning, including open PRs whose content is not on the canonical branch."]
+      ["[MISSING_MEANING_AND_GAPS.md](MISSING_MEANING_AND_GAPS.md)", "Unfiled, missing, unverified, and blocked meaning, including open PRs whose content is not on the canonical branch."],
+      ["[DIRECTIVES_ROADMAP_AND_ETA.md](DIRECTIVES_ROADMAP_AND_ETA.md)", "Founder directives in order, story synopsis, ordered roadmap with ETAs, origin IDs and the origin-ID ETA, report and business plan on one timeline, review queue and automated review findings."]
     ]),
     "",
     "## Required source inventory",
@@ -1163,6 +1343,208 @@ function renderGaps(model) {
   return parts.join("\n");
 }
 
+function weekGantt(plan) {
+  const open = plan.steps.filter((step) => !step.done);
+  if (open.length === 0) return "No open roadmap steps.";
+  const weeks = Math.max(1, Math.floor(daysBetween(plan.startDate, plan.finalEta) / 7) + 1);
+  const headerCells = Array.from({ length: weeks }, (_, index) => `W${String(index + 1).padStart(2, "0")}`);
+  const lines = [`${"Step".padEnd(5)} ${headerCells.join(" ")}  ETA`];
+  for (const step of open) {
+    const first = Math.floor(daysBetween(plan.startDate, step.start) / 7);
+    const last = Math.floor(daysBetween(plan.startDate, step.eta) / 7);
+    const cells = headerCells.map((_, index) => (index >= first && index <= last ? "███" : " · "));
+    lines.push(`${step.id.padEnd(5)} ${cells.join(" ")}  ${step.eta}`);
+  }
+  lines.push("");
+  lines.push(headerCells.map((label, index) => `${label} starts ${addDays(plan.startDate, index * 7)}`).join(" · "));
+  return ["```text", ...lines, "```"].join("\n");
+}
+
+function renderRoadmap(model) {
+  const { config } = model;
+  const plan = model.plan;
+  const inventoryById = new Map(prioritizedInventory(model).map((item) => [item.id, item]));
+  const phaseById = new Map(config.chronologyPhases.map((phase) => [phase.id, phase]));
+  const openSteps = plan.steps.filter((step) => !step.done);
+  const originStep = plan.steps.find((step) => /origin id/i.test(step.title));
+  const findings = plan.steps.filter((step) => step.findings.length > 0);
+  const stages = [...new Set(plan.steps.map((step) => step.stage))];
+  const prLabel = (pr) => `#${pr.number} (${pr.state})`;
+  const stepLink = (id) => `[${id}](#${id.toLowerCase()})`;
+  const months = new Map();
+  for (const step of openSteps) {
+    const month = step.eta.slice(0, 7);
+    if (!months.has(month)) months.set(month, []);
+    months.get(month).push(step);
+  }
+
+  const parts = [
+    header(model, "Directives, roadmap, and ETA", "The founder's directives in order, the story so far, the ordered execution roadmap with ETAs (including the origin-ID ETA), the report and business plan on one timeline, and the automated review that keeps it current."),
+    responsibleFraming(model),
+    "## At a glance",
+    "",
+    `- **Directives recorded:** ${plan.directives.length} (${statusCounts(plan.directives)}).`,
+    `- **Roadmap:** ${plan.steps.length} ordered steps in ${stages.length} stages, starting ${plan.startDate}; ${openSteps.length} open. Projected completion of all open steps: **${plan.finalEta || "n/a"}**.`,
+    originStep ? `- **Origin ID registration ETA:** **${originStep.done ? "done" : originStep.eta}** (${stepLink(originStep.id)}, after ${originStep.dependsOn.map(stepLink).join(", ")}).` : "- **Origin ID registration ETA:** no roadmap step names origin IDs.",
+    `- **Review status as of ${plan.asOf}:** ${plan.reviewQueue.length} open PRs in the review queue, ${findings.length} steps with automated findings, ${plan.unscheduledOpenPrs.length} open PRs not on the roadmap.`,
+    `- **ETA rule:** ${md(plan.etaRule)}`,
+    "",
+    "## 1. Story synopsis",
+    "",
+    "The story in chronological order, one chapter per phase. Counts are computed from repository records; chapter text is the agent's summary of the cited records for founder review.",
+    ""
+  ];
+  for (const chapter of [...config.storySynopsis].sort((a, b) => a.chapter - b.chapter)) {
+    const phase = phaseById.get(chapter.phase);
+    const inPhase = (date) => date >= phase.start && date <= phase.end;
+    const merged = model.prRecords.filter((pr) => pr.state === "merged" && inPhase(pr.closedAt)).length;
+    const memory = model.memoryRecords.filter((record) => inPhase(record.date)).length;
+    const setbacks = model.memoryRecords.filter((record) => record.setback && inPhase(record.date)).length;
+    parts.push(`### Chapter ${chapter.chapter} — ${md(chapter.title)} (${phase.start} → ${phase.end})`);
+    parts.push("");
+    parts.push(md(chapter.text));
+    parts.push("");
+    parts.push(`_Record: ${merged} PRs merged · ${memory} continuity records · ${setbacks} recorded setbacks. Sources: ${refList(model, chapter.sourceRefs)}._`);
+    parts.push("");
+  }
+  parts.push(`### Chapter ${config.storySynopsis.length + 1} — What happens next (${plan.startDate} → ${plan.finalEta || "n/a"})`);
+  parts.push("");
+  parts.push(`${openSteps.length} ordered steps turn the directives into filed, merged, and evidenced records: ${stages.map(md).join("; ")}. The first founder action is ${stepLink(plan.steps[0].id)} — ${md(plan.steps[0].title)}.`);
+  parts.push("");
+
+  parts.push("## 2. Founder directives in order");
+  parts.push("");
+  parts.push("Exact wording is preserved as given. Status describes delivery on the canonical branch, not whether the directive is valid. ETA is the latest ETA among the directive's open roadmap steps.");
+  parts.push("");
+  parts.push(table(["Order", "ID", "Given", "Directive (short)", "Status", "Steps", "ETA"], plan.directives.map((directive) => [
+    String(directive.order),
+    code(directive.id),
+    directive.given,
+    md(truncate(directive.wording, 80)),
+    code(directive.status),
+    directive.steps.map((step) => stepLink(step.id)).join(", "),
+    directive.eta || "done"
+  ])));
+  parts.push("");
+  for (const directive of plan.directives) {
+    parts.push(`### ${directive.id} — directive ${directive.order}`);
+    parts.push("");
+    parts.push(`> ${md(directive.wording)}`);
+    parts.push("");
+    parts.push(`- **Given:** ${directive.given} · **Origin ID:** ${code(directive.originId)}`);
+    parts.push(`- **Objective:** ${md(directive.objective)}`);
+    parts.push(`- **Status:** ${code(directive.status)} — ${md(directive.statusNote)}`);
+    parts.push(`- **Roadmap:** ${directive.steps.map((step) => `${stepLink(step.id)} ${step.done ? "done" : `ETA ${step.eta}`}`).join(" · ")}`);
+    parts.push(`- **Directive ETA:** ${directive.eta || "done"}`);
+    parts.push(`- **Sources:** ${refList(model, directive.sourceRefs)}`);
+    parts.push("");
+  }
+
+  parts.push("## 3. Execution order and ETA");
+  parts.push("");
+  parts.push(table(["Order", "Step", "Stage", "Owner", "Depends on", "Directives", "Start", "ETA", "Status", "PRs", "Inventory"], plan.steps.map((step) => [
+    String(step.order),
+    `**${code(step.id)}** ${md(step.title)}`,
+    md(step.stage),
+    md(step.owner),
+    step.dependsOn.length ? step.dependsOn.map(stepLink).join(", ") : "—",
+    step.directives.map(code).join(", "),
+    step.done ? "—" : step.start,
+    step.done ? "done" : `**${step.eta}**`,
+    code(step.status),
+    step.prs.length ? step.prs.map(prLabel).join(", ") : "—",
+    step.inventoryRefs.length ? step.inventoryRefs.map(code).join(", ") : "—"
+  ])));
+  parts.push("");
+  for (const step of plan.steps) {
+    parts.push(`### ${step.id}`);
+    parts.push("");
+    parts.push(`**${md(step.title)}** — ${md(step.stage)} · owner ${md(step.owner)} · ${step.durationDays} day(s) · ${step.done ? "done" : `${step.start} → ETA ${step.eta}`} · ${code(step.status)}`);
+    parts.push("");
+    parts.push(`- **Acceptance:** ${md(step.acceptance)}`);
+    parts.push(`- **Origin ID:** ${code(step.originId)}`);
+    if (step.inventoryRefs.length) {
+      parts.push(`- **Business value:** ${step.inventoryRefs.map((id) => { const item = inventoryById.get(id); return `${code(id)} ${md(item.item)} (profit ${item.profit} × urgency ${item.urgency} = ${item.score})`; }).join("; ")}`);
+    }
+    parts.push(`- **Review findings:** ${step.findings.length ? step.findings.map(md).join("; ") : "none"}`);
+    parts.push(`- **Sources:** ${refList(model, step.sourceRefs)}`);
+    parts.push("");
+  }
+
+  parts.push("## 4. Origin IDs");
+  parts.push("");
+  parts.push(`Origin IDs are internal, content-addressed record identifiers: ${code("AXES-OID-<kind>-<id>-<first 12 hex of SHA-256 over the identifying content>")}. The same content always yields the same ID, and a change in wording yields a new ID, so a silent edit is detectable. They are not a legal, patent, trademark, or external registry filing. Formal registration in the OORR-P registry is ${originStep ? `${stepLink(originStep.id)} with ETA **${originStep.done ? "done" : originStep.eta}**` : "not yet scheduled"}.`);
+  parts.push("");
+  parts.push(table(["Kind", "Record", "Origin ID"], [
+    ...plan.directives.map((directive) => ["Directive", `${code(directive.id)} ${md(truncate(directive.wording, 70))}`, code(directive.originId)]),
+    ...prioritizedInventory(model).map((item) => ["Inventory", `${code(item.id)} ${md(item.item)}`, code(originId("INV", item.id, [item.item]))])
+  ]));
+  parts.push("");
+
+  parts.push("## 5. Report and business plan on one timeline");
+  parts.push("");
+  parts.push("### Looking back: how we got here");
+  parts.push("");
+  parts.push(table(["Phase", "Dates", "Chapter"], config.chronologyPhases.map((phase) => {
+    const chapter = config.storySynopsis.find((entry) => entry.phase === phase.id);
+    return [`${md(phase.id)} ${md(phase.name)}`, `${phase.start} → ${phase.end}`, chapter ? `Chapter ${chapter.chapter}: ${md(chapter.title)}` : "—"];
+  })));
+  parts.push("");
+  parts.push("### Looking forward: week-by-week roadmap");
+  parts.push("");
+  parts.push(weekGantt(plan));
+  parts.push("");
+  parts.push("### Business-plan milestones by month of ETA");
+  parts.push("");
+  for (const [month, unsortedSteps] of [...months.entries()].sort((a, b) => compareStrings(a[0], b[0]))) {
+    const monthSteps = [...unsortedSteps].sort((a, b) => compareStrings(a.eta, b.eta) || a.order - b.order);
+    parts.push(`**${month}**`);
+    parts.push("");
+    for (const step of monthSteps) {
+      const value = step.inventoryRefs.map((id) => inventoryById.get(id)).filter(Boolean);
+      const score = value.length ? ` — business score ${Math.max(...value.map((item) => item.score))}` : "";
+      parts.push(`- ${step.eta} · ${stepLink(step.id)} ${md(step.title)} (${md(step.owner)})${score}`);
+    }
+    parts.push("");
+  }
+
+  parts.push("## 6. Review automation");
+  parts.push("");
+  parts.push("### Review queue (open PRs in roadmap order)");
+  parts.push("");
+  parts.push(plan.reviewQueue.length
+    ? table(["Position", "PR", "Title", "Roadmap step", "Step ETA", `Days open as of ${plan.asOf}`, "Next action"], plan.reviewQueue.map((entry, index) => [
+      String(index + 1),
+      `#${entry.pr.number}`,
+      md(truncate(entry.pr.title, 90)),
+      stepLink(entry.step.id),
+      entry.step.eta || "done",
+      String(entry.daysOpen),
+      index === 0 ? "Founder review now; agent regenerates reports after merge" : `Founder review by ${entry.step.eta || "next refresh"}; agent rebases on the latest base first`
+    ]))
+    : "No open PRs are scheduled.");
+  parts.push("");
+  parts.push("### Automated findings");
+  parts.push("");
+  parts.push(`- Steps with findings as of ${plan.asOf}: ${findings.length ? "" : "none."}`);
+  for (const step of findings) parts.push(`  - ${stepLink(step.id)}: ${step.findings.map(md).join("; ")}`);
+  parts.push(`- Open PRs not on the roadmap: ${plan.unscheduledOpenPrs.length ? plan.unscheduledOpenPrs.map((pr) => `#${pr.number} ${md(truncate(pr.title, 60))}`).join("; ") : "none"}.`);
+  parts.push(`- Inventory items not scheduled (deferred or already done): ${plan.unscheduledInventory.length ? plan.unscheduledInventory.map((item) => `${code(item.id)} (${item.status})`).join(", ") : "none"}.`);
+  parts.push("- Every directive has at least one roadmap step; the generator fails if a directive is left unscheduled, a dependency is missing, or the order contains a cycle.");
+  parts.push("");
+  parts.push("### What runs automatically");
+  parts.push("");
+  parts.push(table(["Automation", "When", "What it does", "Founder action"], [
+    ["`Reconciliation report validation` CI job", "Every push and pull request", "Runs the generator tests and `--check`: fails on invalid inputs, unscheduled directives, dependency cycles, or missing reports; warns when reports are stale.", "Approve held CI runs."],
+    ["`Reconciliation refresh` workflow", "Weekly (Monday) and on demand", "Refreshes the PR snapshot read-only from the GitHub API, regenerates every report (including overdue and review findings), runs the tests, and opens a review PR. It never merges, deploys, or edits other files.", "Review and merge the refresh PR."],
+    ["Generator review findings", "Every regeneration", "Flags overdue steps, steps whose PRs are all merged, open PRs missing from the roadmap, and unscheduled inventory.", "Confirm or reorder steps in the curated config."]
+  ]));
+  parts.push("");
+  parts.push("To change the order, ETAs, or owners, edit `roadmap` in [sources/reconciliation-config.v1.json](sources/reconciliation-config.v1.json) and regenerate.");
+  parts.push("");
+  return parts.join("\n");
+}
+
 // ---------------------------------------------------------------- orchestration
 
 function buildReports(root) {
@@ -1173,7 +1555,8 @@ function buildReports(root) {
     ["PR_RECONCILIATION.md", renderPrReconciliation(model)],
     ["ORIGIN_OWNERSHIP_GOVERNANCE_MATRIX.md", renderMatrix(model)],
     ["TIMELINE_AND_BUSINESS_SYNTHESIS.md", renderTimeline(model)],
-    ["MISSING_MEANING_AND_GAPS.md", renderGaps(model)]
+    ["MISSING_MEANING_AND_GAPS.md", renderGaps(model)],
+    ["DIRECTIVES_ROADMAP_AND_ETA.md", renderRoadmap(model)]
   ]);
   return { model, outputs, errors: [], warnings: model.warnings };
 }
@@ -1275,6 +1658,10 @@ module.exports = {
   parseTimeline,
   evaluateProbe,
   reconcilePr,
+  scheduleRoadmap,
+  buildPlan,
+  originId,
+  addDays,
   validateInputs,
   collect,
   buildReports,

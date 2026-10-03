@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-10-03 Reconciliation roadmap, ETAs, origin IDs, and weekly review automation](2026-10-03-reconciliation-roadmap-eta-review-automation.md)
 - [2026-10-02 Repository reconciliation automation: deterministic generator, curated inputs, PR snapshot, and five reconciliation reports under `docs/reconciliation/`](2026-10-02-repository-reconciliation-automation.md)
 - [2026-09-23 AXI chat attachments, upload diagnostics, and continuity-capacity plan](2026-09-23-axi-chat-attachments-continuity-plan.md)
 - [2026-09-22 (b) PR #173 authorized security/integrity remediation: escaped rating notes, protected ledger POST/preflight, strict confirmation types, and current evidence eligibility without rewriting history](2026-09-22b-pr173-authorized-remediation.md)

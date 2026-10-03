@@ -82,7 +82,20 @@ function fixtureConfig() {
       { id: "INV-02", item: "Trademark", category: "document", status: "unfiled", profit: 2, urgency: 5, authority: "Counsel", nextAction: "File.", sourceRefs: refs }
     ],
     knownGaps: [{ id: "GAP-01", gap: "Uncommitted chats", status: "unfiled", detail: "Not in repository.", sourceRefs: refs }],
-    missionNarrative: { mission: "Fixture mission.", problem: "Fixture problem.", assets: ["Asset"], differentiators: ["Truth labeling"], nearTermRevenue: "Consulting.", sourceRefs: refs }
+    missionNarrative: { mission: "Fixture mission.", problem: "Fixture problem.", assets: ["Asset"], differentiators: ["Truth labeling"], nearTermRevenue: "Consulting.", sourceRefs: refs },
+    originalDirectives: [
+      { id: "D01", order: 1, given: "2026-10-02", wording: "establish origin ownership registration", objective: "Register origin.", status: "proposed", statusNote: "Open.", sourceRefs: refs },
+      { id: "D02", order: 2, given: "2026-10-03", wording: "eta and review automation", objective: "Schedule.", status: "proposed", statusNote: "Open.", sourceRefs: refs }
+    ],
+    storySynopsis: [{ chapter: 1, phase: "P0", title: "Fixture chapter", text: "Fixture story.", sourceRefs: refs }],
+    roadmap: {
+      startDate: "2026-10-05",
+      etaRule: "Fixture rule.",
+      steps: [
+        { id: "S1", order: 1, stage: "1. Unblock", title: "Merge the ledger", owner: "founder", durationDays: 2, dependsOn: [], directives: ["D01", "D02"], inventoryRefs: ["INV-01"], prRefs: [173], acceptance: "Merged.", status: "proposed", sourceRefs: refs },
+        { id: "S2", order: 2, stage: "2. Origin", title: "Register origin IDs", owner: "agent", durationDays: 3, dependsOn: ["S1"], directives: ["D01"], inventoryRefs: [], prRefs: [217], acceptance: "Registered.", status: "unfiled", sourceRefs: refs }
+      ]
+    }
   };
 }
 
@@ -205,6 +218,88 @@ test("validateInputs rejects unsupported verified labels, unsafe paths, missing 
   assert.match(errors, /responsibleParties must include role "Assigned completion agent"/);
 });
 
+test("scheduleRoadmap computes ETAs from dependencies and detects cycles", () => {
+  const config = fixtureConfig();
+  const schedule = generator.scheduleRoadmap(config.roadmap);
+  assert.deepEqual(schedule.get("S1"), { done: false, start: "2026-10-05", eta: "2026-10-06" });
+  assert.deepEqual(schedule.get("S2"), { done: false, start: "2026-10-07", eta: "2026-10-09" });
+  config.roadmap.steps[0].status = "verified";
+  assert.equal(generator.scheduleRoadmap(config.roadmap).get("S2").start, "2026-10-05");
+  config.roadmap.steps[0].dependsOn = ["S2"];
+  assert.equal(generator.scheduleRoadmap(config.roadmap), null);
+  assert.equal(generator.addDays("2026-12-31", 1), "2027-01-01");
+});
+
+test("buildPlan flags overdue steps and steps whose PRs are all merged", () => {
+  const config = fixtureConfig();
+  const snapshot = { ...fixtureSnapshot(), recordedAt: "2026-10-20" };
+  const plan = generator.buildPlan(config, snapshot, new Map(snapshot.pullRequests.map((pr) => [pr.number, pr])));
+  const [s1, s2] = plan.steps;
+  assert.match(s1.findings.join(" "), /overdue by 14 day/);
+  assert.match(s1.findings.join(" "), /all referenced PRs are closed or merged \(#173 merged\)/);
+  assert.match(s2.findings.join(" "), /overdue by 11 day/);
+  assert.equal(plan.finalEta, "2026-10-09");
+  assert.equal(plan.directives[0].eta, "2026-10-09");
+  assert.deepEqual(plan.reviewQueue.map((entry) => entry.pr.number), [217]);
+  assert.match(plan.directives[0].originId, /^AXES-OID-DIR-D01-[0-9A-F]{12}$/);
+});
+
+test("originId is deterministic and changes when content changes", () => {
+  const first = generator.originId("DIR", "D01", ["Founder", "2026-10-02", "wording"]);
+  assert.equal(first, generator.originId("DIR", "D01", ["Founder", "2026-10-02", "wording"]));
+  assert.notEqual(first, generator.originId("DIR", "D01", ["Founder", "2026-10-02", "wording changed"]));
+});
+
+test("validateInputs rejects unscheduled directives, unknown dependencies, and cycles", () => {
+  const root = makeFixture();
+  const config = fixtureConfig();
+  config.roadmap.steps[1].directives = ["D01"];
+  config.roadmap.steps[0].directives = ["D01"];
+  config.roadmap.steps[1].dependsOn = ["S9"];
+  config.roadmap.steps[0].prRefs = [4242];
+  let errors = generator.validateInputs(root, config, fixtureSnapshot()).errors.join("\n");
+  assert.match(errors, /originalDirectives D02 has no roadmap step/);
+  assert.match(errors, /dependsOn "S9" is not a roadmap step/);
+  assert.match(errors, /prRef 4242 is not in the PR snapshot/);
+
+  const cyclic = fixtureConfig();
+  cyclic.roadmap.steps[0].dependsOn = ["S2"];
+  errors = generator.validateInputs(root, cyclic, fixtureSnapshot()).errors.join("\n");
+  assert.match(errors, /contain a cycle/);
+});
+
+test("refresh-pr-snapshot builds a valid snapshot from API pull requests", () => {
+  const refresh = require("../refresh-pr-snapshot.js");
+  const snapshot = refresh.buildSnapshot([
+    { number: 2, title: "Open  work", state: "open", created_at: "2026-10-01T10:00:00Z", merged_at: null, closed_at: null, head: { ref: "b" } },
+    { number: 1, title: "Merged", state: "closed", created_at: "2026-09-01T10:00:00Z", merged_at: "2026-09-02T10:00:00Z", closed_at: "2026-09-02T10:00:00Z", head: { ref: "a" } },
+    { number: 3, title: "Dropped", state: "closed", created_at: "2026-09-03T10:00:00Z", merged_at: null, closed_at: "2026-09-04T10:00:00Z", head: { ref: "c" } }
+  ], { boundary: "Kept boundary." }, "owner/repo", "2026-10-05");
+  assert.equal(snapshot.boundary, "Kept boundary.");
+  assert.deepEqual(snapshot.pullRequests.map((pr) => [pr.number, pr.state, pr.closedAt, pr.title]), [
+    [1, "merged", "2026-09-02", "Merged"],
+    [2, "open", null, "Open work"],
+    [3, "closed-unmerged", "2026-09-04", "Dropped"]
+  ]);
+  assert.throws(() => refresh.buildSnapshot([], null, "../evil", "2026-10-05"), /Invalid repository/);
+});
+
+test("fetchAllPulls pages read-only requests and fails on API errors", async () => {
+  const refresh = require("../refresh-pr-snapshot.js");
+  const calls = [];
+  const fakeFetch = async (url, options) => {
+    calls.push({ url, auth: options.headers.Authorization });
+    const page = Number(new URL(url).searchParams.get("page"));
+    const batch = page === 1 ? Array.from({ length: 100 }, (_, index) => ({ number: index + 1 })) : [{ number: 101 }];
+    return { ok: true, json: async () => batch };
+  };
+  const pulls = await refresh.fetchAllPulls("owner/repo", "t0k", fakeFetch);
+  assert.equal(pulls.length, 101);
+  assert.equal(calls.length, 2);
+  assert.ok(calls.every((call) => call.url.startsWith("https://api.github.com/repos/owner/repo/pulls?state=all")));
+  await assert.rejects(refresh.fetchAllPulls("owner/repo", "", async () => ({ ok: false, status: 403 })), /403/);
+});
+
 test("generator writes byte-identical reports and reconciles the fixture", () => {
   const root = makeFixture();
   const first = capture();
@@ -214,7 +309,7 @@ test("generator writes byte-identical reports and reconciles the fixture", () =>
   assert.equal(generator.main(["--root", root], capture().io), 0);
   assert.deepEqual(read(), before);
 
-  const [index, prs, matrix, timeline, gaps] = before;
+  const [index, prs, matrix, timeline, gaps, roadmap] = before;
   for (const content of before) {
     assert.match(content, /^<!-- GENERATED FILE/);
     assert.match(content, /## Responsible parties/);
@@ -231,6 +326,15 @@ test("generator writes byte-identical reports and reconciles the fixture", () =>
   assert.match(timeline, /`INV-01`[^\n]*\*\*20\*\*/);
   assert.match(gaps, /PR numbers cited in records but absent from the snapshot: #999/);
   assert.match(gaps, /GAP-01/);
+  assert.match(index, /DIRECTIVES_ROADMAP_AND_ETA\.md/);
+  assert.match(roadmap, /## 1\. Story synopsis/);
+  assert.match(roadmap, /Chapter 1 — Fixture chapter/);
+  assert.match(roadmap, /## 2\. Founder directives in order/);
+  assert.match(roadmap, /> establish origin ownership registration/);
+  assert.match(roadmap, /Origin ID registration ETA:\*\* \*\*2026-10-09\*\*/);
+  assert.match(roadmap, /W01 starts 2026-10-05/);
+  assert.match(roadmap, /## 6\. Review automation/);
+  assert.match(roadmap, /\| 1 \| #217 \|/);
 });
 
 test("check mode warns on stale reports, fails in strict mode, and fails when reports are missing", () => {

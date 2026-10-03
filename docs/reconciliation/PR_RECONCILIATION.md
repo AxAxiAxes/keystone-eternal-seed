@@ -4,7 +4,7 @@
 
 > PR-by-PR reconciliation of origin, ownership, governance, accountability, review-process, and business-plan work against what actually exists on this tree.
 >
-> Generated from repository records only. Curated inputs recorded 2026-10-02; pull-request snapshot recorded 2026-10-02. Source fingerprint `sha256:acf04aef2e2bea89`. Every status label below follows the definitions in [RECONCILIATION_INDEX.md](RECONCILIATION_INDEX.md#status-labels); symbolic or proposed material is never presented as verified, and nothing here is a legal, financial, or professional determination.
+> Generated from repository records only. Curated inputs recorded 2026-10-02; pull-request snapshot recorded 2026-10-02. Source fingerprint `sha256:899e978d92a15b00`. Every status label below follows the definitions in [RECONCILIATION_INDEX.md](RECONCILIATION_INDEX.md#status-labels); symbolic or proposed material is never presented as verified, and nothing here is a legal, financial, or professional determination.
 
 ## Responsible parties
 
@@ -342,7 +342,7 @@ All 107 snapshot PRs whose title or curated themes touch origin, ownership, gove
 | 218 | 2026-09-26 | — | `open` | `proposed` | governance, ownership | 0 | Automate agent production-rights attribution and harden public chat/upload failure handling |
 | 219 | 2026-09-28 | — | `open` | `proposed` | governance, origin, ownership | 0 | Introduce OORR-P v1 canonical registry, boundaries, and deterministic validation under docs/keystone |
 | 220 | 2026-09-30 | — | `open` | `proposed` | governance, review-process | 0 | Add founder pace view to Command Center and an advisory review-board check |
-| 221 | 2026-10-02 | — | `open` | `proposed` | review-process | 0 | [WIP] Automate repository-backed collection and reconciliation workflow |
+| 221 | 2026-10-02 | — | `open` | `proposed` | review-process | 1 | [WIP] Automate repository-backed collection and reconciliation workflow |
 
 ## Closed without merge (not adopted)
 

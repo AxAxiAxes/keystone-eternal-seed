@@ -4,7 +4,7 @@
 
 > Everything the repository references but has not filed, verified, or completed — so it can be refiled, decided, or explicitly left open.
 >
-> Generated from repository records only. Curated inputs recorded 2026-10-02; pull-request snapshot recorded 2026-10-02. Source fingerprint `sha256:acf04aef2e2bea89`. Every status label below follows the definitions in [RECONCILIATION_INDEX.md](RECONCILIATION_INDEX.md#status-labels); symbolic or proposed material is never presented as verified, and nothing here is a legal, financial, or professional determination.
+> Generated from repository records only. Curated inputs recorded 2026-10-02; pull-request snapshot recorded 2026-10-02. Source fingerprint `sha256:899e978d92a15b00`. Every status label below follows the definitions in [RECONCILIATION_INDEX.md](RECONCILIATION_INDEX.md#status-labels); symbolic or proposed material is never presented as verified, and nothing here is a legal, financial, or professional determination.
 
 ## Responsible parties
 
@@ -92,7 +92,7 @@ Line numbers point to phrases such as "not yet filed", "unverified", "pending fo
 | --- | --- | --- | --- |
 | [docs/keystone/SACRED_RECORD_SESSION_08_28_2026.md](../keystone/SACRED_RECORD_SESSION_08_28_2026.md) | `symbolic` | 18 | 91, 165, 177, 237, 279, 322 |
 | [docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md](../AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md) | `operational` | 16 | 56, 59, 62, 64, 68, 72 |
-| [PROJECT_TIMELINE.md](../../PROJECT_TIMELINE.md) | `operational` | 15 | 16, 34, 39, 42, 49, 66 |
+| [PROJECT_TIMELINE.md](../../PROJECT_TIMELINE.md) | `operational` | 15 | 17, 35, 40, 43, 50, 67 |
 | [docs/keystone/PATENT_APPLICATION_64_078_819.md](../keystone/PATENT_APPLICATION_64_078_819.md) | `historical` | 12 | 290, 321, 842, 1320, 1420, 5953 |
 | [docs/AXEL_URARTU_ORIGIN_TIMELINE_AND_INVESTIGATION_REGISTER.md](../AXEL_URARTU_ORIGIN_TIMELINE_AND_INVESTIGATION_REGISTER.md) | `operational` | 7 | 16, 62, 77, 98, 120, 158 |
 | [docs/keystone/AXIOM_APPLICATION_DRAFT_RECORDS.md](../keystone/AXIOM_APPLICATION_DRAFT_RECORDS.md) | `proposed` | 5 | 16, 33, 38, 49, 54 |

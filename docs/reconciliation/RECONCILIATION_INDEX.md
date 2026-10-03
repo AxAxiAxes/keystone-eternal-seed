@@ -4,7 +4,7 @@
 
 > Entry point for the repository-backed reconciliation of origin, ownership, constitution and governance, timeline, pull-request history, and business-plan priorities.
 >
-> Generated from repository records only. Curated inputs recorded 2026-10-02; pull-request snapshot recorded 2026-10-02. Source fingerprint `sha256:acf04aef2e2bea89`. Every status label below follows the definitions in [RECONCILIATION_INDEX.md](RECONCILIATION_INDEX.md#status-labels); symbolic or proposed material is never presented as verified, and nothing here is a legal, financial, or professional determination.
+> Generated from repository records only. Curated inputs recorded 2026-10-02; pull-request snapshot recorded 2026-10-02. Source fingerprint `sha256:899e978d92a15b00`. Every status label below follows the definitions in [RECONCILIATION_INDEX.md](RECONCILIATION_INDEX.md#status-labels); symbolic or proposed material is never presented as verified, and nothing here is a legal, financial, or professional determination.
 
 ## Responsible parties
 
@@ -35,12 +35,13 @@
 
 ## Executive summary
 
-- Reviewed **348** repository text records (216 dated continuity memory records), **229** timeline rows, and **61** timeline checkpoints (17 still open).
+- Reviewed **349** repository text records (217 dated continuity memory records), **230** timeline rows, and **61** timeline checkpoints (17 still open).
 - Required sources: **20 of 20** present.
 - Pull requests in snapshot: **220** (merged 188, open 12, closed without merge 20).
 - Focus pull requests reconciled: **16** — verified 6 · operational 0 · proposed 10 · symbolic 0 · historical 0 · blocked 0 · unfiled 0.
 - Origin/ownership work in the PR history: **47** pull requests (41 merged, 6 still open, 0 closed without merge) and **36** origin/ownership continuity records; dated origin/ownership activity spans 2026-09-09 to 2026-09-28.
 - After-the-fact capture: **103** PR titles record, preserve, document, or confirm earlier meaning; **26** PR titles correct, clarify, restore, reconfirm, follow up, or reconcile earlier work.
+- Founder directives: **9** in order; roadmap: **24** ordered steps from 2026-10-05, projected completion **2026-11-25** (see [DIRECTIVES_ROADMAP_AND_ETA.md](DIRECTIVES_ROADMAP_AND_ETA.md)).
 - Curated inventory: **22** items (verified 1 · operational 1 · proposed 7 · symbolic 0 · historical 0 · blocked 8 · unfiled 5); concepts: **26** (verified 0 · operational 6 · proposed 5 · symbolic 6 · historical 4 · blocked 0 · unfiled 5); known gaps: **9**.
 
 ## Reports
@@ -51,12 +52,13 @@
 | [ORIGIN_OWNERSHIP_GOVERNANCE_MATRIX.md](ORIGIN_OWNERSHIP_GOVERNANCE_MATRIX.md) | Authority separation, origin science / constitution / governance concepts, and every reviewed record classified by domain and status. |
 | [TIMELINE_AND_BUSINESS_SYNTHESIS.md](TIMELINE_AND_BUSINESS_SYNTHESIS.md) | Chronology, loss/gain graph, values → operational values, inventory prioritized by profit and urgency, mission narrative. |
 | [MISSING_MEANING_AND_GAPS.md](MISSING_MEANING_AND_GAPS.md) | Unfiled, missing, unverified, and blocked meaning, including open PRs whose content is not on the canonical branch. |
+| [DIRECTIVES_ROADMAP_AND_ETA.md](DIRECTIVES_ROADMAP_AND_ETA.md) | Founder directives in order, story synopsis, ordered roadmap with ETAs, origin IDs and the origin-ID ETA, report and business plan on one timeline, review queue and automated review findings. |
 
 ## Required source inventory
 
 | Source | Domain | Curated status | Auto status | Authority | Lines | SHA-256 |
 | --- | --- | --- | --- | --- | --- | --- |
-| [PROJECT_TIMELINE.md](../../PROJECT_TIMELINE.md) | timeline | `operational` | `operational` | Canonical milestone and checkpoint record | 402 | `5e2b79fca764` |
+| [PROJECT_TIMELINE.md](../../PROJECT_TIMELINE.md) | timeline | `operational` | `operational` | Canonical milestone and checkpoint record | 403 | `de343d340bef` |
 | [README.md](../../README.md) | continuity | `operational` | `operational` | Repository entry point and record index | 94 | `ef1c94494e4b` |
 | [AGENTS.md](../../AGENTS.md) | governance | `operational` | `operational` | Startup/reset protocol and external-action boundary for every agent or operator | 89 | `e02c656e5b1f` |
 | [docs/AXI_GENESIS_OWNERSHIP_CHECKPOINT.md](../AXI_GENESIS_OWNERSHIP_CHECKPOINT.md) | ownership | `operational` | `operational` | Founder ownership-and-accountability claim; AI non-personhood; required agent runtime record | 128 | `3bf1fcbe65f3` |
@@ -67,7 +69,7 @@
 | [docs/AXES_PLATFORM_PLAN.md](../AXES_PLATFORM_PLAN.md) | business | `proposed` | `operational` | Directional product constellation and phased delivery | 178 | `a05c71367ade` |
 | [docs/AXI_AUTOMATION_SERVICE.md](../AXI_AUTOMATION_SERVICE.md) | automation | `operational` | `operational` | Allowlisted, human-controlled automation contract | 413 | `7b5a251e05d2` |
 | [docs/COPILOT_ACCOUNTABILITY_TRACKER.md](../COPILOT_ACCOUNTABILITY_TRACKER.md) | accountability | `operational` | `operational` | Directive-vs-delivery accountability ledger (merged via PR #173) | 152 | `3ae59b9a9a6a` |
-| [docs/memory/README.md](../memory/README.md) | continuity | `operational` | `operational` | Continuity memory rules and chronological index | 334 | `843cb99dc7ec` |
+| [docs/memory/README.md](../memory/README.md) | continuity | `operational` | `operational` | Continuity memory rules and chronological index | 335 | `544cc442f83e` |
 | [docs/keystone/README.md](../keystone/README.md) | origin | `historical` | `operational` | Index of preserved KEYSTONE founding sources | 171 | `fdc13525f640` |
 | [docs/AXES_CREATOR_ORIGIN_CONSTITUTION.md](../AXES_CREATOR_ORIGIN_CONSTITUTION.md) | constitution | `operational` | `operational` | Creator credit, consent, evidence, and correction standards (Articles I-XI) | 234 | `96bec422bd07` |
 | [docs/AXES_AGENT_ORIGIN_REGISTRY.md](../AXES_AGENT_ORIGIN_REGISTRY.md) | ownership | `operational` | `operational` | Per-agent origin, purpose, duties, and accountability status | 134 | `40cb2c97aa91` |
