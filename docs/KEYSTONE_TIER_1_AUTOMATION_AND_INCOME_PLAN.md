@@ -31,6 +31,96 @@ banking, payment, trading, custody, or investment action.
 | Tool evaluation | Test only already enabled productivity features using non-sensitive sample material | Founder-reviewed evaluation record; no sensitive prompts |
 | Crypto readiness | Organize legal/product questions and a feature inventory for counsel | Dated counsel briefing packet; no accounts, keys, wallet, market, or transaction activity |
 
+## Prioritized repository action plan
+
+**Reviewed:** 2026-10-03. **Source and provenance:** Founder-directed internal
+planning; Copilot provides technical assistance, not origin, ownership, or
+professional authority. The priorities below supplement the build program and
+decision register; they do not override their readiness or approval gates.
+
+The linked PRs were open when checked through GitHub's pull-request listing.
+They are proposed dependencies, not merged capabilities on this branch. Recheck
+their state and overlapping changes before integration, especially #206/#216
+and the continuity/reconciliation workflow edits. A PR title is not acceptance
+evidence.
+
+| Order / phase | Action and source direction | Usefulness / effort | Dependency and acceptance evidence | Proposed human owner / approval |
+| --- | --- | --- | --- | --- |
+| 1 · Automation backbone | Daily repository reconciliation **drafts**, [PR #212](https://github.com/AxAxiAxes/keystone-eternal-seed/pull/212) | High administrative leverage / small | Review and integrate generator first; fixed date + tree produce repeatable preview; existing draft cannot be overwritten; no canonical memory changes | Repository maintainer implements; founder/operator reviews promotion |
+| 2 · Automation backbone | Deterministic origin, ownership, governance, PR, timeline, and business-plan reports, [PR #221](https://github.com/AxAxiAxes/keystone-eternal-seed/pull/221) | High governance leverage / medium | After 1's source conventions are agreed; frozen curated inputs produce identical reports; missing evidence stays unverified; report checks pass | Maintainer validates; founder approves curated claims and priorities |
+| 3 · Automation backbone | Workflow-run continuity from explicit origin coordinates, [PR #207](https://github.com/AxAxiAxes/keystone-eternal-seed/pull/207) | High traceability / medium | After 2's evidence conventions; explicit repository/branch/SHA/run coordinates, idempotent capture, sanitized metadata, and same-repository guards tested | Maintainer implements; authorized operator approves any private engine connection |
+| 4 · Governance and provenance | Offline origin validation and bounded accountability, [PR #217](https://github.com/AxAxiAxes/keystone-eternal-seed/pull/217); canonical registry validation, [PR #219](https://github.com/AxAxiAxes/keystone-eternal-seed/pull/219) | High integrity / medium | Apply to 1–3 before runtime use; invalid origin records fail closed; schema compliance never becomes legal ownership or scientific proof | Founder reviews governance rules; maintainer runs offline checks |
+| 5 · Governance and records | General task records, [PR #206](https://github.com/AxAxiAxes/keystone-eternal-seed/pull/206), with overlapping follow-up [#216](https://github.com/AxAxiAxes/keystone-eternal-seed/pull/216); **Accounting-balance ledger** in the existing Command Center | High execution visibility / small–medium | Reconcile task-record lineage first; ledger scaffold is available in this change but starts empty; validate signed amounts, currency separation, evidence references, and draft exclusion | Founder/authorized human approves entries and corrections through reviewed PRs |
+| 6 · Oversight | Founder pace/advisory review, [PR #220](https://github.com/AxAxiAxes/keystone-eternal-seed/pull/220); attribution/failure handling, [PR #218](https://github.com/AxAxiAxes/keystone-eternal-seed/pull/218) | Useful after backbone / medium | After 3–5; observed metrics stay advisory, privacy-safe, and distinct from people/value judgments | Founder chooses metrics and reviews conclusions |
+| 7 · Deferred experiments | Design polish [#211](https://github.com/AxAxiAxes/keystone-eternal-seed/pull/211); light-sensing/research [#213](https://github.com/AxAxiAxes/keystone-eternal-seed/pull/213), [#214](https://github.com/AxAxiAxes/keystone-eternal-seed/pull/214) | Conditional usefulness / uncertain | Do not displace 1–5; require a bounded hypothesis, offline evidence, and a separate human-approved scope | Founder decides whether to proceed |
+
+No owner assignment in this table registers or schedules an agent. Before doing
+so, inspect its protected report for the Genesis checkpoint, creator
+ownership-and-accountability claim, operational origin, and active accountability
+status. Unreconciled or suspended records are not eligible.
+
+### Sciences → opportunities and relative evaluation
+
+These are internal opportunity hypotheses, not an academic taxonomy,
+professional qualification, validated market ranking, or profit forecast.
+Usefulness ranks reflect this repository's immediate reporting needs.
+Commercial ranks are proposed evaluation order only: actual profitability is
+unknown until a permitted offer has measured demand, delivery cost, founder
+time, and support cost. No opportunity is approved for sale by this table.
+
+| Domain | Repository opportunity | Usefulness rank | Commercial evaluation rank | Safe next step |
+| --- | --- | ---: | ---: | --- |
+| Computer science | Deterministic provenance, report generation, audit tooling | 1 | 1 | Deliver plan items 1–3; measure administrative time saved |
+| Law / governance | Evidence organization, attribution and dispute-review packets | 2 | 2 | Organize sources only; qualified review for legal conclusions |
+| Information science | Source catalogs, metadata, registry consistency | 3 | 3 | Validate curated sources and correction paths in items 2/4 |
+| Mathematics | Exact balance arithmetic, invariants, deterministic validation | 4 | 5 | Test item 5; no valuation or financial advice |
+| Ethics | Consent, approval, privacy and accountability checkpoints | 5 | 4 | Keep human review and record-minimization gates explicit |
+| Philosophy | Clarify internal origin, identity and authority terms | 6 | 7 | Separate concepts from verified operational evidence |
+| History | Versioned lineage and continuity chronology | 7 | 6 | Link item 3's records to source commits, not reconstructed claims |
+| Physics | Causality/state tracing and offline simulations | 8 | 9 | Defer experiments until backbone checks pass |
+| Cognitive science | Usability of operator review and explanation | 9 | 8 | Review UI with non-sensitive examples; no profiling or diagnosis |
+| Sociology | Institutional process and adoption hypotheses | 10 | 10 | Human-led pilot evaluation; no personal scoring |
+
+The practical intersection is computer science + governance + information
+science. Start with internal reporting efficiency, then evaluate a bounded
+provenance/records offer through the existing offer-readiness and income gates.
+Do not equate projected commercial usefulness with collected revenue.
+
+### Recommended automation service and integration gates
+
+Prefer one **GitHub Actions deterministic reconciliation service**, reusing the
+above PRs after review instead of implementing competing generators:
+
+| Job | Trigger / deterministic inputs | Output and boundary |
+| --- | --- | --- |
+| Daily reconciliation draft (#212) | Proposed daily cron or manual dispatch; explicitly supplied UTC date and checked-out SHA | Preview/draft artifact only; human promotion into canonical continuity records |
+| Repository reports (#221) | PR validation plus proposed scheduled/manual refresh; versioned config and frozen PR snapshot | Markdown/JSON draft reports; any live PR-metadata refresh is a separate read-only GitHub API step, not part of offline generation |
+| Workflow continuity (#207) | Proposed completion event; explicit origin coordinates and verified same-repository metadata | Deduplicated, sanitized run evidence; do not execute untrusted branch code with privileged workflow credentials |
+| Origin/registry validation (#217/#219) | Proposed PR/manual offline validation; reviewed schema and fixtures | Bounded validation findings, never autonomous ownership/accountability determinations |
+| Accounting-balance ledger (this change) | Existing AXI continuity CI on push/PR/manual dispatch; `docs/accounting-balances.json` | Validate and put deterministic JSON in the job summary; read-only, no entry creation, approval, commits, or payments |
+
+The ledger check is wired into the existing portal test job, which continues to
+skip `workflow_run` events. Run locally from the repository root:
+
+```bash
+node apps/axiom-freedom/accounting-balances.js
+node apps/axiom-freedom/accounting-balances.js --report
+node --test apps/axiom-freedom/test/accounting-balances.test.js
+```
+
+Recommended permissions are `contents: read`; write-capable draft-PR generation
+requires separate human approval, a bounded output path, and must never merge
+itself. Keep reports and continuity drafts separate from approved governance and
+ledger sources. No model/provider API is needed for deterministic checks;
+GitHub Actions compute/storage limits may still apply, so no zero-total-cost
+claim is made.
+
+Nightly scheduling of the proposed generators is not enabled by this plan.
+Private engine scheduling remains disabled after restart until the authorized
+operator accepts monitoring, allowlist, task limits, verified recovery bundle,
+and rollback path under `AXI_AUTOMATION_SERVICE.md`. None of these proposals
+authorizes external accounts, deployments, publishing, or spending.
+
 ## Productivity-tool evaluation protocol
 
 For each already enabled tool, conduct a limited founder-reviewed test using
