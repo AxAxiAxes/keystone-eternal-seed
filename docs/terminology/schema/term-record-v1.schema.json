@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AXES OS Terminology Term Record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "termId",
+    "label",
+    "domain",
+    "category",
+    "definition",
+    "engineeringMeaning",
+    "notThisBoundary",
+    "allowedContexts",
+    "nonAllowedContexts",
+    "dataMapping",
+    "governanceImplication",
+    "runtimeEffectClass",
+    "requiredControls",
+    "evidenceClass",
+    "version",
+    "status",
+    "verificationRequired",
+    "lastReviewedAt"
+  ],
+  "properties": {
+    "termId": {"type": "string", "pattern": "^[a-z0-9.-]+$"},
+    "label": {"type": "string", "minLength": 1},
+    "domain": {
+      "type": "string",
+      "enum": [
+        "ux-ui-interaction",
+        "light-observation",
+        "sequencer-resequencer",
+        "recognition-registry",
+        "identity-origin"
+      ]
+    },
+    "category": {"type": "string", "minLength": 1},
+    "aliases": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "definition": {"type": "string", "minLength": 1},
+    "engineeringMeaning": {"type": "string", "minLength": 1},
+    "notThisBoundary": {"type": "string", "minLength": 1},
+    "allowedContexts": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "nonAllowedContexts": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "dataMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eventFields", "tokenNamespaces"],
+      "properties": {
+        "eventFields": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "tokenNamespaces": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "governanceImplication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authorization", "consent", "retention", "audit"],
+      "properties": {
+        "authorization": {"type": "string"},
+        "consent": {"type": "string"},
+        "retention": {"type": "string"},
+        "audit": {"type": "string"}
+      }
+    },
+    "runtimeEffectClass": {
+      "type": "string",
+      "enum": ["none", "informational", "decision-support", "policy-affecting", "access-controlling"]
+    },
+    "requiredControls": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "string",
+        "enum": [
+          "discovery-not-authorization",
+          "deny-by-default",
+          "least-privilege",
+          "explicit-consent",
+          "signed-manifest",
+          "revocation",
+          "audit-hook",
+          "platform-enforcement"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "evidenceClass": {
+      "type": "string",
+      "enum": [
+        "repository-implemented-fact",
+        "external-research-evidence",
+        "keystone-proposal"
+      ]
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 0
+    },
+    "verificationRequired": {"type": "boolean"},
+    "version": {"type": "string", "pattern": "^v[0-9]+$"},
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "reviewed", "adopted", "deprecated", "superseded"]
+    },
+    "supersedes": {"type": "string"},
+    "supersededBy": {"type": "string"},
+    "changeRationale": {"type": "string"},
+    "lastReviewedAt": {
+      "type": "string",
+      "oneOf": [
+        {"pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+        {"pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$"}
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["runtimeEffectClass"],
+        "properties": {
+          "runtimeEffectClass": {"const": "none"}
+        }
+      },
+      "then": {
+        "required": ["requiredControls"],
+        "properties": {
+          "requiredControls": {
+            "type": "array",
+            "maxItems": 0
+          }
+        }
+      },
+      "else": {
+        "required": ["requiredControls"],
+        "properties": {
+          "requiredControls": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["evidenceClass"],
+        "properties": {
+          "evidenceClass": {
+            "enum": ["repository-implemented-fact", "external-research-evidence"]
+          }
+        }
+      },
+      "then": {
+        "required": ["evidenceRefs"],
+        "properties": {
+          "evidenceRefs": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["status"],
+        "properties": {
+          "status": {"const": "superseded"}
+        }
+      },
+      "then": {
+        "required": ["supersededBy"]
+      }
+    },
+    {
+      "if": {
+        "required": ["status"],
+        "properties": {
+          "status": {"enum": ["proposed", "reviewed"]}
+        }
+      },
+      "then": {
+        "not": {
+          "anyOf": [
+            {"required": ["supersedes"]},
+            {"required": ["supersededBy"]}
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["supersedes"]
+      },
+      "then": {
+        "properties": {
+          "status": {"enum": ["adopted", "superseded"]}
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["supersededBy"]
+      },
+      "then": {
+        "properties": {
+          "status": {"enum": ["deprecated", "superseded"]}
+        }
+      }
+    }
+  ]
+}
