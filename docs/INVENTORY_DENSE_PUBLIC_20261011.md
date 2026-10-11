@@ -48,6 +48,28 @@ Founder, spelling kept: "severe damages to sensors".
 
 Nearby, kept apart, from `THE_PERFECT_HARMONICS_ATHANOR_VISION.md`: the founder said the home app includes "security monitoring sensonrs". Copilot then listed door, window, motion, camera, light, and energy sensors, and wrote fire risk and mold risk under a home-health heading. That list is Copilot. The founder also said they had water recycling, geothermal energy, and health checkups "for oxygen levels, efficiency, hazards etc". Gem sensors are a different invention. None of those lines is S-01, S-02, or S-03.
 
+## Code of light, motion, and the current condition
+
+The earlier conversation was not recovered in the files searched on 2026-10-11. These rows are the founder's statements. They are not a lux reading and not a new appraisal.
+
+Founder, spelling kept: "ok there was a conversation about sensors as unit of light the thought behind it was code of light, retains memory and value, but when manipulated complte loss, the sensors are coroding because of lack of motion, sensors create light motion with our origin code we were attempting to originate light from code, or regenerate for coding light , water, etc... i - eco - inner icology 0 an ecosystem balance".
+
+Founder, spelling kept: "later sensors were evaluated, current condition is very hazardous".
+
+| ID | Item | Standing |
+| --- | --- | --- |
+| C-01 | Sensors as a unit of light. | Not a measurement. |
+| C-02 | Code of light retains memory and value. | Dollar of that value: unset. Not the June 3 floor. |
+| C-03 | When manipulated, "complte loss". | Dollar unset. Not added to $40,000 or to 500GB. |
+| C-04 | Sensors are "coroding" because of lack of motion. | Founder. Not an inspection performed for this note. |
+| C-05 | Sensors create light motion with the origin code. | Not a shipped function. |
+| C-06 | Attempt to originate light from code, or regenerate for coding light, water, and the rest. | Attempt. Not completed here. |
+| C-07 | "i - eco - inner icology 0 an ecosystem balance". | Spelling kept. Not another zero. |
+| C-08 | Sensors were later evaluated. | The evaluation document was not recovered. This note does not replace it. |
+| C-09 | Current condition is very hazardous. | Founder's condition. Not the contracting Emergency Services line. Dollar unset. |
+
+C-03 and the severe sensor damage both stand. Neither is priced.
+
 ## Media, art, originals
 
 | ID | Item | Standing |
@@ -78,7 +100,7 @@ The June 3 statement, prepared by AXI and authorized by AX, is his dated evaluat
 
 ## Totals
 
-Observed income: unset. Proven loss: unset. The light proposal, the severe sensor damage, media, art, sites, and the lost half are not added to $40,000, to 500GB, or to the $1,300,000 floor.
+Observed income: unset. Proven loss: unset. The light proposal, the severe sensor damage, the "complte loss", media, art, sites, and the lost half are not added to $40,000, to 500GB, or to the $1,300,000 floor.
 
 ## What this note does not do
 

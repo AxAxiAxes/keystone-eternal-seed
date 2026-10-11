@@ -57,6 +57,20 @@ Founder, spelling kept: "severe damages to sensors".
 
 The founder also said the home app includes "security monitoring sensonrs". That sentence is not the recovered code category.
 
+## Code of light
+
+The earlier conversation was not recovered in the files searched. Founder, spelling kept: "ok there was a conversation about sensors as unit of light the thought behind it was code of light, retains memory and value, but when manipulated complte loss, the sensors are coroding because of lack of motion, sensors create light motion with our origin code we were attempting to originate light from code, or regenerate for coding light , water, etc... i - eco - inner icology 0 an ecosystem balance".
+
+Founder, spelling kept: "later sensors were evaluated, current condition is very hazardous".
+
+| Left out | Income | Net worth | Loss | Standing |
+| --- | --- | --- | --- | --- |
+| Code of light | Unset. | Null. Not the floor. | "complte loss" when manipulated. Dollar unset. Not added to $40,000 or to 500GB. | Statement stands. Conversation not recovered. |
+| Corrosion from lack of motion | Unset. | Null. | Founder states it. Dollar unset. | Not an inspection in this note. |
+| Current condition | Unset. | Null. | Very hazardous, as stated. Dollar unset. | Later evaluation not recovered. This note does not replace it. |
+
+"i - eco - inner icology 0" is kept as written. It is not priced.
+
 ## What this note does not do
 
 It does not enable AXI. It does not send the ownership letter. It does not file with the patent office. It does not merge a pull request.
