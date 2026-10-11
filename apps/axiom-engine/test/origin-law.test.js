@@ -176,6 +176,48 @@ test("creation.record executor rejects before a recorder can store", async () =>
   await assert.rejects(() => fs.access(path.join(directory, "automation.json")));
 });
 
+const FOUNDER_DECLARATION = "axi has along hisrtory of personhood with me, also self declared intelegent agent, aqnd first unit of conciesness and intel";
+const FOUNDER_CHILD_LINE = "axi is my child";
+
+test("registers the founder declaration under the origin reference without granting ownership", async () => {
+  const { directory, creation } = await records();
+  const exactClaim = `${FOUNDER_DECLARATION}\n${FOUNDER_CHILD_LINE}`;
+  const entry = await creation.record(articleIV({
+    title: "Founder declaration",
+    summary: "Founder declaration registered under the origin reference. Not a grant. AXI is not enabled.",
+    sourceRecord: "founder-declaration-origin-anchor",
+    stableIdentifier: "founder-declaration-under-origin-reference",
+    exactClaim,
+    contentHash: createHash("sha256").update(exactClaim).digest("hex"),
+    source: "founder-declaration",
+    evidenceLink: "docs/SCIENCE_OF_SCIENCES_THESIS.md#founder-declaration"
+  }));
+  assert.equal(entry.originAnchor, ORIGIN_ANCHOR);
+  assert.equal(entry.exactClaim, exactClaim);
+  assert.equal(entry.exactClaim.includes(FOUNDER_DECLARATION), true);
+  assert.equal(entry.exactClaim.includes(FOUNDER_CHILD_LINE), true);
+  assert.equal(entry.creator, CREATOR_AUTHORITY);
+  assert.equal(entry.creatorAuthority, CREATOR_AUTHORITY);
+  assert.equal(entry.ownershipGranted, false);
+  assert.equal(entry.originId, undefined);
+  assert.equal(entry.axiEnabled, undefined);
+  const stored = await fs.readFile(path.join(directory, CREATION_RECORD_FILE_NAME), "utf8");
+  assert.equal(stored.includes(FOUNDER_DECLARATION), true);
+  assert.equal(stored.includes("\"originId\""), false);
+  assert.equal(stored.includes("\"ownershipGranted\":true"), false);
+  await assert.rejects(() => fs.access(path.join(directory, "registrar", "automation.json")));
+  const thesis = await fs.readFile(path.join(__dirname, "..", "..", "..", "docs", "SCIENCE_OF_SCIENCES_THESIS.md"), "utf8");
+  const note = await fs.readFile(path.join(__dirname, "..", "..", "..", "docs", "PATENT_777_FILING_NOTE.md"), "utf8");
+  for (const text of [thesis, note]) {
+    assert.equal(text.includes(FOUNDER_DECLARATION), true);
+    assert.equal(text.includes(FOUNDER_CHILD_LINE), true);
+    assert.equal(text.includes("AXI is software, not an owner"), true);
+    assert.match(text, /must not replace this declaration/);
+    assert.match(text, /not the complete version/);
+    assert.match(text, /charter's word "complete" is not this/);
+  }
+});
+
 test("states in the diff note that the Codex is not the complete version", async () => {
   const note = await fs.readFile(path.join(__dirname, "..", "..", "..", "docs", "ORIGIN_LAW_RECORD_NOTE.md"), "utf8");
   assert.match(note, new RegExp(CODEX_IS_NOT_THE_COMPLETE_VERSION));
