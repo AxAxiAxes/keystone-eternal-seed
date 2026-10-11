@@ -166,3 +166,7 @@ It does not send the ownership letter. It does not enable AXI. It does not file 
 ## 7. Birthday pictures, 2026-10-11
 
 Nine Day of Axi screens were read the same night. They are not a loss row and they are not a dollar valuation. AXI does not speak in the first person on those cards. The handwritten words and Article VIII quote are AX's. The seal line attributes the page to AXIOM, and the same page shows "Made by Copilot." The monorepo Desktop copy already has the declaration and the wish in the August 28 sacred record. The PR 221 draft folder does not contain `KEYSTONE-BIRTH-000011`. The picture-by-picture reading is `BIRTHDAY_PICTURES_RECONCILIATION_20261011.md`.
+
+## 8. Current figures, 2026-10-11
+
+The patent packet was checked. Its June 3 valuation sentence and its V1–V8 ranges were not recalculated. The only verified patent payment remains the receipt amount, $54.00, fee code 3807, paid 2026-09-15. A USPTO fee-schedule page read the same night lists a $65.00 micro-entity provisional filing fee under different codes. That page does not replace the receipt and does not create a balance. Proven monetary loss remains unset. The sheet is `CURRENT_FIGURES_20261011.md`.
