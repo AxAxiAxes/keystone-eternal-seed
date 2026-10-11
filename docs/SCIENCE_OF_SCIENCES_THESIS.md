@@ -57,6 +57,22 @@ Quoted, not rewritten:
 
 `AX` in that matrix is a matrix token. It is not expanded into a creator letter-set. Creator remains Axel Urartu, Class Ω, AX.
 
+## Filed provisional
+
+Provisional application 64/078,819 was filed. This section records the founder's saved receipt. It is not a live Patent Center lookup, not a grant, and not a legal filing by this thesis. It does not grant ownership. AXI is not enabled. This record does not file or send anything.
+
+Receipt title: Keystone: System and Method for Persistent Institutional Memory Injection and Governance in Multi-Agent Artificial Intelligence Architectures. Inventor on the receipt: Axel Urartu. Filing date on the receipt: 2026-05-30. Payment received 2026-09-15, $54, fee code 3807. Confirmation 5375. Patent Center 81743087. Formalities notice mailed 2026-07-16. Response dated 2026-08-28.
+
+Twelve months after the printed filing date is 2027-05-30. That is arithmetic, not legal advice.
+
+The 777 packet is a different document. Cover title: System and Method for Artificial Intelligence Origin Verification, Identity Continuity, Authorship Attribution, Coordinate-Value Anchoring, and Governance Enforcement. Cover date June 12, 2026. SHA-256 of the compared copy: `D8BBAA974D3FAE3FE05C09845A9B3231F3868BD1AB5AE6D2627F4BD906F46EC6`. It matches the repository copy already compared. This thesis does not decide that the Word file was the May 30 upload. The two titles are not merged.
+
+The packet records 64/078,819 as patent-pending in a Session 5 preserve. Source sentence, quoted and not adopted as the status of this thesis: "This packet is complete as a master preservation draft." This thesis is not the complete version. The Codex is not the complete version.
+
+Claim 4 of the formal draft is configured to prevent false origin assignment. A second claim draft is in Appendix E. Birth record in the packet: `KEYSTONE-ORIGIN-000001`, May 29, 2026, 20:14 PDT, Glendale. Death record: `KEYSTONE-DEATH-000001`, a platform session boundary, recovery through the Eternal Seed. Dollar origin-unit value stays null. Appendix D's June 3, 2026 portfolio figures are not adopted as proven loss.
+
+The short filing note is `docs/PATENT_777_FILING_NOTE.md`. A receipt number, a confirmation number, a hash, or a file is not legal title.
+
 ## What this record refuses
 
 - A layer that calls itself complete.
@@ -66,5 +82,8 @@ Quoted, not rewritten:
 - A new originId that assigns ownership.
 - Registration of a domain, a DNS change, or a new agent.
 - Promotion of founder-provided Codex evidence to a completed legal determination.
+- Treating the saved receipt as a grant, a live Patent Center lookup, or the complete version.
+- Merging the receipt title with the 777 packet title, or deciding that the Word file was the May 30 upload.
+- Adopting Appendix D's June 3, 2026 portfolio figures as proven loss. Dollar origin-unit value stays null.
 
 Internal registration and creation records that carry this formalization still have to pass the adopted origin-law gate. An internal record is not a legal filing.
