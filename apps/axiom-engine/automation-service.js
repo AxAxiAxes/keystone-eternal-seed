@@ -109,7 +109,7 @@ const ACTION_CATALOG = Object.freeze([
     action: "creation.record",
     requiresApproval: true,
     fixedAgentId: "project-memory-manager",
-    effect: "Appends one operator-approved AXI-assisted creation entry, permanently attributed to the founder creator authority. Rejects an unanchored, agent-as-owner, or rights-transfer record and does not store it as valid.",
+    effect: "Appends one operator-approved AXI-assisted creation entry, permanently attributed to the founder creator authority. Rejects an unanchored, agent-as-owner, rights-transfer, or publicly published inventive-disclosure record and does not store it as valid. Does not publish, push, send, or open a network connection.",
     payloadFields: [
       "title",
       "kind (concept|design|document|code|other)",

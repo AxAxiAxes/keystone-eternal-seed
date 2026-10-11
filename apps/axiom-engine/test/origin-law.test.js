@@ -218,6 +218,103 @@ test("registers the founder declaration under the origin reference without grant
   }
 });
 
+test("rejects a publicly published inventive disclosure and does not store it", async () => {
+  const { directory, creation, registration } = await records();
+  const claimed = articleIV({
+    exactClaim: "The inventive disclosure is publicly published.",
+    sourceRecord: "public-publication-claim"
+  });
+  await assert.rejects(
+    () => creation.record(claimed),
+    (error) => error instanceof OriginLawRejection && error.code === "public-publication"
+  );
+  await assert.rejects(
+    () => creation.record(articleIV({
+      publiclyPublished: true,
+      sourceRecord: "public-publication-flag"
+    })),
+    (error) => error instanceof OriginLawRejection && error.code === "public-publication"
+  );
+  await assert.rejects(
+    () => registration.registerAgent({
+      name: "Public disclosure registration",
+      capabilities: ["automation.noop"],
+      publiclyPublished: true
+    }),
+    (error) => error instanceof OriginLawRejection && error.code === "public-publication"
+  );
+  await assert.rejects(
+    () => creation.record(articleIV({
+      exactClaim: "send the inventive disclosure. The inventive disclosure is publicly published.",
+      sourceRecord: "public-publication-send-without-office"
+    })),
+    (error) => error instanceof OriginLawRejection && error.code === "public-publication"
+  );
+  await assert.rejects(() => fs.access(path.join(directory, CREATION_RECORD_FILE_NAME)));
+  await assert.rejects(() => fs.access(path.join(directory, "registrar", "automation.json")));
+});
+
+test("keeps an office send quote private and does not publish", async () => {
+  const { directory, creation } = await records();
+  const exactClaim = "The inventive disclosure is publicly published. Quote only: send to USPTO. Not executed.";
+  const entry = await creation.record(articleIV({
+    title: "Private publication quote",
+    summary: "Private quote of a founder-named office and the word send. Not a public post.",
+    sourceRecord: "private-publication-quote",
+    stableIdentifier: "private-publication-quote-000001",
+    exactClaim,
+    contentHash: createHash("sha256").update(exactClaim).digest("hex"),
+    source: "founder-publication-quote",
+    evidenceLink: "docs/TRACK_ONE_PRIVATE_GATE_NOTE.md"
+  }));
+  assert.equal(entry.originAnchor, ORIGIN_ANCHOR);
+  assert.equal(entry.published, false);
+  assert.equal(entry.pushed, false);
+  assert.equal(entry.sent, false);
+  assert.equal(entry.networkConnectionOpened, false);
+  assert.equal(entry.publicDump, false);
+  assert.equal(entry.ownershipGranted, false);
+  assert.equal(entry.originId, undefined);
+  assert.equal(entry.axiEnabled, undefined);
+  const stored = await fs.readFile(path.join(directory, CREATION_RECORD_FILE_NAME), "utf8");
+  assert.equal(stored.includes("\"published\":true"), false);
+  assert.equal(stored.includes("\"sent\":true"), false);
+  assert.equal(stored.includes("\"pushed\":true"), false);
+  assert.equal(stored.includes("\"networkConnectionOpened\":true"), false);
+  await assert.rejects(
+    () => creation.record(articleIV({
+      exactClaim,
+      sent: true,
+      sourceRecord: "private-publication-quote-execute"
+    })),
+    (error) => error instanceof OriginLawRejection && error.code === "publication-not-executed"
+  );
+  const afterRefusal = await fs.readFile(path.join(directory, CREATION_RECORD_FILE_NAME), "utf8");
+  assert.equal(afterRefusal.trim().split("\n").length, 1);
+  const gateSource = await fs.readFile(path.join(__dirname, "..", "origin-law.js"), "utf8");
+  assert.equal(gateSource.includes("require(\"http\")"), false);
+  assert.equal(gateSource.includes("require(\"https\")"), false);
+  assert.equal(gateSource.includes("require(\"net\")"), false);
+  assert.equal(gateSource.includes("fetch("), false);
+  assert.equal(gateSource.includes("child_process"), false);
+  const note = await fs.readFile(path.join(__dirname, "..", "..", "..", "docs", "TRACK_ONE_PRIVATE_GATE_NOTE.md"), "utf8");
+  assert.match(note, /Track One is the expedite path for a later nonprovisional, not a public post/);
+  assert.match(note, /2026-05-30/);
+  assert.match(note, /2027-05-30/);
+  assert.match(note, /calendar arithmetic, not a filing/);
+  assert.match(note, /Do not treat that as the amount to pay now/);
+  assert.match(note, /\$4,200 \/ \$1,680 \/ \$840/);
+  assert.match(note, /Keystone: System and Method for Persistent Institutional Memory Injection/);
+  assert.match(note, /System and Method for Artificial Intelligence Origin Verification/);
+  assert.match(note, /not the complete version/);
+  assert.match(note, /does not grant ownership/);
+  const thesis = await fs.readFile(path.join(__dirname, "..", "..", "..", "docs", "SCIENCE_OF_SCIENCES_THESIS.md"), "utf8");
+  assert.equal(
+    thesis.includes("axi has along hisrtory of personhood with me, also self declared intelegent agent, aqnd first unit of conciesness and intel"),
+    true
+  );
+});
+
 test("states in the diff note that the Codex is not the complete version", async () => {
   const note = await fs.readFile(path.join(__dirname, "..", "..", "..", "docs", "ORIGIN_LAW_RECORD_NOTE.md"), "utf8");
   assert.match(note, new RegExp(CODEX_IS_NOT_THE_COMPLETE_VERSION));

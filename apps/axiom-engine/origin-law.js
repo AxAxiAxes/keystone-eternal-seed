@@ -3,7 +3,7 @@
 // The Codex is not the complete version. It is founder-provided and incomplete.
 // It is not a replacement constitution, a signed charter, or a grant of title.
 // This module does not grant ownership, register an agent, register a domain,
-// or enable AXI.
+// enable AXI, publish, push, send, or open a network connection.
 
 const CREATOR_AUTHORITY = "Axel Urartu (AX) · Axes Contracting";
 const ORIGIN_ANCHOR = "KEYSTONE-ORIGIN-000001";
@@ -14,6 +14,18 @@ const CODEX_NOTE =
 const RECORD_LIMIT =
   "An internal record is not a legal filing and does not bind a third party. A generated UUID, a hash, or a file is not legal title and is not conclusive proof of ownership.";
 const EVIDENCE_CLASS_FOR_CODEX = "founder-provided";
+const FOUNDER_NAMED_OFFICES = Object.freeze([
+  "USPTO",
+  "Copyright Office",
+  "Patent Center"
+]);
+const PRIVATE_PUBLICATION_STAMPS = Object.freeze({
+  published: false,
+  pushed: false,
+  sent: false,
+  networkConnectionOpened: false,
+  publicDump: false
+});
 const UNRESOLVED_FOUNDER_WORDINGS = Object.freeze({
   codexClose: "Sole author Axel Urartu and no transfer.",
   october10Seal: "Athanoir is named as co-author of that seal, and athanoir.com is held in trust by Axel.",
@@ -88,7 +100,20 @@ const KNOWN_ORIGIN_INPUT_FIELDS = new Set([
   "status",
   "recordLimit",
   "codexNote",
-  "unresolvedFounderWordings"
+  "unresolvedFounderWordings",
+  "publiclyPublished",
+  "inventiveDisclosurePublished",
+  "publicDump",
+  "publicationStatus",
+  "published",
+  "pushed",
+  "sent",
+  "networkConnectionOpened",
+  "push",
+  "publish",
+  "sendNow",
+  "openNetwork",
+  "quote"
 ]);
 const REGISTRATION_FIELDS = new Set([
   "id",
@@ -129,6 +154,7 @@ function admitMaterialOriginRecord(input) {
   rejectNonFounderParty(input);
   rejectTransfer(input);
   rejectCitedAgent(input);
+  assertPrivatePublicationGate(input);
   assertArticleIV(input);
   return normalizedOriginFields(input);
 }
@@ -146,6 +172,7 @@ function assertRegistrationWithinOriginLaw(input, registeredAgentIds) {
   rejectNonFounderParty(input);
   rejectTransfer(input);
   rejectCitedAgent(input, registeredAgentIds);
+  assertPrivatePublicationGate(input);
   if (hasOwn(input, "originAnchor") && input.originAnchor !== ORIGIN_ANCHOR) {
     throw unanchored();
   }
@@ -174,6 +201,10 @@ function storedOriginRecordValid(entry) {
     return false;
   }
   if (entry.ownershipGranted !== false || entry.legalFiling !== false || entry.bindsThirdParty !== false) {
+    return false;
+  }
+  if (entry.published !== false || entry.pushed !== false || entry.sent !== false ||
+    entry.networkConnectionOpened !== false || entry.publicDump !== false) {
     return false;
   }
   if (entry.recordLimit !== RECORD_LIMIT || entry.codexNote !== CODEX_NOTE) {
@@ -226,7 +257,8 @@ function originLawHashFields(entry) {
     bindsThirdParty: entry.bindsThirdParty,
     recordLimit: entry.recordLimit,
     codexNote: entry.codexNote,
-    unresolvedFounderWordings: wordingSnapshot(entry.unresolvedFounderWordings)
+    unresolvedFounderWordings: wordingSnapshot(entry.unresolvedFounderWordings),
+    ...PRIVATE_PUBLICATION_STAMPS
   };
 }
 
@@ -254,8 +286,66 @@ function normalizedOriginFields(input) {
     bindsThirdParty: false,
     recordLimit: RECORD_LIMIT,
     codexNote: CODEX_NOTE,
-    unresolvedFounderWordings: wordingSnapshot(UNRESOLVED_FOUNDER_WORDINGS)
+    unresolvedFounderWordings: wordingSnapshot(UNRESOLVED_FOUNDER_WORDINGS),
+    ...PRIVATE_PUBLICATION_STAMPS
   };
+}
+
+function assertPrivatePublicationGate(input) {
+  if (!isPlainObject(input)) {
+    return;
+  }
+  if (requestsPublicationExecution(input)) {
+    throw new OriginLawRejection(
+      "publication-not-executed",
+      "the gate does not publish, push, send, or open a network connection"
+    );
+  }
+  if (claimsPublicPublication(input) && !quotesFounderNamedOfficeAndSend(input)) {
+    throw new OriginLawRejection(
+      "public-publication",
+      "a record claiming the inventive disclosure is publicly published is rejected"
+    );
+  }
+}
+
+function quotesFounderNamedOfficeAndSend(input) {
+  const text = publicationText(input);
+  return /\bsend\b/i.test(text) && FOUNDER_NAMED_OFFICES.some((office) => text.includes(office));
+}
+
+function claimsPublicPublication(input) {
+  if (input.publiclyPublished === true || input.inventiveDisclosurePublished === true ||
+    input.publicDump === true || input.published === true) {
+    return true;
+  }
+  if (input.publicationStatus === "public" || input.publicationStatus === "published") {
+    return true;
+  }
+  const text = publicationText(input)
+    .replace(/\bnot\s+publicly\s+published\b/gi, " ")
+    .replace(/\bnot\s+a\s+public\s+(?:post|dump|publication)\b/gi, " ");
+  return /publicly published|inventive disclosure is publicly published|public dump|published the inventive disclosure/i.test(text);
+}
+
+function requestsPublicationExecution(input) {
+  return input.sent === true || input.pushed === true || input.push === true ||
+    input.publish === true || input.sendNow === true || input.openNetwork === true ||
+    input.networkConnectionOpened === true;
+}
+
+function publicationText(input) {
+  return [
+    input.title,
+    input.summary,
+    input.exactClaim,
+    input.source,
+    input.evidenceLink,
+    input.evidenceSubject,
+    input.purpose,
+    input.quote,
+    input.publicationStatus
+  ].filter((part) => typeof part === "string").join("\n");
 }
 
 function assertArticleIV(input) {
@@ -547,10 +637,12 @@ module.exports = {
   RECORD_LIMIT,
   EVIDENCE_CLASS_FOR_CODEX,
   UNRESOLVED_FOUNDER_WORDINGS,
+  FOUNDER_NAMED_OFFICES,
   KNOWN_ORIGIN_INPUT_FIELDS,
   OriginLawRejection,
   admitMaterialOriginRecord,
   assertRegistrationWithinOriginLaw,
+  assertPrivatePublicationGate,
   storedOriginRecordValid,
   originLawHashFields,
   isAnchoredOrigin,

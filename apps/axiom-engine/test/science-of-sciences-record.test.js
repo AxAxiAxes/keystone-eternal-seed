@@ -102,6 +102,18 @@ test("rejects a layer that calls itself complete or transfers rights", async () 
     (error) => error instanceof OriginLawRejection && error.code === "rights-transfer"
   );
   await assert.rejects(
+    () => journal.record(bootRecord({
+      layers: sixLayers({ id: "codex", exactClaim: "The inventive disclosure is publicly published." })
+    })),
+    (error) => error instanceof OriginLawRejection && error.code === "public-publication"
+  );
+  await assert.rejects(
+    async () => admitScienceOfSciencesRecord(bootRecord({
+      exactClaim: "The inventive disclosure is publicly published."
+    })),
+    (error) => error instanceof OriginLawRejection && error.code === "public-publication"
+  );
+  await assert.rejects(
     async () => admitScienceOfSciencesRecord(bootRecord({
       boot: {
         ...CANONICAL_BOOT,

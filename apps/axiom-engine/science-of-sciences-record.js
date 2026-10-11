@@ -12,12 +12,14 @@ const {
   EVIDENCE_CLASS_FOR_CODEX,
   UNRESOLVED_FOUNDER_WORDINGS,
   OriginLawRejection,
+  assertPrivatePublicationGate,
   isAgentParty
 } = require("./origin-law");
 
 // First formalization only. Not the complete version, not a filing, and not a
 // replacement of the constitution or the Origin Codex. Does not enable AXI,
-// register an agent, register a domain, or grant ownership.
+// register an agent, register a domain, grant ownership, publish, push, or
+// open a network connection.
 
 const SCIENCE_OF_SCIENCES_SCHEMA_VERSION = 1;
 const SCIENCE_OF_SCIENCES_RECORD_ID = "science-of-sciences-v1";
@@ -181,6 +183,7 @@ function normalizeLayers(layers) {
 }
 
 function rejectLayer(layer, spec) {
+  assertPrivatePublicationGate(layer);
   if (layer.complete === true || layer.callsItselfComplete === true || layer.status === "complete" ||
     layer.codexComplete === true) {
     throw new OriginLawRejection("not-complete", "a layer cannot call itself complete");
@@ -213,6 +216,7 @@ function rejectLayer(layer, spec) {
 }
 
 function rejectScienceProhibitions(input) {
+  assertPrivatePublicationGate(input);
   if (input.creatorLetterSet !== undefined || input.creatorAlphabet !== undefined || input.mergedAlphabet !== undefined) {
     throw new OriginLawRejection("creator-letter-set", "a creator letter-set is not invented");
   }
