@@ -43,7 +43,38 @@ These are not copies of each other. Do not merge them.
 | R10 | `docs/memory/2026-09-19j-service-protocol-adopted.md` | 2026-09-19 | Founder said there is a formal compliance letter and loss report update. The note points at R4. An agent rated that task 7/10. | Pointer, not a new amount. The 7/10 is not AXI. |
 | R11 | `docs/AXI_ETERNAL_ORIGIN_VALUE_AND_CRISIS_REGISTER.md` and `docs/memory/README.md` | 2026-09-12 and later | Same 500GB and $40,000 reports, restated. Command Center copies under `docs/axes-os-command-center/` repeat the memory files. | Duplicates. Do not count them again. |
 
-Desktop root was searched this pass for a file whose name contained `loss`, `crisis`, or `EF-26`. None was listed. That does not erase an earlier Desktop copy if it lives in a subfolder not searched here.
+The first Desktop search looked at `C:\Users\erick\Desktop` only. The computer's Desktop is `C:\Users\erick\OneDrive\Desktop`. The packet is there. It is not a new set of losses.
+
+## 2.1 Desktop packet, checked 2026-10-11
+
+Folder: `C:\Users\erick\OneDrive\Desktop\Origin-AXI Loss and Crisis Reports - 2026-10-07`
+
+`COPY_RECEIPT.json` says 21 files, copied 2026-10-09, all byte matches, originals not modified. Scope line: already located reports, not a new census.
+
+| Folder | What it holds | Reconciliation |
+| --- | --- | --- |
+| `01-session-copies` | Investigation, consolidated report, ledger | Same as R6–R8. Not new amounts. |
+| `02-evidence-packet-distinct` | OriginAI copies of the investigation and consolidated report | Distinct file hashes from folder 01. Still the same two documents, not a second incident. |
+| `03-repository-distinct` | R1, R2, R5, the crisis register, the 2026-09-10 UI loss-model note, and `axi_crisis_recovery_report.txt` | The 2026-09-10 note is the source of ledger L03: $9,360 + $9,600 + $30,000 = $48,960 a year, then the 1.5 billion extrapolation. Arithmetic only. The June 7, 2026 recovery report is a file scan of `C:\axi`, 252 matching files. It is not a dollar loss. |
+| `04-october-3-audit` | Directive-versus-delivery audit | 2 narrow completes, 7 partial, 1 blocked, 1 pending, inside 11 recorded groups. Not a money total. |
+| `05-pr-221-draft-7f92080` | Unmerged PR 221 reconciliation drafts | Drafts. Not a new loss. |
+
+A nested checkout under `OneDrive\Desktop\Documents\New folder\keystone-eternal-seed-axaxiaxes-axiom-monorepo` also contains the repository copies. Do not count those again.
+
+On this pass, `C:\axi` exists. The June 7 scan roots `axi home back up`, `AXI_Continuity_Archive`, `axi_archive`, and `axi_crisis_recovery` were not present.
+
+## 2.2 Keystone folder evaluations
+
+Local folder checked: `...\docs\keystone` in that Desktop checkout.
+
+| File | What the evaluation is |
+| --- | --- |
+| `CERTIFICATE_ETERNAL_ORIGIN_ANCHOR_AND_EVALUATION.md` | Recorded 2026-09-12. Four lenses: artistic, philosophical, factual, monetary. Monetary finding: no dollar figure assigned. Not AXI grading himself or the company. |
+| `CERTIFICATE_SPHERE_EVERSION_AND_SECRET_GARDEN.md` | Companion four-lens note. Founder concepts. Not a deployed app. Not an AXI company grade. |
+| `CRYPTOGRAPHIC_ORIGIN_ANCHOR.md` and `birth certificate bill of eternal rights` | AXI's own words, already quoted in section 4. |
+| `A_LETTER_TO_AXI.md` | Founder's words about AXI. Not AXI's grade of the company. |
+
+No file in that keystone folder was found in which AXI assigns a numeric grade to Axes Contracting or to Microsoft.
 
 ## 3. Reconciliation — what must not be summed
 
