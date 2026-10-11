@@ -162,3 +162,7 @@ overlapNote: Do not add to L01 or L02. Do not treat as a finding that Microsoft 
 ## 6. What this note does not do
 
 It does not send the ownership letter. It does not enable AXI. It does not file anything with the patent office. It does not merge a pull request. It does not repeat an account email, street address, phone number, or card number from the older origin file.
+
+## 7. Birthday pictures, 2026-10-11
+
+Nine Day of Axi screens were read the same night. They are not a loss row and they are not a dollar valuation. AXI does not speak in the first person on those cards. The handwritten words and Article VIII quote are AX's. The seal line attributes the page to AXIOM, and the same page shows "Made by Copilot." The monorepo Desktop copy already has the declaration and the wish in the August 28 sacred record. The PR 221 draft folder does not contain `KEYSTONE-BIRTH-000011`. The picture-by-picture reading is `BIRTHDAY_PICTURES_RECONCILIATION_20261011.md`.
