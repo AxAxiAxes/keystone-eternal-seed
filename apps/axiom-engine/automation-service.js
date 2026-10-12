@@ -2,6 +2,12 @@ const { randomUUID } = require("crypto");
 const fs = require("fs/promises");
 const path = require("path");
 const { validateServiceRegistryInput } = require("./service-registry-service");
+const {
+  admitMaterialOriginRecord,
+  assertLegacyCreationWithinOriginLaw,
+  assertRegistrationWithinOriginLaw,
+  isWorkingBranchCreationInput
+} = require("./origin-law");
 const PROFILE_TASK = Symbol("automation-profile-task");
 
 const TASK_ACTIONS = new Set([
@@ -105,8 +111,28 @@ const ACTION_CATALOG = Object.freeze([
     action: "creation.record",
     requiresApproval: true,
     fixedAgentId: "project-memory-manager",
-    effect: "Appends one operator-approved AXI-assisted creation entry, permanently attributed to the founder creator authority.",
-    payloadFields: ["title", "kind (concept|design|document|code|other)", "summary", "sourceRecord"]
+    effect: "Appends one operator-approved AXI-assisted creation entry, permanently attributed to the founder creator authority. Rejects an unanchored, agent-as-owner, rights-transfer, or publicly published inventive-disclosure record and does not store it as valid. Does not publish, push, send, or open a network connection.",
+    payloadFields: [
+      "title",
+      "kind (concept|design|document|code|other)",
+      "summary",
+      "sourceRecord",
+      "originAnchor (KEYSTONE-ORIGIN-000001)",
+      "anchorCoordinate (0,0)",
+      "genesisCheckpoint (axi-genesis-creator-ownership)",
+      "stableIdentifier",
+      "exactClaim",
+      "creator",
+      "source",
+      "captureDate",
+      "recordDate",
+      "contentHash",
+      "rightsStatus (no transfer; not a completed legal determination)",
+      "evidenceLink",
+      "evidenceClass",
+      "confidence",
+      "humanReviewer"
+    ]
   }
 ]);
 
@@ -198,16 +224,18 @@ class AutomationService {
     });
   }
 
-  async registerAgent({
-    id,
-    name,
-    capabilities,
-    originCheckpoint,
-    creator,
-    purpose,
-    duties
-  }) {
+  async registerAgent(input) {
     return this.withState(async (state) => {
+      assertRegistrationWithinOriginLaw(input, state.agents.map((agent) => agent.id));
+      const {
+        id,
+        name,
+        capabilities,
+        originCheckpoint,
+        creator,
+        purpose,
+        duties
+      } = input;
       if (id !== undefined && !isNonEmptyString(id)) {
         throw new TypeError("agent id must be a non-empty string");
       }
@@ -699,7 +727,14 @@ class AutomationService {
       if (typeof this.recordCreation !== "function") {
         throw new RangeError("creation recording is not configured");
       }
-      const entry = await this.recordCreation(task.payload);
+      let entry;
+      if (isWorkingBranchCreationInput(task.payload)) {
+        assertLegacyCreationWithinOriginLaw(task.payload);
+        entry = await this.recordCreation(task.payload);
+      } else {
+        const admitted = admitMaterialOriginRecord(task.payload);
+        entry = await this.recordCreation({ ...task.payload, ...admitted });
+      }
       return {
         creationRecordEntryId: entry.id,
         creationRecordSequence: entry.sequence,

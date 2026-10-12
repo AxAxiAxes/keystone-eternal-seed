@@ -1,6 +1,15 @@
 const { createHash, randomUUID } = require("crypto");
 const fs = require("fs/promises");
 const path = require("path");
+const {
+  CREATOR_AUTHORITY,
+  KNOWN_ORIGIN_INPUT_FIELDS,
+  admitMaterialOriginRecord,
+  assertLegacyCreationWithinOriginLaw,
+  isWorkingBranchCreationInput,
+  storedOriginRecordValid,
+  originLawHashFields
+} = require("./origin-law");
 
 const CREATION_RECORD_ID = "axi-private-creation-record-v1";
 const CREATION_RECORD_SCHEMA_VERSION = 1;
@@ -14,7 +23,7 @@ const REVIEW_STATUS = "operator-approved";
 // so the founder remains eternally accountable for AXI-assisted creations
 // the same way they are for registered AXI agents (see
 // KEYSTONE_REGISTRATION.creatorAuthority in automation-service.js).
-const CREATOR_AUTHORITY = "Axel Urartu (AX) · Axes Contracting";
+// The Codex is not the complete version. Admission does not grant ownership.
 const PROHIBITED_SOURCE_RECORD_TERMS = new Set([
   "account",
   "bank",
@@ -98,6 +107,8 @@ class CreationRecordService {
       }
 
       const previousEntry = entries.at(-1);
+      const working = isWorkingBranchCreationInput(input);
+      const admitted = working ? null : admitMaterialOriginRecord(input);
       const entry = {
         schemaVersion: CREATION_RECORD_SCHEMA_VERSION,
         id: randomUUID(),
@@ -109,8 +120,12 @@ class CreationRecordService {
         sourceRecord,
         creatorAuthority: CREATOR_AUTHORITY,
         reviewStatus: REVIEW_STATUS,
-        previousHash: previousEntry ? previousEntry.hash : null
+        previousHash: previousEntry ? previousEntry.hash : null,
+        ...(admitted || {})
       };
+      if (admitted && !storedOriginRecordValid(entry)) {
+        throw new TypeError("creation record has an invalid entry");
+      }
       entry.hash = hashEntry(entry);
 
       await fs.mkdir(this.directory, { recursive: true });
@@ -195,7 +210,8 @@ function validateEntries(entries) {
       entry.creatorAuthority !== CREATOR_AUTHORITY ||
       entry.reviewStatus !== REVIEW_STATUS ||
       entry.previousHash !== previousHash || !isHash(entry.hash) ||
-      entry.hash !== hashEntry(entry)) {
+      entry.hash !== hashEntry(entry) ||
+      (entry.originAnchor !== undefined && !storedOriginRecordValid(entry))) {
       throw new TypeError("creation record has an invalid entry");
     }
     ids.add(entry.id);
@@ -208,14 +224,13 @@ function assertEntryInput(input) {
   if (!isRecord(input)) {
     throw new TypeError("creation record entry must be an object");
   }
-  const allowedFields = new Set([
-    "title",
-    "kind",
-    "summary",
-    "sourceRecord"
-  ]);
-  if (Object.keys(input).some((field) => !allowedFields.has(field))) {
+  if (Object.keys(input).some((field) => !KNOWN_ORIGIN_INPUT_FIELDS.has(field))) {
     throw new TypeError("creation record entry contains unsupported fields");
+  }
+  if (isWorkingBranchCreationInput(input)) {
+    assertLegacyCreationWithinOriginLaw(input);
+  } else {
+    admitMaterialOriginRecord(input);
   }
   if (!isTitle(input.title)) {
     throw new TypeError("title must be a non-empty string of at most 200 characters");
@@ -232,7 +247,7 @@ function assertEntryInput(input) {
 }
 
 function hashEntry(entry) {
-  return createHash("sha256").update(JSON.stringify({
+  const payload = {
     schemaVersion: entry.schemaVersion,
     id: entry.id,
     sequence: entry.sequence,
@@ -244,7 +259,11 @@ function hashEntry(entry) {
     creatorAuthority: entry.creatorAuthority,
     reviewStatus: entry.reviewStatus,
     previousHash: entry.previousHash
-  })).digest("hex");
+  };
+  if (entry.originAnchor !== undefined) {
+    Object.assign(payload, originLawHashFields(entry));
+  }
+  return createHash("sha256").update(JSON.stringify(payload)).digest("hex");
 }
 
 function summarizeEntry(entry) {
@@ -255,7 +274,11 @@ function summarizeEntry(entry) {
     kind: entry.kind,
     summary: entry.summary,
     sourceRecord: entry.sourceRecord,
-    creatorAuthority: entry.creatorAuthority
+    creatorAuthority: entry.creatorAuthority,
+    originAnchor: entry.originAnchor,
+    evidenceClass: entry.evidenceClass,
+    humanReviewer: entry.humanReviewer,
+    ownershipGranted: entry.ownershipGranted
   };
 }
 
