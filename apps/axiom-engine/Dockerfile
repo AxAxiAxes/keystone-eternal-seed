@@ -27,6 +27,8 @@ COPY accountability-ledger-service.js ./
 COPY automation-profile-service.js ./
 COPY github-status-service.js ./
 COPY web-access-service.js ./
+COPY origin-law.js ./
+COPY science-of-sciences-record.js ./
 
 EXPOSE 3000
 
