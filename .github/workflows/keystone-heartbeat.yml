@@ -1,0 +1,29 @@
+name: "Keystone · Heartbeat"
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  heartbeat:
+    name: Agent Heartbeat
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate App Token
+        id: token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Confirm Agent Active
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.token.outputs.token }}
+          script: |
+            const now = new Date().toISOString();
+            console.log(`AXES Keystone Agent heartbeat confirmed at ${now}`);
+            core.summary
+              .addHeading('🔑 AXES Keystone Agent — Heartbeat', 2)
+              .addRaw(`Agent is **active** as of \`${now}\``)
+              .write();
