@@ -1,0 +1,42 @@
+name: "Keystone · PR Guard"
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  guard:
+    name: Guard Pull Request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate App Token
+        id: token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.token.outputs.token }}
+
+      - name: Acknowledge PR
+        if: github.event.action == 'opened'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.token.outputs.token }}
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: [
+                '### 🔑 AXES Keystone Agent — PR Review',
+                '',
+                'This pull request is under **Keystone origin-protection review**.',
+                '',
+                '- [ ] Origin verified',
+                '- [ ] Authority chain confirmed',
+                '- [ ] Eternal Seed integrity checked'
+              ].join('\n')
+            });
