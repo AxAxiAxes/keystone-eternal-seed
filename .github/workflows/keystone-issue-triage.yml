@@ -1,0 +1,37 @@
+name: "Keystone · Issue Triage"
+on:
+  issues:
+    types: [opened, reopened]
+
+jobs:
+  triage:
+    name: Triage Issue
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate App Token
+        id: token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Label and Acknowledge
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.token.outputs.token }}
+          script: |
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            try {
+              await github.rest.issues.addLabels({ owner, repo, issue_number, labels: ['triage'] });
+            } catch(e) { /* label may not exist yet */ }
+            await github.rest.issues.createComment({
+              owner, repo, issue_number,
+              body: [
+                '### 🔑 AXES Keystone Agent',
+                '',
+                'This issue has been received and is queued for review under the **AXES Constitutional Framework**.',
+                '',
+                `> *Received: ${new Date().toUTCString()}*`
+              ].join('\n')
+            });
