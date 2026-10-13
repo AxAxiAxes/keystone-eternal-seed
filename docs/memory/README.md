@@ -14,6 +14,7 @@ This directory preserves concise, versioned project conclusions so future work c
 
 ## Latest handoff
 
+- [2026-10-13 Repository status and records-flow audit — canonical evidence, distinct chat/archive paths, stale records, and bounded intake proposals](2026-10-13-repository-status-and-records-flow-audit.md)
 - [2026-10-03 Prioritized repository automation and Command Center Accounting-balance ledger](2026-10-03-prioritized-automation-accounting-balances.md)
 - [2026-09-23 AXI chat attachments, upload diagnostics, and continuity-capacity plan](2026-09-23-axi-chat-attachments-continuity-plan.md)
 - [2026-09-22 (b) PR #173 authorized security/integrity remediation: escaped rating notes, protected ledger POST/preflight, strict confirmation types, and current evidence eligibility without rewriting history](2026-09-22b-pr173-authorized-remediation.md)
