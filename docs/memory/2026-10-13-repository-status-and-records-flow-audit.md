@@ -1,7 +1,9 @@
 # 2026-10-13 — Repository status and records-flow audit
 
-**Status:** Repository-evidenced handoff; intake/reconciliation proposals await human review  
-**Checked:** 2026-10-13 UTC  
+**Status:** Repository-evidenced handoff; intake/reconciliation proposals await human review
+
+**Checked:** 2026-10-13 UTC
+
 **Scope:** Documentation only; no runtime, deployment, account, scheduler, or existing-PR changes
 
 ## Exact reviewed source basis and limits
@@ -297,6 +299,9 @@ deployment claims are not promoted.
   balanced code fences were checked. The budget-section anchor was checked
   against its heading. The new report appears once, first under the index's
   single latest-handoff heading, and its dated timeline evidence row exists.
+  The baseline-to-branch check initially caught two Markdown hard-break trailing
+  spaces in this new file, missed by the unstaged check while it was untracked;
+  they were removed before final validation.
 - Existing test command from `apps/axiom-freedom`:
   `node --test --test-name-pattern='Command Center checkpoint parsing' test/axiom-proxy.test.js`
   passed both tests. The real timeline parser also preserved the baseline phase
